@@ -1,0 +1,19 @@
+# IDE
+.idea/
+.vs/
+.vscode/
+
+bin/
+build/
+
+.cxx/
+.gradle/
+
+# 资源文件
+app/src/main/assets/
+
+# macOS
+.DS_Store
+
+keystore.properties
+local.properties
