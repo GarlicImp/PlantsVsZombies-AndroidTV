@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <application
+        android:icon="@mipmap/icon"
+        android:label="@string/app_name"
+        android:resizeableActivity="true"
+        android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
+
+        <activity
+            android:name="com.transmension.mobile.EnhanceActivity"
+            android:alwaysRetainTaskState="true"
+            android:configChanges="orientation|uiMode|fontWeightAdjustment|screenLayout|screenSize|smallestScreenSize|fontScale|density|touchscreen|mcc|mnc|colorMode|layoutDirection|locale|keyboardHidden|keyboard|navigation"
+            android:exported="true"
+            android:label="@string/pvz_name"
+            android:launchMode="singleTask"
+            android:screenOrientation="sensorLandscape">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts" />
+        </activity>
+
+        <activity
+            android:name="com.transmension.mobile.SetActivityEntrance"
+            android:exported="true"
+            android:icon="@mipmap/set"
+            android:label="@string/addon_set"
+            android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name="com.transmension.mobile.SetActivity"
+            android:exported="true"
+            android:icon="@mipmap/set"
+            android:label="@string/addon_set" />
+
+        <activity
+            android:name="com.transmension.mobile.ButtonSetActivity"
+            android:configChanges="orientation|uiMode|fontWeightAdjustment|screenLayout|screenSize|smallestScreenSize|fontScale|density|touchscreen|mcc|mnc|colorMode|layoutDirection|locale|keyboardHidden|keyboard|navigation"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:screenOrientation="sensorLandscape" />
+
+        <activity
+            android:name="com.transmension.mobile.MainActivity"
+            android:configChanges="orientation|uiMode|fontWeightAdjustment|screenLayout|screenSize|smallestScreenSize|fontScale|density|touchscreen|mcc|mnc|colorMode|layoutDirection|locale|keyboardHidden|keyboard|navigation"
+            android:exported="true"
+            android:screenOrientation="sensorLandscape" />
+
+        <activity
+            android:name="com.transmension.mobile.KeyboardSetActivity"
+            android:exported="true"
+            android:label="@string/second_player_set" />
+
+        <meta-data
+            android:name="android.max_aspect"
+            android:value="2.4" />
+    </application>
+
+</manifest>
