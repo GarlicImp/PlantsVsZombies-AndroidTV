@@ -103,7 +103,7 @@ inline Sexy::Image *(*Sexy_SexyAppBase_CopyImage2)(LawnApp *, Sexy::Image *, TRe
 
 inline void (*Sexy_MemoryImage_MemoryImage)(Sexy::Image *);
 
-unsigned int *(*Sexy_MemoryImage_GetBits)(Sexy::Image *);
+inline unsigned int *(*Sexy_MemoryImage_GetBits)(Sexy::Image *);
 
 inline void (*Sexy_MemoryImage_Create)(Sexy::Image *, int x, int y);
 
@@ -125,7 +125,7 @@ inline void (*FilterEffectDoWhite)(Sexy::Image *);
 
 inline void (*FilterEffectDoLumSat)(Sexy::Image *theImage, float aLum, float aSat);
 
-int **(*ReanimAtlas_GetEncodedReanimAtlas)(int *, int *);
+inline int **(*ReanimAtlas_GetEncodedReanimAtlas)(int *, int *);
 
 inline void (*ReanimatorCache_GetPlantImageSize)(ReanimatorCache *, int, int *, int *, int *, int *);
 
@@ -133,7 +133,7 @@ inline int *(*Sexy_ResourceManager_GetSoundThrow)(int *, int *);
 
 inline float (*RandRangeFloat)(float, float);
 
-unsigned int (*PoolEffect_BilinearLookupFixedPoint)(PoolEffect *, unsigned int, unsigned int);
+inline unsigned int (*PoolEffect_BilinearLookupFixedPoint)(PoolEffect *, unsigned int, unsigned int);
 
 inline bool (*TodFoley_IsFoleyPlaying)(TodFoley *soundSystem, FoleyType::FoleyType theFoleyType);
 

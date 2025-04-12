@@ -407,8 +407,8 @@ public class NativeActivity extends Activity {
         return "";
     }
 
-    public String getDeviceId() {
-        return "";
+    public int getDeviceId() {
+        return 0;
     }
 
     public String getSerialNumber() {

@@ -214,6 +214,8 @@ inline TodParticleSystem *(*LawnApp_ParticleTryToGet)(LawnApp *lawnApp, int);
 
 inline void (*old_LawnApp_DoBackToMain)(LawnApp *lawnApp);
 
+inline void (*old_LawnApp_ShowAwardScreen)(LawnApp* lawnApp, int a2);
+
 inline void (*old_LawnApp_KillAwardScreen)(LawnApp *lawnApp);
 
 inline int (*old_LawnApp_GamepadToPlayerIndex)(LawnApp *lawnApp, unsigned int a2);
@@ -245,6 +247,8 @@ inline bool (*old_LawnApp_IsNight)(LawnApp *lawnApp);
 inline void (*old_Sexy_SexyAppBase_SexyAppBase)(SexyAppBase *appBase);
 
 inline bool (*old_LawnApp_HasSeedType)(LawnApp *lawnApp, SeedType::SeedType theSeedType, int playerIndex);
+
+inline void (*old_LawnApp_DoNewOptions)(LawnApp *lawnApp, bool a2, unsigned int a3);
 
 
 void LawnApp_LawnApp(LawnApp *lawnApp);

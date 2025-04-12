@@ -33,10 +33,10 @@ constexpr int AGVideoPlayOffset = 0x693950;
 inline bool enableNewOptionsDialog = false;
 
 namespace game_patches {
-homura::Patcher whackAZombieNormalSpeed;     // 锤僵尸关卡的僵尸速度恢复为原速
-homura::Patcher repairShopA;                 // 破解商店
-homura::Patcher repairShopB;                 // 破解商店
-homura::Patcher autoPickupSeedPacketDisable; // 禁止光标自动拾取植物卡片
+inline homura::Patcher whackAZombieNormalSpeed;     // 锤僵尸关卡的僵尸速度恢复为原速
+inline homura::Patcher repairShopA;                 // 破解商店
+inline homura::Patcher repairShopB;                 // 破解商店
+inline homura::Patcher autoPickupSeedPacketDisable; // 禁止光标自动拾取植物卡片
 } // namespace game_patches
 
 inline void ApplyPatches() {

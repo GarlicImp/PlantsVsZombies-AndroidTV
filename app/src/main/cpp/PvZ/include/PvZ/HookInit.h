@@ -602,6 +602,7 @@ inline void InitHookFunction() {
     homura::HookFunction(LawnApp_HardwareInitAddr, &LawnApp_HardwareInit, &old_LawnApp_HardwareInit);
     homura::HookFunction(LawnApp_DoBackToMainAddr, &LawnApp_DoBackToMain, &old_LawnApp_DoBackToMain);
     homura::HookFunction(LawnApp_CanShopLevelAddr, &LawnApp_CanShopLevel, &old_LawnApp_CanShopLevel);
+    homura::HookFunction(LawnApp_DoNewOptionsAddr, &LawnApp_DoNewOptions, &old_LawnApp_DoNewOptions);
     homura::HookFunction(LawnApp_GetNumPreloadingTasksAddr, &LawnApp_GetNumPreloadingTasks, &old_LawnApp_GetNumPreloadingTasks);
     homura::HookFunction(LawnApp_DoConfirmBackToMainAddr, &LawnApp_DoConfirmBackToMain, nullptr);
     homura::HookFunction(LawnApp_TrophiesNeedForGoldSunflowerAddr, &LawnApp_TrophiesNeedForGoldSunflower, nullptr);
@@ -609,13 +610,14 @@ inline void InitHookFunction() {
     homura::HookFunction(LawnApp_ShowCreditScreenAddr, &LawnApp_ShowCreditScreen, &old_LawnApp_ShowCreditScreen);
     homura::HookFunction(LawnApp_OnSessionTaskFailedAddr, &LawnApp_OnSessionTaskFailed, nullptr);
     homura::HookFunction(LawnApp_UpdateAppAddr, &LawnApp_UpdateApp, &old_LawnApp_UpDateApp);
+    homura::HookFunction(LawnApp_ShowAwardScreenAddr, &LawnApp_ShowAwardScreen, &old_LawnApp_ShowAwardScreen);
     homura::HookFunction(LawnApp_KillAwardScreenAddr, &LawnApp_KillAwardScreen, &old_LawnApp_KillAwardScreen);
     homura::HookFunction(LawnApp_LoadLevelConfigurationAddr, &LawnApp_LoadLevelConfiguration, &old_LawnApp_LoadLevelConfiguration);
     homura::HookFunction(LawnApp_LoadingThreadProcAddr, &LawnApp_LoadingThreadProc, &old_LawnApp_LoadingThreadProc);
     homura::HookFunction(LawnApp_IsChallengeWithoutSeedBankAddr, &LawnApp_IsChallengeWithoutSeedBank, &old_LawnApp_IsChallengeWithoutSeedBank);
     homura::HookFunction(LawnApp_TryHelpTextScreenAddr, &LawnApp_TryHelpTextScreen, nullptr);
     homura::HookFunction(LawnApp_KillSeedChooserScreenAddr, &LawnApp_KillSeedChooserScreen, &old_LawnApp_KillSeedChooserScreen);
-    homura::HookFunction(LawnApp_HasSeedTypeAddr, &LawnApp_HasSeedType, &old_LawnApp_HasSeedType);
+//    homura::HookFunction(LawnApp_HasSeedTypeAddr, &LawnApp_HasSeedType, &old_LawnApp_HasSeedType);
 
 
     homura::HookFunction(Board_UpdateAddr, &Board_Update, &old_Board_Update);
@@ -645,6 +647,7 @@ inline void InitHookFunction() {
     homura::HookFunction(Board_IsLevelDataLoadedAddr, &Board_IsLevelDataLoaded, &old_Board_IsLevelDataLoaded);
     homura::HookFunction(Board_NeedSaveGameAddr, &Board_NeedSaveGame, &old_Board_NeedSaveGame);
     homura::HookFunction(Board_UpdateFwooshAddr, &Board_UpdateFwoosh, &old_Board_UpdateFwoosh);
+    homura::HookFunction(Board_UpdateFogAddr, &Board_UpdateFog, &old_Board_UpdateFog);
     homura::HookFunction(Board_DrawFogAddr, &Board_DrawFog, &old_Board_DrawFog);
     homura::HookFunction(Board_UpdateIceAddr, &Board_UpdateIce, &old_Board_UpdateIce);
     homura::HookFunction(Board_DrawBackdropAddr, &Board_DrawBackdrop, &old_Board_DrawBackdrop);
@@ -664,9 +667,11 @@ inline void InitHookFunction() {
     homura::HookFunction(Board_InitLawnMowersAddr, &Board_InitLawnMowers, &old_Board_InitLawnMowers);
     homura::HookFunction(Board_PickZombieWavesAddr, &Board_PickZombieWaves, &old_Board_PickZombieWaves);
     homura::HookFunction(Board_DrawUITopAddr, &Board_DrawUITop, &old_Board_DrawUITop);
+    homura::HookFunction(Board_GetShovelButtonRectAddr, &Board_GetShovelButtonRect, &old_Board_GetShovelButtonRect);
     homura::HookFunction(Board_UpdateLevelEndSequenceAddr, &Board_UpdateLevelEndSequence, &old_Board_UpdateLevelEndSequence);
     homura::HookFunction(Board_UpdateGridItemsAddr, &Board_UpdateGridItems, &old_Board_UpdateGridItems);
     homura::HookFunction(Board_ShakeBoardAddr, &Board_ShakeBoard, &old_Board_ShakeBoard);
+    homura::HookFunction(Board_DrawZenButtonsAddr, &Board_DrawZenButtons, &old_Board_DrawZenButtons);
 
 
     homura::HookFunction(FixBoardAfterLoadAddr, &FixBoardAfterLoad, &old_FixBoardAfterLoad);
