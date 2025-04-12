@@ -70,7 +70,7 @@ inline void (*Projectile_GetProjectileRect)(TRect *a1, Projectile *a2);
 
 inline Plant *(*Projectile_FindCollisionTargetPlant)(Projectile *a1);
 
-ProjectileDefinition &(*Projectile_GetProjectileDef)(Projectile *a);
+inline ProjectileDefinition &(*Projectile_GetProjectileDef)(Projectile *a);
 
 inline bool (*Projectile_CantHitHighGround)(Projectile *a);
 

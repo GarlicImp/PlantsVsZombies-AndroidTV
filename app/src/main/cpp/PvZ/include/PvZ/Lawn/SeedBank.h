@@ -41,8 +41,6 @@ inline void (*old_SeedBank_EndDraw)(SeedBank *seedBank, Sexy::Graphics *graphics
 
 void SeedBank_Draw(SeedBank *seedBank, Sexy::Graphics *graphics);
 
-bool SeedBank_MouseHitTest(SeedBank *seedBank, int x, int y, HitResult *hitResult);
-
 bool SeedBank_ContainsPoint(SeedBank *, int x, int y);
 
 bool SeedBank_BeginDraw(SeedBank *seedBank, Sexy::Graphics *graphics);

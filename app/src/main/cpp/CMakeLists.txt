@@ -3,7 +3,7 @@ project(PvZTV)
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
+string(APPEND CMAKE_CXX_FLAGS " -w")
 set(CMAKE_CXX_VISIBILITY_PRESET hidden) # 隐藏非 inline 符号
 set(CMAKE_VISIBILITY_INLINES_HIDDEN ON) # 隐藏 inline 符号
 
@@ -25,10 +25,14 @@ find_library(android-lib android)
 find_library(EGL-lib EGL)
 find_library(GLESv2-lib GLESv2)
 find_library(log-lib log)
+find_library(opensles-lib OpenSLES)
 target_link_libraries(Homura PRIVATE
         Substrate
         ${android-lib}
         ${EGL-lib}
         ${GLESv2-lib}
         ${log-lib}
+        ${opensles-lib}
 )
+
+

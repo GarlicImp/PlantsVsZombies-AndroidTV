@@ -32,7 +32,7 @@ constexpr const float THOWN_ZOMBIE_GRAVITY = 0.05f;
 constexpr const float CHILLED_SPEED_FACTOR = 0.4f;
 constexpr const float CLIP_HEIGHT_LIMIT = -100.0f;
 constexpr const float CLIP_HEIGHT_OFF = -200.0f;
-const Color ZOMBIE_MINDCONTROLLED_COLOR = Color(128, 0, 192, 255);
+//const Color ZOMBIE_MINDCONTROLLED_COLOR = Color(128, 0, 192, 255);
 
 enum ZombieAttackType
 {
@@ -307,7 +307,7 @@ inline void (*old_Zombie_DetachShield)(Zombie *zombie);
 
 inline void (*old_Zombie_ZombieInitialize)(Zombie *zombie, int theRow, ZombieType theType, bool theVariant, Zombie *theParentZombie, int theFromWave, bool isVisible);
 
-ZombieDefinition &(*old_GetZombieDefinition)(ZombieType type);
+inline ZombieDefinition &(*old_GetZombieDefinition)(ZombieType type);
 
 inline void (*old_Zombie_DieNoLoot)(Zombie *);
 

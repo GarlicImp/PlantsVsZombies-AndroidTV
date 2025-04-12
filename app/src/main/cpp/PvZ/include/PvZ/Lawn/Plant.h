@@ -246,7 +246,7 @@ inline void (*Plant_UpdateReanim)(Plant *);
 
 inline bool (*Plant_IsFlying)(SeedType::SeedType);
 
-PlantDefinition &(*GetPlantDefinition)(SeedType::SeedType);
+inline PlantDefinition &(*GetPlantDefinition)(SeedType::SeedType);
 
 inline bool (*Plant_IsNocturnal)(SeedType::SeedType);
 

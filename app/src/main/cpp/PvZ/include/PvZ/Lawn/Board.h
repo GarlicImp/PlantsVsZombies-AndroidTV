@@ -558,6 +558,12 @@ inline bool (*old_Board_RowCanHaveZombieType)(Board *board, int theRow, ZombieTy
 
 inline void (*old_Board_ShakeBoard)(Board *board, int theShakeAmountX, int theShakeAmountY);
 
+inline void (*old_Board_UpdateFog)(Board *board);
+
+inline void (*old_Board_GetShovelButtonRect)(TRect *rect, Board *board);
+
+inline void (*old_Board_DrawZenButtons)(Board *board, Sexy::Graphics *a2);
+
 
 void FixBoardAfterLoad(Board *board);
 
