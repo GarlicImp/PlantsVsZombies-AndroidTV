@@ -43,7 +43,7 @@ public:
     int mAppCounter;                                // 591
     Music2 *mMusic;                                 // 592
     int mCrazyDaveReanimID;                         // 593
-    CrazyDaveState::CrazyDaveState mCrazyDaveState; // 594
+    CrazyDaveState mCrazyDaveState; // 594
     int mCrazyDaveBlinkCounter;                     // 595
     int mCrazyDaveBlinkReanimID;                    // 596
     int mCrazyDaveMessageIndex;                     // 597
@@ -57,7 +57,7 @@ public:
     int mInitialSunMoney;                           // 645     // 这个数据能给玩家加初始阳光
     bool mIsFullVersion;                            // 2584
     int unk9[7];                                    // 647 ~ 653
-    BoardResult::BoardResult mBoardResult;          // 654
+    BoardResult mBoardResult;          // 654
     bool mKilledYetiAndRestarted;                   // 2620
     int *mKonamiCheck;                              // 656
     int *mMustacheCheck;                            // 657
@@ -169,7 +169,7 @@ inline int (*LawnApp_ParticleGetID)(LawnApp *, TodParticleSystem *);
 
 inline Reanimation *(*LawnApp_AddReanimation)(LawnApp *, float, float, int, ReanimationType);
 
-inline void (*LawnApp_ShowChallengeScreen)(LawnApp *, ChallengePage::ChallengePage);
+inline void (*LawnApp_ShowChallengeScreen)(LawnApp *, ChallengePage);
 
 inline bool (*LawnApp_HasFinishedAdventure)(LawnApp *);
 
@@ -203,7 +203,7 @@ inline bool (*LawnApp_IsLittleTroubleLevel)(LawnApp *);
 
 inline int *(*Sexy_SexyAppBase_GetDialog)(LawnApp *lawnApp, Dialogs::Dialogs dialogId);
 
-inline int (*LawnApp_GetNumTrophies)(LawnApp *, ChallengePage::ChallengePage);
+inline int (*LawnApp_GetNumTrophies)(LawnApp *, ChallengePage);
 
 inline bool (*LawnApp_IsSurvivalEndless)(LawnApp *lawnApp, GameMode::GameMode);
 

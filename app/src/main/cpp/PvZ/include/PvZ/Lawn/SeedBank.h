@@ -16,8 +16,9 @@ public:
     ShopSeedPacket mShopSeedPackets[7]; // 308 ~ 354
     int unknownMembers[100];            // 355 ~ 454
     // 大小455个整数
-public:
-    void Creat(bool thePlayerIndex);
+
+    SeedBank(bool thePlayerIndex);
+    void Create(bool thePlayerIndex);
     void Draw(Sexy::Graphics* g);
     bool MouseHitTest(int x, int y, HitResult *theHitResult);
     void UpdateWidth();

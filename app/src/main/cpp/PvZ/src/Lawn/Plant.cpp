@@ -605,7 +605,7 @@ void Plant::PlantInitialize(int theGridX, int theGridY, SeedType::SeedType theSe
 
     // 在对战模式修改指定植物的血量
     if (mApp->mGameMode == GameMode::TwoPlayerVS) {
-        switch (mSeedType) {
+        switch (theSeedType) {
             case SeedType::Sunflower:
                 mPlantMaxHealth = 300;
                 break;

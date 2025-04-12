@@ -137,8 +137,8 @@ void GridItem_DrawStinky(GridItem *mStinky, Sexy::Graphics *graphics) {
     }
     // 如果Stinky在光标位置处
     CursorObject *cursorObject = board->mCursorObject1;
-    CursorType::CursorType mCursorType = cursorObject->mCursorType;
-    if (mCursorType == CursorType::Chocolate) {
+    CursorType mCursorType = cursorObject->mCursorType;
+    if (mCursorType == CursorType::CURSOR_TYPE_CHOCOLATE) {
         // 如果光标类型为巧克力
         bool isStinkyHighOnChocolate = ZenGarden_IsStinkyHighOnChocolate(mStinky->mApp->mZenGarden);
         mStinky->mHighlighted = !isStinkyHighOnChocolate; // 为没喂巧克力的Stinky加入高亮效果

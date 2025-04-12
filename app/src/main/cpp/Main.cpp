@@ -27,6 +27,8 @@
  * Java 层已指定模块加载顺序: 先 libGameMain.so, 后 libHomura.so.
  */
 [[gnu::constructor]] void lib_main() {
+    homura::Logger::Instance().SetLevel(homura::LogLevel::INFO);
+
     // Target lib here
     constexpr char targetLibName[] = "libGameMain.so";
 

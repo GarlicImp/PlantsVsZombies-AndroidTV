@@ -622,7 +622,7 @@ inline void InitHookFunction() {
 
     homura::HookFunction(Board_UpdateAddr, &Board_Update, &old_Board_Update);
     homura::HookFunction(Board_BoardAddr, &Board_Board, &old_Board_Board);
-    homura::HookFunction(Board_InitLevelAddr, &Board_InitLevel, &old_Board_InitLevel);
+    homura::HookFunction(Board_InitLevelAddr, &Board::InitLevel, &old_Board_InitLevel);
     homura::HookFunction(Board_RemovedFromManagerAddr, &Board_RemovedFromManager, &old_Board_RemovedFromManager);
     homura::HookFunction(Board_FadeOutLevelAddr, &Board_FadeOutLevel, &old_Board_FadeOutLevel);
     homura::HookFunction(Board_AddPlantAddr, &Board_AddPlant, &old_Board_AddPlant);
@@ -672,6 +672,7 @@ inline void InitHookFunction() {
     homura::HookFunction(Board_UpdateGridItemsAddr, &Board_UpdateGridItems, &old_Board_UpdateGridItems);
     homura::HookFunction(Board_ShakeBoardAddr, &Board_ShakeBoard, &old_Board_ShakeBoard);
     homura::HookFunction(Board_DrawZenButtonsAddr, &Board_DrawZenButtons, &old_Board_DrawZenButtons);
+//    homura::HookFunction(Board_GetNumSeedsInBankAddr, &Board::GetNumSeedsInBank, &old_Board_GetNumSeedsInBank);
 
 
     homura::HookFunction(FixBoardAfterLoadAddr, &FixBoardAfterLoad, &old_FixBoardAfterLoad);
@@ -852,8 +853,8 @@ inline void InitHookFunction() {
 
     homura::HookFunction(SeedBank_DrawAddr, &SeedBank::Draw, &old_SeedBank_Draw);
     homura::HookFunction(SeedBank_MouseHitTestAddr, &SeedBank::MouseHitTest, nullptr);
-    homura::HookFunction(SeedBank_SeedBankAddr, &SeedBank::Creat, &old_SeedBank_SeedBank);
-    homura::HookFunction(SeedBank_UpdateWidthAddr, &SeedBank::UpdateWidth, &old_SeedBank_UpdateWidth);
+//    homura::HookFunction(SeedBank_SeedBankAddr, &SeedBank::Create, &old_SeedBank_SeedBank);
+//    homura::HookFunction(SeedBank_UpdateWidthAddr, &SeedBank::UpdateWidth, &old_SeedBank_UpdateWidth);
     homura::HookFunction(SeedBank_MoveAddr, &SeedBank::Move, nullptr);
 
 
@@ -949,7 +950,7 @@ inline void InitHookFunction() {
     homura::HookFunction(DaveHelp_DrawAddr, &DaveHelp_Draw, nullptr);
     homura::HookFunction(DaveHelp_Delete2Addr, &DaveHelp_Delete2, &old_DaveHelp_Delete2);
     homura::HookFunction(DaveHelp_DealClickAddr, &DaveHelp_DealClick, nullptr);
-    homura::HookFunction(TrashBin_TrashBinAddr, &TrashBin::Creat, &old_TrashBin_TrashBin);
+    homura::HookFunction(TrashBin_TrashBinAddr, &TrashBin::Create, &old_TrashBin_TrashBin);
     homura::HookFunction(Sexy_SexyAppBase_Is3DAcceleratedAddr, &Sexy_SexyAppBase_Is3DAccelerated, nullptr);
     homura::HookFunction(Sexy_SexyAppBase_SexyAppBaseAddr, &Sexy_SexyAppBase_SexyAppBase, &old_Sexy_SexyAppBase_SexyAppBase);
     homura::HookFunction(SettingsDialog_AddedToManagerAddr, &SettingsDialog_AddedToManager, &old_SettingsDialog_AddedToManager);

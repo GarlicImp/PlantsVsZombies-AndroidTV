@@ -91,17 +91,17 @@ void GamepadControls_Draw(GamepadControls *gamepadControls, Sexy::Graphics *grap
                 if (!board->mShowShovel)
                     requestDrawShovelInCursor = false;
                 if (lawnApp->mGameMode == GameMode::ChallengeLastStand) {
-                    if (board->mChallenge->mChallengeState == ChallengeState::Normal && lawnApp->mGameScene == GameScenes::Playing) {
-                        cursorObject->mCursorType = CursorType::MoneySign;
+                    if (board->mChallenge->mChallengeState == ChallengeState::STATECHALLENGE_NORMAL && lawnApp->mGameScene == GameScenes::Playing) {
+                        cursorObject->mCursorType = CursorType::CURSOR_TYPE_MONEY_SIGN;
                         cursorObject->mX = gamepadControls->mCursorPositionX;
                         cursorObject->mY = gamepadControls->mCursorPositionY;
                     } else {
-                        cursorObject->mCursorType = CursorType::Shovel;
+                        cursorObject->mCursorType = CursorType::CURSOR_TYPE_SHOVEL;
                         cursorObject->mX = gamepadControls->mCursorPositionX - 20;
                         cursorObject->mY = gamepadControls->mCursorPositionY - 20;
                     }
                 } else {
-                    cursorObject->mCursorType = CursorType::Shovel;
+                    cursorObject->mCursorType = CursorType::CURSOR_TYPE_SHOVEL;
                     cursorObject->mX = gamepadControls->mCursorPositionX - 20;
                     cursorObject->mY = gamepadControls->mCursorPositionY - 20;
                 }
@@ -494,7 +494,7 @@ void GamepadControls_UpdatePreviewReanim(GamepadControls *gamepadControls) {
     if (mPreviewReanim4 == nullptr)
         return;
 
-    if (cursorObject->mCursorType != CursorType::PlantFromUsableCoin && gamepadControls->mGamepadState != 7)
+    if (cursorObject->mCursorType != CursorType::CURSOR_TYPE_PLANT_FROM_USABLE_COIN && gamepadControls->mGamepadState != 7)
         return;
     if (gamepadControls->mSelectedSeedIndex == -1)
         return;
@@ -508,7 +508,7 @@ void GamepadControls_UpdatePreviewReanim(GamepadControls *gamepadControls) {
         flagUpdateCanPlant = false;
         flagDrawGray = true;
     }
-    if (!Board_HasConveyorBeltSeedBank(gamepadControls->mBoard, gamepadControls->mPlayerIndex2) && cursorObject->mCursorType != CursorType::PlantFromUsableCoin) {
+    if (!Board_HasConveyorBeltSeedBank(gamepadControls->mBoard, gamepadControls->mPlayerIndex2) && cursorObject->mCursorType != CursorType::CURSOR_TYPE_PLANT_FROM_USABLE_COIN) {
         if (gamepadControls->mIsZombie && gamepadControls->mGameObject.mApp->mGameMode == GameMode::TwoPlayerVS) {
             if (!Board_CanTakeDeathMoney(gamepadControls->mBoard, Board_GetCurrentPlantCost(gamepadControls->mBoard, mSeedType, SeedType::None))) {
                 flagUpdateCanPlant = false;
@@ -546,7 +546,7 @@ void GamepadControls_DrawPreview(GamepadControls *gamepadControls, Sexy::Graphic
     GameMode::GameMode mGameMode = lawnApp->mGameMode;
     if (mGameMode == GameMode::ChallengeRainingSeeds) { // 为种子雨添加种植预览
         CursorObject *cursorObject = gamepadControls->mPlayerIndex1 ? gamepadControls->mBoard->mCursorObject2 : gamepadControls->mBoard->mCursorObject1;
-        if (cursorObject->mCursorType == CursorType::PlantFromUsableCoin) {
+        if (cursorObject->mCursorType == CursorType::CURSOR_TYPE_PLANT_FROM_USABLE_COIN) {
             gamepadControls->mGamepadState = 7;
             old_GamepadControls_DrawPreview(gamepadControls, graphics);
             gamepadControls->mGamepadState = 1;

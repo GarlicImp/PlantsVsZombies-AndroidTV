@@ -39,7 +39,7 @@ public:
     bool mBeghouledEated[9][6];                     // 40 ~  93
     bool mBeghouledPurcasedUpgrade[3];              // 94 ~ 96
     int mBeghouledMatchesThisMove;                  // 25
-    ChallengeState::ChallengeState mChallengeState; // 26
+    ChallengeState mChallengeState; // 26
     int mChallengeStateCounter;                     // 27
     int mConveyorBeltCounter;                       // 28
     int unk2;                                       // 29
@@ -71,7 +71,7 @@ public:
     int mReanimHeavyWeaponID2;                      // 78
     int mReanimHeavyWeaponID3;                      // 79
     // 大小80个整数
-public:
+
 
 };
 

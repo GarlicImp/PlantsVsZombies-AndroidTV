@@ -6,7 +6,7 @@
 
 static Sexy::GameButton *mChallengeScreenCloseButton;
 
-void ChallengeScreen_ChallengeScreen(ChallengeScreen *challengeScreen, LawnApp *lawnApp, ChallengePage::ChallengePage page) {
+void ChallengeScreen_ChallengeScreen(ChallengeScreen *challengeScreen, LawnApp *lawnApp, ChallengePage page) {
     // 去除按钮对触控的遮挡
     old_ChallengeScreen_ChallengeScreen(challengeScreen, lawnApp, page);
     for (auto *button : challengeScreen->mButtons) {

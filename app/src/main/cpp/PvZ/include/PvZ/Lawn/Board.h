@@ -59,7 +59,7 @@ struct BungeeDropGrid
     int								mGridArrayCount;
 };
 
-class Board : public Sexy::Widget, public Sexy::ButtonListener {
+class Board : public Sexy::Widget, Sexy::ButtonListener {
 public:
     Sexy::ButtonListener mButtonListener;                 // 64
     int unknownMembers1[4];                               // 65 ~ 68
@@ -150,7 +150,7 @@ public:
     int mShakeCounter;                                    // 5525
     int mShakeAmountX;                                    // 5526
     int mShakeAmountY;                                    // 5527
-    BackgroundType::BackgroundType mBackgroundType;       // 5528
+    BackgroundType mBackgroundType;       // 5528
     int mLevel;                                           // 5529
     int mSodPosition;                                     // 5530
     int mPrevMouseX;                                      // 5531
@@ -176,7 +176,7 @@ public:
     int mZombieCountDownStart;                            // 5551
     int mHugeWaveCountDown;                               // 5552
     bool mHelpDisplayed[72];                              // 5553 ~ 5570
-    AdviceType::AdviceType mHelpIndex;                    // 5571
+    AdviceType mHelpIndex;                    // 5571
     bool mFinalBossKilled;                                // 22288
     bool mShowShovel;                                     // 22289
     bool mShowButter;                                     // 22290
@@ -238,7 +238,8 @@ public:
     int *mStringSecondPlayer;                             // 5689
     int unknownMembers[8];                                // 5690 ~ 5697
 
-public:
+    void InitLevel();
+    int GetNumSeedsInBank(bool thePlayerIdx);
     void RemoveParticleByType(ParticleEffect::ParticleEffect theEffectType);
 };
 
@@ -431,7 +432,7 @@ inline int (*Board_TotalZombiesHealthInWave)(Board *, int);
 
 inline void (*Board_ClearAdviceImmediately)(Board *);
 
-inline void (*Board_DisplayAdviceAgain)(Board *, int *, MessageStyle::MessageStyle, AdviceType::AdviceType);
+inline void (*Board_DisplayAdviceAgain)(Board *, int *, MessageStyle::MessageStyle, AdviceType);
 
 inline int (*Board_GridCellWidth)(Board *, int, int);
 
@@ -564,6 +565,8 @@ inline void (*old_Board_GetShovelButtonRect)(TRect *rect, Board *board);
 
 inline void (*old_Board_DrawZenButtons)(Board *board, Sexy::Graphics *a2);
 
+inline int (*old_Board_GetNumSeedsInBank)(Board* , bool);
+
 
 void FixBoardAfterLoad(Board *board);
 
@@ -605,7 +608,7 @@ int Board_GetLiveZombiesCount(Board *board);
 
 void Board_ShovelDown(Board *);
 
-bool Board_ZenGardenItemNumIsZero(Board *, CursorType::CursorType);
+bool Board_ZenGardenItemNumIsZero(Board *, CursorType);
 
 void Board_SetGrids(Board *board);
 

@@ -84,9 +84,8 @@ public:
         ZOMBIE_WAVE_WINNER = -4
     };
 
-public:
     ZombieType mZombieType;       // 13
-    ZombiePhase::ZombiePhase mZombiePhase;    // 14
+    ZombiePhase mZombiePhase;    // 14
     float mPosX;                              // 15
     float mPosY;                              // 16
     float mVelX;                              // 17
@@ -102,7 +101,7 @@ public:
     int mShieldJustGotShotCounter;            // 26
     int mShieldRecoilCounter;                 // 27
     int mZombieAge;                           // 28
-    ZombieHeight::ZombieHeight mZombieHeight; // 29
+    ZombieHeight mZombieHeight; // 29
     int mPhaseCounter;                        // 30
     int mFromWave;                            // 31
     bool mDroppedLoot;                        // 128
@@ -164,7 +163,7 @@ public:
     int unkMems[6];                           // 91 ~ 96
     int mZombieID;                            // 97
     // 大小98个整数
-public:
+
     void ZombieInitialize(int theRow, ZombieType theType, bool theVariant, Zombie *theParentZombie, int theFromWave, bool isVisible);
     void Draw(Sexy::Graphics *g);
     void DieNoLoot();
