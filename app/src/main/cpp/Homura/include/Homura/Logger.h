@@ -79,10 +79,10 @@ protected:
             return;
         }
         std::string message = std::vformat(format, std::make_format_args(args...));
-        __android_log_print(GetLogPriority(level), _logTag, "[%s] %s", location.function_name(), message.c_str());
+        __android_log_print(ANDROID_LOG_DEBUG, _logTag, "[%s] %s", location.function_name(), message.c_str());
     }
 
-    LogLevel _level = LogLevel::DEBUG;
+    LogLevel _level = LogLevel::INFO;
 
 private:
     [[nodiscard]] static constexpr android_LogPriority GetLogPriority(LogLevel level) noexcept {

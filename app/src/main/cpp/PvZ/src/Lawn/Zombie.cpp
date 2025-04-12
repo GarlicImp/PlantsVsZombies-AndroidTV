@@ -324,9 +324,8 @@ int Zombie::GetDancerFrame() {
 
     // 修复女仆秘籍问题、修复舞王和舞者的跳舞时间不吃高级暂停也不吃倍速
     // 关键就是用mBoard.mMainCounter代替mApp.mAppCounter做计时
-    ZombiePhase::ZombiePhase mZombiePhase = mZombiePhase;
-    int num1 = mZombiePhase == ZombiePhase::DancerDancingIn ? 10 : 20;
-    int num2 = mZombiePhase == ZombiePhase::DancerDancingIn ? 110 : 460;
+    int num1 = mZombiePhase == ZombiePhase::PHASE_DANCER_DANCING_IN ? 10 : 20;
+    int num2 = mZombiePhase == ZombiePhase::PHASE_DANCER_DANCING_IN ? 110 : 460;
     return mBoard->mMainCounter % num2 / num1;
     // return *(uint32_t *) (lawnApp + 2368) % num2 / num1;
 }
@@ -352,8 +351,8 @@ void Zombie::RiseFromGrave(int theGridX, int theGridY) {
             //                }
         }
 
-        BackgroundType::BackgroundType tmp = mBoard->mBackgroundType;
-        mBoard->mBackgroundType = BackgroundType::Num1Day;
+        BackgroundType tmp = mBoard->mBackgroundType;
+        mBoard->mBackgroundType = BackgroundType::BACKGROUND_1_DAY;
         old_Zombie_RiseFromGrave(this, theGridX, theGridY);
         mBoard->mBackgroundType = tmp;
         return;
@@ -396,21 +395,21 @@ void Zombie::CheckForBoardEdge() {
 
 void Zombie::EatPlant(Plant *thePlant) {
     // 修复正向出土的矿工不上梯子
-    if (mZombiePhase == ZombiePhase::DancerDancingIn) {
+    if (mZombiePhase == ZombiePhase::PHASE_DANCER_DANCING_IN) {
         mPhaseCounter = 1;
         return;
     }
     if (mYuckyFace) {
         return;
     }
-    int mPlantCol = thePlant->mPlantCol;
-    int mRow = thePlant->mRow;
-    if (Board_GetLadderAt(mBoard, mPlantCol, mRow) != nullptr && mZombieType == ZombieType::ZOMBIE_DIGGER && mZombiePhase == ZombiePhase::DiggerWalkingWithoutAxe
+    int aPlantCol = thePlant->mPlantCol;
+    int aRow = thePlant->mRow;
+    if (Board_GetLadderAt(mBoard, aPlantCol, aRow) != nullptr && mZombieType == ZombieType::ZOMBIE_DIGGER && mZombiePhase == ZombiePhase::PHASE_DIGGER_WALKING_WITHOUT_AXE
         && !Zombie_IsWalkingBackwards(this)) {
         Zombie_StopEating(this);
-        if (mZombieHeight == ZombieHeight::ZombieNormal && mUseLadderCol != mPlantCol) {
-            mZombieHeight = ZombieHeight::UpLadder;
-            mUseLadderCol = mPlantCol;
+        if (mZombieHeight == ZombieHeight::HEIGHT_ZOMBIE_NORMAL && mUseLadderCol != aPlantCol) {
+            mZombieHeight = ZombieHeight::HEIGHT_UP_LADDER;
+            mUseLadderCol = aPlantCol;
         }
         return;
     }
@@ -428,7 +427,7 @@ void Zombie::DetachShield() {
 void Zombie::BossSpawnAttack() {
     // 修复泳池僵王为六路放僵尸时闪退
     Zombie_RemoveColdEffects(this);
-    mZombiePhase = ZombiePhase::BossSpawning;
+    mZombiePhase = ZombiePhase::PHASE_BOSS_SPAWNING;
     if (mBossMode == 0) {
         mSummonCounter = RandRangeInt(450, 550);
     } else if (mBossMode == 1) {
@@ -551,7 +550,7 @@ void Zombie::DrawBungeeCord(Sexy::Graphics *graphics, int theOffsetX, int theOff
     if (Zombie_IsOnBoard(this) && LawnApp_IsFinalBossLevel(mApp)) {
         Zombie *aBossZombie = Board_GetBossZombie(mBoard);
         int aClipAmount = 55;
-        if (aBossZombie->mZombiePhase == ZombiePhase::BossBungeesLeave) {
+        if (aBossZombie->mZombiePhase == ZombiePhase::PHASE_BOSS_BUNGEES_LEAVE) {
             Reanimation *reanimation = LawnApp_ReanimationGet(mApp, aBossZombie->mBodyReanimID);
             aClipAmount = TodAnimateCurveFloatTime(0.0f, 0.2f, reanimation->mAnimTime, 55.0f, 0.0f, TodCurves::Linear);
         }
@@ -580,7 +579,7 @@ bool Zombie::IsTangleKelpTarget() {
     if (!Board_StageHasPool(mBoard)) {
         return false;
     }
-    if (mZombieHeight == ZombieHeight::DraggedUnder) {
+    if (mZombieHeight == ZombieHeight::HEIGHT_DRAGGED_UNDER) {
         return true;
     }
     Plant *aPlant = nullptr;

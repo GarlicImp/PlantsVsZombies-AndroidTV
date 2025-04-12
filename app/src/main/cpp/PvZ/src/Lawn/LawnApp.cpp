@@ -117,7 +117,7 @@ void LawnApp_DoConfirmBackToMain(LawnApp *lawnApp, bool save) {
     // 实现在花园直接退出而不是弹窗退出；同时实现新版暂停菜单
     GameMode::GameMode gameMode = lawnApp->mGameMode;
     if (gameMode == GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN) {
-        lawnApp->mBoardResult = BoardResult::Quit;
+        lawnApp->mBoardResult = BoardResult::BOARDRESULT_QUIT;
         //        if (save) Board_TryToSaveGame(lawnApp->mBoard);
         LawnApp_DoBackToMain(lawnApp);
         return;
@@ -354,7 +354,7 @@ bool LawnApp_GrantAchievement(LawnApp *lawnApp, AchievementId::AchievementId the
         //    int holder[1];
         //    Sexy_StrFormat(holder,"一二三四五六 成就达成！");
         //    ((CustomMessageWidget*)board->mAdvice)->mIcon = GetIconByAchievementId(theAchievementId);
-        //    Board_DisplayAdviceAgain(board, holder, MessageStyle::Achievement, AdviceType::AchievementEarned);
+        //    Board_DisplayAdviceAgain(board, holder, MessageStyle::Achievement, AdviceType::ADVICE_NEED_ACHIVEMENT_EARNED);
         //    Sexy_String_Delete(holder);
         playerInfo->mAchievements[theAchievementId] = true;
         return true;

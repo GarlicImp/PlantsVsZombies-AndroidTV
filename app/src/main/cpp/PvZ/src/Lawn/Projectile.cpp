@@ -165,10 +165,10 @@ void Projectile_DoImpact(Projectile *projectile, Zombie *zombie) {
         if (zombie != nullptr) {
             int mZombieX = zombie->mX;
             int mZombieY = zombie->mY;
-            ZombiePhase::ZombiePhase mZombiePhase = zombie->mZombiePhase;
+            ZombiePhase mZombiePhase = zombie->mZombiePhase;
             float num5 = num3 + 52.0f - mZombieX;
             float num6 = num4 - mZombieY;
-            if (mZombiePhase == ZombiePhase::DolphinWalkingInPool || mZombiePhase == ZombiePhase::SnorkelWalkingInPool) {
+            if (mZombiePhase == ZombiePhase::PHASE_DOLPHIN_WALKING_IN_POOL || mZombiePhase == ZombiePhase::PHASE_SNORKEL_WALKING_IN_POOL) {
                 num6 += 60.0f;
             }
             if (mMotionType == ProjectileMotion::Backwards) {

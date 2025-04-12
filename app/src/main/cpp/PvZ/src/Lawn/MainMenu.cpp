@@ -607,7 +607,7 @@ void MainMenu::Draw(Sexy::Graphics *g) {
     Reanimation_MatrixFromTransform(&v43, &v42);
     Sexy_SexyTransform2D_Translate(&v42, mCameraPositionX, mCameraPositionY);
     Sexy_SexyTransform2D_Translate(&v42, 120.0, 200.0);
-    Sexy::Image *m2DMarkImage = m2DMarkImage;
+
     TRect v37 = {0, 0, m2DMarkImage->mWidth, m2DMarkImage->mHeight};
     Sexy_Graphics_DrawImageMatrix(g, m2DMarkImage, &v42, &v37, 0.0, 0.0, 1);
     TRect v38 = {15, 15, 90, 90};
@@ -862,11 +862,14 @@ Sexy::Image *TrashBin_GetPlantTrashPiece(TrashBin *trashBin, int level) {
     }
 }
 
+TrashBin::TrashBin(TrashPileType theTrashPileType, float theHeight) {
+    Create(theTrashPileType, theHeight);
+}
 
 constexpr int zombiePileHeight = 70;
 constexpr int plantPileHeight = 100;
 
-void TrashBin::Creat(TrashPileType theTrashPileType, float theHeight) {
+void TrashBin::Create(TrashPileType theTrashPileType, float theHeight) {
     old_TrashBin_TrashBin(this, theTrashPileType, theHeight);
 
     int thePileNum = theHeight / (theTrashPileType == TrashBin::ZOMBIE_PILE ? zombiePileHeight : plantPileHeight) + 1;
@@ -1077,7 +1080,7 @@ void LeaderboardsWidget_LeaderboardsWidget(LeaderboardsWidget *this_, LawnApp *l
     Sexy_SexyTransform2D_SexyTransform2D(&zombieSexyTransform2D);
     Reanimation_GetTrackMatrix(this_->mLeaderboardReanimations->backgroundReanim[0], zombieTrackIndex, &zombieSexyTransform2D);
     this_->mZombieTrashBin = (TrashBin *)operator new(sizeof(TrashBin));
-    this_->mZombieTrashBin->TrashBin::Creat(TrashBin::ZOMBIE_PILE, lawnApp->mPlayerInfo->mGameStats.mMiscStats[GameStats::ZOMBIES_KILLED] / 125.0f);
+    this_->mZombieTrashBin->TrashBin::Create(TrashBin::ZOMBIE_PILE, lawnApp->mPlayerInfo->mGameStats.mMiscStats[GameStats::ZOMBIES_KILLED] / 125.0f);
     Sexy_Widget_Move(this_->mZombieTrashBin, zombieSexyTransform2D.m[0][2], zombieSexyTransform2D.m[1][2]);
 
     int plantTrackIndex = Reanimation_FindTrackIndex(this_->mLeaderboardReanimations->backgroundReanim[0], "PvZ/plant_tra.h");
@@ -1085,7 +1088,7 @@ void LeaderboardsWidget_LeaderboardsWidget(LeaderboardsWidget *this_, LawnApp *l
     Sexy_SexyTransform2D_SexyTransform2D(&plantSexyTransform2D);
     Reanimation_GetTrackMatrix(this_->mLeaderboardReanimations->backgroundReanim[0], plantTrackIndex, &plantSexyTransform2D);
     this_->mPlantTrashBin = (TrashBin *)operator new(sizeof(TrashBin));
-    this_->mPlantTrashBin->TrashBin::Creat(TrashBin::PLANT_PILE, lawnApp->mPlayerInfo->mGameStats.mMiscStats[GameStats::PLANTS_KILLED] / 125.0f);
+    this_->mPlantTrashBin->TrashBin::Create(TrashBin::PLANT_PILE, lawnApp->mPlayerInfo->mGameStats.mMiscStats[GameStats::PLANTS_KILLED] / 125.0f);
     Sexy_Widget_Move(this_->mPlantTrashBin, plantSexyTransform2D.m[0][2], plantSexyTransform2D.m[1][2]);
 
     for (int i = 0; i < AchievementId::MAX_ACHIEVEMENTS; ++i) {

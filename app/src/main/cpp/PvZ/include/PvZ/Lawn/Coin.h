@@ -21,8 +21,8 @@ public:
     bool mIsBeingCollected;             // 104
     int mCollectedByPlayerIndex;        // 27
     int mDisappearCounter;              // 28
-    CoinType::CoinType mType;           // 29
-    CoinMotion::CoinMotion mCoinMotion; // 30
+    CoinType mType;           // 29
+    CoinMotion mCoinMotion; // 30
     int mAttachment[3];                 // 31 ~ 33
     float mCollectionDistance;          // 34
     SeedType::SeedType mUsableSeedType; // 35

@@ -31,7 +31,7 @@ void Challenge_Update(Challenge *challenge) {
             mBoardStoreButton->mBtnNoDraw = true;
             mBoardStoreButton->mDisabled = true;
             mBoardMenuButton->mDisabled = true;
-        } else if (challenge->mApp->mCrazyDaveState != CrazyDaveState::Off) {
+        } else if (challenge->mApp->mCrazyDaveState != CrazyDaveState::CRAZY_DAVE_OFF) {
             mBoardStoreButton->mBtnNoDraw = true;
             mBoardMenuButton->mBtnNoDraw = true;
             mBoardStoreButton->mDisabled = true;
@@ -307,7 +307,7 @@ void Challenge_TreeOfWisdomFertilize(Challenge *challenge) {
 }
 
 void Challenge_LastStandUpdate(Challenge *challenge) {
-    if (challenge->mBoard->mNextSurvivalStageCounter == 0 && challenge->mChallengeState == ChallengeState::Normal && mBoardStoreButton->mBtnNoDraw) {
+    if (challenge->mBoard->mNextSurvivalStageCounter == 0 && challenge->mChallengeState == ChallengeState::STATECHALLENGE_NORMAL && mBoardStoreButton->mBtnNoDraw) {
         mBoardStoreButton->mBtnNoDraw = false;
         mBoardStoreButton->mDisabled = false;
         int holder[1];
@@ -316,11 +316,11 @@ void Challenge_LastStandUpdate(Challenge *challenge) {
         Sexy_String_Delete(holder);
         GameButton_Resize(mBoardStoreButton, 325, 555, 170, 120);
     }
-    if (challenge->mChallengeState == ChallengeState::LastStandOnslaught && challenge->mApp->mGameScene == GameScenes::Playing) {
+    if (challenge->mChallengeState == ChallengeState::STATECHALLENGE_LAST_STAND_ONSLAUGHT && challenge->mApp->mGameScene == GameScenes::Playing) {
         challenge->mChallengeStateCounter++;
     }
 
-    if (challenge->mChallengeState == ChallengeState::Normal && !mBoardStoreButton->mBtnNoDraw) {
+    if (challenge->mChallengeState == ChallengeState::STATECHALLENGE_NORMAL && !mBoardStoreButton->mBtnNoDraw) {
         GameButton_Resize(mBoardStoreButton, 325, 555, 170, 120);
         mBoardStoreButton->mBtnNoDraw = false;
         mBoardStoreButton->mDisabled = false;

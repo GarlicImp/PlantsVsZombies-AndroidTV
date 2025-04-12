@@ -1,20 +1,27 @@
 #include "PvZ/Lawn/SeedBank.h"
-#include "PvZ/Symbols.h"
-#include "PvZ/SexyAppFramework/Graphics.h"
-#include "PvZ/Misc.h"
+#include "Homura/Logger.h"
 #include "PvZ/GlobalVariable.h"
 #include "PvZ/Lawn/Board.h"
 #include "PvZ/Lawn/CutScene.h"
+#include "PvZ/Lawn/GamepadControls.h"
 #include "PvZ/Lawn/LawnApp.h"
 #include "PvZ/Lawn/SeedPacket.h"
 #include "PvZ/MagicAddr.h"
-#include "PvZ/Lawn/GamepadControls.h"
+#include "PvZ/Misc.h"
+#include "PvZ/SexyAppFramework/Graphics.h"
+#include "PvZ/Symbols.h"
 
-void SeedBank::Creat(bool thePlayerIndex) {
+SeedBank::SeedBank(bool thePlayerIndex) {
+    Create(thePlayerIndex);
+}
+
+void SeedBank::Create(bool thePlayerIndex) {
     old_SeedBank_SeedBank(this, thePlayerIndex);
+//    LOG_DEBUG("this->mBoard: {}", (void*)this->mBoard);
 }
 
 void SeedBank::Draw(Sexy::Graphics *g) {
+    LOG_INFO("this->mBoard: {}", (void*)this->mBoard);
     // 在对战模式取消0.9倍缩放
     if (mApp->mGameMode != GameMode::TwoPlayerVS) {
         return old_SeedBank_Draw(this, g);
@@ -72,7 +79,6 @@ void SeedBank::Draw(Sexy::Graphics *g) {
     }
     SeedPacket *seedPacket1 = nullptr;
     SeedPacket *seedPacket2 = nullptr;
-    int mNumPackets = mNumPackets;
     if (mNumPackets > 0) {
         for (int i = 0; i < mNumPackets; ++i) {
             SeedPacket *seedPacket = &(mSeedPackets[i]);
@@ -198,9 +204,9 @@ void SeedBank::Draw(Sexy::Graphics *g) {
 }
 
 bool SeedBank::MouseHitTest(int x, int y, HitResult *theHitResult) {
+    LOG_INFO("this->mBoard: {}", (void*)this->mBoard);
     int relativeX = x - mX;
     int relativeY = y - mY;
-    int mNumPackets = mNumPackets;
     if (mWidth - 4 <= relativeX || mNumPackets <= 0) {
         theHitResult->mObject = nullptr;
         theHitResult->mObjectType = GameObjectType::None;
@@ -220,14 +226,23 @@ bool SeedBank::MouseHitTest(int x, int y, HitResult *theHitResult) {
 
 
 void SeedBank::UpdateWidth() {
+//    LOG_DEBUG("this->mBoard: {}", (void*)this->mBoard);
+//    LOG_DEBUG("this->mApp: {}", (void*)this->mApp);
+//    LOG_DEBUG("this->mSeedPackets: {}", (void*)this->mSeedPackets);
+//    LOG_DEBUG("this->mNumPackets: {}", this->mNumPackets);
+//    LOG_DEBUG("this->mToolTipWidget: {}", (void*)this->mToolTipWidget);
+//    LOG_DEBUG("this->mX: {}", this->mX);
+//    LOG_DEBUG("this->mWidth: {}", this->mWidth);
     old_SeedBank_UpdateWidth(this);
 }
 
 bool SeedBank_ContainsPoint(SeedBank *seedBank, int theX, int theY) {
+    LOG_INFO("this->mBoard: {}", (void*)seedBank->mBoard);
     return theX >= seedBank->mX && theX < seedBank->mX + seedBank->mWidth && theY >= seedBank->mY && theY < seedBank->mY + seedBank->mHeight;
 }
 
 void SeedBank::Move(int x, int y) {
+    LOG_INFO("this->mBoard: {}", (void*)this->mBoard);
     // 在对战模式 错开双方的Bank
     mX = x;
     mY = y;
@@ -242,10 +257,12 @@ void SeedBank::Move(int x, int y) {
 }
 
 bool SeedBank_BeginDraw(SeedBank *seedBank, Sexy::Graphics *graphics) {
+    LOG_INFO("this->mBoard: {}", (void*)seedBank->mBoard);
     return old_SeedBank_BeginDraw(seedBank, graphics);
 }
 
 
 void SeedBank_EndDraw(SeedBank *seedBank, Sexy::Graphics *graphics) {
+    LOG_INFO("this->mBoard: {}", (void*)seedBank->mBoard);
     old_SeedBank_EndDraw(seedBank, graphics);
 }

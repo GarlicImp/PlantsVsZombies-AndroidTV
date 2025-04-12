@@ -9,7 +9,7 @@ public:
     Sexy::ButtonWidget *mButtons[94];            // 65 ~ 158
     LawnApp *mApp;                               // 159
     int *mToolTipWidget;                         // 160
-    ChallengePage::ChallengePage mPage;          // 161
+    ChallengePage mPage;          // 161
     bool mCheatEnableChallenges;                 // 648
     UnlockingState::UnlockingState mUnlockState; // 163
     int mUnlockStateCounter;                     // 164
@@ -41,7 +41,7 @@ inline void (*ChallengeScreen_SetScrollTarget)(ChallengeScreen *instance, int a)
 inline void (*ChallengeScreen_KeyDown)(ChallengeScreen *, int);
 
 
-inline void (*old_ChallengeScreen_ChallengeScreen)(ChallengeScreen *challengeScreen, LawnApp *lawnApp, ChallengePage::ChallengePage page);
+inline void (*old_ChallengeScreen_ChallengeScreen)(ChallengeScreen *challengeScreen, LawnApp *lawnApp, ChallengePage page);
 
 inline void (*old_ChallengeScreen_Draw)(ChallengeScreen *challengeScreen, Sexy::Graphics *graphics);
 
@@ -74,7 +74,7 @@ void ChallengeScreen_Delete2(ChallengeScreen *challengeScreen);
 
 void ChallengeScreen_UpdateButtons(ChallengeScreen *challengeScreen);
 
-void ChallengeScreen_ChallengeScreen(ChallengeScreen *challengeScreen, LawnApp *lawnApp, ChallengePage::ChallengePage page);
+void ChallengeScreen_ChallengeScreen(ChallengeScreen *challengeScreen, LawnApp *lawnApp, ChallengePage page);
 
 void ChallengeScreen_Draw(ChallengeScreen *challengeScreen, Sexy::Graphics *graphics);
 

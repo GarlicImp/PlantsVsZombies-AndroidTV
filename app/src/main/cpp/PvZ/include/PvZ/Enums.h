@@ -5,6 +5,266 @@
 
 #include <jni.h>
 
+enum AdviceType
+{
+    ADVICE_NONE = -1,
+    ADVICE_CLICK_ON_SUN = 0,
+    ADVICE_CLICKED_ON_SUN = 1,
+    ADVICE_CLICKED_ON_COIN = 2,
+    ADVICE_SEED_REFRESH = 3,
+    ADVICE_CANT_AFFORD_PLANT = 4,
+    ADVICE_PLANT_GRAVEBUSTERS_ON_GRAVES = 5,
+    ADVICE_PLANT_LILYPAD_ON_WATER = 6,
+    ADVICE_PLANT_TANGLEKELP_ON_WATER = 7,
+    ADVICE_PLANT_SEASHROOM_ON_WATER = 8,
+    ADVICE_PLANT_POTATOE_MINE_ON_LILY = 9,
+    ADVICE_PLANT_WRONG_ART_TYPE = 10,
+    ADVICE_PLANT_NEED_POT = 11,
+    ADVICE_PLANT_NOT_ON_GRAVE = 12,
+    ADVICE_PLANT_NOT_ON_CRATER = 13,
+    ADVICE_CANT_PLANT_THERE = 14,
+    ADVICE_PLANT_NOT_ON_WATER = 15,
+    ADVICE_PLANTING_NEEDS_GROUND = 16,
+    ADVICE_BEGHOULED_DRAG_TO_MATCH_3 = 17,
+    ADVICE_BEGHOULED_MATCH_3 = 18,
+    ADVICE_BEGHOULED_MATCH_4 = 19,
+    ADVICE_BEGHOULED_SAVE_SUN = 20,
+    ADVICE_BEGHOULED_USE_CRATER_1 = 21,
+    ADVICE_BEGHOULED_USE_CRATER_2 = 22,
+    ADVICE_PLANT_NOT_PASSED_LINE = 23,
+    ADVICE_PLANT_ONLY_ON_REPEATERS = 24,
+    ADVICE_PLANT_ONLY_ON_MELONPULT = 25,
+    ADVICE_PLANT_ONLY_ON_SUNFLOWER = 26,
+    ADVICE_PLANT_ONLY_ON_SPIKEWEED = 27,
+    ADVICE_PLANT_ONLY_ON_KERNELPULT = 28,
+    ADVICE_PLANT_ONLY_ON_MAGNETSHROOM = 29,
+    ADVICE_PLANT_ONLY_ON_FUMESHROOM = 30,
+    ADVICE_PLANT_ONLY_ON_LILYPAD = 31,
+    ADVICE_PLANT_NEEDS_REPEATER = 32,
+    ADVICE_PLANT_NEEDS_MELONPULT = 33,
+    ADVICE_PLANT_NEEDS_SUNFLOWER = 34,
+    ADVICE_PLANT_NEEDS_SPIKEWEED = 35,
+    ADVICE_PLANT_NEEDS_KERNELPULT = 36,
+    ADVICE_PLANT_NEEDS_MAGNETSHROOM = 37,
+    ADVICE_PLANT_NEEDS_FUMESHROOM = 38,
+    ADVICE_PLANT_NEEDS_LILYPAD = 39,
+    ADVICE_SLOT_MACHINE_PULL = 40,
+    ADVICE_HUGE_WAVE = 41,
+    ADVICE_SHOVEL_REFRESH = 42,
+    ADVICE_PORTAL_RELOCATING = 43,
+    ADVICE_SLOT_MACHINE_COLLECT_SUN = 44,
+    ADVICE_DESTORY_POTS_TO_FINISIH_LEVEL = 45,
+    ADVICE_USE_SHOVEL_ON_POTS = 46,
+    ADVICE_ALMOST_THERE = 47,
+    ADVICE_ZOMBIQUARIUM_CLICK_TROPHY = 48,
+    ADVICE_ZOMBIQUARIUM_COLLECT_SUN = 49,
+    ADVICE_ZOMBIQUARIUM_CLICK_TO_FEED,
+    ADVICE_ZOMBIQUARIUM_BUY_SNORKEL,
+    ADVICE_I_ZOMBIE_PLANTS_NOT_REAL,
+    ADVICE_I_ZOMBIE_NOT_PASSED_LINE,
+    ADVICE_I_ZOMBIE_LEFT_OF_LINE,
+    ADVICE_SLOT_MACHINE_SPIN_AGAIN,
+    ADVICE_I_ZOMBIE_EAT_ALL_BRAINS,
+    ADVICE_PEASHOOTER_DIED,
+    ADVICE_STINKY_SLEEPING,
+    ADVICE_BEGHOULED_NO_MOVES,
+    ADVICE_PLANT_SUNFLOWER5,
+    ADVICE_PLANTING_NEED_SLEEPING,
+    ADVICE_CLICK_TO_CONTINUE,
+    ADVICE_SURVIVE_FLAGS,
+    ADVICE_UNLOCKED_MODE,
+    ADVICE_NEED_WHEELBARROW,
+    ADVICE_NEED_ACHIVEMENT_EARNED = 66,
+    NUM_ADVICE_TYPES
+};
+enum AlmanacPage
+{
+    ALMANAC_PAGE_INDEX,
+    ALMANAC_PAGE_PLANTS,
+    ALMANAC_PAGE_ZOMBIES
+};
+enum AwardType
+{
+    AWARD_FORLEVEL,
+    AWARD_CREDITS_ZOMBIENOTE,
+    AWARD_HELP_ZOMBIENOTE,
+    AWARD_ACHIEVEMENTONLY,
+    AWARD_PRECREDITS_ZOMBIENOTE,
+};
+enum BackgroundType
+{
+    BACKGROUND_1_DAY,
+    BACKGROUND_2_NIGHT,
+    BACKGROUND_3_POOL,
+    BACKGROUND_4_FOG,
+    BACKGROUND_5_ROOF,
+    BACKGROUND_6_BOSS,
+    BACKGROUND_MUSHROOM_GARDEN,
+    BACKGROUND_GREENHOUSE,
+    BACKGROUND_ZOMBIQUARIUM,
+    BACKGROUND_TREEOFWISDOM
+};
+enum BoardResult
+{
+    BOARDRESULT_NONE = 0,
+    BOARDRESULT_WON = 1,
+    BOARDRESULT_LOST = 2,
+    BOARDRESULT_RESTART = 3,
+    BOARDRESULT_QUIT = 4,
+    BOARDRESULT_QUIT_APP = 5,
+    BOARDRESULT_CHEAT = 6,
+    BOARDRESULT_VS_PLANT_WON = 7,
+    BOARDRESULT_VS_ZOMBIE_WON = 8
+};
+enum BossPart
+{
+    BOSS_PART_BACK_LEG = 0,
+    BOSS_PART_FRONT_LEG = 1,
+    BOSS_PART_MAIN = 2,
+    BOSS_PART_BACK_ARM = 3,
+    BOSS_PART_FIREBALL = 4
+};
+enum ChallengePage
+{
+    CHALLENGE_PAGE_SURVIVAL = 0,
+    CHALLENGE_PAGE_CHALLENGE = 1,
+    CHALLENGE_PAGE_LIMBO = 2,
+    CHALLENGE_PAGE_COOP = 3,
+    CHALLENGE_PAGE_PUZZLE = 4,
+    MAX_CHALLANGE_PAGES = 5
+};
+enum ChallengeState
+{
+    STATECHALLENGE_NORMAL,
+    STATECHALLENGE_BEGHOULED_MOVING,
+    STATECHALLENGE_BEGHOULED_FALLING,
+    STATECHALLENGE_BEGHOULED_NO_MATCHES,
+    STATECHALLENGE_SLOT_MACHINE_ROLLING,
+    STATECHALLENGE_STORM_FLASH_1,
+    STATECHALLENGE_STORM_FLASH_2,
+    STATECHALLENGE_STORM_FLASH_3,
+    STATECHALLENGE_ZEN_FADING,
+    STATECHALLENGE_SCARY_POTTER_MALLETING,
+    STATECHALLENGE_LAST_STAND_ONSLAUGHT,
+    STATECHALLENGE_TREE_JUST_GREW,
+    STATECHALLENGE_TREE_GIVE_WISDOM,
+    STATECHALLENGE_TREE_WAITING_TO_BABBLE,
+    STATECHALLENGE_TREE_BABBLING,
+    STATECHALLENGE_SHOVEL_FLASHING = 15
+};
+enum ChosenSeedState
+{
+    SEED_FLYING_TO_BANK = 0,
+    SEED_IN_BANK = 1,
+    SEED_FLYING_TO_CHOOSER = 2,
+    SEED_IN_CHOOSER = 3,
+    SEED_PACKET_HIDDEN = 4
+};
+enum CoinMotion
+{
+    COIN_MOTION_FROM_SKY = 0,
+    COIN_MOTION_FROM_SKY_SLOW = 1,
+    COIN_MOTION_FROM_PLANT = 2,
+    COIN_MOTION_COIN = 3,
+    COIN_MOTION_LAWNMOWER_COIN = 4,
+    COIN_MOTION_FROM_PRESENT = 5,
+    COIN_MOTION_FROM_BOSS = 6,
+    COIN_MOTION_FROM_NEAR_CURSOR = 7,
+    COIN_MOTION_FROM_FROM_VS_WON = 8,
+    COIN_MOTION_FROM_FROM_GRAVE = 9
+};
+enum CoinType
+{
+    COIN_NONE,
+    COIN_SILVER,
+    COIN_GOLD,
+    COIN_DIAMOND,
+    COIN_SUN,
+    COIN_SMALLSUN,
+    COIN_LARGESUN,
+    COIN_FINAL_SEED_PACKET,
+    COIN_TROPHY,
+    COIN_SHOVEL,
+    COIN_ALMANAC,
+    COIN_CARKEYS,
+    COIN_VASE,
+    COIN_WATERING_CAN,
+    COIN_TACO,
+    COIN_NOTE,
+    COIN_USABLE_SEED_PACKET,
+    COIN_PRESENT_PLANT,
+    COIN_AWARD_MONEY_BAG,
+    COIN_AWARD_PRESENT,
+    COIN_AWARD_BAG_DIAMOND,
+    COIN_AWARD_SILVER_SUNFLOWER,
+    COIN_AWARD_GOLD_SUNFLOWER,
+    COIN_CHOCOLATE,
+    COIN_AWARD_CHOCOLATE,
+    COIN_PRESENT_MINIGAMES,
+    COIN_PRESENT_PUZZLE_MODE,
+//    COIN_PRESENT_SURVIVAL_MODE,
+    Present32 = 27,
+    Present1024 = 28,
+    COIN_COOP_DOUBLE_SUN = 29,
+    COIN_VS_ZOMBIE_BRAIN = 30,
+    COIN_VS_PLANT_TROPHY = 31,
+    COIN_VS_ZOMBIE_TROPHY = 32
+};
+enum CrazyDaveState
+{
+    CRAZY_DAVE_OFF = 0,
+    CRAZY_DAVE_ENTERING = 1,
+    CRAZY_DAVE_LEAVING = 2,
+    CRAZY_DAVE_IDLING = 3,
+    CRAZY_DAVE_TALKING = 4,
+    CRAZY_DAVE_HANDING_TALKING = 5,
+    CRAZY_DAVE_HANDING_IDLING = 6
+};
+enum CursorType
+{
+    CURSOR_TYPE_NORMAL,
+    CURSOR_TYPE_PLANT_FROM_BANK,
+    CURSOR_TYPE_PLANT_FROM_USABLE_COIN,
+    CURSOR_TYPE_PLANT_FROM_GLOVE,
+    CURSOR_TYPE_PLANT_FROM_DUPLICATOR,
+    CURSOR_TYPE_PLANT_FROM_WHEEL_BARROW,
+    CURSOR_TYPE_SHOVEL,
+    CURSOR_TYPE_HAMMER,
+    CURSOR_TYPE_COBCANNON_TARGET,
+    CURSOR_TYPE_WATERING_CAN,
+    CURSOR_TYPE_FERTILIZER,
+    CURSOR_TYPE_BUG_SPRAY,
+    CURSOR_TYPE_PHONOGRAPH,
+    CURSOR_TYPE_CHOCOLATE,
+    CURSOR_TYPE_GLOVE,
+    CURSOR_TYPE_MONEY_SIGN,
+    CURSOR_TYPE_WHEEELBARROW,
+    CURSOR_TYPE_TREE_FOOD,
+    MushRoomGarden = 18,
+    QuariumGarden = 19,
+    ZenGarden = 20,
+    TreeOfWisdomGarden = 21
+};
+enum DamageFlags
+{
+    DAMAGE_BYPASSES_SHIELD = 0,
+    DAMAGE_HITS_SHIELD_AND_BODY = 1,
+    DAMAGE_FREEZE = 2,
+    DAMAGE_DOESNT_CAUSE_FLASH = 3,
+    DAMAGE_DOESNT_LEAVE_BODY = 4,
+    DAMAGE_SPIKE = 5
+};
+enum DamageRangeFlags
+{
+    DAMAGES_GROUND,
+    DAMAGES_FLYING,
+    DAMAGES_SUBMERGED,
+    DAMAGES_DOG,
+    DAMAGES_OFF_GROUND,
+    DAMAGES_DYING,
+    DAMAGES_UNDERGROUND,
+    DAMAGES_ONLY_MINDCONTROLLED
+};
 namespace SeedType {
 enum SeedType { // 直接从WP复制过来的，怀疑其中有错误，因为TV有重型武器关卡，多了三个种子
     Peashooter = 0,
@@ -96,6 +356,160 @@ enum SeedType { // 直接从WP复制过来的，怀疑其中有错误，因为TV
     None = -1
 };
 }
+enum ZombieHeight
+{
+    HEIGHT_ZOMBIE_NORMAL = 0,
+    HEIGHT_IN_TO_POOL = 1,
+    HEIGHT_OUT_OF_POOL = 2,
+    HEIGHT_DRAGGED_UNDER = 3,
+    HEIGHT_UP_TO_HIGH_GROUND = 4,
+    HEIGHT_DOWN_OFF_HIGH_GROUND = 5,
+    HEIGHT_UP_LADDER = 6,
+    HEIGHT_FALLING = 7,
+    HEIGHT_IN_TO_CHIMNEY = 8,
+    HEIGHT_GETTING_BUNGEE_DROPPED = 9,
+    HEIGHT_ZOMBIQUARIUM = 10
+};
+enum ZombiePhase {
+    PHASE_ZOMBIE_NORMAL,
+    PHASE_ZOMBIE_DYING,
+    PHASE_ZOMBIE_BURNED,
+    PHASE_ZOMBIE_MOWERED,
+    PHASE_BUNGEE_DIVING,
+    PHASE_BUNGEE_DIVING_SCREAMING,
+    PHASE_BUNGEE_AT_BOTTOM,
+    PHASE_BUNGEE_GRABBING,
+    PHASE_BUNGEE_RISING,
+    PHASE_BUNGEE_HIT_OUCHY,
+    PHASE_BUNGEE_CUTSCENE,
+    PHASE_POLEVAULTER_PRE_VAULT,
+    PHASE_POLEVAULTER_IN_VAULT,
+    PHASE_POLEVAULTER_POST_VAULT,
+    PHASE_RISING_FROM_GRAVE,
+    PHASE_JACK_IN_THE_BOX_RUNNING,
+    PHASE_JACK_IN_THE_BOX_POPPING,
+    PHASE_BOBSLED_SLIDING,
+    PHASE_BOBSLED_BOARDING,
+    PHASE_BOBSLED_CRASHING,
+    PHASE_POGO_BOUNCING,
+    PHASE_POGO_HIGH_BOUNCE_1,
+    PHASE_POGO_HIGH_BOUNCE_2,
+    PHASE_POGO_HIGH_BOUNCE_3,
+    PHASE_POGO_HIGH_BOUNCE_4,
+    PHASE_POGO_HIGH_BOUNCE_5,
+    PHASE_POGO_HIGH_BOUNCE_6,
+    PHASE_POGO_FORWARD_BOUNCE_2,
+    PHASE_POGO_FORWARD_BOUNCE_7,
+    PHASE_NEWSPAPER_READING,
+    PHASE_NEWSPAPER_MADDENING,
+    PHASE_NEWSPAPER_MAD,
+    PHASE_DIGGER_TUNNELING,
+    PHASE_DIGGER_RISING,
+    PHASE_DIGGER_TUNNELING_PAUSE_WITHOUT_AXE,
+    PHASE_DIGGER_RISE_WITHOUT_AXE,
+    PHASE_DIGGER_STUNNED,
+    PHASE_DIGGER_WALKING,
+    PHASE_DIGGER_WALKING_WITHOUT_AXE = 38,
+    PHASE_DIGGER_CUTSCENE,
+    PHASE_DANCER_DANCING_IN = 40,
+    PHASE_DANCER_SNAPPING_FINGERS,
+    PHASE_DANCER_SNAPPING_FINGERS_WITH_LIGHT,
+    PHASE_DANCER_SNAPPING_FINGERS_HOLD,
+    PHASE_DANCER_DANCING_LEFT,
+    PHASE_DANCER_WALK_TO_RAISE,
+    PHASE_DANCER_RAISE_LEFT_1,
+    PHASE_DANCER_RAISE_RIGHT_1,
+    PHASE_DANCER_RAISE_LEFT_2,
+    PHASE_DANCER_RAISE_RIGHT_2,
+    PHASE_DANCER_RISING,
+    PHASE_DOLPHIN_WALKING,
+    PHASE_DOLPHIN_INTO_POOL,
+    PHASE_DOLPHIN_RIDING,
+    PHASE_DOLPHIN_IN_JUMP,
+    PHASE_DOLPHIN_WALKING_IN_POOL = 55,
+    PHASE_DOLPHIN_WALKING_WITHOUT_DOLPHIN,
+    PHASE_SNORKEL_WALKING,
+    PHASE_SNORKEL_INTO_POOL,
+    PHASE_SNORKEL_WALKING_IN_POOL = 59,
+    PHASE_SNORKEL_UP_TO_EAT,
+    PHASE_SNORKEL_EATING_IN_POOL,
+    PHASE_SNORKEL_DOWN_FROM_EAT,
+    PHASE_ZOMBIQUARIUM_ACCEL,
+    PHASE_ZOMBIQUARIUM_DRIFT,
+    PHASE_ZOMBIQUARIUM_BACK_AND_FORTH,
+    PHASE_ZOMBIQUARIUM_BITE,
+    PHASE_CATAPULT_LAUNCHING,
+    PHASE_CATAPULT_RELOADING,
+    PHASE_GARGANTUAR_THROWING,
+    PHASE_GARGANTUAR_SMASHING,
+    PHASE_IMP_GETTING_THROWN,
+    PHASE_IMP_LANDING,
+    PHASE_BALLOON_FLYING,
+    PHASE_BALLOON_POPPING,
+    PHASE_BALLOON_WALKING,
+    PHASE_LADDER_CARRYING,
+    PHASE_LADDER_PLACING,
+    PHASE_BOSS_ENTER,
+    PHASE_BOSS_IDLE,
+    PHASE_BOSS_SPAWNING = 80,
+    PHASE_BOSS_STOMPING,
+    PHASE_BOSS_BUNGEES_ENTER,
+    PHASE_BOSS_BUNGEES_DROP,
+    PHASE_BOSS_BUNGEES_LEAVE = 84,
+    PHASE_BOSS_DROP_RV,
+    PHASE_BOSS_HEAD_ENTER,
+    PHASE_BOSS_HEAD_IDLE_BEFORE_SPIT,
+    PHASE_BOSS_HEAD_IDLE_AFTER_SPIT,
+    PHASE_BOSS_HEAD_SPIT,
+    PHASE_BOSS_HEAD_LEAVE,
+    PHASE_YETI_RUNNING,
+    PHASE_SQUASH_PRE_LAUNCH,
+    PHASE_SQUASH_RISING,
+    PHASE_SQUASH_FALLING,
+    PHASE_SQUASH_DONE_FALLING
+};
+enum ZombieType {
+    ZOMBIE_INVALID = -1,
+    ZOMBIE_NORMAL = 0,
+    ZOMBIE_FLAG = 1,
+    ZOMBIE_TRAFFIC_CONE = 2,
+    ZOMBIE_POLEVAULTER = 3,
+    ZOMBIE_PAIL = 4,
+    ZOMBIE_NEWSPAPER = 5,
+    ZOMBIE_DOOR = 6,
+    ZOMBIE_FOOTBALL = 7,
+    ZOMBIE_DANCER = 8,
+    ZOMBIE_BACKUP_DANCER = 9,
+    ZOMBIE_DUCKY_TUBE = 10,
+    ZOMBIE_SNORKEL = 11,
+    ZOMBIE_ZAMBONI = 12,
+    ZOMBIE_BOBSLED = 13,
+    ZOMBIE_DOLPHIN_RIDER = 14,
+    ZOMBIE_JACK_IN_THE_BOX = 15,
+    ZOMBIE_BALLOON = 16,
+    ZOMBIE_DIGGER = 17,
+    ZOMBIE_POGO = 18,
+    ZOMBIE_YETI = 19,
+    ZOMBIE_BUNGEE = 20,
+    ZOMBIE_LADDER = 21,
+    ZOMBIE_CATAPULT = 22,
+    ZOMBIE_GARGANTUAR = 23,
+    ZOMBIE_IMP = 24,
+    ZOMBIE_BOSS = 25,
+    ZOMBIE_TRASH_BIN = 26,
+    ZOMBIE_PEA_HEAD = 27,
+    ZOMBIE_WALLNUT_HEAD = 28,
+    ZOMBIE_JALAPENO_HEAD = 29,
+    ZOMBIE_GATLING_HEAD = 30,
+    ZOMBIE_SQUASH_HEAD = 31,
+    ZOMBIE_TALLNUT_HEAD = 32,
+    ZOMBIE_REDEYE_GARGANTUAR = 33,
+    NUM_ZOMBIE_TYPES = 34,
+    ZOMBIE_CACHED_POLEVAULTER_WITH_POLE = 35,
+    NUM_CACHED_ZOMBIE_TYPES = 36
+};
+
+//////////////////////////////
 
 enum ProjectileType {
     PROJECTILE_PEA = 0,
@@ -118,79 +532,7 @@ enum ProjectileType {
 namespace ScaryPotType {
 enum ScaryPotType { None = 0, Seed = 1, Zombie = 2, Sun = 3 };
 }
-namespace AdviceType {
-enum AdviceType {
-    None = -1,
-    ClickOnSun,
-    ClickedOnSun,
-    ClickedOnCoin,
-    SeedRefresh,
-    CantAffordPlant,
-    PlantGravebustersOnGraves,
-    PlantLilypadOnWater,
-    PlantTanglekelpOnWater,
-    PlantSeashroomOnWater,
-    PlantPotatoMineOnLily,
-    PlantWrongArtType,
-    PlantNeedPot,
-    PlantNotOnGrave,
-    PlantNotOnCrater,
-    CantPlantThere,
-    PlantNotOnWater,
-    PlantingNeedsGround,
-    BeghouledDragToMatch3,
-    BeghouledMatch3,
-    BeghouledMatch4,
-    BeghouledSaveSun,
-    BeghouledUseCrater1,
-    BeghouledUseCrater2,
-    PlantNotPassedLine,
-    PlantOnlyOnRepeaters,
-    PlantOnlyOnMelonpult,
-    PlantOnlyOnSunflower,
-    PlantOnlyOnSpikeweed,
-    PlantOnlyOnKernelpult,
-    PlantOnlyOnMagnetshroom,
-    PlantOnlyOnFumeshroom,
-    PlantOnlyOnLilypad,
-    PlantNeedsRepeater,
-    PlantNeedsMelonpult,
-    PlantNeedsSunflower,
-    PlantNeedsSpikeweed,
-    PlantNeedsKernelpult,
-    PlantNeedsMagnetshroom,
-    PlantNeedsFumeshroom,
-    PlantNeedsLilypad,
-    SlotMachinePull,
-    HugeWave,
-    ShovelRefresh,
-    PortalRelocating,
-    SlotMachineCollectSun,
-    DestroyPotsToFinisihLevel,
-    UseShovelOnPots,
-    AlmostThere,
-    ZombiquariumClickTrophy,
-    ZombiquariumCollectSun,
-    ZombiquariumClickToFeed,
-    ZombiquariumBuySnorkel,
-    IZombiePlantsNotReal,
-    IZombieNotPassedLine,
-    IZombieLeftOfLine,
-    SlotMachineSpinAgain,
-    IZombieEatAllBrains,
-    PeashooterDied,
-    StinkySleeping,
-    BeghouledNoMoves,
-    PlantSunflower5,
-    PlantingNeedSleeping,
-    ClickToContinue,
-    SurviveFlags,
-    UnlockedMode,
-    NeedWheelbarrow,
-    AchievementEarned = 66,
-    AdviceTypeCount
-};
-}
+
 
 namespace MessageStyle {
 enum MessageStyle {
@@ -360,32 +702,7 @@ enum GameObjectType {
 };
 }
 
-namespace CursorType {
-enum CursorType {
-    Normal = 0,
-    PlantFromBank = 1,
-    PlantFromUsableCoin = 2,
-    PlantFromGlove = 3,
-    PlantFromDuplicator = 4,
-    PlantFromWheelBarrow = 5,
-    Shovel = 6,
-    Hammer = 7,
-    CobcannonTarget = 8,
-    WateringCan = 9,
-    Fertilizer = 10,
-    BugSpray = 11,
-    Phonograph = 12,
-    Chocolate = 13,
-    Glove = 14,
-    MoneySign = 15,
-    Wheelbarrow = 16,
-    TreeFood = 17,
-    MushRoomGarden = 18,
-    QuariumGarden = 19,
-    ZenGarden = 20,
-    TreeOfWisdomGarden = 21
-};
-}
+
 namespace TouchState {
 enum TouchState {
     None = 0,
@@ -411,12 +728,6 @@ namespace TouchPlayerIndex {
 enum TouchPlayerIndex { None = -1, Player1 = 0, Player2 = 1 };
 }
 
-namespace CrazyDaveState {
-enum CrazyDaveState { Off = 0, Entering = 1, Leaving = 2, Idling = 3, Talking = 4, HandingTalking = 5, HandingIdling = 6 };
-}
-namespace BoardResult {
-enum BoardResult { None = 0, Won = 1, Lost = 2, Restart = 3, Quit = 4, QuitApp = 5, Cheat = 6, VSPlantWon = 7, VSZombieWon = 8 };
-}
 
 namespace GameMode {
 enum GameMode {
@@ -654,10 +965,6 @@ enum TutorialState {
 };
 }
 
-namespace BackgroundType {
-enum BackgroundType { Num1Day = 0, Num2Night = 1, Num3Pool = 2, Num4Fog = 3, Num5Roof = 4, Num6Boss = 5, MushroomGarden = 6, Greenhouse = 7, Zombiquarium = 8, TreeOfWisdom = 9 };
-}
-
 namespace PlantRowType {
 enum PlantRowType { Dirt = 0, Normal = 1, Pool = 2, HighGround = 3 };
 }
@@ -690,50 +997,9 @@ enum PlantingReason {
 }
 
 
-enum ZombieType {
-    ZOMBIE_INVALID = -1,
-    ZOMBIE_NORMAL = 0,
-    ZOMBIE_FLAG = 1,
-    ZOMBIE_TRAFFIC_CONE = 2,
-    ZOMBIE_POLEVAULTER = 3,
-    ZOMBIE_PAIL = 4,
-    ZOMBIE_NEWSPAPER = 5,
-    ZOMBIE_DOOR = 6,
-    ZOMBIE_FOOTBALL = 7,
-    ZOMBIE_DANCER = 8,
-    ZOMBIE_BACKUP_DANCER = 9,
-    ZOMBIE_DUCKY_TUBE = 10,
-    ZOMBIE_SNORKEL = 11,
-    ZOMBIE_ZAMBONI = 12,
-    ZOMBIE_BOBSLED = 13,
-    ZOMBIE_DOLPHIN_RIDER = 14,
-    ZOMBIE_JACK_IN_THE_BOX = 15,
-    ZOMBIE_BALLOON = 16,
-    ZOMBIE_DIGGER = 17,
-    ZOMBIE_POGO = 18,
-    ZOMBIE_YETI = 19,
-    ZOMBIE_BUNGEE = 20,
-    ZOMBIE_LADDER = 21,
-    ZOMBIE_CATAPULT = 22,
-    ZOMBIE_GARGANTUAR = 23,
-    ZOMBIE_IMP = 24,
-    ZOMBIE_BOSS = 25,
-    ZOMBIE_TRASH_BIN = 26,
-    ZOMBIE_PEA_HEAD = 27,
-    ZOMBIE_WALLNUT_HEAD = 28,
-    ZOMBIE_JALAPENO_HEAD = 29,
-    ZOMBIE_GATLING_HEAD = 30,
-    ZOMBIE_SQUASH_HEAD = 31,
-    ZOMBIE_TALLNUT_HEAD = 32,
-    ZOMBIE_REDEYE_GARGANTUAR = 33,
-    NUM_ZOMBIE_TYPES = 34,
-    ZOMBIE_CACHED_POLEVAULTER_WITH_POLE = 35,
-    NUM_CACHED_ZOMBIE_TYPES = 36
-};
 
-namespace ChosenSeedState {
-enum ChosenSeedState { SEED_FLYING_TO_BANK = 0, SEED_IN_BANK = 1, SEED_FLYING_TO_CHOOSER = 2, SEED_IN_CHOOSER = 3, SEED_PACKET_HIDDEN = 4 };
-}
+
+
 
 
 namespace FoleyType {
@@ -879,113 +1145,8 @@ enum DrawVariation {
 };
 }
 
-namespace ZombiePhase {
-enum ZombiePhase {
-    ZombieNormal,
-    ZombieDying,
-    ZombieBurned,
-    ZombieMowered,
-    BungeeDiving,
-    BungeeDivingScreaming,
-    BungeeAtBottom,
-    BungeeGrabbing,
-    BungeeRising,
-    BungeeHitOuchy,
-    BungeeCutscene,
-    PolevaulterPreVault,
-    PolevaulterInVault,
-    PolevaulterPostVault,
-    RisingFromGrave = 14,
-    JackInTheBoxRunning,
-    JackInTheBoxPopping,
-    BobsledSliding,
-    BobsledBoarding,
-    BobsledCrashing,
-    PogoBouncing,
-    PogoHighBounce1,
-    PogoHighBounce2,
-    PogoHighBounce3,
-    PogoHighBounce4,
-    PogoHighBounce5,
-    PogoHighBounce6,
-    PogoForwardBounce2,
-    PogoForwardBounce7,
-    NewspaperReading,
-    NewspaperMaddening,
-    NewspaperMad,
-    DiggerTunneling,
-    DiggerRising,
-    DiggerTunnelingPauseWithoutAxe,
-    DiggerRiseWithoutAxe,
-    DiggerStunned,
-    DiggerWalking,
-    DiggerWalkingWithoutAxe = 38,
-    DiggerCutscene,
-    DancerDancingIn = 40,
-    DancerSnappingFingers,
-    DancerSnappingFingersWithLight,
-    DancerSnappingFingersHold,
-    DancerDancingLeft,
-    DancerWalkToRaise,
-    DancerRaiseLeft1,
-    DancerRaiseRight1,
-    DancerRaiseLeft2,
-    DancerRaiseRight2,
-    DancerRising,
-    DolphinWalking,
-    DolphinIntoPool,
-    DolphinRiding,
-    DolphinInJump,
-    DolphinWalkingInPool = 55,
-    DolphinWalkingWithoutDolphin,
-    SnorkelWalking,
-    SnorkelIntoPool,
-    SnorkelWalkingInPool = 59,
-    SnorkelUpToEat,
-    SnorkelEatingInPool,
-    SnorkelDownFromEat,
-    ZombiquariumAccel,
-    ZombiquariumDrift,
-    ZombiquariumBackAndForth,
-    ZombiquariumBite,
-    CatapultLaunching,
-    CatapultReloading,
-    GargantuarThrowing,
-    GargantuarSmashing,
-    ImpGettingThrown,
-    ImpLanding,
-    BalloonFlying,
-    BalloonPopping,
-    BalloonWalking,
-    LadderCarrying,
-    LadderPlacing,
-    BossEnter,
-    BossIdle,
-    BossSpawning = 80,
-    BossStomping,
-    BossBungeesEnter,
-    BossBungeesDrop,
-    BossBungeesLeave = 84,
-    BossDropRv,
-    BossHeadEnter,
-    BossHeadIdleBeforeSpit,
-    BossHeadIdleAfterSpit,
-    BossHeadSpit,
-    BossHeadLeave,
-    YetiRunning,
-    SquashPreLaunch,
-    SquashRising,
-    SquashFalling,
-    SquashDoneFalling
-};
-}
-
 namespace TopPlant {
 enum TopPlant { EatingOrder = 0, DiggingOrder = 1, BungeeOrder = 2, CatapultOrder = 3, ZenToolOrder = 4, Any = 5, OnlyNormalPosition = 6, OnlyFlying = 7, OnlyPumpkin = 8, OnlyUnderPlant = 9 };
-}
-
-namespace ZombieHeight {
-enum ZombieHeight { ZombieNormal = 0, InToPool, OutOfPool, DraggedUnder, UpToHighGround, DownOffHighGround, UpLadder = 6, Falling, InToChimney, GettingBungeeDropped, Zombiquarium };
 }
 
 
@@ -1171,79 +1332,16 @@ namespace GridItemType {
 enum GridItemType { None = 0, Gravestone = 1, Crater, Ladder = 3, PortalCircle, PortalSquare, Brain, ScaryPot, Squirrel, ZenTool, Stinky, Rake, IzombieBrain, VSTargetZombie = 14 };
 }
 
-namespace ChallengePage {
-enum ChallengePage { CHALLENGE_PAGE_SURVIVAL = 0, CHALLENGE_PAGE_CHALLENGE = 1, CHALLENGE_PAGE_LIMBO = 2, CHALLENGE_PAGE_COOP = 3, CHALLENGE_PAGE_PUZZLE = 4, MAX_CHALLANGE_PAGES = 5 };
-}
+
 namespace UnlockingState {
 enum UnlockingState { Off, Shaking, Fading };
-}
-
-namespace CoinMotion {
-enum CoinMotion { FromSky = 0, FromSkySlow = 1, FromPlant = 2, Coin = 3, LawnmowerCoin = 4, FromPresent = 5, FromBoss = 6, NearCursor = 7, FromVSWon = 8, FromGrave = 9 };
-}
-
-namespace CoinType {
-enum CoinType {
-    None = 0,
-    Silver = 1,
-    Gold = 2,
-    Diamond = 3,
-    Sun = 4,
-    Smallsun = 5,
-    Largesun = 6,
-    FinalSeedPacket = 7,
-    Trophy = 8,
-    Shovel = 9,
-    Almanac = 10,
-    Carkeys = 11,
-    ScaryPot = 12,
-    WateringCan = 13,
-    Taco = 14,
-    Note = 15,
-    UsableSeedPacket = 16,
-    PresentPlant = 17,
-    AwardMoneyBag = 18,
-    AwardPresent = 19,
-    AwardBagDiamond = 20,
-    SunflowerSilverTrophy = 21,
-    SunflowerGoldTrophy = 22,
-    Chocolate = 23,
-    AwardChocolate = 24,
-    PresentMinigames = 25,
-    PresentPuzzleMode = 26,
-    Present32 = 27,
-    Present1024 = 28,
-    CoopDoubleSun = 29,
-    VSZombieBrain = 30,
-    VSPlantTrophy = 31,
-    VSZombieTrophy = 32
-};
 }
 
 namespace GameScenes {
 enum GameScenes { Loading = 0, Menu = 1, LevelIntro = 2, Playing = 3, ZombiesWon = 4, Award = 5, Credit = 6, Challenge = 7, Leaderboard = 8 };
 }
 
-namespace ChallengeState {
-enum ChallengeState {
-    Normal = 0,
-    BeghouledMoving,
-    BeghouledFalling,
-    BeghouledNoMatches,
-    SlotMachineRolling,
-    StormFlash1,
-    StormFlash2,
-    StormFlash3,
-    ZenFading,
-    ScaryPotterMalleting,
-    LastStandOnslaught = 10,
-    TreeJustGrew,
-    TreeGiveWisdom,
-    TreeWaitingToBabble,
-    TreeBabbling,
-    ShovelFlashing = 15
-};
-}
+
 namespace ReanimatorRenderGroup {
 enum ReanimatorRenderGroup { RENDER_GROUP_HIDDEN = -1, RENDER_GROUP_NORMAL = 0 };
 }
@@ -1444,7 +1542,7 @@ enum ReanimationType {
 struct ChallengeDefinition {
     GameMode::GameMode mChallengeMode;  // 0
     int mChallengeIconIndex;            // 1
-    ChallengePage::ChallengePage mPage; // 2
+    ChallengePage mPage; // 2
     int mRow;                           // 3 无用
     int mCol;                           // 4 无用
     const char *mChallengeName;         // 5
@@ -1668,7 +1766,7 @@ struct ChosenSeed {
     int mEndY;                                   // 7
     int mChosenPlayerIndex;                      // 8
     SeedType::SeedType mSeedType;                // 9
-    ChosenSeedState::ChosenSeedState mSeedState; // 10
+    ChosenSeedState mSeedState; // 10
     int mSeedIndexInBank;                        // 11
     bool mRefreshing;                            // 12
     int mRefreshCounter;                         // 13
@@ -2128,7 +2226,7 @@ public:
     int mSeedBankIndex;                 // 13
     SeedType::SeedType mType;           // 14
     SeedType::SeedType mImitaterType;   // 15
-    CursorType::CursorType mCursorType; // 16
+    CursorType mCursorType; // 16
     Coin *mCoinID;                      // 17
     Plant *mGlovePlantID;               // 18
     Plant *mDuplicatorPlantID;          // 19
@@ -2439,8 +2537,9 @@ public:
     int mRandomPileWeight[6];     // 79 ~ 84
     int mPileNum;                 // 85
     // 大小86个整数
-public:
-    void Creat(TrashPileType theTrashPileType, float theHeight);
+
+    TrashBin(TrashPileType theTrashPileType, float theHeight);
+    void Create(TrashPileType theTrashPileType, float theHeight);
     void Draw(Sexy::Graphics *g);
 
 };
