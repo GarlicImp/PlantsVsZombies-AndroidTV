@@ -105,7 +105,7 @@ void Challenge_IZombieDrawPlant(Challenge *challenge, Sexy::Graphics *graphics, 
 
     Reanimation *mBodyReanim = LawnApp_ReanimationTryToGet(challenge->mApp, thePlant->mBodyReanimID);
     if (mBodyReanim != nullptr) {
-        Challenge_IZombieSetPlantFilterEffect(challenge, thePlant, FilterEffectType::White);
+        Challenge_IZombieSetPlantFilterEffect(challenge, thePlant, FilterEffectType::FILTEREFFECT_WHITE);
         float aOffsetX = graphics->mTransX;
         float aOffsetY = graphics->mTransY;
         Color theColor;
@@ -141,9 +141,9 @@ void Challenge_IZombieDrawPlant(Challenge *challenge, Sexy::Graphics *graphics, 
         theColor.mBlue = 160;
         theColor.mAlpha = 255;
         Sexy_Graphics_SetColor(graphics, &theColor);
-        Challenge_IZombieSetPlantFilterEffect(challenge, thePlant, FilterEffectType::None);
+        Challenge_IZombieSetPlantFilterEffect(challenge, thePlant, FilterEffectType::FILTEREFFECT_NONE);
         Reanimation_DrawRenderGroup(mBodyReanim, graphics, 0);
-        Challenge_IZombieSetPlantFilterEffect(challenge, thePlant, FilterEffectType::None);
+        Challenge_IZombieSetPlantFilterEffect(challenge, thePlant, FilterEffectType::FILTEREFFECT_NONE);
         Sexy_Graphics_SetDrawMode(graphics, DrawMode::DRAWMODE_NORMAL);
         Sexy_Graphics_SetColorizeImages(graphics, false);
     }
@@ -178,7 +178,7 @@ void Challenge_DrawArtChallenge(Challenge *challenge, Sexy::Graphics *graphics) 
             if (ArtChallengeSeed != SeedType::SEED_NONE && Board_GetTopPlantAt(board, theGridX, theGridY, PlantPriority::TOPPLANT_ONLY_NORMAL_POSITION) == nullptr) {
                 int x = Board_GridToPixelX(board, theGridX, theGridY);
                 int y = Board_GridToPixelY(board, theGridX, theGridY);
-                Plant_DrawSeedType(graphics, ArtChallengeSeed, SeedType::SEED_NONE, DrawVariation::VARIATION_NORMAL, x, y);
+                Plant::DrawSeedType(graphics, ArtChallengeSeed, SeedType::SEED_NONE, DrawVariation::VARIATION_NORMAL, x, y);
             }
         }
     }

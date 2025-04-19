@@ -304,7 +304,7 @@ void Board_ShovelDown(Board *board) {
     Plant *plantUnderShovel = Board_ToolHitTest(board, mGamePadX, mGamePadY);
     if (plantUnderShovel != nullptr) {
         LawnApp_PlayFoley(lawnApp, FoleyType::UseShovel); // 播放铲除音效
-        Plant_Die(plantUnderShovel);                      // 让被铲的植物趋势
+        plantUnderShovel->Die();                      // 让被铲的植物趋势
         SeedType plantType = plantUnderShovel->mSeedType;
         int mPlantCol = plantUnderShovel->mPlantCol;
         int mRow = plantUnderShovel->mRow;
@@ -315,7 +315,7 @@ void Board_ShovelDown(Board *board) {
         if (lawnApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_LAST_STAND) {
             Challenge *challenge = board->mChallenge;
             if (challenge->mChallengeState == ChallengeState::STATECHALLENGE_NORMAL && lawnApp->mGameScene == GameScenes::SCENE_PLAYING) {
-                int theCost = Plant_GetCost(plantType, plantUnderShovel->mImitaterType);
+                int theCost = Plant::GetCost(plantType, plantUnderShovel->mImitaterType);
                 int num = theCost / 25;
                 if (plantType == SeedType::SEED_GARLIC || plantType == SeedType::SEED_WALLNUT || plantType == SeedType::SEED_TALLNUT || plantType == SeedType::SEED_PUMPKINSHELL) {
                     int mPlantHealth = plantUnderShovel->mPlantHealth;
@@ -532,7 +532,7 @@ void Board_parseFormationSegment(Board *board, char *segment) {
             }
             Plant *plant = old_Board_AddPlant(board, x, y, seedType, imitaterMorphed ? SeedType::SEED_IMITATER : SeedType::SEED_NONE, 1, false);
             if (imitaterMorphed) {
-                Plant_SetImitaterFilterEffect(plant);
+                plant->SetImitaterFilterEffect();
             }
             if (wakeUp) {
                 plant->SetSleeping(false);
@@ -1224,7 +1224,7 @@ void Board_Update(Board *board) {
                 for (int y = 0; y < rowsCount; y++) {
                     Plant *theBuiltPlant = Board_AddPlant(board, x, y, theBuildPlantType, (isImitaterPlant ? SeedType::SEED_IMITATER : SeedType::SEED_NONE), 0, true);
                     if (isImitaterPlant)
-                        Plant_SetImitaterFilterEffect(theBuiltPlant);
+                        theBuiltPlant->SetImitaterFilterEffect();
                     if (isIZMode)
                         Challenge_IZombieSetupPlant(board->mChallenge, theBuiltPlant);
                 }
@@ -1235,7 +1235,7 @@ void Board_Update(Board *board) {
             for (int x = 0; x < colsCount; x += width) {
                 Plant *theBuiltPlant = Board_AddPlant(board, x, theBuildPlantY, theBuildPlantType, (isImitaterPlant ? SeedType::SEED_IMITATER : SeedType::SEED_NONE), 0, true);
                 if (isImitaterPlant)
-                    Plant_SetImitaterFilterEffect(theBuiltPlant);
+                    theBuiltPlant->SetImitaterFilterEffect();
                 if (isIZMode)
                     Challenge_IZombieSetupPlant(board->mChallenge, theBuiltPlant);
             }
@@ -1245,7 +1245,7 @@ void Board_Update(Board *board) {
             for (int y = 0; y < rowsCount; y++) {
                 Plant *theBuiltPlant = Board_AddPlant(board, theBuildPlantX, y, theBuildPlantType, (isImitaterPlant ? SeedType::SEED_IMITATER : SeedType::SEED_NONE), 0, true);
                 if (isImitaterPlant)
-                    Plant_SetImitaterFilterEffect(theBuiltPlant);
+                    theBuiltPlant->SetImitaterFilterEffect();
                 if (isIZMode)
                     Challenge_IZombieSetupPlant(board->mChallenge, theBuiltPlant);
             }
@@ -1254,7 +1254,7 @@ void Board_Update(Board *board) {
         else if (theBuildPlantX < colsCount && theBuildPlantY < rowsCount) {
             Plant *theBuiltPlant = Board_AddPlant(board, theBuildPlantX, theBuildPlantY, theBuildPlantType, (isImitaterPlant ? SeedType::SEED_IMITATER : SeedType::SEED_NONE), 0, true);
             if (isImitaterPlant)
-                Plant_SetImitaterFilterEffect(theBuiltPlant);
+                theBuiltPlant->SetImitaterFilterEffect();
             if (isIZMode)
                 Challenge_IZombieSetupPlant(board->mChallenge, theBuiltPlant);
         }

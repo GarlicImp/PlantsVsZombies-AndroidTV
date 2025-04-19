@@ -112,7 +112,7 @@ void DrawSeedPacket(Sexy::Graphics *graphics, float x, float y, SeedType seedTyp
     int celToDraw;
     if (seedType == SeedType::SEED_IMITATER) {
         celToDraw = 0;
-    } else if (Plant_IsUpgrade(realSeedType)) {
+    } else if (Plant::IsUpgrade(realSeedType)) {
         celToDraw = 1;
     } else if (seedType == SeedType::SEED_BEGHOULED_BUTTON_CRATER) {
         celToDraw = 3;
@@ -375,11 +375,11 @@ void DrawSeedPacket(Sexy::Graphics *graphics, float x, float y, SeedType seedTyp
                 int CurrentPlantCost = Board_GetCurrentPlantCost(board, seedType, imitaterType);
                 Sexy_StrFormat(tmpHolder, "%d", CurrentPlantCost);
             } else {
-                int Cost = Plant_GetCost(seedType, imitaterType);
+                int Cost = Plant::GetCost(seedType, imitaterType);
                 Sexy_StrFormat(tmpHolder, "%d+", Cost);
             }
         } else {
-            int Cost = Plant_GetCost(seedType, imitaterType);
+            int Cost = Plant::GetCost(seedType, imitaterType);
             Sexy_StrFormat(tmpHolder, "%d", Cost);
         }
         Sexy::Font *font = *Sexy_FONT_BRIANNETOD12_Addr;
@@ -573,22 +573,22 @@ void FixPixelsOnAlphaEdgeForBlending(Sexy::Image *theImage) {
     }
 }
 
-Sexy::Image *FilterEffectCreateImage(Sexy::Image *image, FilterEffectType::FilterEffectType theFilterEffect) {
+Sexy::Image *FilterEffectCreateImage(Sexy::Image *image, FilterEffectType theFilterEffect) {
     Sexy::Image *memoryImage = Sexy_SexyAppBase_CopyImage((LawnApp *)*gLawnApp_Addr, image);
     memoryImage->mWidth = image->mWidth;
     memoryImage->mHeight = image->mHeight;
     FixPixelsOnAlphaEdgeForBlending(memoryImage);
     switch (theFilterEffect) {
-        case FilterEffectType::WashedOut:
+        case FilterEffectType::FILTEREFFECT_WASHED_OUT:
             FilterEffectDoWashedOut(memoryImage);
             break;
-        case FilterEffectType::LessWashedOut:
+        case FilterEffectType::FILTEREFFECT_LESS_WASHED_OUT:
             FilterEffectDoLessWashedOut(memoryImage);
             break;
-        case FilterEffectType::White:
+        case FilterEffectType::FILTEREFFECT_WHITE:
             FilterEffectDoWhite(memoryImage);
             break;
-        case FilterEffectType::Custom:
+        case FilterEffectType::FILTEREFFECT_CUSTOM:
             FilterEffectDoLumSat(memoryImage, 1.05, 0.8); // 仅MainMenu显示房子雾蒙蒙效果时用到。数值是自己瞎调的
             break;
     }
@@ -600,14 +600,14 @@ Sexy::Image *FilterEffectCreateImage(Sexy::Image *image, FilterEffectType::Filte
 }
 
 
-static std::unordered_map<Sexy::Image *, Sexy::Image *> gFilterEffectMaps[FilterEffectType::FilterEffectCount];
+static std::unordered_map<Sexy::Image *, Sexy::Image *> gFilterEffectMaps[FilterEffectType::NUM_FILTEREFFECT];
 
-Sexy::Image *FilterEffectGetImage(Sexy::Image *image, FilterEffectType::FilterEffectType mFilterEffect) {
+Sexy::Image *FilterEffectGetImage(Sexy::Image *image, FilterEffectType mFilterEffect) {
     // 变灰的植物贴图在这里处理
     if (!imitater) {
         return image;
     }
-    if (mFilterEffect == FilterEffectType::None) {
+    if (mFilterEffect == FilterEffectType::FILTEREFFECT_NONE) {
         return image;
     }
     std::unordered_map<Sexy::Image *, Sexy::Image *> &currentMap = gFilterEffectMaps[mFilterEffect];
@@ -644,9 +644,9 @@ void ReanimatorCache_DrawCachedPlant(ReanimatorCache *a1, Sexy::Graphics *graphi
             return;
         }
         if (drawVariation == DrawVariation::VARIATION_IMITATER) {
-            image = FilterEffectGetImage(image, FilterEffectType::WashedOut);
+            image = FilterEffectGetImage(image, FilterEffectType::FILTEREFFECT_WASHED_OUT);
         } else if (drawVariation == DrawVariation::VARIATION_IMITATER_LESS) {
-            image = FilterEffectGetImage(image, FilterEffectType::LessWashedOut);
+            image = FilterEffectGetImage(image, FilterEffectType::FILTEREFFECT_LESS_WASHED_OUT);
         }
         int a, b, c, d;
         ReanimatorCache_GetPlantImageSize(a1, theSeedType, &a, &b, &c, &d);
@@ -708,9 +708,9 @@ void DrawSeedType(Sexy::Graphics *graphics, float x, float y, SeedType theSeedTy
     } else {
         if (theSeedType == SeedType::SEED_IMITATER && theImitaterType != SeedType::SEED_NONE) {
             // 卡槽内的模仿者SeedPacket卡且为冷却状态，此时需要交换theImitaterType和theSeedType。
-            Plant_DrawSeedType(graphics, theImitaterType, theSeedType, DrawVariation::VARIATION_NORMAL, x + xOffset, y + yOffset);
+            Plant::DrawSeedType(graphics, theImitaterType, theSeedType, DrawVariation::VARIATION_NORMAL, x + xOffset, y + yOffset);
         } else {
-            Plant_DrawSeedType(graphics, theSeedType, theImitaterType, DrawVariation::VARIATION_NORMAL, x + xOffset, y + yOffset);
+            Plant::DrawSeedType(graphics, theSeedType, theImitaterType, DrawVariation::VARIATION_NORMAL, x + xOffset, y + yOffset);
         }
     }
     return Sexy_Graphics_PopState(graphics);

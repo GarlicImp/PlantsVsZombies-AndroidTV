@@ -486,7 +486,7 @@ void MainMenu::AddedToManager(int *a2) {
     Reanimation *reanimation = LawnApp_AddReanimation(mApp, 0, 0, 0, ReanimationType::REANIM_LEADERBOARDS_HOUSE);
     //    Reanimation *reanimation = LawnApp_AddReanimation(mainMenu->mApp, mainMenu->mCameraPositionX + theOffsetX,mainMenu->mCameraPositionY + theOffsetY, 0, ReanimationType::REANIM_LEADERBOARDS_HOUSE);
     reanimation->mCustomFilterEffectColor = {142, 146, 232, 92};
-    reanimation->mFilterEffect = FilterEffectType::Custom;
+    reanimation->mFilterEffect = FilterEffectType::FILTEREFFECT_CUSTOM;
 
 
     LawnApp_SetHouseReanim(mApp, reanimation);

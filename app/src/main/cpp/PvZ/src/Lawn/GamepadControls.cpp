@@ -228,12 +228,12 @@ void GamepadControls_InvalidatePreviewReanim(GamepadControls *gamepadControls) {
     }
 }
 
-FilterEffectType::FilterEffectType GetFilterEffectTypeBySeedType(SeedType mSeedType) {
+FilterEffectType GetFilterEffectTypeBySeedType(SeedType mSeedType) {
     if (mSeedType == SeedType::SEED_HYPNOSHROOM || mSeedType == SeedType::SEED_SQUASH || mSeedType == SeedType::SEED_POTATOMINE || mSeedType == SeedType::SEED_GARLIC
         || mSeedType == SeedType::SEED_LILYPAD) {
-        return FilterEffectType::LessWashedOut;
+        return FilterEffectType::FILTEREFFECT_LESS_WASHED_OUT;
     }
-    return FilterEffectType::WashedOut;
+    return FilterEffectType::FILTEREFFECT_WASHED_OUT;
 }
 
 void GamepadControls_UpdatePreviewReanim(GamepadControls *gamepadControls) {
@@ -466,7 +466,7 @@ void GamepadControls_UpdatePreviewReanim(GamepadControls *gamepadControls) {
         // 如果目标预览植物类型没变化, 则为模仿者上色
         Reanimation *mPreviewReanim4 = LawnApp_ReanimationTryToGet(gamepadControls->mGameObject.mApp, gamepadControls->mPreviewReanimID4);
         if (mPreviewReanim4 != nullptr) {
-            FilterEffectType::FilterEffectType aFilterEffect = isImitater ? GetFilterEffectTypeBySeedType(mSeedType) : FilterEffectType::None;
+            FilterEffectType aFilterEffect = isImitater ? GetFilterEffectTypeBySeedType(mSeedType) : FilterEffectType::FILTEREFFECT_NONE;
             mPreviewReanim4->mFilterEffect = aFilterEffect;
             if (mSeedType == SeedType::SEED_THREEPEATER || mSeedType == SeedType::SEED_SPLITPEA || mSeedType == SeedType::SEED_PEASHOOTER || mSeedType == SeedType::SEED_SNOWPEA
                 || mSeedType == SeedType::SEED_REPEATER || mSeedType == SeedType::SEED_GATLINGPEA || mSeedType == SeedType::SEED_LEFTPEATER) {
