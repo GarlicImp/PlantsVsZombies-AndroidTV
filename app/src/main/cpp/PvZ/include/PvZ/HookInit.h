@@ -221,7 +221,6 @@ inline void InitInGameFunction() {
     Plant_UpdateAbilities = (decltype(Plant_UpdateAbilities))Plant_UpdateAbilitiesAddr;
     Plant_Animate = (decltype(Plant_Animate))Plant_AnimateAddr;
     Plant_UpdateReanim = (decltype(Plant_UpdateReanim))Plant_UpdateReanimAddr;
-    //    Plant_DrawSeedType = (void (*)(int *, a::a, a::a, DrawVariation::DrawVariation, float,float)) Plant_DrawSeedTypeAddr;
     Plant_IsFlying = (decltype(Plant_IsFlying))Plant_IsFlyingAddr;
     Plant_IsNocturnal = (decltype(Plant_IsNocturnal))Plant_IsNocturnalAddr;
     Plant_IsAquatic = (decltype(Plant_IsAquatic))Plant_IsAquaticAddr;
@@ -232,8 +231,6 @@ inline void InitInGameFunction() {
     Plant_DrawMagnetItemsOnTop = (decltype(Plant_DrawMagnetItemsOnTop))Plant_DrawMagnetItemsOnTopAddr;
     Plant_DrawMagnetItems = (decltype(Plant_DrawMagnetItems))Plant_DrawMagnetItemsAddr;
     GetPlantDefinition = (decltype(GetPlantDefinition))GetPlantDefinitionAddr;
-    //    Plant_GetCost = (int (*)(a::a, a::a)) Plant_GetCostAddr;
-//    Plant_Die = (decltype(Plant_Die))Plant_DieAddr;
 
 
     Zombie_GetZombieRect = (decltype(Zombie_GetZombieRect))Zombie_GetZombieRectAddr;
@@ -796,14 +793,14 @@ inline void InitHookFunction() {
     homura::HookFunction(Plant_GetRefreshTimeAddr, &Plant::GetRefreshTime, &old_Plant_GetRefreshTime);
     homura::HookFunction(Plant_DoSpecialAddr, &Plant::DoSpecial, &old_Plant_DoSpecial);
     homura::HookFunction(Plant_DrawAddr, &Plant::Draw, &old_Plant_Draw);
-    homura::HookFunction(Plant_DrawSeedTypeAddr, &Plant_DrawSeedType, nullptr);
-    homura::HookFunction(Plant_IsUpgradeAddr, &Plant_IsUpgrade, &old_Plant_IsUpgrade);
+    homura::HookFunction(Plant_DrawSeedTypeAddr, &Plant::DrawSeedType, nullptr);
+    homura::HookFunction(Plant_IsUpgradeAddr, &Plant::IsUpgrade, &old_Plant_IsUpgrade);
     //    MSHookFunction(Plant_CobCannonFireAddr, (void *) Plant_CobCannonFire, (void **) &old_Plant_CobCannonFire);
     homura::HookFunction(Plant_PlantInitializeAddr, &Plant::PlantInitialize, &old_Plant_PlantInitialize);
     homura::HookFunction(Plant_SetSleepingAddr, &Plant::SetSleeping, &old_Plant_SetSleeping);
     homura::HookFunction(Plant_UpdateReanimColorAddr, &Plant::UpdateReanimColor, &old_Plant_UpdateReanimColor);
     homura::HookFunction(Plant_FindTargetGridItemAddr, &Plant::FindTargetGridItem, nullptr);
-    homura::HookFunction(Plant_GetCostAddr, &Plant_GetCost, &old_Plant_GetCost);
+    homura::HookFunction(Plant_GetCostAddr, &Plant::GetCost, &old_Plant_GetCost);
     homura::HookFunction(Plant_DieAddr, &Plant::Die, &old_Plant_Die);
     //    MSHookFunction(Plant_UpdateReanimAddr, (void *) Plant_UpdateReanim, (void **) &old_Plant_UpdateReanim);
 

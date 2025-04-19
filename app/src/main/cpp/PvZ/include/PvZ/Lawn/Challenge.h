@@ -107,7 +107,7 @@ inline void (*Challenge_IZombiePlaceZombie)(Challenge *challenge, ZombieType, in
 
 inline void (*Challenge_GraveDangerSpawnGraveAt)(Challenge *challenge, int x, int y);
 
-inline void (*Challenge_IZombieSetPlantFilterEffect)(Challenge *, Plant *, FilterEffectType::FilterEffectType);
+inline void (*Challenge_IZombieSetPlantFilterEffect)(Challenge *, Plant *, FilterEffectType);
 
 inline void (*Challenge_PlantAdded)(Challenge *, Plant *);
 

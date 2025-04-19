@@ -7,7 +7,7 @@
 
 bool Reanimation::DrawTrack(Sexy::Graphics *g, int theTrackIndex, ReanimatorRenderGroup::ReanimatorRenderGroup theRenderGroup, TodTriangleGroup* theTriangleGroup) {
     // 修复模仿者植物变白
-    if (mFilterEffect != FilterEffectType::None) {
+    if (mFilterEffect != FilterEffectType::FILTEREFFECT_NONE) {
         ReanimatorTransform *reanimatorTransform = mReanimatorTransforms + theTrackIndex;
         Sexy::Image *image = reanimatorTransform->mImage;
         ReanimatorTrackInstance *reanimatorTrackInstance = mTrackInstances + theTrackIndex;

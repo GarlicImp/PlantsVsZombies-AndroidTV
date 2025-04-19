@@ -192,24 +192,29 @@ public:
     // 大小88个整数
 public:
     void PlantInitialize(int theGridX, int theGridY, SeedType theSeedType, SeedType theImitaterType, int a6);
-    void DoSpecial();
     void Update();
-    void UpdateReanimColor();
-    int GetRefreshTime(SeedType theSeedType, SeedType theImitaterType);
+    void Draw(Sexy::Graphics *g);
+    void DoSpecial();
     GridItem* FindTargetGridItem(PlantWeapon thePlantWeapon);
+    void Die();
+    static int GetCost(SeedType theSeedType, SeedType theImitaterType);
+    static int GetRefreshTime(SeedType theSeedType, SeedType theImitaterType);
+    static bool IsUpgrade(SeedType theSeedType);
     bool NotOnGround();
+    static void DrawSeedType(Sexy::Graphics *g, SeedType theSeedType, SeedType theImitaterType, DrawVariation theDrawVariation, float thePosX, float thePosY);
+    void SetSleeping(bool theIsAsleep);
+    void UpdateReanimColor();
     bool IsOnBoard();
     bool IsInPlay();
-    void Die();
-    void Draw(Sexy::Graphics *g);
-    void SetSleeping(bool theIsAsleep);
+
+    void SetImitaterFilterEffect();
 };
 
 class PlantDefinition
 {
 public:
-    SeedType mSeedType;          //+0x0
-    Sexy::Image**                 mPlantImage;        //+0x4
+    SeedType                mSeedType;          //+0x0
+    Sexy::Image**           mPlantImage;        //+0x4
     ReanimationType         mReanimationType;   //+0x8
     int                     mPacketIndex;       //+0xC
     int                     mSeedCost;          //+0x10
@@ -227,8 +232,6 @@ inline bool abilityFastCoolDown;
 inline bool mushroomsNoSleep;
 inline bool showPlantHealth;
 inline bool showNutGarlicSpikeHealth;
-
-inline void (*Plant_Die)(Plant *instance);
 
 inline Sexy::Image *(*Plant_GetImage)(SeedType seedType);
 
@@ -267,7 +270,7 @@ inline int (*Plant_GetDamageRangeFlags)(Plant *, PlantWeapon);
 
 inline void (*old_Plant_Draw)(Plant *plant, Sexy::Graphics *graphics);
 
-inline int (*old_Plant_GetRefreshTime)(Plant* this_, SeedType theSeedType, SeedType theImitaterType);
+inline int (*old_Plant_GetRefreshTime)(SeedType theSeedType, SeedType theImitaterType);
 
 inline int (*old_Plant_GetCost)(SeedType theSeedType, SeedType theImitaterType);
 
@@ -285,14 +288,6 @@ inline bool (*old_Plant_IsUpgrade)(SeedType theSeedType);
 
 inline void (*old_Plant_Die)(Plant* this_);
 
-
-
-int Plant_GetCost(SeedType seedType, SeedType imitaterType);
-
-void Plant_SetImitaterFilterEffect(Plant *plant);
-
-void Plant_DrawSeedType(Sexy::Graphics *graphics, SeedType theSeedType, SeedType theImitaterType, DrawVariation, float thePosX, float thePosY);
-
-bool Plant_IsUpgrade(SeedType theSeedType);
+// inline void (*old_Plant_CobCannonFire)(Plant* plant, int x, int y);
 
 #endif // PVZ_LAWN_PLANT_H

@@ -27,7 +27,7 @@ public:
     Color mExtraOverlayColor;                          // 36 ~ 39
     bool mEnableExtraOverlayDraw;                      // 160
     float mLastFrameTime;                              // 41
-    FilterEffectType::FilterEffectType mFilterEffect;  // 42
+    FilterEffectType mFilterEffect;  // 42
     Color mCustomFilterEffectColor;                    // 43 ~ 46
     int unk2[4];                                       // 47 ~ 50
     ReanimatorTransform *mReanimatorTransforms;        // 51

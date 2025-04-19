@@ -1628,11 +1628,15 @@ enum FoleyType {
 }
 
 
-namespace FilterEffectType {
-enum FilterEffectType { None = -1, WashedOut = 0, LessWashedOut = 1, White = 2, Custom = 3, FilterEffectCount };
-}
-
-
+enum FilterEffectType
+{
+    FILTEREFFECT_NONE = -1,
+    FILTEREFFECT_WASHED_OUT = 0,
+    FILTEREFFECT_LESS_WASHED_OUT = 1,
+    FILTEREFFECT_WHITE = 2,
+    FILTEREFFECT_CUSTOM = 3,
+    NUM_FILTEREFFECT
+};
 
 
 namespace HouseType {
