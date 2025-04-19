@@ -10,10 +10,10 @@ public:
     int mRefreshTime;                          // 14
     int mIndex;                                // 15
     int mOffsetY;                              // 16
-    SeedType::SeedType mPacketType;            // 17
-    SeedType::SeedType mImitaterType;          // 18
+    SeedType mPacketType;            // 17
+    SeedType mImitaterType;          // 18
     int mSlotMachineCountDown;                 // 19
-    SeedType::SeedType mSlotMachiningNextSeed; // 20
+    SeedType mSlotMachiningNextSeed; // 20
     float mSlotMachiningPosition;              // 21
     bool mActive;                              // 88
     bool mRefreshing;                          // 89

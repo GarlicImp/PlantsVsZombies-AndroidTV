@@ -95,20 +95,11 @@ void Sexy_String_Delete(int *holder) {
     }
 }
 
-void DrawSeedPacket(Sexy::Graphics *graphics,
-                    float x,
-                    float y,
-                    SeedType::SeedType seedType,
-                    SeedType::SeedType imitaterType,
-                    float coolDownPercent,
-                    int grayness,
-                    bool drawCostText,
-                    bool isInGame,
-                    bool isZombieSeed,
-                    bool isSeedPacketSelected) {
+void DrawSeedPacket(Sexy::Graphics *graphics, float x, float y, SeedType seedType, SeedType imitaterType, float coolDownPercent,
+                    int grayness, bool drawCostText, bool isInGame, bool isZombieSeed, bool isSeedPacketSelected) {
     // 修复选中紫卡、模仿者卡时卡片背景变为普通卡片背景
 
-    SeedType::SeedType realSeedType = imitaterType != SeedType::None && seedType == SeedType::Imitater ? imitaterType : seedType;
+    SeedType realSeedType = imitaterType != SeedType::SEED_NONE && seedType == SeedType::SEED_IMITATER ? imitaterType : seedType;
     if (grayness != 255) {
         Color theColor = {grayness, grayness, grayness, 255};
         Sexy_Graphics_SetColor(graphics, &theColor);
@@ -119,28 +110,28 @@ void DrawSeedPacket(Sexy::Graphics *graphics,
         Sexy_Graphics_SetColorizeImages(graphics, true);
     }
     int celToDraw;
-    if (seedType == SeedType::Imitater) {
+    if (seedType == SeedType::SEED_IMITATER) {
         celToDraw = 0;
     } else if (Plant_IsUpgrade(realSeedType)) {
         celToDraw = 1;
-    } else if (seedType == SeedType::BeghouledButtonCrater) {
+    } else if (seedType == SeedType::SEED_BEGHOULED_BUTTON_CRATER) {
         celToDraw = 3;
-    } else if (seedType == SeedType::BeghouledButtonShuffle) {
+    } else if (seedType == SeedType::SEED_BEGHOULED_BUTTON_SHUFFLE) {
         celToDraw = 4;
-    } else if (seedType == SeedType::SlotMachineSun) {
+    } else if (seedType == SeedType::SEED_SLOT_MACHINE_SUN) {
         celToDraw = 5;
-    } else if (seedType == SeedType::SlotMachineDiamond) {
+    } else if (seedType == SeedType::SEED_SLOT_MACHINE_DIAMOND) {
         celToDraw = 6;
-    } else if (seedType == SeedType::ZombiquariumSnorkel) {
+    } else if (seedType == SeedType::SEED_ZOMBIQUARIUM_SNORKLE) {
         celToDraw = 7;
-    } else if (seedType == SeedType::ZombiquariumTrophy) {
+    } else if (seedType == SeedType::SEED_ZOMBIQUARIUM_TROPHY) {
         celToDraw = 8;
     } else {
         celToDraw = 2;
     }
 
     if (isSeedPacketSelected) {
-        if (graphics->mScaleX > 1.0f && seedType <= SeedType::Leftpeater) {
+        if (graphics->mScaleX > 1.0f && seedType <= SeedType::SEED_LEFTPEATER) {
             // 紫卡背景BUG就是在这里修复的
             if (celToDraw == 2) {
                 TodDrawImageCelScaledF(graphics, *Sexy_IMAGE_SEEDPACKET_LARGER_Addr, x, y, 0, 0, graphics->mScaleX * 0.5f, graphics->mScaleY * 0.5f);
@@ -154,180 +145,180 @@ void DrawSeedPacket(Sexy::Graphics *graphics,
             TodDrawImageCelScaledF(graphics, *Sexy_IMAGE_SEEDS_Addr, x, y, celToDraw, 0, graphics->mScaleX, graphics->mScaleY);
         }
     }
-    bool isPlant = seedType < SeedType::BeghouledButtonShuffle || seedType > SeedType::ZombiquariumTrophy;
+    bool isPlant = seedType < SeedType::SEED_BEGHOULED_BUTTON_SHUFFLE || seedType > SeedType::SEED_ZOMBIQUARIUM_TROPHY;
     float offsetY, offsetX, theDrawScale;
     switch (realSeedType) {
-        case SeedType::Tallnut:
+        case SeedType::SEED_TALLNUT:
             offsetY = 22.0;
             offsetX = 12.0;
             theDrawScale = 0.3;
             break;
-        case SeedType::InstantCoffee:
+        case SeedType::SEED_INSTANT_COFFEE:
             offsetY = 9.0;
             offsetX = 0.0;
             theDrawScale = 0.55;
             break;
-        case SeedType::Cobcannon:
+        case SeedType::SEED_COBCANNON:
             offsetY = 22.0;
             offsetX = 6.0;
             theDrawScale = 0.26;
             break;
-        case SeedType::Cactus:
+        case SeedType::SEED_CACTUS:
             offsetY = 13.0;
             offsetX = 9.0;
             theDrawScale = 0.5;
             break;
-        case SeedType::Magnetshroom:
+        case SeedType::SEED_MAGNETSHROOM:
             offsetY = 12.0;
             offsetX = 5.0;
             theDrawScale = 0.5;
             break;
-        case SeedType::Twinsunflower:
-        case SeedType::Gloomshroom:
+        case SeedType::SEED_TWINSUNFLOWER:
+        case SeedType::SEED_GLOOMSHROOM:
             offsetY = 14.0;
             offsetX = 7.0;
             theDrawScale = 0.45;
             break;
-        case SeedType::Cattail:
+        case SeedType::SEED_CATTAIL:
             offsetY = 13.0;
             offsetX = 8.0;
             theDrawScale = 0.45;
             break;
-        case SeedType::Umbrella:
+        case SeedType::SEED_UMBRELLA:
             offsetY = 10.0;
             offsetX = 5.0;
             theDrawScale = 0.5;
             break;
-        case SeedType::Kernelpult:
+        case SeedType::SEED_KERNELPULT:
             offsetY = 14.0;
             offsetX = 13.0;
             theDrawScale = 0.4;
             break;
-        case SeedType::Cabbagepult:
+        case SeedType::SEED_CABBAGEPULT:
             offsetY = 14.0;
             offsetX = 15.0;
             theDrawScale = 0.4;
             break;
-        case SeedType::Gravebuster:
+        case SeedType::SEED_GRAVEBUSTER:
             offsetY = 15.0;
             offsetX = 10.0;
             theDrawScale = 0.4;
             break;
-        case SeedType::Splitpea:
+        case SeedType::SEED_SPLITPEA:
             offsetY = 12.0;
             offsetX = 12.0;
             theDrawScale = 0.45;
             break;
-        case SeedType::Blover:
+        case SeedType::SEED_BLOVER:
             offsetY = 17.0;
             offsetX = 8.0;
             theDrawScale = 0.4;
             break;
-        case SeedType::Starfruit:
+        case SeedType::SEED_STARFRUIT:
             offsetY = 8.0;
             offsetX = 6.0;
             theDrawScale = 0.5;
             break;
-        case SeedType::Threepeater:
+        case SeedType::SEED_THREEPEATER:
             offsetY = 10.0;
             offsetX = 5.0;
             theDrawScale = 0.5;
             break;
-        case SeedType::Gatlingpea:
+        case SeedType::SEED_GATLINGPEA:
             offsetY = 8.0;
             offsetX = 2.0;
             theDrawScale = 0.5;
             break;
-        case SeedType::ZombiePolevaulter:
+        case SeedType::SEED_ZOMBIE_POLEVAULTER:
             offsetY = -12.0;
             offsetX = -8.0;
             theDrawScale = 0.35;
             break;
-        case SeedType::Melonpult:
-        case SeedType::Wintermelon:
+        case SeedType::SEED_MELONPULT:
+        case SeedType::SEED_WINTERMELON:
             offsetY = 19.0;
             offsetX = 18.0;
             theDrawScale = 0.35;
             break;
-        case SeedType::Potatomine:
-        case SeedType::Fumeshroom:
-        case SeedType::Tanglekelp:
-        case SeedType::Pumpkinshell:
-        case SeedType::Chomper:
-        case SeedType::Doomshroom:
+        case SeedType::SEED_POTATOMINE:
+        case SeedType::SEED_FUMESHROOM:
+        case SeedType::SEED_TANGLEKELP:
+        case SeedType::SEED_PUMPKINSHELL:
+        case SeedType::SEED_CHOMPER:
+        case SeedType::SEED_DOOMSHROOM:
         case SeedType::SEED_SQUASH:
-        case SeedType::Hypnoshroom:
-        case SeedType::Spikeweed:
-        case SeedType::Spikerock:
-        case SeedType::Plantern:
-        case SeedType::Torchwood:
+        case SeedType::SEED_HYPNOSHROOM:
+        case SeedType::SEED_SPIKEWEED:
+        case SeedType::SEED_SPIKEROCK:
+        case SeedType::SEED_PLANTERN:
+        case SeedType::SEED_TORCHWOOD:
             offsetY = 12.0;
             offsetX = 8.0;
             theDrawScale = 0.4;
             break;
-        case SeedType::ZombieNormal:
-        case SeedType::ZombieNewsPaper:
-        case SeedType::ZombieFlag:
-        case SeedType::ZombieTrafficCone:
-        case SeedType::ZombiePail:
-        case SeedType::ZombieDancer:
+        case SeedType::SEED_ZOMBIE_NORMAL:
+        case SeedType::SEED_ZOMBIE_NEWSPAPER:
+        case SeedType::SEED_ZOMBIE_FLAG:
+        case SeedType::SEED_ZOMBIE_TRAFFIC_CONE:
+        case SeedType::SEED_ZOMBIE_PAIL:
+        case SeedType::SEED_ZOMBIE_DANCER:
             offsetY = -7.0;
             offsetX = -3.0;
             theDrawScale = 0.35;
             break;
-        case SeedType::ZombieLadder:
-        case SeedType::ZombieDigger:
-        case SeedType::ZombieScreenDoor:
-        case SeedType::ZombieTrashBin:
-        case SeedType::ZombiePogo:
-        case SeedType::ZombieJackInTheBox:
-        case SeedType::ZombieDuckyTube:
+        case SeedType::SEED_ZOMBIE_LADDER:
+        case SeedType::SEED_ZOMBIE_DIGGER:
+        case SeedType::SEED_ZOMBIE_SCREEN_DOOR:
+        case SeedType::SEED_ZOMBIE_TRASH_BIN:
+        case SeedType::SEED_ZOMBIE_POGO:
+        case SeedType::SEED_ZOMBIE_JACK_IN_THE_BOX:
+        case SeedType::SEED_ZOMBIE_DUCKY_TUBE:
             offsetY = -10.0;
             offsetX = -3.0;
             theDrawScale = 0.35;
             break;
-        case SeedType::ZombieDolphinRider:
+        case SeedType::SEED_ZOMBIE_DOLPHIN_RIDER:
             offsetY = -12.0;
             offsetX = -3.0;
             theDrawScale = 0.35;
             break;
-        case SeedType::ZombieSnorkel:
+        case SeedType::SEED_ZOMBIE_SNORKEL:
             offsetY = -8.0;
             offsetX = -3.0;
             theDrawScale = 0.32;
             break;
-        case SeedType::ZombieBungee:
+        case SeedType::SEED_ZOMBIE_BUNGEE:
             offsetY = -1.0;
             offsetX = 1.0;
             theDrawScale = 0.3;
             break;
-        case SeedType::ZombieFootball:
+        case SeedType::SEED_ZOMBIE_FOOTBALL:
             offsetY = -9.0;
             offsetX = -7.0;
             theDrawScale = 0.33;
             break;
-        case SeedType::ZombieBalloon:
+        case SeedType::SEED_ZOMBIE_BALLOON:
             offsetY = -5.0;
             offsetX = -3.0;
             theDrawScale = 0.35;
             break;
-        case SeedType::ZombieImp:
+        case SeedType::SEED_ZOMBIE_IMP:
             offsetY = -17.0;
             offsetX = -12.0;
             theDrawScale = 0.4;
             break;
-        case SeedType::Zomboni:
+        case SeedType::SEED_ZOMBONI:
             offsetY = 3.0;
             offsetX = -5.0;
             theDrawScale = 0.23;
             break;
-        case SeedType::ZombieCatapult:
+        case SeedType::SEED_ZOMBIE_CATAPULT:
             offsetY = 3.0;
             offsetX = 1.0;
             theDrawScale = 0.23;
             break;
-        case SeedType::ZombieGargantuar:
-        case SeedType::ZombieUnknown:
+        case SeedType::SEED_ZOMBIE_GARGANTUAR:
+        case SeedType::SEED_ZOMBIE_UNKNOWN:
             offsetY = 3.0;
             offsetX = 4.0;
             theDrawScale = 0.23;
@@ -340,15 +331,15 @@ void DrawSeedPacket(Sexy::Graphics *graphics,
     }
     LawnApp *lawnApp = (LawnApp *)*gLawnApp_Addr;
     float v28, v29;
-    if (lawnApp->mGameMode == GameMode::ChallengeBigTime) {
-        if (realSeedType == SeedType::Sunflower || realSeedType == SeedType::Wallnut || realSeedType == SeedType::Marigold) {
+    if (lawnApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_BIG_TIME) {
+        if (realSeedType == SeedType::SEED_SUNFLOWER || realSeedType == SeedType::SEED_WALLNUT || realSeedType == SeedType::SEED_MARIGOLD) {
             offsetY = 34.0;
             offsetX = 16.0;
         }
     }
     v28 = offsetX * graphics->mScaleX;
     v29 = (offsetY + 1.0f) * graphics->mScaleY;
-    if (realSeedType == SeedType::GiantWallnut) {
+    if (realSeedType == SeedType::SEED_GIANT_WALLNUT) {
         v29 = 59.0;
         theDrawScale = theDrawScale * 0.75;
         v28 = 52.0;
@@ -398,7 +389,7 @@ void DrawSeedPacket(Sexy::Graphics *graphics,
         Color theColor = {0, 0, 0, 255};
         Sexy_Graphics_PushState(graphics);
         if (graphics->mScaleX == 1.0 && graphics->mScaleY == 1.0) {
-            TodDrawString(graphics, tmpHolder, width + x, height + y, font, theColor, DrawStringJustification::Left);
+            TodDrawString(graphics, tmpHolder, width + x, height + y, font, theColor, DrawStringJustification::DS_ALIGN_LEFT);
         } else {
             int matrix[25];
             Sexy_SexyMatrix3_SexyMatrix3(matrix);
@@ -637,7 +628,7 @@ void ReanimatorCache::LoadCachedImages() {
     old_ReanimatorCache_LoadCachedImages(this);
 }
 
-void ReanimatorCache::UpdateReanimationForVariation(Reanimation *theReanim, DrawVariation::DrawVariation theDrawVariation) {
+void ReanimatorCache::UpdateReanimationForVariation(Reanimation *theReanim, DrawVariation theDrawVariation) {
     // 修复商店花盆不显示、修复花园花盆不显示、修复花园手套和推车预览不显示。原理就是Reanimation_Update。
     old_ReanimatorCache_UpdateReanimationForVariation(this, theReanim, theDrawVariation);
     float tmp = theReanim->mAnimRate;
@@ -646,15 +637,15 @@ void ReanimatorCache::UpdateReanimationForVariation(Reanimation *theReanim, Draw
     //    Reanimation_SetAnimRate(theReanim, tmp);
 }
 
-void ReanimatorCache_DrawCachedPlant(ReanimatorCache *a1, Sexy::Graphics *graphics, float thePosX, float thePosY, SeedType::SeedType theSeedType, DrawVariation::DrawVariation drawVariation) {
-    if (drawVariation == DrawVariation::ImitaterLess || drawVariation == DrawVariation::Imitater || drawVariation == DrawVariation::Normal) {
+void ReanimatorCache_DrawCachedPlant(ReanimatorCache *a1, Sexy::Graphics *graphics, float thePosX, float thePosY, SeedType theSeedType, DrawVariation drawVariation) {
+    if (drawVariation == DrawVariation::VARIATION_IMITATER_LESS || drawVariation == DrawVariation::VARIATION_IMITATER || drawVariation == DrawVariation::VARIATION_NORMAL) {
         Sexy::Image *image = a1->mPlantImages[theSeedType];
         if (image == nullptr) {
             return;
         }
-        if (drawVariation == DrawVariation::Imitater) {
+        if (drawVariation == DrawVariation::VARIATION_IMITATER) {
             image = FilterEffectGetImage(image, FilterEffectType::WashedOut);
-        } else if (drawVariation == DrawVariation::ImitaterLess) {
+        } else if (drawVariation == DrawVariation::VARIATION_IMITATER_LESS) {
             image = FilterEffectGetImage(image, FilterEffectType::LessWashedOut);
         }
         int a, b, c, d;
@@ -707,19 +698,19 @@ Sexy::Image *ReanimatorCache::MakeCachedZombieFrame(ZombieType theZombieType) {
     return BlankCanvasImage;
 }
 
-void DrawSeedType(Sexy::Graphics *graphics, float x, float y, SeedType::SeedType theSeedType, SeedType::SeedType theImitaterType, float xOffset, float yOffset, float scale) {
+void DrawSeedType(Sexy::Graphics *graphics, float x, float y, SeedType theSeedType, SeedType theImitaterType, float xOffset, float yOffset, float scale) {
     // 和Plant_DrawSeedType配合使用，用于绘制卡槽内的模仿者SeedPacket变白效果。
     Sexy_Graphics_PushState(graphics);
     graphics->mScaleX = graphics->mScaleX * scale;
     graphics->mScaleY = graphics->mScaleY * scale;
-    if (theSeedType == SeedType::ZombieTombsTone) {
+    if (theSeedType == SeedType::SEED_ZOMBIE_TOMBSTONE) {
         TodDrawImageCelScaledF(graphics, *Sexy_IMAGE_MP_TOMBSTONE_Addr, x + xOffset, y + yOffset, 0, 0, graphics->mScaleX, graphics->mScaleY);
     } else {
-        if (theSeedType == SeedType::Imitater && theImitaterType != SeedType::None) {
+        if (theSeedType == SeedType::SEED_IMITATER && theImitaterType != SeedType::SEED_NONE) {
             // 卡槽内的模仿者SeedPacket卡且为冷却状态，此时需要交换theImitaterType和theSeedType。
-            Plant_DrawSeedType(graphics, theImitaterType, theSeedType, DrawVariation::Normal, x + xOffset, y + yOffset);
+            Plant_DrawSeedType(graphics, theImitaterType, theSeedType, DrawVariation::VARIATION_NORMAL, x + xOffset, y + yOffset);
         } else {
-            Plant_DrawSeedType(graphics, theSeedType, theImitaterType, DrawVariation::Normal, x + xOffset, y + yOffset);
+            Plant_DrawSeedType(graphics, theSeedType, theImitaterType, DrawVariation::VARIATION_NORMAL, x + xOffset, y + yOffset);
         }
     }
     return Sexy_Graphics_PopState(graphics);
@@ -1142,7 +1133,7 @@ void PoolEffect_PoolEffectDraw(PoolEffect *poolEffect, Sexy::Graphics *graphics,
     Sexy_GLGraphics_SetWrapMode(&newGraphics, 1, 1);
     Sexy_Graphics_Delete2(&newGraphics);
 
-    if (poolEffect->mApp->mGameMode == GameMode::ChallengePoolParty && poolEffect->mApp->mBoard != nullptr) {
+    if (poolEffect->mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_POOL_PARTY && poolEffect->mApp->mBoard != nullptr) {
         float theTmpTransY = graphics->mTransY;
         int thePoolOffsetY[2] = {164, -175};
         for (int i = 0; i < 2; ++i) {
@@ -1195,7 +1186,7 @@ FoleyParams *LookupFoley(FoleyType::FoleyType theFoleyType) {
 
 void MessageWidget_Draw(CustomMessageWidget *messageWidget, Sexy::Graphics *graphics) {
     // 用于绘制成就图标、在LevelIntro时显示“player的房子”、修复老虎机提示文字位置靠上
-    if (messageWidget->mMessageStyle == MessageStyle::SlotMachine) {
+    if (messageWidget->mMessageStyle == MessageStyle::MESSAGE_STYLE_SLOT_MACHINE) {
         float tmpTransY = graphics->mTransY;
         graphics->mTransY += 8;
         old_MessageWidget_Draw(messageWidget, graphics);
@@ -1204,7 +1195,7 @@ void MessageWidget_Draw(CustomMessageWidget *messageWidget, Sexy::Graphics *grap
         old_MessageWidget_Draw(messageWidget, graphics);
     }
 
-    if (messageWidget->mMessageStyle == MessageStyle::HouseName && messageWidget->mReanimType == ReanimationType::REANIM_NONE) {
+    if (messageWidget->mMessageStyle == MessageStyle::MESSAGE_STYLE_HOUSE_NAME && messageWidget->mReanimType == ReanimationType::REANIM_NONE) {
         Sexy::Font *theFont = MessageWidget_GetFont(messageWidget);
         int num2 = 530; // 原版为550，此处改为530！
         Color theColor = {255, 255, 255, std::clamp(messageWidget->mDuration * 15, 0, 255)};
@@ -1215,7 +1206,7 @@ void MessageWidget_Draw(CustomMessageWidget *messageWidget, Sexy::Graphics *grap
         theRect.mHeight = 600;
         theRect.mWidth = 800;
         theRect.mX = -messageWidget->mApp->mBoard->mX;
-        TodDrawStringWrapped(graphics, holder, &theRect, theFont, &theColor, DrawStringJustification::Center, false);
+        TodDrawStringWrapped(graphics, holder, &theRect, theFont, &theColor, DrawStringJustification::DS_ALIGN_CENTER, false);
         Sexy_String_Delete(holder);
     }
     if (messageWidget->mIcon != nullptr) {
@@ -1229,7 +1220,7 @@ void MessageWidget_ClearLabel(CustomMessageWidget *messageWidget) {
     messageWidget->mIcon = nullptr;
 }
 
-void MessageWidget_SetLabel(CustomMessageWidget *messageWidget, int *label, MessageStyle::MessageStyle theStyle) {
+void MessageWidget_SetLabel(CustomMessageWidget *messageWidget, int *label, MessageStyle theStyle) {
     // 用于绘制成就图标
     old_MessageWidget_SetLabel(messageWidget, label, theStyle);
     messageWidget->mIcon = nullptr;
@@ -1299,7 +1290,7 @@ void SaveGameContext_SyncReanimationDef(int *theSaveGameContext, ReanimatorDefin
         SaveGameContext_SyncInt(theSaveGameContext, &reanimationType);
         if (reanimationType == -1) {
             *a2 = nullptr;
-        } else if (reanimationType <= ReanimationType::ZombatarHead) {
+        } else if (reanimationType <= ReanimationType::REANIM_ZOMBATAR_HEAD) {
             ReanimatorEnsureDefinitionLoaded((ReanimationType)reanimationType, true);
             ReanimatorDefinition *v6 = *gReanimatorDefArray_Addr; // r3
             *a2 = v6 + reanimationType;
@@ -1312,7 +1303,7 @@ void SaveGameContext_SyncReanimationDef(int *theSaveGameContext, ReanimatorDefin
         ReanimatorDefinition *v5 = *a2;                       // r1
         ReanimatorDefinition *v6 = *gReanimatorDefArray_Addr; // r3
         while (v5 != v6++) {
-            if (++v3 == ReanimationType::ZombatarHead + 1)
+            if (++v3 == ReanimationType::REANIM_ZOMBATAR_HEAD + 1)
                 goto LABEL_7;
         }
         reanimationType = v3;

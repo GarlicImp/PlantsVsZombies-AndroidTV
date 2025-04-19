@@ -309,7 +309,7 @@ extern "C" JNIEXPORT void JNICALL Java_com_android_support_Preferences_Changes(J
             VSBackGround = value; // 更换场景
             break;
         case 103:
-            theBuildPlantType = (SeedType::SeedType)(value >= 49 ? value + 1 : value - 1); // 植物类型
+            theBuildPlantType = (SeedType)(value >= 49 ? value + 1 : value - 1); // 植物类型
             break;
         case 104:
             theBuildZombieType = (ZombieType)(value - 1); // 僵尸类型
@@ -376,13 +376,13 @@ extern "C" JNIEXPORT void JNICALL Java_com_android_support_Preferences_Changes(J
             break;
         case 143:
             if (value <= 48) {
-                choiceSeedType = (SeedType::SeedType)(value - 1); // [豌豆射手, 模仿者)
+                choiceSeedType = (SeedType)(value - 1); // [豌豆射手, 模仿者)
             } else if (value <= 52) {
-                choiceSeedType = (SeedType::SeedType)(value + 1); // [爆炸坚果, NUM_SEED_TYPES)
+                choiceSeedType = (SeedType)(value + 1); // [爆炸坚果, NUM_SEED_TYPES)
             } else if (value <= 71) {
-                choiceSeedType = (SeedType::SeedType)(value + 8); // [墓碑, ZombieUnknown)
+                choiceSeedType = (SeedType)(value + 8); // [墓碑, ZombieUnknown)
             } else if (value <= 77) {
-                choiceSeedType = (SeedType::SeedType)(value + 9); // [鸭子救生圈僵尸, 气球僵尸]
+                choiceSeedType = (SeedType)(value + 9); // [鸭子救生圈僵尸, 气球僵尸]
             }
             break; // 卡片类型
         case 144:
@@ -753,9 +753,9 @@ std::string printAllKeyValuePairs(KeyValuePair *hashTable[]) {
             int key = current->key;
             int mSeedType = key & 0x3F;
             std::stringstream *ss_ptr;
-            if (mSeedType == SeedType::Lilypad || mSeedType == SeedType::Flowerpot) {
+            if (mSeedType == SeedType::SEED_LILYPAD || mSeedType == SeedType::SEED_FLOWERPOT) {
                 ss_ptr = &ss1;
-            } else if (mSeedType == SeedType::Pumpkinshell) {
+            } else if (mSeedType == SeedType::SEED_PUMPKINSHELL) {
                 ss_ptr = &ss3;
             } else {
                 ss_ptr = &ss2;
@@ -822,18 +822,18 @@ extern "C" JNIEXPORT jstring JNICALL Java_com_android_support_CkHomuraMenu_GetCu
     while (Board_IteratePlants(board, &plant)) {
         if (plant->mDead)
             continue;
-        SeedType::SeedType mSeedType = plant->mSeedType;
-        SeedType::SeedType mImitaterType = plant->mImitaterType;
-        if (mSeedType == SeedType::Imitater) {
+        SeedType mSeedType = plant->mSeedType;
+        SeedType mImitaterType = plant->mImitaterType;
+        if (mSeedType == SeedType::SEED_IMITATER) {
             mSeedType = mImitaterType;
         }
         int mPlantCol = plant->mPlantCol;
         int mRow = plant->mRow;
         bool mIsAsleep = plant->mIsAsleep;
-        bool canHaveLadder = mSeedType == SeedType::Wallnut || mSeedType == SeedType::Tallnut || mSeedType == SeedType::Pumpkinshell;
+        bool canHaveLadder = mSeedType == SeedType::SEED_WALLNUT || mSeedType == SeedType::SEED_TALLNUT || mSeedType == SeedType::SEED_PUMPKINSHELL;
         bool canBeAsleep = Plant_IsNocturnal(mSeedType);
         bool wakeUp = canBeAsleep && !mIsAsleep;
-        bool imitaterMorphed = mSeedType == SeedType::Imitater || mImitaterType == SeedType::Imitater;
+        bool imitaterMorphed = mSeedType == SeedType::SEED_IMITATER || mImitaterType == SeedType::SEED_IMITATER;
         bool ladder = canHaveLadder && Board_GetLadderAt(board, mPlantCol, mRow) != nullptr;
         int key = mSeedType | (wakeUp << 6) | (imitaterMorphed << 7) | (ladder << 8);
         int value = mPlantCol | (mRow << 4);
@@ -855,7 +855,7 @@ extern "C" JNIEXPORT void JNICALL Java_com_transmension_mobile_EnhanceActivity_n
     doKeyboardTwoPlayerDialog = is_on;
     if (!is_on) {
         LawnApp *lawnApp = (LawnApp *)*gLawnApp_Addr;
-        if (LawnApp_IsCoopMode(lawnApp) || lawnApp->mGameMode == GameMode::TwoPlayerVS)
+        if (LawnApp_IsCoopMode(lawnApp) || lawnApp->mGameMode == GameMode::GAMEMODE_TWO_PLAYER_VS)
             return;
         LawnApp_ClearSecondPlayer(lawnApp);
         Board *board = lawnApp->mBoard;
@@ -880,7 +880,7 @@ extern "C" JNIEXPORT jboolean JNICALL Java_com_transmension_mobile_EnhanceActivi
         return true;
     }
 
-    if (lawnApp->mGameMode == GameMode::TwoPlayerVS && lawnApp->mVSSetupScreen != nullptr && lawnApp->mVSSetupScreen[74] == 3) {
+    if (lawnApp->mGameMode == GameMode::GAMEMODE_TWO_PLAYER_VS && lawnApp->mVSSetupScreen != nullptr && lawnApp->mVSSetupScreen[74] == 3) {
         return true;
     }
     return false;
@@ -986,7 +986,7 @@ extern "C" JNIEXPORT void JNICALL Java_com_transmension_mobile_EnhanceActivity_n
     }
 
     int *theVSSetupScreen = lawnApp->mVSSetupScreen;
-    if (is_key_down && lawnApp->mGameMode == GameMode::TwoPlayerVS && theVSSetupScreen != nullptr && theVSSetupScreen[74] == 3) {
+    if (is_key_down && lawnApp->mGameMode == GameMode::GAMEMODE_TWO_PLAYER_VS && theVSSetupScreen != nullptr && theVSSetupScreen[74] == 3) {
         VSSetupMenu_GameButtonDown(theVSSetupScreen, buttonCode, playerIndex, 0);
         return;
     }

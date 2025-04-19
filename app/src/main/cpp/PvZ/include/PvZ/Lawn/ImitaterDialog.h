@@ -3,7 +3,7 @@
 
 #include "PvZ/Enums.h"
 
-inline SeedType::SeedType (*ImitaterDialog_SeedHitTest)(LawnDialog *, int, int);
+inline SeedType (*ImitaterDialog_SeedHitTest)(LawnDialog *, int, int);
 
 
 inline void (*old_ImitaterDialog_ImitaterDialog)(LawnDialog *instance, int a2);

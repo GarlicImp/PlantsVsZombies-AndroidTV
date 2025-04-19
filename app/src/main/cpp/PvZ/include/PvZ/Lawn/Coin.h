@@ -25,7 +25,7 @@ public:
     CoinMotion mCoinMotion; // 30
     int mAttachment[3];                 // 31 ~ 33
     float mCollectionDistance;          // 34
-    SeedType::SeedType mUsableSeedType; // 35
+    SeedType mUsableSeedType; // 35
     int *mPottedPlantSpec;              // 36
     int unknownMember[4];               // 37 ~ 40
     bool mNeedsBouncyArrow;             // 164

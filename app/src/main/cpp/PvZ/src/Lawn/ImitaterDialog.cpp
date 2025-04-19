@@ -31,18 +31,18 @@ bool ImitaterDialog_KeyDown(LawnDialog *a, int a2) {
 }
 
 void ImitaterDialog_MouseDown(LawnDialog *a, int x, int y, int theCount) {
-    SeedType::SeedType seedType = ImitaterDialog_SeedHitTest(a, x, y);
-    if (seedType == SeedType::None) {
+    SeedType seedType = ImitaterDialog_SeedHitTest(a, x, y);
+    if (seedType == SeedType::SEED_NONE) {
         return;
     }
     LawnApp *lawnApp = a->mApp;
     SeedChooserScreen *seedChooserScreen = lawnApp->mSeedChooserScreen;
 
     if (!SeedChooserScreen_SeedNotAllowedToPick(seedChooserScreen, seedType)) {
-        ChosenSeed *chosenSeed = &(seedChooserScreen->mChosenSeeds[SeedType::Imitater]);
+        ChosenSeed *chosenSeed = &(seedChooserScreen->mChosenSeeds[SeedType::SEED_IMITATER]);
         chosenSeed->mImitaterType = seedType;
         chosenSeed->mSeedState = ChosenSeedState::SEED_IN_CHOOSER;
-        SeedChooserScreen_GetSeedPositionInChooser(seedChooserScreen, SeedType::Imitater, &chosenSeed->mX, &chosenSeed->mY);
+        SeedChooserScreen_GetSeedPositionInChooser(seedChooserScreen, SeedType::SEED_IMITATER, &chosenSeed->mX, &chosenSeed->mY);
         //        SeedChooserScreen_ClickedSeedInChooser(*(uint32_t *) (a[184] + 2244), seedChooserScreen + 835, -1);//模仿者选种子闪退，就是因为这里参数为-1而不是0或者1
         //        int mIsZombie = a[194];
         SeedChooserScreen_ClickedSeedInChooser(seedChooserScreen, chosenSeed, m1PChoosingSeeds ? 0 : 1);

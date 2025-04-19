@@ -83,7 +83,7 @@ void Reanimation_SetImageDefinition(Reanimation *reanim, const char *trackName, 
 
 // "addonFiles/compiled/reanim/zombatar_zombie_head.reanim"
 static ReanimationParams gNewReanimationParamArray[] = {
-    {ReanimationType::ZombatarHead, "addonFiles/compiled/reanim/zombatar_zombie_head.reanim", 1},
+    {ReanimationType::REANIM_ZOMBATAR_HEAD, "addonFiles/compiled/reanim/zombatar_zombie_head.reanim", 1},
 };
 
 void ReanimatorLoadDefinitions(ReanimationParams *theReanimationParamArray, int theReanimationParamArraySize) {

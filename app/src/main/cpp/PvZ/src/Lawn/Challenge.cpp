@@ -17,16 +17,17 @@
 void Challenge_Update(Challenge *challenge) {
     if (requestJumpSurvivalStage) {
         // 如果玩家按了无尽跳关
-        if (challenge->mSurvivalStage > 0 || challenge->mApp->mGameScene == GameScenes::Playing) {
+        if (challenge->mSurvivalStage > 0 || challenge->mApp->mGameScene == GameScenes::SCENE_PLAYING) {
             // 需要玩家至少已完成选种子，才能跳关。否则有BUG
             challenge->mSurvivalStage = targetWavesToJump;
         }
         requestJumpSurvivalStage = false;
     }
-    GameMode::GameMode gameMode = challenge->mApp->mGameMode;
+    GameMode gameMode = challenge->mApp->mGameMode;
     if (gameMode == GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN || gameMode == GameMode::GAMEMODE_TREE_OF_WISDOM) {
-        TutorialState::TutorialState mTutorialState = challenge->mBoard->mTutorialState;
-        if (mTutorialState == TutorialState::ZenGardenPickupWater || mTutorialState == TutorialState::ZenGardenWaterPlant || mTutorialState == TutorialState::ZenGardenKeepWatering) {
+        TutorialState mTutorialState = challenge->mBoard->mTutorialState;
+        if (mTutorialState == TutorialState::TUTORIAL_ZEN_GARDEN_PICKUP_WATER || mTutorialState == TutorialState::TUTORIAL_ZEN_GARDEN_WATER_PLANT
+            || mTutorialState == TutorialState::TUTORIAL_ZEN_GARDEN_KEEP_WATERING) {
             mBoardMenuButton->mBtnNoDraw = true;
             mBoardStoreButton->mBtnNoDraw = true;
             mBoardStoreButton->mDisabled = true;
@@ -36,7 +37,7 @@ void Challenge_Update(Challenge *challenge) {
             mBoardMenuButton->mBtnNoDraw = true;
             mBoardStoreButton->mDisabled = true;
             mBoardMenuButton->mDisabled = true;
-        } else if (mTutorialState == TutorialState::ZenGardenVisitStore) {
+        } else if (mTutorialState == TutorialState::TUTORIAL_ZEN_GARDEN_VISIT_STORE) {
             mBoardStoreButton->mBtnNoDraw = false;
             mBoardMenuButton->mBtnNoDraw = true;
             mBoardStoreButton->mDisabled = false;
@@ -57,7 +58,7 @@ void Challenge_Update(Challenge *challenge) {
 void Challenge_Challenge(Challenge *challenge) {
     if (requestJumpSurvivalStage) {
         // 如果玩家按了无尽跳关
-        if (challenge->mSurvivalStage > 0 || challenge->mApp->mGameScene == GameScenes::Playing) {
+        if (challenge->mSurvivalStage > 0 || challenge->mApp->mGameScene == GameScenes::SCENE_PLAYING) {
             // 需要玩家至少已完成选种子，才能跳关。否则有BUG
             challenge->mSurvivalStage = targetWavesToJump;
         }
@@ -173,15 +174,15 @@ void Challenge_DrawArtChallenge(Challenge *challenge, Sexy::Graphics *graphics) 
     Board *board = challenge->mBoard;
     for (int theGridY = 0; theGridY < 6; theGridY++) {
         for (int theGridX = 0; theGridX < 9; theGridX++) {
-            SeedType::SeedType ArtChallengeSeed = Challenge_GetArtChallengeSeed(challenge, theGridX, theGridY);
-            if (ArtChallengeSeed != SeedType::None && Board_GetTopPlantAt(board, theGridX, theGridY, TopPlant::OnlyNormalPosition) == nullptr) {
+            SeedType ArtChallengeSeed = Challenge_GetArtChallengeSeed(challenge, theGridX, theGridY);
+            if (ArtChallengeSeed != SeedType::SEED_NONE && Board_GetTopPlantAt(board, theGridX, theGridY, PlantPriority::TOPPLANT_ONLY_NORMAL_POSITION) == nullptr) {
                 int x = Board_GridToPixelX(board, theGridX, theGridY);
                 int y = Board_GridToPixelY(board, theGridX, theGridY);
-                Plant_DrawSeedType(graphics, ArtChallengeSeed, SeedType::None, DrawVariation::Normal, x, y);
+                Plant_DrawSeedType(graphics, ArtChallengeSeed, SeedType::SEED_NONE, DrawVariation::VARIATION_NORMAL, x, y);
             }
         }
     }
-    if (challenge->mApp->mGameMode == GameMode::ChallengeArtChallenge1) {
+    if (challenge->mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_ART_CHALLENGE_WALLNUT) {
         Color theColor = {255, 255, 255, 255};
         Sexy_Graphics_SetColor(graphics, &theColor);
         int x1 = Board_GridToPixelX(board, 4, 1);
@@ -194,24 +195,25 @@ void Challenge_DrawArtChallenge(Challenge *challenge, Sexy::Graphics *graphics) 
     Sexy_Graphics_SetColorizeImages(graphics, false);
 }
 
-PlantingReason::PlantingReason Challenge_CanPlantAt(Challenge *challenge, int theGridX, int theGridY, SeedType::SeedType theType) {
+PlantingReason Challenge_CanPlantAt(Challenge *challenge, int theGridX, int theGridY, SeedType theType) {
     // 修复IZ多个蹦极可放置在同一格子内
     LawnApp *lawnApp = challenge->mApp;
-    GameMode::GameMode mGameMode = lawnApp->mGameMode;
+    GameMode mGameMode = lawnApp->mGameMode;
     if (LawnApp_IsWallnutBowlingLevel(lawnApp)) {
         if (theGridX > 2) {
-            return PlantingReason::NotPassedLine;
+            return PlantingReason::PLANTING_NOT_PASSED_LINE;
         }
     } else if (LawnApp_IsIZombieLevel(lawnApp)) {
         int num = 6;
-        if (mGameMode == GameMode::PuzzleIZombie1 || mGameMode == GameMode::PuzzleIZombie2 || mGameMode == GameMode::PuzzleIZombie3 || mGameMode == GameMode::PuzzleIZombie4
-            || mGameMode == GameMode::PuzzleIZombie5) {
+        if (mGameMode == GameMode::GAMEMODE_PUZZLE_I_ZOMBIE_1 || mGameMode == GameMode::GAMEMODE_PUZZLE_I_ZOMBIE_2 || mGameMode == GameMode::GAMEMODE_PUZZLE_I_ZOMBIE_3
+            || mGameMode == GameMode::GAMEMODE_PUZZLE_I_ZOMBIE_4 || mGameMode == GameMode::GAMEMODE_PUZZLE_I_ZOMBIE_5) {
             num = 4;
         }
-        if (mGameMode == GameMode::PuzzleIZombie6 || mGameMode == GameMode::PuzzleIZombie7 || mGameMode == GameMode::PuzzleIZombie8 || mGameMode == GameMode::PuzzleIZombieEndless) {
+        if (mGameMode == GameMode::GAMEMODE_PUZZLE_I_ZOMBIE_6 || mGameMode == GameMode::GAMEMODE_PUZZLE_I_ZOMBIE_7 || mGameMode == GameMode::GAMEMODE_PUZZLE_I_ZOMBIE_8
+            || mGameMode == GameMode::GAMEMODE_PUZZLE_I_ZOMBIE_ENDLESS) {
             num = 5;
         }
-        if (theType == SeedType::ZombieBungee) {
+        if (theType == SeedType::SEED_ZOMBIE_BUNGEE) {
             if (theGridX < num) {
                 Board *board = challenge->mBoard;
                 Zombie *zombie = nullptr;
@@ -219,68 +221,68 @@ PlantingReason::PlantingReason Challenge_CanPlantAt(Challenge *challenge, int th
                     if (zombie->mZombieType == ZombieType::ZOMBIE_BUNGEE) {
                         int mGridX = Board_PixelToGridX(board, zombie->mX, zombie->mY);
                         if (mGridX == theGridX && zombie->mRow == theGridY) {
-                            return PlantingReason::NotHere;
+                            return PlantingReason::PLANTING_NOT_HERE;
                         }
                     }
                 }
-                return PlantingReason::Ok;
+                return PlantingReason::PLANTING_OK;
             }
-            return PlantingReason::NotHere;
+            return PlantingReason::PLANTING_NOT_HERE;
         } else if (Challenge_IsZombieSeedType(theType)) {
             if (theGridX >= num) {
-                return PlantingReason::Ok;
+                return PlantingReason::PLANTING_OK;
             }
-            return PlantingReason::NotHere;
+            return PlantingReason::PLANTING_NOT_HERE;
         }
     } else if (LawnApp_IsArtChallenge(lawnApp)) {
-        SeedType::SeedType artChallengeSeed = Challenge_GetArtChallengeSeed(challenge, theGridX, theGridY);
-        if (artChallengeSeed != SeedType::None && artChallengeSeed != theType && theType != SeedType::Lilypad && theType != SeedType::Pumpkinshell) {
-            return PlantingReason::NotOnArt;
+        SeedType artChallengeSeed = Challenge_GetArtChallengeSeed(challenge, theGridX, theGridY);
+        if (artChallengeSeed != SeedType::SEED_NONE && artChallengeSeed != theType && theType != SeedType::SEED_LILYPAD && theType != SeedType::SEED_PUMPKINSHELL) {
+            return PlantingReason::PLANTING_NOT_ON_ART;
         }
-        if (mGameMode == GameMode::ChallengeArtChallenge1) {
+        if (mGameMode == GameMode::GAMEMODE_CHALLENGE_ART_CHALLENGE_WALLNUT) {
             if (theGridX == 4 && theGridY == 1) {
-                return PlantingReason::NotHere;
+                return PlantingReason::PLANTING_NOT_HERE;
             }
             if (theGridX == 6 && theGridY == 1) {
-                return PlantingReason::NotHere;
+                return PlantingReason::PLANTING_NOT_HERE;
             }
         }
     } else if (LawnApp_IsFinalBossLevel(lawnApp) && theGridX >= 8) {
-        return PlantingReason::NotHere;
-    } else if (mGameMode == GameMode::TwoPlayerVSHide || mGameMode == GameMode::TwoPlayerVS) {
+        return PlantingReason::PLANTING_NOT_HERE;
+    } else if (mGameMode == GameMode::GAMEMODE_TWO_PLAYER_VS_HIDE || mGameMode == GameMode::GAMEMODE_TWO_PLAYER_VS) {
         if (Challenge_IsMPSeedType(theType)) {
-            if (theGridX > 5 || theType == SeedType::ZombieBungee)
-                return PlantingReason::Ok;
-            return PlantingReason::VSModeNotPassedLine;
+            if (theGridX > 5 || theType == SeedType::SEED_ZOMBIE_BUNGEE)
+                return PlantingReason::PLANTING_OK;
+            return PlantingReason::PLANTING_NOT_PASSED_LINE_VS;
         }
-        if (theType == SeedType::Gravebuster) {
-            if (Board_GetGridItemAt(challenge->mBoard, GridItemType::Gravestone, theGridX, theGridY) == nullptr)
-                return PlantingReason::OnlyOnGraves;
+        if (theType == SeedType::SEED_GRAVEBUSTER) {
+            if (Board_GetGridItemAt(challenge->mBoard, GridItemType::GRIDITEM_GRAVESTONE, theGridX, theGridY) == nullptr)
+                return PlantingReason::PLANTING_ONLY_ON_GRAVES;
         } else {
             if (theGridX <= 5)
-                return PlantingReason::Ok;
-            return PlantingReason::VSModeNotPassedLine;
+                return PlantingReason::PLANTING_OK;
+            return PlantingReason::PLANTING_NOT_PASSED_LINE_VS;
         }
     }
-    return PlantingReason::Ok;
+    return PlantingReason::PLANTING_OK;
 }
 
 void Challenge_InitLevel(Challenge *challenge) {
     old_Challenge_InitLevel(challenge);
     LawnApp *lawnApp = challenge->mApp;
     Board *board = challenge->mBoard;
-    if (lawnApp->mGameMode == GameMode::ChallengeButteredPopcorn) {
-        Board_NewPlant(board, 0, 0, SeedType::Cobcannon, SeedType::None, -1);
-        Board_NewPlant(board, 0, 1, SeedType::Cobcannon, SeedType::None, -1);
-        Board_NewPlant(board, 0, 4, SeedType::Cobcannon, SeedType::None, -1);
-        Board_NewPlant(board, 0, 5, SeedType::Cobcannon, SeedType::None, -1);
+    if (lawnApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_BUTTERED_POPCORN) {
+        Board_NewPlant(board, 0, 0, SeedType::SEED_COBCANNON, SeedType::SEED_NONE, -1);
+        Board_NewPlant(board, 0, 1, SeedType::SEED_COBCANNON, SeedType::SEED_NONE, -1);
+        Board_NewPlant(board, 0, 4, SeedType::SEED_COBCANNON, SeedType::SEED_NONE, -1);
+        Board_NewPlant(board, 0, 5, SeedType::SEED_COBCANNON, SeedType::SEED_NONE, -1);
     }
 }
 
 void Challenge_InitZombieWaves(Challenge *challenge) {
     old_Challenge_InitZombieWaves(challenge);
     LawnApp *lawnApp = challenge->mApp;
-    if (lawnApp->mGameMode == GameMode::ChallengeButteredPopcorn) {
+    if (lawnApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_BUTTERED_POPCORN) {
         ZombieType zombieList[] = {ZombieType::ZOMBIE_NORMAL,
                                                ZombieType::ZOMBIE_TRAFFIC_CONE,
                                                ZombieType::ZOMBIE_PAIL,
@@ -316,7 +318,7 @@ void Challenge_LastStandUpdate(Challenge *challenge) {
         Sexy_String_Delete(holder);
         GameButton_Resize(mBoardStoreButton, 325, 555, 170, 120);
     }
-    if (challenge->mChallengeState == ChallengeState::STATECHALLENGE_LAST_STAND_ONSLAUGHT && challenge->mApp->mGameScene == GameScenes::Playing) {
+    if (challenge->mChallengeState == ChallengeState::STATECHALLENGE_LAST_STAND_ONSLAUGHT && challenge->mApp->mGameScene == GameScenes::SCENE_PLAYING) {
         challenge->mChallengeStateCounter++;
     }
 
@@ -327,9 +329,9 @@ void Challenge_LastStandUpdate(Challenge *challenge) {
     }
 }
 
-ZombieType Challenge_IZombieSeedTypeToZombieType(SeedType::SeedType type) {
+ZombieType Challenge_IZombieSeedTypeToZombieType(SeedType type) {
     // 此处可修改VS和IZ中的僵尸类型
-    if (type == SeedType::ZombieUnknown) {
+    if (type == SeedType::SEED_ZOMBIE_UNKNOWN) {
         return ZombieType::ZOMBIE_REDEYE_GARGANTUAR;
     }
     return old_Challenge_IZombieSeedTypeToZombieType(type);
@@ -349,10 +351,10 @@ bool Challenge_UpdateZombieSpawning(Challenge *challenge) {
 
 void Challenge_HeavyWeaponPacketClicked(Challenge *challenge, SeedPacket *seedPacket) {
     // 修复疯狂点击毁灭菇导致GridItem数量超出上限而闪退
-    if (seedPacket->mPacketType == SeedType::Doomshroom) {
+    if (seedPacket->mPacketType == SeedType::SEED_DOOMSHROOM) {
         GridItem *gridItem = nullptr;
         while (Board_IterateGridItems(challenge->mBoard, &gridItem)) {
-            if (gridItem->mGridItemType == GridItemType::Crater) {
+            if (gridItem->mGridItemType == GridItemType::GRIDITEM_CRATER) {
                 GridItem_GridItemDie(gridItem);
             }
         }
@@ -362,7 +364,7 @@ void Challenge_HeavyWeaponPacketClicked(Challenge *challenge, SeedPacket *seedPa
 
 void Challenge_StartLevel(Challenge *challenge) {
     old_Challenge_StartLevel(challenge);
-    if (challenge->mApp->mGameMode == GameMode::ChallengeHeavyWeapon && heavyWeaponAccel) {
+    if (challenge->mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAVY_WEAPON && heavyWeaponAccel) {
         Native::BridgeApp *bridgeApp = Native_BridgeApp_getSingleton();
         JNIEnv *env = Native_BridgeApp_getJNIEnv(bridgeApp);
         jobject activity = Native_NativeApp_getActivity(bridgeApp->mNativeApp);
@@ -375,7 +377,7 @@ void Challenge_StartLevel(Challenge *challenge) {
 
 void Challenge_Delete(Challenge *challenge) {
     old_Challenge_Delete(challenge);
-    if (challenge->mApp->mGameMode == GameMode::ChallengeHeavyWeapon && heavyWeaponAccel) {
+    if (challenge->mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAVY_WEAPON && heavyWeaponAccel) {
         Native::BridgeApp *bridgeApp = Native_BridgeApp_getSingleton();
         JNIEnv *env = Native_BridgeApp_getJNIEnv(bridgeApp);
         jobject activity = Native_NativeApp_getActivity(bridgeApp->mNativeApp);

@@ -45,7 +45,7 @@ public:
     int unk2;                                       // 29
     int mChallengeScore;                            // 30
     bool mShowBowlingLine;                          // 124
-    SeedType::SeedType mLastConveyorSeedType;       // 32
+    SeedType mLastConveyorSeedType;       // 32
     int mSurvivalStage;                             // 33
     int mSlotMachineRollCount;                      // 34
     int mReanimChallenge;                           // 35
@@ -89,13 +89,13 @@ inline void (*Challenge_IZombieScoreBrain)(Challenge *, GridItem *);
 
 inline bool (*Challenge_MouseDown)(Challenge *, int, int, int, HitResult *, int);
 
-inline SeedType::SeedType (*Challenge_GetArtChallengeSeed)(Challenge *, int, int);
+inline SeedType (*Challenge_GetArtChallengeSeed)(Challenge *, int, int);
 
 inline void (*Challenge_TreeOfWisdomOpenStore)(Challenge *);
 
-inline bool (*Challenge_IsZombieSeedType)(SeedType::SeedType type);
+inline bool (*Challenge_IsZombieSeedType)(SeedType type);
 
-inline bool (*Challenge_IsMPSeedType)(SeedType::SeedType type);
+inline bool (*Challenge_IsMPSeedType)(SeedType type);
 
 inline bool (*Challenge_IsMPSuddenDeath)(Challenge *);
 
@@ -126,7 +126,7 @@ inline void (*old_Challenge_InitZombieWaves)(Challenge *a);
 
 inline void (*old_Challenge_TreeOfWisdomFertilize)(Challenge *);
 
-inline ZombieType (*old_Challenge_IZombieSeedTypeToZombieType)(SeedType::SeedType type);
+inline ZombieType (*old_Challenge_IZombieSeedTypeToZombieType)(SeedType type);
 
 inline bool (*old_Challenge_UpdateZombieSpawning)(Challenge *);
 
@@ -143,7 +143,7 @@ void Challenge_HeavyWeaponFire(Challenge *challenge, float a2, float a3);
 
 void Challenge_Update(Challenge *challenge);
 
-ZombieType Challenge_IZombieSeedTypeToZombieType(SeedType::SeedType);
+ZombieType Challenge_IZombieSeedTypeToZombieType(SeedType);
 
 void Challenge_IZombieDrawPlant(Challenge *challenge, Sexy::Graphics *graphics, Plant *plant);
 
@@ -155,7 +155,7 @@ bool Challenge_IZombieEatBrain(Challenge *challenge, Zombie *zombie);
 
 void Challenge_DrawArtChallenge(Challenge *challenge, Sexy::Graphics *graphics);
 
-PlantingReason::PlantingReason Challenge_CanPlantAt(Challenge *challenge, int theGridX, int theGridY, SeedType::SeedType theType);
+PlantingReason Challenge_CanPlantAt(Challenge *challenge, int theGridX, int theGridY, SeedType theType);
 
 void Challenge_InitLevel(Challenge *challenge);
 

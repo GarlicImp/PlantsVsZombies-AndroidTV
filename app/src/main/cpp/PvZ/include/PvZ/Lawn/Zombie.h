@@ -125,12 +125,12 @@ public:
     bool mOnHighGround;                       // 206
     bool mYuckyFace;                          // 207
     int mYuckyFaceCounter;                    // 52
-    HelmType::HelmType mHelmType;             // 53
+    HelmType mHelmType;             // 53
     int mBodyHealth;                          // 54
     int mBodyMaxHealth;                       // 55
     int mHelmHealth;                          // 56
     int mHelmMaxHealth;                       // 57
-    ShieldType::ShieldType mShieldType;       // 58
+    ShieldType mShieldType;       // 58
     int mShieldHealth;                        // 59
     int mShieldMaxHealth;                     // 60
     int mFlyingHealth;                        // 61

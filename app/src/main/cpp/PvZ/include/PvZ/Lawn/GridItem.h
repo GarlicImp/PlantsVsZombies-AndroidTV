@@ -8,8 +8,8 @@ public:
     int placeHolder[4];
     LawnApp *mApp;                               // 4
     Board *mBoard;                               // 5
-    GridItemType::GridItemType mGridItemType;    // 6
-    GridItemState::GridItemState mGridItemState; // 7
+    GridItemType mGridItemType;    // 6
+    GridItemState mGridItemState; // 7
     int mGridX;                                  // 8
     int mGridY;                                  // 9
     int mGridItemCounter;                        // 10
@@ -22,8 +22,8 @@ public:
     Reanimation *mGridItemReanimID;              // 17
     int *mGridItemParticleID;                    // 18
     ZombieType mZombieType;          // 19
-    SeedType::SeedType mSeedType;                // 20
-    ScaryPotType::ScaryPotType mScaryPotType;    // 21
+    SeedType mSeedType;                // 20
+    ScaryPotType mScaryPotType;    // 21
     bool mHighlighted;                           // 88
     int mTransparentCounter;                     // 23
     int mSunCount;                               // 24

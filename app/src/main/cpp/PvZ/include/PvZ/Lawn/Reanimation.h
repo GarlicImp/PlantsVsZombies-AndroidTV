@@ -10,7 +10,7 @@ public:
     float mAnimTime;                                   // 5
     float mAnimRate;                                   // 6
     ReanimatorDefinition *mDefinition;                 // 7
-    ReanimLoopType::ReanimLoopType mLoopType;          // 8
+    ReanimLoopType mLoopType;          // 8
     bool mDead;                                        // 36
     int mFrameStart;                                   // 10
     int mFrameCount;                                   // 11
@@ -75,7 +75,7 @@ inline void (*Reanimation_GetCurrentTransform)(Reanimation *, int, ReanimatorTra
 
 inline void (*ReanimatorTransform_ReanimatorTransform)(ReanimatorTransform *a);
 
-inline void (*Reanimation_PlayReanim)(Reanimation *a1, const char *a2, ReanimLoopType::ReanimLoopType a3, int a4, float a5);
+inline void (*Reanimation_PlayReanim)(Reanimation *a1, const char *a2, ReanimLoopType a3, int a4, float a5);
 
 inline void (*Reanimation_SetAnimRate)(Reanimation *a, float a2);
 

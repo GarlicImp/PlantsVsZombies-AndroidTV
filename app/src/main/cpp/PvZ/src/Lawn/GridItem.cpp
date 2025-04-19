@@ -25,12 +25,12 @@ void GridItem_DrawScaryPot(GridItem *scaryPot, Sexy::Graphics *graphics) {
         Sexy_Graphics_DrawImageCel(graphics, *Sexy_IMAGE_SCARY_POT_Addr, thePixelX, thePixelY, theCelCol, 0);
         Sexy::Graphics newGraphics;
         Sexy_Graphics_Graphics(&newGraphics, graphics);
-        ScaryPotType::ScaryPotType mScaryPotType = scaryPot->mScaryPotType;
-        if (mScaryPotType == ScaryPotType::Seed) {
+        ScaryPotType mScaryPotType = scaryPot->mScaryPotType;
+        if (mScaryPotType == ScaryPotType::SCARYPOT_SEED) {
             newGraphics.mScaleX = 0.7f;
             newGraphics.mScaleY = 0.7f;
-            DrawSeedPacket(&newGraphics, thePixelX + 23, thePixelY + 33, scaryPot->mSeedType, SeedType::None, 0.0, 255, false, false, false, true);
-        } else if (mScaryPotType == ScaryPotType::Zombie) {
+            DrawSeedPacket(&newGraphics, thePixelX + 23, thePixelY + 33, scaryPot->mSeedType, SeedType::SEED_NONE, 0.0, 255, false, false, false, true);
+        } else if (mScaryPotType == ScaryPotType::SCARYPOT_ZOMBIE) {
             newGraphics.mScaleX = 0.4f;
             newGraphics.mScaleY = 0.4f;
             float theOffsetX = 6.0;
@@ -45,7 +45,7 @@ void GridItem_DrawScaryPot(GridItem *scaryPot, Sexy::Graphics *graphics) {
                 newGraphics.mScaleY = 0.3f;
             }
             ReanimatorCache_DrawCachedZombie(scaryPot->mApp->mReanimatorCache, &newGraphics, theOffsetX + thePixelX, theOffsetY + thePixelY, scaryPot->mZombieType);
-        } else if (mScaryPotType == ScaryPotType::Sun) {
+        } else if (mScaryPotType == ScaryPotType::SCARYPOT_SUN) {
             int theSunCount = Challenge_ScaryPotterCountSunInPot(scaryPot->mBoard->mChallenge, scaryPot);
             Reanimation newReanim;
             Reanimation_Reanimation(&newReanim);
@@ -78,7 +78,7 @@ void GridItem_DrawScaryPot(GridItem *scaryPot, Sexy::Graphics *graphics) {
             }
             Reanimation_Delete2(&newReanim);
         }
-        int theAlpha = TodAnimateCurve(0, 50, scaryPot->mTransparentCounter, 255, 58, TodCurves::Linear);
+        int theAlpha = TodAnimateCurve(0, 50, scaryPot->mTransparentCounter, 255, 58, TodCurves::CURVE_LINEAR);
         Sexy_Graphics_SetColorizeImages(graphics, true);
         Color theColor = {255, 255, 255, theAlpha};
         Sexy_Graphics_SetColor(graphics, &theColor);
@@ -151,20 +151,20 @@ void GridItem_DrawSquirrel(GridItem *squirrel, Sexy::Graphics *graphics) {
     float mSquirrelX = Board_GridToPixelX(squirrel->mBoard, squirrel->mGridX, squirrel->mGridY);
     float mSquirrelY = Board_GridToPixelY(squirrel->mBoard, squirrel->mGridX, squirrel->mGridY);
     switch (squirrel->mGridItemState) {
-        case GridItemState::SquirrelPeeking:
-            mSquirrelY += TodAnimateCurve(50, 0, squirrel->mGridItemCounter, 0, -40.0f, TodCurves::BounceSlowMiddle);
+        case GridItemState::GRIDITEM_STATE_SQUIRREL_PEEKING:
+            mSquirrelY += TodAnimateCurve(50, 0, squirrel->mGridItemCounter, 0, -40.0f, TodCurves::CURVE_BOUNCE_SLOW_MIDDLE);
             break;
-        case GridItemState::SquirrelRunningUp:
-            mSquirrelY += TodAnimateCurve(50, 0, squirrel->mGridItemCounter, 100, 0.0f, TodCurves::EaseIn);
+        case GridItemState::GRIDITEM_STATE_SQUIRREL_RUNNING_UP:
+            mSquirrelY += TodAnimateCurve(50, 0, squirrel->mGridItemCounter, 100, 0.0f, TodCurves::CURVE_EASE_IN);
             break;
-        case GridItemState::SquirrelRunningDown:
-            mSquirrelY += TodAnimateCurve(50, 0, squirrel->mGridItemCounter, -100, 0.0f, TodCurves::EaseIn);
+        case GridItemState::GRIDITEM_STATE_SQUIRREL_RUNNING_DOWN:
+            mSquirrelY += TodAnimateCurve(50, 0, squirrel->mGridItemCounter, -100, 0.0f, TodCurves::CURVE_EASE_IN);
             break;
-        case GridItemState::SquirrelRunningLeft:
-            mSquirrelX += TodAnimateCurve(50, 0, squirrel->mGridItemCounter, 80, 0.0f, TodCurves::EaseIn);
+        case GridItemState::GRIDITEM_STATE_SQUIRREL_RUNNING_LEFT:
+            mSquirrelX += TodAnimateCurve(50, 0, squirrel->mGridItemCounter, 80, 0.0f, TodCurves::CURVE_EASE_IN);
             break;
-        case GridItemState::SquirrelRunningRight:
-            mSquirrelX += TodAnimateCurve(50, 0, squirrel->mGridItemCounter, -80, 0.0f, TodCurves::EaseIn);
+        case GridItemState::GRIDITEM_STATE_SQUIRREL_RUNNING_RIGHT:
+            mSquirrelX += TodAnimateCurve(50, 0, squirrel->mGridItemCounter, -80, 0.0f, TodCurves::CURVE_EASE_IN);
             break;
     }
     Sexy_Graphics_DrawImage(graphics, addonImages.squirrel, mSquirrelX, mSquirrelY);
@@ -175,7 +175,7 @@ void GridItem_DrawCrater(GridItem *squirrel, Sexy::Graphics *graphics) {
     float num = Board_GridToPixelX(squirrel->mBoard, squirrel->mGridX, squirrel->mGridY) - 8.0f;
     float num2 = Board_GridToPixelY(squirrel->mBoard, squirrel->mGridX, squirrel->mGridY) + 40.0f;
     if (squirrel->mGridItemCounter < 25) {
-        int theAlpha = TodAnimateCurve(25, 0, squirrel->mGridItemCounter, 255, 0, TodCurves::Linear);
+        int theAlpha = TodAnimateCurve(25, 0, squirrel->mGridItemCounter, 255, 0, TodCurves::CURVE_LINEAR);
         Color color = {255, 255, 255, theAlpha};
         Sexy_Graphics_SetColor(graphics, &color);
         Sexy_Graphics_SetColorizeImages(graphics, true);

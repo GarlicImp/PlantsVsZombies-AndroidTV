@@ -8,7 +8,7 @@ public:
     float mRangeFrom0to30UpdateFresh;       // 43
     int *mSelectorParticle;                 // 44
     int mSelectedSeedIndex;                 // 45
-    SeedType::SeedType mSelectedSeedType;   // 46
+    SeedType mSelectedSeedType;   // 46
     bool mIsZombie;                         // 188
     bool mCanPickUp;                        // 189
     int mSelectedUpgradableType;            // 48
@@ -20,7 +20,7 @@ public:
     int mPreviewReanimID3;                  // 54
     int mUnkCobCannonRelated;               // 55
     int mPreviewReanimID4;                  // 56
-    SeedType::SeedType mPreviewingSeedType; // 57
+    SeedType mPreviewingSeedType; // 57
     Sexy::Image *mPreviewImage;             // 58
     Zombie *mButterZombie;                  // 59
     int mShovelRelated2;                    // 60
@@ -32,7 +32,7 @@ public:
 
 class ZenGardenControls : public GamepadControls {
 public:
-    GameObjectType::GameObjectType mObjectType; // 66
+    GameObjectType mObjectType; // 66
 }; // 大小67个整数
 
 /***************************************************************************************************************/
@@ -95,7 +95,7 @@ inline void (*old_ZenGardenControls_Update)(ZenGardenControls *a1, float a2);
 
 void GamepadControls_GamepadControls(GamepadControls *gamepadControls, Board *board, int a3, int a4);
 
-FilterEffectType::FilterEffectType GetFilterEffectTypeBySeedType(SeedType::SeedType mSeedType);
+FilterEffectType::FilterEffectType GetFilterEffectTypeBySeedType(SeedType mSeedType);
 
 void GamepadControls_pickUpCobCannon(int, int);
 

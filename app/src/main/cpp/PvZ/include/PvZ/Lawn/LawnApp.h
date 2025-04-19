@@ -23,8 +23,8 @@ public:
     bool mRegisterResourcesLoaded;                  // 2296
     bool mTodCheatKeys;                             // 2297
     bool mNewIs3DAccelerated;                       // 2298，在对齐间隙插入新成员
-    GameMode::GameMode mGameMode;                   // 575
-    GameScenes::GameScenes mGameScene;              // 576
+    GameMode mGameMode;                   // 575
+    GameScenes mGameScene;              // 576
     bool mLoadingZombiesThreadCompleted;            // 2308
     bool mFirstTimeGameSelector;                    // 2309
     int mGamesPlayed;                               // 578
@@ -108,7 +108,7 @@ inline void (*LawnApp_KillMainMenu)(LawnApp *lawnApp);
 
 inline void (*LawnApp_KillNewOptionsDialog)(LawnApp *lawnApp);
 
-inline void (*LawnApp_PreNewGame)(LawnApp *lawnApp, GameMode::GameMode a2, bool a3);
+inline void (*LawnApp_PreNewGame)(LawnApp *lawnApp, GameMode a2, bool a3);
 
 inline bool (*LawnApp_CanShowStore)(LawnApp *lawnApp);
 
@@ -156,14 +156,14 @@ inline Reanimation *(*LawnApp_ReanimationGet)(LawnApp *lawnApp, int theReanimati
 
 // 阻塞式函数，能创建并立即展示一个带按钮的对话框。按钮个数由最后一个参数决定。其返回值就是用户按下的按钮ID，一般情况下只可能为1000或1001。
 inline int (*LawnApp_LawnMessageBox)(LawnApp *lawnApp,
-                                     Dialogs::Dialogs theDialogId, // 用于标识本对话框的ID，以便于用KillDialog(theDialogId)关闭此对话框。一般用不到，所以随便填个数字就可以。
+                                     Dialogs theDialogId, // 用于标识本对话框的ID，以便于用KillDialog(theDialogId)关闭此对话框。一般用不到，所以随便填个数字就可以。
                                      const char *theHeaderName,
                                      const char *theLinesName,
                                      const char *theButton1Name,
                                      const char *theButton2Name,
                                      int theButtonMode); // 取值为0，1，2，3。其中0就是无按钮；1和2会展示两个按钮，其ID分别为1000和1001；3只会展示一个按钮，其ID为1000。
 
-inline TodParticleSystem *(*LawnApp_AddTodParticle)(LawnApp *lawnApp, float, float, int, ParticleEffect::ParticleEffect);
+inline TodParticleSystem *(*LawnApp_AddTodParticle)(LawnApp *lawnApp, float, float, int, ParticleEffect);
 
 inline int (*LawnApp_ParticleGetID)(LawnApp *, TodParticleSystem *);
 
@@ -201,11 +201,11 @@ inline void (*LawnApp_KillHelpTextScreen)(LawnApp *);
 
 inline bool (*LawnApp_IsLittleTroubleLevel)(LawnApp *);
 
-inline int *(*Sexy_SexyAppBase_GetDialog)(LawnApp *lawnApp, Dialogs::Dialogs dialogId);
+inline int *(*Sexy_SexyAppBase_GetDialog)(LawnApp *lawnApp, Dialogs dialogId);
 
 inline int (*LawnApp_GetNumTrophies)(LawnApp *, ChallengePage);
 
-inline bool (*LawnApp_IsSurvivalEndless)(LawnApp *lawnApp, GameMode::GameMode);
+inline bool (*LawnApp_IsSurvivalEndless)(LawnApp *lawnApp, GameMode);
 
 inline void (*LawnApp_ShowMainMenuScreen)(LawnApp *lawnApp);
 
@@ -246,7 +246,7 @@ inline bool (*old_LawnApp_IsNight)(LawnApp *lawnApp);
 
 inline void (*old_Sexy_SexyAppBase_SexyAppBase)(SexyAppBase *appBase);
 
-inline bool (*old_LawnApp_HasSeedType)(LawnApp *lawnApp, SeedType::SeedType theSeedType, int playerIndex);
+inline bool (*old_LawnApp_HasSeedType)(LawnApp *lawnApp, SeedType theSeedType, int playerIndex);
 
 inline void (*old_LawnApp_DoNewOptions)(LawnApp *lawnApp, bool a2, unsigned int a3);
 
@@ -311,7 +311,7 @@ bool LawnApp_IsNight(LawnApp *);
 
 void LawnApp_SetFoleyVolume(LawnApp *lawnApp, FoleyType::FoleyType type, double theVolume);
 
-void LawnApp_KillDialog(LawnApp *lawnApp, Dialogs::Dialogs id);
+void LawnApp_KillDialog(LawnApp *lawnApp, Dialogs id);
 
 void LawnApp_ShowLeaderboards(LawnApp *lawnApp);
 
@@ -321,7 +321,7 @@ void LawnApp_SetHouseReanim(LawnApp *lawnApp, Reanimation *houseAnimation);
 
 void LawnApp_LoadZombatarResources(LawnApp *lawnApp);
 
-bool LawnApp_HasSeedType(LawnApp *lawnApp, SeedType::SeedType theSeedType, int playerIndex);
+bool LawnApp_HasSeedType(LawnApp *lawnApp, SeedType theSeedType, int playerIndex);
 
 void Sexy_SexyAppBase_SexyAppBase(SexyAppBase *appBase);
 #endif // PVZ_LAWN_LAWN_APP_H
