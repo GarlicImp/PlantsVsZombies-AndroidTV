@@ -34,11 +34,10 @@ void Coin_Update(Coin *coin) {
 
     if (enableManualCollect) {
         // 如果开了手动拾取，则重置Coin的存在时间计数器为0，从而不会触发自动拾取。
-        GameMode::GameMode mGameMode = lawnApp->mGameMode;
+        GameMode mGameMode = lawnApp->mGameMode;
         // 在重型武器中、花园中依然自动收集；在关卡结束后依然自动收集。
-        if (mGameMode != GameMode::ChallengeHeavyWeapon && mGameMode != GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN && mGameMode != GameMode::GAMEMODE_TREE_OF_WISDOM
-            && lawnApp->mGameScene == GameScenes::Playing
-            && board->mBoardFadeOutCounter <= 0) {
+        if (mGameMode != GameMode::GAMEMODE_CHALLENGE_HEAVY_WEAPON && mGameMode != GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN && mGameMode != GameMode::GAMEMODE_TREE_OF_WISDOM
+            && lawnApp->mGameScene == GameScenes::SCENE_PLAYING && board->mBoardFadeOutCounter <= 0) {
             coin->mCoinAge = 0;
         }
     } else if (mCoinType == CoinType::COIN_VS_ZOMBIE_BRAIN) {
@@ -179,7 +178,7 @@ void Coin_UpdateFallForAward(Coin *coin) {
             } else if (mType == CoinType::COIN_VS_PLANT_TROPHY || mType == CoinType::COIN_VS_ZOMBIE_TROPHY) {
                 num2 = num2 - 20.0;
                 RenderOrder = Board_MakeRenderOrder(700000, coin->mRow, coin->mHasBouncyArrow);
-                v53 = LawnApp_AddTodParticle(mApp, mPosX, mPosY, RenderOrder, ParticleEffect::TrophySparkle);
+                v53 = LawnApp_AddTodParticle(mApp, mPosX, mPosY, RenderOrder, ParticleEffect::PARTICLE_TROPHY_SPARKLE);
                 AttachParticle(coin->mAttachment + 2, v53, 0, 0.0);
             } else if (mType == CoinType::COIN_AWARD_MONEY_BAG || mType == CoinType::COIN_AWARD_BAG_DIAMOND) {
                 num2 = num2 - 2.0;
@@ -194,13 +193,13 @@ void Coin_UpdateFallForAward(Coin *coin) {
                 num2 = num2 + 21.0;
             }
 
-            ParticleEffect::ParticleEffect theEffect;
+            ParticleEffect theEffect;
             if (mType == CoinType::COIN_FINAL_SEED_PACKET) {
-                theEffect = ParticleEffect::SeedPacket;
+                theEffect = ParticleEffect::PARTICLE_SEED_PACKET;
             } else if (Coin_IsMoney(coin)) {
-                theEffect = ParticleEffect::CoinPickupArrow;
+                theEffect = ParticleEffect::PARTICLE_COIN_PICKUP_ARROW;
             } else {
-                theEffect = ParticleEffect::AwardPickupArrow;
+                theEffect = ParticleEffect::PARTICLE_AWARD_PICKUP_ARROW;
             }
             TodParticleSystem *theParticleSystem = LawnApp_AddTodParticle(mApp, mPosX + num, mPosY + num2, 0, theEffect);
             AttachParticle(coin->mAttachment, theParticleSystem, num, num2);
@@ -213,7 +212,7 @@ void Coin_UpdateFallForAward(Coin *coin) {
 
         coin->mPosY = coin->mGroundY;
         coin->mPosX = std::round(coin->mPosX);
-        if ((coin->mApp->mGameMode != GameMode::ChallengeLastStand || (v22 = coin->mBoard) == nullptr || v22->mChallenge->mChallengeState == ChallengeState::STATECHALLENGE_LAST_STAND_ONSLAUGHT)
+        if ((coin->mApp->mGameMode != GameMode::GAMEMODE_CHALLENGE_LAST_STAND || (v22 = coin->mBoard) == nullptr || v22->mChallenge->mChallengeState == ChallengeState::STATECHALLENGE_LAST_STAND_ONSLAUGHT)
             && !Coin_IsLevelAward(coin) && !Coin_IsPresentWithAdvice(coin)) {
             ++coin->mDisappearCounter;
             if (Coin_GetDisappearTime(coin) <= coin->mDisappearCounter)

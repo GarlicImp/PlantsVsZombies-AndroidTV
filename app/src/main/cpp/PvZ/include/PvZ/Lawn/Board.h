@@ -32,7 +32,7 @@ class HitResult
 {
 public:
     void*							mObject;
-    GameObjectType::GameObjectType					mObjectType;
+    GameObjectType					mObjectType;
 };
 
 struct ZombiePicker {
@@ -59,7 +59,7 @@ struct BungeeDropGrid
     int								mGridArrayCount;
 };
 
-class Board : public Sexy::Widget, Sexy::ButtonListener {
+class Board : public Sexy::Widget {
 public:
     Sexy::ButtonListener mButtonListener;                 // 64
     int unknownMembers1[4];                               // 65 ~ 68
@@ -125,7 +125,7 @@ public:
     Challenge *mChallenge;                                // 149
     bool unknownBool;                                     // 600
     bool mPaused;                                         // 601
-    GridSquareType::GridSquareType mGridSquareType[9][6]; // 151 ~ 204
+    GridSquareType mGridSquareType[9][6]; // 151 ~ 204
     int mGridCelLook[9][6];                               // 205 ~ 258
     int mGridCelOffset[9][6][2];                          // 259 ~ 366
     int mGridCelFog[9][7];                                // 367 ~ 429
@@ -136,12 +136,12 @@ public:
     int mOffsetMoved;                                     // 434
     int mCoverLayerAnimIDs[7];                            // 435 ~ 441
     int mFogBlownCountDown;                               // 442
-    PlantRowType::PlantRowType mPlantRow[6];              // 443 ~ 448
+    PlantRowType mPlantRow[6];              // 443 ~ 448
     int mWaveRowGotLawnMowered[6];                        // 449 ~ 454
     int mBonusLawnMowersRemaining;                        // 455
     int mIceMinX[6];                                      // 456 ~ 461
     int mIceTimer[6];                                     // 462 ~ 467
-    ParticleSystemID::ParticleSystemID mIceParticleID[6]; // 468 ~ 473
+    ParticleSystemID mIceParticleID[6]; // 468 ~ 473
     TodSmoothArray mRowPickingArray[6];                   // 474 ~ 497
     ZombieType mZombiesInWave[100][50];       // 498 ~ 5497
     bool mZombieAllowed[100];                             // 5498 ~ 5522
@@ -166,7 +166,7 @@ public:
     int mOutOfMoneyCounter;                               // 5541
     int mCurrentWave;                                     // 5542
     int mTotalSpawnedWaves;                               // 5543
-    TutorialState::TutorialState mTutorialState;          // 5544
+    TutorialState mTutorialState;          // 5544
     int *mTutorialParticleID;                             // 5545
     int mTutorialTimer;                                   // 5546
     int mLastBungeeWave;                                  // 5547
@@ -182,7 +182,7 @@ public:
     bool mShowButter;                                     // 22290
     bool mShowHammer;                                     // 22291
     int mCoinBankFadeCount;                               // 5573
-    DebugTextMode::DebugTextMode mDebugTextMode;          // 5574
+    DebugTextMode mDebugTextMode;          // 5574
     bool mLevelComplete;                                  // 22300
     bool mNewWallNutAndSunFlowerAndChomperOnly;           // 在对齐间隙插入成员，22301
     char mNewPeaShooterCount;                             // 在对齐间隙插入成员，22302
@@ -240,7 +240,7 @@ public:
 
     void InitLevel();
     int GetNumSeedsInBank(bool thePlayerIdx);
-    void RemoveParticleByType(ParticleEffect::ParticleEffect theEffectType);
+    void RemoveParticleByType(ParticleEffect theEffectType);
 };
 
 /***************************************************************************************************************/
@@ -254,7 +254,7 @@ inline bool ladderBuild;
 inline bool graveBuild;
 inline bool plantBuild;
 inline bool zombieBuild;
-inline SeedType::SeedType theBuildPlantType = SeedType::None;
+inline SeedType theBuildPlantType = SeedType::SEED_NONE;
 inline ZombieType theBuildZombieType = ZombieType::ZOMBIE_INVALID;
 inline bool isImitaterPlant;
 inline int theBuildZombieCount = 1;
@@ -282,7 +282,7 @@ inline int choiceSpawnMode;                                    // 刷怪模式
 inline bool buttonSetSpawn;                                    // 设置出怪
 inline int targetSeedBank = 1;
 inline int choiceSeedPacketIndex;
-inline SeedType::SeedType choiceSeedType = SeedType::None;
+inline SeedType choiceSeedType = SeedType::SEED_NONE;
 inline bool isImitaterSeed;
 inline bool setSeedPacket;
 inline TRect mTouchVSShovelRect = {0, 85, 56, 56};
@@ -314,11 +314,11 @@ inline Plant *(*Board_ToolHitTest)(Board *board, int a2, int a3);
 
 inline int (*Board_RefreshSeedPacketFromCursor)(Board *board, int a2);
 
-inline int (*Board_CanUseGameObject)(Board *board, GameObjectType::GameObjectType a2);
+inline int (*Board_CanUseGameObject)(Board *board, GameObjectType a2);
 
-inline Plant *(*Board_NewPlant)(Board *board, int a2, int a3, SeedType::SeedType a4, SeedType::SeedType a5, int a6);
+inline Plant *(*Board_NewPlant)(Board *board, int a2, int a3, SeedType a4, SeedType a5, int a6);
 
-inline Plant *(*Board_GetTopPlantAt)(Board *board, unsigned int a2, unsigned int a3, TopPlant::TopPlant a4);
+inline Plant *(*Board_GetTopPlantAt)(Board *board, unsigned int a2, unsigned int a3, PlantPriority a4);
 
 inline int (*Board_ClearCursor)(Board *board, int a2);
 
@@ -361,7 +361,7 @@ inline bool (*Board_IterateParticles)(Board *, TodParticleSystem **);
 
 inline bool (*Board_IsSurvivalStageWithRepick)(Board *board);
 
-inline void (*Board_PickUpTool)(Board *board, GameObjectType::GameObjectType a2, int a3);
+inline void (*Board_PickUpTool)(Board *board, GameObjectType a2, int a3);
 
 inline bool (*Board_ProgressMeterHasFlags)(Board *board);
 
@@ -376,7 +376,7 @@ inline Zombie *(*Board_ZombieTryToGet)(Board *, Zombie *);
 
 inline int (*Board_MakeRenderOrder)(int, int, int);
 
-inline bool (*Board_PlantUsesAcceleratedPricing)(Board *board, SeedType::SeedType seedType);
+inline bool (*Board_PlantUsesAcceleratedPricing)(Board *board, SeedType seedType);
 
 inline bool (*Board_CanInteractWithBoardButtons)(Board *board);
 
@@ -394,9 +394,9 @@ inline Coin *(*Board_AddCoin)(Board *, int, int, int, int);
 
 inline bool (*Board_CanTakeSunMoney)(Board *, int, int);
 
-inline GridItem *(*Board_GetGridItemAt)(Board *, GridItemType::GridItemType, int, int);
+inline GridItem *(*Board_GetGridItemAt)(Board *, GridItemType, int, int);
 
-inline void (*Board_GetZenButtonRect)(TRect *, Board *, GameObjectType::GameObjectType);
+inline void (*Board_GetZenButtonRect)(TRect *, Board *, GameObjectType);
 
 inline GridItem *(*Board_GetLadderAt)(Board *, int, int);
 
@@ -432,13 +432,13 @@ inline int (*Board_TotalZombiesHealthInWave)(Board *, int);
 
 inline void (*Board_ClearAdviceImmediately)(Board *);
 
-inline void (*Board_DisplayAdviceAgain)(Board *, int *, MessageStyle::MessageStyle, AdviceType);
+inline void (*Board_DisplayAdviceAgain)(Board *, int *, MessageStyle, AdviceType);
 
 inline int (*Board_GridCellWidth)(Board *, int, int);
 
 inline int (*Board_GridCellHeight)(Board *, int, int);
 
-inline SeedType::SeedType (*Board_GetSeedTypeInCursor)(Board *, int);
+inline SeedType (*Board_GetSeedTypeInCursor)(Board *, int);
 
 inline int (*Board_KillAllZombiesInRadius)(Board *, int, int, int, int, int, bool, int);
 
@@ -475,15 +475,15 @@ inline void (*old_Board_DrawDebugText)(Board *board, Sexy::Graphics *graphics);
 
 inline void (*old_Board_DrawDebugObjectRects)(Board *board, Sexy::Graphics *graphics);
 
-inline int (*old_Board_GetCurrentPlantCost)(Board *board, SeedType::SeedType a2, SeedType::SeedType a3);
+inline int (*old_Board_GetCurrentPlantCost)(Board *board, SeedType a2, SeedType a3);
 
-inline PlantingReason::PlantingReason (*old_Board_CanPlantAt)(Board *board, int theGridX, int theGridY, SeedType::SeedType seedType);
+inline PlantingReason (*old_Board_CanPlantAt)(Board *board, int theGridX, int theGridY, SeedType seedType);
 
 inline bool (*old_Board_PlantingRequirementsMet)(Board *board, int a2);
 
 inline void (*old_BoardZombiesWon)(Board *board, Zombie *zombie);
 
-inline Plant *(*old_Board_AddPlant)(Board *board, int x, int y, SeedType::SeedType seedType, SeedType::SeedType theImitaterType, int playerIndex, bool doPlantEffect);
+inline Plant *(*old_Board_AddPlant)(Board *board, int x, int y, SeedType seedType, SeedType theImitaterType, int playerIndex, bool doPlantEffect);
 
 inline void (*old_Board_KeyDown)(Board *board, int keyCode);
 
@@ -602,7 +602,7 @@ Plant *Board_GetPumpkinAt(Board *, int, int);
 
 bool Board_GrantAchievement(Board *board, AchievementId::AchievementId theAchievementId, bool show);
 
-void Board_DoPlantingAchievementCheck(Board *board, SeedType::SeedType theType);
+void Board_DoPlantingAchievementCheck(Board *board, SeedType theType);
 
 int Board_GetLiveZombiesCount(Board *board);
 
@@ -622,19 +622,19 @@ void Board_DrawDebugObjectRects(Board *board, Sexy::Graphics *graphics);
 
 void Board_DrawFadeOut(Board *board, Sexy::Graphics *graphics);
 
-int Board_GetCurrentPlantCost(Board *board, SeedType::SeedType a2, SeedType::SeedType a3);
+int Board_GetCurrentPlantCost(Board *board, SeedType a2, SeedType a3);
 
 void Board_AddSunMoney(Board *board, int theAmount, int playerIndex);
 
 void Board_AddDeathMoney(Board *board, int theAmount);
 
-PlantingReason::PlantingReason Board_CanPlantAt(Board *board, int theGridX, int theGridY, SeedType::SeedType seedType);
+PlantingReason Board_CanPlantAt(Board *board, int theGridX, int theGridY, SeedType seedType);
 
 bool Board_PlantingRequirementsMet(Board *board, int a2);
 
 void Board_ZombiesWon(Board *board, Zombie *theZombie);
 
-Plant *Board_AddPlant(Board *board, int x, int y, SeedType::SeedType seedType, SeedType::SeedType theImitaterType, int playerIndex, bool doPlantEffect);
+Plant *Board_AddPlant(Board *board, int x, int y, SeedType seedType, SeedType theImitaterType, int playerIndex, bool doPlantEffect);
 
 void Board_parseFormationSegment(Board *board, char *segment);
 

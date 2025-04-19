@@ -22,7 +22,7 @@ void StoreScreen_Update(int a) {
 void StoreScreen_SetupPage(int *a) {
     old_StoreScreen_SetupPage(a);
     //    for (int i = 0; i < 8; ++i) {
-    //        StoreItem::StoreItem StoreItemType = StoreScreen_GetStoreItemType(a, i);
+    //        a::a StoreItemType = StoreScreen_GetStoreItemType(a, i);
     //        if (StoreScreen_IsPottedPlant(a, StoreItemType)) {
     //            Sexy::Image *theImage = *((Sexy::Image **) a + i + 217);
     //            Sexy::Graphics g;
@@ -35,7 +35,7 @@ void StoreScreen_SetupPage(int *a) {
     //    }
 }
 
-void StoreScreen_DrawItem(int *a1, Sexy::Graphics *a2, int a3, StoreItem::StoreItem item) {
+void StoreScreen_DrawItem(int *a1, Sexy::Graphics *a2, int a3, StoreItem item) {
     //    if (StoreScreen_IsItemUnavailable(a1, item)) return;
     //    if (StoreScreen_IsPottedPlant(a1, item)){
     //        int theX = 0;
@@ -99,7 +99,7 @@ void StoreScreen_ButtonDepress(int *storeScreen, int buttonId) {
     }
 }
 
-void StoreScreen_PurchaseItem(int *storeScreen, StoreItem::StoreItem item) {
+void StoreScreen_PurchaseItem(int *storeScreen, StoreItem item) {
     old_StoreScreen_PurchaseItem(storeScreen, item);
     LawnApp *lawnApp = (LawnApp *)storeScreen[184];
     PlayerInfo *mPlayerInfo = lawnApp->mPlayerInfo;
@@ -133,7 +133,7 @@ void StoreScreen_Draw(int *storeScreen, Sexy::Graphics *a2) {
     int holder[1];
     Sexy_StrFormat(holder, "%d/%d", mPage, theTotalPages);
     Color theColor = {200, 200, 200, 255};
-    TodDrawString(a2, holder, 410, 512, *Sexy_FONT_BRIANNETOD16_Addr, theColor, DrawStringJustification::Center);
+    TodDrawString(a2, holder, 410, 512, *Sexy_FONT_BRIANNETOD16_Addr, theColor, DrawStringJustification::DS_ALIGN_CENTER);
     Sexy_String_Delete(holder);
 }
 
@@ -142,7 +142,7 @@ static StoreScreenTouchState::StoreScreenTouchState mStoreScreenTouchState = Sto
 
 void StoreScreen_MouseDown(int *storeScreen, int x, int y, int theClickCount) {
     bool mBubbleClickToContinue = *((uint8_t *)storeScreen + 756);
-    StoreItem::StoreItem mSelectedStoreItemType = *((StoreItem::StoreItem *)storeScreen + 194);
+    StoreItem mSelectedStoreItemType = *((StoreItem *)storeScreen + 194);
     if (mBubbleClickToContinue) {
         // 初次捡到戴夫车钥匙时会进入商店并且有一段戴夫对话，这里用于识别戴夫对话
         StoreScreen_AdvanceCrazyDaveDialog(storeScreen);
@@ -181,10 +181,10 @@ void StoreScreen_MouseDown(int *storeScreen, int x, int y, int theClickCount) {
         }
     }
 
-    //    StoreScreen_PurchaseItem(storeScreen, StoreItem::STORE_ITEM_BLUEPRINT_CHANGE);
+    //    StoreScreen_PurchaseItem(storeScreen, a::STORE_ITEM_BLUEPRINT_CHANGE);
 
     for (int i = 0; i < 8; i++) {
-        StoreItem::StoreItem storeItemType = StoreScreen_GetStoreItemType(storeScreen, i);
+        StoreItem storeItemType = StoreScreen_GetStoreItemType(storeScreen, i);
         if (storeItemType != StoreItem::STORE_ITEM_INVALID) {
             int theX = 0;
             int theY = 0;

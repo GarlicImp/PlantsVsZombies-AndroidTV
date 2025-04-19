@@ -11,7 +11,7 @@ public:
     int *mToolTipWidget;                         // 160
     ChallengePage mPage;          // 161
     bool mCheatEnableChallenges;                 // 648
-    UnlockingState::UnlockingState mUnlockState; // 163
+    UnlockingState mUnlockState; // 163
     int mUnlockStateCounter;                     // 164
     int mUnlockChallengeIndex;                   // 165
     float mLockShakeX;                           // 166
@@ -21,11 +21,11 @@ public:
     int mScreenTopChallengeIndex;                // 185
     int mSelectedChallengeIndex;                 // 186
     float mUnkFloat;                             // 187
-    GameMode::GameMode mUnk1[94];                // 188 ~ 281
+    GameMode mUnk1[94];                // 188 ~ 281
     int mUnk2[94];                               // 282 ~ 375
     int mTotalGameInPage;                        // 376
     int mSelectedChallenge;                      // 377 其值固定比mSelectedMode小2
-    GameMode::GameMode mSelectedMode;            // 378
+    GameMode mSelectedMode;            // 378
     int unk4;                                    // 379
     // 大小380个整数
 public:

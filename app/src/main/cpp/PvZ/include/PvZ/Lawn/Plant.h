@@ -138,7 +138,7 @@ class GridItem;
 
 class Plant : public GameObject {
 public:
-    SeedType::SeedType mSeedType;                          // 13
+    SeedType mSeedType;                          // 13
     int mPlantCol;                                         // 14
     int mAnimCounter;                                      // 15
     int mFrame;                                            // 16
@@ -177,7 +177,7 @@ public:
     int mTargetZombieID;                                   // 79
     int mWakeUpCounter;                                    // 80
     PlantOnBungeeState mOnBungeeState;                     // 81
-    SeedType::SeedType mImitaterType;                      // 82
+    SeedType mImitaterType;                      // 82
     int mPottedPlantIndex;                                 // 83
     bool mAnimPing;                                        // 336
     bool mDead;                                            // 337
@@ -191,11 +191,11 @@ public:
     int mPlantIndexInList;                                 // 87
     // 大小88个整数
 public:
-    void PlantInitialize(int theGridX, int theGridY, SeedType::SeedType theSeedType, SeedType::SeedType theImitaterType, int a6);
+    void PlantInitialize(int theGridX, int theGridY, SeedType theSeedType, SeedType theImitaterType, int a6);
     void DoSpecial();
     void Update();
     void UpdateReanimColor();
-    int GetRefreshTime(SeedType::SeedType theSeedType, SeedType::SeedType theImitaterType);
+    int GetRefreshTime(SeedType theSeedType, SeedType theImitaterType);
     GridItem* FindTargetGridItem(PlantWeapon thePlantWeapon);
     bool NotOnGround();
     bool IsOnBoard();
@@ -208,7 +208,7 @@ public:
 class PlantDefinition
 {
 public:
-    SeedType::SeedType                mSeedType;          //+0x0
+    SeedType mSeedType;          //+0x0
     Sexy::Image**                 mPlantImage;        //+0x4
     ReanimationType         mReanimationType;   //+0x8
     int                     mPacketIndex;       //+0xC
@@ -220,7 +220,7 @@ public:
 };
 extern PlantDefinition gPlantDefs[SeedType::NUM_SEED_TYPES];
 
-///*inline*/ PlantDefinition& GetPlantDefinition(SeedType::SeedType theSeedType);
+///*inline*/ PlantDefinition& GetPlantDefinition(a::a theSeedType);
 
 /***************************************************************************************************************/
 inline bool abilityFastCoolDown;
@@ -230,7 +230,7 @@ inline bool showNutGarlicSpikeHealth;
 
 inline void (*Plant_Die)(Plant *instance);
 
-inline Sexy::Image *(*Plant_GetImage)(SeedType::SeedType seedType);
+inline Sexy::Image *(*Plant_GetImage)(SeedType seedType);
 
 inline void (*Plant_GetPlantRect)(TRect *rect, Plant *plant);
 
@@ -244,17 +244,17 @@ inline void (*Plant_Animate)(Plant *);
 
 inline void (*Plant_UpdateReanim)(Plant *);
 
-inline bool (*Plant_IsFlying)(SeedType::SeedType);
+inline bool (*Plant_IsFlying)(SeedType);
 
-inline PlantDefinition &(*GetPlantDefinition)(SeedType::SeedType);
+inline PlantDefinition &(*GetPlantDefinition)(SeedType);
 
-inline bool (*Plant_IsNocturnal)(SeedType::SeedType);
+inline bool (*Plant_IsNocturnal)(SeedType);
 
-inline bool (*Plant_IsAquatic)(SeedType::SeedType);
+inline bool (*Plant_IsAquatic)(SeedType);
 
 inline void (*Plant_DrawShadow)(Plant *, Sexy::Graphics *, float, float);
 
-inline bool (*Plant_IsPartOfUpgradableTo)(Plant *, SeedType::SeedType);
+inline bool (*Plant_IsPartOfUpgradableTo)(Plant *, SeedType);
 
 inline bool (*Plant_IsInPlay)(Plant *);
 
@@ -267,9 +267,9 @@ inline int (*Plant_GetDamageRangeFlags)(Plant *, PlantWeapon);
 
 inline void (*old_Plant_Draw)(Plant *plant, Sexy::Graphics *graphics);
 
-inline int (*old_Plant_GetRefreshTime)(Plant* this_, SeedType::SeedType theSeedType, SeedType::SeedType theImitaterType);
+inline int (*old_Plant_GetRefreshTime)(Plant* this_, SeedType theSeedType, SeedType theImitaterType);
 
-inline int (*old_Plant_GetCost)(SeedType::SeedType theSeedType, SeedType::SeedType theImitaterType);
+inline int (*old_Plant_GetCost)(SeedType theSeedType, SeedType theImitaterType);
 
 inline void (*old_Plant_Update)(Plant *plant);
 
@@ -279,20 +279,20 @@ inline void (*old_Plant_UpdateReanimColor)(Plant *a);
 
 inline void (*old_Plant_DoSpecial)(Plant *plant);
 
-inline void (*old_Plant_PlantInitialize)(Plant *plant, int theGridX, int theGridY, SeedType::SeedType theSeedType, SeedType::SeedType theImitaterType, int a6);
+inline void (*old_Plant_PlantInitialize)(Plant *plant, int theGridX, int theGridY, SeedType theSeedType, SeedType theImitaterType, int a6);
 
-inline bool (*old_Plant_IsUpgrade)(SeedType::SeedType theSeedType);
+inline bool (*old_Plant_IsUpgrade)(SeedType theSeedType);
 
 inline void (*old_Plant_Die)(Plant* this_);
 
 
 
-int Plant_GetCost(SeedType::SeedType seedType, SeedType::SeedType imitaterType);
+int Plant_GetCost(SeedType seedType, SeedType imitaterType);
 
 void Plant_SetImitaterFilterEffect(Plant *plant);
 
-void Plant_DrawSeedType(Sexy::Graphics *graphics, SeedType::SeedType theSeedType, SeedType::SeedType theImitaterType, DrawVariation::DrawVariation, float thePosX, float thePosY);
+void Plant_DrawSeedType(Sexy::Graphics *graphics, SeedType theSeedType, SeedType theImitaterType, DrawVariation, float thePosX, float thePosY);
 
-bool Plant_IsUpgrade(SeedType::SeedType theSeedType);
+bool Plant_IsUpgrade(SeedType theSeedType);
 
 #endif // PVZ_LAWN_PLANT_H

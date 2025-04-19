@@ -141,22 +141,22 @@ inline void (*TodDrawImageCelScaledF)(Sexy::Graphics *, Sexy::Image *, float, fl
 
 inline void (*TodDrawImageCenterScaledF)(Sexy::Graphics *, Sexy::Image *, float, float, float, float);
 
-inline void (*TodDrawString)(Sexy::Graphics *, int *, int, int, Sexy::Font *, Color color, DrawStringJustification::DrawStringJustification);
+inline void (*TodDrawString)(Sexy::Graphics *, int *, int, int, Sexy::Font *, Color color, DrawStringJustification);
 
 inline void (*TodScaleTransformMatrix)(int *, float, float, float, float);
 
 inline void (*TodDrawStringMatrix)(Sexy::Graphics *, Sexy::Font *, int *, int *, Color *);
 
-inline int (*TodAnimateCurve)(int theTimeStart, int theTimeEnd, int theTimeAge, int thePositionStart, int thePositionEnd, TodCurves::TodCurves theCurve);
+inline int (*TodAnimateCurve)(int theTimeStart, int theTimeEnd, int theTimeAge, int thePositionStart, int thePositionEnd, TodCurves theCurve);
 
-inline float (*TodAnimateCurveFloat)(int theTimeStart, int theTimeEnd, int theTimeAge, float thePositionStart, float thePositionEnd, TodCurves::TodCurves theCurve);
+inline float (*TodAnimateCurveFloat)(int theTimeStart, int theTimeEnd, int theTimeAge, float thePositionStart, float thePositionEnd, TodCurves theCurve);
 
-inline float (*TodAnimateCurveFloatTime)(float theTimeStart, float theTimeEnd, float theTimeAge, float thePositionStart, float thePositionEnd, TodCurves::TodCurves theCurve);
+inline float (*TodAnimateCurveFloatTime)(float theTimeStart, float theTimeEnd, float theTimeAge, float thePositionStart, float thePositionEnd, TodCurves theCurve);
 
-inline void (*TodDrawStringWrapped)(Sexy::Graphics *graphics, int *text, TRect *theRect, Sexy::Font *theFont, Color *theColor, DrawStringJustification::DrawStringJustification justification, bool a7);
+inline void (*TodDrawStringWrapped)(Sexy::Graphics *graphics, int *text, TRect *theRect, Sexy::Font *theFont, Color *theColor, DrawStringJustification justification, bool a7);
 
 inline int (*TodDrawStringWrappedHelper)(
-    Sexy::Graphics *pGraphics, int *pInt, TRect *pRect, Sexy::Font *pFont, Color color, DrawStringJustification::DrawStringJustification justification, bool i1, bool i2);
+    Sexy::Graphics *pGraphics, int *pInt, TRect *pRect, Sexy::Font *pFont, Color color, DrawStringJustification justification, bool i1, bool i2);
 
 inline void (*Sexy_GLGraphics_SetWrapMode)(Sexy::Graphics *graphics, int a2, int a3);
 

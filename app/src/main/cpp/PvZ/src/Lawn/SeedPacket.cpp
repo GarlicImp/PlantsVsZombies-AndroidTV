@@ -23,7 +23,7 @@ void SeedPacket_Update(SeedPacket *seedPacket) {
             return old_SeedPacket_Update(seedPacket);
         }
 
-        if (seedPacket->mApp->mGameScene == GameScenes::Playing && seedPacket->mPacketType != SeedType::None) {
+        if (seedPacket->mApp->mGameScene == GameScenes::SCENE_PLAYING && seedPacket->mPacketType != SeedType::SEED_NONE) {
             seedPacket->mRefreshCounter--;
         }
         if (seedPacket->mSlotMachineCountDown > 0) {
@@ -34,7 +34,7 @@ void SeedPacket_Update(SeedPacket *seedPacket) {
 }
 
 void SeedPacket::UpdateSelected() {
-    if (mApp->mGameMode == GameMode::TwoPlayerVS || LawnApp_IsCoopMode(mApp)) {
+    if (mApp->mGameMode == GameMode::GAMEMODE_TWO_PLAYER_VS || LawnApp_IsCoopMode(mApp)) {
         // 如果是双人模式关卡(对战或结盟)，则使用下面的逻辑来更新当前选中的卡片。用于修复1P和2P的卡片选择框同时出现在两个人各自的植物栏里(也就是植物栏一共出现四个选择框)的问题。
         int mSelectedSeedIndex1P = mBoard->mGamepadControls1->mSelectedSeedIndex;
         int mSelectedSeedIndex2P = mBoard->mGamepadControls2->mSelectedSeedIndex;
@@ -97,19 +97,19 @@ void SeedPacket::FlashIfReady() {
         playerIndex = mSeedBank->mIsZombie;
     }
     if (!Board_HasConveyorBeltSeedBank(mBoard, playerIndex) && mSeedBank != nullptr) {
-        LawnApp_AddTodParticle(mApp, mSeedBank->mX + mX, mSeedBank->mY + mY, 100000 + 2, ParticleEffect::SeedPacketFlash);
+        LawnApp_AddTodParticle(mApp, mSeedBank->mX + mX, mSeedBank->mY + mY, 100000 + 2, ParticleEffect::PARTICLE_SEED_PACKET_FLASH);
     }
-    TutorialState::TutorialState tutorialState = mBoard->mTutorialState;
-    if (tutorialState == TutorialState::Level1RefreshPeashooter) {
-        Board_SetTutorialState(mBoard, TutorialState::Level1PickUpPeashooter);
+    TutorialState tutorialState = mBoard->mTutorialState;
+    if (tutorialState == TutorialState::TUTORIAL_LEVEL_1_REFRESH_PEASHOOTER) {
+        Board_SetTutorialState(mBoard, TutorialState::TUTORIAL_LEVEL_1_PICK_UP_PEASHOOTER);
         return;
     }
-    if (tutorialState == TutorialState::Level2RefreshSunflower && mPacketType == SeedType::Sunflower) {
-        Board_SetTutorialState(mBoard, TutorialState::Level2PickUpSunflower);
+    if (tutorialState == TutorialState::TUTORIAL_LEVEL_2_REFRESH_SUNFLOWER && mPacketType == SeedType::SEED_SUNFLOWER) {
+        Board_SetTutorialState(mBoard, TutorialState::TUTORIAL_LEVEL_2_PICK_UP_SUNFLOWER);
         return;
     }
-    if (tutorialState == TutorialState::MoresunRefreshSunflower && mPacketType == SeedType::Sunflower) {
-        Board_SetTutorialState(mBoard, TutorialState::MoresunPickUpSunflower);
+    if (tutorialState == TutorialState::TUTORIAL_MORESUN_REFRESH_SUNFLOWER && mPacketType == SeedType::SEED_SUNFLOWER) {
+        Board_SetTutorialState(mBoard, TutorialState::TUTORIAL_MORESUN_PICK_UP_SUNFLOWER);
         return;
     }
 }

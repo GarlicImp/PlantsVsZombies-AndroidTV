@@ -89,7 +89,7 @@ void MainMenu::Update() {
                 LawnApp_PlayFoley(mApp, theNextType);
                 LawnApp_SetFoleyVolume(mApp, theNextType, 0);
             }
-            float theVolume = TodAnimateCurveFloat(0, 93, mFoleyVolumeCounter, mApp->mPlayerInfo->mSoundVolume, 0, TodCurves::BounceSlowMiddle);
+            float theVolume = TodAnimateCurveFloat(0, 93, mFoleyVolumeCounter, mApp->mPlayerInfo->mSoundVolume, 0, TodCurves::CURVE_BOUNCE_SLOW_MIDDLE);
             if (mFoleyVolumeCounter >= 46) {
                 LawnApp_SetFoleyVolume(mApp, theNextType, theVolume);
                 if (TodFoley_IsFoleyPlaying(mApp->mSoundSystem, theType)) {
@@ -107,16 +107,16 @@ void MainMenu::Update() {
                     LawnApp_SetFoleyVolume(mApp, theType, 0);
                 }
                 if (mEnterReanimationCounter > 0) {
-                    float theVolume = TodAnimateCurveFloat(110, 0, mEnterReanimationCounter, 0, mApp->mPlayerInfo->mSoundVolume, TodCurves::Linear);
+                    float theVolume = TodAnimateCurveFloat(110, 0, mEnterReanimationCounter, 0, mApp->mPlayerInfo->mSoundVolume, TodCurves::CURVE_LINEAR);
                     LawnApp_SetFoleyVolume(mApp, theType, theVolume);
                 }
             }
             if (mAchievementState == SLIDING_IN) {
-                float theVolume = TodAnimateCurveFloat(100, 0, mMainMenuAchievementCounter, mApp->mPlayerInfo->mSoundVolume, 0, TodCurves::Linear);
+                float theVolume = TodAnimateCurveFloat(100, 0, mMainMenuAchievementCounter, mApp->mPlayerInfo->mSoundVolume, 0, TodCurves::CURVE_LINEAR);
                 LawnApp_SetFoleyVolume(mApp, theType, theVolume);
             }
             if (mAchievementState == SLIDING_OUT && mMainMenuAchievementCounter <= 100) {
-                float theVolume = TodAnimateCurveFloat(100, 0, mMainMenuAchievementCounter, 0, mApp->mPlayerInfo->mSoundVolume, TodCurves::Linear);
+                float theVolume = TodAnimateCurveFloat(100, 0, mMainMenuAchievementCounter, 0, mApp->mPlayerInfo->mSoundVolume, TodCurves::CURVE_LINEAR);
                 LawnApp_SetFoleyVolume(mApp, theType, theVolume);
             }
         }
@@ -126,7 +126,7 @@ void MainMenu::Update() {
     if (mMainMenuAchievementKeyboardScrollCounter != 0) {
         mMainMenuAchievementKeyboardScrollCounter--;
         if (mMainMenuAchievementsWidget != nullptr) {
-            int theY = TodAnimateCurve(mKeyboardScrollTime, 0, mMainMenuAchievementKeyboardScrollCounter, 0, 192, TodCurves::Linear);
+            int theY = TodAnimateCurve(mKeyboardScrollTime, 0, mMainMenuAchievementKeyboardScrollCounter, 0, 192, TodCurves::CURVE_LINEAR);
             int theNewY = mMainMenuAchievementsKeyboardScrollWidgetY - (mMainMenuAchievementKeyboardScrollDirection ? theY : -theY);
             if (theNewY > mMainMenuHeight)
                 theNewY = mMainMenuHeight;
@@ -139,7 +139,7 @@ void MainMenu::Update() {
     if (mAchievementState == SLIDING_IN) {
         mMainMenuAchievementCounter--;
         if (mMainMenuAchievementsWidget != nullptr) {
-            int theY = TodAnimateCurve(100, 0, mMainMenuAchievementCounter, 660, -60, TodCurves::EaseInOut);
+            int theY = TodAnimateCurve(100, 0, mMainMenuAchievementCounter, 660, -60, TodCurves::CURVE_EASE_IN_OUT);
             Sexy_Widget_Move(this, mX, -720 + theY);
         }
         if (mMainMenuAchievementCounter == 0) {
@@ -157,10 +157,10 @@ void MainMenu::Update() {
         mMainMenuAchievementCounter--;
         if (mMainMenuAchievementsWidget != nullptr) {
             if (mMainMenuAchievementCounter <= 100) {
-                int theY = TodAnimateCurve(100, 0, mMainMenuAchievementCounter, -780, -60, TodCurves::EaseInOut);
+                int theY = TodAnimateCurve(100, 0, mMainMenuAchievementCounter, -780, -60, TodCurves::CURVE_EASE_IN_OUT);
                 Sexy_Widget_Move(this, mX, theY);
             } else {
-                int theAchievementsY = TodAnimateCurve(150, 100, mMainMenuAchievementCounter, mMainMenuAchievementsWidgetY, mMainMenuHeight, TodCurves::EaseInOut);
+                int theAchievementsY = TodAnimateCurve(150, 100, mMainMenuAchievementCounter, mMainMenuAchievementsWidgetY, mMainMenuHeight, TodCurves::CURVE_EASE_IN_OUT);
                 Sexy_Widget_Move(mMainMenuAchievementsWidget, mMainMenuAchievementsWidget->mX, theAchievementsY);
             }
         }
@@ -241,7 +241,7 @@ void MainMenu::ButtonDepress(MainMenuButtonId theSelectedButton) {
                 (*(void (**)(MainMenu *))(*(uint32_t *)this + 496))(this);
             } else {
                 mPressedButtonId = ADVENTURE_BUTTON;
-                lawnApp->mGameMode = GameMode::Adventure;
+                lawnApp->mGameMode = GameMode::GAMEMODE_ADVENTURE;
                 (*(void (**)(MainMenu *))(*(uint32_t *)this + 496))(this);
             }
             return;
@@ -483,8 +483,8 @@ void MainMenu::AddedToManager(int *a2) {
     old_MainMenu_AddedToManager(this, a2);
     if (!showHouse)
         return;
-    Reanimation *reanimation = LawnApp_AddReanimation(mApp, 0, 0, 0, ReanimationType::LeaderboardsHouse);
-    //    Reanimation *reanimation = LawnApp_AddReanimation(mainMenu->mApp, mainMenu->mCameraPositionX + theOffsetX,mainMenu->mCameraPositionY + theOffsetY, 0, ReanimationType::LeaderboardsHouse);
+    Reanimation *reanimation = LawnApp_AddReanimation(mApp, 0, 0, 0, ReanimationType::REANIM_LEADERBOARDS_HOUSE);
+    //    Reanimation *reanimation = LawnApp_AddReanimation(mainMenu->mApp, mainMenu->mCameraPositionX + theOffsetX,mainMenu->mCameraPositionY + theOffsetY, 0, ReanimationType::REANIM_LEADERBOARDS_HOUSE);
     reanimation->mCustomFilterEffectColor = {142, 146, 232, 92};
     reanimation->mFilterEffect = FilterEffectType::Custom;
 
@@ -595,7 +595,7 @@ void MainMenu::Draw(Sexy::Graphics *g) {
             if (v18 > 99)
                 v18 = 0;
             unkMems3[3] = v18;
-            TodAnimateCurveFloat(0, 100, v18, 0.75, 0.8, TodCurves::SinWave);
+            TodAnimateCurveFloat(0, 100, v18, 0.75, 0.8, TodCurves::CURVE_SIN_WAVE);
             TRect v38 = {0, 0, mailAlertImage->mWidth, mailAlertImage->mHeight};
             Sexy_Graphics_DrawImageMatrix(g, mailAlertImage, &v42, &v38, 0.0, 0.0, 1);
         }
@@ -675,14 +675,14 @@ void MaskHelpWidget_Draw(AchievementsWidget *achievementsWidget, Sexy::Graphics 
         Color theColor = {0, 255, 0, 255};
         Color theColor1 = {255, 255, 255, 255};
         TRect rect = {460, theAchievementY + 60, 540, 0};
-        TodDrawString(graphics, holder, 460, theAchievementY + 40, *Sexy_FONT_HOUSEOFTERROR28_Addr, theColor, DrawStringJustification::Left);
+        TodDrawString(graphics, holder, 460, theAchievementY + 40, *Sexy_FONT_HOUSEOFTERROR28_Addr, theColor, DrawStringJustification::DS_ALIGN_LEFT);
         if (i == AchievementId::ACHIEVEMENT_SHOP) {
             int holder2[1];
             TodReplaceNumberString(holder2, holder1, "{coin}", achievementsWidget->mApp->mPlayerInfo->mUsedCoins * 10);
-            TodDrawStringWrapped(graphics, holder2, &rect, *Sexy_FONT_HOUSEOFTERROR20_Addr, &theColor1, DrawStringJustification::Left, false);
+            TodDrawStringWrapped(graphics, holder2, &rect, *Sexy_FONT_HOUSEOFTERROR20_Addr, &theColor1, DrawStringJustification::DS_ALIGN_LEFT, false);
             Sexy_String_Delete(holder2);
         } else {
-            TodDrawStringWrapped(graphics, holder1, &rect, *Sexy_FONT_HOUSEOFTERROR20_Addr, &theColor1, DrawStringJustification::Left, false);
+            TodDrawStringWrapped(graphics, holder1, &rect, *Sexy_FONT_HOUSEOFTERROR20_Addr, &theColor1, DrawStringJustification::DS_ALIGN_LEFT, false);
         }
         Sexy_String_Delete(holder);
         Sexy_String_Delete(holder1);
@@ -698,7 +698,7 @@ void MaskHelpWidget_Draw(AchievementsWidget *achievementsWidget, Sexy::Graphics 
     int holder[1];
     Sexy_StrFormat(holder, "%d/%d", theAccomplishedNum, AchievementId::MAX_ACHIEVEMENTS);
     Color theColor = {255, 240, 0, 255};
-    TodDrawString(graphics, holder, 1060, 173, *Sexy_FONT_DWARVENTODCRAFT18_Addr, theColor, DrawStringJustification::Center);
+    TodDrawString(graphics, holder, 1060, 173, *Sexy_FONT_DWARVENTODCRAFT18_Addr, theColor, DrawStringJustification::DS_ALIGN_CENTER);
     Sexy_String_Delete(holder);
 }
 
@@ -919,7 +919,7 @@ void TrashBin::Draw(Sexy::Graphics *g) {
     //    if (mTrashPileType == ZOMBIE_TRASH_BIN::PLANT_PILE) {
     //        TRect theRect ={317,658,120,50};
     //        Sexy::Font* theFont = *Sexy_FONT_CONTINUUMBOLD14_Addr;
-    //        TodDrawStringWrapped(g, holder1, &theRect, theFont, &yellow, DrawStringJustification::Center, false);
+    //        TodDrawStringWrapped(g, holder1, &theRect, theFont, &yellow, DrawStringJustification::DS_ALIGN_CENTER, false);
     //    }else {
     //        Sexy_Graphics_DrawImageF(g, addonImages.zombie_can, trashBin->mX, trashBin->mY);
     //    }
@@ -928,40 +928,40 @@ void TrashBin::Draw(Sexy::Graphics *g) {
 int LeaderboardsWidget_GetAchievementIdByReanimationType(ReanimationType type) {
     AchievementId::AchievementId id = AchievementId::ACHIEVEMENT_HOME_SECURITY;
     switch (type) {
-        case ReanimationType::AchievementHomeSecurity:
+        case ReanimationType::REANIM_ACHIEVEMENT_HOME_SECURITY:
             id = AchievementId::ACHIEVEMENT_HOME_SECURITY;
             break;
-        case ReanimationType::AchievementMorticulturalist:
+        case ReanimationType::REANIM_ACHIEVEMENT_MORTICULTURALIST:
             id = AchievementId::ACHIEVEMENT_MORTICULTURALIST;
             break;
-        case ReanimationType::AchievementSmartyBranches:
+        case ReanimationType::REANIM_ACHIEVEMENT_SMARTY_BRANCHES:
             id = AchievementId::ACHIEVEMENT_TREE;
             break;
-        case ReanimationType::AchievementCrashOfTheTitan:
+        case ReanimationType::REANIM_ACHIEVEMENT_CRASH_OF_THE_TITAN:
             id = AchievementId::ACHIEVEMENT_GARG;
             break;
-        case ReanimationType::AchievementZffs4Evr:
+        case ReanimationType::REANIM_ACHIEVEMENT_Zffs4Evr:
             id = AchievementId::ACHIEVEMENT_COOP;
             break;
-        case ReanimationType::AchievementAliveAndPlanting:
+        case ReanimationType::REANIM_ACHIEVEMENT_ALIVE_AND_PLANTING:
             id = AchievementId::ACHIEVEMENT_IMMORTAL;
             break;
-        case ReanimationType::AchievementVersus:
+        case ReanimationType::REANIM_ACHIEVEMENT_VERSUS:
             id = AchievementId::ACHIEVEMENT_VERSUS;
             break;
-        case ReanimationType::AchievementSoilYourPlants:
+        case ReanimationType::REANIM_ACHIEVEMENT_SOIL_YOUR_PLANTS:
             id = AchievementId::ACHIEVEMENT_SOILPLANTS;
             break;
-        case ReanimationType::AchievementExplodonator:
+        case ReanimationType::REANIM_ACHIEVEMENT_EXPLODONATOR:
             id = AchievementId::ACHIEVEMENT_EXPLODONATOR;
             break;
-        case ReanimationType::AchievementCloseShave:
+        case ReanimationType::REANIM_ACHIEVEMENT_CLOSE_SHAVE:
             id = AchievementId::ACHIEVEMENT_CLOSESHAVE;
             break;
-        case ReanimationType::AchievementShop:
+        case ReanimationType::REANIM_ACHIEVEMENT_SHOP:
             id = AchievementId::ACHIEVEMENT_SHOP;
             break;
-        case ReanimationType::AchievementNomNomNom:
+        case ReanimationType::REANIM_ACHIEVEMENT_NOM_NOM_NOM:
             id = AchievementId::ACHIEVEMENT_CHOMP;
             break;
     }
@@ -969,46 +969,46 @@ int LeaderboardsWidget_GetAchievementIdByReanimationType(ReanimationType type) {
 }
 
 int LeaderboardsWidget_GetAchievementIdByDrawOrder(int drawOrder) {
-    ReanimationType type = ReanimationType::AchievementHomeSecurity;
+    ReanimationType type = ReanimationType::REANIM_ACHIEVEMENT_HOME_SECURITY;
     switch (drawOrder) {
         case 0:
-            type = ReanimationType::AchievementCloseShave;
+            type = ReanimationType::REANIM_ACHIEVEMENT_CLOSE_SHAVE;
             break;
         case 1:
-            type = ReanimationType::AchievementShop;
+            type = ReanimationType::REANIM_ACHIEVEMENT_SHOP;
             break;
         case 2:
-            type = ReanimationType::AchievementExplodonator;
+            type = ReanimationType::REANIM_ACHIEVEMENT_EXPLODONATOR;
             break;
         case 3:
-            type = ReanimationType::AchievementAliveAndPlanting;
+            type = ReanimationType::REANIM_ACHIEVEMENT_ALIVE_AND_PLANTING;
             break;
         case 4:
-            type = ReanimationType::AchievementSmartyBranches;
+            type = ReanimationType::REANIM_ACHIEVEMENT_SMARTY_BRANCHES;
             break;
         case 5:
-            type = ReanimationType::AchievementNomNomNom;
+            type = ReanimationType::REANIM_ACHIEVEMENT_NOM_NOM_NOM;
             break;
         case 6:
-            type = ReanimationType::AchievementSoilYourPlants;
+            type = ReanimationType::REANIM_ACHIEVEMENT_SOIL_YOUR_PLANTS;
             break;
         case 7:
-            type = ReanimationType::AchievementVersus;
+            type = ReanimationType::REANIM_ACHIEVEMENT_VERSUS;
             break;
         case 8:
-            type = ReanimationType::AchievementZffs4Evr;
+            type = ReanimationType::REANIM_ACHIEVEMENT_Zffs4Evr;
             break;
         case 9:
-            type = ReanimationType::AchievementCrashOfTheTitan;
+            type = ReanimationType::REANIM_ACHIEVEMENT_CRASH_OF_THE_TITAN;
             break;
         case 10:
-            type = ReanimationType::AchievementMorticulturalist;
+            type = ReanimationType::REANIM_ACHIEVEMENT_MORTICULTURALIST;
             break;
         case 11:
-            type = ReanimationType::AchievementHomeSecurity;
+            type = ReanimationType::REANIM_ACHIEVEMENT_HOME_SECURITY;
             break;
     }
-    return type - ReanimationType::AchievementHomeSecurity;
+    return type - ReanimationType::REANIM_ACHIEVEMENT_HOME_SECURITY;
 }
 
 void LeaderboardsWidget_ButtonDepress(Sexy::ButtonListener *listener, int id) {
@@ -1052,18 +1052,18 @@ void LeaderboardsWidget_LeaderboardsWidget(LeaderboardsWidget *this_, LawnApp *l
     for (int i = 0; i < 5; ++i) {
         Reanimation *reanim = (Reanimation *)operator new(sizeof(Reanimation));
         Reanimation_Reanimation(reanim);
-        Reanimation_ReanimationInitializeType(reanim, 0.0, 0.0, (ReanimationType)(ReanimationType::LeaderboardsHouse + i));
+        Reanimation_ReanimationInitializeType(reanim, 0.0, 0.0, (ReanimationType)(ReanimationType::REANIM_LEADERBOARDS_HOUSE + i));
         Reanimation_SetAnimRate(reanim, 0.0f);
-        reanim->mLoopType = ReanimLoopType::Loop;
+        reanim->mLoopType = ReanimLoopType::REANIM_LOOP;
         if (i == 0) {
             LawnApp_SetHouseReanim(this_->mApp, reanim);
             Reanimation_SetPosition(reanim, 456.9f, 129.3f);
         }
         if (i == 1 || i == 2 || i == 3) {
-            Reanimation_PlayReanim(reanim, "anim_idle", ReanimLoopType::Loop, 0, 12.0f);
+            Reanimation_PlayReanim(reanim, "anim_idle", ReanimLoopType::REANIM_LOOP, 0, 12.0f);
         }
         if (i == 4) {
-            Reanimation_PlayReanim(reanim, "anim_float", ReanimLoopType::Loop, 0, 2.0f); // 云儿飘得慢一些
+            Reanimation_PlayReanim(reanim, "anim_float", ReanimLoopType::REANIM_LOOP, 0, 2.0f); // 云儿飘得慢一些
         }
         Reanimation_Update(reanim); // 一次Update是必要的，否则绘制出来是Empty
         this_->mLeaderboardReanimations->backgroundReanim[i] = reanim;
@@ -1093,17 +1093,17 @@ void LeaderboardsWidget_LeaderboardsWidget(LeaderboardsWidget *this_, LawnApp *l
 
     for (int i = 0; i < AchievementId::MAX_ACHIEVEMENTS; ++i) {
         this_->mAchievements[i] =
-            lawnApp->mPlayerInfo->mAchievements[LeaderboardsWidget_GetAchievementIdByReanimationType((ReanimationType)(ReanimationType::AchievementHomeSecurity + i))];
+            lawnApp->mPlayerInfo->mAchievements[LeaderboardsWidget_GetAchievementIdByReanimationType((ReanimationType)(ReanimationType::REANIM_ACHIEVEMENT_HOME_SECURITY + i))];
         Reanimation *reanim = (Reanimation *)operator new(sizeof(Reanimation));
         Reanimation_Reanimation(reanim);
-        Reanimation_ReanimationInitializeType(reanim, 0.0, 0.0, (ReanimationType)(ReanimationType::AchievementHomeSecurity + i));
+        Reanimation_ReanimationInitializeType(reanim, 0.0, 0.0, (ReanimationType)(ReanimationType::REANIM_ACHIEVEMENT_HOME_SECURITY + i));
         Reanimation_SetPosition(reanim, gLeaderboardAchievementsPosition[i][0], gLeaderboardAchievementsPosition[i][1]);
-        reanim->mLoopType = ReanimLoopType::Loop;
+        reanim->mLoopType = ReanimLoopType::REANIM_LOOP;
         Reanimation_Update(reanim); // 一次Update是必要的，否则绘制出来是Empty
         this_->mLeaderboardReanimations->achievementReanim[i] = reanim;
     }
 
-    this_->mLongestRecordPool = lawnApp->mPlayerInfo->mChallengeRecords[GameMode::SurvivalEndlessStage3 - 2];
+    this_->mLongestRecordPool = lawnApp->mPlayerInfo->mChallengeRecords[GameMode::GAMEMODE_SURVIVAL_ENDLESS_STAGE_3 - 2];
     //    this_->mLongestRecordPool = lawnApp->mPlayerInfo->mGameStats.mMiscStats[GameStats::ENDLESS_FLAGS];
 
 
@@ -1155,7 +1155,7 @@ void DaveHelp_Draw(LeaderboardsWidget *leaderboardsWidget, Sexy::Graphics *graph
         if (!leaderboardsWidget->mAchievements[num])
             continue;
         if (leaderboardsWidget->mHighLightAchievement && num == leaderboardsWidget->mFocusedAchievementIndex) {
-            auto id = AchievementId::AchievementId(LeaderboardsWidget_GetAchievementIdByReanimationType(ReanimationType(num + ReanimationType::AchievementHomeSecurity))
+            auto id = AchievementId::AchievementId(LeaderboardsWidget_GetAchievementIdByReanimationType(ReanimationType(num + ReanimationType::REANIM_ACHIEVEMENT_HOME_SECURITY))
                                                    + AchievementId::ACHIEVEMENT_HOME_SECURITY);
             Sexy::Image *image = GetIconByAchievementId(id);
             Color color;
@@ -1171,7 +1171,7 @@ void DaveHelp_Draw(LeaderboardsWidget *leaderboardsWidget, Sexy::Graphics *graph
             Sexy_StrFormat(holder, "[%s]", GetNameByAchievementId(id));
             TRect rect = {offsetX - 42, offsetY + 125, 200, 200};
             Color theColor = {0, 255, 0, 255};
-            TodDrawStringWrapped(graphics, holder, &rect, *Sexy_FONT_HOUSEOFTERROR28_Addr, &theColor, DrawStringJustification::Center, false);
+            TodDrawStringWrapped(graphics, holder, &rect, *Sexy_FONT_HOUSEOFTERROR28_Addr, &theColor, DrawStringJustification::DS_ALIGN_CENTER, false);
             Sexy_String_Delete(holder);
         } else {
             Reanimation_Draw(leaderboardsWidget->mLeaderboardReanimations->achievementReanim[num], graphics);
@@ -1186,7 +1186,7 @@ void DaveHelp_Draw(LeaderboardsWidget *leaderboardsWidget, Sexy::Graphics *graph
         TodReplaceNumberString(holder1, holder, "{STREAK}", leaderboardsWidget->mLongestRecordPool);
         TRect theRect = {317, 658, 120, 50};
         Sexy::Font *theFont = *Sexy_FONT_CONTINUUMBOLD14_Addr;
-        TodDrawStringWrapped(graphics, holder1, &theRect, theFont, &yellow, DrawStringJustification::Center, false);
+        TodDrawStringWrapped(graphics, holder1, &theRect, theFont, &yellow, DrawStringJustification::DS_ALIGN_CENTER, false);
         Sexy_String_Delete(holder);
         Sexy_String_Delete(holder1);
     }
@@ -1201,7 +1201,7 @@ void DaveHelp_Draw(LeaderboardsWidget *leaderboardsWidget, Sexy::Graphics *graph
     Sexy_StrFormat(holder3, "%s", leaderboardsWidget->mApp->mPlayerInfo->mName);
     TodReplaceString(holder4, holder2, "{PLAYER}", holder3);
     Sexy::Font *theFont1 = *Sexy_FONT_HOUSEOFTERROR28_Addr;
-    TodDrawStringWrapped(graphics, holder4, &theRect1, theFont1, &white, DrawStringJustification::Center, false);
+    TodDrawStringWrapped(graphics, holder4, &theRect1, theFont1, &white, DrawStringJustification::DS_ALIGN_CENTER, false);
     Sexy_String_Delete(holder2);
     Sexy_String_Delete(holder3);
     Sexy_String_Delete(holder4);
@@ -2901,8 +2901,8 @@ void ZombatarWidget_ZombatarWidget(ZombatarWidget *zombatarWidget, LawnApp *lawn
     ReanimatorTrackInstance *aHeadTrackInstance = Reanimation_GetTrackInstanceByName(aBodyReanim, "anim_head1");
     aHeadTrackInstance->mImageOverride = *Sexy_IMAGE_BLANK_Addr;
 
-    Reanimation *aZombatarHeadReanim = LawnApp_AddReanimation(lawnApp, 0, 0, 0, ReanimationType::ZombatarHead);
-    Reanimation_PlayReanim(aZombatarHeadReanim, "anim_head_idle", ReanimLoopType::Loop, 0, 15.0);
+    Reanimation *aZombatarHeadReanim = LawnApp_AddReanimation(lawnApp, 0, 0, 0, ReanimationType::REANIM_ZOMBATAR_HEAD);
+    Reanimation_PlayReanim(aZombatarHeadReanim, "anim_head_idle", ReanimLoopType::REANIM_LOOP, 0, 15.0);
     Reanimation_AssignRenderGroupToTrack(aZombatarHeadReanim, "anim_hair", -1);
     zombie->mBossFireBallReanimID = LawnApp_ReanimationGetID(zombie->mApp, aZombatarHeadReanim);
     AttachEffect *attachEffect = AttachReanim(&aHeadTrackInstance->mAttachmentID, aZombatarHeadReanim, 0.0f, 0.0f);
@@ -2952,7 +2952,7 @@ void TestMenuWidget_DrawSkin(ZombatarWidget *zombatarWidget, Sexy::Graphics *gra
     TodStringTranslate(holder, "[ZOMBATAR_START_TEXT]");
     TRect rect = {160 + 295, 211, 250, 100};
     Sexy::Font *font = *Sexy_FONT_DWARVENTODCRAFT18_Addr;
-    TodDrawStringWrapped(graphics, holder, &rect, font, &yellow, DrawStringJustification::Center, false);
+    TodDrawStringWrapped(graphics, holder, &rect, font, &yellow, DrawStringJustification::DS_ALIGN_CENTER, false);
     Sexy_String_Delete(holder);
 }
 
@@ -3000,7 +3000,7 @@ void TestMenuWidget_DrawHair(ZombatarWidget *zombatarWidget, Sexy::Graphics *gra
         TodStringTranslate(holder, "[ZOMBATAR_COLOR_ITEM_NOT_CHOSEN]");
         TRect rect = {160 + 288, 445, 250, 100};
         Sexy::Font *font = *Sexy_FONT_BRIANNETOD12_Addr;
-        TodDrawStringWrapped(graphics, holder, &rect, font, &white, DrawStringJustification::Left, false);
+        TodDrawStringWrapped(graphics, holder, &rect, font, &white, DrawStringJustification::DS_ALIGN_LEFT, false);
         Sexy_String_Delete(holder);
     } else if (ZombatarWidget_AccessoryIsColorized(zombatarWidget->mSelectedTab, zombatarWidget->mSelectedHair)) {
         for (int i = 0; i < 18; ++i) {
@@ -3017,7 +3017,7 @@ void TestMenuWidget_DrawHair(ZombatarWidget *zombatarWidget, Sexy::Graphics *gra
         TodStringTranslate(holder, "[ZOMBATAR_COLOR_NOT_APPLICABLE]");
         TRect rect = {160 + 288, 445, 250, 100};
         Sexy::Font *font = *Sexy_FONT_BRIANNETOD12_Addr;
-        TodDrawStringWrapped(graphics, holder, &rect, font, &white, DrawStringJustification::Left, false);
+        TodDrawStringWrapped(graphics, holder, &rect, font, &white, DrawStringJustification::DS_ALIGN_LEFT, false);
         Sexy_String_Delete(holder);
     }
 }
@@ -3110,7 +3110,7 @@ void TestMenuWidget_DrawFHair(ZombatarWidget *zombatarWidget, Sexy::Graphics *gr
         TodStringTranslate(holder, "[ZOMBATAR_COLOR_ITEM_NOT_CHOSEN]");
         TRect rect = {160 + 288, 445, 250, 100};
         Sexy::Font *font = *Sexy_FONT_BRIANNETOD12_Addr;
-        TodDrawStringWrapped(graphics, holder, &rect, font, &white, DrawStringJustification::Left, false);
+        TodDrawStringWrapped(graphics, holder, &rect, font, &white, DrawStringJustification::DS_ALIGN_LEFT, false);
         Sexy_String_Delete(holder);
     } else if (ZombatarWidget_AccessoryIsColorized(zombatarWidget->mSelectedTab, zombatarWidget->mSelectedFHair)) {
         for (int i = 0; i < 18; ++i) {
@@ -3127,13 +3127,13 @@ void TestMenuWidget_DrawFHair(ZombatarWidget *zombatarWidget, Sexy::Graphics *gr
         TodStringTranslate(holder, "[ZOMBATAR_COLOR_NOT_APPLICABLE]");
         TRect rect = {160 + 288, 445, 250, 100};
         Sexy::Font *font = *Sexy_FONT_BRIANNETOD12_Addr;
-        TodDrawStringWrapped(graphics, holder, &rect, font, &white, DrawStringJustification::Left, false);
+        TodDrawStringWrapped(graphics, holder, &rect, font, &white, DrawStringJustification::DS_ALIGN_LEFT, false);
         Sexy_String_Delete(holder);
     }
 
     int holder[1];
     Sexy_StrFormat(holder, "PAGE %d/%d", zombatarWidget->mSelectedFHairPage + 1, 2);
-    TodDrawString(graphics, holder, 160 + 410, 525, *Sexy_FONT_BRIANNETOD16_Addr, black, DrawStringJustification::Center);
+    TodDrawString(graphics, holder, 160 + 410, 525, *Sexy_FONT_BRIANNETOD16_Addr, black, DrawStringJustification::DS_ALIGN_CENTER);
     Sexy_String_Delete(holder);
 }
 
@@ -3175,7 +3175,7 @@ void TestMenuWidget_DrawTidBit(ZombatarWidget *zombatarWidget, Sexy::Graphics *g
         TodStringTranslate(holder, "[ZOMBATAR_COLOR_ITEM_NOT_CHOSEN]");
         TRect rect = {160 + 288, 445, 250, 100};
         Sexy::Font *font = *Sexy_FONT_BRIANNETOD12_Addr;
-        TodDrawStringWrapped(graphics, holder, &rect, font, &white, DrawStringJustification::Left, false);
+        TodDrawStringWrapped(graphics, holder, &rect, font, &white, DrawStringJustification::DS_ALIGN_LEFT, false);
         Sexy_String_Delete(holder);
     } else if (ZombatarWidget_AccessoryIsColorized(zombatarWidget->mSelectedTab, zombatarWidget->mSelectedTidBit)) {
         for (int i = 0; i < 18; ++i) {
@@ -3192,7 +3192,7 @@ void TestMenuWidget_DrawTidBit(ZombatarWidget *zombatarWidget, Sexy::Graphics *g
         TodStringTranslate(holder, "[ZOMBATAR_COLOR_NOT_APPLICABLE]");
         TRect rect = {160 + 288, 445, 250, 100};
         Sexy::Font *font = *Sexy_FONT_BRIANNETOD12_Addr;
-        TodDrawStringWrapped(graphics, holder, &rect, font, &white, DrawStringJustification::Left, false);
+        TodDrawStringWrapped(graphics, holder, &rect, font, &white, DrawStringJustification::DS_ALIGN_LEFT, false);
         Sexy_String_Delete(holder);
     }
 }
@@ -3236,7 +3236,7 @@ void TestMenuWidget_DrawEyeWear(ZombatarWidget *zombatarWidget, Sexy::Graphics *
         TodStringTranslate(holder, "[ZOMBATAR_COLOR_ITEM_NOT_CHOSEN]");
         TRect rect = {160 + 288, 445, 250, 100};
         Sexy::Font *font = *Sexy_FONT_BRIANNETOD12_Addr;
-        TodDrawStringWrapped(graphics, holder, &rect, font, &white, DrawStringJustification::Left, false);
+        TodDrawStringWrapped(graphics, holder, &rect, font, &white, DrawStringJustification::DS_ALIGN_LEFT, false);
         Sexy_String_Delete(holder);
     } else if (ZombatarWidget_AccessoryIsColorized(zombatarWidget->mSelectedTab, zombatarWidget->mSelectedEyeWear)) {
         for (int i = 0; i < 18; ++i) {
@@ -3253,7 +3253,7 @@ void TestMenuWidget_DrawEyeWear(ZombatarWidget *zombatarWidget, Sexy::Graphics *
         TodStringTranslate(holder, "[ZOMBATAR_COLOR_NOT_APPLICABLE]");
         TRect rect = {160 + 288, 445, 250, 100};
         Sexy::Font *font = *Sexy_FONT_BRIANNETOD12_Addr;
-        TodDrawStringWrapped(graphics, holder, &rect, font, &white, DrawStringJustification::Left, false);
+        TodDrawStringWrapped(graphics, holder, &rect, font, &white, DrawStringJustification::DS_ALIGN_LEFT, false);
         Sexy_String_Delete(holder);
     }
 }
@@ -3309,14 +3309,14 @@ void TestMenuWidget_DrawCloth(ZombatarWidget *zombatarWidget, Sexy::Graphics *gr
         TodStringTranslate(holder, "[ZOMBATAR_COLOR_ITEM_NOT_CHOSEN]");
         TRect rect = {160 + 288, 445, 250, 100};
         Sexy::Font *font = *Sexy_FONT_BRIANNETOD12_Addr;
-        TodDrawStringWrapped(graphics, holder, &rect, font, &white, DrawStringJustification::Left, false);
+        TodDrawStringWrapped(graphics, holder, &rect, font, &white, DrawStringJustification::DS_ALIGN_LEFT, false);
         Sexy_String_Delete(holder);
     } else {
         int holder[1];
         TodStringTranslate(holder, "[ZOMBATAR_COLOR_NOT_APPLICABLE]");
         TRect rect = {160 + 288, 445, 250, 100};
         Sexy::Font *font = *Sexy_FONT_BRIANNETOD12_Addr;
-        TodDrawStringWrapped(graphics, holder, &rect, font, &white, DrawStringJustification::Left, false);
+        TodDrawStringWrapped(graphics, holder, &rect, font, &white, DrawStringJustification::DS_ALIGN_LEFT, false);
         Sexy_String_Delete(holder);
     }
 }
@@ -3353,7 +3353,7 @@ void TestMenuWidget_DrawAccessory(ZombatarWidget *zombatarWidget, Sexy::Graphics
         TodStringTranslate(holder, "[ZOMBATAR_COLOR_ITEM_NOT_CHOSEN]");
         TRect rect = {160 + 288, 445, 250, 100};
         Sexy::Font *font = *Sexy_FONT_BRIANNETOD12_Addr;
-        TodDrawStringWrapped(graphics, holder, &rect, font, &white, DrawStringJustification::Left, false);
+        TodDrawStringWrapped(graphics, holder, &rect, font, &white, DrawStringJustification::DS_ALIGN_LEFT, false);
         Sexy_String_Delete(holder);
     } else if (ZombatarWidget_AccessoryIsColorized(zombatarWidget->mSelectedTab, zombatarWidget->mSelectedAccessory)) {
         for (int i = 0; i < 18; ++i) {
@@ -3370,7 +3370,7 @@ void TestMenuWidget_DrawAccessory(ZombatarWidget *zombatarWidget, Sexy::Graphics
         TodStringTranslate(holder, "[ZOMBATAR_COLOR_NOT_APPLICABLE]");
         TRect rect = {160 + 288, 445, 250, 100};
         Sexy::Font *font = *Sexy_FONT_BRIANNETOD12_Addr;
-        TodDrawStringWrapped(graphics, holder, &rect, font, &white, DrawStringJustification::Left, false);
+        TodDrawStringWrapped(graphics, holder, &rect, font, &white, DrawStringJustification::DS_ALIGN_LEFT, false);
         Sexy_String_Delete(holder);
     }
 }
@@ -3416,7 +3416,7 @@ void TestMenuWidget_DrawHat(ZombatarWidget *zombatarWidget, Sexy::Graphics *grap
         TodStringTranslate(holder, "[ZOMBATAR_COLOR_ITEM_NOT_CHOSEN]");
         TRect rect = {160 + 288, 445, 250, 100};
         Sexy::Font *font = *Sexy_FONT_BRIANNETOD12_Addr;
-        TodDrawStringWrapped(graphics, holder, &rect, font, &white, DrawStringJustification::Left, false);
+        TodDrawStringWrapped(graphics, holder, &rect, font, &white, DrawStringJustification::DS_ALIGN_LEFT, false);
         Sexy_String_Delete(holder);
     } else if (ZombatarWidget_AccessoryIsColorized(zombatarWidget->mSelectedTab, zombatarWidget->mSelectedHat)) {
         for (int i = 0; i < 18; ++i) {
@@ -3433,7 +3433,7 @@ void TestMenuWidget_DrawHat(ZombatarWidget *zombatarWidget, Sexy::Graphics *grap
         TodStringTranslate(holder, "[ZOMBATAR_COLOR_NOT_APPLICABLE]");
         TRect rect = {160 + 288, 445, 250, 100};
         Sexy::Font *font = *Sexy_FONT_BRIANNETOD12_Addr;
-        TodDrawStringWrapped(graphics, holder, &rect, font, &white, DrawStringJustification::Left, false);
+        TodDrawStringWrapped(graphics, holder, &rect, font, &white, DrawStringJustification::DS_ALIGN_LEFT, false);
         Sexy_String_Delete(holder);
     }
 }
@@ -3499,13 +3499,13 @@ void TestMenuWidget_DrawBackground(ZombatarWidget *zombatarWidget, Sexy::Graphic
         TodStringTranslate(holder, "[ZOMBATAR_COLOR_NOT_APPLICABLE]");
         TRect rect = {160 + 288, 445, 250, 100};
         Sexy::Font *font = *Sexy_FONT_BRIANNETOD12_Addr;
-        TodDrawStringWrapped(graphics, holder, &rect, font, &white, DrawStringJustification::Left, false);
+        TodDrawStringWrapped(graphics, holder, &rect, font, &white, DrawStringJustification::DS_ALIGN_LEFT, false);
         Sexy_String_Delete(holder);
     }
 
     int holder[1];
     Sexy_StrFormat(holder, "PAGE %d/%d", zombatarWidget->mSelectedBackgroundPage + 1, 5);
-    TodDrawString(graphics, holder, 160 + 410, 525, *Sexy_FONT_BRIANNETOD16_Addr, black, DrawStringJustification::Center);
+    TodDrawString(graphics, holder, 160 + 410, 525, *Sexy_FONT_BRIANNETOD16_Addr, black, DrawStringJustification::DS_ALIGN_CENTER);
     Sexy_String_Delete(holder);
 }
 
@@ -3677,7 +3677,7 @@ void TestMenuWidget_Draw(ZombatarWidget *zombatarWidget, Sexy::Graphics *graphic
         int holder[1];
         TodStringTranslate(holder, "[ZOMBATAR_VIEW_PORTRAIT]");
         TRect rect = {160 + 178, 450, 400, 100};
-        TodDrawStringWrapped(graphics, holder, &rect, *Sexy_FONT_BRIANNETOD16_Addr, &white, DrawStringJustification::Center, false);
+        TodDrawStringWrapped(graphics, holder, &rect, *Sexy_FONT_BRIANNETOD16_Addr, &white, DrawStringJustification::DS_ALIGN_CENTER, false);
         Sexy_String_Delete(holder);
     } else if (zombatarWidget->mShowZombieTypeSelection) {
         TestMenuWidget_DrawZombieSelection(zombatarWidget, graphics);

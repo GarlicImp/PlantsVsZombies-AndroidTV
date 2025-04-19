@@ -13,7 +13,7 @@ inline int (*ZenGarden_GetPottedPlantInWheelbarrow)(int *);
 
 inline void (*ZenGarden_DrawPottedPlant)(int *a1, Sexy::Graphics *g, float x, float y, PottedPlant *thePottedPlant, float theScale, bool theDrawPot);
 
-inline float (*PlantFlowerPotHeightOffset)(SeedType::SeedType, float);
+inline float (*PlantFlowerPotHeightOffset)(SeedType, float);
 
 
 inline void (*old_ZenGarden_DrawBackdrop)(int *zenGarden, int *graphics);

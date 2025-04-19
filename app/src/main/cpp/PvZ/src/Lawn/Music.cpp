@@ -319,7 +319,7 @@ void Music_UpdateMusicBurst2(Music *music) {
     unsigned short v29;                                // [esp+2Ch] [ebp-4h]
 
     mApp = music->mApp;
-    if (mApp->mBoard == nullptr || mApp->mGameMode == GameMode::Intro) {
+    if (mApp->mBoard == nullptr || mApp->mGameMode == GameMode::GAMEMODE_INTRO) {
         return;
     }
     if (music->mCurMusicTune > MusicTune::RoofGrazetheroof) {
@@ -350,7 +350,7 @@ void Music_UpdateMusicBurst2(Music *music) {
             break;
         case MusicBurstState::MUSIC_BURST_STARTING:
             if (!isNightMoonGrainsMode) {
-                aMainTrackVolume = TodAnimateCurveFloat(400, 0, music->mBurstStateCounter, 0.0, 1.0, TodCurves::Linear);
+                aMainTrackVolume = TodAnimateCurveFloat(400, 0, music->mBurstStateCounter, 0.0, 1.0, TodCurves::CURVE_LINEAR);
                 v11 = music->mBurstStateCounter;
                 if (v11 == 300) {
                     music->mMusicDrumsState = MusicDrumsState::MUSIC_DRUMS_ON_QUEUED;
@@ -366,7 +366,7 @@ void Music_UpdateMusicBurst2(Music *music) {
                 mMusicDrumsState = music->mMusicDrumsState;
                 if (mMusicDrumsState != MusicDrumsState::MUSIC_DRUMS_OFF) {
                     if (mMusicDrumsState != MusicDrumsState::MUSIC_DRUMS_ON_QUEUED) {
-                        aDrumsJumpOrder = TodAnimateCurveFloat(400, 0, music->mBurstStateCounter, 1.0, 0.0, TodCurves::Linear);
+                        aDrumsJumpOrder = TodAnimateCurveFloat(400, 0, music->mBurstStateCounter, 1.0, 0.0, TodCurves::CURVE_LINEAR);
                         if (!music->mBurstStateCounter) {
                             music->mMusicBurstState = MusicBurstState::MUSIC_BURST_ON;
                             music->mBurstStateCounter = 800;
@@ -403,9 +403,9 @@ void Music_UpdateMusicBurst2(Music *music) {
             break;
         case MusicBurstState::MUSIC_BURST_FINISHING:
             if (!isNightMoonGrainsMode)
-                aMainTrackVolume = TodAnimateCurveFloat(800, 0, music->mBurstStateCounter, 1.0, 0.0, TodCurves::Linear);
+                aMainTrackVolume = TodAnimateCurveFloat(800, 0, music->mBurstStateCounter, 1.0, 0.0, TodCurves::CURVE_LINEAR);
             else
-                aDrumsJumpOrder = TodAnimateCurveFloat(400, 0, music->mBurstStateCounter, 0.0, 1.0, TodCurves::Linear);
+                aDrumsJumpOrder = TodAnimateCurveFloat(400, 0, music->mBurstStateCounter, 0.0, 1.0, TodCurves::CURVE_LINEAR);
             if (!music->mBurstStateCounter && music->mMusicDrumsState == MusicDrumsState::MUSIC_DRUMS_OFF)
                 music->mMusicBurstState = MusicBurstState::MUSIC_BURST_OFF;
             break;
@@ -437,7 +437,7 @@ void Music_UpdateMusicBurst2(Music *music) {
                     aPackedOrderMain = (v16 % 2 != 0) + 74;
                 }
             } else {
-                aFadeTrackVolume = TodAnimateCurveFloat(300, 0, music->mBurstStateCounter, 0.0, 1.0, TodCurves::Linear);
+                aFadeTrackVolume = TodAnimateCurveFloat(300, 0, music->mBurstStateCounter, 0.0, 1.0, TodCurves::CURVE_LINEAR);
                 if (music->mBurstStateCounter == 1) {
                     music->mMusicDrumsState = MusicDrumsState::MUSIC_DRUMS_ON;
                 }
@@ -457,7 +457,7 @@ void Music_UpdateMusicBurst2(Music *music) {
         case MusicDrumsState::MUSIC_DRUMS_FADING:
             thePositionEnd = v7;
             thePositionStart = v9;
-            aFadeTrackVolume = TodAnimateCurveFloat(isNightMoonGrainsMode ? 800 : 50, 0, music->mDrumsStateCounter, thePositionStart, thePositionEnd, TodCurves::Linear);
+            aFadeTrackVolume = TodAnimateCurveFloat(isNightMoonGrainsMode ? 800 : 50, 0, music->mDrumsStateCounter, thePositionStart, thePositionEnd, TodCurves::CURVE_LINEAR);
             if (music->mDrumsStateCounter == 0)
                 music->mMusicDrumsState = MusicDrumsState::MUSIC_DRUMS_OFF;
             break;
@@ -490,7 +490,7 @@ void Music::MusicUpdate() {
     } else {
         mFadeOutCounter--;
         if (mFadeOutCounter > 0) {
-            float theVolume = TodAnimateCurveFloat(mFadeOutDuration, 0, mFadeOutCounter, 1.0, 0.0, TodCurves::Linear);
+            float theVolume = TodAnimateCurveFloat(mFadeOutDuration, 0, mFadeOutCounter, 1.0, 0.0, TodCurves::CURVE_LINEAR);
             Sexy_AudiereMusicInterface_SetSongVolume(mMusicInterface, mCurMusicFileMain, theVolume * mPauseVolume);
         } else {
             Music_StopAllMusic(this);

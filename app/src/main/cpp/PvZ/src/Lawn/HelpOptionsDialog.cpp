@@ -16,7 +16,7 @@ void HelpOptionsDialog_ButtonDepress(HelpOptionsDialog *a, int a2) {
     //    if( a2 == 0){
     //        int * lawnApp = (int*)a[HELPOPTIONS_LAWNAPP_OFFSET];
     //        GameMode::GameMode mGameMode = (GameMode::GameMode) *(lawnApp + LAWNAPP_GAMEMODE_OFFSET);
-    //        if (mGameMode >= GameMode::TwoPlayerVS && mGameMode < GameMode::TwoPlayerCoopEndless) {
+    //        if (mGameMode >= GameMode::GAMEMODE_TWO_PLAYER_VS && mGameMode < GameMode::GAMEMODE_TWO_PLAYER_COOP_ENDLESS) {
     //            LawnApp_ShowHelpTextScreen(lawnApp, 2);
     //        } else {
     //            LawnApp_ShowHelpTextScreen(lawnApp, 0);

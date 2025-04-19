@@ -23,11 +23,11 @@ void SeedBank::Create(bool thePlayerIndex) {
 void SeedBank::Draw(Sexy::Graphics *g) {
     LOG_INFO("this->mBoard: {}", (void*)this->mBoard);
     // 在对战模式取消0.9倍缩放
-    if (mApp->mGameMode != GameMode::TwoPlayerVS) {
+    if (mApp->mGameMode != GameMode::GAMEMODE_TWO_PLAYER_VS) {
         return old_SeedBank_Draw(this, g);
     }
     Sexy_Graphics_PushState(g);
-    //    if (mApp->mGameMode == GameMode::TwoPlayerVS) {
+    //    if (mApp->mGameMode == GameMode::GAMEMODE_TWO_PLAYER_VS) {
     //        g->mTransX = 0;
     //        g->mTransY = 0;
     //        int transform[12];
@@ -41,7 +41,7 @@ void SeedBank::Draw(Sexy::Graphics *g) {
     ////        Sexy_Image_PushTransform(g->mDestImage,transform,true);
     //        (*(void (**)(uint32_t, int *, bool))(**((uint32_t **)g + 1) + 140))(*((uint32_t *)g + 1),transform,true);
     //    }
-    if (mApp->mGameScene != GameScenes::Playing) {
+    if (mApp->mGameScene != GameScenes::SCENE_PLAYING) {
         g->mTransX = g->mTransX - mBoard->mX;
         g->mTransY = g->mTransY - mBoard->mY;
     }
@@ -63,7 +63,7 @@ void SeedBank::Draw(Sexy::Graphics *g) {
         }
     } else if (LawnApp_IsCoopMode(mApp)) {
         Sexy_Graphics_DrawImage(g, *Sexy_IMAGE_SEEDBANK_COOP_Addr, 0, 0);
-    } else if (mApp->mGameMode == GameMode::TwoPlayerVS && mIsZombie) {
+    } else if (mApp->mGameMode == GameMode::GAMEMODE_TWO_PLAYER_VS && mIsZombie) {
         int theSeedBankExtraWidth = Board_GetSeedBankExtraWidth(mBoard);
         Sexy_Graphics_DrawImage(g, *Sexy_IMAGE_ZOMBIE_SEEDBANK_Addr, theSeedBankExtraWidth, 0);
     } else {
@@ -82,11 +82,11 @@ void SeedBank::Draw(Sexy::Graphics *g) {
     if (mNumPackets > 0) {
         for (int i = 0; i < mNumPackets; ++i) {
             SeedPacket *seedPacket = &(mSeedPackets[i]);
-            if (seedPacket->mPacketType == SeedType::None) {
+            if (seedPacket->mPacketType == SeedType::SEED_NONE) {
                 continue;
             }
             if (!LawnApp_IsSlotMachineLevel(mApp)) {
-                if (LawnApp_IsCoopMode(mApp) || mApp->mGameMode == GameMode::TwoPlayerVS) {
+                if (LawnApp_IsCoopMode(mApp) || mApp->mGameMode == GameMode::GAMEMODE_TWO_PLAYER_VS) {
                     bool mPlayerIndex = mBoard->mSeedBank2 == this;
                     GamepadControls *gamepadControls = mPlayerIndex ? mBoard->mGamepadControls2 : mBoard->mGamepadControls1;
                     if (gamepadControls->mPlayerIndex2 != -1 && i == gamepadControls->mSelectedSeedIndex) {
@@ -117,7 +117,7 @@ void SeedBank::Draw(Sexy::Graphics *g) {
         }
         for (int i = 0; i < mNumPackets; ++i) {
             SeedPacket *seedPacket = &(mSeedPackets[i]);
-            if (seedPacket->mPacketType == SeedType::None) {
+            if (seedPacket->mPacketType == SeedType::SEED_NONE) {
                 continue;
             }
             if (seedPacket == seedPacket1 || seedPacket == seedPacket2) {
@@ -131,7 +131,7 @@ void SeedBank::Draw(Sexy::Graphics *g) {
 
         for (int i = 0; i < mNumPackets; ++i) {
             SeedPacket *seedPacket = &(mSeedPackets[i]);
-            if (seedPacket->mPacketType == SeedType::None) {
+            if (seedPacket->mPacketType == SeedType::SEED_NONE) {
                 continue;
             }
             if (seedPacket == seedPacket1 || seedPacket == seedPacket2) {
@@ -181,21 +181,21 @@ void SeedBank::Draw(Sexy::Graphics *g) {
             theColor.mBlue = 0;
             theColor.mAlpha = 255;
         }
-        TodDrawString(g, holder, mIsZombie ? (408 + Board_GetSeedBankExtraWidth(mBoard)) : 38, 78, *Sexy_FONT_CONTINUUMBOLD14_Addr, theColor, DrawStringJustification::Center);
+        TodDrawString(g, holder, mIsZombie ? (408 + Board_GetSeedBankExtraWidth(mBoard)) : 38, 78, *Sexy_FONT_CONTINUUMBOLD14_Addr, theColor, DrawStringJustification::DS_ALIGN_CENTER);
         Sexy_String_Delete(holder);
 
         if (LawnApp_IsTwinSunbankMode(mApp)) {
             int holder1[1];
             Sexy_StrFormat(holder1, "%d", mBoard->mSunMoney2 & ~mBoard->mSunMoney2 >> 31);
-            TodDrawString(g, holder1, 644, 49, *Sexy_FONT_CONTINUUMBOLD14_Addr, theColor, DrawStringJustification::Center);
+            TodDrawString(g, holder1, 644, 49, *Sexy_FONT_CONTINUUMBOLD14_Addr, theColor, DrawStringJustification::DS_ALIGN_CENTER);
             Sexy_String_Delete(holder1);
         }
     }
-    if (mApp->mGameScene != GameScenes::Playing) {
+    if (mApp->mGameScene != GameScenes::SCENE_PLAYING) {
         g->mTransX = g->mTransX + mBoard->mX;
         g->mTransY = g->mTransY + mBoard->mY;
     }
-    //    if (mApp->mGameMode == GameMode::TwoPlayerVS) {
+    //    if (mApp->mGameMode == GameMode::GAMEMODE_TWO_PLAYER_VS) {
     ////        Sexy_Graphics_PopTransform(g);
     ////        Sexy_Image_PopTransform(g->mDestImage);
     //        (*(void (**)(uint32_t))(**((uint32_t **)g + 1) + 144))(*((uint32_t *)g + 1));
@@ -209,7 +209,7 @@ bool SeedBank::MouseHitTest(int x, int y, HitResult *theHitResult) {
     int relativeY = y - mY;
     if (mWidth - 4 <= relativeX || mNumPackets <= 0) {
         theHitResult->mObject = nullptr;
-        theHitResult->mObjectType = GameObjectType::None;
+        theHitResult->mObjectType = GameObjectType::OBJECT_TYPE_NONE;
         return false;
     }
 
@@ -220,7 +220,7 @@ bool SeedBank::MouseHitTest(int x, int y, HitResult *theHitResult) {
     }
 
     theHitResult->mObject = nullptr;
-    theHitResult->mObjectType = GameObjectType::None;
+    theHitResult->mObjectType = GameObjectType::OBJECT_TYPE_NONE;
     return false;
 }
 
@@ -246,7 +246,7 @@ void SeedBank::Move(int x, int y) {
     // 在对战模式 错开双方的Bank
     mX = x;
     mY = y;
-    if (mApp->mGameMode == GameMode::TwoPlayerVS) {
+    if (mApp->mGameMode == GameMode::GAMEMODE_TWO_PLAYER_VS) {
         int theSeedBankExtraWidth = Board_GetSeedBankExtraWidth(mBoard);
         if (mIsZombie) {
             mX += (5 - theSeedBankExtraWidth / 2);

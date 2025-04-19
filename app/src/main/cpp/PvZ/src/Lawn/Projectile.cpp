@@ -95,7 +95,7 @@ void Projectile_DoImpact(Projectile *projectile, Zombie *zombie) {
         return old_Projectile_DoImpact(projectile, zombie);
     }
     ProjectileType mProjectileType = projectile->mProjectileType;
-    ProjectileMotion::ProjectileMotion mMotionType = projectile->mMotionType;
+    ProjectileMotion mMotionType = projectile->mMotionType;
     Projectile_PlayImpactSound(projectile, zombie);
     if (Projectile_IsSplashDamage(projectile, zombie)) {
         if (mProjectileType == ProjectileType::PROJECTILE_FIREBALL && zombie != nullptr) {
@@ -118,25 +118,25 @@ void Projectile_DoImpact(Projectile *projectile, Zombie *zombie) {
     int aRenderOrder = projectile->mRenderOrder + 1;
     float num = mPosX - mVelX;
     float num2 = mPosY + mPosZ - mVelY - mVelZ;
-    ParticleEffect::ParticleEffect particleEffect = ParticleEffect::None;
+    ParticleEffect particleEffect = ParticleEffect::PARTICLE_NONE;
     float num3 = mPosX + 12.0f;
     float num4 = mPosY + 12.0f;
     if (mProjectileType == ProjectileType::PROJECTILE_MELON) {
-        LawnApp_AddTodParticle(lawnApp, num + 30.0f, num2 + 30.0f, aRenderOrder, ParticleEffect::Melonsplash);
+        LawnApp_AddTodParticle(lawnApp, num + 30.0f, num2 + 30.0f, aRenderOrder, ParticleEffect::PARTICLE_MELONSPLASH);
     } else if (mProjectileType == ProjectileType::PROJECTILE_WINTERMELON) {
-        LawnApp_AddTodParticle(lawnApp, num + 30.0f, num2 + 30.0f, aRenderOrder, ParticleEffect::Wintermelon);
+        LawnApp_AddTodParticle(lawnApp, num + 30.0f, num2 + 30.0f, aRenderOrder, ParticleEffect::PARTICLE_WINTERMELON);
     } else if (mProjectileType == ProjectileType::PROJECTILE_COBBIG) {
         int aRenderOrder2 = Board_MakeRenderOrder(20000, projectile->mCobTargetRow, 2);
-        LawnApp_AddTodParticle(lawnApp, mPosX + 80.0f, mPosY + 40.0f, aRenderOrder2, ParticleEffect::Blastmark);
-        LawnApp_AddTodParticle(lawnApp, mPosX + 80.0f, mPosY + 40.0f, aRenderOrder, ParticleEffect::Popcornsplash);
+        LawnApp_AddTodParticle(lawnApp, mPosX + 80.0f, mPosY + 40.0f, aRenderOrder2, ParticleEffect::PARTICLE_BLASTMARK);
+        LawnApp_AddTodParticle(lawnApp, mPosX + 80.0f, mPosY + 40.0f, aRenderOrder, ParticleEffect::PARTICLE_POPCORNSPLASH);
         LawnApp_PlaySample(lawnApp, *Sexy_SOUND_DOOMSHROOM_Addr);
         Board_ShakeBoard(board, 3, -4);
     } else if (mProjectileType == ProjectileType::PROJECTILE_PEA) {
         num3 -= 15.0f;
-        particleEffect = ParticleEffect::PeaSplat;
+        particleEffect = ParticleEffect::PARTICLE_PEA_SPLAT;
     } else if (mProjectileType == ProjectileType::PROJECTILE_SNOWPEA) {
         num3 -= 15.0f;
-        particleEffect = ParticleEffect::SnowpeaSplat;
+        particleEffect = ParticleEffect::PARTICLE_SNOWPEA_SPLAT;
     } else if (mProjectileType == ProjectileType::PROJECTILE_FIREBALL) {
         if (Projectile_IsSplashDamage(projectile, zombie)) {
             Reanimation *reanimation = LawnApp_AddReanimation(lawnApp, mPosX + 38.0f, mPosY - 20.0f, aRenderOrder, ReanimationType::REANIM_JALAPENO_FIRE);
@@ -145,23 +145,23 @@ void Projectile_DoImpact(Projectile *projectile, Zombie *zombie) {
             Reanimation_OverrideScale(reanimation, 0.7f, 0.4f);
         }
     } else if (mProjectileType == ProjectileType::PROJECTILE_STAR) {
-        particleEffect = ParticleEffect::StarSplat;
+        particleEffect = ParticleEffect::PARTICLE_STAR_SPLAT;
     } else if (mProjectileType == ProjectileType::PROJECTILE_PUFF) {
         num3 -= 20.0f;
-        particleEffect = ParticleEffect::PuffSplat;
+        particleEffect = ParticleEffect::PARTICLE_PUFF_SPLAT;
     } else if (mProjectileType == ProjectileType::PROJECTILE_CABBAGE) {
         num3 = num - 38.0f;
         num4 = num2 + 23.0f;
-        particleEffect = ParticleEffect::CabbageSplat;
+        particleEffect = ParticleEffect::PARTICLE_CABBAGE_SPLAT;
     } else if (mProjectileType == ProjectileType::PROJECTILE_BUTTER) {
         num3 = num - 20.0f;
         num4 = num2 + 63.0f;
-        particleEffect = ParticleEffect::ButterSplat;
+        particleEffect = ParticleEffect::PARTICLE_BUTTER_SPLAT;
         if (zombie != nullptr) {
             Zombie_ApplyButter(zombie);
         }
     }
-    if (particleEffect != ParticleEffect::None) {
+    if (particleEffect != ParticleEffect::PARTICLE_NONE) {
         if (zombie != nullptr) {
             int mZombieX = zombie->mX;
             int mZombieY = zombie->mY;
@@ -171,9 +171,9 @@ void Projectile_DoImpact(Projectile *projectile, Zombie *zombie) {
             if (mZombiePhase == ZombiePhase::PHASE_DOLPHIN_WALKING_IN_POOL || mZombiePhase == ZombiePhase::PHASE_SNORKEL_WALKING_IN_POOL) {
                 num6 += 60.0f;
             }
-            if (mMotionType == ProjectileMotion::Backwards) {
+            if (mMotionType == ProjectileMotion::MOTION_BACKWARDS) {
                 num5 -= 80.0f;
-            } else if (mPosX > mZombieX + 40 && mMotionType != ProjectileMotion::Lobbed) {
+            } else if (mPosX > mZombieX + 40 && mMotionType != ProjectileMotion::MOTION_LOBBED) {
                 num5 -= 60.0f;
             }
             if (num6 > 100.0f)
@@ -185,7 +185,7 @@ void Projectile_DoImpact(Projectile *projectile, Zombie *zombie) {
             LawnApp_AddTodParticle(lawnApp, num3, num4, aRenderOrder, particleEffect);
         }
     }
-    if (mMotionType == ProjectileMotion::Lobbed && zombie == nullptr) {
+    if (mMotionType == ProjectileMotion::MOTION_LOBBED && zombie == nullptr) {
         // 如果玩家开启了“子弹帧伤”,且子弹是抛物线轨迹
         Projectile_Die(projectile);
         return;
@@ -217,13 +217,13 @@ Zombie *Projectile_FindCollisionMindControlledTarget(Projectile *projectile) {
 void Projectile_CheckForCollision(Projectile *projectile) {
     // 修复豌豆僵尸的子弹无法击中魅惑僵尸、修复随即子弹飞出屏幕不自动消失导致闪退。
     ProjectileType mProjectileType = projectile->mProjectileType;
-    ProjectileMotion::ProjectileMotion mMotionType = projectile->mMotionType;
+    ProjectileMotion mMotionType = projectile->mMotionType;
     float mPosX = projectile->mPosX;
     float mPosY = projectile->mPosY;
     LawnApp *lawnApp = projectile->mApp;
     int mRenderOrder = projectile->mRenderOrder;
 
-    if (mMotionType == ProjectileMotion::Puff && projectile->mProjectileAge >= 75) {
+    if (mMotionType == ProjectileMotion::MOTION_PUFF && projectile->mProjectileAge >= 75) {
         Projectile_Die(projectile);
         return;
     }
@@ -231,7 +231,7 @@ void Projectile_CheckForCollision(Projectile *projectile) {
         Projectile_Die(projectile);
         return;
     }
-    if (mMotionType == ProjectileMotion::Homing) {
+    if (mMotionType == ProjectileMotion::MOTION_HOMING) {
         Zombie *zombie = Board_ZombieTryToGet(projectile->mBoard, projectile->mTargetZombieID);
         if (zombie != nullptr && Zombie_EffectedByDamage(zombie, projectile->mDamageRangeFlags)) {
             TRect projectileRect;
@@ -251,13 +251,13 @@ void Projectile_CheckForCollision(Projectile *projectile) {
     //        return;
     //    }
 
-    if (mMotionType == ProjectileMotion::Star && (mPosY > 600.0f || mPosY < 40.0f)) {
+    if (mMotionType == ProjectileMotion::MOTION_STAR && (mPosY > 600.0f || mPosY < 40.0f)) {
         // 将判断条件从mProjectileType改为mMotionType，从而修复随机杨桃子弹在Y方向出界后不消失导致的闪退
         Projectile_Die(projectile);
         return;
     }
 
-    if (projectile->mApp->mGameMode == GameMode::ChallengeHeavyWeapon && (mPosY > 600.0f || mPosY < 40.0f)) {
+    if (projectile->mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAVY_WEAPON && (mPosY > 600.0f || mPosY < 40.0f)) {
         // 添加一段逻辑，让重型武器中所有Y方向出界的子弹都会消失。无论子弹种类。
         Projectile_Die(projectile);
         return;
@@ -267,7 +267,7 @@ void Projectile_CheckForCollision(Projectile *projectile) {
     if ((mProjectileType == ProjectileType::PROJECTILE_PEA || mProjectileType == ProjectileType::PROJECTILE_STAR) && projectile->mShadowY - mPosY > 90.0f) {
         return;
     }
-    if (mMotionType == ProjectileMotion::FloatOver) {
+    if (mMotionType == ProjectileMotion::MOTION_FLOAT_OVER) {
         return;
     }
     if (mProjectileType == ProjectileType::PROJECTILE_ZOMBIE_PEA) {
@@ -277,7 +277,7 @@ void Projectile_CheckForCollision(Projectile *projectile) {
             plant->mPlantHealth -= mProjectileDamage;
             plant->mEatenFlashCountdown = plant->mEatenFlashCountdown > 25 ? plant->mEatenFlashCountdown : 25;
             LawnApp_PlayFoley(lawnApp, FoleyType::Splat);
-            LawnApp_AddTodParticle(lawnApp, mPosX - 3.0f, mPosY + 17.0f, mRenderOrder + 1, ParticleEffect::PeaSplat);
+            LawnApp_AddTodParticle(lawnApp, mPosX - 3.0f, mPosY + 17.0f, mRenderOrder + 1, ParticleEffect::PARTICLE_PEA_SPLAT);
             Projectile_Die(projectile);
             return;
         }
@@ -302,7 +302,7 @@ void Projectile_CheckForCollision(Projectile *projectile) {
             return;
         }
         Projectile_DoImpact(projectile, zombie);
-    } else if (lawnApp->mGameMode == GameMode::TwoPlayerVS) {
+    } else if (lawnApp->mGameMode == GameMode::GAMEMODE_TWO_PLAYER_VS) {
         GridItem *gridItem = Projectile_FindCollisionTargetGridItem(projectile);
         if (gridItem != nullptr) {
             Projectile_DoImpactGridItem(projectile, gridItem);

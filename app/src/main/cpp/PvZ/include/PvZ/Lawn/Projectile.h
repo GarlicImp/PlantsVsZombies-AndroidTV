@@ -32,7 +32,7 @@ public:
     bool mDead;                                     // 96
                                                     //    short mNewProjectileLastX; // 在对齐空隙新增成员，98 ~ 99
     int mAnimTicksPerFrame;                         // 25
-    ProjectileMotion::ProjectileMotion mMotionType; // 26
+    ProjectileMotion mMotionType; // 26
     ProjectileType mProjectileType; // 27
     int mProjectileAge;                             // 28
     int mClickBackoffCounter;                       // 29

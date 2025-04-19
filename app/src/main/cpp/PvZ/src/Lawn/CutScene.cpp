@@ -5,7 +5,7 @@
 
 void CutScene_ShowShovel(CutScene *cutScene) {
     LawnApp *lawnApp = cutScene->mApp;
-    if (lawnApp->mGameMode == GameMode::ChallengeButteredPopcorn) {
+    if (lawnApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_BUTTERED_POPCORN) {
         // 不绘制锤子铲子黄油按钮
         Board *board = cutScene->mBoard;
         board->mShowShovel = false;

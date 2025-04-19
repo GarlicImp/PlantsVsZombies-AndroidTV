@@ -90,8 +90,8 @@ void AlmanacDialog_MouseDown(AlmanacDialog *almanacDialog, int x, int y, int a4)
         mAlmanacDialogTouchDownY = y;
     }
 
-    SeedType::SeedType seedType = AlmanacDialog_SeedHitTest(almanacDialog, x, y);
-    if (seedType != SeedType::None && seedType != almanacDialog->mSelectedSeed) {
+    SeedType seedType = AlmanacDialog_SeedHitTest(almanacDialog, x, y);
+    if (seedType != SeedType::SEED_NONE && seedType != almanacDialog->mSelectedSeed) {
         almanacDialog->mSelectedSeed = seedType;
         AlmanacDialog_SetupPlant(almanacDialog);
         LawnApp_PlaySample(almanacDialog->mApp, *Sexy_SOUND_TAP_Addr);
@@ -173,17 +173,17 @@ void AlmanacDialog_DrawPlants_Unmodified(AlmanacDialog *almanacDialog, Sexy::Gra
     int theHeaderText[1];
     TodStringTranslate(theHeaderText, "[SUBURBAN_ALMANAC_PLANTS]");
     Color theHeaderColor = {213, 159, 43, 255};
-    TodDrawString(graphics, theHeaderText, 400, 50, *Sexy_FONT_HOUSEOFTERROR20_Addr, theHeaderColor, DrawStringJustification::Center);
+    TodDrawString(graphics, theHeaderText, 400, 50, *Sexy_FONT_HOUSEOFTERROR20_Addr, theHeaderColor, DrawStringJustification::DS_ALIGN_CENTER);
     Sexy_String_Delete(theHeaderText);
-    SeedType::SeedType mSelectedSeed = almanacDialog->mSelectedSeed;
+    SeedType mSelectedSeed = almanacDialog->mSelectedSeed;
     int theAlpha = std::sin((almanacDialog->mUpdateCnt % 100) * 0.01 * std::numbers::pi) * 255.0;
     int x, y;
-    for (int i = SeedType::Peashooter; i < SeedType::SeedsInChooserCount; ++i) {
+    for (int i = SeedType::SEED_PEASHOOTER; i < SeedType::NUM_SEEDS_IN_CHOOSER; ++i) {
         AlmanacDialog_GetSeedPosition(almanacDialog, i, &x, &y);
-        if (i == SeedType::Imitater) {
+        if (i == SeedType::SEED_IMITATER) {
             bool tmp = Sexy_Graphics_GetColorizeImages(graphics);
             Sexy_Graphics_SetColorizeImages(graphics, true);
-            if (mSelectedSeed == SeedType::Imitater) {
+            if (mSelectedSeed == SeedType::SEED_IMITATER) {
                 Color v39 = {255, 255, 0, theAlpha};
                 Sexy_Graphics_SetColor(graphics, &v39);
             } else {
@@ -196,7 +196,7 @@ void AlmanacDialog_DrawPlants_Unmodified(AlmanacDialog *almanacDialog, Sexy::Gra
         } else {
             if (mSelectedSeed == i) {
                 Sexy_Graphics_SetScale(graphics, 1.1, 1.1, x, y);
-                DrawSeedPacket(graphics, x - 2, y - 4, mSelectedSeed, SeedType::None, 0.0, 255, true, false, false, true);
+                DrawSeedPacket(graphics, x - 2, y - 4, mSelectedSeed, SeedType::SEED_NONE, 0.0, 255, true, false, false, true);
                 bool tmp = Sexy_Graphics_GetColorizeImages(graphics);
                 Sexy_Graphics_SetColorizeImages(graphics, true);
                 Color v39 = {255, 255, 0, theAlpha};
@@ -206,7 +206,7 @@ void AlmanacDialog_DrawPlants_Unmodified(AlmanacDialog *almanacDialog, Sexy::Gra
                 Sexy_Graphics_SetColorizeImages(graphics, tmp);
                 Sexy_Graphics_SetScale(graphics, 1.0, 1.0, 0.0, 0.0);
             } else {
-                DrawSeedPacket(graphics, x, y, (SeedType::SeedType)i, SeedType::None, 0.0, 255, true, false, false, true);
+                DrawSeedPacket(graphics, x, y, (SeedType)i, SeedType::SEED_NONE, 0.0, 255, true, false, false, true);
             }
         }
     }
@@ -231,9 +231,9 @@ void AlmanacDialog_DrawPlants_Unmodified(AlmanacDialog *almanacDialog, Sexy::Gra
                 Sexy_Graphics_ClearClipRect(graphics);
             }
         }
-    } else if (Plant_IsNocturnal(mSelectedSeed) || mSelectedSeed == SeedType::Gravebuster || mSelectedSeed == SeedType::Plantern) {
+    } else if (Plant_IsNocturnal(mSelectedSeed) || mSelectedSeed == SeedType::SEED_GRAVEBUSTER || mSelectedSeed == SeedType::SEED_PLANTERN) {
         Sexy_Graphics_DrawImage(graphics, *Sexy_IMAGE_ALMANAC_GROUNDNIGHT_Addr, mAlmanacPlantRectX, mAlmanacPlantRectY);
-    } else if (mSelectedSeed == SeedType::Flowerpot) {
+    } else if (mSelectedSeed == SeedType::SEED_FLOWERPOT) {
         Sexy_Graphics_DrawImage(graphics, *Sexy_IMAGE_ALMANAC_GROUNDROOF_Addr, mAlmanacPlantRectX, mAlmanacPlantRectY);
     } else {
         Sexy_Graphics_DrawImage(graphics, *Sexy_IMAGE_ALMANAC_GROUNDDAY_Addr, mAlmanacPlantRectX, mAlmanacPlantRectY);
@@ -252,11 +252,11 @@ void AlmanacDialog_DrawPlants_Unmodified(AlmanacDialog *almanacDialog, Sexy::Gra
     Sexy_Graphics_DrawImage(graphics, *Sexy_IMAGE_ALMANAC_PLANTCARD_Addr, 459, 80);
 
     Color color = {213, 159, 43, 255};
-    TodDrawString(graphics, (int *)&almanacDialog->mNameString, 617, 108, *Sexy_FONT_DWARVENTODCRAFT18_Addr, color, DrawStringJustification::Center);
+    TodDrawString(graphics, (int *)&almanacDialog->mNameString, 617, 108, *Sexy_FONT_DWARVENTODCRAFT18_Addr, color, DrawStringJustification::DS_ALIGN_CENTER);
 
-    if (mSelectedSeed != SeedType::Imitater) {
-        TodDrawStringWrapped(graphics, (int *)&almanacDialog->mCostString, &almanacDialog->mCostRect, *Sexy_FONT_BRIANNETOD16_Addr, &white, DrawStringJustification::Left, false);
-        TodDrawStringWrapped(graphics, (int *)&almanacDialog->mWaitTimeString, &almanacDialog->mWaitTimeRect, *Sexy_FONT_BRIANNETOD16_Addr, &white, DrawStringJustification::Right, false);
+    if (mSelectedSeed != SeedType::SEED_IMITATER) {
+        TodDrawStringWrapped(graphics, (int *)&almanacDialog->mCostString, &almanacDialog->mCostRect, *Sexy_FONT_BRIANNETOD16_Addr, &white, DrawStringJustification::DS_ALIGN_LEFT, false);
+        TodDrawStringWrapped(graphics, (int *)&almanacDialog->mWaitTimeString, &almanacDialog->mWaitTimeRect, *Sexy_FONT_BRIANNETOD16_Addr, &white, DrawStringJustification::DS_ALIGN_RIGHT, false);
     }
 
     Sexy_Graphics_PushState(graphics);
@@ -266,7 +266,7 @@ void AlmanacDialog_DrawPlants_Unmodified(AlmanacDialog *almanacDialog, Sexy::Gra
     *(float *)almanacDialog->unk2 = -v22;
     graphics->mTransY = v23;
     Color v39 = {143, 67, 27, 255};
-    TodDrawStringWrappedHelper(graphics, (int *)&almanacDialog->mDescriptionString, &almanacDialog->mDescriptionRect, *Sexy_FONT_BRIANNETOD16_Addr, v39, DrawStringJustification::Left, true, true);
+    TodDrawStringWrappedHelper(graphics, (int *)&almanacDialog->mDescriptionString, &almanacDialog->mDescriptionRect, *Sexy_FONT_BRIANNETOD16_Addr, v39, DrawStringJustification::DS_ALIGN_LEFT, true, true);
     Sexy_Graphics_PopState(graphics);
 }
 
@@ -274,7 +274,7 @@ void AlmanacDialog_DrawPlants(AlmanacDialog *almanacDialog, Sexy::Graphics *grap
     //    return old_AlmanacDialog_DrawPlants(almanacDialog,graphics);
     //   为泳池背景加入PoolEffect。此函数改变了原版绘制顺序，将背景图放在泳池的后面绘制
 
-    SeedType::SeedType mSelectedSeed = almanacDialog->mSelectedSeed;
+    SeedType mSelectedSeed = almanacDialog->mSelectedSeed;
     if (Plant_IsAquatic(mSelectedSeed)) {
         if (Plant_IsNocturnal(mSelectedSeed)) {
             Sexy_Graphics_DrawImage(graphics, *Sexy_IMAGE_ALMANAC_GROUNDNIGHTPOOL_Addr, mAlmanacPlantRectX, mAlmanacPlantRectY + 10);
@@ -295,9 +295,9 @@ void AlmanacDialog_DrawPlants(AlmanacDialog *almanacDialog, Sexy::Graphics *grap
                 //                Sexy_Graphics_ClearClipRect(graphics);
             }
         }
-    } else if (Plant_IsNocturnal(mSelectedSeed) || mSelectedSeed == SeedType::Gravebuster || mSelectedSeed == SeedType::Plantern) {
+    } else if (Plant_IsNocturnal(mSelectedSeed) || mSelectedSeed == SeedType::SEED_GRAVEBUSTER || mSelectedSeed == SeedType::SEED_PLANTERN) {
         Sexy_Graphics_DrawImage(graphics, *Sexy_IMAGE_ALMANAC_GROUNDNIGHT_Addr, mAlmanacPlantRectX, mAlmanacPlantRectY);
-    } else if (mSelectedSeed == SeedType::Flowerpot) {
+    } else if (mSelectedSeed == SeedType::SEED_FLOWERPOT) {
         Sexy_Graphics_DrawImage(graphics, *Sexy_IMAGE_ALMANAC_GROUNDROOF_Addr, mAlmanacPlantRectX + 10, mAlmanacPlantRectY + 12);
     } else {
         Sexy_Graphics_DrawImage(graphics, *Sexy_IMAGE_ALMANAC_GROUNDDAY_Addr, mAlmanacPlantRectX, mAlmanacPlantRectY);
@@ -307,17 +307,17 @@ void AlmanacDialog_DrawPlants(AlmanacDialog *almanacDialog, Sexy::Graphics *grap
     int theHeaderText[1];
     TodStringTranslate(theHeaderText, "[SUBURBAN_ALMANAC_PLANTS]");
     Color theHeaderColor = {213, 159, 43, 255};
-    TodDrawString(graphics, theHeaderText, 400, 50, *Sexy_FONT_HOUSEOFTERROR20_Addr, theHeaderColor, DrawStringJustification::Center);
+    TodDrawString(graphics, theHeaderText, 400, 50, *Sexy_FONT_HOUSEOFTERROR20_Addr, theHeaderColor, DrawStringJustification::DS_ALIGN_CENTER);
     Sexy_String_Delete(theHeaderText);
 
     int theAlpha = sin((almanacDialog->mUpdateCnt % 100) * 0.01 * std::numbers::pi) * 255.0;
     int x, y;
-    for (int i = SeedType::Peashooter; i < SeedType::SeedsInChooserCount; ++i) {
+    for (int i = SeedType::SEED_PEASHOOTER; i < SeedType::NUM_SEEDS_IN_CHOOSER; ++i) {
         AlmanacDialog_GetSeedPosition(almanacDialog, i, &x, &y);
-        if (i == SeedType::Imitater) {
+        if (i == SeedType::SEED_IMITATER) {
             bool tmp = Sexy_Graphics_GetColorizeImages(graphics);
             Sexy_Graphics_SetColorizeImages(graphics, true);
-            if (mSelectedSeed == SeedType::Imitater) {
+            if (mSelectedSeed == SeedType::SEED_IMITATER) {
                 Color v39 = {255, 255, 0, theAlpha};
                 Sexy_Graphics_SetColor(graphics, &v39);
             } else {
@@ -330,7 +330,7 @@ void AlmanacDialog_DrawPlants(AlmanacDialog *almanacDialog, Sexy::Graphics *grap
         } else {
             if (mSelectedSeed == i) {
                 Sexy_Graphics_SetScale(graphics, 1.1, 1.1, x, y);
-                DrawSeedPacket(graphics, x - 2, y - 4, mSelectedSeed, SeedType::None, 0.0, 255, true, false, false, true);
+                DrawSeedPacket(graphics, x - 2, y - 4, mSelectedSeed, SeedType::SEED_NONE, 0.0, 255, true, false, false, true);
                 bool tmp = Sexy_Graphics_GetColorizeImages(graphics);
                 Sexy_Graphics_SetColorizeImages(graphics, true);
                 Color v39 = {255, 255, 0, theAlpha};
@@ -340,7 +340,7 @@ void AlmanacDialog_DrawPlants(AlmanacDialog *almanacDialog, Sexy::Graphics *grap
                 Sexy_Graphics_SetColorizeImages(graphics, tmp);
                 Sexy_Graphics_SetScale(graphics, 1.0, 1.0, 0.0, 0.0);
             } else {
-                DrawSeedPacket(graphics, x, y, (SeedType::SeedType)i, SeedType::None, 0.0, 255, true, false, false, true);
+                DrawSeedPacket(graphics, x, y, (SeedType)i, SeedType::SEED_NONE, 0.0, 255, true, false, false, true);
             }
         }
     }
@@ -357,11 +357,11 @@ void AlmanacDialog_DrawPlants(AlmanacDialog *almanacDialog, Sexy::Graphics *grap
     Sexy_Graphics_DrawImage(graphics, *Sexy_IMAGE_ALMANAC_PLANTCARD_Addr, 459, 80);
 
     Color color = {213, 159, 43, 255};
-    TodDrawString(graphics, (int *)&almanacDialog->mNameString, 617, 108, *Sexy_FONT_DWARVENTODCRAFT18_Addr, color, DrawStringJustification::Center);
+    TodDrawString(graphics, (int *)&almanacDialog->mNameString, 617, 108, *Sexy_FONT_DWARVENTODCRAFT18_Addr, color, DrawStringJustification::DS_ALIGN_CENTER);
 
-    if (mSelectedSeed != SeedType::Imitater) {
-        TodDrawStringWrapped(graphics, (int *)&almanacDialog->mCostString, &almanacDialog->mCostRect, *Sexy_FONT_BRIANNETOD16_Addr, &white, DrawStringJustification::Left, false);
-        TodDrawStringWrapped(graphics, (int *)&almanacDialog->mWaitTimeString, &almanacDialog->mWaitTimeRect, *Sexy_FONT_BRIANNETOD16_Addr, &white, DrawStringJustification::Right, false);
+    if (mSelectedSeed != SeedType::SEED_IMITATER) {
+        TodDrawStringWrapped(graphics, (int *)&almanacDialog->mCostString, &almanacDialog->mCostRect, *Sexy_FONT_BRIANNETOD16_Addr, &white, DrawStringJustification::DS_ALIGN_LEFT, false);
+        TodDrawStringWrapped(graphics, (int *)&almanacDialog->mWaitTimeString, &almanacDialog->mWaitTimeRect, *Sexy_FONT_BRIANNETOD16_Addr, &white, DrawStringJustification::DS_ALIGN_RIGHT, false);
     }
 
     Sexy_Graphics_PushState(graphics);
@@ -371,7 +371,7 @@ void AlmanacDialog_DrawPlants(AlmanacDialog *almanacDialog, Sexy::Graphics *grap
     *(float *)almanacDialog->unk2 = -v22;
     graphics->mTransY = v23;
     Color v39 = {143, 67, 27, 255};
-    TodDrawStringWrappedHelper(graphics, (int *)&almanacDialog->mDescriptionString, &almanacDialog->mDescriptionRect, *Sexy_FONT_BRIANNETOD16_Addr, v39, DrawStringJustification::Left, true, true);
+    TodDrawStringWrappedHelper(graphics, (int *)&almanacDialog->mDescriptionString, &almanacDialog->mDescriptionRect, *Sexy_FONT_BRIANNETOD16_Addr, v39, DrawStringJustification::DS_ALIGN_LEFT, true, true);
     Sexy_Graphics_PopState(graphics);
 }
 

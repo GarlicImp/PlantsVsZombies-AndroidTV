@@ -91,7 +91,7 @@ inline int (*Sexy_Image_GetHeight)(Sexy::Image *);
 
 inline int (*Sexy_Image_GetCelHeight)(Sexy::Image *);
 
-inline float (*PlantDrawHeightOffset)(Board *, int, SeedType::SeedType, int, int);
+inline float (*PlantDrawHeightOffset)(Board *, int, SeedType, int, int);
 
 inline void (*TypingCheck_SetPhrase)(int *a1, int *a2);
 
@@ -195,12 +195,12 @@ inline int (*Mailbox_GetNumUnseenMessages)(int *);
 
 inline void (*LawnMower_StartMower)(int *);
 
-inline Sexy::Image *(*ReanimatorCache_MakeCachedPlantFrame)(ReanimatorCache *, SeedType::SeedType, DrawVariation::DrawVariation);
+inline Sexy::Image *(*ReanimatorCache_MakeCachedPlantFrame)(ReanimatorCache *, SeedType, DrawVariation);
 
 inline Sexy::MemoryImage *(*ReanimatorCache_MakeBlankCanvasImage)(ReanimatorCache *, int, int);
 
 inline void (*ReanimatorCache_DrawReanimatorFrame)(
-    ReanimatorCache *, Sexy::Graphics *g, float x, float y, ReanimationType reanimType, char *trackName, DrawVariation::DrawVariation variation);
+    ReanimatorCache *, Sexy::Graphics *g, float x, float y, ReanimationType reanimType, char *trackName, DrawVariation variation);
 
 inline TodAllocator *(*FindGlobalAllocator)(int aSize);
 
@@ -245,10 +245,10 @@ inline void (*old_LawnMower_Update)(int *lawnMover);
 
 inline void (*old_ReanimatorCache_LoadCachedImages)(ReanimatorCache *a1);
 
-inline void (*old_ReanimatorCache_UpdateReanimationForVariation)(ReanimatorCache *a1, Reanimation *a, DrawVariation::DrawVariation theDrawVariation);
+inline void (*old_ReanimatorCache_UpdateReanimationForVariation)(ReanimatorCache *a1, Reanimation *a, DrawVariation theDrawVariation);
 
 inline void (*old_ReanimatorCache_DrawCachedPlant)(
-    ReanimatorCache *a1, Sexy::Graphics *graphics, float thePosX, float thePosY, SeedType::SeedType theSeedType, DrawVariation::DrawVariation drawVariation);
+    ReanimatorCache *a1, Sexy::Graphics *graphics, float thePosX, float thePosY, SeedType theSeedType, DrawVariation drawVariation);
 
 inline Sexy::Image *(*old_ReanimatorCache_MakeCachedZombieFrame)(ReanimatorCache *reanimatorCache, ZombieType zombieType);
 
@@ -266,7 +266,7 @@ inline void (*old_MessageWidget_Draw)(CustomMessageWidget *messageWidget, Sexy::
 
 inline void (*old_MessageWidget_ClearLabel)(CustomMessageWidget *messageWidget);
 
-inline void (*old_MessageWidget_SetLabel)(CustomMessageWidget *messageWidget, int *label, MessageStyle::MessageStyle theStyle);
+inline void (*old_MessageWidget_SetLabel)(CustomMessageWidget *messageWidget, int *label, MessageStyle theStyle);
 
 inline void (*old_MessageWidget_Update)(CustomMessageWidget *messageWidget);
 
@@ -282,8 +282,8 @@ int randomInt(int a, int b);
 void DrawSeedPacket(Sexy::Graphics *graphics,
                     float x,
                     float y,
-                    SeedType::SeedType seedType,
-                    SeedType::SeedType imitaterType,
+                    SeedType seedType,
+                    SeedType imitaterType,
                     float coolDownPercent,
                     int grayness,
                     bool drawCostText,
@@ -291,9 +291,9 @@ void DrawSeedPacket(Sexy::Graphics *graphics,
                     bool isZombieSeed,
                     bool a11);
 
-void ReanimatorCache_DrawCachedPlant(ReanimatorCache *a1, Sexy::Graphics *graphics, float thePosX, float thePosY, SeedType::SeedType theSeedType, DrawVariation::DrawVariation theDrawVariation);
+void ReanimatorCache_DrawCachedPlant(ReanimatorCache *a1, Sexy::Graphics *graphics, float thePosX, float thePosY, SeedType theSeedType, DrawVariation theDrawVariation);
 
-void DrawSeedType(Sexy::Graphics *graphics, float x, float y, SeedType::SeedType theSeedType, SeedType::SeedType theImitaterType, float xOffset, float yOffset, float scale);
+void DrawSeedType(Sexy::Graphics *graphics, float x, float y, SeedType theSeedType, SeedType theImitaterType, float xOffset, float yOffset, float scale);
 
 void LawnMower_Update(int *lawnMover);
 
@@ -345,7 +345,7 @@ void CreditScreen_ButtonDepress(Sexy::Widget *creditScreen, int id);
 
 void MessageWidget_ClearLabel(CustomMessageWidget *messageWidget);
 
-void MessageWidget_SetLabel(CustomMessageWidget *messageWidget, int *label, MessageStyle::MessageStyle theStyle);
+void MessageWidget_SetLabel(CustomMessageWidget *messageWidget, int *label, MessageStyle theStyle);
 
 void MessageWidget_Update(CustomMessageWidget *messageWidget);
 

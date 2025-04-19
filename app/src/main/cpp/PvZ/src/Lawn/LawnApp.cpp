@@ -115,14 +115,14 @@ int LawnApp_GetSoundByFileName(LawnApp *lawnApp, const char *fileName) {
 
 void LawnApp_DoConfirmBackToMain(LawnApp *lawnApp, bool save) {
     // 实现在花园直接退出而不是弹窗退出；同时实现新版暂停菜单
-    GameMode::GameMode gameMode = lawnApp->mGameMode;
+    GameMode gameMode = lawnApp->mGameMode;
     if (gameMode == GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN) {
         lawnApp->mBoardResult = BoardResult::BOARDRESULT_QUIT;
         //        if (save) Board_TryToSaveGame(lawnApp->mBoard);
         LawnApp_DoBackToMain(lawnApp);
         return;
     }
-    if ((gameMode == GameMode::TwoPlayerVS || gameMode == GameMode::GAMEMODE_TREE_OF_WISDOM || enableNewOptionsDialog) && Sexy_SexyAppBase_GetDialog(lawnApp, Dialogs::DIALOG_NEWOPTIONS) == nullptr) {
+    if ((gameMode == GameMode::GAMEMODE_TWO_PLAYER_VS || gameMode == GameMode::GAMEMODE_TREE_OF_WISDOM || enableNewOptionsDialog) && Sexy_SexyAppBase_GetDialog(lawnApp, Dialogs::DIALOG_NEWOPTIONS) == nullptr) {
         LawnApp_DoNewOptions(lawnApp, false, 0);
         return;
     }
@@ -191,13 +191,13 @@ bool LawnApp_CanShopLevel(LawnApp *lawnApp) {
     // 决定是否在当前关卡显示道具栏
     if (disableShop)
         return false;
-    if (lawnApp->mGameMode == GameMode::TwoPlayerVS || LawnApp_IsCoopMode(lawnApp))
+    if (lawnApp->mGameMode == GameMode::GAMEMODE_TWO_PLAYER_VS || LawnApp_IsCoopMode(lawnApp))
         return false;
     return old_LawnApp_CanShopLevel(lawnApp);
 }
 
-void LawnApp_KillDialog(LawnApp *lawnApp, Dialogs::Dialogs id) {
-    (*(void (**)(LawnApp *, Dialogs::Dialogs))(*(uint32_t *)lawnApp + 428))(lawnApp, id); // KillDialog(Dialogs::DIALOG_HELPOPTIONS)
+void LawnApp_KillDialog(LawnApp *lawnApp, Dialogs id) {
+    (*(void (**)(LawnApp *, Dialogs))(*(uint32_t *)lawnApp + 428))(lawnApp, id); // KillDialog(Dialogs::DIALOG_HELPOPTIONS)
 }
 
 void LawnApp_ShowCreditScreen(LawnApp *lawnApp, bool isFromMainMenu) {
@@ -303,16 +303,16 @@ void LawnApp_LoadingThreadProc(LawnApp *lawnApp) {
     //    LawnApp_Load(lawnApp,"DelayLoad_Background6");
 
     if (showHouse) {
-        ReanimatorEnsureDefinitionLoaded(ReanimationType::LeaderboardsHouse, true);
+        ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_LEADERBOARDS_HOUSE, true);
         lawnApp->mCompletedLoadingThreadTasks += 136;
     }
-    ReanimatorEnsureDefinitionLoaded(ReanimationType::ZombatarHead, true);
+    ReanimatorEnsureDefinitionLoaded(ReanimationType::REANIM_ZOMBATAR_HEAD, true);
     lawnApp->mCompletedLoadingThreadTasks += 136;
 }
 
 bool LawnApp_IsChallengeWithoutSeedBank(LawnApp *lawnApp) {
     // 黄油爆米花专用
-    return lawnApp->mGameMode == GameMode::ChallengeButteredPopcorn || old_LawnApp_IsChallengeWithoutSeedBank(lawnApp);
+    return lawnApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_BUTTERED_POPCORN || old_LawnApp_IsChallengeWithoutSeedBank(lawnApp);
 }
 
 int LawnApp_GetSeedsAvailable(LawnApp *lawnApp, int isZombieChooser) {
@@ -335,7 +335,7 @@ void LawnApp_HardwareInit(LawnApp *lawnApp) {
 int LawnApp_GetNumPreloadingTasks(LawnApp *lawnApp) {
     int oldResult = old_LawnApp_GetNumPreloadingTasks(lawnApp);
 
-    int addonReanimsNum = (ReanimationType::NUM_REANIMS - ReanimationType::ZombatarHead) + (showHouse ? 1 : 0);
+    int addonReanimsNum = (ReanimationType::NUM_REANIMS - ReanimationType::REANIM_ZOMBATAR_HEAD) + (showHouse ? 1 : 0);
     int addonSoundsNum = (sizeof(addonSounds) / sizeof(int));
     int addonImagesNum = (sizeof(AddonImages) / sizeof(Sexy::Image *));
 
@@ -354,7 +354,7 @@ bool LawnApp_GrantAchievement(LawnApp *lawnApp, AchievementId::AchievementId the
         //    int holder[1];
         //    Sexy_StrFormat(holder,"一二三四五六 成就达成！");
         //    ((CustomMessageWidget*)board->mAdvice)->mIcon = GetIconByAchievementId(theAchievementId);
-        //    Board_DisplayAdviceAgain(board, holder, MessageStyle::Achievement, AdviceType::ADVICE_NEED_ACHIVEMENT_EARNED);
+        //    Board_DisplayAdviceAgain(board, holder, a::MESSAGE_STYLE_ACHIEVEMENT, AdviceType::ADVICE_NEED_ACHIVEMENT_EARNED);
         //    Sexy_String_Delete(holder);
         playerInfo->mAchievements[theAchievementId] = true;
         return true;
@@ -459,7 +459,7 @@ void LawnApp_SetHouseReanim(LawnApp *lawnApp, Reanimation *houseAnimation) {
         }
     }
 
-    Reanimation_PlayReanim(houseAnimation, houseControl[currentHouseLevel], ReanimLoopType::Loop, 0, 12.0f);
+    Reanimation_PlayReanim(houseAnimation, houseControl[currentHouseLevel], ReanimLoopType::REANIM_LOOP, 0, 12.0f);
 
     for (int i = 0; i < 5; ++i) {
         Reanimation_HideTrackByPrefix(houseAnimation, housePrefix[i], i != currentHouseType);

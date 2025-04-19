@@ -11,7 +11,7 @@ public:
     Sexy::GameButton *mViewZombieButton;                                     // 194
     Sexy::CustomScrollbarWidget *mScrollTextView;                            // 195
     int mOpenPage;                                                           // 196
-    SeedType::SeedType mSelectedSeed;                                        // 197
+    SeedType mSelectedSeed;                                        // 197
     ZombieType mSelectedZombie;                                  // 198
     Plant *mPlant;                                                           // 199
     Zombie *mZombie;                                                         // 200
@@ -26,8 +26,8 @@ public:
     char *mDescriptionString;                                                // 222
     char *mCostString;                                                       // 223
     char *mWaitTimeString;                                                   // 224
-    DrawStringJustification::DrawStringJustification mWaitTimeJustification; // 225
-    DrawStringJustification::DrawStringJustification mJustification;         // 226
+    DrawStringJustification mWaitTimeJustification; // 225
+    DrawStringJustification mJustification;         // 226
     bool mSetupFinished;                                                     // 227 * 4
     double unk3;                                                             // 228 ~ 229
     int *mHelpBarWidget;                                                     // 230
@@ -36,7 +36,7 @@ public:
 
 inline bool (*AlmanacDialog_KeyDown)(AlmanacDialog *, int);
 
-inline SeedType::SeedType (*AlmanacDialog_SeedHitTest)(AlmanacDialog *, int, int);
+inline SeedType (*AlmanacDialog_SeedHitTest)(AlmanacDialog *, int, int);
 
 inline ZombieType (*AlmanacDialog_ZombieHitTest)(AlmanacDialog *, int, int);
 

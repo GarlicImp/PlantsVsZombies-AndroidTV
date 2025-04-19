@@ -221,7 +221,7 @@ inline void InitInGameFunction() {
     Plant_UpdateAbilities = (decltype(Plant_UpdateAbilities))Plant_UpdateAbilitiesAddr;
     Plant_Animate = (decltype(Plant_Animate))Plant_AnimateAddr;
     Plant_UpdateReanim = (decltype(Plant_UpdateReanim))Plant_UpdateReanimAddr;
-    //    Plant_DrawSeedType = (void (*)(int *, SeedType::SeedType, SeedType::SeedType, DrawVariation::DrawVariation, float,float)) Plant_DrawSeedTypeAddr;
+    //    Plant_DrawSeedType = (void (*)(int *, a::a, a::a, DrawVariation::DrawVariation, float,float)) Plant_DrawSeedTypeAddr;
     Plant_IsFlying = (decltype(Plant_IsFlying))Plant_IsFlyingAddr;
     Plant_IsNocturnal = (decltype(Plant_IsNocturnal))Plant_IsNocturnalAddr;
     Plant_IsAquatic = (decltype(Plant_IsAquatic))Plant_IsAquaticAddr;
@@ -232,7 +232,7 @@ inline void InitInGameFunction() {
     Plant_DrawMagnetItemsOnTop = (decltype(Plant_DrawMagnetItemsOnTop))Plant_DrawMagnetItemsOnTopAddr;
     Plant_DrawMagnetItems = (decltype(Plant_DrawMagnetItems))Plant_DrawMagnetItemsAddr;
     GetPlantDefinition = (decltype(GetPlantDefinition))GetPlantDefinitionAddr;
-    //    Plant_GetCost = (int (*)(SeedType::SeedType, SeedType::SeedType)) Plant_GetCostAddr;
+    //    Plant_GetCost = (int (*)(a::a, a::a)) Plant_GetCostAddr;
 //    Plant_Die = (decltype(Plant_Die))Plant_DieAddr;
 
 
@@ -315,7 +315,7 @@ inline void InitInGameFunction() {
     StoreScreen_IsItemUnavailable = (decltype(StoreScreen_IsItemUnavailable))StoreScreen_IsItemUnavailableAddr;
     StoreScreen_IsComingSoon = (decltype(StoreScreen_IsComingSoon))StoreScreen_IsComingSoonAddr;
     StoreScreen_IsPottedPlant = (decltype(StoreScreen_IsPottedPlant))StoreScreen_IsPottedPlantAddr;
-    //    StoreScreen_PurchaseItem = (void (*)(int *, StoreItem::StoreItem)) StoreScreen_PurchaseItemAddr;
+    //    StoreScreen_PurchaseItem = (void (*)(int *, a::a)) StoreScreen_PurchaseItemAddr;
     StoreScreen_IsPageShown = (decltype(StoreScreen_IsPageShown))StoreScreen_IsPageShownAddr;
     StoreScreen_EnableButtons = (decltype(StoreScreen_EnableButtons))StoreScreen_EnableButtonsAddr;
 
@@ -378,7 +378,7 @@ inline void InitInGameFunction() {
     Challenge_IsMPSeedType = (decltype(Challenge_IsMPSeedType))Challenge_IsMPSeedTypeAddr;
     Challenge_IsMPSuddenDeath = (decltype(Challenge_IsMPSuddenDeath))Challenge_IsMPSuddenDeathAddr;
     Challenge_InitZombieWavesFromList = (decltype(Challenge_InitZombieWavesFromList))Challenge_InitZombieWavesFromListAddr;
-    // Challenge_IZombieSeedTypeToZombieType = (ZombieType (*)(SeedType::SeedType)) Challenge_IZombieSeedTypeToZombieTypeAddr;
+    // Challenge_IZombieSeedTypeToZombieType = (ZombieType (*)(a::a)) Challenge_IZombieSeedTypeToZombieTypeAddr;
     Challenge_ScaryPotterCountSunInPot = (decltype(Challenge_ScaryPotterCountSunInPot))Challenge_ScaryPotterCountSunInPotAddr;
     Challenge_IZombieSetupPlant = (decltype(Challenge_IZombieSetupPlant))Challenge_IZombieSetupPlantAddr;
     Challenge_IZombiePlaceZombie = (decltype(Challenge_IZombiePlaceZombie))Challenge_IZombiePlaceZombieAddr;

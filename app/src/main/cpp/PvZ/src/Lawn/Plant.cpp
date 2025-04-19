@@ -14,7 +14,7 @@
 
 #include <algorithm>
 
-void Plant_DrawSeedType(Sexy::Graphics *graphics, SeedType::SeedType theSeedType, SeedType::SeedType theImitaterType, DrawVariation::DrawVariation drawVariation, float thePosX, float thePosY) {
+void Plant_DrawSeedType(Sexy::Graphics *graphics, SeedType theSeedType, SeedType theImitaterType, DrawVariation drawVariation, float thePosX, float thePosY) {
     // 用于绘制卡槽内的模仿者SeedPacket变白效果、模仿者变身后的植物被压扁的白色效果、模仿者变身前被压扁后绘制模仿者自己而非变身后的植物。
     int v38 = ((int *)graphics)[9];
     int v10 = ((int *)graphics)[8];
@@ -36,29 +36,29 @@ void Plant_DrawSeedType(Sexy::Graphics *graphics, SeedType::SeedType theSeedType
     color.mBlue = v19;
     color.mAlpha = v20;
     bool ColorizeImages = Sexy_Graphics_GetColorizeImages(graphics);
-    SeedType::SeedType theSeedType2 = theSeedType;
+    SeedType theSeedType2 = theSeedType;
 
-    if ((theSeedType == theImitaterType && theImitaterType != SeedType::None) ||    // seedPacket中的灰色模仿者卡片在冷却完成后
-        (theImitaterType == SeedType::Imitater && theSeedType != SeedType::None)) { // 模仿者变身之后的植物被压扁
+    if ((theSeedType == theImitaterType && theImitaterType != SeedType::SEED_NONE) ||    // seedPacket中的灰色模仿者卡片在冷却完成后
+        (theImitaterType == SeedType::SEED_IMITATER && theSeedType != SeedType::SEED_NONE)) { // 模仿者变身之后的植物被压扁
         switch (theSeedType2) {
-            case SeedType::Potatomine:
-            case SeedType::Hypnoshroom:
-            case SeedType::Lilypad:
+            case SeedType::SEED_POTATOMINE:
+            case SeedType::SEED_HYPNOSHROOM:
+            case SeedType::SEED_LILYPAD:
             case SeedType::SEED_SQUASH:
-            case SeedType::Garlic:
-                drawVariation = DrawVariation::ImitaterLess;
+            case SeedType::SEED_GARLIC:
+                drawVariation = DrawVariation::VARIATION_IMITATER_LESS;
                 break;
-            case SeedType::Imitater:
-                drawVariation = DrawVariation::Normal;
+            case SeedType::SEED_IMITATER:
+                drawVariation = DrawVariation::VARIATION_NORMAL;
                 break;
             default:
-                drawVariation = DrawVariation::Imitater;
+                drawVariation = DrawVariation::VARIATION_IMITATER;
                 break;
         }
     }
     LawnApp *lawnApp = (LawnApp *)*gLawnApp_Addr;
     float v24, v25;
-    if (lawnApp->mGameMode == GameMode::ChallengeBigTime && (theSeedType2 == SeedType::Sunflower || theSeedType2 == SeedType::Wallnut || theSeedType2 == SeedType::Marigold)) {
+    if (lawnApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_BIG_TIME && (theSeedType2 == SeedType::SEED_SUNFLOWER || theSeedType2 == SeedType::SEED_WALLNUT || theSeedType2 == SeedType::SEED_MARIGOLD)) {
         v24 = -40.0;
         v25 = -20.0;
         graphics->mScaleX = graphics->mScaleX * 1.5;
@@ -67,7 +67,7 @@ void Plant_DrawSeedType(Sexy::Graphics *graphics, SeedType::SeedType theSeedType
         v24 = 0.0;
         v25 = 0.0;
     }
-    if (theSeedType2 == SeedType::Leftpeater) {
+    if (theSeedType2 == SeedType::SEED_LEFTPEATER) {
         v25 = v25 + graphics->mScaleX * 80.0;
         graphics->mScaleX = -graphics->mScaleX;
     }
@@ -79,16 +79,16 @@ void Plant_DrawSeedType(Sexy::Graphics *graphics, SeedType::SeedType theSeedType
         return;
     } else {
         PlantDefinition plantDefinition = GetPlantDefinition(theSeedType2);
-        if (theSeedType2 == SeedType::GiantWallnut) {
+        if (theSeedType2 == SeedType::SEED_GIANT_WALLNUT) {
             graphics->mScaleX = graphics->mScaleX * 1.4;
             graphics->mScaleY = graphics->mScaleY * 1.4;
             TodDrawImageScaledF(graphics, *Sexy_IMAGE_REANIM_WALLNUT_BODY_Addr, thePosX - 53.0, thePosY - 56.0, graphics->mScaleX, graphics->mScaleY);
         } else if (plantDefinition.mReanimationType == -1) {
             int v29;
-            if (theSeedType2 == SeedType::Kernelpult)
+            if (theSeedType2 == SeedType::SEED_KERNELPULT)
                 v29 = 2;
             else
-                v29 = theSeedType2 == SeedType::Twinsunflower;
+                v29 = theSeedType2 == SeedType::SEED_TWINSUNFLOWER;
 
             Sexy::Image *Image = Plant_GetImage(theSeedType2);
             int v31 = Image->mNumCols;
@@ -134,10 +134,10 @@ void Plant::Draw(Sexy::Graphics *g) {
     int theCelCol = mFrame;
     Sexy::Image *image = Plant_GetImage(mSeedType);
     if (mSquished) {
-        if (mSeedType == SeedType::Flowerpot) {
+        if (mSeedType == SeedType::SEED_FLOWERPOT) {
             num2 -= 15.0f;
         }
-        if (mSeedType == SeedType::InstantCoffee) {
+        if (mSeedType == SeedType::SEED_INSTANT_COFFEE) {
             num2 -= 20.0f;
         }
         float ratioSquished = 0.5f;
@@ -145,7 +145,7 @@ void Plant::Draw(Sexy::Graphics *g) {
         Sexy_Graphics_SetColorizeImages(g, true);
         Color color = {255, 255, 255, (int)(255.0f * std::min(1.0f, mDisappearCountdown / 100.0f))};
         Sexy_Graphics_SetColor(g, &color);
-        Plant_DrawSeedType(g, mSeedType, mImitaterType, DrawVariation::Normal, num, num2 + 85.0f * (1 - ratioSquished));
+        Plant_DrawSeedType(g, mSeedType, mImitaterType, DrawVariation::VARIATION_NORMAL, num, num2 + 85.0f * (1 - ratioSquished));
         Sexy_Graphics_SetScale(g, 1.0f, 1.0f, 0.0f, 0.0f);
         Sexy_Graphics_SetColorizeImages(g, false);
         return;
@@ -155,7 +155,7 @@ void Plant::Draw(Sexy::Graphics *g) {
     if (IsOnBoard()) {
         thePlant = Board_GetPumpkinAt(mBoard, mPlantCol, mRow);
         if (thePlant != nullptr) {
-            Plant *plant2 = Board_GetTopPlantAt(mBoard, mPlantCol, mRow, TopPlant::OnlyNormalPosition);
+            Plant *plant2 = Board_GetTopPlantAt(mBoard, mPlantCol, mRow, PlantPriority::TOPPLANT_ONLY_NORMAL_POSITION);
             if (plant2 != nullptr && plant2->mRenderOrder > thePlant->mRenderOrder) {
                 plant2 = nullptr;
             }
@@ -165,14 +165,14 @@ void Plant::Draw(Sexy::Graphics *g) {
             if (plant2 == this) {
                 flag = true;
             }
-            if (plant2 == nullptr && mSeedType == SeedType::Pumpkinshell) {
+            if (plant2 == nullptr && mSeedType == SeedType::SEED_PUMPKINSHELL) {
                 flag = true;
             }
-        } else if (mSeedType == SeedType::Pumpkinshell) {
+        } else if (mSeedType == SeedType::SEED_PUMPKINSHELL) {
             flag = true;
             thePlant = this;
         }
-    } else if (mSeedType == SeedType::Pumpkinshell) {
+    } else if (mSeedType == SeedType::SEED_PUMPKINSHELL) {
         flag = true;
         thePlant = this;
     }
@@ -219,25 +219,25 @@ void Plant::Draw(Sexy::Graphics *g) {
             //            }
         }
     } else {
-        SeedType::SeedType seedType = SeedType::None;
-        SeedType::SeedType seedType2 = SeedType::None;
+        SeedType seedType = SeedType::SEED_NONE;
+        SeedType seedType2 = SeedType::SEED_NONE;
         if (mBoard != nullptr) {
             seedType = Board_GetSeedTypeInCursor(mBoard, 0);
             seedType2 = Board_GetSeedTypeInCursor(mBoard, 1);
         }
-        if ((Plant_IsPartOfUpgradableTo(this, seedType) && Board_CanPlantAt(mBoard, mPlantCol, mRow, seedType) == PlantingReason::Ok)
-            || (Plant_IsPartOfUpgradableTo(this, seedType2) && Board_CanPlantAt(mBoard, mPlantCol, mRow, seedType2) == PlantingReason::Ok)) {
+        if ((Plant_IsPartOfUpgradableTo(this, seedType) && Board_CanPlantAt(mBoard, mPlantCol, mRow, seedType) == PlantingReason::PLANTING_OK)
+            || (Plant_IsPartOfUpgradableTo(this, seedType2) && Board_CanPlantAt(mBoard, mPlantCol, mRow, seedType2) == PlantingReason::PLANTING_OK)) {
             Sexy_Graphics_SetColorizeImages(g, true);
             Color color;
             GetFlashingColor(&color, mBoard->mMainCounter, 90);
             Sexy_Graphics_SetColor(g, &color);
-        } else if ((seedType == SeedType::Cobcannon && Board_CanPlantAt(mBoard, mPlantCol - 1, mRow, seedType) == PlantingReason::Ok)
-                   || (seedType2 == SeedType::Cobcannon && Board_CanPlantAt(mBoard, mPlantCol - 1, mRow, seedType2) == PlantingReason::Ok)) {
+        } else if ((seedType == SeedType::SEED_COBCANNON && Board_CanPlantAt(mBoard, mPlantCol - 1, mRow, seedType) == PlantingReason::PLANTING_OK)
+                   || (seedType2 == SeedType::SEED_COBCANNON && Board_CanPlantAt(mBoard, mPlantCol - 1, mRow, seedType2) == PlantingReason::PLANTING_OK)) {
             Sexy_Graphics_SetColorizeImages(g, true);
             Color color;
             GetFlashingColor(&color, mBoard->mMainCounter, 90);
             Sexy_Graphics_SetColor(g, &color);
-        } else if (mBoard != nullptr && mBoard->mTutorialState == TutorialState::ShovelDig) {
+        } else if (mBoard != nullptr && mBoard->mTutorialState == TutorialState::TUTORIAL_SHOVEL_DIG) {
             Sexy_Graphics_SetColorizeImages(g, true);
             Color color;
             GetFlashingColor(&color, mBoard->mMainCounter, 90);
@@ -246,7 +246,7 @@ void Plant::Draw(Sexy::Graphics *g) {
         if (image != nullptr) {
             TodDrawImageCelF(g, image, num, num2, theCelCol, theCelRow);
         }
-        //        if (mSeedType == SeedType::Sprout)
+        //        if (mSeedType == a::Sprout)
         //        {
         //            if (plant->mGloveGrabbed)
         //            {
@@ -284,28 +284,28 @@ void Plant::Draw(Sexy::Graphics *g) {
             Sexy_Graphics_SetColorizeImages(g, false);
         }
     }
-    if (mSeedType == SeedType::Magnetshroom && !Plant_DrawMagnetItemsOnTop(this)) {
+    if (mSeedType == SeedType::SEED_MAGNETSHROOM && !Plant_DrawMagnetItemsOnTop(this)) {
         Plant_DrawMagnetItems(this, g);
     }
 
 
     if (showPlantHealth
         || (showNutGarlicSpikeHealth
-            && (mSeedType == SeedType::Wallnut || mSeedType == SeedType::Tallnut || mSeedType == SeedType::Pumpkinshell || mSeedType == SeedType::Garlic
-                || mSeedType == SeedType::Spikerock))) { // 如果玩家开了 植物显血
+            && (mSeedType == SeedType::SEED_WALLNUT || mSeedType == SeedType::SEED_TALLNUT || mSeedType == SeedType::SEED_PUMPKINSHELL || mSeedType == SeedType::SEED_GARLIC
+                || mSeedType == SeedType::SEED_SPIKEROCK))) { // 如果玩家开了 植物显血
         int holder[1];
         Sexy_StrFormat(holder, "%d/%d", mPlantHealth, mPlantMaxHealth);
         Sexy_Graphics_SetFont(g, *Sexy_FONT_DWARVENTODCRAFT12_Addr);
-        if (mSeedType == SeedType::Pumpkinshell) {
+        if (mSeedType == SeedType::SEED_PUMPKINSHELL) {
             Sexy_Graphics_SetColor(g, &yellow);
             Sexy_Graphics_DrawString(g, holder, 0, 52);
-        } else if (mSeedType == SeedType::Flowerpot) {
+        } else if (mSeedType == SeedType::SEED_FLOWERPOT) {
             Sexy_Graphics_SetColor(g, &brown);
             Sexy_Graphics_DrawString(g, holder, 0, 93);
-        } else if (mSeedType == SeedType::Lilypad) {
+        } else if (mSeedType == SeedType::SEED_LILYPAD) {
             Sexy_Graphics_SetColor(g, &green);
             Sexy_Graphics_DrawString(g, holder, 0, 100);
-        } else if (mSeedType == SeedType::Cobcannon) {
+        } else if (mSeedType == SeedType::SEED_COBCANNON) {
             Sexy_Graphics_SetColor(g, &white);
             Sexy_Graphics_DrawString(g, holder, 40, 34);
         } else {
@@ -317,40 +317,40 @@ void Plant::Draw(Sexy::Graphics *g) {
     }
 }
 
-int Plant::GetRefreshTime(SeedType::SeedType theSeedType, SeedType::SeedType theImitaterType) {
+int Plant::GetRefreshTime(SeedType theSeedType, SeedType theImitaterType) {
     if (seedPacketFastCoolDown) {
         return 0;
     }
     LawnApp *lawnApp = (LawnApp *)*gLawnApp_Addr;
-    if (lawnApp->mGameMode == GameMode::TwoPlayerVS) {
+    if (lawnApp->mGameMode == GameMode::GAMEMODE_TWO_PLAYER_VS) {
         int refreshTime;
-        if (theSeedType == SeedType::Imitater && theImitaterType != SeedType::None) {
+        if (theSeedType == SeedType::SEED_IMITATER && theImitaterType != SeedType::SEED_NONE) {
             theSeedType = theImitaterType;
         }
         if (Challenge_IsMPSeedType(theSeedType)) {
             switch (theSeedType) {
-                case SeedType::ZombieTrashBin:
-                case SeedType::ZombieTrafficCone:
-                case SeedType::ZombiePolevaulter:
-                case SeedType::ZombiePail:
-                case SeedType::ZombieFlag:
-                case SeedType::ZombieFootball:
-                case SeedType::ZombieDancer:
-                case SeedType::ZombieJackInTheBox:
-                case SeedType::ZombieDigger:
-                case SeedType::ZombieBungee:
-                case SeedType::ZombieLadder:
-                case SeedType::ZombieBalloon:
+                case SeedType::SEED_ZOMBIE_TRASH_BIN:
+                case SeedType::SEED_ZOMBIE_TRAFFIC_CONE:
+                case SeedType::SEED_ZOMBIE_POLEVAULTER:
+                case SeedType::SEED_ZOMBIE_PAIL:
+                case SeedType::SEED_ZOMBIE_FLAG:
+                case SeedType::SEED_ZOMBIE_FOOTBALL:
+                case SeedType::SEED_ZOMBIE_DANCER:
+                case SeedType::SEED_ZOMBIE_JACK_IN_THE_BOX:
+                case SeedType::SEED_ZOMBIE_DIGGER:
+                case SeedType::SEED_ZOMBIE_BUNGEE:
+                case SeedType::SEED_ZOMBIE_LADDER:
+                case SeedType::SEED_ZOMBIE_BALLOON:
                     refreshTime = 3000;
                     break;
-                case SeedType::ZombieNewsPaper:
-                case SeedType::ZombieScreenDoor:
+                case SeedType::SEED_ZOMBIE_NEWSPAPER:
+                case SeedType::SEED_ZOMBIE_SCREEN_DOOR:
                     refreshTime = 1500;
                     break;
-                case SeedType::Zomboni:
-                case SeedType::ZombiePogo:
-                case SeedType::ZombieCatapult:
-                case SeedType::ZombieGargantuar:
+                case SeedType::SEED_ZOMBONI:
+                case SeedType::SEED_ZOMBIE_POGO:
+                case SeedType::SEED_ZOMBIE_CATAPULT:
+                case SeedType::SEED_ZOMBIE_GARGANTUAR:
                     refreshTime = 6000;
                     break;
                 default:
@@ -359,19 +359,19 @@ int Plant::GetRefreshTime(SeedType::SeedType theSeedType, SeedType::SeedType the
             }
         } else {
             switch (theSeedType) {
-                case SeedType::Cherrybomb:
-                case SeedType::Iceshroom:
-                case SeedType::Doomshroom:
-                case SeedType::Jalapeno:
+                case SeedType::SEED_CHERRYBOMB:
+                case SeedType::SEED_ICESHROOM:
+                case SeedType::SEED_DOOMSHROOM:
+                case SeedType::SEED_JALAPENO:
                     refreshTime = 6000;
                     break;
-                case SeedType::Gravebuster:
+                case SeedType::SEED_GRAVEBUSTER:
                 case SeedType::SEED_SQUASH:
                     refreshTime = 3000;
                     break;
-                case SeedType::Threepeater:
-                case SeedType::Starfruit:
-                case SeedType::Melonpult:
+                case SeedType::SEED_THREEPEATER:
+                case SeedType::SEED_STARFRUIT:
+                case SeedType::SEED_MELONPULT:
                     refreshTime = 1500;
                     break;
                 default:
@@ -380,8 +380,8 @@ int Plant::GetRefreshTime(SeedType::SeedType theSeedType, SeedType::SeedType the
             }
         }
         if (Challenge_IsMPSuddenDeath(lawnApp->mBoard->mChallenge) && *Challenge_gVSSuddenDeathMode_Addr == 1) {
-            if (theSeedType == SeedType::ZombieTombsTone || theSeedType == SeedType::Sunflower || theSeedType == SeedType::Tallnut || theSeedType == SeedType::Wallnut
-                || theSeedType == SeedType::ZombieScreenDoor || theSeedType == SeedType::Pumpkinshell || theSeedType == SeedType::ZombieTrashBin) {
+            if (theSeedType == SeedType::SEED_ZOMBIE_TOMBSTONE || theSeedType == SeedType::SEED_SUNFLOWER || theSeedType == SeedType::SEED_TALLNUT || theSeedType == SeedType::SEED_WALLNUT
+                || theSeedType == SeedType::SEED_ZOMBIE_SCREEN_DOOR || theSeedType == SeedType::SEED_PUMPKINSHELL || theSeedType == SeedType::SEED_ZOMBIE_TRASH_BIN) {
                 return refreshTime;
             }
             refreshTime /= 3;
@@ -392,61 +392,61 @@ int Plant::GetRefreshTime(SeedType::SeedType theSeedType, SeedType::SeedType the
 }
 
 
-int Plant_GetCost(SeedType::SeedType theSeedType, SeedType::SeedType theImitaterType) {
+int Plant_GetCost(SeedType theSeedType, SeedType theImitaterType) {
     LawnApp *lawnApp = (LawnApp *)*gLawnApp_Addr;
-    if (lawnApp->mGameMode == GameMode::TwoPlayerVS) {
-        if (theSeedType == SeedType::Imitater && theImitaterType != SeedType::None) {
+    if (lawnApp->mGameMode == GameMode::GAMEMODE_TWO_PLAYER_VS) {
+        if (theSeedType == SeedType::SEED_IMITATER && theImitaterType != SeedType::SEED_NONE) {
             theSeedType = theImitaterType;
         }
         switch (theSeedType) {
-            case SeedType::Cherrybomb:
-            case SeedType::Snowpea:
-            case SeedType::Repeater:
-            case SeedType::ZombieFootball:
-            case SeedType::ZombieDancer:
-            case SeedType::ZombieDigger:
-            case SeedType::ZombieLadder:
+            case SeedType::SEED_CHERRYBOMB:
+            case SeedType::SEED_SNOWPEA:
+            case SeedType::SEED_REPEATER:
+            case SeedType::SEED_ZOMBIE_FOOTBALL:
+            case SeedType::SEED_ZOMBIE_DANCER:
+            case SeedType::SEED_ZOMBIE_DIGGER:
+            case SeedType::SEED_ZOMBIE_LADDER:
                 return 150;
             case SeedType::SEED_SQUASH:
-            case SeedType::Garlic:
-            case SeedType::ZombieTrafficCone:
+            case SeedType::SEED_GARLIC:
+            case SeedType::SEED_ZOMBIE_TRAFFIC_CONE:
                 return 75;
-            case SeedType::Threepeater:
-            case SeedType::ZombieCatapult:
+            case SeedType::SEED_THREEPEATER:
+            case SeedType::SEED_ZOMBIE_CATAPULT:
                 return 200;
-            case SeedType::Jalapeno:
-            case SeedType::Torchwood:
-            case SeedType::ZombieBungee:
-            case SeedType::ZombieSnorkel:
+            case SeedType::SEED_JALAPENO:
+            case SeedType::SEED_TORCHWOOD:
+            case SeedType::SEED_ZOMBIE_BUNGEE:
+            case SeedType::SEED_ZOMBIE_SNORKEL:
                 return 125;
-            case SeedType::Cactus:
-            case SeedType::Cabbagepult:
-            case SeedType::Kernelpult:
-            case SeedType::ZombiePolevaulter:
-            case SeedType::ZombiePail:
-            case SeedType::ZombieScreenDoor:
-            case SeedType::ZombieJackInTheBox:
-            case SeedType::ZombieDuckyTube:
+            case SeedType::SEED_CACTUS:
+            case SeedType::SEED_CABBAGEPULT:
+            case SeedType::SEED_KERNELPULT:
+            case SeedType::SEED_ZOMBIE_POLEVAULTER:
+            case SeedType::SEED_ZOMBIE_PAIL:
+            case SeedType::SEED_ZOMBIE_SCREEN_DOOR:
+            case SeedType::SEED_ZOMBIE_JACK_IN_THE_BOX:
+            case SeedType::SEED_ZOMBIE_DUCKY_TUBE:
                 return 100;
-            case SeedType::Starfruit:
-            case SeedType::Zomboni:
+            case SeedType::SEED_STARFRUIT:
+            case SeedType::SEED_ZOMBONI:
                 return 175;
-            case SeedType::InstantCoffee:
-            case SeedType::ZombieNormal:
+            case SeedType::SEED_INSTANT_COFFEE:
+            case SeedType::SEED_ZOMBIE_NORMAL:
                 return 25;
-            case SeedType::Melonpult:
-            case SeedType::ZombieFlag:
-            case SeedType::ZombieBalloon:
+            case SeedType::SEED_MELONPULT:
+            case SeedType::SEED_ZOMBIE_FLAG:
+            case SeedType::SEED_ZOMBIE_BALLOON:
                 return 300;
-            case SeedType::ZombieTombsTone:
-            case SeedType::ZombieTrashBin:
-            case SeedType::ZombieNewsPaper:
-            case SeedType::ZombieImp:
+            case SeedType::SEED_ZOMBIE_TOMBSTONE:
+            case SeedType::SEED_ZOMBIE_TRASH_BIN:
+            case SeedType::SEED_ZOMBIE_NEWSPAPER:
+            case SeedType::SEED_ZOMBIE_IMP:
                 return 50;
-            case SeedType::ZombiePogo:
+            case SeedType::SEED_ZOMBIE_POGO:
                 return 225;
-            case SeedType::ZombieGargantuar:
-            case SeedType::ZombieDolphinRider:
+            case SeedType::SEED_ZOMBIE_GARGANTUAR:
+            case SeedType::SEED_ZOMBIE_DOLPHIN_RIDER:
                 return 250;
             default:
                 return GetPlantDefinition(theSeedType).mSeedCost;
@@ -466,7 +466,7 @@ bool Plant::IsOnBoard()
 void Plant::Update() {
     // 用于修复植物受击闪光、生产发光、铲子下方植物发光，同时实现技能无冷却
 
-    if (abilityFastCoolDown && mSeedType != SeedType::Spikeweed && mSeedType != SeedType::Spikerock) { // 修复地刺和地刺王开启技能无冷却后不攻击敌人
+    if (abilityFastCoolDown && mSeedType != SeedType::SEED_SPIKEWEED && mSeedType != SeedType::SEED_SPIKEROCK) { // 修复地刺和地刺王开启技能无冷却后不攻击敌人
         if (mStateCountdown > 10) {
             mStateCountdown = 10;
         }
@@ -481,10 +481,10 @@ void Plant::Update() {
         mBeghouledFlashCountdown = mHighLightCounter > 25 ? 25 : mHighLightCounter;
     }
 
-    GameScenes::GameScenes mGameScene = mApp->mGameScene;
+    GameScenes mGameScene = mApp->mGameScene;
 
-    if ((!IsOnBoard() || mGameScene != GameScenes::LevelIntro || !LawnApp_IsWallnutBowlingLevel(mApp)) && (!IsOnBoard() || mApp->mGameMode != GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN)
-        && (!IsOnBoard() || !CutScene_ShouldRunUpsellBoard(mBoard->mCutScene)) && IsOnBoard() && mGameScene != GameScenes::Playing) {
+    if ((!IsOnBoard() || mGameScene != GameScenes::SCENE_LEVEL_INTRO || !LawnApp_IsWallnutBowlingLevel(mApp)) && (!IsOnBoard() || mApp->mGameMode != GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN)
+        && (!IsOnBoard() || !CutScene_ShouldRunUpsellBoard(mBoard->mCutScene)) && IsOnBoard() && mGameScene != GameScenes::SCENE_PLAYING) {
         return;
     }
 
@@ -523,12 +523,12 @@ void Plant::UpdateReanimColor() {
     if (!Plant_IsUpgrade(mSeedType)) {
         return old_Plant_UpdateReanimColor(this);
     }
-    if (mSeedType == SeedType::ExplodeONut) {
+    if (mSeedType == SeedType::SEED_EXPLODE_O_NUT) {
         return old_Plant_UpdateReanimColor(this);
     }
     GamepadControls *gamePad = mBoard->mGamepadControls1;
     if (gamePad->mGamepadState != 7) {
-        mSeedType = SeedType::Peashooter;
+        mSeedType = SeedType::SEED_PEASHOOTER;
         old_Plant_UpdateReanimColor(this);
         return;
     }
@@ -541,18 +541,18 @@ GridItem *Plant::FindTargetGridItem(PlantWeapon thePlantWeapon) {
     GridItem *aGridItem = nullptr;
     GridItem *aTargetGridItem = nullptr;
     int aLastGridX = 0;
-    if (mApp->mGameMode == GameMode::TwoPlayerVS) { // 如果是对战模式(关卡ID为76)
+    if (mApp->mGameMode == GameMode::GAMEMODE_TWO_PLAYER_VS) { // 如果是对战模式(关卡ID为76)
         int mRow = mStartRow;
         while (Board_IterateGridItems(mBoard, &aGridItem)) { // 遍历场上的所有GridItem
 
-            GridItemType::GridItemType mGridItemType = aGridItem->mGridItemType;
-            if (mGridItemType != GridItemType::Gravestone && mGridItemType != GridItemType::VSTargetZombie) {
+            GridItemType mGridItemType = aGridItem->mGridItemType;
+            if (mGridItemType != GridItemType::GRIDITEM_GRAVESTONE && mGridItemType != GridItemType::GRIDITEM_VS_TARGET_ZOMBIE) {
                 // 修复植物们攻击核坑和梯子
                 continue;
             }
             int mGridX = aGridItem->mGridX;
             int mGridY = aGridItem->mGridY;
-            if (mSeedType == SeedType::Threepeater ? abs(mGridY - mRow) > 1 : mGridY != mRow) {
+            if (mSeedType == SeedType::SEED_THREEPEATER ? abs(mGridY - mRow) > 1 : mGridY != mRow) {
                 // 如果是三线射手，则索敌三行; 反之，索敌一行
                 // 注释掉此行，就会发现投手能够命中三格内的靶子了，但会导致很多其他BUG。尚不清楚原因。
                 continue;
@@ -560,17 +560,17 @@ GridItem *Plant::FindTargetGridItem(PlantWeapon thePlantWeapon) {
 
 
             if (aTargetGridItem == nullptr || mGridX < aLastGridX) {
-                if (mSeedType == SeedType::Fumeshroom && mGridX - mPlantCol > 3) {
+                if (mSeedType == SeedType::SEED_FUMESHROOM && mGridX - mPlantCol > 3) {
                     // 如果是大喷菇，则索敌三格以内的靶子或墓碑
                     continue;
                 }
-                if (mSeedType == SeedType::Puffshroom || mSeedType == SeedType::Seashroom) {
+                if (mSeedType == SeedType::SEED_PUFFSHROOM || mSeedType == SeedType::SEED_SEASHROOM) {
                     // 如果是小喷菇或水兵菇，则索敌三格以内的墓碑
                     if (mGridX - mPlantCol > 3) {
                         continue;
                     }
                     // 不主动攻击靶子
-                    if (mGridItemType == GridItemType::VSTargetZombie) {
+                    if (mGridItemType == GridItemType::GRIDITEM_VS_TARGET_ZOMBIE) {
                         continue;
                     }
                 }
@@ -585,7 +585,7 @@ GridItem *Plant::FindTargetGridItem(PlantWeapon thePlantWeapon) {
 void Plant::DoSpecial() {
     // 试图修复辣椒爆炸后反而在本行的末尾处产生冰道。失败。
 
-    if (mSeedType == SeedType::Cherrybomb) {
+    if (mSeedType == SeedType::SEED_CHERRYBOMB) {
         // 用于成就
         int num1 = Board_GetLiveZombiesCount(mBoard);
         old_Plant_DoSpecial(this);
@@ -598,18 +598,18 @@ void Plant::DoSpecial() {
     return old_Plant_DoSpecial(this);
 }
 
-void Plant::PlantInitialize(int theGridX, int theGridY, SeedType::SeedType theSeedType, SeedType::SeedType theImitaterType, int a6) {
+void Plant::PlantInitialize(int theGridX, int theGridY, SeedType theSeedType, SeedType theImitaterType, int a6) {
     // 在初始化植物后更新一次动画，以解决开场前存在的植物只绘制阴影而不绘制植物本体的问题
     old_Plant_PlantInitialize(this, theGridX, theGridY, theSeedType, theImitaterType, a6);
     Plant_UpdateReanim(this);
 
     // 在对战模式修改指定植物的血量
-    if (mApp->mGameMode == GameMode::TwoPlayerVS) {
+    if (mApp->mGameMode == GameMode::GAMEMODE_TWO_PLAYER_VS) {
         switch (theSeedType) {
-            case SeedType::Sunflower:
+            case SeedType::SEED_SUNFLOWER:
                 mPlantMaxHealth = 300;
                 break;
-            case SeedType::Peashooter:
+            case SeedType::SEED_PEASHOOTER:
                 mPlantMaxHealth = 300;
                 break;
         }
@@ -618,9 +618,9 @@ void Plant::PlantInitialize(int theGridX, int theGridY, SeedType::SeedType theSe
 }
 
 
-bool Plant_IsUpgrade(SeedType::SeedType theSeedType) {
+bool Plant_IsUpgrade(SeedType theSeedType) {
     // 修复机枪射手在SeedBank光标移动到shop栏后变为绿卡。
-    if (theSeedType == SeedType::Gatlingpea) {
+    if (theSeedType == SeedType::SEED_GATLINGPEA) {
         LawnApp *lawnApp = (LawnApp *)*gLawnApp_Addr;
         Board *board = lawnApp->mBoard;
         if (board == nullptr) {
@@ -636,7 +636,7 @@ bool Plant_IsUpgrade(SeedType::SeedType theSeedType) {
 }
 
 void Plant_SetImitaterFilterEffect(Plant *plant) {
-    SeedType::SeedType mSeedType = plant->mSeedType;
+    SeedType mSeedType = plant->mSeedType;
     FilterEffectType::FilterEffectType aFilterEffect = GetFilterEffectTypeBySeedType(mSeedType);
     LawnApp *lawnApp = plant->mApp;
     Reanimation *mBodyReanim = LawnApp_ReanimationTryToGet(lawnApp, plant->mBodyReanimID);

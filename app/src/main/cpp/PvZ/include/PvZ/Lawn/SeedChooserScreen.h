@@ -24,12 +24,12 @@ public:
     int mCursorPositionX2;                           // 943
     int mCursorPositionY1;                           // 944
     int mCursorPositionY2;                           // 945
-    SeedChooserState::SeedChooserState mChooseState; // 946
+    SeedChooserState mChooseState; // 946
     int mViewLawnTime;                               // 947
     bool unkBool;                                    // 3792
     int mPlayerIndex;                                // 949
-    SeedType::SeedType mSeedType1;                   // 950
-    SeedType::SeedType mSeedType2;                   // 951
+    SeedType mSeedType1;                   // 950
+    SeedType mSeedType2;                   // 951
     float unkF;                                      // 952
     bool mIsZombieChooser;                           // 3812
     SeedBank *mSeedBank1;                            // 954
@@ -66,11 +66,11 @@ inline bool (*SeedChooserScreen_CancelLawnView)(SeedChooserScreen *seedChooserSc
 
 inline void (*SeedChooserScreen_GetNextSeedInDir)(SeedChooserScreen *seedChooserScreen, int a2, int a3);
 
-inline void (*SeedChooserScreen_GetSeedPositionInChooser)(SeedChooserScreen *, SeedType::SeedType, int *, int *);
+inline void (*SeedChooserScreen_GetSeedPositionInChooser)(SeedChooserScreen *, SeedType, int *, int *);
 
 inline void (*SeedChooserScreen_UpdateImitaterButton)(SeedChooserScreen *);
 
-inline SeedType::SeedType (*SeedChooserScreen_SeedHitTest)(SeedChooserScreen *, int, int);
+inline SeedType (*SeedChooserScreen_SeedHitTest)(SeedChooserScreen *, int, int);
 
 inline void (*SeedChooserScreen_LandFlyingSeed)(SeedChooserScreen *, int *);
 
@@ -87,7 +87,7 @@ inline void (*old_SeedChooserScreen_EnableStartButton)(SeedChooserScreen *seedCh
 
 inline void (*old_SeedChooserScreen_OnStartButton)(SeedChooserScreen *seedChooserScreen);
 
-inline bool (*old_SeedChooserScreen_SeedNotAllowedToPick)(SeedChooserScreen *seedChooserScreen, SeedType::SeedType theSeedType);
+inline bool (*old_SeedChooserScreen_SeedNotAllowedToPick)(SeedChooserScreen *seedChooserScreen, SeedType theSeedType);
 
 inline void (*old_SeedChooserScreen_ClickedSeedInChooser)(SeedChooserScreen *a1, ChosenSeed *a2, int a3);
 
@@ -128,7 +128,7 @@ void SeedChooserScreen_ClickedSeedInChooser(SeedChooserScreen *a1, ChosenSeed *c
 
 void SeedChooserScreen_EnableStartButton(SeedChooserScreen *seedChooserScreen, int isEnabled);
 
-bool SeedChooserScreen_SeedNotAllowedToPick(SeedChooserScreen *seedChooserScreen, SeedType::SeedType theSeedType);
+bool SeedChooserScreen_SeedNotAllowedToPick(SeedChooserScreen *seedChooserScreen, SeedType theSeedType);
 
 void SeedChooserScreen_OnStartButton(SeedChooserScreen *seedChooserScreen);
 
@@ -148,8 +148,8 @@ void SeedChooserScreen_DrawPacket(SeedChooserScreen *seedChooserScreen,
                                   Sexy::Graphics *graphics,
                                   int x,
                                   int y,
-                                  SeedType::SeedType theSeedType,
-                                  SeedType::SeedType theImitaterType,
+                                  SeedType theSeedType,
+                                  SeedType theImitaterType,
                                   float coolDownPercent,
                                   int grayness,
                                   Color *theColor,

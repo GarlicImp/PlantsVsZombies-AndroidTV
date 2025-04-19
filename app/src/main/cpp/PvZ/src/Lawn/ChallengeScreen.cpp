@@ -41,7 +41,7 @@ void ChallengeScreen_Draw(ChallengeScreen *challengeScreen, Sexy::Graphics *grap
     int holder[1];
     Sexy_StrFormat(holder, "%d/%d", LawnApp_GetNumTrophies(challengeScreen->mApp, challengeScreen->mPage), mTotalTrophiesInPage);
     Color theColor = {255, 240, 0, 255};
-    TodDrawString(graphics, holder, 711, 62, *Sexy_FONT_BRIANNETOD16_Addr, theColor, DrawStringJustification::Center);
+    TodDrawString(graphics, holder, 711, 62, *Sexy_FONT_BRIANNETOD16_Addr, theColor, DrawStringJustification::DS_ALIGN_CENTER);
     Sexy_String_Delete(holder);
 }
 
@@ -96,15 +96,15 @@ void ChallengeScreen_UpdateButtons(ChallengeScreen *challengeScreen) {
 
 
 namespace {
-ChallengeDefinition gButteredPopcornDef = {GameMode::ChallengeButteredPopcorn, 37, ChallengePage::CHALLENGE_PAGE_CHALLENGE, 6, 1, "[BUTTERED_POPCORN]"};
-ChallengeDefinition gPoolPartyDef = {GameMode::ChallengePoolParty, 37, ChallengePage::CHALLENGE_PAGE_CHALLENGE, 6, 2, "[POOL_PARTY]"};
+ChallengeDefinition gButteredPopcornDef = {GameMode::GAMEMODE_CHALLENGE_BUTTERED_POPCORN, 37, ChallengePage::CHALLENGE_PAGE_CHALLENGE, 6, 1, "[BUTTERED_POPCORN]"};
+ChallengeDefinition gPoolPartyDef = {GameMode::GAMEMODE_CHALLENGE_POOL_PARTY, 37, ChallengePage::CHALLENGE_PAGE_CHALLENGE, 6, 2, "[POOL_PARTY]"};
 } // namespace
 
 ChallengeDefinition &GetChallengeDefinition(int index) {
-    if (index + 2 == GameMode::ChallengeButteredPopcorn) {
+    if (index + 2 == GameMode::GAMEMODE_CHALLENGE_BUTTERED_POPCORN) {
         return gButteredPopcornDef;
     }
-    // if (index + 2 == GameMode::ChallengePoolParty) {
+    // if (index + 2 == GameMode::GAMEMODE_CHALLENGE_POOL_PARTY) {
     //     return gPoolPartyDef;
     // }
     return old_GetChallengeDefinition(index);
