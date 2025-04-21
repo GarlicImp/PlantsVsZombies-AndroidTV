@@ -295,7 +295,7 @@ public:
     void InitLawnMowers();
     void PickZombieWaves();
     void DrawUITop(Sexy::Graphics* g);
-    void GetShovelButtonRect(TRect *rect);
+//    void GetShovelButtonRect(TRect *rect);
     void UpdateLevelEndSequence();
     void UpdateGridItems();
     void ShakeBoard(int theShakeAmountX, int theShakeAmountY);

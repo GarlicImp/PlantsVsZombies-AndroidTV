@@ -1,9 +1,22 @@
 #ifndef PVZ_LAWN_SEED_CHOOSER_SCREEN_H
 #define PVZ_LAWN_SEED_CHOOSER_SCREEN_H
 
+#include "GamepadControls.h"
 #include "PvZ/Enums.h"
 
 class SeedChooserScreen : public Sexy::Widget {
+private:
+    enum
+    {
+        SeedChooserScreen_Start = 100,
+        SeedChooserScreen_Random = 101,
+        SeedChooserScreen_ViewLawn = 102,
+        SeedChooserScreen_Almanac = 103,
+        SeedChooserScreen_Menu = 104,
+        SeedChooserScreen_Store = 105,
+        SeedChooserScreen_Imitater = 106
+    };
+
 public:
     Sexy::ButtonListener mButtonListener;            // 64
     int unkMem1;                                     // 65
@@ -42,7 +55,27 @@ public:
     Sexy::GameButton *mAlmanacButton;                // 961
     int unkMems3[4];                                 // 962 ~ 965
     // 大小966个整数
-public:
+
+    SeedChooserScreen(bool theIsZombieChooser);
+
+    void Create(bool theIsZombieChooser);
+    void EnableStartButton(int theIsEnabled);
+    void RebuildHelpbar();
+    SeedType GetZombieSeedType(SeedType theSeedType);
+    ZombieType GetZombieType(ZombieType theZombieType);
+    void ClickedSeedInChooser(ChosenSeed* theChosenSeed, int thePlayerIndex);
+    void CrazyDavePickSeeds();
+    void OnStartButton();
+    void Update();
+    bool SeedNotAllowedToPick(SeedType theSeedType);
+    void ClickedSeedInBank(ChosenSeed* theChosenSeed, unsigned int thePlayerIndex);
+    void GameButtonDown(ButtonCode theButton, unsigned int thePlayerIndex);
+    void DrawPacket(Sexy::Graphics* g, int x, int y, SeedType theSeedType, SeedType theImitaterType, float thePercentDark, int theGrayness, Color* theColor, bool theDrawCost, bool theUseCurrentCost);
+    void ButtonDepress(int theId);
+    void GetSeedPositionInBank(int theIndex, int* x, int* y, int thePlayerIndex);
+    void ShowToolTip(unsigned int thePlayerIndex);
+    static SeedType GetZombieIndexBySeedType(SeedType theSeedType);
+
     void MouseMove(int x, int y);
     void MouseDown(int x, int y, int theClickCount);
     void MouseUp(int x, int y);
@@ -95,7 +128,7 @@ inline void (*old_SeedChooserScreen_CrazyDavePickSeeds)(SeedChooserScreen *a);
 
 inline void (*old_SeedChooserScreen_ClickedSeedInBank)(SeedChooserScreen *seedChooserScreen, ChosenSeed *theChosenSeed, unsigned int playerIndex);
 
-inline void (*old_SeedChooserScreen_GameButtonDown)(SeedChooserScreen *a1, int a2, unsigned int a3);
+inline void (*old_SeedChooserScreen_GameButtonDown)(SeedChooserScreen *a1, ButtonCode a2, unsigned int a3);
 
 inline void (*old_SeedChooserScreen_ButtonDepress)(SeedChooserScreen *seedChooserScreen, int id);
 
@@ -110,50 +143,5 @@ inline void (*old_SeedChooserScreen_MouseDown)(SeedChooserScreen *a, int x, int 
 inline void (*old_SeedChooserScreen_MouseDrag)(SeedChooserScreen *seedChooserScreen, int x, int y);
 
 inline void (*old_SeedChooserScreen_MouseUp)(SeedChooserScreen *seedChooserScreen, int x, int y);
-
-
-void SeedChooserScreen_SeedChooserScreen(SeedChooserScreen *seedChooserScreen, bool isZombieChooser);
-
-void LawnApp_KillSeedChooserScreen(LawnApp *lawnApp);
-
-void SeedChooserScreen_ClickedSeedInBank(SeedChooserScreen *a1, ChosenSeed *a2, unsigned int a3);
-
-void SeedChooserScreen_GameButtonDown(SeedChooserScreen *seedChooserScreen, int buttonCode, unsigned int playerIndex);
-
-void SeedChooserScreen_GetSeedPositionInBank(SeedChooserScreen *, int, int *, int *, int);
-
-void SeedChooserScreen_ButtonDepress(SeedChooserScreen *, int);
-
-void SeedChooserScreen_ClickedSeedInChooser(SeedChooserScreen *a1, ChosenSeed *chosenSeed, int playerIndex);
-
-void SeedChooserScreen_EnableStartButton(SeedChooserScreen *seedChooserScreen, int isEnabled);
-
-bool SeedChooserScreen_SeedNotAllowedToPick(SeedChooserScreen *seedChooserScreen, SeedType theSeedType);
-
-void SeedChooserScreen_OnStartButton(SeedChooserScreen *seedChooserScreen);
-
-void SeedChooserScreen_ShowToolTip(SeedChooserScreen *seedChooserScreen, unsigned int playerIndex);
-
-void SeedChooserScreen_RebuildHelpbar(SeedChooserScreen *seedChooserScreen);
-
-int SeedChooserScreen_GetZombieSeedType(SeedChooserScreen *a, int a2);
-
-int SeedChooserScreen_GetZombieType(SeedChooserScreen *a, int a2);
-
-void SeedChooserScreen_CrazyDavePickSeeds(SeedChooserScreen *a);
-
-void SeedChooserScreen_Update(SeedChooserScreen *seedChooserScreen);
-
-void SeedChooserScreen_DrawPacket(SeedChooserScreen *seedChooserScreen,
-                                  Sexy::Graphics *graphics,
-                                  int x,
-                                  int y,
-                                  SeedType theSeedType,
-                                  SeedType theImitaterType,
-                                  float coolDownPercent,
-                                  int grayness,
-                                  Color *theColor,
-                                  bool drawCostText,
-                                  bool a11);
 
 #endif // PVZ_LAWN_SEED_CHOOSER_SCREEN_H
