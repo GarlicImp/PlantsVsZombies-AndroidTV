@@ -843,7 +843,7 @@ void Board::SpeedUpUpdate() {
     UpdateGame();
     UpdateFog();
     //    Board_UpdateCoverLayer(this);
-    Challenge_Update(mChallenge);
+    mChallenge->Update();
 }
 
 bool TRect_Contains(TRect *rect, int x, int y) {

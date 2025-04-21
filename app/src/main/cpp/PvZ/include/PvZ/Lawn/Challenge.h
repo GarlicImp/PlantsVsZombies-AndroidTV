@@ -72,7 +72,26 @@ public:
     int mReanimHeavyWeaponID3;                      // 79
     // 大小80个整数
 
+    Challenge();
 
+    void Create();
+    void Update();
+    void HeavyWeaponFire(float a2, float a3);
+    void IZombieDrawPlant(Sexy::Graphics* g, Plant* thePlant);
+    void HeavyWeaponUpdate();
+    bool IZombieEatBrain(Zombie* theZombie);
+    void DrawArtChallenge(Sexy::Graphics* g);
+    PlantingReason CanPlantAt(int theGridX, int theGridY, SeedType theSeedType);
+    void InitLevel();
+    void InitZombieWaves();
+    void TreeOfWisdomFertilize();
+    void LastStandUpdate();
+    void DrawHeavyWeapon(Sexy::Graphics* g);
+    bool UpdateZombieSpawning();
+    void HeavyWeaponPacketClicked(SeedPacket* theSeedPacket);
+    static ZombieType IZombieSeedTypeToZombieType(SeedType theSeedType);
+    void StartLevel();
+    void Delete();
 };
 
 /***************************************************************************************************************/
@@ -135,42 +154,5 @@ inline void (*old_Challenge_HeavyWeaponPacketClicked)(Challenge *challenge, Seed
 inline void (*old_Challenge_StartLevel)(Challenge *challenge);
 
 inline void (*old_Challenge_Delete)(Challenge *challenge);
-
-
-void Challenge_Challenge(Challenge *challenge);
-
-void Challenge_HeavyWeaponFire(Challenge *challenge, float a2, float a3);
-
-void Challenge_Update(Challenge *challenge);
-
-ZombieType Challenge_IZombieSeedTypeToZombieType(SeedType);
-
-void Challenge_IZombieDrawPlant(Challenge *challenge, Sexy::Graphics *graphics, Plant *plant);
-
-bool Challenge_UpdateZombieSpawning(Challenge *challenge);
-
-void Challenge_HeavyWeaponUpdate(Challenge *challenge);
-
-bool Challenge_IZombieEatBrain(Challenge *challenge, Zombie *zombie);
-
-void Challenge_DrawArtChallenge(Challenge *challenge, Sexy::Graphics *graphics);
-
-PlantingReason Challenge_CanPlantAt(Challenge *challenge, int theGridX, int theGridY, SeedType theType);
-
-void Challenge_InitLevel(Challenge *challenge);
-
-void Challenge_InitZombieWaves(Challenge *challenge);
-
-void Challenge_TreeOfWisdomFertilize(Challenge *challenge);
-
-void Challenge_LastStandUpdate(Challenge *challenge);
-
-void Challenge_DrawHeavyWeapon(Challenge *challenge, Sexy::Graphics *graphics);
-
-void Challenge_HeavyWeaponPacketClicked(Challenge *challenge, SeedPacket *seedPacket);
-
-void Challenge_StartLevel(Challenge *challenge);
-
-void Challenge_Delete(Challenge *challenge);
 
 #endif // PVZ_LAWN_CHALLENGE_H

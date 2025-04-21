@@ -676,24 +676,24 @@ inline void InitHookFunction() {
     homura::HookFunction(LawnSaveGameAddr, &LawnSaveGame, &old_LawnSaveGame);
 
 
-    homura::HookFunction(Challenge_UpdateAddr, &Challenge_Update, &old_Challenge_Update);
-    homura::HookFunction(Challenge_ChallengeAddr, &Challenge_Challenge, &old_Challenge_Challenge);
-    homura::HookFunction(Challenge_HeavyWeaponFireAddr, &Challenge_HeavyWeaponFire, &old_Challenge_HeavyWeaponFire);
-    homura::HookFunction(Challenge_IZombieDrawPlantAddr, &Challenge_IZombieDrawPlant, nullptr);
-    homura::HookFunction(Challenge_HeavyWeaponUpdateAddr, &Challenge_HeavyWeaponUpdate, &old_Challenge_HeavyWeaponUpdate);
-    homura::HookFunction(Challenge_IZombieEatBrainAddr, &Challenge_IZombieEatBrain, nullptr);
-    homura::HookFunction(Challenge_DrawArtChallengeAddr, &Challenge_DrawArtChallenge, nullptr);
-    homura::HookFunction(Challenge_CanPlantAtAddr, &Challenge_CanPlantAt, nullptr);
-    homura::HookFunction(Challenge_InitLevelAddr, &Challenge_InitLevel, &old_Challenge_InitLevel);
-    homura::HookFunction(Challenge_InitZombieWavesAddr, &Challenge_InitZombieWaves, &old_Challenge_InitZombieWaves);
-    homura::HookFunction(Challenge_TreeOfWisdomFertilizeAddr, &Challenge_TreeOfWisdomFertilize, &old_Challenge_TreeOfWisdomFertilize);
-    homura::HookFunction(Challenge_LastStandUpdateAddr, &Challenge_LastStandUpdate, nullptr);
-    homura::HookFunction(Challenge_DrawHeavyWeaponAddr, &Challenge_DrawHeavyWeapon, nullptr);
-    homura::HookFunction(Challenge_UpdateZombieSpawningAddr, &Challenge_UpdateZombieSpawning, &old_Challenge_UpdateZombieSpawning);
-    homura::HookFunction(Challenge_HeavyWeaponPacketClickedAddr, &Challenge_HeavyWeaponPacketClicked, &old_Challenge_HeavyWeaponPacketClicked);
-    homura::HookFunction(Challenge_IZombieSeedTypeToZombieTypeAddr, &Challenge_IZombieSeedTypeToZombieType, &old_Challenge_IZombieSeedTypeToZombieType);
-    homura::HookFunction(Challenge_StartLevelAddr, &Challenge_StartLevel, &old_Challenge_StartLevel);
-    homura::HookFunction(Challenge_DeleteAddr, &Challenge_Delete, &old_Challenge_Delete);
+    homura::HookFunction(Challenge_UpdateAddr, &Challenge::Update, &old_Challenge_Update);
+    homura::HookFunction(Challenge_ChallengeAddr, &Challenge::Create, &old_Challenge_Challenge);
+    homura::HookFunction(Challenge_HeavyWeaponFireAddr, &Challenge::HeavyWeaponFire, &old_Challenge_HeavyWeaponFire);
+    homura::HookFunction(Challenge_IZombieDrawPlantAddr, &Challenge::IZombieDrawPlant, nullptr);
+    homura::HookFunction(Challenge_HeavyWeaponUpdateAddr, &Challenge::HeavyWeaponUpdate, &old_Challenge_HeavyWeaponUpdate);
+    homura::HookFunction(Challenge_IZombieEatBrainAddr, &Challenge::IZombieEatBrain, nullptr);
+    homura::HookFunction(Challenge_DrawArtChallengeAddr, &Challenge::DrawArtChallenge, nullptr);
+    homura::HookFunction(Challenge_CanPlantAtAddr, &Challenge::CanPlantAt, nullptr);
+    homura::HookFunction(Challenge_InitLevelAddr, &Challenge::InitLevel, &old_Challenge_InitLevel);
+    homura::HookFunction(Challenge_InitZombieWavesAddr, &Challenge::InitZombieWaves, &old_Challenge_InitZombieWaves);
+    homura::HookFunction(Challenge_TreeOfWisdomFertilizeAddr, &Challenge::TreeOfWisdomFertilize, &old_Challenge_TreeOfWisdomFertilize);
+    homura::HookFunction(Challenge_LastStandUpdateAddr, &Challenge::LastStandUpdate, nullptr);
+    homura::HookFunction(Challenge_DrawHeavyWeaponAddr, &Challenge::DrawHeavyWeapon, nullptr);
+    homura::HookFunction(Challenge_UpdateZombieSpawningAddr, &Challenge::UpdateZombieSpawning, &old_Challenge_UpdateZombieSpawning);
+    homura::HookFunction(Challenge_HeavyWeaponPacketClickedAddr, &Challenge::HeavyWeaponPacketClicked, &old_Challenge_HeavyWeaponPacketClicked);
+    homura::HookFunction(Challenge_IZombieSeedTypeToZombieTypeAddr, &Challenge::IZombieSeedTypeToZombieType, &old_Challenge_IZombieSeedTypeToZombieType);
+    homura::HookFunction(Challenge_StartLevelAddr, &Challenge::StartLevel, &old_Challenge_StartLevel);
+    homura::HookFunction(Challenge_DeleteAddr, &Challenge::Delete, &old_Challenge_Delete);
 
 
     homura::HookFunction(ChallengeScreen_AddedToManagerAddr, &ChallengeScreen_AddedToManager, &old_ChallengeScreen_AddedToManager);
