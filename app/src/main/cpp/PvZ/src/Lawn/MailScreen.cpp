@@ -62,16 +62,16 @@ void MailScreen_Delete2(MailScreen *mailScreen) {
     mMailScreenSwitchButton = nullptr;
 }
 
-void MailScreen_ButtonPress(MailScreen *mailScreen, int id) {
-    old_MailScreen_ButtonPress(mailScreen, id);
+void MailScreen::ButtonPress(int theId) {
+    old_MailScreen_ButtonPress(this, theId);
 }
 
-void MailScreen_ButtonDepress(MailScreen *mailScreen, int id) {
+void MailScreen::ButtonDepress(int theId) {
     LawnApp *lawnApp = (LawnApp *)*gLawnApp_Addr;
     MailScreen *theRealMailScreen = (MailScreen *)Sexy_SexyAppBase_GetDialog(lawnApp, Dialogs::DIALOG_MAIL);
-    if (id == 1002) {
+    if (theId == 1002) {
         MailScreen_KeyDown(theRealMailScreen, Sexy::Ok, 0, 0);
-    } else if (id == 1001) {
+    } else if (theId == 1001) {
         MailScreen_KeyDown(theRealMailScreen, 307, 0, 0);
         bool isAtInBox = theRealMailScreen->mPage == 0;
         mMailScreenReadButton->mDisabled = !isAtInBox;
@@ -81,7 +81,7 @@ void MailScreen_ButtonDepress(MailScreen *mailScreen, int id) {
         GameButton_SetLabel(mMailScreenSwitchButton, holder);
         Sexy_String_Delete(holder);
     } else
-        old_MailScreen_ButtonDepress(mailScreen, id);
+        old_MailScreen_ButtonDepress(this, theId);
 }
 
 

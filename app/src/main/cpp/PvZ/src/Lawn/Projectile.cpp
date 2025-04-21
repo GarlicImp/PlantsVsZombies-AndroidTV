@@ -130,7 +130,7 @@ void Projectile_DoImpact(Projectile *projectile, Zombie *zombie) {
         LawnApp_AddTodParticle(lawnApp, mPosX + 80.0f, mPosY + 40.0f, aRenderOrder2, ParticleEffect::PARTICLE_BLASTMARK);
         LawnApp_AddTodParticle(lawnApp, mPosX + 80.0f, mPosY + 40.0f, aRenderOrder, ParticleEffect::PARTICLE_POPCORNSPLASH);
         LawnApp_PlaySample(lawnApp, *Sexy_SOUND_DOOMSHROOM_Addr);
-        Board_ShakeBoard(board, 3, -4);
+        board->ShakeBoard(3, -4);
     } else if (mProjectileType == ProjectileType::PROJECTILE_PEA) {
         num3 -= 15.0f;
         particleEffect = ParticleEffect::PARTICLE_PEA_SPLAT;

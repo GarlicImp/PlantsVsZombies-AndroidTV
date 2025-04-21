@@ -13,6 +13,8 @@ public:
     void MouseDown(int x, int y, int theClickCount);
     void MouseUp(int x, int y);
     void MouseDrag(int x, int y);
+    void ButtonPress(int theId);
+    void ButtonDepress(int theId);
 };
 
 inline void (*MailScreen_KeyDown)(MailScreen *mailScreen, int keyCode, int, int);
@@ -44,9 +46,5 @@ void MailScreen_AddedToManager(MailScreen *mailScreen, int *widgetManager);
 void MailScreen_RemovedFromManager(MailScreen *mailScreen, int *widgetManager);
 
 void MailScreen_Delete2(MailScreen *mailScreen);
-
-void MailScreen_ButtonPress(MailScreen *mailScreen, int id);
-
-void MailScreen_ButtonDepress(MailScreen *mailScreen, int id);
 
 #endif // PVZ_LAWN_MAIL_SCREEN_H

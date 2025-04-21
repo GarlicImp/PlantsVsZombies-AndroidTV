@@ -372,7 +372,7 @@ void DrawSeedPacket(Sexy::Graphics *graphics, float x, float y, SeedType seedTyp
         Board *board = lawnApp->mBoard;
         if (board != nullptr && Board_PlantUsesAcceleratedPricing(board, realSeedType)) {
             if (isInGame) {
-                int CurrentPlantCost = Board_GetCurrentPlantCost(board, seedType, imitaterType);
+                int CurrentPlantCost = board->GetCurrentPlantCost(seedType, imitaterType);
                 Sexy_StrFormat(tmpHolder, "%d", CurrentPlantCost);
             } else {
                 int Cost = Plant::GetCost(seedType, imitaterType);

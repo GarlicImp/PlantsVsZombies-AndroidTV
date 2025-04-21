@@ -506,18 +506,18 @@ void GamepadControls_UpdatePreviewReanim(GamepadControls *gamepadControls) {
         flagUpdateCanPlant = false;
         flagDrawGray = true;
     }
-    if (Board_CanPlantAt(gamepadControls->mBoard, theGridX, theGridY, mSeedType) != PlantingReason::PLANTING_OK) {
+    if (gamepadControls->mBoard->CanPlantAt(theGridX, theGridY, mSeedType) != PlantingReason::PLANTING_OK) {
         flagUpdateCanPlant = false;
         flagDrawGray = true;
     }
     if (!Board_HasConveyorBeltSeedBank(gamepadControls->mBoard, gamepadControls->mPlayerIndex2) && cursorObject->mCursorType != CursorType::CURSOR_TYPE_PLANT_FROM_USABLE_COIN) {
         if (gamepadControls->mIsZombie && gamepadControls->mGameObject.mApp->mGameMode == GameMode::GAMEMODE_TWO_PLAYER_VS) {
-            if (!Board_CanTakeDeathMoney(gamepadControls->mBoard, Board_GetCurrentPlantCost(gamepadControls->mBoard, mSeedType, SeedType::SEED_NONE))) {
+            if (!Board_CanTakeDeathMoney(gamepadControls->mBoard, gamepadControls->mBoard->GetCurrentPlantCost(mSeedType, SeedType::SEED_NONE))) {
                 flagUpdateCanPlant = false;
                 flagDrawGray = true;
             }
         } else {
-            if (!Board_CanTakeSunMoney(gamepadControls->mBoard, Board_GetCurrentPlantCost(gamepadControls->mBoard, mSeedType, SeedType::SEED_NONE), gamepadControls->mPlayerIndex2)) {
+            if (!Board_CanTakeSunMoney(gamepadControls->mBoard, gamepadControls->mBoard->GetCurrentPlantCost(mSeedType, SeedType::SEED_NONE), gamepadControls->mPlayerIndex2)) {
                 flagUpdateCanPlant = false;
                 flagDrawGray = true;
             }
@@ -577,14 +577,14 @@ void GamepadControls_DrawPreview(GamepadControls *gamepadControls, Sexy::Graphic
             if (dynamicPreview) { // 修复动态预览时植物错位
                 int thePixelY = Board_GridToPixelY(gamepadControls->mBoard, mGridX, mGridY);
                 for (int i = 0; i != 6; ++i) {
-                    if (Board_CanPlantAt(board, mGridX, i, mSelectedSeedType) == PlantingReason::PLANTING_OK) {
+                    if (board->CanPlantAt(mGridX, i, mSelectedSeedType) == PlantingReason::PLANTING_OK) {
                         int theGridPixelY = Board_GridToPixelY(gamepadControls->mBoard, mGridX, i);
                         Sexy_Graphics_DrawImage(graphics, gamepadControls->mPreviewImage, 0, theGridPixelY - thePixelY);
                     }
                 }
             } else {
                 for (int i = 0; i != 6; ++i) {
-                    if (Board_CanPlantAt(board, mGridX, i, mSelectedSeedType) == PlantingReason::PLANTING_OK) {
+                    if (board->CanPlantAt(mGridX, i, mSelectedSeedType) == PlantingReason::PLANTING_OK) {
                         float offset = PlantDrawHeightOffset(board, 0, mSelectedSeedType, mGridX, i);
                         Sexy_Graphics_DrawImage(graphics, gamepadControls->mPreviewImage, 0, offset + (i - mGridY) * 85);
                     }

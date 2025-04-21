@@ -137,7 +137,7 @@ extern "C" JNIEXPORT void JNICALL Java_com_transmension_mobile_EnhanceActivity_n
     }
     switch (action) {
         case 0:
-            Board_MouseDownSecond(board, x, y, 0);
+            board->MouseDownSecond(x, y, 0);
             break;
         case 1:
             Board_MouseDragSecond(board, x, y);

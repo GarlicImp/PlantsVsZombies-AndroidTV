@@ -179,6 +179,7 @@ public:
     void DetachShield();
     void CheckForBoardEdge();
     void DrawBossPart(Sexy::Graphics *graphics, int theBossPart);
+    static bool ZombieTypeCanGoInPool(ZombieType theZombieType);
     void BossSpawnAttack();
     void DrawBungeeCord(Sexy::Graphics *graphics, int theOffsetX, int theOffsetY);
     bool IsTangleKelpTarget();
@@ -317,8 +318,6 @@ inline void (*old_Zombie_DropHead)(Zombie *zombie, unsigned int a2);
 
 
 void Zombie_AddButter(Zombie *zombieUnderButter);
-
-bool ZombieTypeCanGoInPool(ZombieType theZombieType);
 
 void Zombie_SetZombatarReanim(Zombie *zombie);
 
