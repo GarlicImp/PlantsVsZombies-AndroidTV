@@ -287,7 +287,7 @@ void GamepadControls_UpdatePreviewReanim(GamepadControls *gamepadControls) {
         int theRenderOrder = Board_MakeRenderOrder(mRenderOrder, theGridY, 100);
         float theDrawHeightOffset = PlantDrawHeightOffset(board, 0, mSeedType, theGridX, theGridY);
         if (gamepadControls->mIsZombie) {
-            ZombieType theZombieType = Challenge_IZombieSeedTypeToZombieType(mSeedType);
+            ZombieType theZombieType = Challenge::IZombieSeedTypeToZombieType(mSeedType);
             switch (theZombieType) {
                 case ZombieType::ZOMBIE_INVALID:
                     gamepadControls->mPreviewingSeedType = mSeedType;

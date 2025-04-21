@@ -271,7 +271,7 @@ void Plant::Draw(Sexy::Graphics *g) {
     num += mShakeOffsetX;
     num2 += mShakeOffsetY;
     if (IsInPlay() && LawnApp_IsIZombieLevel(mApp)) {
-        Challenge_IZombieDrawPlant(mBoard->mChallenge, g, this);
+        mBoard->mChallenge->IZombieDrawPlant(g, this);
     } else if (mBodyReanimID != 0) {
         Reanimation *reanimation2 = LawnApp_ReanimationTryToGet(mApp, mBodyReanimID);
         if (reanimation2 != nullptr) {
@@ -445,7 +445,7 @@ void Plant::DrawSeedType(Sexy::Graphics *g, SeedType theSeedType, SeedType theIm
         g->mScaleX = -g->mScaleX;
     }
     if (Challenge_IsZombieSeedType(theSeedType2)) {
-        ZombieType theZombieType = Challenge_IZombieSeedTypeToZombieType(theSeedType2);
+        ZombieType theZombieType = Challenge::IZombieSeedTypeToZombieType(theSeedType2);
         if (theZombieType != ZombieType::ZOMBIE_INVALID) {
             ReanimatorCache_DrawCachedZombie(lawnApp->mReanimatorCache, g, thePosX, thePosY, theZombieType);
         }
