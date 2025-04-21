@@ -21,7 +21,7 @@ void SeedBank::Create(bool thePlayerIndex) {
 }
 
 void SeedBank::Draw(Sexy::Graphics *g) {
-    LOG_INFO("this->mBoard: {}", (void*)this->mBoard);
+//    LOG_INFO("this->mBoard: {}", (void*)this->mBoard);
     // 在对战模式取消0.9倍缩放
     if (mApp->mGameMode != GameMode::GAMEMODE_TWO_PLAYER_VS) {
         return old_SeedBank_Draw(this, g);

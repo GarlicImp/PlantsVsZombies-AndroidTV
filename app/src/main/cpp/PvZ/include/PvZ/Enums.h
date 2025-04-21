@@ -1880,8 +1880,8 @@ public:
 
 class LawnApp;
 
-class Sexy {
-public:
+namespace Sexy {
+//public:
     class Image {
     public:
         int *vTable;                      // 0
@@ -1919,7 +1919,7 @@ public:
     }; // 大小58个整数
 
 
-public:
+//public:
     class Font {
     public:
         int *vTable;
@@ -1929,7 +1929,7 @@ public:
         int mLineSpacingOffset;
     };
 
-public:
+//public:
     class Graphics {
     public:
         int *vTable;                  // 0
@@ -1958,7 +1958,7 @@ public:
         int unk3[6];                  // 30 ~ 35
     }; // 大小36个整数
 
-public:
+//public:
     class WidgetContainer {
     public:
         int *vTable;                  // 0

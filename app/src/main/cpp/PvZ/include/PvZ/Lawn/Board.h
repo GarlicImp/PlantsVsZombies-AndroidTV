@@ -238,9 +238,70 @@ public:
     int *mStringSecondPlayer;                             // 5689
     int unknownMembers[8];                                // 5690 ~ 5697
 
+    Board(LawnApp* theApp);
+
+    void Create(LawnApp* theApp);
     void InitLevel();
-    int GetNumSeedsInBank(bool thePlayerIdx);
+    void Update();
+    void RemovedFromManager(int* theManager);
+    int GetNumSeedsInBank(bool thePlayerIndex);
     void RemoveParticleByType(ParticleEffect theEffectType);
+    void MouseMove(int x, int y);
+    void MouseDown(int x, int y, int theClickCount);
+    void MouseDownSecond(int x, int y, int theClickCount);
+    void MouseUp(int x, int y, int theClickCount);
+    void MouseDrag(int x, int y);
+    void ButtonDepress(int theId);
+    void FadeOutLevel();
+    Plant *AddPlant(int theGridX, int theGridY, SeedType theSeedType, SeedType theImitaterType, int thePlayerIndex, bool theIsDoEffect);
+    void AddSunMoney(int theAmount, int thePlayerIndex);
+    void AddDeathMoney(int theAmount);
+    PlantingReason CanPlantAt(int theGridX, int theGridY, SeedType theSeedType);
+    bool PlantingRequirementsMet(SeedType theSeedType);
+    Plant* GetFlowerPotAt(int theGridX, int theGridY);
+    Plant* GetPumpkinAt(int theGridX, int theGridY);
+    void ZombiesWon(Zombie* theZombie);
+    void KeyDown(Sexy::KeyCode theKey);
+    void UpdateSunSpawning();
+    void UpdateZombieSpawning();
+    void PickBackground();
+    void DrawCoverLayer(Sexy::Graphics* g, int theRow);
+    void UpdateGame();
+    void UpdateGameObjects();
+    bool IsFlagWave(int theWaveNumber);
+    void SpawnZombieWave();
+    void DrawProgressMeter(Sexy::Graphics* g, int theX, int theY);
+    int GetNumWavesPerFlag();
+    bool IsLevelDataLoaded();
+    bool NeedSaveGame();
+    void UpdateFwoosh();
+    void UpdateFog();
+    void DrawFog(Sexy::Graphics* g);
+    void UpdateIce();
+    void DrawBackdrop(Sexy::Graphics* g);
+    bool RowCanHaveZombieType(int theRow, ZombieType theZombieType);
+    void DrawDebugText(Sexy::Graphics* g);
+    void DrawDebugObjectRects(Sexy::Graphics* g);
+    void DrawFadeOut(Sexy::Graphics* g);
+    int GetCurrentPlantCost(SeedType theSeedType, SeedType theImitaterType);
+    void Pause(bool thePause);
+    void AddSecondPlayer(int a2);
+    bool IsLastStandFinalStage();
+    bool MouseHitTest(int x, int y, HitResult* theHitResult, bool thePlayerIndex);
+    void DrawShovel(Sexy::Graphics* g);
+    bool StageHasPool();
+    Zombie* AddZombieInRow(ZombieType theZombieType, int theRow, int theFromWave, bool theIsRustle);
+    void DoPlantingEffects(int theGridX, int theGridY, Plant* thePlant);
+    void InitLawnMowers();
+    void PickZombieWaves();
+    void DrawUITop(Sexy::Graphics* g);
+    void GetShovelButtonRect(TRect *rect);
+    void UpdateLevelEndSequence();
+    void UpdateGridItems();
+    void ShakeBoard(int theShakeAmountX, int theShakeAmountY);
+    void DrawZenButtons(Sexy::Graphics* g);
+    void SpeedUpUpdate();
+    void DrawShovelButton(Sexy::Graphics* g, LawnApp* theApp);
 };
 
 /***************************************************************************************************************/
@@ -292,7 +353,7 @@ inline bool drawDebugText;
 inline bool drawDebugRects;
 inline bool FreePlantAt;
 inline bool ZombieCanNotWon;
-inline bool PumpkinWithLadder; // Board_AddPlant
+inline bool PumpkinWithLadder; // AddPlant
 inline bool endlessLastStand;
 
 // 检查加农炮用
@@ -479,13 +540,13 @@ inline int (*old_Board_GetCurrentPlantCost)(Board *board, SeedType a2, SeedType 
 
 inline PlantingReason (*old_Board_CanPlantAt)(Board *board, int theGridX, int theGridY, SeedType seedType);
 
-inline bool (*old_Board_PlantingRequirementsMet)(Board *board, int a2);
+inline bool (*old_Board_PlantingRequirementsMet)(Board *board, SeedType theSeedType);
 
 inline void (*old_BoardZombiesWon)(Board *board, Zombie *zombie);
 
 inline Plant *(*old_Board_AddPlant)(Board *board, int x, int y, SeedType seedType, SeedType theImitaterType, int playerIndex, bool doPlantEffect);
 
-inline void (*old_Board_KeyDown)(Board *board, int keyCode);
+inline void (*old_Board_KeyDown)(Board *board, Sexy::KeyCode theKey);
 
 inline void (*old_Board_UpdateSunSpawning)(Board *board);
 
@@ -580,25 +641,15 @@ Sexy::Image *GetIconByAchievementId(AchievementId::AchievementId theAchievementI
 
 void Board_FixReanimErrorAfterLoad(Board *board);
 
-bool Board_MouseHitTest(Board *board, int x, int y, HitResult *hitResult, bool playerIndex);
-
-void Board_UpdateGridItems(Board *board);
-
-void Board_ShakeBoard(Board *board, int, int);
-
 void Board_GetShovelButtonRect(TRect *, Board *);
 
 bool TRect_Contains(TRect *rect, int x, int y);
-
-void Board_MouseDownSecond(Board *board, int x, int y, int theClickCount);
 
 void Board_MouseDragSecond(Board *board, int x, int y);
 
 void Board_MouseUpSecond(Board *board, int x, int y, int theClickCount);
 
 void Board_LoadFormation(Board *board, const char *formation);
-
-Plant *Board_GetPumpkinAt(Board *, int, int);
 
 bool Board_GrantAchievement(Board *board, AchievementId::AchievementId theAchievementId, bool show);
 
@@ -612,134 +663,26 @@ bool Board_ZenGardenItemNumIsZero(Board *, CursorType);
 
 void Board_SetGrids(Board *board);
 
-void Board_UpdateGame(Board *board);
-
-void Board_UpdateGameObjects(Board *board);
-
-void Board_DrawDebugText(Board *board, Sexy::Graphics *graphics);
-
-void Board_DrawDebugObjectRects(Board *board, Sexy::Graphics *graphics);
-
-void Board_DrawFadeOut(Board *board, Sexy::Graphics *graphics);
-
-int Board_GetCurrentPlantCost(Board *board, SeedType a2, SeedType a3);
-
-void Board_AddSunMoney(Board *board, int theAmount, int playerIndex);
-
-void Board_AddDeathMoney(Board *board, int theAmount);
-
-PlantingReason Board_CanPlantAt(Board *board, int theGridX, int theGridY, SeedType seedType);
-
-bool Board_PlantingRequirementsMet(Board *board, int a2);
-
-void Board_ZombiesWon(Board *board, Zombie *theZombie);
-
-Plant *Board_AddPlant(Board *board, int x, int y, SeedType seedType, SeedType theImitaterType, int playerIndex, bool doPlantEffect);
-
 void Board_parseFormationSegment(Board *board, char *segment);
 
 void Board_LoadFormation(Board *board, char *formation);
 
-void Board_DrawZenButtons(Board *board, Sexy::Graphics *a2);
-
 bool Board_KeyUp(Board *board, int keyCode);
 
-void Board_KeyDown(Board *board, int keyCode);
-
-void Board_UpdateSunSpawning(Board *board);
-
-void Board_UpdateZombieSpawning(Board *board);
-
-void Board_UpdateIce(Board *board);
-
-void Board_DrawCoverLayer(Board *board, Sexy::Graphics *graphics, int theRow);
-
-void Board_PickBackground(Board *board);
-
 bool Board_StageIsNight(Board *board);
-
-bool Board_StageHasPool(Board *board);
 
 bool Board_StageHasRoof(Board *board);
 
 bool Board_StageHas6Rows(Board *board);
 
-void Board_UpdateFwoosh(Board *board);
-
-void Board_UpdateFog(Board *board);
-
-void Board_DrawFog(Board *board, Sexy::Graphics *g);
-
-Zombie *Board_AddZombieInRow(Board *board, ZombieType theZombieType, int theRow, int theFromWave, bool playAnim);
-
-void Board_SpeedUpUpdate(Board *board);
-
-void Board_Update(Board *board);
-
-int Board_GetNumWavesPerFlag(Board *board);
-
-bool Board_IsFlagWave(Board *board, int currentWave);
-
-void Board_SpawnZombieWave(Board *board);
-
-void Board_DrawProgressMeter(Board *board, Sexy::Graphics *graphics, int a3, int a4);
-
-bool Board_IsLevelDataLoaded(Board *board);
-
-bool Board_NeedSaveGame(Board *board);
-
-void Board_DrawBackdrop(Board *board, Sexy::Graphics *graphics);
-
 void Board_DrawHammerButton(Board *board, Sexy::Graphics *graphics, LawnApp *lawnApp);
 
 void Board_DrawButterButton(Board *board, Sexy::Graphics *graphics, LawnApp *lawnApp);
 
-void Board_DrawShovelButton(Board *board, Sexy::Graphics *graphics, LawnApp *lawnApp);
-
 void Board_DrawStartButton(Board *board, Sexy::Graphics *graphics, LawnApp *lawnApp);
-
-void Board_DrawShovel(Board *board, Sexy::Graphics *graphics);
-
-void Board_Pause(Board *board, bool a2);
-
-void Board_AddSecondPlayer(Board *board, int a2);
-
-bool Board_IsLastStandFinalStage(Board *board);
-
-Plant *Board_GetFlowerPotAt(Board *board, int theGridX, int theGridY);
-
-void Board_DoPlantingEffects(Board *board, int theGridX, int theGridY, Plant *plant);
-
-void Board_InitLawnMowers(Board *board);
-
-void Board_PickZombieWaves(Board *board);
 
 int Board_GetLiveGargantuarCount(Board *board);
 
-void Board_RemovedFromManager(Board *board, int *manager);
-
-void Board_InitLevel(Board *board);
-
-void Board_ButtonDepress(Board *board, int id);
-
-void Board_Board(Board *board, LawnApp *mApp);
-
-void Board_MouseUp(Board *board, int x, int y, int theClickCount);
-
-void Board_MouseDrag(Board *board, int x, int y);
-
-void Board_MouseDown(Board *board, int x, int y, int theClickCount);
-
-void Board_MouseMove(Board *board, int x, int y);
-
-void Board_FadeOutLevel(Board *board);
-
 void Board_UpdateButtons(Board *board);
-
-bool Board_RowCanHaveZombieType(Board *board, int theRow, ZombieType theZombieType);
-
-void Board_DrawUITop(Board *board, Sexy::Graphics *graphics);
-
-void Board_UpdateLevelEndSequence(Board *board);
 
 #endif // PVZ_LAWN_BOARD_H

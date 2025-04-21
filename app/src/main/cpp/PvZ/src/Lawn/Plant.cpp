@@ -222,7 +222,7 @@ void Plant::Draw(Sexy::Graphics *g) {
     bool flag = false;
     Plant *thePlant = nullptr;
     if (IsOnBoard()) {
-        thePlant = Board_GetPumpkinAt(mBoard, mPlantCol, mRow);
+        thePlant = mBoard->GetPumpkinAt(mPlantCol, mRow);
         if (thePlant != nullptr) {
             Plant *plant2 = Board_GetTopPlantAt(mBoard, mPlantCol, mRow, PlantPriority::TOPPLANT_ONLY_NORMAL_POSITION);
             if (plant2 != nullptr && plant2->mRenderOrder > thePlant->mRenderOrder) {
@@ -294,14 +294,14 @@ void Plant::Draw(Sexy::Graphics *g) {
             seedType = Board_GetSeedTypeInCursor(mBoard, 0);
             seedType2 = Board_GetSeedTypeInCursor(mBoard, 1);
         }
-        if ((Plant_IsPartOfUpgradableTo(this, seedType) && Board_CanPlantAt(mBoard, mPlantCol, mRow, seedType) == PlantingReason::PLANTING_OK)
-            || (Plant_IsPartOfUpgradableTo(this, seedType2) && Board_CanPlantAt(mBoard, mPlantCol, mRow, seedType2) == PlantingReason::PLANTING_OK)) {
+        if ((Plant_IsPartOfUpgradableTo(this, seedType) && mBoard->CanPlantAt(mPlantCol, mRow, seedType) == PlantingReason::PLANTING_OK)
+            || (Plant_IsPartOfUpgradableTo(this, seedType2) && mBoard->CanPlantAt(mPlantCol, mRow, seedType2) == PlantingReason::PLANTING_OK)) {
             Sexy_Graphics_SetColorizeImages(g, true);
             Color color;
             GetFlashingColor(&color, mBoard->mMainCounter, 90);
             Sexy_Graphics_SetColor(g, &color);
-        } else if ((seedType == SeedType::SEED_COBCANNON && Board_CanPlantAt(mBoard, mPlantCol - 1, mRow, seedType) == PlantingReason::PLANTING_OK)
-                   || (seedType2 == SeedType::SEED_COBCANNON && Board_CanPlantAt(mBoard, mPlantCol - 1, mRow, seedType2) == PlantingReason::PLANTING_OK)) {
+        } else if ((seedType == SeedType::SEED_COBCANNON && mBoard->CanPlantAt(mPlantCol - 1, mRow, seedType) == PlantingReason::PLANTING_OK)
+                   || (seedType2 == SeedType::SEED_COBCANNON && mBoard->CanPlantAt(mPlantCol - 1, mRow, seedType2) == PlantingReason::PLANTING_OK)) {
             Sexy_Graphics_SetColorizeImages(g, true);
             Color color;
             GetFlashingColor(&color, mBoard->mMainCounter, 90);

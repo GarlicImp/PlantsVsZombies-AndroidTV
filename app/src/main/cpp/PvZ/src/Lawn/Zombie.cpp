@@ -206,7 +206,7 @@ void Zombie::UpdateZombieJalapenoHead() {
         LawnApp_PlayFoley(mApp, FoleyType::JalapenoIgnite);
         LawnApp_PlayFoley(mApp, FoleyType::Juicy);
         Board_DoFwoosh(mBoard, mRow);
-        Board_ShakeBoard(mBoard, 3, -4);
+        mBoard->ShakeBoard(3, -4);
 
 #ifdef DO_FIX_BUGS
         if (mMindControlled)
@@ -330,12 +330,13 @@ int Zombie::GetDancerFrame() {
     // return *(uint32_t *) (lawnApp + 2368) % num2 / num1;
 }
 
-bool ZombieTypeCanGoInPool(ZombieType theZombieType) {
+bool Zombie::ZombieTypeCanGoInPool(ZombieType theZombieType) {
     // 修复泳池对战的僵尸们走水路时不攻击植物
     LawnApp *lawnApp = (LawnApp *)*gLawnApp_Addr;
     if (lawnApp->mGameMode == GameMode::GAMEMODE_TWO_PLAYER_VS && (VSBackGround == 3 || VSBackGround == 4 || VSBackGround == 9)) {
         return true;
     }
+
     return old_ZombieTypeCanGoInPool(theZombieType);
 }
 
@@ -346,7 +347,7 @@ void Zombie::RiseFromGrave(int theGridX, int theGridY) {
         if (mBoard->mPlantRow[theGridY] == PlantRowType::PLANTROW_POOL) {
             //                if (old_ZombieTypeCanGoInPool(mZombieType)) {
             DieNoLoot();
-            Board_AddZombieInRow(mBoard, mZombieType, theGridY, mBoard->mCurrentWave, 1);
+            mBoard->AddZombieInRow(mZombieType, theGridY, mBoard->mCurrentWave, 1);
             return;
             //                }
         }
@@ -385,7 +386,7 @@ void Zombie::CheckForBoardEdge() {
         if (LawnApp_IsIZombieLevel(mApp)) {
             DieNoLoot();
         } else {
-            Board_ZombiesWon(mBoard, this);
+            mBoard->ZombiesWon(this);
         }
     }
     if (mX <= boardEdge + 70 && !mHasHead) {
@@ -576,7 +577,7 @@ void Zombie::DrawBungeeCord(Sexy::Graphics *graphics, int theOffsetX, int theOff
 bool Zombie::IsTangleKelpTarget() {
     // 修复水草拉僵尸有概率失效
 
-    if (!Board_StageHasPool(mBoard)) {
+    if (!mBoard->StageHasPool()) {
         return false;
     }
     if (mZombieHeight == ZombieHeight::HEIGHT_DRAGGED_UNDER) {

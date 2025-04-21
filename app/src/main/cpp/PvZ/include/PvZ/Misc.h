@@ -279,17 +279,7 @@ inline void (*old_CreditScreen_Delete2)(Sexy::Widget *creditScreen);
 
 int randomInt(int a, int b);
 
-void DrawSeedPacket(Sexy::Graphics *graphics,
-                    float x,
-                    float y,
-                    SeedType seedType,
-                    SeedType imitaterType,
-                    float coolDownPercent,
-                    int grayness,
-                    bool drawCostText,
-                    bool isInGame,
-                    bool isZombieSeed,
-                    bool a11);
+void DrawSeedPacket(Sexy::Graphics *graphics,float x,float y,SeedType seedType,SeedType imitaterType,float coolDownPercent,int grayness,bool drawCostText,bool isInGame,bool isZombieSeed,bool a11);
 
 void ReanimatorCache_DrawCachedPlant(ReanimatorCache *a1, Sexy::Graphics *graphics, float thePosX, float thePosY, SeedType theSeedType, DrawVariation theDrawVariation);
 
