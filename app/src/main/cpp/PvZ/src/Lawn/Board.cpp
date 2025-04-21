@@ -1795,7 +1795,7 @@ void Board::MouseDown(int x, int y, int theClickCount) {
 
     SeedChooserScreen *mSeedChooserScreen = mApp->mSeedChooserScreen;
     if (mGameScene == GameScenes::SCENE_LEVEL_INTRO && mSeedChooserScreen != nullptr && mSeedChooserScreen->mChooseState == SeedChooserState::CHOOSE_VIEW_LAWN) {
-        SeedChooserScreen_GameButtonDown(mSeedChooserScreen, 6, 0);
+        mSeedChooserScreen->GameButtonDown(BUTTONCODE_A, 0);
         return;
     }
     if (mGameScene == GameScenes::SCENE_LEVEL_INTRO) {
@@ -2381,7 +2381,7 @@ void Board::MouseDownSecond(int x, int y, int theClickCount) {
 
     SeedChooserScreen *mSeedChooserScreen = mApp->mSeedChooserScreen;
     if (mGameScene == GameScenes::SCENE_LEVEL_INTRO && mSeedChooserScreen != nullptr && mSeedChooserScreen->mChooseState == SeedChooserState::CHOOSE_VIEW_LAWN) {
-        SeedChooserScreen_GameButtonDown(mSeedChooserScreen, 6, 0);
+        mSeedChooserScreen->GameButtonDown(BUTTONCODE_A, 0);
         return;
     }
     if (mGameScene == GameScenes::SCENE_LEVEL_INTRO) {

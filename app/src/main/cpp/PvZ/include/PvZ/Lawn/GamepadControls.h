@@ -37,6 +37,28 @@ public:
 
 /***************************************************************************************************************/
 // buttonCode 是按键键值，对应关系如下：
+enum ButtonCode{
+    BUTTONCODE_LUP = 0,
+    BUTTONCODE_LDOWN = 1,
+    BUTTONCODE_LLEFT = 2,
+    BUTTONCODE_LRIGHT = 3,
+    BUTTONCODE_UNKNOWN = 4,
+    BUTTONCODE_PAUSE = 5,
+    BUTTONCODE_A = 6,
+    BUTTONCODE_B = 7,
+    BUTTONCODE_X = 8,
+    BUTTONCODE_Y = 9,
+    BUTTONCODE_L1 = 10,
+    BUTTONCODE_R1 = 11,
+    BUTTONCODE_L2 = 12,
+    BUTTONCODE_R2 = 13,
+    BUTTONCODE_TL = 14,
+    BUTTONCODE_TR = 15,
+    BUTTONCODE_UP = 16,
+    BUTTONCODE_DOWN = 17,
+    BUTTONCODE_LEFT = 18,
+    BUTTONCODE_RIGHT = 19
+};
 // 左摇杆上 0
 // 左摇杆下 1
 // 左摇杆左 2

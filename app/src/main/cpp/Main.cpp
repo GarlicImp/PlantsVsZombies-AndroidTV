@@ -981,7 +981,7 @@ extern "C" JNIEXPORT void JNICALL Java_com_transmension_mobile_EnhanceActivity_n
     }
     SeedChooserScreen *seedChooserScreen = lawnApp->mSeedChooserScreen;
     if (is_key_down && LawnApp_IsCoopMode(lawnApp) && seedChooserScreen != nullptr && mFocusWidget == seedChooserScreen) {
-        SeedChooserScreen_GameButtonDown(seedChooserScreen, buttonCode, playerIndex);
+        seedChooserScreen->GameButtonDown((ButtonCode)buttonCode, playerIndex);
         return;
     }
 
