@@ -42,8 +42,12 @@ public:
     bool unk8;                          // 197
     int unkInt;                         // 50
     // 大小51个整数
-public:
 
+    void GamepadCursorOver(int thePlayerIndex);
+    void Update();
+    void UpdateFallForAward();
+    void UpdateFall();
+    bool MouseHitTest(int theX, int theY, int **theHitResult, int thePlayerIndex);
 };
 
 /***************************************************************************************************************/
@@ -79,16 +83,5 @@ inline void (*old_Coin_Update)(Coin *coin);
 inline void (*old_Coin_UpdateFall)(Coin *coin);
 
 inline bool (*old_Coin_MouseHitTest)(Coin *coin, int a2, int a3, int **hitResult, int a5);
-
-
-void Coin_GamepadCursorOver(Coin *coin, int a2);
-
-void Coin_Update(Coin *coin);
-
-void Coin_UpdateFallForAward(Coin *coin);
-
-void Coin_UpdateFall(Coin *coin);
-
-bool Coin_MouseHitTest(Coin *coin, int a2, int a3, int **hitResult, int a5);
 
 #endif // PVZ_LAWN_COIN_H

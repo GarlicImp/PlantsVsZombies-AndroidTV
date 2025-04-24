@@ -30,7 +30,16 @@ public:
     MotionTrailFrame mMotionTrailFrames[12];     // 25 ~ 60
     int mMotionTrailCount;                       // 61
     int unkMems[14];                             // 62 ~ 75
-}; // 大小76个整数
+    // 大小76个整数
+
+    void DrawScaryPot(Sexy::Graphics* g);
+    void Update();
+    void UpdateScaryPot();
+    void DrawStinky(Sexy::Graphics* g);
+    void DrawSquirrel(Sexy::Graphics* g);
+    void DrawCrater(Sexy::Graphics* g);
+
+};
 
 /***************************************************************************************************************/
 inline bool transparentVase;
@@ -44,18 +53,5 @@ inline void (*old_GridItem_Update)(GridItem *a1);
 inline void (*old_GridItem_UpdateScaryPot)(GridItem *scaryPot);
 
 inline void (*old_GridItem_DrawStinky)(GridItem *mStinky, Sexy::Graphics *graphics);
-
-
-void GridItem_DrawScaryPot(GridItem *scaryPot, Sexy::Graphics *graphics);
-
-void GridItem_Update(GridItem *a1);
-
-void GridItem_UpdateScaryPot(GridItem *scaryPot);
-
-void GridItem_DrawStinky(GridItem *mStinky, Sexy::Graphics *graphics);
-
-void GridItem_DrawSquirrel(GridItem *squirrel, Sexy::Graphics *graphics);
-
-void GridItem_DrawCrater(GridItem *squirrel, Sexy::Graphics *graphics);
 
 #endif // PVZ_LAWN_GRID_ITEM_H

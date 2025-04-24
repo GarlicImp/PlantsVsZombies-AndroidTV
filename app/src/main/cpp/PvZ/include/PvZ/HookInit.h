@@ -706,10 +706,10 @@ inline void InitHookFunction() {
     homura::HookFunction(GetChallengeDefinitionAddr, &GetChallengeDefinition, &old_GetChallengeDefinition);
 
 
-    homura::HookFunction(Coin_UpadteAddr, &Coin_Update, &old_Coin_Update);
-    homura::HookFunction(Coin_GamepadCursorOverAddr, &Coin_GamepadCursorOver, &old_Coin_GamepadCursorOver);
-    homura::HookFunction(Coin_MouseHitTestAddr, &Coin_MouseHitTest, &old_Coin_MouseHitTest);
-    homura::HookFunction(Coin_UpdateFallAddr, &Coin_UpdateFall, &old_Coin_UpdateFall);
+    homura::HookFunction(Coin_UpadteAddr, &Coin::Update, &old_Coin_Update);
+    homura::HookFunction(Coin_GamepadCursorOverAddr, &Coin::GamepadCursorOver, &old_Coin_GamepadCursorOver);
+    homura::HookFunction(Coin_MouseHitTestAddr, &Coin::MouseHitTest, &old_Coin_MouseHitTest);
+    homura::HookFunction(Coin_UpdateFallAddr, &Coin::UpdateFall, &old_Coin_UpdateFall);
 
 
     homura::HookFunction(GamepadControls_ButtonDownFireCobcannonTestAddr, &GamepadControls_ButtonDownFireCobcannonTest, &old_GamepadControls_ButtonDownFireCobcannonTest);
@@ -720,12 +720,12 @@ inline void InitHookFunction() {
     homura::HookFunction(GamepadControls_UpdatePreviewReanimAddr, &GamepadControls_UpdatePreviewReanim, &old_GamepadControls_UpdatePreviewReanim);
 
 
-    homura::HookFunction(GridItem_UpdateAddr, &GridItem_Update, &old_GridItem_Update);
-    homura::HookFunction(GridItem_UpdateScaryPotAddr, &GridItem_UpdateScaryPot, &old_GridItem_UpdateScaryPot);
-    homura::HookFunction(GridItem_DrawStinkyAddr, &GridItem_DrawStinky, &old_GridItem_DrawStinky);
-    homura::HookFunction(GridItem_DrawSquirrelAddr, &GridItem_DrawSquirrel, nullptr);
-    homura::HookFunction(GridItem_DrawScaryPotAddr, &GridItem_DrawScaryPot, nullptr);
-    homura::HookFunction(GridItem_DrawCraterAddr, &GridItem_DrawCrater, nullptr);
+    homura::HookFunction(GridItem_UpdateAddr, &GridItem::Update, &old_GridItem_Update);
+    homura::HookFunction(GridItem_UpdateScaryPotAddr, &GridItem::UpdateScaryPot, &old_GridItem_UpdateScaryPot);
+    homura::HookFunction(GridItem_DrawStinkyAddr, &GridItem::DrawStinky, &old_GridItem_DrawStinky);
+    homura::HookFunction(GridItem_DrawSquirrelAddr, &GridItem::DrawSquirrel, nullptr);
+    homura::HookFunction(GridItem_DrawScaryPotAddr, &GridItem::DrawScaryPot, nullptr);
+    homura::HookFunction(GridItem_DrawCraterAddr, &GridItem::DrawCrater, nullptr);
 
 
     homura::HookFunction(AlmanacDialog_RemovedFromManagerAddr, &AlmanacDialog_RemovedFromManager, &old_AlmanacDialog_RemovedFromManager);
