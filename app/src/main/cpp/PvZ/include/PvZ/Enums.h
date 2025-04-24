@@ -131,7 +131,8 @@ enum ChallengePage
     CHALLENGE_PAGE_LIMBO = 2,
     CHALLENGE_PAGE_COOP = 3,
     CHALLENGE_PAGE_PUZZLE = 4,
-    MAX_CHALLANGE_PAGES = 5
+    MAX_CHALLANGE_PAGES = 5,
+//    CHALLENGE_PAGE_VS = 6,
 };
 enum ChallengeState
 {
@@ -1510,6 +1511,12 @@ enum MainMenuButtonId {
 
 
     ACHIEVEMENTS_BACK_BUTTON = 21
+};
+
+enum MainMenuScene {
+    MENUSCENE_MORE_WAYS,
+    MENUSCENE_MAIN,
+    MENUSCENE_EXTRA
 };
 
 

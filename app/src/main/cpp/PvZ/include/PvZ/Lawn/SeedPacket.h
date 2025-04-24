@@ -26,7 +26,10 @@ public:
     bool mSelectedBy1P;                        // 113
     // 大小29个整数
 public:
+    void Update();
     void UpdateSelected();
+    void DrawOverlay(Sexy::Graphics* g);
+    void Draw(Sexy::Graphics* g);
     void FlashIfReady();
 };
 
@@ -61,14 +64,10 @@ inline void (*old_SeedPacket_EndDraw)(SeedPacket *, Sexy::Graphics *);
 inline void (*old_SeedPacket_FlashIfReady)(SeedPacket *seedPacket);
 
 
-void SeedPacket_Update(SeedPacket *seedPacket);
-
 bool SeedPacket_BeginDraw(SeedPacket *a, Sexy::Graphics *a2);
 
 void SeedPacket_EndDraw(SeedPacket *a, Sexy::Graphics *a2);
 
-void SeedPacket_DrawOverlay(SeedPacket *seedPacket, Sexy::Graphics *graphics);
 
-void SeedPacket_Draw(SeedPacket *seedPacket, Sexy::Graphics *graphics);
 
 #endif // PVZ_LAWN_SEED_PACKET_H

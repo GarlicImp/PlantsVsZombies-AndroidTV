@@ -45,28 +45,30 @@ public:
     Sexy::Image *m2DMarkImage;         // 107
     // 大小108个整数
 public:
-    void Creat(LawnApp *mApp);
+    void Creat(LawnApp* theApp);
     void KeyDown(Sexy::KeyCode theKeyCode);
     void ButtonDepress(MainMenuButtonId theSelectedButton);
     void Update();
     void SyncProfile(bool a2);
+    void Enter();
     void Exit();
     bool UpdateExit();
     void OnExit();
     void OnScene(int theScene);
+    void SyncButtons();
     void UpdateCameraPosition();
-    void AddedToManager(int *a2);
-    void RemovedFromManager(int *a2);
-    void DrawOverlay(Sexy::Graphics *g);
-    void DrawFade(Sexy::Graphics *g);
+    void AddedToManager(int* a2);
+    void RemovedFromManager(int* a2);
+    void DrawOverlay(Sexy::Graphics* g);
+    void DrawFade(Sexy::Graphics* g);
     void Delete2();
-    void Draw(Sexy::Graphics *g);
+    void Draw(Sexy::Graphics* g);
     void ButtonPress(MainMenuButtonId theSelectedButton);
 };
 
 inline bool (*MainMenu_InTransition)(MainMenu *);
 
-inline void (*MainMenu_SetScene)(MainMenu *, int scene);
+inline void (*MainMenu_SetScene)(MainMenu *, MainMenuScene scene);
 
 inline void (*MainMenu_StartAdventureMode)(MainMenu *);
 
@@ -120,13 +122,9 @@ inline void (*old_TestMenuWidget_Delete2)(ZombatarWidget *zombatarWidget);
 inline void (*old_TestMenuWidget_Delete)(ZombatarWidget *zombatarWidget);
 
 
-void MainMenu_SyncButtons(MainMenu *mainMenu);
-
 void LeaderboardsWidget_LeaderboardsWidget(LeaderboardsWidget *this_, LawnApp *lawnApp);
 
 void DaveHelp_Delete2(LeaderboardsWidget *leaderboardsWidget);
-
-void MainMenu_Enter(MainMenu *mainMenu);
 
 void ZombatarWidget_ZombatarWidget(ZombatarWidget *zombatarWidget, LawnApp *lawnApp);
 

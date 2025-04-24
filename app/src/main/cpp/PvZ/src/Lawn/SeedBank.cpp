@@ -138,7 +138,7 @@ void SeedBank::Draw(Sexy::Graphics *g) {
                 continue;
             }
             if (SeedPacket_BeginDraw(seedPacket, g)) {
-                SeedPacket_DrawOverlay(seedPacket, g);
+                seedPacket->DrawOverlay(g);
                 SeedPacket_EndDraw(seedPacket, g);
             }
         }
@@ -148,11 +148,11 @@ void SeedBank::Draw(Sexy::Graphics *g) {
     g->mClipRect.mWidth += 20;
     g->mClipRect.mHeight += 30;
     if (seedPacket2 != nullptr && SeedPacket_BeginDraw(seedPacket2, g)) {
-        SeedPacket_Draw(seedPacket2, g);
+        seedPacket2->Draw(g);
         SeedPacket_EndDraw(seedPacket2, g);
     }
     if (seedPacket1 != nullptr && SeedPacket_BeginDraw(seedPacket1, g)) {
-        SeedPacket_Draw(seedPacket1, g);
+        seedPacket1->Draw(g);
         SeedPacket_EndDraw(seedPacket1, g);
     }
     Sexy_Graphics_ClearClipRect(g);

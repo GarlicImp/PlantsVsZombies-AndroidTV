@@ -40,8 +40,6 @@ inline bool (*old_SeedBank_BeginDraw)(SeedBank *seedBank, Sexy::Graphics *graphi
 inline void (*old_SeedBank_EndDraw)(SeedBank *seedBank, Sexy::Graphics *graphics);
 
 
-void SeedBank_Draw(SeedBank *seedBank, Sexy::Graphics *graphics);
-
 bool SeedBank_ContainsPoint(SeedBank *, int x, int y);
 
 bool SeedBank_BeginDraw(SeedBank *seedBank, Sexy::Graphics *graphics);

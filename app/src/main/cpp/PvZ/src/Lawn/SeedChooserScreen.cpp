@@ -118,7 +118,7 @@ void SeedChooserScreen::Create(bool theIsZombieChooser) {
             mAlmanacButton->mDisabled = true;
             mAlmanacButton->mBtnNoDraw = true;
         }
-        if (theIsZombieChooser && mStartButton != nullptr) {
+        if (mStartButton != nullptr) { // 此处仿照PS3版处理，同时去除双方的开始按钮
             mStartButton->mDisabled = true;
             mStartButton->mBtnNoDraw = true;
         }

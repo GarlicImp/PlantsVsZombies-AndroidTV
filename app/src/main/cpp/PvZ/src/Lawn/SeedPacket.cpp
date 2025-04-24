@@ -9,28 +9,29 @@
 #include "PvZ/Lawn/GamepadControls.h"
 #include "PvZ/Lawn/SeedBank.h"
 
-void SeedPacket_Update(SeedPacket *seedPacket) {
-    if (seedPacket->mRefreshing && seedPacketFastCoolDown) {
+void SeedPacket::Update() {
+    if (mRefreshing && seedPacketFastCoolDown) {
         // 正在刷新的种子立即冷却完毕
-        seedPacket->mActive = true;
-        seedPacket->mRefreshing = false;
+        mActive = true;
+        mRefreshing = false;
     }
 
     if (requestPause) {
 
-        if (LawnApp_IsIZombieLevel(seedPacket->mApp)) {
+        if (LawnApp_IsIZombieLevel(mApp)) {
             // 在IZ模式不暂停刷新种子卡片
-            return old_SeedPacket_Update(seedPacket);
+            return old_SeedPacket_Update(this);
         }
 
-        if (seedPacket->mApp->mGameScene == GameScenes::SCENE_PLAYING && seedPacket->mPacketType != SeedType::SEED_NONE) {
-            seedPacket->mRefreshCounter--;
+        if (mApp->mGameScene == GameScenes::SCENE_PLAYING && mPacketType != SeedType::SEED_NONE) {
+            mRefreshCounter--;
         }
-        if (seedPacket->mSlotMachineCountDown > 0) {
-            seedPacket->mSlotMachineCountDown++;
+        if (mSlotMachineCountDown > 0) {
+            mSlotMachineCountDown++;
         }
     }
-    return old_SeedPacket_Update(seedPacket);
+
+    return old_SeedPacket_Update(this);
 }
 
 void SeedPacket::UpdateSelected() {
@@ -48,25 +49,26 @@ void SeedPacket::UpdateSelected() {
     return old_SeedPacket_UpdateSelected(this);
 }
 
-void SeedPacket_DrawOverlay(SeedPacket *seedPacket, Sexy::Graphics *graphics) {
+void SeedPacket::DrawOverlay(Sexy::Graphics* g) {
     // 绘制卡片冷却进度倒计时
-    old_SeedPacket_DrawOverlay(seedPacket, graphics);
-    if (seedPacket->mRefreshing && showCoolDown) {
+    old_SeedPacket_DrawOverlay(this, g);
+
+    if (mRefreshing && showCoolDown) {
         // 如果玩家开启了“显示冷却倒计时”，则绘制倒计时
         int holder[1];
-        int coolDownRemaining = seedPacket->mRefreshTime - seedPacket->mRefreshCounter;
+        int coolDownRemaining = mRefreshTime - mRefreshCounter;
         Sexy_StrFormat(holder, "%1.1f", coolDownRemaining / 100.0f);
-        Sexy_Graphics_SetColor(graphics, SeedPacket_GetPlayerIndex(seedPacket) ? &yellow : &blue);
-        Sexy_Graphics_SetFont(graphics, *Sexy_FONT_DWARVENTODCRAFT18_Addr);
-        Sexy_Graphics_DrawString(graphics, holder, coolDownRemaining < 1000 ? 10 : 0, 39);
+        Sexy_Graphics_SetColor(g, SeedPacket_GetPlayerIndex(this) ? &yellow : &blue);
+        Sexy_Graphics_SetFont(g, *Sexy_FONT_DWARVENTODCRAFT18_Addr);
+        Sexy_Graphics_DrawString(g, holder, coolDownRemaining < 1000 ? 10 : 0, 39);
         Sexy_String_Delete(holder);
-        Sexy_Graphics_SetFont(graphics, nullptr);
+        Sexy_Graphics_SetFont(g, nullptr);
     }
 }
 
-void SeedPacket_Draw(SeedPacket *seedPacket, Sexy::Graphics *graphics) {
+void SeedPacket::Draw(Sexy::Graphics* g) {
     // 绘制卡片冷却进度倒计时
-    old_SeedPacket_Draw(seedPacket, graphics);
+    old_SeedPacket_Draw(this, g);
 }
 
 void SeedPacket_MouseDown(SeedPacket *seedPacket, int x, int y, int c, int unk) {
