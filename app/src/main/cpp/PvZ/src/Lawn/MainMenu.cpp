@@ -225,30 +225,29 @@ void MainMenu::ButtonDepress(MainMenuButtonId theSelectedButton) {
         return; // 在进入、退出成就时不允许玩家操作
     if (theSelectedButton == MORE_WAYS_BUTTON) {
         // 如果当前选中的按钮为"更多游戏方式"
-        MainMenu_SetScene(this, 0);
+        MainMenu_SetScene(this, MENUSCENE_MORE_WAYS);
         return;
     }
 
     // 为1.1.1添加触控或确认进入对战结盟模式，并检测是否解锁对战结盟
-    LawnApp *lawnApp = mApp;
     switch (theSelectedButton) {
         case ADVENTURE_BUTTON:
         case START_ADVENTURE_BUTTON:
             MainMenu_StartAdventureMode(this);
-            if (LawnPlayerInfo_GetFlag(lawnApp->mPlayerInfo, 4096) && lawnApp->mPlayerInfo->mLevel == 35) {
+            if (LawnPlayerInfo_GetFlag(mApp->mPlayerInfo, 4096) && mApp->mPlayerInfo->mLevel == 35) {
                 mPressedButtonId = STORE_BUTTON;
                 unkBool3 = true;
                 (*(void (**)(MainMenu *))(*(uint32_t *)this + 496))(this);
             } else {
                 mPressedButtonId = ADVENTURE_BUTTON;
-                lawnApp->mGameMode = GameMode::GAMEMODE_ADVENTURE;
+                mApp->mGameMode = GameMode::GAMEMODE_ADVENTURE;
                 (*(void (**)(MainMenu *))(*(uint32_t *)this + 496))(this);
             }
             return;
         case VS_BUTTON: // 如果按下了对战按钮
             if (mVSModeLocked) {
                 // 如果没解锁结盟（冒险2-1解锁）
-                LawnApp_LawnMessageBox(lawnApp, Dialogs::DIALOG_MESSAGE, "[MODE_LOCKED]", "[VS_LOCKED_MESSAGE]", "[DIALOG_BUTTON_OK]", "", 3);
+                LawnApp_LawnMessageBox(mApp, Dialogs::DIALOG_MESSAGE, "[MODE_LOCKED]", "[VS_LOCKED_MESSAGE]", "[DIALOG_BUTTON_OK]", "", 3);
                 return;
             }
             mPressedButtonId = theSelectedButton;
@@ -257,7 +256,7 @@ void MainMenu::ButtonDepress(MainMenuButtonId theSelectedButton) {
         case VS_COOP_BUTTON: // 如果按下了结盟按钮
             if (mCoopModeLocked) {
                 // 如果没解锁结盟（冒险2-1解锁）
-                LawnApp_LawnMessageBox(lawnApp, Dialogs::DIALOG_MESSAGE, "[MODE_LOCKED]", "[COOP_LOCKED_MESSAGE]", "[DIALOG_BUTTON_OK]", "", 3);
+                LawnApp_LawnMessageBox(mApp, Dialogs::DIALOG_MESSAGE, "[MODE_LOCKED]", "[COOP_LOCKED_MESSAGE]", "[DIALOG_BUTTON_OK]", "", 3);
                 return;
             }
             mPressedButtonId = theSelectedButton;
@@ -326,7 +325,7 @@ void MainMenu::KeyDown(Sexy::KeyCode theKeyCode) {
     MainMenuButtonId mSelectedButton = (MainMenuButtonId)mFocusedChildWidget->mWidgetId;
     if ((mSelectedButton == ADVENTURE_BUTTON || mSelectedButton == MORE_WAYS_BUTTON || mSelectedButton == START_ADVENTURE_BUTTON) && theKeyCode == Sexy::Left) {
         // 如果当前选中的按钮为"冒险模式"或者为"更多游戏方式"，同时玩家又按下了左方向键
-        MainMenu_SetScene(this, 0);
+        MainMenu_SetScene(this, MENUSCENE_MORE_WAYS);
         return;
     }
 
@@ -412,11 +411,11 @@ void MainMenu_EnableButtons(MainMenu *mainMenu) {
     //    }
 }
 
-void MainMenu_Enter(MainMenu *mainMenu) {
-    old_MainMenu_Enter(mainMenu);
-    MainMenu_UpdateHouseReanim(mainMenu);
+void MainMenu::Enter() {
+    old_MainMenu_Enter(this);
+    MainMenu_UpdateHouseReanim(this);
     // 解除成就按钮的禁用状态
-    MainMenu_EnableButtons(mainMenu);
+    MainMenu_EnableButtons(this);
 }
 
 bool MainMenu::UpdateExit() {
@@ -443,6 +442,14 @@ void MainMenu::OnExit() {
         LawnApp_KillMainMenu(mApp);
         LawnApp_ShowZombatarScreen(mApp);
     }
+
+//    if (mPressedButtonId == VS_BUTTON) {
+//        LawnApp_KillMainMenu(mApp);
+        //TODO:为对战添加选择场景
+//        LawnApp_ShowChallengeScreen(mApp, CHALLENGE_PAGE_VS);
+//        return;
+//    }
+
     old_MainMenu_OnExit(this);
 }
 
@@ -450,15 +457,15 @@ void MainMenu::OnScene(int theScene) {
     return old_MainMenu_OnScene(this, theScene);
 }
 
-void MainMenu_SyncButtons(MainMenu *mainMenu) {
+void MainMenu::SyncButtons() {
     // 解除成就按钮的禁用状态,同时刷新房子
-    old_MainMenu_SyncButtons(mainMenu);
-    MainMenu_UpdateHouseReanim(mainMenu);
-    MainMenu_EnableButtons(mainMenu);
+    old_MainMenu_SyncButtons(this);
+    MainMenu_UpdateHouseReanim(this);
+    MainMenu_EnableButtons(this);
 }
 
-void MainMenu::Creat(LawnApp *mApp) {
-    old_MainMenu_MainMenu(this, mApp);
+void MainMenu::Creat(LawnApp* theApp) {
+    old_MainMenu_MainMenu(this, theApp);
 }
 
 
@@ -479,7 +486,7 @@ void MainMenu::UpdateCameraPosition() {
     }
 }
 
-void MainMenu::AddedToManager(int *a2) {
+void MainMenu::AddedToManager(int* a2) {
     old_MainMenu_AddedToManager(this, a2);
     if (!showHouse)
         return;
@@ -493,7 +500,7 @@ void MainMenu::AddedToManager(int *a2) {
     mHouseReanimID = LawnApp_ReanimationGetID(mApp, reanimation);
 }
 
-void MainMenu::RemovedFromManager(int *a2) {
+void MainMenu::RemovedFromManager(int* a2) {
     // 记录当前游戏状态
     if (mMainMenuAchievementsWidget != nullptr) {
         Sexy_Widget_RemoveWidget(this, mMainMenuAchievementsWidget);
@@ -517,7 +524,7 @@ void MainMenu::Delete2() {
     }
 }
 
-void MainMenu::Draw(Sexy::Graphics *g) {
+void MainMenu::Draw(Sexy::Graphics* g) {
     // 实现绘制房子
     if (!showHouse)
         return old_MainMenu_Draw(this, g);
@@ -615,7 +622,7 @@ void MainMenu::Draw(Sexy::Graphics *g) {
     Sexy_Graphics_DrawImageMatrix(g, mApp->mQRCodeImage, &v42, &v38, 0.0, 0.0, 1);
 }
 
-void MainMenu::DrawOverlay(Sexy::Graphics *g) {
+void MainMenu::DrawOverlay(Sexy::Graphics* g) {
     // 在成就界面存在时，不显示冒险关卡数
     if (mMainMenuAchievementsWidget != nullptr) {
         return;
@@ -1080,7 +1087,7 @@ void LeaderboardsWidget_LeaderboardsWidget(LeaderboardsWidget *this_, LawnApp *l
     Sexy_SexyTransform2D_SexyTransform2D(&zombieSexyTransform2D);
     Reanimation_GetTrackMatrix(this_->mLeaderboardReanimations->backgroundReanim[0], zombieTrackIndex, &zombieSexyTransform2D);
     this_->mZombieTrashBin = (TrashBin *)operator new(sizeof(TrashBin));
-    this_->mZombieTrashBin->TrashBin::Create(TrashBin::ZOMBIE_PILE, lawnApp->mPlayerInfo->mGameStats.mMiscStats[GameStats::ZOMBIES_KILLED] / 125.0f);
+    this_->mZombieTrashBin->Create(TrashBin::ZOMBIE_PILE, lawnApp->mPlayerInfo->mGameStats.mMiscStats[GameStats::ZOMBIES_KILLED] / 125.0f);
     Sexy_Widget_Move(this_->mZombieTrashBin, zombieSexyTransform2D.m[0][2], zombieSexyTransform2D.m[1][2]);
 
     int plantTrackIndex = Reanimation_FindTrackIndex(this_->mLeaderboardReanimations->backgroundReanim[0], "PvZ/plant_tra.h");
@@ -1088,7 +1095,7 @@ void LeaderboardsWidget_LeaderboardsWidget(LeaderboardsWidget *this_, LawnApp *l
     Sexy_SexyTransform2D_SexyTransform2D(&plantSexyTransform2D);
     Reanimation_GetTrackMatrix(this_->mLeaderboardReanimations->backgroundReanim[0], plantTrackIndex, &plantSexyTransform2D);
     this_->mPlantTrashBin = (TrashBin *)operator new(sizeof(TrashBin));
-    this_->mPlantTrashBin->TrashBin::Create(TrashBin::PLANT_PILE, lawnApp->mPlayerInfo->mGameStats.mMiscStats[GameStats::PLANTS_KILLED] / 125.0f);
+    this_->mPlantTrashBin->Create(TrashBin::PLANT_PILE, lawnApp->mPlayerInfo->mGameStats.mMiscStats[GameStats::PLANTS_KILLED] / 125.0f);
     Sexy_Widget_Move(this_->mPlantTrashBin, plantSexyTransform2D.m[0][2], plantSexyTransform2D.m[1][2]);
 
     for (int i = 0; i < AchievementId::MAX_ACHIEVEMENTS; ++i) {
@@ -2896,7 +2903,7 @@ void ZombatarWidget_ZombatarWidget(ZombatarWidget *zombatarWidget, LawnApp *lawn
     Zombie *zombie = (Zombie *)operator new(sizeof(Zombie));
     Zombie_Zombie(zombie);
     zombie->mBoard = nullptr;
-    zombie->Zombie::ZombieInitialize(0, ZombieType::ZOMBIE_FLAG, false, nullptr, -3, true);
+    zombie->ZombieInitialize(0, ZombieType::ZOMBIE_FLAG, false, nullptr, -3, true);
     Reanimation *aBodyReanim = LawnApp_ReanimationGet(zombie->mApp, zombie->mBodyReanimID);
     ReanimatorTrackInstance *aHeadTrackInstance = Reanimation_GetTrackInstanceByName(aBodyReanim, "anim_head1");
     aHeadTrackInstance->mImageOverride = *Sexy_IMAGE_BLANK_Addr;
@@ -3736,7 +3743,7 @@ void TestMenuWidget_RemovedFromManager(ZombatarWidget *zombatarWidget, int *mana
 
 void TestMenuWidget_Delete2(ZombatarWidget *zombatarWidget) {
     // TODO:解决五个按钮的内存泄露问题。GameButton_Delete会闪退，暂不清楚原因。
-    zombatarWidget->mPreviewZombie->Zombie::DieNoLoot();
+    zombatarWidget->mPreviewZombie->DieNoLoot();
     (*((void (**)(Zombie *))zombatarWidget->mPreviewZombie->vTable + 1))(zombatarWidget->mPreviewZombie); // Delete();
 
     (*((void (**)(Sexy::Widget *, Sexy::Widget *))zombatarWidget->vTable + 7))(zombatarWidget, zombatarWidget->mBackButton);

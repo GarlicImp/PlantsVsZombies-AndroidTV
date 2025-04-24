@@ -349,11 +349,32 @@ void Challenge::LastStandUpdate() {
 ZombieType Challenge::IZombieSeedTypeToZombieType(SeedType theSeedType) {
     // 此处可修改VS和IZ中的僵尸类型
     switch (theSeedType) {
-        case SEED_ZOMBIE_UNKNOWN: return ZOMBIE_REDEYE_GARGANTUAR;
-        default:                  return ZOMBIE_INVALID;
+        case SEED_ZOMBIE_NORMAL:		    return ZOMBIE_NORMAL;
+        case SEED_ZOMBIE_TRASH_BIN:		    return ZOMBIE_TRASH_BIN;
+        case SEED_ZOMBIE_TRAFFIC_CONE:	    return ZOMBIE_TRAFFIC_CONE;
+        case SEED_ZOMBIE_POLEVAULTER:	    return ZOMBIE_POLEVAULTER;
+        case SEED_ZOMBIE_PAIL:			    return ZOMBIE_PAIL;
+        case SEED_ZOMBIE_FLAG:		        return ZOMBIE_FLAG;
+        case SEED_ZOMBIE_NEWSPAPER:		    return ZOMBIE_NEWSPAPER;
+        case SEED_ZOMBIE_SCREEN_DOOR:	    return ZOMBIE_DOOR;
+        case SEED_ZOMBIE_FOOTBALL:		    return ZOMBIE_FOOTBALL;
+        case SEED_ZOMBIE_DANCER:		    return ZOMBIE_DANCER;
+        case SEED_ZOMBONI:				    return ZOMBIE_ZAMBONI;
+        case SEED_ZOMBIE_JACK_IN_THE_BOX:   return ZOMBIE_JACK_IN_THE_BOX;
+        case SEED_ZOMBIE_DIGGER:		    return ZOMBIE_DIGGER;
+        case SEED_ZOMBIE_POGO:			    return ZOMBIE_POGO;
+        case SEED_ZOMBIE_BUNGEE:		    return ZOMBIE_BUNGEE;
+        case SEED_ZOMBIE_LADDER:		    return ZOMBIE_LADDER;
+        case SEED_ZOMBIE_CATAPULT:		    return ZOMBIE_CATAPULT;
+        case SEED_ZOMBIE_GARGANTUAR:	    return ZOMBIE_GARGANTUAR;
+        case SEED_ZOMBIE_UNKNOWN:           return ZOMBIE_REDEYE_GARGANTUAR;
+        case SEED_ZOMBIE_DUCKY_TUBE:        return ZOMBIE_DUCKY_TUBE;
+        case SEED_ZOMBIE_SNORKEL:           return ZOMBIE_SNORKEL;
+        case SEED_ZOMBIE_DOLPHIN_RIDER:     return ZOMBIE_DOLPHIN_RIDER;
+        case SEED_ZOMBIE_IMP:			    return ZOMBIE_IMP;
+        case SEED_ZOMBIE_BALLOON:		    return ZOMBIE_BALLOON;
+        default:                            return ZOMBIE_INVALID;
     }
-
-    return old_Challenge_IZombieSeedTypeToZombieType(theSeedType);
 }
 
 void Challenge::DrawHeavyWeapon(Sexy::Graphics* g) {

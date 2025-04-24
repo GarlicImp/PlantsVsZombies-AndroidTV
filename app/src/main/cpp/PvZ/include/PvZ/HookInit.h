@@ -387,7 +387,6 @@ inline void InitInGameFunction() {
     Projectile_GetProjectileRect = (decltype(Projectile_GetProjectileRect))Projectile_GetProjectileRectAddr;
     Projectile_Die = (decltype(Projectile_Die))Projectile_DieAddr;
     Projectile_FindCollisionTargetPlant = (decltype(Projectile_FindCollisionTargetPlant))Projectile_FindCollisionTargetPlantAddr;
-    Projectile_GetProjectileDef = (decltype(Projectile_GetProjectileDef))Projectile_GetProjectileDefAddr;
     Projectile_CantHitHighGround = (decltype(Projectile_CantHitHighGround))Projectile_CantHitHighGroundAddr;
     Projectile_FindCollisionTarget = (decltype(Projectile_FindCollisionTarget))Projectile_FindCollisionTargetAddr;
     Projectile_FindCollisionTargetGridItem = (decltype(Projectile_FindCollisionTargetGridItem))Projectile_FindCollisionTargetGridItemAddr;
@@ -691,7 +690,7 @@ inline void InitHookFunction() {
     homura::HookFunction(Challenge_DrawHeavyWeaponAddr, &Challenge::DrawHeavyWeapon, nullptr);
     homura::HookFunction(Challenge_UpdateZombieSpawningAddr, &Challenge::UpdateZombieSpawning, &old_Challenge_UpdateZombieSpawning);
     homura::HookFunction(Challenge_HeavyWeaponPacketClickedAddr, &Challenge::HeavyWeaponPacketClicked, &old_Challenge_HeavyWeaponPacketClicked);
-    homura::HookFunction(Challenge_IZombieSeedTypeToZombieTypeAddr, &Challenge::IZombieSeedTypeToZombieType, &old_Challenge_IZombieSeedTypeToZombieType);
+    homura::HookFunction(Challenge_IZombieSeedTypeToZombieTypeAddr, &Challenge::IZombieSeedTypeToZombieType, nullptr);
     homura::HookFunction(Challenge_StartLevelAddr, &Challenge::StartLevel, &old_Challenge_StartLevel);
     homura::HookFunction(Challenge_DeleteAddr, &Challenge::Delete, &old_Challenge_Delete);
 
@@ -762,13 +761,13 @@ inline void InitHookFunction() {
     homura::HookFunction(MainMenu_ButtonDepressAddr, &MainMenu::ButtonDepress, &old_MainMenu_ButtonDepress);
     homura::HookFunction(MainMenu_UpdateAddr, &MainMenu::Update, &old_MainMenu_Update);
     homura::HookFunction(MainMenu_SyncProfileAddr, &MainMenu::SyncProfile, &old_MainMenu_SyncProfile);
-    homura::HookFunction(MainMenu_EnterAddr, &MainMenu_Enter, &old_MainMenu_Enter);
+    homura::HookFunction(MainMenu_EnterAddr, &MainMenu::Enter, &old_MainMenu_Enter);
     homura::HookFunction(MainMenu_ExitAddr, &MainMenu::Exit, &old_MainMenu_Exit);
     homura::HookFunction(MainMenu_UpdateExitAddr, &MainMenu::UpdateExit, &old_MainMenu_UpdateExit);
     homura::HookFunction(MainMenu_OnExitAddr, &MainMenu::OnExit, &old_MainMenu_OnExit);
     //    MSHookFunction(MainMenu_SetSceneAddr, (void *) MainMenu_SetScene, (void **) &old_MainMenu_SetScene);
     homura::HookFunction(MainMenu_OnSceneAddr, &MainMenu::OnScene, &old_MainMenu_OnScene);
-    homura::HookFunction(MainMenu_SyncButtonsAddr, &MainMenu_SyncButtons, &old_MainMenu_SyncButtons);
+    homura::HookFunction(MainMenu_SyncButtonsAddr, &MainMenu::SyncButtons, &old_MainMenu_SyncButtons);
     homura::HookFunction(MainMenu_MainMenuAddr, &MainMenu::Creat, &old_MainMenu_MainMenu);
     homura::HookFunction(MainMenu_UpdateCameraPositionAddr, &MainMenu::UpdateCameraPosition, &old_MainMenu_UpdateCameraPosition);
     homura::HookFunction(MainMenu_AddedToManagerAddr, &MainMenu::AddedToManager, &old_MainMenu_AddedToManager);
@@ -805,18 +804,18 @@ inline void InitHookFunction() {
     //    MSHookFunction(Plant_UpdateReanimAddr, (void *) Plant_UpdateReanim, (void **) &old_Plant_UpdateReanim);
 
 
-    homura::HookFunction(Projectile_ProjectileInitializeAddr, &Projectile_ProjectileInitialize, &old_Projectile_ProjectileInitialize);
-    homura::HookFunction(Projectile_ConvertToFireballAddr, &Projectile_ConvertToFireball, &old_Projectile_ConvertToFireball);
-    homura::HookFunction(Projectile_ConvertToPeaAddr, &Projectile_ConvertToPea, &old_Projectile_ConvertToPea);
+    homura::HookFunction(Projectile_ProjectileInitializeAddr, &Projectile::ProjectileInitialize, &old_Projectile_ProjectileInitialize);
+    homura::HookFunction(Projectile_ConvertToFireballAddr, &Projectile::ConvertToFireball, &old_Projectile_ConvertToFireball);
+    homura::HookFunction(Projectile_ConvertToPeaAddr, &Projectile::ConvertToPea, &old_Projectile_ConvertToPea);
     homura::HookFunction(Projectile_UpdateAddr, &Projectile::Update, &old_Projectile_Update);
-    homura::HookFunction(Projectile_DoImpactAddr, &Projectile_DoImpact, &old_Projectile_DoImpact);
-    homura::HookFunction(Projectile_CheckForCollisionAddr, &Projectile_CheckForCollision, nullptr);
+    homura::HookFunction(Projectile_DoImpactAddr, &Projectile::DoImpact, &old_Projectile_DoImpact);
+    homura::HookFunction(Projectile_CheckForCollisionAddr, &Projectile::CheckForCollision, nullptr);
 
 
-    homura::HookFunction(SeedPacket_UpdateAddr, &SeedPacket_Update, &old_SeedPacket_Update);
+    homura::HookFunction(SeedPacket_UpdateAddr, &SeedPacket::Update, &old_SeedPacket_Update);
     homura::HookFunction(SeedPacket_UpdateSelectedAddr, &SeedPacket::UpdateSelected, &old_SeedPacket_UpdateSelected);
-    homura::HookFunction(SeedPacket_DrawOverlayAddr, &SeedPacket_DrawOverlay, &old_SeedPacket_DrawOverlay);
-    homura::HookFunction(SeedPacket_DrawAddr, &SeedPacket_Draw, &old_SeedPacket_Draw);
+    homura::HookFunction(SeedPacket_DrawOverlayAddr, &SeedPacket::DrawOverlay, &old_SeedPacket_DrawOverlay);
+    homura::HookFunction(SeedPacket_DrawAddr, &SeedPacket::Draw, &old_SeedPacket_Draw);
     homura::HookFunction(SeedPacket_FlashIfReadyAddr, &SeedPacket::FlashIfReady, &old_SeedPacket_FlashIfReady);
     //    MSHookFunction(SeedPacket_MouseDownAddr, (void *) SeedPacket_MouseDown, (void **) &old_SeedPacket_MouseDown);
 

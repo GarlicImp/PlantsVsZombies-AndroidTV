@@ -200,7 +200,7 @@ public:
 };
 extern ZombieDefinition gZombieDefs[NUM_ZOMBIE_TYPES];
 
-/*inline*/ ZombieDefinition&            GetZombieDefinition(ZombieType theZombieType);
+ZombieDefinition&            GetZombieDefinition(ZombieType theZombieType);
 
 /***************************************************************************************************************/
 inline bool zombieBloated;
