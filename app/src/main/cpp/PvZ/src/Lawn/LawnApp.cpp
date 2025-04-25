@@ -478,8 +478,15 @@ bool LawnApp::IsIZombieLevel() {
         || mGameMode == GameMode::GAMEMODE_PUZZLE_I_ZOMBIE_ENDLESS;
 }
 
+void TodFoley::PlayFoley(FoleyType theFoleyType) {
+    return old_TodFoley_PlayFoley(this, theFoleyType);
+}
+
 void LawnApp::PlayFoley(FoleyType theFoleyType) {
-//    return old_LawnApp_PlayFoley(this, theFoleyType);
+    if (!mMuteSoundsForCutscene)
+    {
+        mSoundSystem->PlayFoley(theFoleyType);
+    }
 }
 
 void LawnApp::PlaySample(int theSoundNum) {

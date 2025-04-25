@@ -1858,9 +1858,14 @@ struct FoleyTypeData {
     int mLastVariationPlayed;
 };
 
-struct TodFoley {
+class TodFoley {
+public:
     FoleyTypeData mTypeData[110];
+
+    void PlayFoley(FoleyType theFoleyType);
 };
+inline void (*old_TodFoley_PlayFoley)(TodFoley*, FoleyType theFoleyType);
+
 
 class ReanimatorCache;
 

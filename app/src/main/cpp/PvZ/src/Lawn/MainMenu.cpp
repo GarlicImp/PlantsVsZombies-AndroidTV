@@ -86,8 +86,7 @@ void MainMenu::Update() {
             FoleyType aType = MainMenu_GetFoleyTypeByScene(mScene);
             FoleyType aNextType = MainMenu_GetFoleyTypeByScene(mSceneNext);
             if (!TodFoley_IsFoleyPlaying(mApp->mSoundSystem, aNextType)) {
-                //TODO:修复PlayFoley崩溃
-//                mApp->PlayFoley(aNextType);
+                mApp->PlayFoley(aNextType);
                 LawnApp_SetFoleyVolume(mApp, aNextType, 0);
             }
             float theVolume = TodAnimateCurveFloat(0, 93, gFoleyVolumeCounter, mApp->mPlayerInfo->mSoundVolume, 0, TodCurves::CURVE_BOUNCE_SLOW_MIDDLE);
@@ -104,7 +103,6 @@ void MainMenu::Update() {
             FoleyType aType = MainMenu_GetFoleyTypeByScene(mScene);
             if (gAchievementState == NOT_SHOWING) {
                 if (!TodFoley_IsFoleyPlaying(mApp->mSoundSystem, aType) && mExitCounter == 0) {
-                    //TODO:修复PlayFoley崩溃
 //                    mApp->PlayFoley(aType);
                     LawnApp_SetFoleyVolume(mApp, aType, 0);
                 }
@@ -178,9 +176,8 @@ void MainMenu::Update() {
             }
             Sexy::Widget *achievementsButton = Sexy_Widget_FindWidget(this, ACHIEVEMENTS_BUTTON);
             mFocusedChildWidget = achievementsButton;
-            //TODO:修复PlayFoley崩溃
-//            if (!mIsFading)
-//                mApp->PlayFoley(FoleyType::FOLEY_MENU_CENTRE);
+            if (!mIsFading)
+                mApp->PlayFoley(FoleyType::FOLEY_MENU_CENTRE);
         }
     }
     if (gAchievementState == SHOWING) {
@@ -209,8 +206,7 @@ void MainMenu::ButtonPress(MainMenuButtonId theSelectedButton) {
         case ALMANAC_BUTTON:
         case MAIL_BUTTON:
             //            LawnApp_PlaySample(lawnApp, *Sexy_SOUND_CERAMIC_Addr);
-            //TODO:修复PlayFoley崩溃
-//            gLawnApp->PlayFoley(FoleyType::FOLEY_CERAMIC);
+            gLawnApp->PlayFoley(FoleyType::FOLEY_CERAMIC);
             break;
         default:
             LawnApp_PlaySample(gLawnApp, *Sexy_SOUND_GRAVEBUTTON_Addr);

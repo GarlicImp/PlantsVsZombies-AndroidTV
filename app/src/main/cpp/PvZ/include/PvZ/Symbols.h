@@ -899,6 +899,8 @@ inline void *Mailbox_GetNumUnseenMessagesAddr;
 inline void *SaveGameContext_SyncIntAddr;
 inline void *SaveGameContext_SyncReanimationDefAddr;
 
+inline void *TodFoley_PlayFoleyAddr;
+
 inline void *Native_BridgeApp_getJNIEnvAddr;
 inline void *Native_NativeApp_getActivityAddr;
 inline void *Native_BridgeApp_getSingletonAddr;
@@ -2029,6 +2031,7 @@ inline bool GetFunctionAddr() {
     SaveGameContext_SyncIntAddr = dlsym(handle, "_ZN15SaveGameContext7SyncIntERi");
     SaveGameContext_SyncReanimationDefAddr = dlsym(handle, "_ZN15SaveGameContext18SyncReanimationDefERP20ReanimatorDefinition");
 
+    TodFoley_PlayFoleyAddr = dlsym(handle, "_ZN8TodFoley9PlayFoleyE9FoleyType");
 
     Sexy_FONT_HOUSEOFTERROR28_Addr = (Sexy::Font **)dlsym(handle, "_ZN4Sexy20FONT_HOUSEOFTERROR28E");
     Sexy_FONT_HOUSEOFTERROR20_Addr = (Sexy::Font **)dlsym(handle, "_ZN4Sexy20FONT_HOUSEOFTERROR20E");
