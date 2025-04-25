@@ -738,7 +738,7 @@ void BaseGamepadControls::GetGamepadVelocity(float *horizontal, float *vertical)
     // 如果horizontal或vertical不为零，则会在重型武器中播放小推车移动动画。
     // 所以这里将vertical设置为非零，以播放动画；同时horizontal设置为0，以免小推车移动。
     *horizontal = 0.0f;
-    *vertical = mPlayerIndex == TouchPlayerIndex::None ? 0.0f : 100.0f;
+    *vertical = gPlayerIndex == TouchPlayerIndex::None ? 0.0f : 100.0f;
 }
 
 void PoolEffect_UpdateWaterEffect(PoolEffect *poolEffect) {
@@ -1172,13 +1172,13 @@ void Sexy_SexyAppBase_Set3DAccelerated(LawnApp *lawnApp, bool isAccelerated) {
     lawnApp->mPlayerInfo->mIs3DAcceleratedClosed = !isAccelerated;
 }
 
-FoleyParams *LookupFoley(FoleyType::FoleyType theFoleyType) {
+FoleyParams *LookupFoley(FoleyType theFoleyType) {
     // 新增三个Foley，用于主界面白噪音
-    if (theFoleyType == FoleyType::MenuLeft) {
+    if (theFoleyType == FoleyType::FOLEY_MENU_LEFT) {
         return &gMenuLeftFoley;
-    } else if (theFoleyType == FoleyType::MenuCenter) {
+    } else if (theFoleyType == FoleyType::FOLEY_MENU_CENTRE) {
         return &gMenuCenterFoley;
-    } else if (theFoleyType == FoleyType::MenuRight) {
+    } else if (theFoleyType == FoleyType::FOLEY_MENU_RIGHT) {
         return &gMenuRightFoley;
     } else
         return old_LookupFoley(theFoleyType);

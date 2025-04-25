@@ -59,6 +59,7 @@ inline void *Board_TakeSunMoneyAddr;
 inline void *Board_AddALadderAddr;
 inline void *Board_AddPlantAddr;
 inline void *Board_AddZombieInRowAddr;
+inline void *Board_AddZombieAddr;
 inline void *Board_DoPlantingEffectsAddr;
 inline void *Board_InitLawnMowersAddr;
 inline void *Board_PickZombieWavesAddr;
@@ -212,6 +213,7 @@ inline void *LawnApp_DoConfirmBackToMainAddr;
 inline void *LawnApp_TrophiesNeedForGoldSunflowerAddr;
 inline void *LawnApp_PlayFoleyAddr;
 inline void *LawnApp_PlayFoleyPitchAddr;
+inline void *LawnApp_PlaySampleAddr;
 inline void *LawnApp_DoCheatDialogAddr;
 inline void *LawnApp_DoCheatCodeDialogAddr;
 inline void *LawnApp_DoUserDialogAddr;
@@ -296,6 +298,7 @@ inline void *Zombie_ApplyButterAddr;
 inline void *Zombie_DieNoLootAddr;
 inline void *Zombie_ApplyBurnAddr;
 inline void *Zombie_DrawAddr;
+inline void *Zombie_UpdateZombieGargantuarAddr;
 inline void *Zombie_UpdateZombiePeaHeadAddr;
 inline void *Zombie_GetZombieRectAddr;
 inline void *Zombie_UpdateZombieGatlingHeadAddr;
@@ -348,6 +351,15 @@ inline void *Zombie_UpdateAnimationSpeedAddr;
 inline void *Zombie_HitIceTrapAddr;
 inline void *Zombie_ZombieAddr;
 inline void *GetZombieDefinitionAddr;
+inline void *Zombie_FindPlantTargetAddr;
+inline void *Zombie_FindZombieTargetAddr;
+inline void *Zombie_StartWalkAnimAddr;
+inline void *Zombie_GetPosYBasedOnRowAddr;
+inline void *Zombie_SetRowAddr;
+inline void *Zombie_StartMindControlledAddr;
+inline void *Zombie_GetBobsledPositionAddr;
+inline void *Zombie_SquishAllInSquareAddr;
+
 
 
 inline void *SeedChooserScreen_UpdateAddr;
@@ -433,6 +445,8 @@ inline void *Challenge_CanPlantAtAddr;
 inline void *Challenge_HeavyWeaponUpdateAddr;
 inline void *Challenge_ChallengeAddr;
 inline void *Challenge_IZombieGetBrainTargetAddr;
+inline void *Challenge_ScaryPotterOpenPotAddr;
+inline void *Challenge_IZombieSquishBrainAddr;
 inline void *Challenge_GetArtChallengeSeedAddr;
 inline void *Challenge_TreeOfWisdomOpenStoreAddr;
 inline void *Challenge_IZombieScoreBrainAddr;
@@ -493,6 +507,7 @@ inline void *Plant_DrawMagnetItemsAddr;
 inline void *Plant_UpdateAbilitiesAddr;
 inline void *Plant_AnimateAddr;
 inline void *GetPlantDefinitionAddr;
+inline void *Plant_PlayBodyReanimAddr;
 
 
 inline void *Projectile_UpdateAddr;
@@ -1069,6 +1084,7 @@ inline int *Sexy_SOUND_HATCHBACK_CLOSE_Addr;
 inline int *Sexy_SOUND_MENU_L_ST_Addr;
 inline int *Sexy_SOUND_MENU_C_ST_Addr;
 inline int *Sexy_SOUND_MENU_R_ST_Addr;
+inline int *Sexy_SOUND_THROW_Addr;
 inline int *LawnApp_FULLSCREEN_RECT_Addr;
 inline int *VSResultsMenu_msPlayerRecords_Addr;
 
@@ -1170,6 +1186,7 @@ inline bool GetFunctionAddr() {
     Board_AddALadderAddr = dlsym(handle, "_ZN5Board10AddALadderEii");
     Board_AddPlantAddr = dlsym(handle, "_ZN5Board8AddPlantEii8SeedTypeS0_ib");
     Board_AddZombieInRowAddr = dlsym(handle, "_ZN5Board14AddZombieInRowE10ZombieTypeiib");
+    Board_AddZombieAddr = dlsym(handle, "_ZN5Board9AddZombieE10ZombieTypeib");
     Board_DoPlantingEffectsAddr = dlsym(handle, "_ZN5Board17DoPlantingEffectsEiiP5Plant");
     Board_PickZombieWavesAddr = dlsym(handle, "_ZN5Board15PickZombieWavesEv");
     Board_DrawUITopAddr = dlsym(handle, "_ZN5Board9DrawUITopEPN4Sexy8GraphicsE");
@@ -1311,6 +1328,7 @@ inline bool GetFunctionAddr() {
     LawnApp_UpdateAppAddr = dlsym(handle, "_ZN7LawnApp9UpdateAppEv");
     LawnApp_PlayFoleyAddr = dlsym(handle, "_ZN7LawnApp9PlayFoleyE9FoleyType");
     LawnApp_PlayFoleyPitchAddr = dlsym(handle, "_ZN7LawnApp14PlayFoleyPitchE9FoleyTypef");
+    LawnApp_PlaySampleAddr = dlsym(handle, "_ZN7LawnApp10PlaySampleEib");
     LawnApp_PreNewGameAddr = dlsym(handle, "_ZN7LawnApp10PreNewGameE8GameModeb");
     LawnApp_ShowCreditScreenAddr = dlsym(handle, "_ZN7LawnApp16ShowCreditScreenEb");
     LawnApp_KillMainMenuAddr = dlsym(handle, "_ZN7LawnApp12KillMainMenuEv");
@@ -1414,6 +1432,7 @@ inline bool GetFunctionAddr() {
     Zombie_DieNoLootAddr = dlsym(handle, "_ZN6Zombie9DieNoLootEv");
     Zombie_ApplyBurnAddr = dlsym(handle, "_ZN6Zombie9ApplyBurnEv");
     Zombie_DrawAddr = dlsym(handle, "_ZN6Zombie4DrawEPN4Sexy8GraphicsE");
+    Zombie_UpdateZombieGargantuarAddr = dlsym(handle, "_ZN6Zombie22UpdateZombieGargantuarEv");
     Zombie_UpdateZombiePeaHeadAddr = dlsym(handle, "_ZN6Zombie19UpdateZombiePeaHeadEv");
     Zombie_UpdateZombieGatlingHeadAddr = dlsym(handle, "_ZN6Zombie23UpdateZombieGatlingHeadEv");
     Zombie_UpdateZombieJalapenoHeadAddr = dlsym(handle, "_ZN6Zombie24UpdateZombieJalapenoHeadEv");
@@ -1467,6 +1486,14 @@ inline bool GetFunctionAddr() {
     Zombie_HitIceTrapAddr = dlsym(handle, "_ZN6Zombie10HitIceTrapEv");
     Zombie_ZombieAddr = dlsym(handle, "_ZN6ZombieC2Ev");
     GetZombieDefinitionAddr = dlsym(handle, "_Z19GetZombieDefinition10ZombieType");
+    Zombie_FindPlantTargetAddr = dlsym(handle, "_ZN6Zombie15FindPlantTargetE16ZombieAttackType");
+    Zombie_FindZombieTargetAddr = dlsym(handle, "_ZN6Zombie16FindZombieTargetEv");
+    Zombie_StartWalkAnimAddr = dlsym(handle, "_ZN6Zombie13StartWalkAnimEi");
+    Zombie_GetPosYBasedOnRowAddr = dlsym(handle, "_ZN6Zombie17GetPosYBasedOnRowEi");
+    Zombie_SetRowAddr = dlsym(handle, "_ZN6Zombie6SetRowEi");
+    Zombie_StartMindControlledAddr = dlsym(handle, "_ZN6Zombie19StartMindControlledEv");
+    Zombie_GetBobsledPositionAddr = dlsym(handle, "_ZN6Zombie18GetBobsledPositionEv");
+    Zombie_SquishAllInSquareAddr = dlsym(handle, "_ZN6Zombie17SquishAllInSquareEii16ZombieAttackType");
 
 
     SeedChooserScreen_UpdateAddr = dlsym(handle, "_ZN17SeedChooserScreen6UpdateEv");
@@ -1554,6 +1581,8 @@ inline bool GetFunctionAddr() {
     Challenge_TreeOfWisdomOpenStoreAddr = dlsym(handle, "_ZN9Challenge21TreeOfWisdomOpenStoreEv");
     Challenge_IZombieScoreBrainAddr = dlsym(handle, "_ZN9Challenge17IZombieScoreBrainEP8GridItem");
     Challenge_IZombieGetBrainTargetAddr = dlsym(handle, "_ZN9Challenge21IZombieGetBrainTargetEP6Zombie");
+    Challenge_ScaryPotterOpenPotAddr = dlsym(handle, "_ZN9Challenge18ScaryPotterOpenPotEP8GridItem");
+    Challenge_IZombieSquishBrainAddr = dlsym(handle, "_ZN9Challenge18IZombieSquishBrainEP8GridItem");
     Challenge_IZombieEatBrainAddr = dlsym(handle, "_ZN9Challenge15IZombieEatBrainEP6Zombie");
     Challenge_DrawArtChallengeAddr = dlsym(handle, "_ZN9Challenge16DrawArtChallengeEPN4Sexy8GraphicsE");
     Challenge_MouseDownAddr = dlsym(handle, "_ZN9Challenge9MouseDownEiiiP9HitResulti");
@@ -1612,6 +1641,7 @@ inline bool GetFunctionAddr() {
     Plant_UpdateAbilitiesAddr = dlsym(handle, "_ZN5Plant15UpdateAbilitiesEv");
     Plant_AnimateAddr = dlsym(handle, "_ZN5Plant7AnimateEv");
     GetPlantDefinitionAddr = dlsym(handle, "_Z18GetPlantDefinition8SeedType");
+    Plant_PlayBodyReanimAddr = dlsym(handle, "_ZN5Plant14PlayBodyReanimEPKc14ReanimLoopTypeif");
 
 
     Projectile_UpdateAddr = dlsym(handle, "_ZN10Projectile6UpdateEv");
@@ -2177,6 +2207,7 @@ inline bool GetFunctionAddr() {
     Sexy_SOUND_MENU_L_ST_Addr = (int *)dlsym(handle, "_ZN4Sexy15SOUND_MENU_L_STE");
     Sexy_SOUND_MENU_C_ST_Addr = (int *)dlsym(handle, "_ZN4Sexy15SOUND_MENU_C_STE");
     Sexy_SOUND_MENU_R_ST_Addr = (int *)dlsym(handle, "_ZN4Sexy15SOUND_MENU_R_STE");
+    Sexy_SOUND_THROW_Addr = (int*)dlsym(handle, "_ZN4Sexy11SOUND_THROWE");
     LawnApp_FULLSCREEN_RECT_Addr = (int *)dlsym(handle, "_ZN7LawnApp15FULLSCREEN_RECTE");
     VSResultsMenu_msPlayerRecords_Addr = (int *)dlsym(handle, "_ZN13VSResultsMenu15msPlayerRecordsE");
 

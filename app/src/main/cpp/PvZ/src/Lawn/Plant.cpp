@@ -71,7 +71,6 @@ PlantDefinition gPlantDefs[SeedType::NUM_SEED_TYPES] = {
     { SeedType::SEED_LEFTPEATER,        nullptr, ReanimationType::REANIM_REPEATER,      5,  200,    750,    PlantSubClass::SUBCLASS_SHOOTER,    150,    _S("REPEATER") }
 };
 
-
 void Plant::PlantInitialize(int theGridX, int theGridY, SeedType theSeedType, SeedType theImitaterType, int a6) {
     // 在初始化植物后更新一次动画，以解决开场前存在的植物只绘制阴影而不绘制植物本体的问题
     old_Plant_PlantInitialize(this, theGridX, theGridY, theSeedType, theImitaterType, a6);
@@ -91,7 +90,6 @@ void Plant::PlantInitialize(int theGridX, int theGridY, SeedType theSeedType, Se
     }
 }
 
-
 void Plant::SetSleeping(bool theIsAsleep) {
     if (mushroomsNoSleep) {
         // 如果开启"蘑菇免唤醒"
@@ -100,6 +98,39 @@ void Plant::SetSleeping(bool theIsAsleep) {
     return old_Plant_SetSleeping(this, theIsAsleep);
 }
 
+void Plant::PlayBodyReanim(const char* theTrackName, ReanimLoopType theLoopType, int theBlendTime, float theAnimRate) {
+    return old_Plant_PlayBodyReanim(this, theTrackName, theLoopType, theBlendTime, theAnimRate);
+}
+
+void Plant::SpikeweedAttack()
+{
+    if (mState != PlantState::STATE_SPIKEWEED_ATTACKING)
+    {
+        PlayBodyReanim("anim_attack", ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD, 20, 18.0f);
+        mApp->PlaySample(*Sexy_SOUND_THROW_Addr);
+
+        mState = PlantState::STATE_SPIKEWEED_ATTACKING;
+        mStateCountdown = 100;
+    }
+}
+
+void Plant::SpikeRockTakeDamage() {
+    Reanimation *aBodyReanim = mApp->ReanimationGet(mBodyReanimID);
+
+    SpikeweedAttack();
+
+    mPlantHealth -= 50;
+    if (mPlantHealth <= 300) {
+        aBodyReanim->AssignRenderGroupToTrack("bigspike3", RENDER_GROUP_HIDDEN);
+    }
+    if (mPlantHealth <= 150) {
+        aBodyReanim->AssignRenderGroupToTrack("bigspike2", RENDER_GROUP_HIDDEN);
+    }
+    if (mPlantHealth <= 0) {
+        mApp->PlayFoley(FoleyType::FOLEY_SQUISH);
+        Die();
+    }
+}
 
 void Plant::UpdateReanimColor() {
     // 修复玩家选中但不拿起(gameState为1就是选中但不拿起，为7就是选中且拿起)某个紫卡植物时，相应的可升级绿卡植物也会闪烁的BUG。
@@ -121,7 +152,6 @@ void Plant::UpdateReanimColor() {
     return old_Plant_UpdateReanimColor(this);
 }
 
-
 bool Plant::IsOnBoard() {
     if (!mIsOnBoard)
         return false;
@@ -129,11 +159,9 @@ bool Plant::IsOnBoard() {
     return true;
 }
 
-
 bool Plant::IsInPlay() {
     return IsOnBoard() && mApp->mGameMode != GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN && mApp->mGameMode != GameMode::GAMEMODE_TREE_OF_WISDOM;
 }
-
 
 void Plant::Update() {
     // 用于修复植物受击闪光、生产发光、铲子下方植物发光，同时实现技能无冷却
@@ -179,7 +207,6 @@ void Plant::Update() {
     old_Plant_Update(this);
 }
 
-
 bool Plant::NotOnGround() {
     if (mSeedType == SeedType::SEED_SQUASH) {
         if (mState == PlantState::STATE_SQUASH_RISING || mState == PlantState::STATE_SQUASH_FALLING || mState == PlantState::STATE_SQUASH_DONE_FALLING)
@@ -188,7 +215,6 @@ bool Plant::NotOnGround() {
 
     return mSquished || mOnBungeeState == PlantOnBungeeState::RISING_WITH_BUNGEE || mDead;
 }
-
 
 void Plant::Draw(Sexy::Graphics *g) {
     // 根据玩家的“植物显血”功能是否开启，决定是否在游戏的原始old_Plant_Draw函数执行完后额外绘制血量文本。
@@ -260,7 +286,7 @@ void Plant::Draw(Sexy::Graphics *g) {
         num2 += num5;
     }
     if (flag) {
-        Reanimation *reanimation = LawnApp_ReanimationGet(mApp, thePlant->mBodyReanimID);
+        Reanimation *reanimation = mApp->ReanimationGet(thePlant->mBodyReanimID);
         Sexy::Graphics newGraphics;
         Sexy_Graphics_Graphics(&newGraphics, g);
         newGraphics.mTransX += thePlant->mX - mX;
@@ -386,7 +412,6 @@ void Plant::Draw(Sexy::Graphics *g) {
     }
 }
 
-
 void Plant::DrawSeedType(Sexy::Graphics *g, SeedType theSeedType, SeedType theImitaterType, DrawVariation theDrawVariation, float thePosX, float thePosY) {
     // 用于绘制卡槽内的模仿者SeedPacket变白效果、模仿者变身后的植物被压扁的白色效果、模仿者变身前被压扁后绘制模仿者自己而非变身后的植物。
     int v38 = ((int *)g)[9];
@@ -489,7 +514,6 @@ void Plant::DrawSeedType(Sexy::Graphics *g, SeedType theSeedType, SeedType theIm
     Sexy_Graphics_SetColorizeImages(g, ColorizeImages);
 }
 
-
 void Plant::DoSpecial() {
     // 试图修复辣椒爆炸后反而在本行的末尾处产生冰道。失败。
 
@@ -506,12 +530,10 @@ void Plant::DoSpecial() {
     return old_Plant_DoSpecial(this);
 }
 
-
 // void Plant_CobCannonFire(Plant *plant, int x, int y) {
 //     LOGD("fire:%d %d",x,y);
 //     old_Plant_CobCannonFire(plant,x,y);
 // }
-
 
 GridItem *Plant::FindTargetGridItem(PlantWeapon thePlantWeapon) {
     // 对战模式专用，植物索敌僵尸墓碑和靶子僵尸。
@@ -560,11 +582,9 @@ GridItem *Plant::FindTargetGridItem(PlantWeapon thePlantWeapon) {
     return aTargetGridItem;
 }
 
-
 void Plant::Die() {
     old_Plant_Die(this);
 }
-
 
 int Plant::GetCost(SeedType theSeedType, SeedType theImitaterType) {
     LawnApp *lawnApp = (LawnApp *)*gLawnApp_Addr;
@@ -628,7 +648,6 @@ int Plant::GetCost(SeedType theSeedType, SeedType theImitaterType) {
     }
     return old_Plant_GetCost(theSeedType, theImitaterType);
 }
-
 
 int Plant::GetRefreshTime(SeedType theSeedType, SeedType theImitaterType) {
     if (seedPacketFastCoolDown) {
@@ -704,7 +723,6 @@ int Plant::GetRefreshTime(SeedType theSeedType, SeedType theImitaterType) {
     return old_Plant_GetRefreshTime(theSeedType, theImitaterType);
 }
 
-
 bool Plant::IsUpgrade(SeedType theSeedType) {
     // 修复机枪射手在SeedBank光标移动到shop栏后变为绿卡。
     if (theSeedType == SeedType::SEED_GATLINGPEA) {
@@ -721,7 +739,6 @@ bool Plant::IsUpgrade(SeedType theSeedType) {
     }
     return old_Plant_IsUpgrade(theSeedType);
 }
-
 
 void Plant::SetImitaterFilterEffect() {
     FilterEffectType aFilterEffect = GetFilterEffectTypeBySeedType(mSeedType);

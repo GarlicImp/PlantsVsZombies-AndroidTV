@@ -202,9 +202,9 @@ void LawnApp_KillDialog(LawnApp *lawnApp, Dialogs id) {
 
 void LawnApp_ShowCreditScreen(LawnApp *lawnApp, bool isFromMainMenu) {
     // 用于一周目之后点击"制作人员"按钮播放MV
-    TodFoley_StopFoley(lawnApp->mSoundSystem, FoleyType::MenuLeft);
-    TodFoley_StopFoley(lawnApp->mSoundSystem, FoleyType::MenuCenter);
-    TodFoley_StopFoley(lawnApp->mSoundSystem, FoleyType::MenuRight);
+    TodFoley_StopFoley(lawnApp->mSoundSystem, FoleyType::FOLEY_MENU_LEFT);
+    TodFoley_StopFoley(lawnApp->mSoundSystem, FoleyType::FOLEY_MENU_CENTRE);
+    TodFoley_StopFoley(lawnApp->mSoundSystem, FoleyType::FOLEY_MENU_RIGHT);
     if (isFromMainMenu && LawnApp_HasFinishedAdventure(lawnApp)) {
         isFromMainMenu = false;
         LawnApp_KillMainMenu(lawnApp);
@@ -382,7 +382,7 @@ int LawnApp_TrophiesNeedForGoldSunflower(LawnApp *lawnApp) {
         - LawnApp_GetNumTrophies(lawnApp, ChallengePage::CHALLENGE_PAGE_PUZZLE);
 }
 
-void LawnApp_SetFoleyVolume(LawnApp *lawnApp, FoleyType::FoleyType type, double theVolume) {
+void LawnApp_SetFoleyVolume(LawnApp *lawnApp, FoleyType type, double theVolume) {
     TodFoley *mSoundSystem = lawnApp->mSoundSystem;
     FoleyTypeData *foleyTypeData = &mSoundSystem->mTypeData[type];
     for (FoleyInstance &foleyInstance : foleyTypeData->mFoleyInstances) {
@@ -407,34 +407,34 @@ void Sexy_SexyAppBase_SexyAppBase(SexyAppBase *appBase) {
 }
 
 void LawnApp_ShowLeaderboards(LawnApp *lawnApp) {
-    mMainMenuLeaderboardsWidget = (LeaderboardsWidget *)operator new(sizeof(LeaderboardsWidget));
-    LeaderboardsWidget_LeaderboardsWidget(mMainMenuLeaderboardsWidget, lawnApp);
-    (*(void (**)(int *, Sexy::Widget *))(*lawnApp->mWidgetManager + 24))(lawnApp->mWidgetManager, mMainMenuLeaderboardsWidget); // AddWidget()
-    (*(void (**)(int *, Sexy::Widget *))(*lawnApp->mWidgetManager + 48))(lawnApp->mWidgetManager, mMainMenuLeaderboardsWidget); // SetFocusedWidget()
+    gMainMenuLeaderboardsWidget = (LeaderboardsWidget *)operator new(sizeof(LeaderboardsWidget));
+    LeaderboardsWidget_LeaderboardsWidget(gMainMenuLeaderboardsWidget, lawnApp);
+    (*(void (**)(int *, Sexy::Widget *))(*lawnApp->mWidgetManager + 24))(lawnApp->mWidgetManager, gMainMenuLeaderboardsWidget); // AddWidget()
+    (*(void (**)(int *, Sexy::Widget *))(*lawnApp->mWidgetManager + 48))(lawnApp->mWidgetManager, gMainMenuLeaderboardsWidget); // SetFocusedWidget()
 }
 
 void LawnApp_KillLeaderboards(LawnApp *lawnApp) {
-    if (mMainMenuLeaderboardsWidget == nullptr)
+    if (gMainMenuLeaderboardsWidget == nullptr)
         return;
-    (*(void (**)(int *, Sexy::Widget *))(*lawnApp->mWidgetManager + 28))(lawnApp->mWidgetManager, mMainMenuLeaderboardsWidget); // RemoveWidget()
-    (*((void (**)(LawnApp *, Sexy::Widget *))lawnApp->vTable + 47))(lawnApp, mMainMenuLeaderboardsWidget);                      // MSGBOX()
-    mMainMenuLeaderboardsWidget = nullptr;
+    (*(void (**)(int *, Sexy::Widget *))(*lawnApp->mWidgetManager + 28))(lawnApp->mWidgetManager, gMainMenuLeaderboardsWidget); // RemoveWidget()
+    (*((void (**)(LawnApp *, Sexy::Widget *))lawnApp->vTable + 47))(lawnApp, gMainMenuLeaderboardsWidget);                      // MSGBOX()
+    gMainMenuLeaderboardsWidget = nullptr;
 }
 
 void LawnApp_ShowZombatarScreen(LawnApp *lawnApp) {
-    mMainMenuZombatarWidget = (ZombatarWidget *)operator new(sizeof(ZombatarWidget));
-    ZombatarWidget_ZombatarWidget(mMainMenuZombatarWidget, lawnApp);
-    //    Sexy_Widget_Resize(mMainMenuZombatarWidget,-80,-60,960,720);
-    (*(void (**)(int *, Sexy::Widget *))(*lawnApp->mWidgetManager + 24))(lawnApp->mWidgetManager, mMainMenuZombatarWidget); // AddWidget()
-    (*(void (**)(int *, Sexy::Widget *))(*lawnApp->mWidgetManager + 48))(lawnApp->mWidgetManager, mMainMenuZombatarWidget); // SetFocusedWidget()
+    gMainMenuZombatarWidget = (ZombatarWidget *)operator new(sizeof(ZombatarWidget));
+    ZombatarWidget_ZombatarWidget(gMainMenuZombatarWidget, lawnApp);
+    //    Sexy_Widget_Resize(gMainMenuZombatarWidget,-80,-60,960,720);
+    (*(void (**)(int *, Sexy::Widget *))(*lawnApp->mWidgetManager + 24))(lawnApp->mWidgetManager, gMainMenuZombatarWidget); // AddWidget()
+    (*(void (**)(int *, Sexy::Widget *))(*lawnApp->mWidgetManager + 48))(lawnApp->mWidgetManager, gMainMenuZombatarWidget); // SetFocusedWidget()
 }
 
 void LawnApp_KillZombatarScreen(LawnApp *lawnApp) {
-    if (mMainMenuZombatarWidget == nullptr)
+    if (gMainMenuZombatarWidget == nullptr)
         return;
-    (*(void (**)(int *, Sexy::Widget *))(*lawnApp->mWidgetManager + 28))(lawnApp->mWidgetManager, mMainMenuZombatarWidget); // RemoveWidget()
-    (*((void (**)(LawnApp *, Sexy::Widget *))lawnApp->vTable + 47))(lawnApp, mMainMenuZombatarWidget);                      // MSGBOX()
-    mMainMenuZombatarWidget = nullptr;
+    (*(void (**)(int *, Sexy::Widget *))(*lawnApp->mWidgetManager + 28))(lawnApp->mWidgetManager, gMainMenuZombatarWidget); // RemoveWidget()
+    (*((void (**)(LawnApp *, Sexy::Widget *))lawnApp->vTable + 47))(lawnApp, gMainMenuZombatarWidget);                      // MSGBOX()
+    gMainMenuZombatarWidget = nullptr;
 }
 
 
@@ -466,6 +466,41 @@ void LawnApp_SetHouseReanim(LawnApp *lawnApp, Reanimation *houseAnimation) {
     }
 
     Reanimation_HideTrackByPrefix(houseAnimation, "achievement", true);
+}
+
+bool LawnApp::IsIZombieLevel() {
+    if (mBoard == nullptr)
+        return false;
+
+    return mGameMode == GameMode::GAMEMODE_PUZZLE_I_ZOMBIE_1 || mGameMode == GameMode::GAMEMODE_PUZZLE_I_ZOMBIE_2 || mGameMode == GameMode::GAMEMODE_PUZZLE_I_ZOMBIE_3
+        || mGameMode == GameMode::GAMEMODE_PUZZLE_I_ZOMBIE_4 || mGameMode == GameMode::GAMEMODE_PUZZLE_I_ZOMBIE_5 || mGameMode == GameMode::GAMEMODE_PUZZLE_I_ZOMBIE_6
+        || mGameMode == GameMode::GAMEMODE_PUZZLE_I_ZOMBIE_7 || mGameMode == GameMode::GAMEMODE_PUZZLE_I_ZOMBIE_8 || mGameMode == GameMode::GAMEMODE_PUZZLE_I_ZOMBIE_9
+        || mGameMode == GameMode::GAMEMODE_PUZZLE_I_ZOMBIE_ENDLESS;
+}
+
+void LawnApp::PlayFoley(FoleyType theFoleyType) {
+//    return old_LawnApp_PlayFoley(this, theFoleyType);
+}
+
+void LawnApp::PlaySample(int theSoundNum) {
+    return old_LawnApp_PlaySample(this, theSoundNum);
+}
+
+bool LawnApp::IsAdventureMode()
+{
+    return mGameMode == GameMode::GAMEMODE_ADVENTURE;
+}
+
+bool LawnApp::IsScaryPotterLevel()
+{
+    if (mGameMode >= GameMode::GAMEMODE_SCARY_POTTER_1 && mGameMode <= GameMode::GAMEMODE_SCARY_POTTER_9)
+        return true;
+
+    return IsAdventureMode() && mPlayerInfo->mLevel == 35;
+}
+
+Reanimation* LawnApp::ReanimationGet(ReanimationID theReanimationID) {
+    return old_LawnApp_ReanimationGet(this, theReanimationID);
 }
 
 

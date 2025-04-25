@@ -5,7 +5,7 @@
 #include "PvZ/Lawn/MainMenu.h"
 #include <regex>
 
-bool Reanimation::DrawTrack(Sexy::Graphics *g, int theTrackIndex, ReanimatorRenderGroup::ReanimatorRenderGroup theRenderGroup, TodTriangleGroup* theTriangleGroup) {
+bool Reanimation::DrawTrack(Sexy::Graphics *g, int theTrackIndex, int theRenderGroup, TodTriangleGroup* theTriangleGroup) {
     // 修复模仿者植物变白
     if (mFilterEffect != FilterEffectType::FILTEREFFECT_NONE) {
         ReanimatorTransform *reanimatorTransform = mReanimatorTransforms + theTrackIndex;
@@ -30,7 +30,7 @@ int Reanimation_HideTrack(Reanimation *reanim, const char *trackName, bool hide)
     int trackIndex = Reanimation_FindTrackIndex(reanim, trackName);
     if (trackIndex != -1) {
         ReanimatorTrackInstance *reanimatorTrackInstance = reanim->mTrackInstances + trackIndex;
-        reanimatorTrackInstance->mRenderGroup = hide ? ReanimatorRenderGroup::RENDER_GROUP_HIDDEN : ReanimatorRenderGroup::RENDER_GROUP_NORMAL;
+        reanimatorTrackInstance->mRenderGroup = hide ? RENDER_GROUP_HIDDEN : RENDER_GROUP_NORMAL;
     }
     return trackIndex;
 }
@@ -38,7 +38,7 @@ int Reanimation_HideTrack(Reanimation *reanim, const char *trackName, bool hide)
 void Reanimation_HideTrackById(Reanimation *reanim, int trackIndex, bool hide) {
     if (trackIndex != -1) {
         ReanimatorTrackInstance *reanimatorTrackInstance = reanim->mTrackInstances + trackIndex;
-        reanimatorTrackInstance->mRenderGroup = hide ? ReanimatorRenderGroup::RENDER_GROUP_HIDDEN : ReanimatorRenderGroup::RENDER_GROUP_NORMAL;
+        reanimatorTrackInstance->mRenderGroup = hide ? RENDER_GROUP_HIDDEN : RENDER_GROUP_NORMAL;
     }
 }
 
@@ -50,7 +50,7 @@ void Reanimation_HideTrackByPrefix(Reanimation *reanim, const char *trackPrefix,
     }
     ReanimatorTrack *mTracks = mDefinition->mTracks;
     for (int i = 0; i < mTrackCount; ++i) {
-        const char *mName = (mTracks + i)->name;
+        const char *mName = (mTracks + i)->mName;
         if (trackPrefix == nullptr || strstr(mName, trackPrefix) != nullptr) {
             Reanimation_HideTrackById(reanim, i, hide);
         }
@@ -273,7 +273,7 @@ void Reanimation_GetZombatarTrackIndex(Reanimation *zombatarReanim, int *indexAr
     ReanimatorTrack *mTracks = mDefinition->mTracks;
     for (int i = 0; i < 2; ++i) {
         for (int j = 0; j < mTrackCount; ++j) {
-            const char *mName = (mTracks + j)->name;
+            const char *mName = (mTracks + j)->mName;
             //            LOGD("%s",mName);
             if (strstr(mName, stringArray[i]) != nullptr) {
                 ReanimatorTrackInstance *reanimatorTrackInstance = zombatarReanim->mTrackInstances + j;
@@ -300,7 +300,7 @@ int Reanimation_GetZombatarHatTrackIndex(Reanimation *zombatarReanim) {
     //    char *stringArray[] = {"hats","hair","facialHair","accessories","eyeWear","tidBits"};
     ReanimatorTrack *mTracks = mDefinition->mTracks;
     for (int j = 0; j < mTrackCount; ++j) {
-        const char *mName = (mTracks + j)->name;
+        const char *mName = (mTracks + j)->mName;
         //        LOGD("%s,%d",mName,std::regex_match(mName, pattern));
         if (std::regex_match(mName, pattern)) {
             ReanimatorTrackInstance *reanimatorTrackInstance = zombatarReanim->mTrackInstances + j;
@@ -322,7 +322,7 @@ int Reanimation_GetZombatarEyeWearTrackIndex(Reanimation *zombatarReanim) {
 
     ReanimatorTrack *mTracks = mDefinition->mTracks;
     for (int j = 0; j < mTrackCount; ++j) {
-        const char *mName = (mTracks + j)->name;
+        const char *mName = (mTracks + j)->mName;
         //        LOGD("%s,%d",mName,std::regex_match(mName, pattern));
         if (std::regex_match(mName, pattern)) {
             ReanimatorTrackInstance *reanimatorTrackInstance = zombatarReanim->mTrackInstances + j;
@@ -342,4 +342,24 @@ void DefinitionGetCompiledFilePathFromXMLFilePath(int *absPath, int *defPathStri
         return;
     }
     return old_DefinitionGetCompiledFilePathFromXMLFilePath(absPath, defPathString);
+}
+
+bool Reanimation::ShouldTriggerTimedEvent(float theEventTime) {
+    if (mFrameCount == 0 || mLastFrameTime <= 0.0f || mAnimRate <= 0.0f) // 没有动画或倒放或未播放
+        return false;
+
+    if (mAnimTime >= mLastFrameTime) // 一般情况下，可触发的范围为 [mLastFrameTime, mAnimTime]
+        return theEventTime >= mLastFrameTime && theEventTime < mAnimTime;
+    else // 若动画正好完成一次循环而重新进入下一次循环，则可触发的范围为 [0, mAnimTime] ∪ [mLastFrameTime, 1]
+        return theEventTime >= mLastFrameTime || theEventTime < mAnimTime;
+}
+
+void Reanimation::AssignRenderGroupToTrack(const char* theTrackName, int theRenderGroup)
+{
+    for (int i = 0; i < mDefinition->mTrackCount; i++)
+        if (strcasecmp(mDefinition->mTracks[i].mName, theTrackName) == 0)
+        {
+            mTrackInstances[i].mRenderGroup = theRenderGroup;  // 仅设置首个名称恰好为 theTrackName 的轨道
+            return;
+        }
 }

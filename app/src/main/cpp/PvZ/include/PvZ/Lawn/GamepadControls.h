@@ -19,8 +19,8 @@ public:
     int mCursorReanimID;                    // 53
     int mPreviewReanimID3;                  // 54
     int mUnkCobCannonRelated;               // 55
-    int mPreviewReanimID4;                  // 56
-    SeedType mPreviewingSeedType; // 57
+    ReanimationID mPreviewReanimID4;        // 56
+    SeedType mPreviewingSeedType;           // 57
     Sexy::Image *mPreviewImage;             // 58
     Zombie *mButterZombie;                  // 59
     int mShovelRelated2;                    // 60

@@ -51,7 +51,6 @@ inline void InitInGameFunction() {
     Board_IterateParticles = (decltype(Board_IterateParticles))Board_IterateParticlesAddr;
     Board_IterateGridItems = (decltype(Board_IterateGridItems))Board_IterateGridItemsAddr;
     Board_IterateZombies = (decltype(Board_IterateZombies))Board_IterateZombiesAddr;
-    Board_AddProjectile = (decltype(Board_AddProjectile))Board_AddProjectileAddr;
     Board_GameAxisMove = (decltype(Board_GameAxisMove))Board_GameAxisMoveAddr;
     Board_InitCoverLayer = (decltype(Board_InitCoverLayer))Board_InitCoverLayerAddr;
     Board_LoadBackgroundImages = (decltype(Board_LoadBackgroundImages))Board_LoadBackgroundImagesAddr;
@@ -66,8 +65,6 @@ inline void InitInGameFunction() {
     Board_GetPlantsOnLawn = (decltype(Board_GetPlantsOnLawn))Board_GetPlantsOnLawnAddr;
     Board_GridToPixelX = (decltype(Board_GridToPixelX))Board_GridToPixelXAddr;
     Board_GridToPixelY = (decltype(Board_GridToPixelY))Board_GridToPixelYAddr;
-    Board_PixelToGridY = (decltype(Board_PixelToGridY))Board_PixelToGridYAddr;
-    Board_PixelToGridX = (decltype(Board_PixelToGridX))Board_PixelToGridXAddr;
     Board_AddALadder = (decltype(Board_AddALadder))Board_AddALadderAddr;
     Board_ClearCursor = (decltype(Board_ClearCursor))Board_ClearCursorAddr;
     Board_MouseDownWithTool = (decltype(Board_MouseDownWithTool))Board_MouseDownWithToolAddr;
@@ -135,7 +132,7 @@ inline void InitInGameFunction() {
     LawnApp_KillMainMenu = (decltype(LawnApp_KillMainMenu))LawnApp_KillMainMenuAddr;
     LawnApp_KillChallengeScreen = (decltype(LawnApp_KillChallengeScreen))LawnApp_KillChallengeScreenAddr;
     LawnApp_PreNewGame = (decltype(LawnApp_PreNewGame))LawnApp_PreNewGameAddr;
-    LawnApp_PlayFoley = (decltype(LawnApp_PlayFoley))LawnApp_PlayFoleyAddr;
+//    PlayFoley = (decltype(PlayFoley))LawnApp_PlayFoleyAddr;
     LawnApp_PlayFoleyPitch = (decltype(LawnApp_PlayFoleyPitch))LawnApp_PlayFoleyPitchAddr;
     LawnApp_DoCheatDialog = (decltype(LawnApp_DoCheatDialog))LawnApp_DoCheatDialogAddr;
     LawnApp_DoCheatCodeDialog = (decltype(LawnApp_DoCheatCodeDialog))LawnApp_DoCheatCodeDialogAddr;
@@ -147,7 +144,6 @@ inline void InitInGameFunction() {
     LawnApp_IsCoopMode = (decltype(LawnApp_IsCoopMode))LawnApp_IsCoopModeAddr;
     LawnApp_IsTwinSunbankMode = (decltype(LawnApp_IsTwinSunbankMode))LawnApp_IsTwinSunbankModeAddr;
     LawnApp_LawnMessageBox = (decltype(LawnApp_LawnMessageBox))LawnApp_LawnMessageBoxAddr;
-    LawnApp_ReanimationGet = (decltype(LawnApp_ReanimationGet))LawnApp_ReanimationGetAddr;
     LawnApp_IsIZombieLevel = (decltype(LawnApp_IsIZombieLevel))LawnApp_IsIZombieLevelAddr;
     LawnApp_AddTodParticle = (decltype(LawnApp_AddTodParticle))LawnApp_AddTodParticleAddr;
     LawnApp_ParticleGetID = (decltype(LawnApp_ParticleGetID))LawnApp_ParticleGetIDAddr;
@@ -234,30 +230,20 @@ inline void InitInGameFunction() {
 
 
     Zombie_GetZombieRect = (decltype(Zombie_GetZombieRect))Zombie_GetZombieRectAddr;
-    Zombie_IsImmobilizied = (decltype(Zombie_IsImmobilizied))Zombie_IsImmobiliziedAddr;
     Zombie_EffectedByDamage = (decltype(Zombie_EffectedByDamage))Zombie_EffectedByDamageAddr;
     Zombie_RemoveColdEffects = (decltype(Zombie_RemoveColdEffects))Zombie_RemoveColdEffectsAddr;
     Zombie_ApplyButter = (decltype(Zombie_ApplyButter))Zombie_ApplyButterAddr;
     Zombie_ApplyBurn = (decltype(Zombie_ApplyBurn))Zombie_ApplyBurnAddr;
     Zombie_StartEating = (decltype(Zombie_StartEating))Zombie_StartEatingAddr;
-    Zombie_TakeDamage = (decltype(Zombie_TakeDamage))Zombie_TakeDamageAddr;
-    Zombie_IsWalkingBackwards = (decltype(Zombie_IsWalkingBackwards))Zombie_IsWalkingBackwardsAddr;
     Zombie_AddAttachedParticle = (decltype(Zombie_AddAttachedParticle))Zombie_AddAttachedParticleAddr;
-    Zombie_CanBeFrozen = (decltype(Zombie_CanBeFrozen))Zombie_CanBeFrozenAddr;
     Zombie_StopEating = (decltype(Zombie_StopEating))Zombie_StopEatingAddr;
     Zombie_DropArm = (decltype(Zombie_DropArm))Zombie_DropArmAddr;
-    Zombie_PlayZombieReanim = (decltype(Zombie_PlayZombieReanim))Zombie_PlayZombieReanimAddr;
     Zombie_SetupReanimLayers = (decltype(Zombie_SetupReanimLayers))Zombie_SetupReanimLayersAddr;
     Zombie_SetupShieldReanims = (decltype(Zombie_SetupShieldReanims))Zombie_SetupShieldReanimsAddr;
-    Zombie_UpdateReanim = (decltype(Zombie_UpdateReanim))Zombie_UpdateReanimAddr;
     Zombie_UpdateActions = (decltype(Zombie_UpdateActions))Zombie_UpdateActionsAddr;
     Zombie_UpdatePlaying = (decltype(Zombie_UpdatePlaying))Zombie_UpdatePlayingAddr;
-    Zombie_IsDeadOrDying = (decltype(Zombie_IsDeadOrDying))Zombie_IsDeadOrDyingAddr;
     Zombie_IsOnBoard = (decltype(Zombie_IsOnBoard))Zombie_IsOnBoardAddr;
-    Zombie_ReanimShowPrefix = (decltype(Zombie_ReanimShowPrefix))Zombie_ReanimShowPrefixAddr;
-    Zombie_ReanimShowTrack = (decltype(Zombie_ReanimShowTrack))Zombie_ReanimShowTrackAddr;
     Zombie_TakeHelmDamage = (decltype(Zombie_TakeHelmDamage))Zombie_TakeHelmDamageAddr;
-    Zombie_IsFlying = (decltype(Zombie_IsFlying))Zombie_IsFlyingAddr;
     Zombie_TakeFlyingDamage = (decltype(Zombie_TakeFlyingDamage))Zombie_TakeFlyingDamageAddr;
     Zombie_TakeShieldDamage = (decltype(Zombie_TakeShieldDamage))Zombie_TakeShieldDamageAddr;
     Zombie_TakeBodyDamage = (decltype(Zombie_TakeBodyDamage))Zombie_TakeBodyDamageAddr;
@@ -292,7 +278,6 @@ inline void InitInGameFunction() {
     Reanimation_TrackExists = (decltype(Reanimation_TrackExists))Reanimation_TrackExistsAddr;
     Reanimation_AttachToAnotherReanimation = (decltype(Reanimation_AttachToAnotherReanimation))Reanimation_AttachToAnotherReanimationAddr;
     Reanimation_Update = (decltype(Reanimation_Update))Reanimation_UpdateAddr;
-    Reanimation_AssignRenderGroupToTrack = (decltype(Reanimation_AssignRenderGroupToTrack))Reanimation_AssignRenderGroupToTrackAddr;
     Reanimation_MatrixFromTransform = (decltype(Reanimation_MatrixFromTransform))Reanimation_MatrixFromTransformAddr;
     Reanimation_GetFrameTime = (decltype(Reanimation_GetFrameTime))Reanimation_GetFrameTimeAddr;
     Reanimation_ShowOnlyTrack = (decltype(Reanimation_ShowOnlyTrack))Reanimation_ShowOnlyTrackAddr;
@@ -366,7 +351,6 @@ inline void InitInGameFunction() {
     PlantFlowerPotHeightOffset = (decltype(PlantFlowerPotHeightOffset))PlantFlowerPotHeightOffsetAddr;
 
 
-    Challenge_IZombieGetBrainTarget = (decltype(Challenge_IZombieGetBrainTarget))Challenge_IZombieGetBrainTargetAddr;
     Challenge_GetArtChallengeSeed = (decltype(Challenge_GetArtChallengeSeed))Challenge_GetArtChallengeSeedAddr;
     Challenge_TreeOfWisdomOpenStore = (decltype(Challenge_TreeOfWisdomOpenStore))Challenge_TreeOfWisdomOpenStoreAddr;
     Challenge_IZombieScoreBrain = (decltype(Challenge_IZombieScoreBrain))Challenge_IZombieScoreBrainAddr;
@@ -613,6 +597,9 @@ inline void InitHookFunction() {
     homura::HookFunction(LawnApp_IsChallengeWithoutSeedBankAddr, &LawnApp_IsChallengeWithoutSeedBank, &old_LawnApp_IsChallengeWithoutSeedBank);
     homura::HookFunction(LawnApp_TryHelpTextScreenAddr, &LawnApp_TryHelpTextScreen, nullptr);
     homura::HookFunction(LawnApp_KillSeedChooserScreenAddr, &LawnApp::KillSeedChooserScreen, &old_LawnApp_KillSeedChooserScreen);
+    homura::HookFunction(LawnApp_PlayFoleyAddr, &LawnApp::PlayFoley, &old_LawnApp_PlayFoley);
+    homura::HookFunction(LawnApp_PlaySampleAddr, &LawnApp::PlaySample, &old_LawnApp_PlaySample);
+    homura::HookFunction(LawnApp_ReanimationGetAddr, &LawnApp::ReanimationGet, &old_LawnApp_ReanimationGet);
 //    homura::HookFunction(LawnApp_HasSeedTypeAddr, &LawnApp_HasSeedType, &old_LawnApp_HasSeedType);
 
 
@@ -659,6 +646,7 @@ inline void InitHookFunction() {
     homura::HookFunction(Board_DrawShovelAddr, &Board::DrawShovel, nullptr);
     homura::HookFunction(Board_StageHasPoolAddr, &Board::StageHasPool, nullptr);
     homura::HookFunction(Board_AddZombieInRowAddr, &Board::AddZombieInRow, &old_Board_AddZombieInRow);
+    homura::HookFunction(Board_AddZombieAddr, &Board::AddZombie, &old_Board_AddZombie);
     homura::HookFunction(Board_DoPlantingEffectsAddr, &Board::DoPlantingEffects, nullptr);
     homura::HookFunction(Board_InitLawnMowersAddr, &Board::InitLawnMowers, &old_Board_InitLawnMowers);
     homura::HookFunction(Board_PickZombieWavesAddr, &Board::PickZombieWaves, &old_Board_PickZombieWaves);
@@ -668,6 +656,9 @@ inline void InitHookFunction() {
     homura::HookFunction(Board_UpdateGridItemsAddr, &Board::UpdateGridItems, &old_Board_UpdateGridItems);
     homura::HookFunction(Board_ShakeBoardAddr, &Board::ShakeBoard, &old_Board_ShakeBoard);
     homura::HookFunction(Board_DrawZenButtonsAddr, &Board::DrawZenButtons, &old_Board_DrawZenButtons);
+    homura::HookFunction(Board_AddProjectileAddr, &Board::AddProjectile, &old_Board_AddProjectile);
+    homura::HookFunction(Board_PixelToGridXAddr, &Board::PixelToGridX, &old_Board_PixelToGridX);
+    homura::HookFunction(Board_PixelToGridYAddr, &Board::PixelToGridY, &old_Board_PixelToGridY);
 //    homura::HookFunction(Board_GetNumSeedsInBankAddr, &Board::GetNumSeedsInBank, &old_Board_GetNumSeedsInBank);
 
 
@@ -693,6 +684,9 @@ inline void InitHookFunction() {
     homura::HookFunction(Challenge_IZombieSeedTypeToZombieTypeAddr, &Challenge::IZombieSeedTypeToZombieType, nullptr);
     homura::HookFunction(Challenge_StartLevelAddr, &Challenge::StartLevel, &old_Challenge_StartLevel);
     homura::HookFunction(Challenge_DeleteAddr, &Challenge::Delete, &old_Challenge_Delete);
+    homura::HookFunction(Challenge_ScaryPotterOpenPotAddr, &Challenge::ScaryPotterOpenPot, &old_Challenge_ScaryPotterOpenPot);
+    homura::HookFunction(Challenge_IZombieGetBrainTargetAddr, &Challenge::IZombieGetBrainTarget, &old_Challenge_IZombieGetBrainTarget);
+    homura::HookFunction(Challenge_IZombieSquishBrainAddr, &Challenge::IZombieSquishBrain, &old_Challenge_IZombieSquishBrain);
 
 
     homura::HookFunction(ChallengeScreen_AddedToManagerAddr, &ChallengeScreen_AddedToManager, &old_ChallengeScreen_AddedToManager);
@@ -801,6 +795,7 @@ inline void InitHookFunction() {
     homura::HookFunction(Plant_FindTargetGridItemAddr, &Plant::FindTargetGridItem, nullptr);
     homura::HookFunction(Plant_GetCostAddr, &Plant::GetCost, &old_Plant_GetCost);
     homura::HookFunction(Plant_DieAddr, &Plant::Die, &old_Plant_Die);
+    homura::HookFunction(Plant_PlayBodyReanimAddr, &Plant::PlayBodyReanim, &old_Plant_PlayBodyReanim);
     //    MSHookFunction(Plant_UpdateReanimAddr, (void *) Plant_UpdateReanim, (void **) &old_Plant_UpdateReanim);
 
 
@@ -821,9 +816,10 @@ inline void InitHookFunction() {
 
 
     homura::HookFunction(Zombie_UpdateAddr, &Zombie::Update, &old_Zombie_Update);
+    homura::HookFunction(Zombie_UpdateZombieGargantuarAddr, &Zombie::UpdateZombieGargantuar, nullptr);
     homura::HookFunction(Zombie_UpdateZombiePeaHeadAddr, &Zombie::UpdateZombiePeaHead, nullptr);
     homura::HookFunction(Zombie_UpdateZombieGatlingHeadAddr, &Zombie::UpdateZombieGatlingHead, nullptr);
-    homura::HookFunction(Zombie_UpdateZombieJalapenoHeadAddr, &Zombie::UpdateZombieJalapenoHead, &old_Zombie_UpdateZombieJalapenoHead);
+    homura::HookFunction(Zombie_UpdateZombieJalapenoHeadAddr, &Zombie::UpdateZombieJalapenoHead, nullptr);
     homura::HookFunction(Zombie_GetDancerFrameAddr, &Zombie::GetDancerFrame, nullptr);
     homura::HookFunction(Zombie_RiseFromGraveAddr, &Zombie::RiseFromGrave, &old_Zombie_RiseFromGrave);
     homura::HookFunction(Zombie_EatPlantAddr, &Zombie::EatPlant, &old_Zombie_EatPlant);
@@ -840,7 +836,20 @@ inline void InitHookFunction() {
     homura::HookFunction(Zombie_DropHeadAddr, &Zombie::DropHead, &old_Zombie_DropHead);
     homura::HookFunction(Zombie_ZombieInitializeAddr, &Zombie::ZombieInitialize, &old_Zombie_ZombieInitialize);
     homura::HookFunction(Zombie_DieNoLootAddr, &Zombie::DieNoLoot, &old_Zombie_DieNoLoot);
-    homura::HookFunction(GetZombieDefinitionAddr, &GetZombieDefinition, &old_GetZombieDefinition);
+    homura::HookFunction(GetZombieDefinitionAddr, &GetZombieDefinition, nullptr);
+    homura::HookFunction(Zombie_FindPlantTargetAddr, &Zombie::FindPlantTarget, &old_Zombie_FindPlantTarget);
+    homura::HookFunction(Zombie_FindZombieTargetAddr, &Zombie::FindZombieTarget, &old_Zombie_FindZombieTarget);
+    homura::HookFunction(Zombie_TakeDamageAddr, &Zombie::TakeDamage, &old_Zombie_TakeDamage);
+    homura::HookFunction(Zombie_PlayZombieReanimAddr, &Zombie::PlayZombieReanim, &old_Zombie_PlayZombieReanim);
+    homura::HookFunction(Zombie_StartWalkAnimAddr, &Zombie::StartWalkAnim, &old_Zombie_StartWalkAnim);
+    homura::HookFunction(Zombie_ReanimShowPrefixAddr, &Zombie::ReanimShowPrefix, &old_Zombie_ReanimShowPrefix);
+    homura::HookFunction(Zombie_ReanimShowTrackAddr, &Zombie::ReanimShowTrack, &old_Zombie_ReanimShowTrack);
+    homura::HookFunction(Zombie_GetPosYBasedOnRowAddr, &Zombie::GetPosYBasedOnRow, &old_Zombie_GetPosYBasedOnRow);
+    homura::HookFunction(Zombie_SetRowAddr, &Zombie::SetRow, &old_Zombie_SetRow);
+    homura::HookFunction(Zombie_StartMindControlledAddr, &Zombie::StartMindControlled, &old_Zombie_StartMindControlled);
+    homura::HookFunction(Zombie_UpdateReanimAddr, &Zombie::UpdateReanim, &old_Zombie_UpdateReanim);
+    homura::HookFunction(Zombie_GetBobsledPositionAddr, &Zombie::GetBobsledPosition, &old_Zombie_GetBobsledPosition);
+    homura::HookFunction(Zombie_SquishAllInSquareAddr, &Zombie::SquishAllInSquare, &old_Zombie_SquishAllInSquare);
 
 
     homura::HookFunction(Sexy_Dialog_AddedToManagerWidgetManagerAddr, &SexyDialog_AddedToManager, &old_SexyDialog_AddedToManager);

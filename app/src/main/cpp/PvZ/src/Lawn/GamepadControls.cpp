@@ -166,11 +166,11 @@ void GamepadControls_Update(GamepadControls *gamepadControls, float a2) {
     }
 
     if (positionAutoFix && !LawnApp_IsWhackAZombieLevel(lawnApp) && lawnApp->mGameMode != GameMode::GAMEMODE_CHALLENGE_ZOMBIQUARIUM) {
-        if (gamepadControls->mPlayerIndex2 == 0 && mPlayerIndex != TouchPlayerIndex::Player1 && mPlayerIndexSecond != TouchPlayerIndex::Player1) {
+        if (gamepadControls->mPlayerIndex2 == 0 && gPlayerIndex != TouchPlayerIndex::Player1 && gPlayerIndexSecond != TouchPlayerIndex::Player1) {
             gamepadControls->mCursorPositionX += (mGridCenterPositionX - gamepadControls->mCursorPositionX) / 10;
             gamepadControls->mCursorPositionY += (mGridCenterPositionY - gamepadControls->mCursorPositionY) / 10;
         }
-        if (gamepadControls->mPlayerIndex2 == 1 && mPlayerIndex != TouchPlayerIndex::Player2 && mPlayerIndexSecond != TouchPlayerIndex::Player2) {
+        if (gamepadControls->mPlayerIndex2 == 1 && gPlayerIndex != TouchPlayerIndex::Player2 && gPlayerIndexSecond != TouchPlayerIndex::Player2) {
             gamepadControls->mCursorPositionX += (mGridCenterPositionX - gamepadControls->mCursorPositionX) / 10;
             gamepadControls->mCursorPositionY += (mGridCenterPositionY - gamepadControls->mCursorPositionY) / 10;
         }
@@ -182,8 +182,8 @@ void GamepadControls_Update(GamepadControls *gamepadControls, float a2) {
     //    Reanimation *mCursorReanim = LawnApp_ReanimationTryToGet(gamepadControls->mGameObject.mApp, gamepadControls->mCursorReanimID);
     //    LOGD("%d",mCursorReanim);
     //    if (mCursorReanim != nullptr) {
-    //        if ((gamepadControls->mPlayerIndex2 == 0 &&(mIsZombie == TouchPlayerIndex::Player1 || mPlayerIndexSecond == TouchPlayerIndex::Player1)) || (gamepadControls->mPlayerIndex2 == 1
-    //        &&(mIsZombie == TouchPlayerIndex::Player2 || mPlayerIndexSecond == TouchPlayerIndex::Player2))) {
+    //        if ((gamepadControls->mPlayerIndex2 == 0 &&(mIsZombie == TouchPlayerIndex::Player1 || gPlayerIndexSecond == TouchPlayerIndex::Player1)) || (gamepadControls->mPlayerIndex2 == 1
+    //        &&(mIsZombie == TouchPlayerIndex::Player2 || gPlayerIndexSecond == TouchPlayerIndex::Player2))) {
     //            if (!Reanimation_IsAnimPlaying(mCursorReanim, "anim_depressed"))
     //                Reanimation_PlayReanim(mCursorReanim, "anim_depressed", a::REANIM_LOOP, 0,12.0);
     //            LOGD("456456");
@@ -219,7 +219,7 @@ void GamepadControls_InvalidatePreviewReanim(GamepadControls *gamepadControls) {
     Reanimation *mPreviewReanim4 = LawnApp_ReanimationTryToGet(gamepadControls->mGameObject.mApp, gamepadControls->mPreviewReanimID4);
     if (mPreviewReanim4 != nullptr) {
         Reanimation_ReanimationDie(mPreviewReanim4);
-        gamepadControls->mPreviewReanimID4 = 0;
+        gamepadControls->mPreviewReanimID4 = ReanimationID::REANIMATIONID_NULL;
     }
     int mPreviewReanim3 = gamepadControls->mPreviewReanimID3;
     if (mPreviewReanim3 != 0) {

@@ -167,7 +167,7 @@ void Challenge::IZombieDrawPlant(Sexy::Graphics* g, Plant* thePlant) {
 
 bool Challenge::IZombieEatBrain(Zombie* theZombie) {
     // 修复IZ脑子血量太高
-    GridItem* aBrain = Challenge_IZombieGetBrainTarget(this, theZombie);
+    GridItem* aBrain = IZombieGetBrainTarget(theZombie);
     if (aBrain == nullptr)
         return false;
 
@@ -216,19 +216,19 @@ void Challenge::DrawArtChallenge(Sexy::Graphics* g) {
 
 PlantingReason Challenge::CanPlantAt(int theGridX, int theGridY, SeedType theSeedType) {
     // 修复IZ多个蹦极可放置在同一格子内
-    GameMode mGameMode = mApp->mGameMode;
+    GameMode aGameMode = mApp->mGameMode;
     if (LawnApp_IsWallnutBowlingLevel(mApp)) {
         if (theGridX > 2) {
             return PlantingReason::PLANTING_NOT_PASSED_LINE;
         }
     } else if (LawnApp_IsIZombieLevel(mApp)) {
         int num = 6;
-        if (mGameMode == GameMode::GAMEMODE_PUZZLE_I_ZOMBIE_1 || mGameMode == GameMode::GAMEMODE_PUZZLE_I_ZOMBIE_2 || mGameMode == GameMode::GAMEMODE_PUZZLE_I_ZOMBIE_3
-            || mGameMode == GameMode::GAMEMODE_PUZZLE_I_ZOMBIE_4 || mGameMode == GameMode::GAMEMODE_PUZZLE_I_ZOMBIE_5) {
+        if (aGameMode == GameMode::GAMEMODE_PUZZLE_I_ZOMBIE_1 || aGameMode == GameMode::GAMEMODE_PUZZLE_I_ZOMBIE_2 || aGameMode == GameMode::GAMEMODE_PUZZLE_I_ZOMBIE_3
+            || aGameMode == GameMode::GAMEMODE_PUZZLE_I_ZOMBIE_4 || aGameMode == GameMode::GAMEMODE_PUZZLE_I_ZOMBIE_5) {
             num = 4;
         }
-        if (mGameMode == GameMode::GAMEMODE_PUZZLE_I_ZOMBIE_6 || mGameMode == GameMode::GAMEMODE_PUZZLE_I_ZOMBIE_7 || mGameMode == GameMode::GAMEMODE_PUZZLE_I_ZOMBIE_8
-            || mGameMode == GameMode::GAMEMODE_PUZZLE_I_ZOMBIE_ENDLESS) {
+        if (aGameMode == GameMode::GAMEMODE_PUZZLE_I_ZOMBIE_6 || aGameMode == GameMode::GAMEMODE_PUZZLE_I_ZOMBIE_7 || aGameMode == GameMode::GAMEMODE_PUZZLE_I_ZOMBIE_8
+            || aGameMode == GameMode::GAMEMODE_PUZZLE_I_ZOMBIE_ENDLESS) {
             num = 5;
         }
         if (theSeedType == SeedType::SEED_ZOMBIE_BUNGEE) {
@@ -236,8 +236,8 @@ PlantingReason Challenge::CanPlantAt(int theGridX, int theGridY, SeedType theSee
                 Zombie *zombie = nullptr;
                 while (Board_IterateZombies(mBoard, &zombie)) {
                     if (zombie->mZombieType == ZombieType::ZOMBIE_BUNGEE) {
-                        int mGridX = Board_PixelToGridX(mBoard, zombie->mX, zombie->mY);
-                        if (mGridX == theGridX && zombie->mRow == theGridY) {
+                        int aGridX = mBoard->PixelToGridX(zombie->mX, zombie->mY);
+                        if (aGridX == theGridX && zombie->mRow == theGridY) {
                             return PlantingReason::PLANTING_NOT_HERE;
                         }
                     }
@@ -256,7 +256,7 @@ PlantingReason Challenge::CanPlantAt(int theGridX, int theGridY, SeedType theSee
         if (artChallengeSeed != SeedType::SEED_NONE && artChallengeSeed != theSeedType && theSeedType != SeedType::SEED_LILYPAD && theSeedType != SeedType::SEED_PUMPKINSHELL) {
             return PlantingReason::PLANTING_NOT_ON_ART;
         }
-        if (mGameMode == GameMode::GAMEMODE_CHALLENGE_ART_CHALLENGE_WALLNUT) {
+        if (aGameMode == GameMode::GAMEMODE_CHALLENGE_ART_CHALLENGE_WALLNUT) {
             if (theGridX == 4 && theGridY == 1) {
                 return PlantingReason::PLANTING_NOT_HERE;
             }
@@ -266,7 +266,7 @@ PlantingReason Challenge::CanPlantAt(int theGridX, int theGridY, SeedType theSee
         }
     } else if (LawnApp_IsFinalBossLevel(mApp) && theGridX >= 8) {
         return PlantingReason::PLANTING_NOT_HERE;
-    } else if (mGameMode == GameMode::GAMEMODE_TWO_PLAYER_VS_HIDE || mGameMode == GameMode::GAMEMODE_TWO_PLAYER_VS) {
+    } else if (aGameMode == GameMode::GAMEMODE_TWO_PLAYER_VS_HIDE || aGameMode == GameMode::GAMEMODE_TWO_PLAYER_VS) {
         if (Challenge_IsMPSeedType(theSeedType)) {
             if (theGridX > 5 || theSeedType == SeedType::SEED_ZOMBIE_BUNGEE)
                 return PlantingReason::PLANTING_OK;
@@ -430,4 +430,35 @@ void Challenge::Delete() {
         env->CallVoidMethod(activity, methodID);
         env->DeleteLocalRef(cls);
     }
+}
+
+void Challenge::ScaryPotterOpenPot(GridItem* theScaryPot) {
+    return old_Challenge_ScaryPotterOpenPot(this, theScaryPot);
+}
+
+GridItem* Challenge::IZombieGetBrainTarget(Zombie* theZombie)
+{
+    return old_Challenge_IZombieGetBrainTarget(this, theZombie);
+//    if (theZombie->mZombieType == ZOMBIE_BUNGEE || theZombie->IsWalkingBackwards())
+//        return nullptr;
+//
+//    Rect aZombieRect = theZombie->GetZombieAttackRect();
+//    if (theZombie->mZombiePhase == PHASE_POLEVAULTER_PRE_VAULT)
+//    {
+//        aZombieRect = Rect(50 + theZombie->mX, 0, 20, 115);
+//    }
+//    if (theZombie->mZombieType == ZOMBIE_BALLOON)
+//    {
+//        aZombieRect.mX += 25;
+//    }
+//
+//    if (aZombieRect.mX > 20)
+//        return nullptr;
+//
+//    GridItem* aBrain = mBoard->GetGridItemAt(GRIDITEM_IZOMBIE_BRAIN, 0, theZombie->mRow);
+//    return (aBrain && aBrain->mGridItemState != GRIDITEM_STATE_BRAIN_SQUISHED) ? aBrain : nullptr;
+}
+
+void Challenge::IZombieSquishBrain(GridItem* theBrain) {
+    return old_Challenge_IZombieSquishBrain(this, theBrain);
 }

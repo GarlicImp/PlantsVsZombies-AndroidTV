@@ -134,7 +134,7 @@ public:
     int mSpecialGraveStoneY;                              // 432
     float mFogOffset;                                     // 433
     int mOffsetMoved;                                     // 434
-    int mCoverLayerAnimIDs[7];                            // 435 ~ 441
+    ReanimationID mCoverLayerAnimIDs[7];                  // 435 ~ 441
     int mFogBlownCountDown;                               // 442
     PlantRowType mPlantRow[6];              // 443 ~ 448
     int mWaveRowGotLawnMowered[6];                        // 449 ~ 454
@@ -150,7 +150,7 @@ public:
     int mShakeCounter;                                    // 5525
     int mShakeAmountX;                                    // 5526
     int mShakeAmountY;                                    // 5527
-    BackgroundType mBackgroundType;       // 5528
+    BackgroundType mBackground;       // 5528
     int mLevel;                                           // 5529
     int mSodPosition;                                     // 5530
     int mPrevMouseX;                                      // 5531
@@ -246,12 +246,6 @@ public:
     void RemovedFromManager(int* theManager);
     int GetNumSeedsInBank(bool thePlayerIndex);
     void RemoveParticleByType(ParticleEffect theEffectType);
-    void MouseMove(int x, int y);
-    void MouseDown(int x, int y, int theClickCount);
-    void MouseDownSecond(int x, int y, int theClickCount);
-    void MouseUp(int x, int y, int theClickCount);
-    void MouseDrag(int x, int y);
-    void ButtonDepress(int theId);
     void FadeOutLevel();
     Plant *AddPlant(int theGridX, int theGridY, SeedType theSeedType, SeedType theImitaterType, int thePlayerIndex, bool theIsDoEffect);
     void AddSunMoney(int theAmount, int thePlayerIndex);
@@ -261,7 +255,6 @@ public:
     Plant* GetFlowerPotAt(int theGridX, int theGridY);
     Plant* GetPumpkinAt(int theGridX, int theGridY);
     void ZombiesWon(Zombie* theZombie);
-    void KeyDown(Sexy::KeyCode theKey);
     void UpdateSunSpawning();
     void UpdateZombieSpawning();
     void PickBackground();
@@ -290,7 +283,9 @@ public:
     bool MouseHitTest(int x, int y, HitResult* theHitResult, bool thePlayerIndex);
     void DrawShovel(Sexy::Graphics* g);
     bool StageHasPool();
+    bool StageHasRoof();
     Zombie* AddZombieInRow(ZombieType theZombieType, int theRow, int theFromWave, bool theIsRustle);
+    Zombie* AddZombie(ZombieType theZombieType, int theFromWave, bool theIsRustle);
     void DoPlantingEffects(int theGridX, int theGridY, Plant* thePlant);
     void InitLawnMowers();
     void PickZombieWaves();
@@ -302,6 +297,21 @@ public:
     void DrawZenButtons(Sexy::Graphics* g);
     void SpeedUpUpdate();
     void DrawShovelButton(Sexy::Graphics* g, LawnApp* theApp);
+    Projectile* AddProjectile(int theX, int theY, int theRenderOrder, int theRow, ProjectileType theProjectileType);
+    void ShovelDown();
+    int PixelToGridX(int theX, int theY);
+    int PixelToGridY(int theX, int theY);
+    GridItem* GetScaryPotAt(int theGridX, int theGridY);
+    GridItem* GetGridItemAt(GridItemType theGridItemType, int theGridX, int theGridY);
+
+    void MouseMove(int x, int y);
+    void MouseDown(int x, int y, int theClickCount);
+    void MouseDownSecond(int x, int y, int theClickCount);
+    void MouseUp(int x, int y, int theClickCount);
+    void MouseUpSecond(int x, int y, int theClickCount);
+    void MouseDrag(int x, int y);
+    void ButtonDepress(int theId);
+    void KeyDown(Sexy::KeyCode theKey);
 };
 
 /***************************************************************************************************************/
@@ -363,8 +373,6 @@ inline int (*Board_GridToPixelX)(Board *board, unsigned int a2, unsigned int a3)
 
 inline int (*Board_GridToPixelY)(Board *board, unsigned int a2, unsigned int a3);
 
-inline int (*Board_PixelToGridX)(Board *board, unsigned int a2, unsigned int a3);
-
 inline int (*Board_PixelToGridY)(Board *board, unsigned int a2, unsigned int a3);
 
 inline int (*Board_LoadBackgroundImages)(Board *board);
@@ -403,8 +411,6 @@ inline int (*Board_InitCoverLayer)(Board *board);
 // 左 2
 // 右 3
 inline int (*Board_GameAxisMove)(Board *board, int buttonCode, int playerIndex, int isLongPress);
-
-inline Projectile *(*Board_AddProjectile)(Board *, int, int, int, int, ProjectileType);
 
 inline bool (*Board_IterateZombies)(Board *board, Zombie **zombie);
 
@@ -564,6 +570,8 @@ inline void (*old_Board_DrawFog)(Board *board, Sexy::Graphics *g);
 
 inline Zombie *(*old_Board_AddZombieInRow)(Board *board, ZombieType theZombieType, int theRow, int theFromWave, bool playAnim);
 
+inline Zombie* (*old_Board_AddZombie)(Board*, ZombieType theZombieType, int theFromWave, bool theIsRustle);
+
 inline void (*old_Board_Update)(Board *board);
 
 inline bool (*old_Board_IsFlagWave)(Board *board, int currentWave);
@@ -628,6 +636,12 @@ inline void (*old_Board_DrawZenButtons)(Board *board, Sexy::Graphics *a2);
 
 inline int (*old_Board_GetNumSeedsInBank)(Board* , bool);
 
+inline Projectile* (*old_Board_AddProjectile)(Board*, int theX, int theY, int theRenderOrder, int theRow, ProjectileType theProjectileType);
+
+inline int (*old_Board_PixelToGridX)(Board*, int theX, int theY);
+
+inline int (*old_Board_PixelToGridY)(Board*, int theX, int theY);
+
 
 void FixBoardAfterLoad(Board *board);
 
@@ -656,8 +670,6 @@ bool Board_GrantAchievement(Board *board, AchievementId::AchievementId theAchiev
 void Board_DoPlantingAchievementCheck(Board *board, SeedType theType);
 
 int Board_GetLiveZombiesCount(Board *board);
-
-void Board_ShovelDown(Board *);
 
 bool Board_ZenGardenItemNumIsZero(Board *, CursorType);
 

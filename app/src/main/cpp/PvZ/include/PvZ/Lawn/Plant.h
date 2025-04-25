@@ -138,7 +138,7 @@ class GridItem;
 
 class Plant : public GameObject {
 public:
-    SeedType mSeedType;                          // 13
+    SeedType mSeedType;                                    // 13
     int mPlantCol;                                         // 14
     int mAnimCounter;                                      // 15
     int mFrame;                                            // 16
@@ -160,24 +160,24 @@ public:
     int mStartRow;                                         // 38
     int *mParticleID;                                      // 39
     int mShootingCounter;                                  // 40
-    int mBodyReanimID;                                     // 41
-    int mHeadReanimID;                                     // 42
-    int mHeadReanimID2;                                    // 43
-    int mHeadReanimID3;                                    // 44
-    int mBlinkReanimID;                                    // 45
-    int mLightReanimID;                                    // 46
-    int mSleepingReanimID;                                 // 47
+    ReanimationID mBodyReanimID;                           // 41
+    ReanimationID mHeadReanimID;                           // 42
+    ReanimationID mHeadReanimID2;                          // 43
+    ReanimationID mHeadReanimID3;                          // 44
+    ReanimationID mBlinkReanimID;                          // 45
+    ReanimationID mLightReanimID;                          // 46
+    ReanimationID mSleepingReanimID;                       // 47
     int mBlinkCountdown;                                   // 48
     int mRecentlyEatenCountdown;                           // 49
     int mEatenFlashCountdown;                              // 50
     int mBeghouledFlashCountdown;                          // 51
     float mShakeOffsetX;                                   // 52
     float mShakeOffsetY;                                   // 53
-    MagnetItem mMagnetItems[MAX_MAGNET_ITEMS];                            // 54 ~ 78
+    MagnetItem mMagnetItems[MAX_MAGNET_ITEMS];             // 54 ~ 78
     int mTargetZombieID;                                   // 79
     int mWakeUpCounter;                                    // 80
     PlantOnBungeeState mOnBungeeState;                     // 81
-    SeedType mImitaterType;                      // 82
+    SeedType mImitaterType;                                // 82
     int mPottedPlantIndex;                                 // 83
     bool mAnimPing;                                        // 336
     bool mDead;                                            // 337
@@ -206,6 +206,9 @@ public:
     void UpdateReanimColor();
     bool IsOnBoard();
     bool IsInPlay();
+    void PlayBodyReanim(const char* theTrackName, ReanimLoopType theLoopType, int theBlendTime, float theAnimRate);
+    void SpikeweedAttack();
+    void SpikeRockTakeDamage();
 
     void SetImitaterFilterEffect();
 };
@@ -287,6 +290,8 @@ inline void (*old_Plant_PlantInitialize)(Plant *plant, int theGridX, int theGrid
 inline bool (*old_Plant_IsUpgrade)(SeedType theSeedType);
 
 inline void (*old_Plant_Die)(Plant* this_);
+
+inline void (*old_Plant_PlayBodyReanim)(Plant*, const char* theTrackName, ReanimLoopType theLoopType, int theBlendTime, float theAnimRate);
 
 // inline void (*old_Plant_CobCannonFire)(Plant* plant, int x, int y);
 

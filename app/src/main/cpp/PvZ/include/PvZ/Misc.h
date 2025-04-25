@@ -135,11 +135,11 @@ inline float (*RandRangeFloat)(float, float);
 
 inline unsigned int (*PoolEffect_BilinearLookupFixedPoint)(PoolEffect *, unsigned int, unsigned int);
 
-inline bool (*TodFoley_IsFoleyPlaying)(TodFoley *soundSystem, FoleyType::FoleyType theFoleyType);
+inline bool (*TodFoley_IsFoleyPlaying)(TodFoley *soundSystem, FoleyType theFoleyType);
 
-inline void (*TodFoley_StopFoley)(TodFoley *soundSystem, FoleyType::FoleyType theFoleyType);
+inline void (*TodFoley_StopFoley)(TodFoley *soundSystem, FoleyType theFoleyType);
 
-inline FoleyInstance *(*SoundSystemFindInstance)(TodFoley *, FoleyType::FoleyType);
+inline FoleyInstance *(*SoundSystemFindInstance)(TodFoley *, FoleyType);
 
 inline int (*Sexy_AudiereSoundManager_LoadSound)(int *mSoundManager, int *theFileName);
 
@@ -260,7 +260,7 @@ inline void (*old_CursorObject_EndDraw)(CursorObject *cursorObject, Sexy::Graphi
 
 inline void (*old_Sexy_ExtractLoadingSoundsResources)(int *a, int *theManager);
 
-inline FoleyParams *(*old_LookupFoley)(FoleyType::FoleyType type);
+inline FoleyParams *(*old_LookupFoley)(FoleyType type);
 
 inline void (*old_MessageWidget_Draw)(CustomMessageWidget *messageWidget, Sexy::Graphics *a2);
 
@@ -329,7 +329,7 @@ int SexyDialog_AddedToManager(void *instance, void *instance1);
 
 int SexyDialog_RemovedFromManager(void *instance, void *instance1);
 
-FoleyParams *LookupFoley(FoleyType::FoleyType theFoleyType);
+FoleyParams *LookupFoley(FoleyType theFoleyType);
 
 void CreditScreen_ButtonDepress(Sexy::Widget *creditScreen, int id);
 
