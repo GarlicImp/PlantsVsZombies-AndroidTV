@@ -94,6 +94,12 @@ public:
 
 public:
     void KillSeedChooserScreen();
+    bool IsIZombieLevel();
+    void PlayFoley(FoleyType theFoleyType);
+    void PlaySample(int theSoundNum);
+    bool IsAdventureMode();
+    bool IsScaryPotterLevel();
+    Reanimation* ReanimationGet(ReanimationID theReanimationID);
 };
 
 /***************************************************************************************************************/
@@ -114,9 +120,7 @@ inline bool (*LawnApp_CanShowStore)(LawnApp *lawnApp);
 
 inline bool (*LawnApp_CanShowAlmanac)(LawnApp *lawnApp);
 
-inline void (*LawnApp_PlayFoley)(LawnApp *lawnApp, FoleyType::FoleyType theFoleyType);
-
-inline void (*LawnApp_PlayFoleyPitch)(LawnApp *lawnApp, FoleyType::FoleyType theFoleyType, float aPitch);
+inline void (*LawnApp_PlayFoleyPitch)(LawnApp *lawnApp, FoleyType theFoleyType, float aPitch);
 
 inline void (*LawnApp_DoCheatDialog)(LawnApp *lawnApp);
 
@@ -124,7 +128,7 @@ inline void (*LawnApp_DoCheatCodeDialog)(LawnApp *lawnApp);
 
 inline void (*LawnApp_DoUserDialog)(LawnApp *lawnApp);
 
-inline Reanimation *(*LawnApp_ReanimationTryToGet)(LawnApp *lawnApp, int a2);
+inline Reanimation *(*LawnApp_ReanimationTryToGet)(LawnApp *lawnApp, ReanimationID a2);
 
 inline void (*LawnApp_ClearSecondPlayer)(LawnApp *lawnApp);
 
@@ -151,8 +155,6 @@ inline bool (*LawnApp_IsPuzzleMode)(LawnApp *);
 inline bool (*LawnApp_IsFinalBossLevel)(LawnApp *);
 
 inline bool (*LawnApp_IsArtChallenge)(LawnApp *);
-
-inline Reanimation *(*LawnApp_ReanimationGet)(LawnApp *lawnApp, int theReanimationId);
 
 // 阻塞式函数，能创建并立即展示一个带按钮的对话框。按钮个数由最后一个参数决定。其返回值就是用户按下的按钮ID，一般情况下只可能为1000或1001。
 inline int (*LawnApp_LawnMessageBox)(LawnApp *lawnApp,
@@ -191,7 +193,7 @@ inline bool (*LawnApp_EarnedGoldTrophy)(LawnApp *);
 
 inline void (*LawnApp_RemoveReanimation)(LawnApp *, int);
 
-inline int (*LawnApp_ReanimationGetID)(LawnApp *, Reanimation *);
+inline ReanimationID (*LawnApp_ReanimationGetID)(LawnApp *, Reanimation *);
 
 inline bool (*LawnApp_IsSlotMachineLevel)(LawnApp *);
 
@@ -249,6 +251,12 @@ inline void (*old_Sexy_SexyAppBase_SexyAppBase)(SexyAppBase *appBase);
 inline bool (*old_LawnApp_HasSeedType)(LawnApp *lawnApp, SeedType theSeedType, int playerIndex);
 
 inline void (*old_LawnApp_DoNewOptions)(LawnApp *lawnApp, bool a2, unsigned int a3);
+
+inline void (*old_LawnApp_PlayFoley)(LawnApp*, FoleyType theFoleyType);
+
+inline void (*old_LawnApp_PlaySample)(LawnApp*, int theSoundNum);
+
+inline Reanimation* (*old_LawnApp_ReanimationGet)(LawnApp*, ReanimationID theReanimationID);
 
 
 void LawnApp_LawnApp(LawnApp *lawnApp);
@@ -309,7 +317,7 @@ bool LawnApp_IsChallengeWithoutSeedBank(LawnApp *);
 
 bool LawnApp_IsNight(LawnApp *);
 
-void LawnApp_SetFoleyVolume(LawnApp *lawnApp, FoleyType::FoleyType type, double theVolume);
+void LawnApp_SetFoleyVolume(LawnApp *lawnApp, FoleyType type, double theVolume);
 
 void LawnApp_KillDialog(LawnApp *lawnApp, Dialogs id);
 

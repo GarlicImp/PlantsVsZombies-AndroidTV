@@ -22,45 +22,45 @@ enum AchievementWidgetState {
     SLIDING_OUT = 3,
 };
 
-constexpr int mAchievementHoleLength = 136;
-constexpr int mAchievementHoleWormPos = 0x10;
-constexpr int mAchievementHoleGemsPos = 0x19;
-constexpr int mAchievementHoleChuzzlePos = 0x26;
-constexpr int mAchievementHoleBjornPos = 0x34;
-constexpr int mAchievementHolePipePos = 0x45;
-constexpr int mAchievementHoleTikiPos = 0x55;
-constexpr int mAchievementHoleHeavyRocksPos = 0x65;
-constexpr int mAchievementHoleDuWeiPos = 0x72;
+constexpr int gAchievementHoleLength = 136;
+constexpr int gAchievementHoleWormPos = 0x10;
+constexpr int gAchievementHoleGemsPos = 0x19;
+constexpr int gAchievementHoleChuzzlePos = 0x26;
+constexpr int gAchievementHoleBjornPos = 0x34;
+constexpr int gAchievementHolePipePos = 0x45;
+constexpr int gAchievementHoleTikiPos = 0x55;
+constexpr int gAchievementHoleHeavyRocksPos = 0x65;
+constexpr int gAchievementHoleDuWeiPos = 0x72;
 
-constexpr int mKeyboardScrollTime = 20;
-constexpr int mMainMenuHeight = 720 - 2; // 作用：将成就界面上升2个像素点，以更紧密地贴合主界面。奇怪，理论上720是严丝合缝，为什么实际有2像素偏差呢？
+constexpr int gKeyboardScrollTime = 20;
+constexpr int gMainMenuHeight = 720 - 2; // 作用：将成就界面上升2个像素点，以更紧密地贴合主界面。奇怪，理论上720是严丝合缝，为什么实际有2像素偏差呢？
 
 bool isPatched;
-int mMainMenuAchievementCounter;
-int mMainMenuAchievementsWidgetY;
-int mMainMenuAchievementsKeyboardScrollWidgetY;
-int mMainMenuAchievementKeyboardScrollCounter;
-bool mMainMenuAchievementKeyboardScrollDirection;
+int gMainMenuAchievementCounter;
+int gMainMenuAchievementsWidgetY;
+int gMainMenuAchievementsKeyboardScrollWidgetY;
+int gMainMenuAchievementKeyboardScrollCounter;
+bool gMainMenuAchievementKeyboardScrollDirection;
 
-AchievementWidgetState mAchievementState = NOT_SHOWING;
-AchievementsWidget *mMainMenuAchievementsWidget;
-Sexy::GameButton *mMainMenuAchievementsBack;
-int mFoleyVolumeCounter;
+AchievementWidgetState gAchievementState = NOT_SHOWING;
+AchievementsWidget *gMainMenuAchievementsWidget;
+Sexy::GameButton *gMainMenuAchievementsBack;
+int gFoleyVolumeCounter;
 
 } // namespace
 
 
-static FoleyType::FoleyType MainMenu_GetFoleyTypeByScene(int scene) {
-    FoleyType::FoleyType theType = FoleyType::MenuCenter;
+static FoleyType MainMenu_GetFoleyTypeByScene(int scene) {
+    FoleyType theType = FoleyType::FOLEY_MENU_CENTRE;
     switch (scene) {
         case 0:
-            theType = FoleyType::MenuLeft;
+            theType = FoleyType::FOLEY_MENU_LEFT;
             break;
         case 1:
-            theType = FoleyType::MenuCenter;
+            theType = FoleyType::FOLEY_MENU_CENTRE;
             break;
         case 2:
-            theType = FoleyType::MenuRight;
+            theType = FoleyType::FOLEY_MENU_RIGHT;
     }
     return theType;
 }
@@ -82,105 +82,108 @@ void MainMenu::Update() {
         mFadeCounterFloat = fmin(num, 1.0f);
     } else {
         if (MainMenu_InTransition(this)) {
-            mFoleyVolumeCounter++;
-            FoleyType::FoleyType theType = MainMenu_GetFoleyTypeByScene(mScene);
-            FoleyType::FoleyType theNextType = MainMenu_GetFoleyTypeByScene(mSceneNext);
-            if (!TodFoley_IsFoleyPlaying(mApp->mSoundSystem, theNextType)) {
-                LawnApp_PlayFoley(mApp, theNextType);
-                LawnApp_SetFoleyVolume(mApp, theNextType, 0);
+            gFoleyVolumeCounter++;
+            FoleyType aType = MainMenu_GetFoleyTypeByScene(mScene);
+            FoleyType aNextType = MainMenu_GetFoleyTypeByScene(mSceneNext);
+            if (!TodFoley_IsFoleyPlaying(mApp->mSoundSystem, aNextType)) {
+                //TODO:修复PlayFoley崩溃
+//                mApp->PlayFoley(aNextType);
+                LawnApp_SetFoleyVolume(mApp, aNextType, 0);
             }
-            float theVolume = TodAnimateCurveFloat(0, 93, mFoleyVolumeCounter, mApp->mPlayerInfo->mSoundVolume, 0, TodCurves::CURVE_BOUNCE_SLOW_MIDDLE);
-            if (mFoleyVolumeCounter >= 46) {
-                LawnApp_SetFoleyVolume(mApp, theNextType, theVolume);
-                if (TodFoley_IsFoleyPlaying(mApp->mSoundSystem, theType)) {
-                    TodFoley_StopFoley(mApp->mSoundSystem, theType);
+            float theVolume = TodAnimateCurveFloat(0, 93, gFoleyVolumeCounter, mApp->mPlayerInfo->mSoundVolume, 0, TodCurves::CURVE_BOUNCE_SLOW_MIDDLE);
+            if (gFoleyVolumeCounter >= 46) {
+                LawnApp_SetFoleyVolume(mApp, aNextType, theVolume);
+                if (TodFoley_IsFoleyPlaying(mApp->mSoundSystem, aType)) {
+                    TodFoley_StopFoley(mApp->mSoundSystem, aType);
                 }
             } else {
-                LawnApp_SetFoleyVolume(mApp, theType, theVolume);
+                LawnApp_SetFoleyVolume(mApp, aType, theVolume);
             }
         } else {
-            mFoleyVolumeCounter = 0;
-            FoleyType::FoleyType theType = MainMenu_GetFoleyTypeByScene(mScene);
-            if (mAchievementState == NOT_SHOWING) {
-                if (!TodFoley_IsFoleyPlaying(mApp->mSoundSystem, theType) && mExitCounter == 0) {
-                    LawnApp_PlayFoley(mApp, theType);
-                    LawnApp_SetFoleyVolume(mApp, theType, 0);
+            gFoleyVolumeCounter = 0;
+            FoleyType aType = MainMenu_GetFoleyTypeByScene(mScene);
+            if (gAchievementState == NOT_SHOWING) {
+                if (!TodFoley_IsFoleyPlaying(mApp->mSoundSystem, aType) && mExitCounter == 0) {
+                    //TODO:修复PlayFoley崩溃
+//                    mApp->PlayFoley(aType);
+                    LawnApp_SetFoleyVolume(mApp, aType, 0);
                 }
                 if (mEnterReanimationCounter > 0) {
                     float theVolume = TodAnimateCurveFloat(110, 0, mEnterReanimationCounter, 0, mApp->mPlayerInfo->mSoundVolume, TodCurves::CURVE_LINEAR);
-                    LawnApp_SetFoleyVolume(mApp, theType, theVolume);
+                    LawnApp_SetFoleyVolume(mApp, aType, theVolume);
                 }
             }
-            if (mAchievementState == SLIDING_IN) {
-                float theVolume = TodAnimateCurveFloat(100, 0, mMainMenuAchievementCounter, mApp->mPlayerInfo->mSoundVolume, 0, TodCurves::CURVE_LINEAR);
-                LawnApp_SetFoleyVolume(mApp, theType, theVolume);
+            if (gAchievementState == SLIDING_IN) {
+                float theVolume = TodAnimateCurveFloat(100, 0, gMainMenuAchievementCounter, mApp->mPlayerInfo->mSoundVolume, 0, TodCurves::CURVE_LINEAR);
+                LawnApp_SetFoleyVolume(mApp, aType, theVolume);
             }
-            if (mAchievementState == SLIDING_OUT && mMainMenuAchievementCounter <= 100) {
-                float theVolume = TodAnimateCurveFloat(100, 0, mMainMenuAchievementCounter, 0, mApp->mPlayerInfo->mSoundVolume, TodCurves::CURVE_LINEAR);
-                LawnApp_SetFoleyVolume(mApp, theType, theVolume);
+            if (gAchievementState == SLIDING_OUT && gMainMenuAchievementCounter <= 100) {
+                float theVolume = TodAnimateCurveFloat(100, 0, gMainMenuAchievementCounter, 0, mApp->mPlayerInfo->mSoundVolume, TodCurves::CURVE_LINEAR);
+                LawnApp_SetFoleyVolume(mApp, aType, theVolume);
             }
         }
     }
 
 
-    if (mMainMenuAchievementKeyboardScrollCounter != 0) {
-        mMainMenuAchievementKeyboardScrollCounter--;
-        if (mMainMenuAchievementsWidget != nullptr) {
-            int theY = TodAnimateCurve(mKeyboardScrollTime, 0, mMainMenuAchievementKeyboardScrollCounter, 0, 192, TodCurves::CURVE_LINEAR);
-            int theNewY = mMainMenuAchievementsKeyboardScrollWidgetY - (mMainMenuAchievementKeyboardScrollDirection ? theY : -theY);
-            if (theNewY > mMainMenuHeight)
-                theNewY = mMainMenuHeight;
-            if (theNewY < 720 + mMainMenuHeight - (mAchievementHoleLength + 1) * addonImages.hole->mHeight)
-                theNewY = 720 + mMainMenuHeight - (mAchievementHoleLength + 1) * addonImages.hole->mHeight;
-            Sexy_Widget_Move(mMainMenuAchievementsWidget, mMainMenuAchievementsWidget->mX, theNewY);
+    if (gMainMenuAchievementKeyboardScrollCounter != 0) {
+        gMainMenuAchievementKeyboardScrollCounter--;
+        if (gMainMenuAchievementsWidget != nullptr) {
+            int theY = TodAnimateCurve(gKeyboardScrollTime, 0, gMainMenuAchievementKeyboardScrollCounter, 0, 192, TodCurves::CURVE_LINEAR);
+            int theNewY = gMainMenuAchievementsKeyboardScrollWidgetY - (gMainMenuAchievementKeyboardScrollDirection ? theY : -theY);
+            if (theNewY > gMainMenuHeight)
+                theNewY = gMainMenuHeight;
+            if (theNewY < 720 + gMainMenuHeight - (gAchievementHoleLength + 1) * addonImages.hole->mHeight)
+                theNewY = 720 + gMainMenuHeight - (gAchievementHoleLength + 1) * addonImages.hole->mHeight;
+            Sexy_Widget_Move(gMainMenuAchievementsWidget, gMainMenuAchievementsWidget->mX, theNewY);
         }
     }
 
-    if (mAchievementState == SLIDING_IN) {
-        mMainMenuAchievementCounter--;
-        if (mMainMenuAchievementsWidget != nullptr) {
-            int theY = TodAnimateCurve(100, 0, mMainMenuAchievementCounter, 660, -60, TodCurves::CURVE_EASE_IN_OUT);
+    if (gAchievementState == SLIDING_IN) {
+        gMainMenuAchievementCounter--;
+        if (gMainMenuAchievementsWidget != nullptr) {
+            int theY = TodAnimateCurve(100, 0, gMainMenuAchievementCounter, 660, -60, TodCurves::CURVE_EASE_IN_OUT);
             Sexy_Widget_Move(this, mX, -720 + theY);
         }
-        if (mMainMenuAchievementCounter == 0) {
-            mAchievementState = SHOWING;
+        if (gMainMenuAchievementCounter == 0) {
+            gAchievementState = SHOWING;
             int holder1[1];
             TodStringTranslate(holder1, "[CLOSE]");
-            mMainMenuAchievementsBack = MakeButton(ACHIEVEMENTS_BACK_BUTTON, &mButtonListener, this, holder1);
-            GameButton_Resize(mMainMenuAchievementsBack, 1000, 564 + 720, 170, 50);
+            gMainMenuAchievementsBack = MakeButton(ACHIEVEMENTS_BACK_BUTTON, &mButtonListener, this, holder1);
+            GameButton_Resize(gMainMenuAchievementsBack, 1000, 564 + 720, 170, 50);
             Sexy_String_Delete(holder1);
-            Sexy_Widget_AddWidget(this, mMainMenuAchievementsBack);
+            Sexy_Widget_AddWidget(this, gMainMenuAchievementsBack);
         }
     }
 
-    if (mAchievementState == SLIDING_OUT) {
-        mMainMenuAchievementCounter--;
-        if (mMainMenuAchievementsWidget != nullptr) {
-            if (mMainMenuAchievementCounter <= 100) {
-                int theY = TodAnimateCurve(100, 0, mMainMenuAchievementCounter, -780, -60, TodCurves::CURVE_EASE_IN_OUT);
+    if (gAchievementState == SLIDING_OUT) {
+        gMainMenuAchievementCounter--;
+        if (gMainMenuAchievementsWidget != nullptr) {
+            if (gMainMenuAchievementCounter <= 100) {
+                int theY = TodAnimateCurve(100, 0, gMainMenuAchievementCounter, -780, -60, TodCurves::CURVE_EASE_IN_OUT);
                 Sexy_Widget_Move(this, mX, theY);
             } else {
-                int theAchievementsY = TodAnimateCurve(150, 100, mMainMenuAchievementCounter, mMainMenuAchievementsWidgetY, mMainMenuHeight, TodCurves::CURVE_EASE_IN_OUT);
-                Sexy_Widget_Move(mMainMenuAchievementsWidget, mMainMenuAchievementsWidget->mX, theAchievementsY);
+                int theAchievementsY = TodAnimateCurve(150, 100, gMainMenuAchievementCounter, gMainMenuAchievementsWidgetY, gMainMenuHeight, TodCurves::CURVE_EASE_IN_OUT);
+                Sexy_Widget_Move(gMainMenuAchievementsWidget, gMainMenuAchievementsWidget->mX, theAchievementsY);
             }
         }
-        if (mMainMenuAchievementCounter == 0) {
-            mAchievementState = NOT_SHOWING;
-            Sexy_Widget_RemoveWidget(this, mMainMenuAchievementsWidget);
-            MaskHelpWidget_Delete(mMainMenuAchievementsWidget);
-            mMainMenuAchievementsWidget = nullptr;
-            if (mMainMenuAchievementsBack != nullptr) {
-                Sexy_Widget_RemoveWidget(this, mMainMenuAchievementsBack);
-                GameButton_Delete(mMainMenuAchievementsBack);
-                mMainMenuAchievementsBack = nullptr;
+        if (gMainMenuAchievementCounter == 0) {
+            gAchievementState = NOT_SHOWING;
+            Sexy_Widget_RemoveWidget(this, gMainMenuAchievementsWidget);
+            MaskHelpWidget_Delete(gMainMenuAchievementsWidget);
+            gMainMenuAchievementsWidget = nullptr;
+            if (gMainMenuAchievementsBack != nullptr) {
+                Sexy_Widget_RemoveWidget(this, gMainMenuAchievementsBack);
+                GameButton_Delete(gMainMenuAchievementsBack);
+                gMainMenuAchievementsBack = nullptr;
             }
             Sexy::Widget *achievementsButton = Sexy_Widget_FindWidget(this, ACHIEVEMENTS_BUTTON);
             mFocusedChildWidget = achievementsButton;
-            if (!mIsFading)
-                LawnApp_PlayFoley(mApp, FoleyType::MenuCenter);
+            //TODO:修复PlayFoley崩溃
+//            if (!mIsFading)
+//                mApp->PlayFoley(FoleyType::FOLEY_MENU_CENTRE);
         }
     }
-    if (mAchievementState == SHOWING) {
+    if (gAchievementState == SHOWING) {
         return;
     }
 
@@ -189,9 +192,10 @@ void MainMenu::Update() {
 
 void MainMenu::ButtonPress(MainMenuButtonId theSelectedButton) {
     // 按下按钮的声音
-    LawnApp *lawnApp = (LawnApp *)*gLawnApp_Addr;
-    if (MainMenu_InTransition(lawnApp->mGameSelector))
+    LawnApp* gLawnApp = (LawnApp *)*gLawnApp_Addr;
+    if (MainMenu_InTransition(gLawnApp->mGameSelector))
         return;
+
     switch (theSelectedButton) {
         case HOUSE_BUTTON:
         case ACHIEVEMENTS_BUTTON:
@@ -205,10 +209,11 @@ void MainMenu::ButtonPress(MainMenuButtonId theSelectedButton) {
         case ALMANAC_BUTTON:
         case MAIL_BUTTON:
             //            LawnApp_PlaySample(lawnApp, *Sexy_SOUND_CERAMIC_Addr);
-            LawnApp_PlayFoley(lawnApp, FoleyType::Ceramic);
+            //TODO:修复PlayFoley崩溃
+//            gLawnApp->PlayFoley(FoleyType::FOLEY_CERAMIC);
             break;
         default:
-            LawnApp_PlaySample(lawnApp, *Sexy_SOUND_GRAVEBUTTON_Addr);
+            LawnApp_PlaySample(gLawnApp, *Sexy_SOUND_GRAVEBUTTON_Addr);
             break;
     }
 }
@@ -221,7 +226,7 @@ void MainMenu::ButtonDepress(MainMenuButtonId theSelectedButton) {
         return;
     if (mEnterReanimationCounter > 0)
         return;
-    if (mAchievementState == SLIDING_IN || mAchievementState == SLIDING_OUT)
+    if (gAchievementState == SLIDING_IN || gAchievementState == SLIDING_OUT)
         return; // 在进入、退出成就时不允许玩家操作
     if (theSelectedButton == MORE_WAYS_BUTTON) {
         // 如果当前选中的按钮为"更多游戏方式"
@@ -264,19 +269,19 @@ void MainMenu::ButtonDepress(MainMenuButtonId theSelectedButton) {
             return;
         case ACHIEVEMENTS_BUTTON:
         case ACHIEVEMENTS_BACK_BUTTON:
-            if (mMainMenuAchievementsWidget == nullptr) {
-                mAchievementState = SLIDING_IN;
-                mMainMenuAchievementCounter = 100;
-                mMainMenuAchievementsWidget = (AchievementsWidget *)operator new(sizeof(AchievementsWidget));
-                MaskHelpWidget_MaskHelpWidget(mMainMenuAchievementsWidget, mApp);
-                mMainMenuAchievementsWidget->mIsScrolling = false;
-                Sexy_Widget_Resize(mMainMenuAchievementsWidget, 0, mMainMenuHeight, 1280, addonImages.hole->mHeight * (mAchievementHoleLength + 1));
-                mMainMenuAchievementsWidget->mWidgetId = ACHIEVEMENTS_BUTTON;
-                Sexy_Widget_AddWidget(this, mMainMenuAchievementsWidget);
+            if (gMainMenuAchievementsWidget == nullptr) {
+                gAchievementState = SLIDING_IN;
+                gMainMenuAchievementCounter = 100;
+                gMainMenuAchievementsWidget = (AchievementsWidget *)operator new(sizeof(AchievementsWidget));
+                MaskHelpWidget_MaskHelpWidget(gMainMenuAchievementsWidget, mApp);
+                gMainMenuAchievementsWidget->mIsScrolling = false;
+                Sexy_Widget_Resize(gMainMenuAchievementsWidget, 0, gMainMenuHeight, 1280, addonImages.hole->mHeight * (gAchievementHoleLength + 1));
+                gMainMenuAchievementsWidget->mWidgetId = ACHIEVEMENTS_BUTTON;
+                Sexy_Widget_AddWidget(this, gMainMenuAchievementsWidget);
             } else {
-                mAchievementState = SLIDING_OUT;
-                mMainMenuAchievementCounter = mMainMenuAchievementsWidget->mY == mMainMenuHeight ? 100 : 150;
-                mMainMenuAchievementsWidgetY = mMainMenuAchievementsWidget->mY;
+                gAchievementState = SLIDING_OUT;
+                gMainMenuAchievementCounter = gMainMenuAchievementsWidget->mY == gMainMenuHeight ? 100 : 150;
+                gMainMenuAchievementsWidgetY = gMainMenuAchievementsWidget->mY;
             }
             return;
         case HOUSE_BUTTON:
@@ -302,22 +307,22 @@ void MainMenu::KeyDown(Sexy::KeyCode theKeyCode) {
     if (mEnterReanimationCounter > 0)
         return;
 
-    if (mMainMenuAchievementsWidget != nullptr) {
-        if (mAchievementState != SHOWING)
+    if (gMainMenuAchievementsWidget != nullptr) {
+        if (gAchievementState != SHOWING)
             return;
         if (theKeyCode == Sexy::Back || theKeyCode == Sexy::Back2) {
             MainMenu::ButtonDepress(ACHIEVEMENTS_BUTTON);
         } else if (theKeyCode == Sexy::Up || theKeyCode == Sexy::Down) {
-            if (mMainMenuAchievementKeyboardScrollCounter != 0) {
+            if (gMainMenuAchievementKeyboardScrollCounter != 0) {
                 return;
-                //                int theNewY = mMainMenuAchievementsKeyboardScrollWidgetY -(mMainMenuAchievementKeyboardScrollDirection ? 192 : -192);
-                //                if (theNewY > mMainMenuHeight) theNewY = mMainMenuHeight;
-                //                if (theNewY < 720 +mMainMenuHeight - (mAchievementHoleLength + 1) * addonImages.hole->mHeight) theNewY =  720 +mMainMenuHeight - (mAchievementHoleLength + 1) *
-                //                addonImages.hole->mHeight; Sexy_Widget_Move(mMainMenuAchievementsWidget, mMainMenuAchievementsWidget->mX, theNewY);
+                //                int theNewY = gMainMenuAchievementsKeyboardScrollWidgetY -(gMainMenuAchievementKeyboardScrollDirection ? 192 : -192);
+                //                if (theNewY > gMainMenuHeight) theNewY = gMainMenuHeight;
+                //                if (theNewY < 720 +gMainMenuHeight - (gAchievementHoleLength + 1) * addonImages.hole->mHeight) theNewY =  720 +gMainMenuHeight - (gAchievementHoleLength + 1) *
+                //                addonImages.hole->mHeight; Sexy_Widget_Move(gMainMenuAchievementsWidget, gMainMenuAchievementsWidget->mX, theNewY);
             }
-            mMainMenuAchievementKeyboardScrollCounter = mKeyboardScrollTime;
-            mMainMenuAchievementsKeyboardScrollWidgetY = mMainMenuAchievementsWidget->mY;
-            mMainMenuAchievementKeyboardScrollDirection = theKeyCode == Sexy::Down;
+            gMainMenuAchievementKeyboardScrollCounter = gKeyboardScrollTime;
+            gMainMenuAchievementsKeyboardScrollWidgetY = gMainMenuAchievementsWidget->mY;
+            gMainMenuAchievementKeyboardScrollDirection = theKeyCode == Sexy::Down;
         }
         return;
     }
@@ -429,9 +434,9 @@ void MainMenu::Exit() {
 }
 
 void MainMenu::OnExit() {
-    TodFoley_StopFoley(mApp->mSoundSystem, FoleyType::MenuLeft);
-    TodFoley_StopFoley(mApp->mSoundSystem, FoleyType::MenuCenter);
-    TodFoley_StopFoley(mApp->mSoundSystem, FoleyType::MenuRight);
+    TodFoley_StopFoley(mApp->mSoundSystem, FoleyType::FOLEY_MENU_LEFT);
+    TodFoley_StopFoley(mApp->mSoundSystem, FoleyType::FOLEY_MENU_CENTRE);
+    TodFoley_StopFoley(mApp->mSoundSystem, FoleyType::FOLEY_MENU_RIGHT);
 
     if (mPressedButtonId == HOUSE_BUTTON) {
         LawnApp_KillMainMenu(mApp);
@@ -502,25 +507,25 @@ void MainMenu::AddedToManager(int* a2) {
 
 void MainMenu::RemovedFromManager(int* a2) {
     // 记录当前游戏状态
-    if (mMainMenuAchievementsWidget != nullptr) {
-        Sexy_Widget_RemoveWidget(this, mMainMenuAchievementsWidget);
+    if (gMainMenuAchievementsWidget != nullptr) {
+        Sexy_Widget_RemoveWidget(this, gMainMenuAchievementsWidget);
     }
-    if (mMainMenuAchievementsBack != nullptr) {
-        Sexy_Widget_RemoveWidget(this, mMainMenuAchievementsBack);
+    if (gMainMenuAchievementsBack != nullptr) {
+        Sexy_Widget_RemoveWidget(this, gMainMenuAchievementsBack);
     }
     old_MainMenu_RemovedFromManager(this, a2);
 }
 
 void MainMenu::Delete2() {
     old_MainMenu_Delete2(this);
-    if (mMainMenuAchievementsWidget != nullptr) {
-        MaskHelpWidget_Delete(mMainMenuAchievementsWidget);
-        mMainMenuAchievementsWidget = nullptr;
+    if (gMainMenuAchievementsWidget != nullptr) {
+        MaskHelpWidget_Delete(gMainMenuAchievementsWidget);
+        gMainMenuAchievementsWidget = nullptr;
     }
 
-    if (mMainMenuAchievementsBack != nullptr) {
-        GameButton_Delete(mMainMenuAchievementsBack);
-        mMainMenuAchievementsBack = nullptr;
+    if (gMainMenuAchievementsBack != nullptr) {
+        GameButton_Delete(gMainMenuAchievementsBack);
+        gMainMenuAchievementsBack = nullptr;
     }
 }
 
@@ -624,7 +629,7 @@ void MainMenu::Draw(Sexy::Graphics* g) {
 
 void MainMenu::DrawOverlay(Sexy::Graphics* g) {
     // 在成就界面存在时，不显示冒险关卡数
-    if (mMainMenuAchievementsWidget != nullptr) {
+    if (gMainMenuAchievementsWidget != nullptr) {
         return;
     }
     return old_MainMenu_DrawOverlay(this, g);
@@ -643,22 +648,22 @@ void MainMenu::DrawFade(Sexy::Graphics *g) {
 void MaskHelpWidget_Draw(AchievementsWidget *achievementsWidget, Sexy::Graphics *graphics) {
     int theY = 0;
     int theDiffY = addonImages.hole->mHeight;
-    for (int i = 0; i < mAchievementHoleLength; i++) {
-        if (i == mAchievementHoleWormPos) {
+    for (int i = 0; i < gAchievementHoleLength; i++) {
+        if (i == gAchievementHoleWormPos) {
             Sexy_Graphics_DrawImage(graphics, addonImages.hole_worm, 0, theY);
-        } else if (i == mAchievementHoleGemsPos) {
+        } else if (i == gAchievementHoleGemsPos) {
             Sexy_Graphics_DrawImage(graphics, addonImages.hole_gems, 0, theY);
-        } else if (i == mAchievementHoleChuzzlePos) {
+        } else if (i == gAchievementHoleChuzzlePos) {
             Sexy_Graphics_DrawImage(graphics, addonImages.hole_chuzzle, 0, theY);
-        } else if (i == mAchievementHoleBjornPos) {
+        } else if (i == gAchievementHoleBjornPos) {
             Sexy_Graphics_DrawImage(graphics, addonImages.hole_bjorn, 0, theY);
-        } else if (i == mAchievementHolePipePos) {
+        } else if (i == gAchievementHolePipePos) {
             Sexy_Graphics_DrawImage(graphics, addonImages.hole_pipe, 0, theY);
-        } else if (i == mAchievementHoleTikiPos) {
+        } else if (i == gAchievementHoleTikiPos) {
             Sexy_Graphics_DrawImage(graphics, addonImages.hole_tiki, 0, theY);
-        } else if (i == mAchievementHoleHeavyRocksPos) {
+        } else if (i == gAchievementHoleHeavyRocksPos) {
             Sexy_Graphics_DrawImage(graphics, addonImages.hole_heavyrocks, 0, theY);
-        } else if (i == mAchievementHoleDuWeiPos) {
+        } else if (i == gAchievementHoleDuWeiPos) {
             Sexy_Graphics_DrawImage(graphics, addonImages.hole_duwei, 0, theY);
         } else {
             Sexy_Graphics_DrawImage(graphics, addonImages.hole, 0, theY);
@@ -721,9 +726,9 @@ void MaskHelpWidget_MouseDown(AchievementsWidget *achievementsWidget, int x, int
 }
 
 void MaskHelpWidget_MouseDrag(AchievementsWidget *achievementsWidget, int x, int y) {
-    if (mAchievementState != SHOWING)
+    if (gAchievementState != SHOWING)
         return;
-    int theNewY = std::clamp(achievementsWidget->mY + (y - achievementsWidget->mMouseDownY), 720 + mMainMenuHeight - (mAchievementHoleLength + 1) * addonImages.hole->mHeight, mMainMenuHeight);
+    int theNewY = std::clamp(achievementsWidget->mY + (y - achievementsWidget->mMouseDownY), 720 + gMainMenuHeight - (gAchievementHoleLength + 1) * addonImages.hole->mHeight, gMainMenuHeight);
     Sexy_Widget_Move(achievementsWidget, achievementsWidget->mX, theNewY);
     achievementsWidget->mLastDownY1 = achievementsWidget->mLastDownY;
     achievementsWidget->mLastDownY = y;
@@ -753,7 +758,7 @@ void MaskHelpWidget_MouseUp(AchievementsWidget *achievementsWidget, int x, int y
 void MaskHelpWidget_Update(AchievementsWidget *achievementsWidget) {
     // 实现滚动
     if (achievementsWidget->mIsScrolling) {
-        int theNewY = std::clamp<int>(achievementsWidget->mY + achievementsWidget->mVelocity, 720 + mMainMenuHeight - (mAchievementHoleLength + 1) * addonImages.hole->mHeight, mMainMenuHeight);
+        int theNewY = std::clamp<int>(achievementsWidget->mY + achievementsWidget->mVelocity, 720 + gMainMenuHeight - (gAchievementHoleLength + 1) * addonImages.hole->mHeight, gMainMenuHeight);
         Sexy_Widget_Move(achievementsWidget, achievementsWidget->mX, theNewY);
         achievementsWidget->mVelocity *= 0.96;
         if (fabs(achievementsWidget->mVelocity) < 1.0f) {
@@ -1075,7 +1080,7 @@ void LeaderboardsWidget_LeaderboardsWidget(LeaderboardsWidget *this_, LawnApp *l
         Reanimation_Update(reanim); // 一次Update是必要的，否则绘制出来是Empty
         this_->mLeaderboardReanimations->backgroundReanim[i] = reanim;
     }
-    Reanimation_AssignRenderGroupToTrack(this_->mLeaderboardReanimations->backgroundReanim[1], "survival button 1", 1);                   // 设置无尽模式按钮
+    this_->mLeaderboardReanimations->backgroundReanim[1]->AssignRenderGroupToTrack("survival button 1", 1);                   // 设置无尽模式按钮
     Reanimation_SetImageOverride(this_->mLeaderboardReanimations->backgroundReanim[1], "survival button 1", addonImages.survival_button); // 设置无尽模式按钮
     Reanimation_HideTrack(this_->mLeaderboardReanimations->backgroundReanim[1], "house 1", true);                                         // 隐藏默认房屋
     Reanimation_HideTrack(this_->mLeaderboardReanimations->backgroundReanim[1], "house achievements 1", true);                            // 隐藏默认房屋
@@ -1476,46 +1481,46 @@ void ZombatarWidget_ButtonDepress(ZombatarWidget *zombatarWidget, int id) {
         image->mVolatile = true;
         Sexy::Graphics graphics;
         Sexy_Graphics_Graphics2(&graphics, image);
-        TestMenuWidget_DrawPortrait(mMainMenuZombatarWidget, &graphics, 0, 0);
+        TestMenuWidget_DrawPortrait(gMainMenuZombatarWidget, &graphics, 0, 0);
         int holder[1];
         Sexy_StrFormat(holder, "ZOMBATAR.PNG");
         Sexy_MemoryImage_WriteToPng(image, holder);
         Sexy_String_Delete(holder);
         addonImages.zombatar_portrait = image;
-        mMainMenuZombatarWidget->mShowExistingZombatarPortrait = true;
-        mMainMenuZombatarWidget->mShowZombieTypeSelection = false;
+        gMainMenuZombatarWidget->mShowExistingZombatarPortrait = true;
+        gMainMenuZombatarWidget->mShowZombieTypeSelection = false;
 
         PlayerInfo *playerInfo = lawnApp->mPlayerInfo;
-        playerInfo->mZombatarHat = mMainMenuZombatarWidget->mSelectedHat;
-        playerInfo->mZombatarHatColor = mMainMenuZombatarWidget->mSelectedHatColor;
-        playerInfo->mZombatarHair = mMainMenuZombatarWidget->mSelectedHair;
-        playerInfo->mZombatarHairColor = mMainMenuZombatarWidget->mSelectedHairColor;
-        playerInfo->mZombatarFacialHair = mMainMenuZombatarWidget->mSelectedFHair;
-        playerInfo->mZombatarFacialHairColor = mMainMenuZombatarWidget->mSelectedFHairColor;
-        playerInfo->mZombatarAccessory = mMainMenuZombatarWidget->mSelectedAccessory;
-        playerInfo->mZombatarAccessoryColor = mMainMenuZombatarWidget->mSelectedAccessoryColor;
-        playerInfo->mZombatarTidBit = mMainMenuZombatarWidget->mSelectedTidBit;
-        playerInfo->mZombatarTidBitColor = mMainMenuZombatarWidget->mSelectedTidBitColor;
-        playerInfo->mZombatarEyeWear = mMainMenuZombatarWidget->mSelectedEyeWear;
-        playerInfo->mZombatarEyeWearColor = mMainMenuZombatarWidget->mSelectedEyeWearColor;
+        playerInfo->mZombatarHat = gMainMenuZombatarWidget->mSelectedHat;
+        playerInfo->mZombatarHatColor = gMainMenuZombatarWidget->mSelectedHatColor;
+        playerInfo->mZombatarHair = gMainMenuZombatarWidget->mSelectedHair;
+        playerInfo->mZombatarHairColor = gMainMenuZombatarWidget->mSelectedHairColor;
+        playerInfo->mZombatarFacialHair = gMainMenuZombatarWidget->mSelectedFHair;
+        playerInfo->mZombatarFacialHairColor = gMainMenuZombatarWidget->mSelectedFHairColor;
+        playerInfo->mZombatarAccessory = gMainMenuZombatarWidget->mSelectedAccessory;
+        playerInfo->mZombatarAccessoryColor = gMainMenuZombatarWidget->mSelectedAccessoryColor;
+        playerInfo->mZombatarTidBit = gMainMenuZombatarWidget->mSelectedTidBit;
+        playerInfo->mZombatarTidBitColor = gMainMenuZombatarWidget->mSelectedTidBitColor;
+        playerInfo->mZombatarEyeWear = gMainMenuZombatarWidget->mSelectedEyeWear;
+        playerInfo->mZombatarEyeWearColor = gMainMenuZombatarWidget->mSelectedEyeWearColor;
 
 
         playerInfo->mZombatarEnabled = playerInfo->mZombatarHat != 255 || playerInfo->mZombatarHair != 255 || playerInfo->mZombatarFacialHair != 255 || playerInfo->mZombatarAccessory != 255
             || playerInfo->mZombatarTidBit != 255 || playerInfo->mZombatarEyeWear != 255;
-        ZombatarWidget_SetDefault(mMainMenuZombatarWidget);
+        ZombatarWidget_SetDefault(gMainMenuZombatarWidget);
         return;
     }
 
     if (id == 1002) {
         if (addonImages.zombatar_portrait != nullptr) {
-            mMainMenuZombatarWidget->mShowExistingZombatarPortrait = true;
-            ZombatarWidget_SetDefault(mMainMenuZombatarWidget);
+            gMainMenuZombatarWidget->mShowExistingZombatarPortrait = true;
+            ZombatarWidget_SetDefault(gMainMenuZombatarWidget);
         }
         return;
     }
 
     if (id == 1003) {
-        mMainMenuZombatarWidget->mShowExistingZombatarPortrait = false;
+        gMainMenuZombatarWidget->mShowExistingZombatarPortrait = false;
         return;
     }
 
@@ -1523,7 +1528,7 @@ void ZombatarWidget_ButtonDepress(ZombatarWidget *zombatarWidget, int id) {
         LawnApp *lawnApp = (LawnApp *)*gLawnApp_Addr;
         if (LawnApp_LawnMessageBox(lawnApp, Dialogs::DIALOG_MESSAGE, "[ZOMBATAR_DELETE_HEADER]", "[ZOMBATAR_DELETE_BODY]", "[BUTTON_OK]", "[BUTTON_CANCEL]", 1) == 1001)
             return;
-        mMainMenuZombatarWidget->mShowExistingZombatarPortrait = false;
+        gMainMenuZombatarWidget->mShowExistingZombatarPortrait = false;
         if (addonImages.zombatar_portrait != nullptr) {
             Sexy_MemoryImage_Delete(addonImages.zombatar_portrait);
             addonImages.zombatar_portrait = nullptr;
@@ -2904,24 +2909,24 @@ void ZombatarWidget_ZombatarWidget(ZombatarWidget *zombatarWidget, LawnApp *lawn
     Zombie_Zombie(zombie);
     zombie->mBoard = nullptr;
     zombie->ZombieInitialize(0, ZombieType::ZOMBIE_FLAG, false, nullptr, -3, true);
-    Reanimation *aBodyReanim = LawnApp_ReanimationGet(zombie->mApp, zombie->mBodyReanimID);
+    Reanimation *aBodyReanim = zombie->mApp->ReanimationGet(zombie->mBodyReanimID);
     ReanimatorTrackInstance *aHeadTrackInstance = Reanimation_GetTrackInstanceByName(aBodyReanim, "anim_head1");
     aHeadTrackInstance->mImageOverride = *Sexy_IMAGE_BLANK_Addr;
 
     Reanimation *aZombatarHeadReanim = LawnApp_AddReanimation(lawnApp, 0, 0, 0, ReanimationType::REANIM_ZOMBATAR_HEAD);
     Reanimation_PlayReanim(aZombatarHeadReanim, "anim_head_idle", ReanimLoopType::REANIM_LOOP, 0, 15.0);
-    Reanimation_AssignRenderGroupToTrack(aZombatarHeadReanim, "anim_hair", -1);
+    aZombatarHeadReanim->AssignRenderGroupToTrack("anim_hair", -1);
     zombie->mBossFireBallReanimID = LawnApp_ReanimationGetID(zombie->mApp, aZombatarHeadReanim);
     AttachEffect *attachEffect = AttachReanim(&aHeadTrackInstance->mAttachmentID, aZombatarHeadReanim, 0.0f, 0.0f);
     TodScaleRotateTransformMatrix(&attachEffect->mOffset, -20.0, -1.0, 0.2, 1.0, 1.0);
     zombatarWidget->mZombatarReanim = aZombatarHeadReanim;
-    Zombie_ReanimShowPrefix(zombie, "anim_hair", -1);
-    Zombie_ReanimShowPrefix(zombie, "anim_head2", -1);
+    zombie->ReanimShowPrefix("anim_hair", -1);
+    zombie->ReanimShowPrefix("anim_head2", -1);
     zombie->Update();
     zombatarWidget->mPreviewZombie = zombie;
 
     zombatarWidget->mShowExistingZombatarPortrait = addonImages.zombatar_portrait != nullptr;
-    mMainMenuZombatarWidget->mShowZombieTypeSelection = false;
+    gMainMenuZombatarWidget->mShowZombieTypeSelection = false;
 
     ZombatarWidget_SetDefault(zombatarWidget);
 }
@@ -4121,7 +4126,7 @@ void TestMenuWidget_MouseDown(ZombatarWidget *zombatarWidget, int x, int y) {
     //    zombatarWidget->mPreviewZombie->mY = y;
     LOG_DEBUG("{} {}", x, y);
 
-    if (mMainMenuZombatarWidget->mShowExistingZombatarPortrait) {
+    if (gMainMenuZombatarWidget->mShowExistingZombatarPortrait) {
         return;
     }
     for (char i = 0; i < ZombatarWidget::MaxTabNum; ++i) {

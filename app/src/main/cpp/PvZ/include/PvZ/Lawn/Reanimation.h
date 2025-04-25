@@ -3,6 +3,12 @@
 
 #include "PvZ/Enums.h"
 
+enum
+{
+    RENDER_GROUP_HIDDEN = -1,
+    RENDER_GROUP_NORMAL = 0
+};
+
 class Reanimation {
 public:
     int unk1[4];                                       // 0 ~ 3
@@ -36,8 +42,9 @@ public:
     int mReanimationID;                                // 54
     // 大小55个整数
 public:
-    bool DrawTrack(Sexy::Graphics *g, int theTrackIndex, ReanimatorRenderGroup::ReanimatorRenderGroup theRenderGroup, TodTriangleGroup* theTriangleGroup);
-
+    bool DrawTrack(Sexy::Graphics *g, int theTrackIndex, int theRenderGroup, TodTriangleGroup* theTriangleGroup);
+    bool ShouldTriggerTimedEvent(float theEventTime);
+    void AssignRenderGroupToTrack(const char* theTrackName, int theRenderGroup);
 };
 
 class ReanimationHolder {
@@ -101,8 +108,6 @@ inline void (*Reanimation_AttachToAnotherReanimation)(Reanimation *, Reanimation
 
 inline void (*Reanimation_Update)(Reanimation *);
 
-inline void (*Reanimation_AssignRenderGroupToTrack)(Reanimation *, const char *trackName, int group);
-
 inline void (*Reanimation_MatrixFromTransform)(ReanimatorTransform *, Sexy::SexyMatrix3 *);
 
 inline void (*Reanimation_GetFrameTime)(Reanimation *, ReanimatorFrameTime *pTime);
@@ -112,7 +117,7 @@ inline void (*TodScaleRotateTransformMatrix)(Sexy::SexyMatrix3 *, float, float, 
 inline void (*Reanimation_GetTrackMatrix)(Reanimation *pInstance, int i, SexyTransform2D *pD);
 
 
-inline bool (*old_Reanimation_DrawTrack)(Reanimation *reanim, Sexy::Graphics *g, int theTrackIndex, ReanimatorRenderGroup::ReanimatorRenderGroup theRenderGroup, TodTriangleGroup* theTriangleGroup);
+inline bool (*old_Reanimation_DrawTrack)(Reanimation *reanim, Sexy::Graphics *g, int theTrackIndex, int theRenderGroup, TodTriangleGroup* theTriangleGroup);
 
 inline void (*old_ReanimatorLoadDefinitions)(ReanimationParams *theReanimationParamArray, int theReanimationParamArraySize);
 

@@ -67,9 +67,9 @@ public:
     int mHeavyWeaponSnowPeaCounter;                 // 74
     int mHeavyWeaponTorchWoodCounter;               // 75
     int unkHeavyWeaponWithInitValue10;              // 76
-    int mReanimHeavyWeaponID1;                      // 77
-    int mReanimHeavyWeaponID2;                      // 78
-    int mReanimHeavyWeaponID3;                      // 79
+    ReanimationID mReanimHeavyWeaponID1;            // 77
+    ReanimationID mReanimHeavyWeaponID2;            // 78
+    ReanimationID mReanimHeavyWeaponID3;            // 79
     // 大小80个整数
 
     Challenge();
@@ -92,6 +92,9 @@ public:
     static ZombieType IZombieSeedTypeToZombieType(SeedType theSeedType);
     void StartLevel();
     void Delete();
+    void ScaryPotterOpenPot(GridItem* theScaryPot);
+    GridItem* IZombieGetBrainTarget(Zombie* theZombie);
+    void IZombieSquishBrain(GridItem* theBrain);
 };
 
 /***************************************************************************************************************/
@@ -101,8 +104,6 @@ inline bool stopSpawning; // 暂停刷怪
 
 
 inline int (*Challenge_ScaryPotterCountSunInPot)(Challenge *a1, GridItem *a2);
-
-inline GridItem *(*Challenge_IZombieGetBrainTarget)(Challenge *, Zombie *);
 
 inline void (*Challenge_IZombieScoreBrain)(Challenge *, GridItem *);
 
@@ -154,5 +155,11 @@ inline void (*old_Challenge_HeavyWeaponPacketClicked)(Challenge *challenge, Seed
 inline void (*old_Challenge_StartLevel)(Challenge *challenge);
 
 inline void (*old_Challenge_Delete)(Challenge *challenge);
+
+inline void (*old_Challenge_ScaryPotterOpenPot)(Challenge*, GridItem* theScaryPot);
+
+inline GridItem* (*old_Challenge_IZombieGetBrainTarget)(Challenge*, Zombie* theZombie);
+
+inline void (*old_Challenge_IZombieSquishBrain)(Challenge*, GridItem* theBrain);
 
 #endif // PVZ_LAWN_CHALLENGE_H

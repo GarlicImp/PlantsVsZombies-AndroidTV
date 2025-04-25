@@ -1529,110 +1529,116 @@ enum StoreScreenTouchState { Prev, Next, Back, None };
 }
 
 
-namespace FoleyType {
 enum FoleyType {
-    Splat = 1,
-    Throw = 3,
-    Plant = 7,
-    UseShovel = 8,
-    Brains = 12,
-    Brains2 = 13,
-    Jackinthebox = 14,
-    ArtChallenge = 15,
-    Zamboni = 16,
-    Thunder = 17,
-    Frozen = 18,
-    Zombiesplash = 19,
-    Bowlingimpact = 20,
-    Squish = 21,
-    TirePop = 22,
-    Explosion = 23,
-    Slurp = 24,
-    LimbsPop = 25,
-    PogoZombie = 26,
-    SnowPeaSparkles = 27,
-    ZombieFalling = 28,
-    Puff = 29,
-    Fume = 30,
-    Coin = 31,
-    KernelSplat = 32,
-    Digger = 33,
-    JackSurprise = 34,
-    VaseBreaking = 35,
-    PoolCleaner = 36,
-    Basketball = 37,
-    Ignite = 38,
-    Firepea = 39,
-    Thump = 40,
-    SquashHmm = 41,
-    Magnetshroom = 42,
-    Butter = 43,
-    BungeeScream = 44,
-    BossExplosionSmall = 45,
-    ShieldHit = 46,
-    Swing = 47,
-    Bonk = 48,
-    Rain = 49,
-    DolphinBeforeJumping = 50,
-    DolphinAppears = 51,
-    PlantWater = 52,
-    ZombieEnteringWater = 53,
-    Gravebusterchomp = 54,
-    Cherrybomb = 55,
-    JalapenoIgnite = 56,
-    ReverseExplosion = 57,
-    PlasticHit = 58,
-    Winmusic = 59,
-    Ballooninflate = 60,
-    Bigchomp = 61,
-    Melonimpact = 62,
-    Plantgrow = 63,
-    Shoop = 64,
-    Juicy = 65,
-    NewspaperRarrgh = 66,
-    NewspaperRip = 67,
-    Floop = 68,
-    Coffee = 69,
-    Lowgroan = 70,
-    Prize = 71,
-    Yuck = 72,
-    Umbrella = 73,
-    Grassstep = 74,
-    Shovel = 75,
-    Coblaunch = 76,
-    Watering = 77,
-    Polevault = 78,
-    GravestoneRumble = 79,
-    DirtRise = 80,
-    Fertilizer = 81,
-    Portal = 82,
-    Wakeup = 83,
-    Bugspray = 84,
-    Scream = 85,
-    Paper = 86,
-    Moneyfalls = 87,
-    Imp = 88,
-    HydraulicShort = 89,
-    Hydraulic = 90,
-    Gargantudeath = 91,
-    Ceramic = 92,
-    Bossboulderattack = 93,
-    Chime = 94,
-    Crazydaveshort = 95,
-    Crazydavelong = 96,
-    Crazydaveextralong = 97,
-    Crazydavecrazy = 98,
-    Phonograph = 99,
-    Dancer = 100,
-    Finalfanfare = 101,
-    Crazydavescream = 102,
-    Crazydavescream2 = 103,
-    FoleyCount = 104,
-    MenuLeft = 105,
-    MenuCenter = 106,
-    MenuRight = 107
+    FOLEY_SUN,
+    FOLEY_SPLAT = 1,
+    FOLEY_LAWNMOWER,
+    FOLEY_THROW = 3,
+    FOLEY_SPAWN_SUN,
+    FOLEY_CHOMP,
+    FOLEY_CHOMP_SOFT,
+    FOLEY_PLANT = 7,
+    FOLEY_USE_SHOVEL = 8,
+    FOLEY_DROP,
+    FOLEY_BLEEP,
+    FOLEY_GROAN,
+    FOLEY_BRAINS = 12,
+    FOLEY_SUKHBIR = 13,
+    FOLEY_JACKINTHEBOX = 14,
+    FOLEY_ART_CHALLENGE = 15,
+    FOLEY_ZAMBONI = 16,
+    FOLEY_THUNDER = 17,
+    FOLEY_FROZEN = 18,
+    FOLEY_ZOMBIESPLASH = 19,
+    FOLEY_BOWLINGIMPACT = 20,
+    FOLEY_SQUISH = 21,
+    FOLEY_TIRE_POP = 22,
+    FOLEY_EXPLOSION = 23,
+    FOLEY_SLURP = 24,
+    FOLEY_LIMBS_POP = 25,
+    FOLEY_POGO_ZOMBIE = 26,
+    FOLEY_SNOW_PEA_SPARKLES = 27,
+    FOLEY_ZOMBIE_FALLING = 28,
+    FOLEY_PUFF = 29,
+    FOLEY_FUME = 30,
+    FOLEY_COIN = 31,
+    FOLEY_KERNEL_SPLAT = 32,
+    FOLEY_DIGGER = 33,
+    FOLEY_JACK_SURPRISE = 34,
+    FOLEY_VASE_BREAKING = 35,
+    FOLEY_POOL_CLEANER = 36,
+    FOLEY_BASKETBALL = 37,
+    FOLEY_IGNITE = 38,
+    FOLEY_FIREPEA = 39,
+    FOLEY_THUMP = 40,
+    FOLEY_SQUASH_HMM = 41,
+    FOLEY_MAGNETSHROOM = 42,
+    FOLEY_BUTTER = 43,
+    FOLEY_BUNGEE_SCREAM = 44,
+    FOLEY_BOSS_EXPLOSION_SMALL = 45,
+    FOLEY_SHIELD_HIT = 46,
+    FOLEY_SWING = 47,
+    FOLEY_BONK = 48,
+    FOLEY_RAIN = 49,
+    FOLEY_DOLPHIN_BEFORE_JUMPING = 50,
+    FOLEY_DOLPHIN_APPEARS = 51,
+    FOLEY_PLANT_WATER = 52,
+    FOLEY_ZOMBIE_ENTERING_WATER = 53,
+    FOLEY_GRAVEBUSTERCHOMP = 54,
+    FOLEY_CHERRYBOMB = 55,
+    FOLEY_JALAPENO_IGNITE = 56,
+    FOLEY_REVERSE_EXPLOSION = 57,
+    FOLEY_PLASTIC_HIT = 58,
+    FOLEY_WINMUSIC = 59,
+    FOLEY_BALLOONINFLATE = 60,
+    FOLEY_BIGCHOMP = 61,
+    FOLEY_MELONIMPACT = 62,
+    FOLEY_PLANTGROW = 63,
+    FOLEY_SHOOP = 64,
+    FOLEY_JUICY = 65,
+    FOLEY_NEWSPAPER_RARRGH = 66,
+    FOLEY_NEWSPAPER_RIP = 67,
+    FOLEY_FLOOP = 68,
+    FOLEY_COFFEE = 69,
+    FOLEY_LOW_GROAN = 70,
+    FOLEY_PRIZE = 71,
+    FOLEY_YUCK = 72,
+    FOLEY_UMBRELLA = 73,
+    FOLEY_GRASSSTEP = 74,
+    FOLEY_SHOVEL = 75,
+    FOLEY_COB_LAUNCH = 76,
+    FOLEY_WATERING = 77,
+    FOLEY_POLEVAULT = 78,
+    FOLEY_GRAVESTONE_RUMBLE = 79,
+    FOLEY_DIRT_RISE = 80,
+    FOLEY_FERTILIZER = 81,
+    FOLEY_PORTAL = 82,
+    FOLEY_WAKEUP = 83,
+    FOLEY_BUGSPRAY = 84,
+    FOLEY_SCREAM = 85,
+    FOLEY_PAPER = 86,
+    FOLEY_MONEYFALLS = 87,
+    FOLEY_IMP = 88,
+    FOLEY_HYDRAULIC_SHORT = 89,
+    FOLEY_HYDRAULIC = 90,
+    FOLEY_GARGANTUDEATH = 91,
+    FOLEY_CERAMIC = 92,
+    FOLEY_BOSS_BOULDER_ATTACK = 93,
+    FOLEY_CHIME = 94,
+    FOLEY_CRAZY_DAVE_SHORT = 95,
+    FOLEY_CRAZY_DAVE_LONG = 96,
+    FOLEY_CRAZY_DAVE_EXTRA_LONG = 97,
+    FOLEY_CRAZY_DAVE_CRAZY = 98,
+    FOLEY_PHONOGRAPH = 99,
+    FOLEY_DANCER = 100,
+    FOLEY_FINAL_FANFARE = 101,
+    FOLEY_CRAZY_DAVE_SCREAM = 102,
+    FOLEY_CRAZY_DAVE_SCREAM_2 = 103,
+    NUM_FOLEY = 104,
+    FOLEY_MENU_LEFT = 105,
+    FOLEY_MENU_CENTRE = 106,
+    FOLEY_MENU_RIGHT = 107
 };
-}
 
 
 enum FilterEffectType
@@ -1708,11 +1714,6 @@ enum MusicDrumsState {
 
 namespace ResType {
 enum ResType { ResType_Image, ResType_Sound, ResType_Font, ResType_Music, ResType_Reanim, ResType_Particle, ResType_Trail };
-}
-
-
-namespace ReanimatorRenderGroup {
-enum ReanimatorRenderGroup { RENDER_GROUP_HIDDEN = -1, RENDER_GROUP_NORMAL = 0 };
 }
 
 
@@ -1838,7 +1839,7 @@ public:
 
 
 struct FoleyParams {
-    FoleyType::FoleyType mFoleyType;
+    FoleyType mFoleyType;
     float mPitchRange;
     int *mSfxID[10];
     uint mFoleyFlags;
@@ -2643,7 +2644,7 @@ public:
 
 struct ReanimatorTrack {
     int unk;
-    char *name;
+    char *mName;
     ReanimatorTransform *mTransforms;
     int mTransformCount;
     bool IsAttacher;
@@ -2683,7 +2684,7 @@ public:
     float mShakeY;                                             // 16
     unsigned short mAttachmentID;                              // 17
     Sexy::Image *mImageOverride;                               // 18
-    ReanimatorRenderGroup::ReanimatorRenderGroup mRenderGroup; // 19
+    int mRenderGroup;                                          // 19
     Color mTrackColor;                                         // 20 ~ 23
     bool mIgnoreClipRect;                                      // 96
     bool mTruncateDisappearingFrames;                          // 97
@@ -2725,7 +2726,7 @@ public:
 
 struct AttachEffect {
     enum EffectType { Particle, Trail, Reanim, Attachment, Other };
-    int mEffectID;                // 0
+    ReanimationID mEffectID;      // 0
     EffectType mEffectType;       // 1
     SexyTransform2D mOffset;      // 2 ~ 10
     bool mDontDrawIfParentHidden; // 44

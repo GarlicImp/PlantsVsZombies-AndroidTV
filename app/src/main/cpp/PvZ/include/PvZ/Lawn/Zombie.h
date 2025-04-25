@@ -143,7 +143,7 @@ public:
     int mParticleOffsetY;                     // 71
     int *mAttachmentID;                       // 72
     int mSummonCounter;                       // 73
-    int mBodyReanimID;                        // 74
+    ReanimationID mBodyReanimID;              // 74
     float mScaleZombie;                       // 75
     float mVelZ;                              // 76
     float mOrginalAnimRate;                   // 77
@@ -153,8 +153,8 @@ public:
     int mBossBungeeCounter;                   // 81
     int mBossStompCounter;                    // 82
     int mBossHeadCounter;                     // 83
-    int mBossFireBallReanimID;                // 84
-    int mSpecialHeadReanimID;                 // 85
+    ReanimationID mBossFireBallReanimID;      // 84
+    ReanimationID mSpecialHeadReanimID;       // 85
     int mFireballRow;                         // 86
     bool mIsFireBall;                         // 348
     int mMoweredReanimID;                     // 88
@@ -168,6 +168,7 @@ public:
     void Draw(Sexy::Graphics *g);
     void DieNoLoot();
     void Update();
+    void UpdateZombieGargantuar();
     void UpdateZombiePeaHead();
     void UpdateZombieGatlingHead();
     void BurnRow(int theRow);
@@ -185,6 +186,31 @@ public:
     bool IsTangleKelpTarget();
     void DrawReanim(Sexy::Graphics *graphics, ZombieDrawPosition *theZombieDrawPosition, int theBaseRenderGroup);
     void DropHead(unsigned int theDamageFlags);
+    Plant* FindPlantTarget(ZombieAttackType theAttackType);
+    Zombie* FindZombieTarget();
+    void TakeDamage(int theDamage, unsigned int theDamageFlags);
+    void PlayZombieReanim(const char* theTrackName, ReanimLoopType theLoopType, int theBlendTime, float theAnimRate);
+    void StartWalkAnim(int theBlendTime);
+    void ReanimShowPrefix(const char* theTrackPrefix, int theRenderGroup);
+    void ReanimShowTrack(const char* theTrackName, int theRenderGroup);
+    float GetPosYBasedOnRow(int theRow);
+    void SetRow(int theRow);
+    void StartMindControlled();
+    void UpdateReanim();
+    void SetupLostArmReanim();
+    void SetZombatarReanim();
+    bool IsImmobilizied();
+    bool IsBouncingPogo();
+    bool IsFlying();
+    int GetBobsledPosition();
+    bool IsBobsledTeamWithSled();
+    bool IsDeadOrDying();
+    bool CanBeChilled();
+    bool CanBeFrozen();
+    void AddButter();
+    static bool IsZombatarZombie(ZombieType theType);
+    void SquishAllInSquare(int theX, int theY, ZombieAttackType theAttackType);
+    bool IsWalkingBackwards();
 };
 
 class ZombieDefinition
@@ -218,49 +244,29 @@ inline void (*Zombie_ApplyButter)(Zombie *zombie);
 
 inline void (*Zombie_GetZombieRect)(TRect *a1, Zombie *a2);
 
-inline bool (*Zombie_IsImmobilizied)(Zombie *zombie);
-
 inline bool (*Zombie_EffectedByDamage)(Zombie *zombie, int flag);
 
 inline void (*Zombie_RemoveColdEffects)(Zombie *zombie);
 
 inline void (*Zombie_StartEating)(Zombie *);
 
-inline void (*Zombie_TakeDamage)(Zombie *, int, unsigned int);
-
-inline bool (*Zombie_IsWalkingBackwards)(Zombie *);
-
 inline void (*Zombie_AddAttachedParticle)(Zombie *, int, int, int);
-
-inline bool (*Zombie_CanBeFrozen)(Zombie *);
 
 inline void (*Zombie_StopEating)(Zombie *);
 
 inline void (*Zombie_DropArm)(Zombie *, unsigned int);
 
-inline void (*Zombie_PlayZombieReanim)(Zombie *, const char *, int, int, float);
-
 inline void (*Zombie_SetupReanimLayers)(Reanimation *, ZombieType);
 
 inline void (*Zombie_SetupShieldReanims)(ZombieType, Reanimation *);
-
-inline void (*Zombie_UpdateReanim)(Zombie *);
 
 inline void (*Zombie_UpdateActions)(Zombie *);
 
 inline void (*Zombie_UpdatePlaying)(Zombie *);
 
-inline bool (*Zombie_IsDeadOrDying)(Zombie *);
-
 inline bool (*Zombie_IsOnBoard)(Zombie *);
 
-inline void (*Zombie_ReanimShowPrefix)(Zombie *, const char *, int);
-
-inline void (*Zombie_ReanimShowTrack)(Zombie *, const char *, int);
-
 inline void (*Zombie_TakeHelmDamage)(Zombie *, int, unsigned int);
-
-inline bool (*Zombie_IsFlying)(Zombie *);
 
 inline void (*Zombie_TakeFlyingDamage)(Zombie *, int, unsigned int);
 
@@ -287,12 +293,6 @@ inline void (*Zombie_Zombie)(Zombie *);
 
 inline void (*old_Zombie_Update)(Zombie *a1);
 
-inline void (*old_Zombie_UpdateZombiePeaHead)(Zombie *zombie);
-
-inline void (*old_Zombie_UpdateZombieGatlingHead)(Zombie *zombie);
-
-inline void (*old_Zombie_UpdateZombieJalapenoHead)(Zombie *zombie);
-
 inline void (*old_Zombie_Draw)(Zombie *zombie, Sexy::Graphics *graphics);
 
 inline void (*old_Zombie_DrawBossPart)(Zombie *a1, Sexy::Graphics *graphics, int theBossPart);
@@ -315,14 +315,29 @@ inline void (*old_Zombie_DrawReanim)(Zombie *zombie, Sexy::Graphics *graphics, Z
 
 inline void (*old_Zombie_DropHead)(Zombie *zombie, unsigned int a2);
 
+inline Plant* (*old_Zombie_FindPlantTarget)(Zombie*, ZombieAttackType);
 
+inline Zombie* (*old_Zombie_FindZombieTarget)(Zombie*);
 
-void Zombie_AddButter(Zombie *zombieUnderButter);
+inline void (*old_Zombie_TakeDamage)(Zombie*, int theDamage, unsigned int theDamageFlags);
 
-void Zombie_SetZombatarReanim(Zombie *zombie);
+inline void (*old_Zombie_PlayZombieReanim)(Zombie*, const char* theTrackName, ReanimLoopType theLoopType, int theBlendTime, float theAnimRate);
 
-bool Zombie_IsZombatarZombie(ZombieType type);
+inline void (*old_Zombie_StartWalkAnim)(Zombie*, int theBlendTime);
 
-void Zombie_SetupLostArmReanim(Zombie *zombie);
+inline void (*old_Zombie_ReanimShowPrefix)(Zombie *, const char *, int);
 
+inline void (*old_Zombie_ReanimShowTrack)(Zombie *, const char *, int);
+
+inline float (*old_Zombie_GetPosYBasedOnRow)(Zombie*, int theRow);
+
+inline void (*old_Zombie_SetRow)(Zombie*, int theRow);
+
+inline void (*old_Zombie_StartMindControlled)(Zombie*);
+
+inline void (*old_Zombie_UpdateReanim)(Zombie*);
+
+inline int (*old_Zombie_GetBobsledPosition)(Zombie*);
+
+inline void (*old_Zombie_SquishAllInSquare)(Zombie*, int theX, int theY, ZombieAttackType theAttackType);
 #endif // PVZ_TV_1_1_5_ZOMBIE_H

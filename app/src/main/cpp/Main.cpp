@@ -143,7 +143,7 @@ extern "C" JNIEXPORT void JNICALL Java_com_transmension_mobile_EnhanceActivity_n
             Board_MouseDragSecond(board, x, y);
             break;
         case 2:
-            Board_MouseUpSecond(board, x, y, 0);
+            board->MouseUpSecond(x, y, 0);
             break;
         default:
             break;

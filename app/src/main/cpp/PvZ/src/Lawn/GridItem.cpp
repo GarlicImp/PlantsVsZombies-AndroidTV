@@ -121,10 +121,10 @@ void GridItem::DrawStinky(Sexy::Graphics* g) {
     GamepadControls*aGamePad = mBoard->mGamepadControls1;
     int aCursorX = aGamePad->mCursorPositionX;
     int aCursorY = aGamePad->mCursorPositionY;
-    int aCursorGridX = Board_PixelToGridX(mBoard, aCursorX, aCursorY);
-    int aCursorGridY = Board_PixelToGridY(mBoard, aCursorX, aCursorY);
-    int aStinkyGridX = Board_PixelToGridX(mBoard, mPosX, mPosY);
-    int aStinkyGridY = Board_PixelToGridY(mBoard, mPosX, mPosY);
+    int aCursorGridX = mBoard->PixelToGridX(aCursorX, aCursorY);
+    int aCursorGridY = mBoard->PixelToGridY(aCursorX, aCursorY);
+    int aStinkyGridX = mBoard->PixelToGridX(mPosX, mPosY);
+    int aStinkyGridY = mBoard->PixelToGridY(mPosX, mPosY);
     if (aStinkyGridX != aCursorGridX || aStinkyGridY != aCursorGridY) {
         // 如果Stinky不在光标位置处，则取消高亮。
         mHighlighted = false;

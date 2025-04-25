@@ -76,7 +76,7 @@ void Projectile::ConvertToPea(int theGridX) {
             Attachment_AttachmentDie(mAttachmentID);
             mHitTorchwoodGridX = theGridX;
             mProjectileType = ProjectileType::PROJECTILE_SNOWPEA;
-            LawnApp_PlayFoley(mApp, FoleyType::Throw);
+            mApp->PlayFoley(FoleyType::FOLEY_THROW);
         }
         return;
     }
@@ -107,7 +107,7 @@ void Projectile::DoImpact(Zombie* theZombie) {
         Projectile_DoSplashDamage(this, theZombie, 0);
     } else if (theZombie) {
         unsigned int mDamageFlags = Projectile_GetDamageFlags(this, theZombie);
-        Zombie_TakeDamage(theZombie, GetProjectileDef().mDamage, mDamageFlags);
+        theZombie->TakeDamage(GetProjectileDef().mDamage, mDamageFlags);
     }
 
     float aLastPosX = mPosX - mVelX;
@@ -267,7 +267,7 @@ void Projectile::CheckForCollision() {
             aPlant->mPlantHealth -= aProjectileDef.mDamage;
             aPlant->mEatenFlashCountdown = std::max(aPlant->mEatenFlashCountdown, 25);
 
-            LawnApp_PlayFoley(mApp, FoleyType::Splat);
+            mApp->PlayFoley(FoleyType::FOLEY_SPLAT);
             LawnApp_AddTodParticle(mApp, mPosX - 3.0f, mPosY + 17.0f, mRenderOrder + 1, ParticleEffect::PARTICLE_PEA_SPLAT);
             Projectile_Die(this);
             return;

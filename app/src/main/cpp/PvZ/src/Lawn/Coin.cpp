@@ -81,7 +81,7 @@ void Coin::UpdateFallForAward() {
         mPosX += mVelX;
         if (v34 >= mGroundY) {
             if (sqrtf(mVelY * mVelY + mVelX * mVelX) > 0.5) {
-                LawnApp_PlayFoley(mApp, FoleyType::Grassstep);
+                mApp->PlayFoley(FoleyType::FOLEY_GRASSSTEP);
                 mVelY *= -1;
             } else {
                 mPosY = mGroundY;

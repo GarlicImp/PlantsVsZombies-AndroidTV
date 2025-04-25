@@ -40,17 +40,17 @@ inline int GamepadVelocityYOfPlayer1;
 inline int GamepadVelocityXOfPlayer2;
 inline int GamepadVelocityYOfPlayer2;
 
-inline TouchPlayerIndex::TouchPlayerIndex mPlayerIndex = TouchPlayerIndex::None;
-inline TouchPlayerIndex::TouchPlayerIndex mPlayerIndexSecond = TouchPlayerIndex::None;
+inline TouchPlayerIndex::TouchPlayerIndex gPlayerIndex = TouchPlayerIndex::None;
+inline TouchPlayerIndex::TouchPlayerIndex gPlayerIndexSecond = TouchPlayerIndex::None;
 
-inline FoleyParams gMenuLeftFoley = {FoleyType::MenuLeft, 0.0f, {nullptr}, 1u};
-inline FoleyParams gMenuCenterFoley = {FoleyType::MenuCenter, 0.0f, {nullptr}, 1u};
-inline FoleyParams gMenuRightFoley = {FoleyType::MenuRight, 0.0f, {nullptr}, 1u};
+inline FoleyParams gMenuLeftFoley = {FoleyType::FOLEY_MENU_LEFT, 0.0f, {nullptr}, 1u};
+inline FoleyParams gMenuCenterFoley = {FoleyType::FOLEY_MENU_CENTRE, 0.0f, {nullptr}, 1u};
+inline FoleyParams gMenuRightFoley = {FoleyType::FOLEY_MENU_RIGHT, 0.0f, {nullptr}, 1u};
 
 inline bool keyboardMode;
 
-inline LeaderboardsWidget *mMainMenuLeaderboardsWidget;
-inline ZombatarWidget *mMainMenuZombatarWidget;
+inline LeaderboardsWidget *gMainMenuLeaderboardsWidget;
+inline ZombatarWidget *gMainMenuZombatarWidget;
 
 inline int xx, yy, xw, yh;
 inline int xx1, yy1, xw1, yh1;

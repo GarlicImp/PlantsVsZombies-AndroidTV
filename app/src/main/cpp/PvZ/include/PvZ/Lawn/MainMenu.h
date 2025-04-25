@@ -5,7 +5,7 @@
 
 class MainMenu : public Sexy::MenuWidget {
 public:
-    int mMainMenuReanimID;             // 70 , PSV 59
+    ReanimationID mMainMenuReanimID;   // 70 , PSV 59
     float mCameraPositionX;            // 71
     float mCameraPositionY;            // 72
     LawnApp *mApp;                     // 73
@@ -14,14 +14,14 @@ public:
     int mSceneNext;                    // 76
     char *MPlayingTrackName;           // 77
     int mTransitionCounter;            // 78
-    int mSkyReanimID;                  // 79 ,PSV 68
-    int mSky2ReanimID;                 // 80 ,PSV 69
-    int mHouseReanimID;                // 81 ,PSV 70
-    int mZombieHandReanimID;           // 82
-    int mCrowReanimID;                 // 83 , psv 72
-    int mFallingLeavesReanimID;        // 84
-    int mButterflyReanimID;            // 85
-    int mUnkReanimID2;                 // 86
+    ReanimationID mSkyReanimID;        // 79 ,PSV 68
+    ReanimationID mSky2ReanimID;       // 80 ,PSV 69
+    ReanimationID mHouseReanimID;      // 81 ,PSV 70
+    ReanimationID mZombieHandReanimID;           // 82
+    ReanimationID mCrowReanimID;                 // 83 , psv 72
+    ReanimationID mFallingLeavesReanimID;        // 84
+    ReanimationID mButterflyReanimID;            // 85
+    ReanimationID mUnkReanimID2;                 // 86
     MainMenuButtonId mPressedButtonId; // 87
     char *mExitTrackName;              // 88
     int mEnterReanimationCounter;      // 89
