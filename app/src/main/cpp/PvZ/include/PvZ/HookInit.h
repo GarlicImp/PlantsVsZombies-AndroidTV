@@ -597,7 +597,7 @@ inline void InitHookFunction() {
     homura::HookFunction(LawnApp_IsChallengeWithoutSeedBankAddr, &LawnApp_IsChallengeWithoutSeedBank, &old_LawnApp_IsChallengeWithoutSeedBank);
     homura::HookFunction(LawnApp_TryHelpTextScreenAddr, &LawnApp_TryHelpTextScreen, nullptr);
     homura::HookFunction(LawnApp_KillSeedChooserScreenAddr, &LawnApp::KillSeedChooserScreen, &old_LawnApp_KillSeedChooserScreen);
-    homura::HookFunction(LawnApp_PlayFoleyAddr, &LawnApp::PlayFoley, &old_LawnApp_PlayFoley);
+    homura::HookFunction(LawnApp_PlayFoleyAddr, &LawnApp::PlayFoley, nullptr);
     homura::HookFunction(LawnApp_PlaySampleAddr, &LawnApp::PlaySample, &old_LawnApp_PlaySample);
     homura::HookFunction(LawnApp_ReanimationGetAddr, &LawnApp::ReanimationGet, &old_LawnApp_ReanimationGet);
 //    homura::HookFunction(LawnApp_HasSeedTypeAddr, &LawnApp_HasSeedType, &old_LawnApp_HasSeedType);
@@ -974,6 +974,8 @@ inline void InitHookFunction() {
     homura::HookFunction(TitleScreen_DrawAddr, &TitleScreen_Draw, &old_TitleScreen_Draw);
     homura::HookFunction(TitleScreen_UpdateAddr, &TitleScreen_Update, &old_TitleScreen_Update);
     homura::HookFunction(TitleScreen_SwitchStateAddr, &TitleScreen_SwitchState, nullptr);
+
+    homura::HookFunction(TodFoley_PlayFoleyAddr, &TodFoley::PlayFoley, &old_TodFoley_PlayFoley);
 }
 
 inline void InitVTableHookFunction() {
