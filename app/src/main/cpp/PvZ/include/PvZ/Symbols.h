@@ -349,7 +349,7 @@ inline void *Zombie_GetShieldDamageIndexAddr;
 inline void *Zombie_GetHelmDamageIndexAddr;
 inline void *Zombie_GetBodyDamageIndexAddr;
 inline void *Zombie_GetTrackPositionAddr;
-inline void *Zombie_UpdateAnimationSpeedAddr;
+inline void *Zombie_UpdateAnimSpeedAddr;
 inline void *Zombie_HitIceTrapAddr;
 inline void *Zombie_ZombieAddr;
 inline void *GetZombieDefinitionAddr;
@@ -1488,7 +1488,7 @@ inline bool GetFunctionAddr() {
     Zombie_GetHelmDamageIndexAddr = dlsym(handle, "_ZN6Zombie18GetHelmDamageIndexEv");
     Zombie_GetBodyDamageIndexAddr = dlsym(handle, "_ZN6Zombie18GetBodyDamageIndexEv");
     Zombie_GetTrackPositionAddr = dlsym(handle, "_ZN6Zombie16GetTrackPositionEPKcRfS2_");
-    Zombie_UpdateAnimationSpeedAddr = dlsym(handle, "_ZN6Zombie15UpdateAnimSpeedEv");
+    Zombie_UpdateAnimSpeedAddr = dlsym(handle, "_ZN6Zombie15UpdateAnimSpeedEv");
     Zombie_HitIceTrapAddr = dlsym(handle, "_ZN6Zombie10HitIceTrapEv");
     Zombie_ZombieAddr = dlsym(handle, "_ZN6ZombieC2Ev");
     GetZombieDefinitionAddr = dlsym(handle, "_Z19GetZombieDefinition10ZombieType");

@@ -101,7 +101,7 @@ void Projectile::DoImpact(Zombie* theZombie) {
 
     if (Projectile_IsSplashDamage(this, theZombie)) {
         if (theZombie && mProjectileType == ProjectileType::PROJECTILE_FIREBALL) {
-            Zombie_RemoveColdEffects(theZombie);
+            theZombie->RemoveColdEffects();
         }
 
         Projectile_DoSplashDamage(this, theZombie, 0);
@@ -153,7 +153,7 @@ void Projectile::DoImpact(Zombie* theZombie) {
         aEffect = ParticleEffect::PARTICLE_BUTTER_SPLAT;
 
         if (theZombie) {
-            Zombie_ApplyButter(theZombie);
+            theZombie->ApplyButter();
         }
     }
 
@@ -173,7 +173,7 @@ void Projectile::DoImpact(Zombie* theZombie) {
                 aPosY = 100.0f;
             if (aPosY < 20.0f)
                 aPosY = 20.0f;
-            Zombie_AddAttachedParticle(theZombie, aPosX, aPosY, aEffect);
+            theZombie->AddAttachedParticle(aPosX, aPosY, aEffect);
         } else {
             LawnApp_AddTodParticle(mApp, aSplatPosX, aSplatPosY, mRenderOrder + 1, aEffect);
         }
@@ -191,12 +191,12 @@ Zombie* Projectile::FindCollisionMindControlledTarget() {
     Zombie* aZombie = nullptr;
     Zombie* aBestZombie = nullptr;
     int aMinX = 0;
-    Sexy::Rect zombieRect;
+
     Sexy::Rect projectileRect;
     Projectile_GetProjectileRect(&projectileRect, this);
     while (Board_IterateZombies(mBoard, &aZombie)) {
         if (!aZombie->mDead && aZombie->mRow == mRow && aZombie->mMindControlled) {
-            Zombie_GetZombieRect(&zombieRect, aZombie);
+            Sexy::Rect zombieRect = aZombie->GetZombieRect();
             int rectOverlap = GetRectOverlap(&projectileRect, &zombieRect);
             if (rectOverlap >= 0 && (aBestZombie != nullptr || aZombie->mX > aMinX)) {
                 aBestZombie = aZombie;
@@ -222,11 +222,10 @@ void Projectile::CheckForCollision() {
 
     if (mMotionType == ProjectileMotion::MOTION_HOMING) {
         Zombie* aZombie = Board_ZombieTryToGet(mBoard, mTargetZombieID);
-        if (aZombie && Zombie_EffectedByDamage(aZombie, mDamageRangeFlags)) {
+        if (aZombie && aZombie->EffectedByDamage(mDamageRangeFlags)) {
             Sexy::Rect projectileRect;
-            Sexy::Rect zombieRect;
             Projectile_GetProjectileRect(&projectileRect, this);
-            Zombie_GetZombieRect(&zombieRect, aZombie);
+            Sexy::Rect zombieRect = aZombie->GetZombieRect();
             int rectOverlap = GetRectOverlap(&projectileRect, &zombieRect);
             if (rectOverlap >= 0 && mPosY > zombieRect.mY && mPosY < zombieRect.mY + zombieRect.mHeight) {
                 DoImpact(aZombie);
@@ -265,7 +264,7 @@ void Projectile::CheckForCollision() {
         if (aPlant) {
             const ProjectileDefinition& aProjectileDef = GetProjectileDef();
             aPlant->mPlantHealth -= aProjectileDef.mDamage;
-            aPlant->mEatenFlashCountdown = std::max(aPlant->mEatenFlashCountdown, 25);
+            aPlant->mEatenFlashCountdown = max(aPlant->mEatenFlashCountdown, 25);
 
             mApp->PlayFoley(FoleyType::FOLEY_SPLAT);
             LawnApp_AddTodParticle(mApp, mPosX - 3.0f, mPosY + 17.0f, mRenderOrder + 1, ParticleEffect::PARTICLE_PEA_SPLAT);

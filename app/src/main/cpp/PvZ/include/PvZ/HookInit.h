@@ -206,34 +206,6 @@ inline void InitInGameFunction() {
     TodDrawImageCelF = (decltype(TodDrawImageCelF))TodDrawImageCelFAddr;
 
 
-    Zombie_GetZombieRect = (decltype(Zombie_GetZombieRect))Zombie_GetZombieRectAddr;
-    Zombie_EffectedByDamage = (decltype(Zombie_EffectedByDamage))Zombie_EffectedByDamageAddr;
-    Zombie_RemoveColdEffects = (decltype(Zombie_RemoveColdEffects))Zombie_RemoveColdEffectsAddr;
-    Zombie_ApplyButter = (decltype(Zombie_ApplyButter))Zombie_ApplyButterAddr;
-    Zombie_ApplyBurn = (decltype(Zombie_ApplyBurn))Zombie_ApplyBurnAddr;
-    Zombie_StartEating = (decltype(Zombie_StartEating))Zombie_StartEatingAddr;
-    Zombie_AddAttachedParticle = (decltype(Zombie_AddAttachedParticle))Zombie_AddAttachedParticleAddr;
-    Zombie_DropArm = (decltype(Zombie_DropArm))Zombie_DropArmAddr;
-    Zombie_SetupReanimLayers = (decltype(Zombie_SetupReanimLayers))Zombie_SetupReanimLayersAddr;
-    Zombie_SetupShieldReanims = (decltype(Zombie_SetupShieldReanims))Zombie_SetupShieldReanimsAddr;
-    Zombie_UpdateActions = (decltype(Zombie_UpdateActions))Zombie_UpdateActionsAddr;
-    Zombie_UpdatePlaying = (decltype(Zombie_UpdatePlaying))Zombie_UpdatePlayingAddr;
-    Zombie_IsOnBoard = (decltype(Zombie_IsOnBoard))Zombie_IsOnBoardAddr;
-    Zombie_TakeHelmDamage = (decltype(Zombie_TakeHelmDamage))Zombie_TakeHelmDamageAddr;
-    Zombie_TakeFlyingDamage = (decltype(Zombie_TakeFlyingDamage))Zombie_TakeFlyingDamageAddr;
-    Zombie_TakeShieldDamage = (decltype(Zombie_TakeShieldDamage))Zombie_TakeShieldDamageAddr;
-    Zombie_TakeBodyDamage = (decltype(Zombie_TakeBodyDamage))Zombie_TakeBodyDamageAddr;
-    Zombie_UpdateDamageStates = (decltype(Zombie_UpdateDamageStates))Zombie_UpdateDamageStatesAddr;
-    Zombie_GetShieldDamageIndex = (decltype(Zombie_GetShieldDamageIndex))Zombie_GetShieldDamageIndexAddr;
-    Zombie_GetHelmDamageIndex = (decltype(Zombie_GetHelmDamageIndex))Zombie_GetHelmDamageIndexAddr;
-    Zombie_GetBodyDamageIndex = (decltype(Zombie_GetBodyDamageIndex))Zombie_GetBodyDamageIndexAddr;
-    Zombie_GetTrackPosition = (decltype(Zombie_GetTrackPosition))Zombie_GetTrackPositionAddr;
-    Zombie_UpdateAnimationSpeed = (decltype(Zombie_UpdateAnimationSpeed))Zombie_UpdateAnimationSpeedAddr;
-    Zombie_HitIceTrap = (decltype(Zombie_HitIceTrap))Zombie_HitIceTrapAddr;
-    Zombie_Zombie = (decltype(Zombie_Zombie))Zombie_ZombieAddr;
-    //    GetZombieDefinition=(ZombieDefinition & (*)(ZombieType type))GetZombieDefinitionAddr;
-
-
     Reanimation_OverrideScale = (decltype(Reanimation_OverrideScale))Reanimation_OverrideScaleAddr;
     Reanimation_SetPosition = (decltype(Reanimation_SetPosition))Reanimation_SetPositionAddr;
     Reanimation_Reanimation = (decltype(Reanimation_Reanimation))Reanimation_ReanimationAddr;

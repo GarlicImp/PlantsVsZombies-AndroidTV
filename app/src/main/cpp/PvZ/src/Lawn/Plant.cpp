@@ -278,7 +278,7 @@ void Plant::Draw(Sexy::Graphics *g) {
         float ratioSquished = 0.5f;
         Sexy_Graphics_SetScale(g, 1.0f, ratioSquished, 0.0f, 0.0f);
         Sexy_Graphics_SetColorizeImages(g, true);
-        Color color = {255, 255, 255, (int)(255.0f * std::min(1.0f, mDisappearCountdown / 100.0f))};
+        Color color = {255, 255, 255, (int)(255.0f * min(1.0f, mDisappearCountdown / 100.0f))};
         Sexy_Graphics_SetColor(g, &color);
         Plant::DrawSeedType(g, mSeedType, mImitaterType, DrawVariation::VARIATION_NORMAL, num, num2 + 85.0f * (1 - ratioSquished));
         Sexy_Graphics_SetScale(g, 1.0f, 1.0f, 0.0f, 0.0f);

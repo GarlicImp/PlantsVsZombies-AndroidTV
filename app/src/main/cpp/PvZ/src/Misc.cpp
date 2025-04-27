@@ -688,7 +688,7 @@ Sexy::Image *ReanimatorCache::MakeCachedZombieFrame(ZombieType theZombieType) {
     Reanimation_Reanimation(&reanimation);
     Reanimation_ReanimationInitializeType(&reanimation, x, y, reanimationType);
     Reanimation_SetFramesForLayer(&reanimation, "anim_idle");
-    Zombie_SetupReanimLayers(&reanimation, zombieType_reanim);
+    Zombie::SetupReanimLayers(&reanimation, zombieType_reanim);
     Reanimation_SetImageOverride(&reanimation, "anim_head1", *Sexy_IMAGE_REANIM_ZOMBIE_GARGANTUAR_HEAD_REDEYE_Addr);
     Reanimation_Update(&reanimation);
     Reanimation_Draw(&reanimation, &graphics);

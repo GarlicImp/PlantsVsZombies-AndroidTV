@@ -171,7 +171,7 @@ bool Challenge::IZombieEatBrain(Zombie* theZombie) {
     if (aBrain == nullptr)
         return false;
 
-    Zombie_StartEating(theZombie);
+    theZombie->StartEating();
     //    int mHealth = aBrain->mGridItemCounter - 1;
     int mHealth = aBrain->mGridItemCounter - 2; // 一次吃掉脑子的两滴血
     aBrain->mGridItemCounter = mHealth;

@@ -302,9 +302,9 @@ void GamepadControls_UpdatePreviewReanim(GamepadControls *gamepadControls) {
             }
             ZombieDefinition &theZombieDefinition = GetZombieDefinition(theZombieType);
             Reanimation *zombieReanim = LawnApp_AddReanimation(lawnApp, -20.0, -35 - theDrawHeightOffset, theRenderOrder + 1, theZombieDefinition.mReanimationType);
-            Zombie_SetupReanimLayers(zombieReanim, theZombieType);
+            Zombie::SetupReanimLayers(zombieReanim, theZombieType);
             if (theZombieType == ZombieType::ZOMBIE_DOOR || theZombieType == ZombieType::ZOMBIE_TRASH_BIN || theZombieType == ZombieType::ZOMBIE_NEWSPAPER || theZombieType == ZombieType::ZOMBIE_LADDER) {
-                Zombie_SetupShieldReanims(theZombieType, zombieReanim);
+                Zombie::SetupShieldReanims(theZombieType, zombieReanim);
             }
             zombieReanim->mIsAttachment = true;
             if (theZombieType == ZombieType::ZOMBIE_POGO) {
