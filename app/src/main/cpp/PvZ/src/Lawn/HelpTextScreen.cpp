@@ -55,13 +55,13 @@ void HelpTextScreen_MouseDown(Sexy::Widget *helpTextScreen, int x, int y, int th
     int imageWidth = Sexy_Image_GetWidth(*Sexy_IMAGE_ZEN_NEXTGARDEN_Addr);
     int imageHeight = Sexy_Image_GetHeight(*Sexy_IMAGE_ZEN_NEXTGARDEN_Addr);
 
-    TRect nextPageRect = {nextPageButtonX, nextPageButtonY, imageWidth, imageHeight};
+    Sexy::Rect nextPageRect = {nextPageButtonX, nextPageButtonY, imageWidth, imageHeight};
     if (TRect_Contains(&nextPageRect, x, y)) {
         HelpTextScreen_KeyDown(helpTextScreen, 39);
         return;
     }
 
-    TRect prevPageRect = {prevPageButtonX, prevPageButtonY, imageWidth, imageHeight};
+    Sexy::Rect prevPageRect = {prevPageButtonX, prevPageButtonY, imageWidth, imageHeight};
     if (TRect_Contains(&prevPageRect, x, y)) {
         HelpTextScreen_KeyDown(helpTextScreen, 37);
         return;

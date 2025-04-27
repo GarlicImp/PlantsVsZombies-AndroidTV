@@ -763,7 +763,7 @@ void LawnApp_LoadZombatarResources(LawnApp *lawnApp) {
     addonZombatarImages.zombatar_zombie_blank_skin = LawnApp_GetImageByFileName(lawnApp, "addonFiles/images/ZombatarWidget/zombatar_zombie_blank_skin");
     int xClip = 130;
     int yClip = 130;
-    TRect rect = {addonZombatarImages.zombatar_zombie_blank->mWidth - xClip, addonZombatarImages.zombatar_zombie_blank->mHeight - yClip, xClip, yClip};
+    Sexy::Rect rect = {addonZombatarImages.zombatar_zombie_blank->mWidth - xClip, addonZombatarImages.zombatar_zombie_blank->mHeight - yClip, xClip, yClip};
     addonZombatarImages.zombatar_zombie_blank_part = Sexy_SexyAppBase_CopyImage2(lawnApp, addonZombatarImages.zombatar_zombie_blank, &rect);
     addonZombatarImages.zombatar_zombie_blank_skin_part = Sexy_SexyAppBase_CopyImage2(lawnApp, addonZombatarImages.zombatar_zombie_blank_skin, &rect);
     addonZombatarImages.zombatar_colors_bg = LawnApp_GetImageByFileName(lawnApp, "addonFiles/images/ZombatarWidget/zombatar_colors_bg");

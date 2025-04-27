@@ -73,7 +73,7 @@ inline bool ColdPeaCanPassFireWood;
 
 inline void (*Projectile_Die)(Projectile *a);
 
-inline void (*Projectile_GetProjectileRect)(TRect *a1, Projectile *a2);
+inline void (*Projectile_GetProjectileRect)(Sexy::Rect *a1, Projectile *a2);
 
 inline Plant *(*Projectile_FindCollisionTargetPlant)(Projectile *a1);
 

@@ -15,10 +15,10 @@ public:
     ZombieType mSelectedZombie;                                  // 198
     Plant *mPlant;                                                           // 199
     Zombie *mZombie;                                                         // 200
-    TRect mUnkRect;                                                          // 201 ~ 204
-    TRect mDescriptionRect;                                                  // 205 ~ 208
-    TRect mCostRect;                                                         // 209 ~ 212
-    TRect mWaitTimeRect;                                                     // 213 ~ 216
+    Sexy::Rect mUnkRect;                                                          // 201 ~ 204
+    Sexy::Rect mDescriptionRect;                                                  // 205 ~ 208
+    Sexy::Rect mCostRect;                                                         // 209 ~ 212
+    Sexy::Rect mWaitTimeRect;                                                     // 213 ~ 216
     int unk2[2];                                                             // 217 ~ 218
     char *mNameString;                                                       // 219
     char *mDescriptionHeaderString;                                          // 220

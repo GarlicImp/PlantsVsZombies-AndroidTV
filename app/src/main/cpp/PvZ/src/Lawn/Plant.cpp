@@ -1,18 +1,20 @@
 #include "PvZ/Lawn/Plant.h"
-#include "PvZ/Symbols.h"
-#include "PvZ/SexyAppFramework/Graphics.h"
-#include "PvZ/Misc.h"
 #include "PvZ/GlobalVariable.h"
 #include "PvZ/Lawn/Board.h"
 #include "PvZ/Lawn/Challenge.h"
 #include "PvZ/Lawn/CutScene.h"
 #include "PvZ/Lawn/GamepadControls.h"
+#include "PvZ/Lawn/GridItem.h"
 #include "PvZ/Lawn/LawnApp.h"
 #include "PvZ/Lawn/Reanimation.h"
 #include "PvZ/MagicAddr.h"
-#include "PvZ/Lawn/GridItem.h"
+#include "PvZ/Misc.h"
+#include "PvZ/SexyAppFramework/Graphics.h"
+#include "PvZ/SexyAppFramework/SexyVector.h"
+#include "PvZ/Symbols.h"
 
 #include <algorithm>
+using namespace Sexy;
 
 PlantDefinition gPlantDefs[SeedType::NUM_SEED_TYPES] = {
     { SeedType::SEED_PEASHOOTER,        nullptr, ReanimationType::REANIM_PEASHOOTER,    0,  100,    750,    PlantSubClass::SUBCLASS_SHOOTER,    150,    _S("PEASHOOTER") },
@@ -74,7 +76,7 @@ PlantDefinition gPlantDefs[SeedType::NUM_SEED_TYPES] = {
 void Plant::PlantInitialize(int theGridX, int theGridY, SeedType theSeedType, SeedType theImitaterType, int a6) {
     // 在初始化植物后更新一次动画，以解决开场前存在的植物只绘制阴影而不绘制植物本体的问题
     old_Plant_PlantInitialize(this, theGridX, theGridY, theSeedType, theImitaterType, a6);
-    Plant_UpdateReanim(this);
+    UpdateReanim();
 
     // 在对战模式修改指定植物的血量
     if (mApp->mGameMode == GameMode::GAMEMODE_MP_VS) {
@@ -95,7 +97,45 @@ void Plant::SetSleeping(bool theIsAsleep) {
         // 如果开启"蘑菇免唤醒"
         theIsAsleep = false;
     }
+
     return old_Plant_SetSleeping(this, theIsAsleep);
+}
+
+int Plant::GetDamageRangeFlags(PlantWeapon thePlantWeapon)
+{
+    switch (mSeedType)
+    {
+        case SeedType::SEED_CACTUS:
+            return thePlantWeapon == PlantWeapon::WEAPON_SECONDARY ? 1 : 2;
+        case SeedType::SEED_CHERRYBOMB:
+        case SeedType::SEED_JALAPENO:
+        case SeedType::SEED_COBCANNON:
+        case SeedType::SEED_DOOMSHROOM:
+            return 127;
+        case SeedType::SEED_MELONPULT:
+        case SeedType::SEED_CABBAGEPULT:
+        case SeedType::SEED_KERNELPULT:
+        case SeedType::SEED_WINTERMELON:
+            return 13;
+        case SeedType::SEED_POTATOMINE:
+            return 77;
+        case SeedType::SEED_SQUASH:
+            return 13;
+        case SeedType::SEED_PUFFSHROOM:
+        case SeedType::SEED_SEASHROOM:
+        case SeedType::SEED_FUMESHROOM:
+        case SeedType::SEED_GLOOMSHROOM:
+        case SeedType::SEED_CHOMPER:
+            return 9;
+        case SeedType::SEED_CATTAIL:
+            return 11;
+        case SeedType::SEED_TANGLEKELP:
+            return 5;
+        case SeedType::SEED_GIANT_WALLNUT:
+            return 17;
+        default:
+            return 1;
+    }
 }
 
 void Plant::PlayBodyReanim(const char* theTrackName, ReanimLoopType theLoopType, int theBlendTime, float theAnimRate) {
@@ -223,11 +263,11 @@ void Plant::Draw(Sexy::Graphics *g) {
     int theCelRow = 0;
     float num = 0.0f;
     float num2 = PlantDrawHeightOffset(mBoard, 0, mSeedType, mPlantCol, mRow);
-    if (Plant_IsFlying(mSeedType) && mSquished) {
+    if (IsFlying(mSeedType) && mSquished) {
         num2 += 30.0f;
     }
     int theCelCol = mFrame;
-    Sexy::Image *image = Plant_GetImage(mSeedType);
+    Image *aImage = GetImage(mSeedType);
     if (mSquished) {
         if (mSeedType == SeedType::SEED_FLOWERPOT) {
             num2 -= 15.0f;
@@ -272,9 +312,9 @@ void Plant::Draw(Sexy::Graphics *g) {
         thePlant = this;
     }
 
-    Plant_DrawShadow(this, g, num, num2);
+    DrawShadow(g, num, num2);
 
-    if (Plant_IsFlying(mSeedType)) {
+    if (IsFlying(mSeedType)) {
         int num3;
         if (IsOnBoard()) {
             num3 = mBoard->mMainCounter;
@@ -320,8 +360,8 @@ void Plant::Draw(Sexy::Graphics *g) {
             seedType = Board_GetSeedTypeInCursor(mBoard, 0);
             seedType2 = Board_GetSeedTypeInCursor(mBoard, 1);
         }
-        if ((Plant_IsPartOfUpgradableTo(this, seedType) && mBoard->CanPlantAt(mPlantCol, mRow, seedType) == PlantingReason::PLANTING_OK)
-            || (Plant_IsPartOfUpgradableTo(this, seedType2) && mBoard->CanPlantAt(mPlantCol, mRow, seedType2) == PlantingReason::PLANTING_OK)) {
+        if ((IsPartOfUpgradableTo(seedType) && mBoard->CanPlantAt(mPlantCol, mRow, seedType) == PlantingReason::PLANTING_OK)
+            || (IsPartOfUpgradableTo(seedType2) && mBoard->CanPlantAt(mPlantCol, mRow, seedType2) == PlantingReason::PLANTING_OK)) {
             Sexy_Graphics_SetColorizeImages(g, true);
             Color color;
             GetFlashingColor(&color, mBoard->mMainCounter, 90);
@@ -338,8 +378,8 @@ void Plant::Draw(Sexy::Graphics *g) {
             GetFlashingColor(&color, mBoard->mMainCounter, 90);
             Sexy_Graphics_SetColor(g, &color);
         }
-        if (image != nullptr) {
-            TodDrawImageCelF(g, image, num, num2, theCelCol, theCelRow);
+        if (aImage != nullptr) {
+            TodDrawImageCelF(g, aImage, num, num2, theCelCol, theCelRow);
         }
         //        if (mSeedType == a::Sprout)
         //        {
@@ -361,8 +401,8 @@ void Plant::Draw(Sexy::Graphics *g) {
             Sexy_Graphics_SetColorizeImages(g, true);
             Color color = {255, 255, 255, 196};
             Sexy_Graphics_SetColor(g, &color);
-            if (image != nullptr) {
-                TodDrawImageCelF(g, image, num, num2, theCelCol, theCelRow);
+            if (aImage != nullptr) {
+                TodDrawImageCelF(g, aImage, num, num2, theCelCol, theCelRow);
             }
             Sexy_Graphics_SetDrawMode(g, DrawMode::DRAWMODE_NORMAL);
             Sexy_Graphics_SetColorizeImages(g, false);
@@ -372,15 +412,15 @@ void Plant::Draw(Sexy::Graphics *g) {
             int theAlpha = std::clamp(mEatenFlashCountdown * 3, 0, 255);
             Color color = {255, 255, 255, theAlpha};
             Sexy_Graphics_SetColor(g, &color);
-            if (image != nullptr) {
-                TodDrawImageCelF(g, image, num, num2, theCelCol, theCelRow);
+            if (aImage != nullptr) {
+                TodDrawImageCelF(g, aImage, num, num2, theCelCol, theCelRow);
             }
             Sexy_Graphics_SetDrawMode(g, DrawMode::DRAWMODE_NORMAL);
             Sexy_Graphics_SetColorizeImages(g, false);
         }
     }
-    if (mSeedType == SeedType::SEED_MAGNETSHROOM && !Plant_DrawMagnetItemsOnTop(this)) {
-        Plant_DrawMagnetItems(this, g);
+    if (mSeedType == SeedType::SEED_MAGNETSHROOM && !DrawMagnetItemsOnTop()) {
+        DrawMagnetItems(g);
     }
 
 
@@ -476,26 +516,26 @@ void Plant::DrawSeedType(Sexy::Graphics *g, SeedType theSeedType, SeedType theIm
         }
         return;
     } else {
-        PlantDefinition plantDefinition = GetPlantDefinition(theSeedType2);
+        PlantDefinition aPlantDef = GetPlantDefinition(theSeedType2);
         if (theSeedType2 == SeedType::SEED_GIANT_WALLNUT) {
             g->mScaleX = g->mScaleX * 1.4;
             g->mScaleY = g->mScaleY * 1.4;
             TodDrawImageScaledF(g, *Sexy_IMAGE_REANIM_WALLNUT_BODY_Addr, thePosX - 53.0, thePosY - 56.0, g->mScaleX, g->mScaleY);
-        } else if (plantDefinition.mReanimationType == -1) {
+        } else if (aPlantDef.mReanimationType == -1) {
             int v29;
             if (theSeedType2 == SeedType::SEED_KERNELPULT)
                 v29 = 2;
             else
                 v29 = theSeedType2 == SeedType::SEED_TWINSUNFLOWER;
 
-            Sexy::Image *Image = Plant_GetImage(theSeedType2);
-            int v31 = Image->mNumCols;
+            Image *aImage = GetImage(theSeedType2);
+            int v31 = aImage->mNumCols;
             int v32;
             if (v31 > 2)
                 v32 = 2;
             else
                 v32 = v31 - 1;
-            TodDrawImageCelScaledF(g, Image, v25 + thePosX, v24 + thePosY, v32, v29, g->mScaleX, g->mScaleY);
+            TodDrawImageCelScaledF(g, aImage, v25 + thePosX, v24 + thePosY, v32, v29, g->mScaleX, g->mScaleY);
         } else {
             ReanimatorCache_DrawCachedPlant(lawnApp->mReanimatorCache, g, v25 + thePosX, v24 + thePosY, theSeedType2, theDrawVariation);
         }
@@ -584,6 +624,10 @@ GridItem *Plant::FindTargetGridItem(PlantWeapon thePlantWeapon) {
 
 void Plant::Die() {
     old_Plant_Die(this);
+}
+
+PlantDefinition &GetPlantDefinition(SeedType theSeedType) {
+    return gPlantDefs[theSeedType];
 }
 
 int Plant::GetCost(SeedType theSeedType, SeedType theImitaterType) {
@@ -723,6 +767,34 @@ int Plant::GetRefreshTime(SeedType theSeedType, SeedType theImitaterType) {
     return old_Plant_GetRefreshTime(theSeedType, theImitaterType);
 }
 
+bool Plant::IsNocturnal(SeedType theSeedtype)
+{
+    return
+        theSeedtype == SeedType::SEED_PUFFSHROOM ||
+        theSeedtype == SeedType::SEED_SEASHROOM ||
+        theSeedtype == SeedType::SEED_SUNSHROOM ||
+        theSeedtype == SeedType::SEED_FUMESHROOM ||
+        theSeedtype == SeedType::SEED_HYPNOSHROOM ||
+        theSeedtype == SeedType::SEED_DOOMSHROOM ||
+        theSeedtype == SeedType::SEED_ICESHROOM ||
+        theSeedtype == SeedType::SEED_MAGNETSHROOM ||
+        theSeedtype == SeedType::SEED_SCAREDYSHROOM ||
+        theSeedtype == SeedType::SEED_GLOOMSHROOM;
+}
+
+bool Plant::IsAquatic(SeedType theSeedType)
+{
+    return
+        theSeedType == SeedType::SEED_LILYPAD ||
+        theSeedType == SeedType::SEED_TANGLEKELP ||
+        theSeedType == SeedType::SEED_SEASHROOM ||
+        theSeedType == SeedType::SEED_CATTAIL;
+}
+
+bool Plant::IsFlying(SeedType theSeedtype) {
+    return theSeedtype == SeedType::SEED_INSTANT_COFFEE;
+}
+
 bool Plant::IsUpgrade(SeedType theSeedType) {
     // 修复机枪射手在SeedBank光标移动到shop栏后变为绿卡。
     if (theSeedType == SeedType::SEED_GATLINGPEA) {
@@ -738,6 +810,35 @@ bool Plant::IsUpgrade(SeedType theSeedType) {
         return !(gamePad->mGamepadState == 7 && gamePad->mIsInShopSeedBank);
     }
     return old_Plant_IsUpgrade(theSeedType);
+}
+
+Rect Plant::GetPlantRect()
+{
+    Rect aRect;
+    if (mSeedType == SeedType::SEED_TALLNUT)
+    {
+        aRect = Rect(mX + 10, mY, mWidth, mHeight);
+    }
+    else if (mSeedType == SeedType::SEED_PUMPKINSHELL)
+    {
+        aRect = Rect(mX, mY, mWidth - 20, mHeight);
+    }
+    else if (mSeedType == SeedType::SEED_COBCANNON)
+    {
+        aRect = Rect(mX, mY, 140, 80);
+    }
+    else
+    {
+        aRect = Rect(mX + 10, mY, mWidth - 20, mHeight);
+    }
+
+    return aRect;
+}
+
+Image* Plant::GetImage(SeedType theSeedType)
+{
+    Image** aImages = GetPlantDefinition(theSeedType).mPlantImage;
+    return aImages ? aImages[0] : nullptr;
 }
 
 void Plant::SetImitaterFilterEffect() {
@@ -756,4 +857,37 @@ void Plant::SetImitaterFilterEffect() {
         mHeadReanim3->mFilterEffect = aFilterEffect;
 }
 
+bool Plant::DrawMagnetItemsOnTop()
+{
+    if (mSeedType == SeedType::SEED_GOLD_MAGNET)
+    {
+        for (int i = 0; i < MAX_MAGNET_ITEMS; i++)
+        {
+            if (mMagnetItems[i].mItemType != MagnetItemType::MAGNET_ITEM_NONE)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    if (mSeedType == SeedType::SEED_MAGNETSHROOM)
+    {
+        for (int i = 0; i < MAX_MAGNET_ITEMS; i++)
+        {
+            MagnetItem* aMagnetItem = &mMagnetItems[i];
+            if (aMagnetItem->mItemType != MagnetItemType::MAGNET_ITEM_NONE)
+            {
+                SexyVector2 aVectorToPlant(mX + aMagnetItem->mDestOffsetX - aMagnetItem->mPosX, mY + aMagnetItem->mDestOffsetY - aMagnetItem->mPosY);
+                if (aVectorToPlant.Magnitude() > 20.0f)
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+}
 

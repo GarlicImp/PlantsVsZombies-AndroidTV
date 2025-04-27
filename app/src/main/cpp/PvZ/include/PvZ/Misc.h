@@ -17,7 +17,7 @@ inline void (*Sexy_StrFormat)(int *holder, const char *theFormat, ...);
 
 inline void (*TodStringTranslate)(int *holder, const char *theText);
 
-inline int (*GetRectOverlap)(TRect *a1, TRect *a2);
+inline int (*GetRectOverlap)(Sexy::Rect *a1, Sexy::Rect *a2);
 
 inline int (*LawnPlayerInfo_GetFlag)(PlayerInfo *, int);
 
@@ -99,7 +99,7 @@ inline int (*Sexy_SexyAppBase_RegistryReadString)(int *, int *, int *);
 
 inline Sexy::Image *(*Sexy_SexyAppBase_CopyImage)(LawnApp *, Sexy::Image *);
 
-inline Sexy::Image *(*Sexy_SexyAppBase_CopyImage2)(LawnApp *, Sexy::Image *, TRect *);
+inline Sexy::Image *(*Sexy_SexyAppBase_CopyImage2)(LawnApp *, Sexy::Image *, Sexy::Rect *);
 
 inline void (*Sexy_MemoryImage_MemoryImage)(Sexy::Image *);
 
@@ -309,7 +309,7 @@ void Sexy_MemoryImage_PushTransform(Sexy::Image *image, int *transform, bool con
 
 void Sexy_MemoryImage_PopTransform(Sexy::Image *image);
 
-void Sexy_MemoryImage_ClearRect(Sexy::Image *a1, TRect *a2);
+void Sexy_MemoryImage_ClearRect(Sexy::Image *a1, Sexy::Rect *a2);
 
 Sexy::Image *FilterEffectCreateImage(Sexy::Image *image, FilterEffectType);
 

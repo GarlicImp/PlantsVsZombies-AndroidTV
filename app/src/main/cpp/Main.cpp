@@ -830,7 +830,7 @@ extern "C" JNIEXPORT jstring JNICALL Java_com_android_support_CkHomuraMenu_GetCu
         int mRow = plant->mRow;
         bool mIsAsleep = plant->mIsAsleep;
         bool canHaveLadder = mSeedType == SeedType::SEED_WALLNUT || mSeedType == SeedType::SEED_TALLNUT || mSeedType == SeedType::SEED_PUMPKINSHELL;
-        bool canBeAsleep = Plant_IsNocturnal(mSeedType);
+        bool canBeAsleep = Plant::IsNocturnal(mSeedType);
         bool wakeUp = canBeAsleep && !mIsAsleep;
         bool imitaterMorphed = mSeedType == SeedType::SEED_IMITATER || mImitaterType == SeedType::SEED_IMITATER;
         bool ladder = canHaveLadder && Board_GetLadderAt(board, mPlantCol, mRow) != nullptr;

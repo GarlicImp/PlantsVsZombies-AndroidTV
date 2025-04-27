@@ -2,6 +2,7 @@
 #define PVZ_LAWN_PLANT_H
 
 #include "PvZ/Enums.h"
+#include "PvZ/Symbols.h"
 
 #define MAX_MAGNET_ITEMS 5
 
@@ -153,8 +154,8 @@ public:
     int mStateCountdown;                                   // 25
     int mLaunchCounter;                                    // 26
     int mLaunchRate;                                       // 27
-    TRect mPlantRect;                                      // 28 ~ 31
-    TRect mPlantAttackRect;                                // 32 ~ 35
+    Sexy::Rect mPlantRect;                                      // 28 ~ 31
+    Sexy::Rect mPlantAttackRect;                                // 32 ~ 35
     int mTargetX;                                          // 36
     int mTargetY;                                          // 37
     int mStartRow;                                         // 38
@@ -190,16 +191,31 @@ public:
     int unk;                                               // 86
     int mPlantIndexInList;                                 // 87
     // 大小88个整数
-public:
+
+    void UpdateAbilities() { reinterpret_cast<void (*)(Plant *)>(Plant_UpdateAbilitiesAddr)(this); }
+    void Animate() { reinterpret_cast<void (*)(Plant *)>(Plant_AnimateAddr)(this); }
+    void UpdateReanim() { reinterpret_cast<void (*)(Plant *)>(Plant_UpdateReanimAddr)(this); };
+    void DrawShadow(Sexy::Graphics *g, float theOffsetX, float theOffsetY) {
+        reinterpret_cast<void (*)(Plant *, Sexy::Graphics *, float, float)>(Plant_DrawShadowAddr)(this, g, theOffsetX, theOffsetY);
+    }
+    bool IsPartOfUpgradableTo(SeedType theUpgradedType) { reinterpret_cast<bool (*)(Plant *, SeedType)>(Plant_IsPartOfUpgradableToAddr)(this, theUpgradedType);}
+    void DrawMagnetItems(Sexy::Graphics *g) { reinterpret_cast<void (*)(Plant *, Sexy::Graphics *)>(Plant_DrawMagnetItemsAddr)(this, g); }
+
     void PlantInitialize(int theGridX, int theGridY, SeedType theSeedType, SeedType theImitaterType, int a6);
     void Update();
     void Draw(Sexy::Graphics *g);
     void DoSpecial();
     GridItem* FindTargetGridItem(PlantWeapon thePlantWeapon);
     void Die();
+    static Sexy::Image* GetImage(SeedType theSeedType);
     static int GetCost(SeedType theSeedType, SeedType theImitaterType);
     static int GetRefreshTime(SeedType theSeedType, SeedType theImitaterType);
+    static bool IsNocturnal(SeedType theSeedtype);
+    static bool IsAquatic(SeedType theSeedType);
+    static bool IsFlying(SeedType theSeedtype);
     static bool IsUpgrade(SeedType theSeedType);
+    int GetDamageRangeFlags(PlantWeapon thePlantWeapon);
+    Sexy::Rect GetPlantRect();
     bool NotOnGround();
     static void DrawSeedType(Sexy::Graphics *g, SeedType theSeedType, SeedType theImitaterType, DrawVariation theDrawVariation, float thePosX, float thePosY);
     void SetSleeping(bool theIsAsleep);
@@ -209,7 +225,7 @@ public:
     void PlayBodyReanim(const char* theTrackName, ReanimLoopType theLoopType, int theBlendTime, float theAnimRate);
     void SpikeweedAttack();
     void SpikeRockTakeDamage();
-
+    bool DrawMagnetItemsOnTop();
     void SetImitaterFilterEffect();
 };
 
@@ -228,47 +244,13 @@ public:
 };
 extern PlantDefinition gPlantDefs[SeedType::NUM_SEED_TYPES];
 
-///*inline*/ PlantDefinition& GetPlantDefinition(a::a theSeedType);
-
+PlantDefinition &GetPlantDefinition(SeedType theSeedType);
 /***************************************************************************************************************/
+
 inline bool abilityFastCoolDown;
 inline bool mushroomsNoSleep;
 inline bool showPlantHealth;
 inline bool showNutGarlicSpikeHealth;
-
-inline Sexy::Image *(*Plant_GetImage)(SeedType seedType);
-
-inline void (*Plant_GetPlantRect)(TRect *rect, Plant *plant);
-
-inline bool (*Plant_NotOnGround)(Plant *plant);
-
-inline bool (*Plant_IsOnBoard)(Plant *);
-
-inline void (*Plant_UpdateAbilities)(Plant *);
-
-inline void (*Plant_Animate)(Plant *);
-
-inline void (*Plant_UpdateReanim)(Plant *);
-
-inline bool (*Plant_IsFlying)(SeedType);
-
-inline PlantDefinition &(*GetPlantDefinition)(SeedType);
-
-inline bool (*Plant_IsNocturnal)(SeedType);
-
-inline bool (*Plant_IsAquatic)(SeedType);
-
-inline void (*Plant_DrawShadow)(Plant *, Sexy::Graphics *, float, float);
-
-inline bool (*Plant_IsPartOfUpgradableTo)(Plant *, SeedType);
-
-inline bool (*Plant_IsInPlay)(Plant *);
-
-inline bool (*Plant_DrawMagnetItemsOnTop)(Plant *);
-
-inline void (*Plant_DrawMagnetItems)(Plant *, Sexy::Graphics *);
-
-inline int (*Plant_GetDamageRangeFlags)(Plant *, PlantWeapon);
 
 
 inline void (*old_Plant_Draw)(Plant *plant, Sexy::Graphics *graphics);

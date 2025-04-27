@@ -1768,13 +1768,46 @@ struct Color {
     int mAlpha;
 };
 
+namespace Sexy {
+template <class _T>
+class TRect {
+public:
+    _T mX;
+    _T mY;
+    _T mWidth;
+    _T mHeight;
 
-struct TRect {
-    int mX;
-    int mY;
-    int mWidth;
-    int mHeight;
+    TRect(_T theX, _T theY, _T theWidth, _T theHeight) :
+        mX(theX), mY(theY), mWidth(theWidth), mHeight(theHeight)
+    {
+    }
+
+    TRect(const TRect<_T>& theTRect) :
+        mX(theTRect.mX), mY(theTRect.mY), mWidth(theTRect.mWidth), mHeight(theTRect.mHeight)
+    {
+    }
+
+    TRect() :
+        mX(0), mY(0), mWidth(0), mHeight(0)
+    {
+    }
+
+    bool					Contains(_T theX, _T theY) const
+    {
+        return ((theX >= mX) && (theX < mX + mWidth) &&
+                (theY >= mY) && (theY < mY + mHeight));
+    }
+
+//    bool					Contains(const TPoint<_T>& thePoint) const
+//    {
+//        return ((thePoint.mX >= mX) && (thePoint.mX < mX + mWidth) &&
+//                (thePoint.mY >= mY) && (thePoint.mY < mY + mHeight));
+//    }
 };
+
+typedef TRect<int> Rect;
+typedef TRect<double> FRect;
+} // namespace Sexy
 
 struct MotionTrailFrame {
     float mPosX;
@@ -1946,7 +1979,7 @@ namespace Sexy {
         float mScaleX;                // 4
         float mScaleY;                // 5
         float unk1[2];                // 6 ~ 7
-        TRect mClipRect;              // 8 ~ 11
+        Rect mClipRect;              // 8 ~ 11
         int unk2[3];                  // 12 ~ 14
         Color mColorUnknown;          // 15 ~ 18
         Color mColor;                 // 19 ~ 22
@@ -2019,8 +2052,8 @@ namespace Sexy {
         Image *mCheckedImage;   // 74
         int mId;                // 75
         bool mChecked;          // 304
-        TRect mCheckedRect;     // 77 ~ 80
-        TRect mUncheckedRect;   // 81 ~ 84
+        Rect mCheckedRect;     // 77 ~ 80
+        Rect mUncheckedRect;   // 81 ~ 84
         Color mOutlineColor;    // 85 ~ 88
         Color mBkgColor;        // 89 ~ 92
         Color mCheckColor;      // 93 ~ 96
@@ -2049,10 +2082,10 @@ namespace Sexy {
         Image *mOverImage;      // 174
         Image *mDownImage;      // 175
         Image *mDisabledImage;  // 176
-        TRect mNormalRect;      // 177 ~ 180
-        TRect mOverRect;        // 181 ~ 184
-        TRect mDownRect;        // 185 ~ 188
-        TRect mDisabledRect;    // 189 ~ 192
+        Rect mNormalRect;      // 177 ~ 180
+        Rect mOverRect;        // 181 ~ 184
+        Rect mDownRect;        // 185 ~ 188
+        Rect mDisabledRect;    // 189 ~ 192
         bool unkBool1;          // 772
         bool mBtnNoDraw;        // 773
         bool unkBool2;          // 774
