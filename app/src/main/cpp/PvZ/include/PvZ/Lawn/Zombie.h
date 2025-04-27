@@ -173,6 +173,7 @@ public:
     void UpdateZombieGatlingHead();
     void BurnRow(int theRow);
     void UpdateZombieJalapenoHead();
+//    void UpdateZombieSquashHead();
     void BossDestroyIceballInRow(int theRow);
     int GetDancerFrame();
     void RiseFromGrave(int theGridX, int theGridY);
@@ -211,6 +212,7 @@ public:
     static bool IsZombatarZombie(ZombieType theType);
     void SquishAllInSquare(int theX, int theY, ZombieAttackType theAttackType);
     bool IsWalkingBackwards();
+    void StopEating();
 };
 
 class ZombieDefinition
@@ -251,8 +253,6 @@ inline void (*Zombie_RemoveColdEffects)(Zombie *zombie);
 inline void (*Zombie_StartEating)(Zombie *);
 
 inline void (*Zombie_AddAttachedParticle)(Zombie *, int, int, int);
-
-inline void (*Zombie_StopEating)(Zombie *);
 
 inline void (*Zombie_DropArm)(Zombie *, unsigned int);
 
@@ -340,4 +340,6 @@ inline void (*old_Zombie_UpdateReanim)(Zombie*);
 inline int (*old_Zombie_GetBobsledPosition)(Zombie*);
 
 inline void (*old_Zombie_SquishAllInSquare)(Zombie*, int theX, int theY, ZombieAttackType theAttackType);
+
+inline void (*old_Zombie_StopEating)(Zombie*);
 #endif // PVZ_TV_1_1_5_ZOMBIE_H

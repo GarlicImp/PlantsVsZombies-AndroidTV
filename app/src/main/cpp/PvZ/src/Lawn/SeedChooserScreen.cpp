@@ -109,7 +109,7 @@ void SeedChooserScreen::Create(bool theIsZombieChooser) {
 
     // int mViewLawnButton = *((uint32_t *) seedChooserScreen + 958);
 
-    if (mGameMode == GameMode::GAMEMODE_TWO_PLAYER_VS) { // 去除对战中的冗余按钮
+    if (mGameMode == GameMode::GAMEMODE_MP_VS) { // 去除对战中的冗余按钮
         if (mStoreButton != nullptr) {
             mStoreButton->mDisabled = true;
             mStoreButton->mBtnNoDraw = true;
@@ -137,7 +137,7 @@ void SeedChooserScreen::Create(bool theIsZombieChooser) {
         }
     }
 
-    if (mApp->mGameMode != GameMode::GAMEMODE_TWO_PLAYER_VS && !mIsZombieChooser) {
+    if (mApp->mGameMode != GameMode::GAMEMODE_MP_VS && !mIsZombieChooser) {
         int holder[1];
         TodStringTranslate(holder, "[MENU_BUTTON]");
         mSeedChooserScreenMainMenuButton = MakeButton(104, &mButtonListener, this, holder);
@@ -150,7 +150,7 @@ void SeedChooserScreen::Create(bool theIsZombieChooser) {
 
 void LawnApp::KillSeedChooserScreen() {
     SeedChooserScreen *seedChooserScreen = mSeedChooserScreen;
-    if (seedChooserScreen != nullptr && mGameMode != GameMode::GAMEMODE_TWO_PLAYER_VS) {
+    if (seedChooserScreen != nullptr && mGameMode != GameMode::GAMEMODE_MP_VS) {
         Sexy_Widget_RemoveWidget(seedChooserScreen, mSeedChooserScreenMainMenuButton);
         GameButton_Delete(mSeedChooserScreenMainMenuButton);
         mSeedChooserScreenMainMenuButton = nullptr;
@@ -161,7 +161,7 @@ void LawnApp::KillSeedChooserScreen() {
 
 void SeedChooserScreen::RebuildHelpbar() {
     // 拓宽Widget大小
-    if (mApp->mGameMode != GameMode::GAMEMODE_TWO_PLAYER_VS && !mIsZombieChooser) {
+    if (mApp->mGameMode != GameMode::GAMEMODE_MP_VS && !mIsZombieChooser) {
         Sexy_Widget_Resize(this, mX, mY, 800, 600); // 原本(472,521)，改为(800,600)，不然没办法点击模仿者按钮和底栏三按钮。
     } else {
         Sexy_Widget_Resize(this, mX, mY, mWidth, 600);
@@ -195,7 +195,7 @@ void SeedChooserScreen::EnableStartButton(int theIsEnabled) {
 }
 
 void SeedChooserScreen::OnStartButton() {
-    if (mApp->mGameMode == GameMode::GAMEMODE_TWO_PLAYER_VS) {
+    if (mApp->mGameMode == GameMode::GAMEMODE_MP_VS) {
         // 如果是对战模式，则直接关闭种子选择界面。用于修复对战模式选卡完毕后点击开始按钮导致的闪退
         return SeedChooserScreen_CloseSeedChooser(this);
     }
@@ -205,7 +205,7 @@ void SeedChooserScreen::OnStartButton() {
 
 bool SeedChooserScreen::SeedNotAllowedToPick(SeedType theSeedType) {
     // 解除更多对战场地中的某些植物不能选取的问题，如泳池对战不能选荷叶，屋顶对战不能选花盆
-    if (mApp->mGameMode == GameMode::GAMEMODE_TWO_PLAYER_VS && VSBackGround > 1) {
+    if (mApp->mGameMode == GameMode::GAMEMODE_MP_VS && VSBackGround > 1) {
         // 直接在其他对战场景解锁全部植物即可
         return false;
     }
@@ -285,7 +285,7 @@ void SeedChooserScreen::DrawPacket(Sexy::Graphics* g, int x, int y, SeedType the
     // int theConvertedGrayness = ((theColor->mRed + theColor->mGreen + theColor->mBlue) / 3 + theGrayness) / 2;
     // 此算法用于在对战模式将非选卡的一方的卡片整体变暗。但这种算法下，55亮度会变成155亮度，115亮度会变成185亮度，严重影响非对战模式的选卡体验。所以需要修复。
 
-    int theConvertedGrayness = (mApp->mGameMode == GameMode::GAMEMODE_TWO_PLAYER_VS) ? ((theColor->mRed + theColor->mGreen + theColor->mBlue) / 3 + theGrayness) / 2 : theGrayness;
+    int theConvertedGrayness = (mApp->mGameMode == GameMode::GAMEMODE_MP_VS) ? ((theColor->mRed + theColor->mGreen + theColor->mBlue) / 3 + theGrayness) / 2 : theGrayness;
     DrawSeedPacket(g, x, y, theSeedType, theImitaterType, thePercentDark, theConvertedGrayness, theDrawCost, false, mIsZombieChooser, theUseCurrentCost);
 }
 
@@ -311,7 +311,7 @@ void SeedChooserScreen::ButtonDepress(int theId) {
 
 void SeedChooserScreen::GetSeedPositionInBank(int theIndex, int* x, int* y, int thePlayerIndex) {
     // 修复对战选卡时的错位
-    if (mApp->mGameMode == GameMode::GAMEMODE_TWO_PLAYER_VS) {
+    if (mApp->mGameMode == GameMode::GAMEMODE_MP_VS) {
         int SeedPacketPositionX = Board_GetSeedPacketPositionX(mBoard, theIndex, 0, mIsZombieChooser);
         *x = mSeedBank1->mX + SeedPacketPositionX - mX;
         *y = mSeedBank1->mY + 8 - mY;
@@ -324,7 +324,7 @@ void SeedChooserScreen::GetSeedPositionInBank(int theIndex, int* x, int* y, int 
 void SeedChooserScreen::ShowToolTip(unsigned int thePlayerIndex) {
     old_SeedChooserScreen_ShowToolTip(this, thePlayerIndex);
 
-    if (mApp->mGameMode == GameMode::GAMEMODE_TWO_PLAYER_VS && mIsZombieChooser) {
+    if (mApp->mGameMode == GameMode::GAMEMODE_MP_VS && mIsZombieChooser) {
         SeedType aSeedType = SeedChooserScreen_SeedHitTest(this, mCursorPositionX2, mCursorPositionY2);
         if (mChosenSeeds[aSeedType - SeedType::SEED_ZOMBIE_TOMBSTONE].mSeedState == ChosenSeedState::SEED_IN_BANK
             && mChosenSeeds[aSeedType - SeedType::SEED_ZOMBIE_TOMBSTONE].mCrazyDavePicked) {
@@ -351,7 +351,7 @@ void SeedChooserScreen::MouseMove(int x, int y) {
         SeedChooserScreen_GetSeedPositionInChooser(this, zombieSeedType, &mCursorPositionX2, &mCursorPositionY2);
         mSeedType2 = zombieSeedType;
     } else if (m1PChoosingSeeds) {
-        if (mApp->mGameMode == GameMode::GAMEMODE_TWO_PLAYER_VS && seedType > SeedType::SEED_MELONPULT)
+        if (mApp->mGameMode == GameMode::GAMEMODE_MP_VS && seedType > SeedType::SEED_MELONPULT)
             return;
         SeedChooserScreen_GetSeedPositionInChooser(this, seedType, &mCursorPositionX1, &mCursorPositionY1);
         mSeedType1 = seedType;
@@ -415,7 +415,7 @@ void SeedChooserScreen::MouseDown(int x, int y, int theClickCount) {
         }
     }
 
-    if (SeedChooserScreen_HasPacket(this, SeedType::SEED_IMITATER, 0) && mGameMode != GameMode::GAMEMODE_TWO_PLAYER_VS && !mIsZombieChooser) {
+    if (SeedChooserScreen_HasPacket(this, SeedType::SEED_IMITATER, 0) && mGameMode != GameMode::GAMEMODE_MP_VS && !mIsZombieChooser) {
         int mImitaterPositionX = 0;
         int mImitaterPositionY = 0;
         SeedChooserScreen_GetSeedPositionInChooser(this, SeedType::SEED_IMITATER, &mImitaterPositionX, &mImitaterPositionY);
@@ -451,7 +451,7 @@ void SeedChooserScreen::MouseDown(int x, int y, int theClickCount) {
         SeedChooserScreen_GetSeedPositionInChooser(this, zombieSeedType, &mCursorPositionX2, &mCursorPositionY2);
         mSeedType2 = zombieSeedType;
     } else if (m1PChoosingSeeds) {
-        if (mGameMode == GameMode::GAMEMODE_TWO_PLAYER_VS && aSeedType > SeedType::SEED_MELONPULT)
+        if (mGameMode == GameMode::GAMEMODE_MP_VS && aSeedType > SeedType::SEED_MELONPULT)
             return;
         SeedChooserScreen_GetSeedPositionInChooser(this, aSeedType, &mCursorPositionX1, &mCursorPositionY1);
         mSeedType1 = aSeedType;
@@ -474,7 +474,7 @@ void SeedChooserScreen::MouseDrag(int x, int y) {
             SeedChooserScreen_GetSeedPositionInChooser(this, zombieSeedType, &mCursorPositionX2, &mCursorPositionY2);
             mSeedType2 = zombieSeedType;
         } else if (m1PChoosingSeeds) {
-            if (mApp->mGameMode == GameMode::GAMEMODE_TWO_PLAYER_VS && aSeedType > SeedType::SEED_MELONPULT)
+            if (mApp->mGameMode == GameMode::GAMEMODE_MP_VS && aSeedType > SeedType::SEED_MELONPULT)
                 return;
             SeedChooserScreen_GetSeedPositionInChooser(this, aSeedType, &mCursorPositionX1, &mCursorPositionY1);
             mSeedType1 = aSeedType;

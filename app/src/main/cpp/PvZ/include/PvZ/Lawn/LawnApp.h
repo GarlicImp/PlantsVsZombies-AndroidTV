@@ -2,6 +2,7 @@
 #define PVZ_LAWN_LAWN_APP_H
 
 #include "PvZ/Enums.h"
+#include "PvZ/Symbols.h"
 
 class LawnApp : public SexyAppBase {
 public:
@@ -92,14 +93,13 @@ public:
     int *mDaveHelp;                                 // 707
     int *mMaskHelpWidget;                           // 708
 
-public:
     void KillSeedChooserScreen();
     bool IsIZombieLevel();
-    void PlayFoley(FoleyType theFoleyType);
-    void PlaySample(int theSoundNum);
+    void PlayFoley(FoleyType theFoleyType) { reinterpret_cast<void (*)(LawnApp *, FoleyType)>(LawnApp_PlayFoleyAddr)(this, theFoleyType); }
+    void PlaySample(int theSoundNum) { reinterpret_cast<void (*)(LawnApp *, int)>(LawnApp_PlaySampleAddr)(this, theSoundNum); }
     bool IsAdventureMode();
     bool IsScaryPotterLevel();
-    Reanimation* ReanimationGet(ReanimationID theReanimationID);
+    Reanimation *ReanimationGet(ReanimationID theReanimationID) { reinterpret_cast<void (*)(LawnApp *, ReanimationID)>(LawnApp_ReanimationGetAddr)(this, theReanimationID); }
 };
 
 /***************************************************************************************************************/
@@ -251,12 +251,6 @@ inline void (*old_Sexy_SexyAppBase_SexyAppBase)(SexyAppBase *appBase);
 inline bool (*old_LawnApp_HasSeedType)(LawnApp *lawnApp, SeedType theSeedType, int playerIndex);
 
 inline void (*old_LawnApp_DoNewOptions)(LawnApp *lawnApp, bool a2, unsigned int a3);
-
-inline void (*old_LawnApp_PlayFoley)(LawnApp*, FoleyType theFoleyType);
-
-inline void (*old_LawnApp_PlaySample)(LawnApp*, int theSoundNum);
-
-inline Reanimation* (*old_LawnApp_ReanimationGet)(LawnApp*, ReanimationID theReanimationID);
 
 
 void LawnApp_LawnApp(LawnApp *lawnApp);

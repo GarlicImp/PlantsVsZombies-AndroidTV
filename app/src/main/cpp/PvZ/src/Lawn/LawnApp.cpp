@@ -122,7 +122,7 @@ void LawnApp_DoConfirmBackToMain(LawnApp *lawnApp, bool save) {
         LawnApp_DoBackToMain(lawnApp);
         return;
     }
-    if ((gameMode == GameMode::GAMEMODE_TWO_PLAYER_VS || gameMode == GameMode::GAMEMODE_TREE_OF_WISDOM || enableNewOptionsDialog) && Sexy_SexyAppBase_GetDialog(lawnApp, Dialogs::DIALOG_NEWOPTIONS) == nullptr) {
+    if ((gameMode == GameMode::GAMEMODE_MP_VS || gameMode == GameMode::GAMEMODE_TREE_OF_WISDOM || enableNewOptionsDialog) && Sexy_SexyAppBase_GetDialog(lawnApp, Dialogs::DIALOG_NEWOPTIONS) == nullptr) {
         LawnApp_DoNewOptions(lawnApp, false, 0);
         return;
     }
@@ -191,7 +191,7 @@ bool LawnApp_CanShopLevel(LawnApp *lawnApp) {
     // 决定是否在当前关卡显示道具栏
     if (disableShop)
         return false;
-    if (lawnApp->mGameMode == GameMode::GAMEMODE_TWO_PLAYER_VS || LawnApp_IsCoopMode(lawnApp))
+    if (lawnApp->mGameMode == GameMode::GAMEMODE_MP_VS || LawnApp_IsCoopMode(lawnApp))
         return false;
     return old_LawnApp_CanShopLevel(lawnApp);
 }
@@ -478,36 +478,15 @@ bool LawnApp::IsIZombieLevel() {
         || mGameMode == GameMode::GAMEMODE_PUZZLE_I_ZOMBIE_ENDLESS;
 }
 
-void TodFoley::PlayFoley(FoleyType theFoleyType) {
-    return old_TodFoley_PlayFoley(this, theFoleyType);
-}
-
-void LawnApp::PlayFoley(FoleyType theFoleyType) {
-    if (!mMuteSoundsForCutscene)
-    {
-        mSoundSystem->PlayFoley(theFoleyType);
-    }
-}
-
-void LawnApp::PlaySample(int theSoundNum) {
-    return old_LawnApp_PlaySample(this, theSoundNum);
-}
-
-bool LawnApp::IsAdventureMode()
-{
+bool LawnApp::IsAdventureMode() {
     return mGameMode == GameMode::GAMEMODE_ADVENTURE;
 }
 
-bool LawnApp::IsScaryPotterLevel()
-{
+bool LawnApp::IsScaryPotterLevel() {
     if (mGameMode >= GameMode::GAMEMODE_SCARY_POTTER_1 && mGameMode <= GameMode::GAMEMODE_SCARY_POTTER_9)
         return true;
 
     return IsAdventureMode() && mPlayerInfo->mLevel == 35;
-}
-
-Reanimation* LawnApp::ReanimationGet(ReanimationID theReanimationID) {
-    return old_LawnApp_ReanimationGet(this, theReanimationID);
 }
 
 

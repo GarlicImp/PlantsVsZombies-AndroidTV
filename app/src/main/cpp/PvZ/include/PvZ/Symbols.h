@@ -278,6 +278,7 @@ inline void *ChallengeScreen_KeyDownAddr;
 inline void *ChallengeScreen_UpdateButtonsAddr;
 inline void *ChallengeScreen_ButtonPressAddr;
 inline void *ChallengeScreen_ButtonDepressAddr;
+inline void *ChallengeScreen_SetUnlockChallengeIndexAddr;
 
 
 inline void *GamepadControls_ButtonDownFireCobcannonTestAddr;
@@ -303,6 +304,7 @@ inline void *Zombie_UpdateZombiePeaHeadAddr;
 inline void *Zombie_GetZombieRectAddr;
 inline void *Zombie_UpdateZombieGatlingHeadAddr;
 inline void *Zombie_UpdateZombieJalapenoHeadAddr;
+inline void *Zombie_UpdateZombieSquashHeadAddr;
 inline void *Zombie_DrawBossPartAddr;
 inline void *Zombie_BossSpawnAttackAddr;
 inline void *Zombie_DrawBungeeCordAddr;
@@ -1414,6 +1416,7 @@ inline bool GetFunctionAddr() {
     ChallengeScreen_UpdateButtonsAddr = dlsym(handle, "_ZN15ChallengeScreen13UpdateButtonsEv");
     ChallengeScreen_ButtonPressAddr = dlsym(handle, "_ZN15ChallengeScreen11ButtonPressEi");
     ChallengeScreen_ButtonDepressAddr = dlsym(handle, "_ZN15ChallengeScreen13ButtonDepressEi");
+    ChallengeScreen_SetUnlockChallengeIndexAddr = dlsym(handle, "_ZN15ChallengeScreen23SetUnlockChallengeIndexE13ChallengePageb");
 
 
     GamepadControls_ButtonDownFireCobcannonTestAddr = dlsym(handle, "_ZN15GamepadControls27ButtonDownFireCobcannonTestEv");
@@ -1438,6 +1441,7 @@ inline bool GetFunctionAddr() {
     Zombie_UpdateZombiePeaHeadAddr = dlsym(handle, "_ZN6Zombie19UpdateZombiePeaHeadEv");
     Zombie_UpdateZombieGatlingHeadAddr = dlsym(handle, "_ZN6Zombie23UpdateZombieGatlingHeadEv");
     Zombie_UpdateZombieJalapenoHeadAddr = dlsym(handle, "_ZN6Zombie24UpdateZombieJalapenoHeadEv");
+    Zombie_UpdateZombieSquashHeadAddr = dlsym(handle, "_ZN6Zombie22UpdateZombieSquashHeadEv");
     Zombie_GetZombieRectAddr = dlsym(handle, "_ZN6Zombie13GetZombieRectEv");
     Zombie_DrawBossPartAddr = dlsym(handle, "_ZN6Zombie12DrawBossPartEPN4Sexy8GraphicsE8BossPart");
     Zombie_ZombieInitializeAddr = dlsym(handle, "_ZN6Zombie16ZombieInitializeEi10ZombieTypebPS_ib");

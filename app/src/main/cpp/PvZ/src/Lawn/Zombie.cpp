@@ -380,7 +380,7 @@ void Zombie::UpdateZombieJalapenoHead() {
     {
         mApp->PlayFoley(FoleyType::FOLEY_JALAPENO_IGNITE);
         mApp->PlayFoley(FoleyType::FOLEY_JUICY);
-        Board_DoFwoosh(mBoard, mRow);
+        mBoard->DoFwoosh(mRow);
         mBoard->ShakeBoard(3, -4);
 
         if (mMindControlled) // 魅惑修复
@@ -398,6 +398,127 @@ void Zombie::UpdateZombieJalapenoHead() {
         }
     }
 }
+
+//void Zombie::UpdateZombieSquashHead()
+//{
+//    if (mHasHead && mIsEating && mZombiePhase == ZombiePhase::PHASE_SQUASH_PRE_LAUNCH)
+//    {
+//        StopEating();
+//        PlayZombieReanim("anim_idle", ReanimLoopType::REANIM_LOOP, 20, 12.0f);
+//        mHasHead = false;
+//
+//        Reanimation* aHeadReanim = mApp->ReanimationGet(mSpecialHeadReanimID);
+//        aHeadReanim->PlayReanim("anim_jumpup", ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD, 20, 24.0f);
+//        aHeadReanim->mRenderOrder = mRenderOrder + 1;
+//        aHeadReanim->SetPosition(mPosX + 6.0f, mPosY - 21.0f);
+//
+//        Reanimation* aBodyReanim = mApp->ReanimationGet(mBodyReanimID);
+//        ReanimatorTrackInstance* aTrackInstance = aBodyReanim->GetTrackInstanceByName("anim_head1");
+//        AttachmentDetach(aTrackInstance->mAttachmentID);
+//        aHeadReanim->OverrideScale(0.75f, 0.75f);
+//        aHeadReanim->mOverlayMatrix.m10 = 0.0f;
+//
+//        mZombiePhase = ZombiePhase::PHASE_SQUASH_RISING;
+//        mPhaseCounter = 95;
+//    }
+//
+//    if (mZombiePhase == ZombiePhase::PHASE_SQUASH_RISING)
+//    {
+//        int aDestX = mBoard->GridToPixelX(mBoard->PixelToGridXKeepOnBoard(mX, mY), mRow);
+//
+//        if (mMindControlled)
+//        {
+//            Zombie* aZombie = FindZombieTarget();
+//            if (aZombie)
+//            {
+//                aDestX = aZombie->ZombieTargetLeadX(0.0f);
+//            }
+//            else
+//            {
+//                aDestX += 90.0f * mScaleZombie;
+//            }
+//        }
+//
+//        int aPosX = TodAnimateCurve(50, 20, mPhaseCounter, 0, aDestX - mPosX, TodCurves::CURVE_EASE_IN_OUT);
+//        int aPosY = TodAnimateCurve(50, 20, mPhaseCounter, 0, -20, TodCurves::CURVE_EASE_IN_OUT);
+//
+//        Reanimation* aHeadReanim = mApp->ReanimationGet(mSpecialHeadReanimID);
+//        aHeadReanim->SetPosition(mPosX + aPosX + 6.0f, mPosY + aPosY - 21.0f);
+//
+//        if (mPhaseCounter == 0)
+//        {
+//            aHeadReanim = mApp->ReanimationGet(mSpecialHeadReanimID);
+//            aHeadReanim->PlayReanim("anim_jumpdown", ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD, 0, 60.0f);
+//            mZombiePhase = ZombiePhase::PHASE_SQUASH_FALLING;
+//            mPhaseCounter = 10;
+//        }
+//    }
+//
+//    if (mZombiePhase == ZombiePhase::PHASE_SQUASH_FALLING)
+//    {
+//        int aPosY = TodAnimateCurve(10, 0, mPhaseCounter, -20, 74, TodCurves::CURVE_LINEAR);
+//        int aDestX = mBoard->GridToPixelX(mBoard->PixelToGridXKeepOnBoard(mX, mY), mRow);
+//
+//        if (mMindControlled)
+//        {
+//            Zombie* aZombie = FindZombieTarget();
+//            if (aZombie)
+//            {
+//                aDestX = aZombie->ZombieTargetLeadX(0.0f);
+//            }
+//            else
+//            {
+//                aDestX += 90.0f * mScaleZombie;
+//            }
+//        }
+//
+//        Reanimation* aHeadReanim = mApp->ReanimationGet(mSpecialHeadReanimID);
+//        aHeadReanim->SetPosition(mPosX + 6.0f + aDestX - mPosX, mPosY - 21.0f + aPosY);
+//
+//        if (mPhaseCounter == 2)
+//        {
+//            if (mMindControlled)  // 魅惑修复
+//            {
+//                Rect aAttackRect(aDestX - 73, mPosY + 4, 65, 90);  // 具体数值未实测，待定
+//
+//                Zombie* aZombie = nullptr;
+//                while (mBoard->IterateZombies(aZombie))
+//                {
+//                    if ((aZombie->mRow == mRow || aZombie->mZombieType == ZombieType::ZOMBIE_BOSS) && aZombie->EffectedByDamage(13U))
+//                    {
+//                        Rect aZombieRect = aZombie->GetZombieRect();
+//                        if (GetRectOverlap(aAttackRect, aZombieRect) > (aZombie->mZombieType == ZombieType::ZOMBIE_FOOTBALL ? -20 : 0))
+//                        {
+//                            aZombie->TakeDamage(1800, 18U);
+//                        }
+//                    }
+//                }
+//            }
+//            else
+//            {
+//                SquishAllInSquare(mBoard->PixelToGridXKeepOnBoard(mX, mY), mRow, ZombieAttackType::ATTACKTYPE_CHEW);
+//            }
+//        }
+//
+//        if (mPhaseCounter == 0)
+//        {
+//            mZombiePhase = ZombiePhase::PHASE_SQUASH_DONE_FALLING;
+//            mPhaseCounter = 100;
+//
+//            mBoard->ShakeBoard(1, 4);
+//            mApp->PlayFoley(FoleyType::FOLEY_THUMP);
+//        }
+//    }
+//
+//    if (mZombiePhase == ZombiePhase::PHASE_SQUASH_DONE_FALLING && mPhaseCounter == 0)
+//    {
+//        Reanimation* aHeadReanim = mApp->ReanimationGet(mSpecialHeadReanimID);
+//        aHeadReanim->ReanimationDie();
+//        mSpecialHeadReanimID = ReanimationID::REANIMATIONID_NULL;
+//
+//        TakeDamage(1800, 9U);
+//    }
+//}
 
 void Zombie::Draw(Sexy::Graphics *g) {
     // 根据玩家的“僵尸显血”功能是否开启，决定是否在游戏的原始old_Zombie_Draw函数执行完后额外绘制血量文本。
@@ -491,7 +612,7 @@ int Zombie::GetDancerFrame() {
 bool Zombie::ZombieTypeCanGoInPool(ZombieType theZombieType) {
     // 修复泳池对战的僵尸们走水路时不攻击植物
     LawnApp *lawnApp = (LawnApp *)*gLawnApp_Addr;
-    if (lawnApp->mGameMode == GameMode::GAMEMODE_TWO_PLAYER_VS && (VSBackGround == 3 || VSBackGround == 4 || VSBackGround == 9)) {
+    if (lawnApp->mGameMode == GameMode::GAMEMODE_MP_VS && (VSBackGround == 3 || VSBackGround == 4 || VSBackGround == 9)) {
         return true;
     }
 
@@ -500,7 +621,7 @@ bool Zombie::ZombieTypeCanGoInPool(ZombieType theZombieType) {
 
 void Zombie::RiseFromGrave(int theGridX, int theGridY) {
     // 修复对战切换场地为泳池后的闪退BUG。但是仅仅是修复闪退，泳池对战还谈不上能玩的程度
-    if (mApp->mGameMode == GameMode::GAMEMODE_TWO_PLAYER_VS) {
+    if (mApp->mGameMode == GameMode::GAMEMODE_MP_VS) {
 
         if (mBoard->mPlantRow[theGridY] == PlantRowType::PLANTROW_POOL) {
             //                if (old_ZombieTypeCanGoInPool(mZombieType)) {
@@ -552,6 +673,10 @@ void Zombie::CheckForBoardEdge() {
     }
 }
 
+void Zombie::StopEating() {
+    return old_Zombie_StopEating(this);
+}
+
 void Zombie::EatPlant(Plant *thePlant) {
     // 修复正向出土的矿工不上梯子
     if (mZombiePhase == ZombiePhase::PHASE_DANCER_DANCING_IN) {
@@ -565,7 +690,7 @@ void Zombie::EatPlant(Plant *thePlant) {
     int aRow = thePlant->mRow;
     if (Board_GetLadderAt(mBoard, aPlantCol, aRow) != nullptr && mZombieType == ZombieType::ZOMBIE_DIGGER && mZombiePhase == ZombiePhase::PHASE_DIGGER_WALKING_WITHOUT_AXE
         && !IsWalkingBackwards()) {
-        Zombie_StopEating(this);
+        StopEating();
         if (mZombieHeight == ZombieHeight::HEIGHT_ZOMBIE_NORMAL && mUseLadderCol != aPlantCol) {
             mZombieHeight = ZombieHeight::HEIGHT_UP_LADDER;
             mUseLadderCol = aPlantCol;
