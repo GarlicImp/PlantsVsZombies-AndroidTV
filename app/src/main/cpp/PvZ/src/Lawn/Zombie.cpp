@@ -1,16 +1,18 @@
 #include "PvZ/Lawn/Zombie.h"
-#include "PvZ/Symbols.h"
-#include "PvZ/SexyAppFramework/Graphics.h"
-#include "PvZ/Misc.h"
 #include "PvZ/GlobalVariable.h"
 #include "PvZ/Lawn/Board.h"
+#include "PvZ/Lawn/Challenge.h"
 #include "PvZ/Lawn/GridItem.h"
 #include "PvZ/Lawn/LawnApp.h"
 #include "PvZ/Lawn/Plant.h"
+#include "PvZ/Lawn/Projectile.h"
 #include "PvZ/Lawn/Reanimation.h"
 #include "PvZ/MagicAddr.h"
-#include "PvZ/Lawn/Projectile.h"
-#include "PvZ/Lawn/Challenge.h"
+#include "PvZ/Misc.h"
+#include "PvZ/SexyAppFramework/Graphics.h"
+#include "PvZ/Symbols.h"
+#include "PvZ/TodLib/TodCommon.h"
+using namespace Sexy;
 
 ZombieDefinition gZombieDefs[NUM_ZOMBIE_TYPES] = {  //0x69DA80
     { ZOMBIE_NORMAL,            REANIM_ZOMBIE,              1,      1,      1,      4000,   _S("ZOMBIE") },
@@ -65,7 +67,7 @@ void Zombie::ZombieInitialize(int theRow, ZombieType theType, bool theVariant, Z
     //    }
     if (zombieSetScale != 0 && mZombieType != ZombieType::ZOMBIE_BOSS) {
         mScaleZombie = 0.2 * zombieSetScale;
-        Zombie_UpdateAnimationSpeed(this);
+        UpdateAnimSpeed();
         float theRatio = mScaleZombie * mScaleZombie;
         mBodyHealth *= theRatio;
         mHelmHealth *= theRatio;
@@ -80,6 +82,16 @@ void Zombie::ZombieInitialize(int theRow, ZombieType theType, bool theVariant, Z
     if (IsZombatarZombie(theType) && theFromWave != -3) {
         SetZombatarReanim();
     }
+}
+
+bool Zombie::IsOnBoard()
+{
+    if (mFromWave == Zombie::ZOMBIE_WAVE_CUTSCENE || mFromWave == Zombie::ZOMBIE_WAVE_UI)
+    {
+        return false;
+    }
+
+    return true;
 }
 
 void Zombie::Update() {
@@ -349,10 +361,10 @@ void Zombie::BurnRow(int theRow) {
 
     Zombie *aZombie = nullptr;
     while (Board_IterateZombies(mBoard, &aZombie)) {
-        if ((aZombie->mZombieType == ZombieType::ZOMBIE_BOSS || aZombie->mRow == theRow) && Zombie_EffectedByDamage(aZombie, 127))
+        if ((aZombie->mZombieType == ZombieType::ZOMBIE_BOSS || aZombie->mRow == theRow) && aZombie->EffectedByDamage(127))
         {
-            Zombie_RemoveColdEffects(aZombie);
-            Zombie_ApplyBurn(aZombie);
+            aZombie->RemoveColdEffects();
+            aZombie->ApplyBurn();
         }
     }
 
@@ -619,6 +631,25 @@ bool Zombie::ZombieTypeCanGoInPool(ZombieType theZombieType) {
     return old_ZombieTypeCanGoInPool(theZombieType);
 }
 
+Rect Zombie::GetZombieRect()
+{
+    Rect aZombieRect = mZombieRect;
+    if (IsWalkingBackwards())
+    {
+        aZombieRect.mX = mWidth - aZombieRect.mX - aZombieRect.mWidth;
+    }
+
+    ZombieDrawPosition aDrawPos;
+    GetDrawPos(aDrawPos);
+    aZombieRect.Offset(mX, mY + aDrawPos.mBodyY);
+    if (aDrawPos.mClipHeight > CLIP_HEIGHT_LIMIT)
+    {
+        aZombieRect.mHeight -= aDrawPos.mClipHeight;
+    }
+
+    return aZombieRect;
+}
+
 void Zombie::RiseFromGrave(int theGridX, int theGridY) {
     // 修复对战切换场地为泳池后的闪退BUG。但是仅仅是修复闪退，泳池对战还谈不上能玩的程度
     if (mApp->mGameMode == GameMode::GAMEMODE_MP_VS) {
@@ -710,7 +741,7 @@ void Zombie::DetachShield() {
 
 void Zombie::BossSpawnAttack() {
     // 修复泳池僵王为六路放僵尸时闪退
-    Zombie_RemoveColdEffects(this);
+    RemoveColdEffects();
     mZombiePhase = ZombiePhase::PHASE_BOSS_SPAWNING;
     if (mBossMode == 0) {
         mSummonCounter = RandRangeInt(450, 550);
@@ -819,6 +850,101 @@ bool Zombie::CanBeFrozen()
     return mZombieType != ZombieType::ZOMBIE_BUNGEE || mZombiePhase == ZombiePhase::PHASE_BUNGEE_AT_BOTTOM;
 }
 
+bool Zombie::EffectedByDamage(unsigned int theDamageRangeFlags)
+{
+    if (!TestBit(theDamageRangeFlags, (int)DamageRangeFlags::DAMAGES_DYING) && IsDeadOrDying())
+    {
+        return false;
+    }
+
+    if (TestBit(theDamageRangeFlags, (int)DamageRangeFlags::DAMAGES_ONLY_MINDCONTROLLED))
+    {
+        if (!mMindControlled)
+        {
+            return false;
+        }
+    }
+    else if (mMindControlled)
+    {
+        return false;
+    }
+
+    if (mZombieType == ZombieType::ZOMBIE_BUNGEE && mZombiePhase != ZombiePhase::PHASE_BUNGEE_AT_BOTTOM && mZombiePhase != ZombiePhase::PHASE_BUNGEE_GRABBING)
+    {
+        return false;  // 蹦极僵尸只有在停留时才会受到攻击
+    }
+
+    if (mZombieHeight == ZombieHeight::HEIGHT_GETTING_BUNGEE_DROPPED)
+    {
+        return false;  // 被空投的过程中不会受到攻击
+    }
+
+    if (mZombieType == ZombieType::ZOMBIE_BOSS)
+    {
+        Reanimation* aBodyReanim = mApp->ReanimationGet(mBodyReanimID);
+        if (mZombiePhase == ZombiePhase::PHASE_BOSS_HEAD_ENTER && aBodyReanim->mAnimTime < 0.5f)
+        {
+            return false;
+        }
+        if (mZombiePhase == ZombiePhase::PHASE_BOSS_HEAD_LEAVE && aBodyReanim->mAnimTime > 0.5f)
+        {
+            return false;
+        }
+
+        if (mZombiePhase != ZombiePhase::PHASE_BOSS_HEAD_IDLE_BEFORE_SPIT &&
+            mZombiePhase != ZombiePhase::PHASE_BOSS_HEAD_IDLE_AFTER_SPIT &&
+            mZombiePhase != ZombiePhase::PHASE_BOSS_HEAD_SPIT)
+        {
+            return false;  // 僵王博士只有在低头状态下才会受到攻击
+        }
+    }
+
+    if (mZombieType == ZombieType::ZOMBIE_BOBSLED && GetBobsledPosition() > 0)
+    {
+        return false;  // 存在雪橇时，只有领头僵尸会受到攻击
+    }
+
+    if (mZombiePhase == ZombiePhase::PHASE_POLEVAULTER_IN_VAULT ||
+        mZombiePhase == ZombiePhase::PHASE_IMP_GETTING_THROWN ||
+        mZombiePhase == ZombiePhase::PHASE_DIGGER_RISING ||
+        mZombiePhase == ZombiePhase::PHASE_DIGGER_TUNNELING_PAUSE_WITHOUT_AXE ||
+        mZombiePhase == ZombiePhase::PHASE_DIGGER_RISE_WITHOUT_AXE ||
+        mZombiePhase == ZombiePhase::PHASE_DOLPHIN_INTO_POOL ||
+        mZombiePhase == ZombiePhase::PHASE_DOLPHIN_IN_JUMP ||
+        mZombiePhase == ZombiePhase::PHASE_SNORKEL_INTO_POOL ||
+        mZombiePhase == ZombiePhase::PHASE_BALLOON_POPPING ||
+        mZombiePhase == ZombiePhase::PHASE_RISING_FROM_GRAVE ||
+        mZombiePhase == ZombiePhase::PHASE_BOBSLED_CRASHING ||
+        mZombiePhase == ZombiePhase::PHASE_DANCER_RISING)
+    {
+        return TestBit(theDamageRangeFlags, (int)DamageRangeFlags::DAMAGES_OFF_GROUND);
+    }
+
+    if (mZombieType != ZombieType::ZOMBIE_BOBSLED && GetZombieRect().mX > WIDE_BOARD_WIDTH)
+    {
+        return false;  // 除雪橇僵尸小队外，场外的僵尸不会受到攻击
+    }
+
+    bool submerged = mZombieType == ZombieType::ZOMBIE_SNORKEL && mInPool && !mIsEating;
+    if (TestBit(theDamageRangeFlags, (int)DamageRangeFlags::DAMAGES_SUBMERGED) && submerged)
+    {
+        return true;
+    }
+
+    bool underground = mZombiePhase == ZombiePhase::PHASE_DIGGER_TUNNELING;
+    if (TestBit(theDamageRangeFlags, (int)DamageRangeFlags::DAMAGES_UNDERGROUND) && underground)
+    {
+        return true;
+    }
+
+    if (TestBit(theDamageRangeFlags, (int)DamageRangeFlags::DAMAGES_FLYING) && IsFlying())
+    {
+        return true;
+    }
+
+    return TestBit(theDamageRangeFlags, (int)DamageRangeFlags::DAMAGES_GROUND) && !IsFlying() && !submerged && !underground;
+}
+
 void Zombie::AddButter() {
     if (CanBeFrozen() && mZombieType != ZombieType::ZOMBIE_BOSS) {
         // Ban冰车 跳跳 僵王 飞翔的气球 跳跃的撑杆 即将跳水的潜水 等等
@@ -826,7 +952,7 @@ void Zombie::AddButter() {
             if (mButteredCounter == 0) {
                 mApp->PlayFoley(FoleyType::FOLEY_BUTTER);
             }
-            Zombie_ApplyButter(this);
+            ApplyButter();
         }
     }
 }
@@ -907,9 +1033,9 @@ void Zombie::DrawBungeeCord(Sexy::Graphics *graphics, int theOffsetX, int theOff
     int aCordCelHeight = Sexy_Image_GetCelHeight(*Sexy_IMAGE_BUNGEECORD_Addr) * mScaleZombie;
     float aPosX = 0.0f;
     float aPosY = 0.0f;
-    Zombie_GetTrackPosition(this, "Zombie_bungi_body", &aPosX, &aPosY);
+    GetTrackPosition("Zombie_bungi_body", aPosX, aPosY);
     bool aSetClip = false;
-    if (Zombie_IsOnBoard(this) && LawnApp_IsFinalBossLevel(mApp)) {
+    if (IsOnBoard() && LawnApp_IsFinalBossLevel(mApp)) {
         Zombie *aBossZombie = Board_GetBossZombie(mBoard);
         int aClipAmount = 55;
         if (aBossZombie->mZombiePhase == ZombiePhase::PHASE_BOSS_BUNGEES_LEAVE) {
@@ -933,6 +1059,274 @@ void Zombie::DrawBungeeCord(Sexy::Graphics *graphics, int theOffsetX, int theOff
     if (aSetClip) {
         Sexy_Graphics_ClearClipRect(graphics);
     }
+}
+
+void Zombie::GetDrawPos(ZombieDrawPosition& theDrawPos)
+{
+    theDrawPos.mImageOffsetX = mPosX - mX;
+    theDrawPos.mImageOffsetY = mPosY - mY;
+
+    if (mIsEating)
+    {
+        theDrawPos.mHeadX = 47;
+        theDrawPos.mHeadY = 4;
+    }
+    else
+    {
+        switch (mFrame)
+        {
+            case 0:
+                theDrawPos.mHeadX = 50;
+                theDrawPos.mHeadY = 2;
+                break;
+            case 1:
+                theDrawPos.mHeadX = 49;
+                theDrawPos.mHeadY = 1;
+                break;
+            case 2:
+                theDrawPos.mHeadX = 49;
+                theDrawPos.mHeadY = 2;
+                break;
+            case 3:
+                theDrawPos.mHeadX = 48;
+                theDrawPos.mHeadY = 4;
+                break;
+            case 4:
+                theDrawPos.mHeadX = 48;
+                theDrawPos.mHeadY = 5;
+                break;
+            case 5:
+                theDrawPos.mHeadX = 48;
+                theDrawPos.mHeadY = 4;
+                break;
+            case 6:
+                theDrawPos.mHeadX = 48;
+                theDrawPos.mHeadY = 2;
+                break;
+            case 7:
+                theDrawPos.mHeadX = 49;
+                theDrawPos.mHeadY = 1;
+                break;
+            case 8:
+                theDrawPos.mHeadX = 49;
+                theDrawPos.mHeadY = 2;
+                break;
+            case 9:
+                theDrawPos.mHeadX = 50;
+                theDrawPos.mHeadY = 4;
+                break;
+            case 10:
+                theDrawPos.mHeadX = 50;
+                theDrawPos.mHeadY = 5;
+                break;
+            default:
+                theDrawPos.mHeadX = 50;
+                theDrawPos.mHeadY = 4;
+                break;
+        }
+    }
+
+    theDrawPos.mArmY = theDrawPos.mHeadY / 2;
+
+    switch (mZombieType)
+    {
+        case ZombieType::ZOMBIE_FOOTBALL:
+            theDrawPos.mImageOffsetY -= 16.0f;
+            break;
+        case ZombieType::ZOMBIE_YETI:
+            theDrawPos.mImageOffsetY -= 20.0f;
+            break;
+        case ZombieType::ZOMBIE_CATAPULT:
+            theDrawPos.mImageOffsetX -= 25.0f;
+            theDrawPos.mImageOffsetY -= 18.0f;
+            break;
+        case ZombieType::ZOMBIE_POGO:
+            theDrawPos.mImageOffsetY += 16.0f;
+            break;
+        case ZombieType::ZOMBIE_BALLOON:
+            theDrawPos.mImageOffsetY += 17.0f;
+            break;
+        case ZombieType::ZOMBIE_POLEVAULTER:
+            theDrawPos.mImageOffsetX -= 6.0f;
+            theDrawPos.mImageOffsetY -= 11.0f;
+            break;
+        case ZombieType::ZOMBIE_ZAMBONI:
+            theDrawPos.mImageOffsetX += 68.0f;
+            theDrawPos.mImageOffsetY -= 23.0f;
+            break;
+        case ZombieType::ZOMBIE_GARGANTUAR:
+        case ZombieType::ZOMBIE_REDEYE_GARGANTUAR:
+            theDrawPos.mImageOffsetY -= 8.0f;
+            break;
+        case ZombieType::ZOMBIE_BOBSLED:
+            theDrawPos.mImageOffsetY -= 12.0f;
+            break;
+    }
+
+    if (mZombiePhase == ZombiePhase::PHASE_RISING_FROM_GRAVE)
+    {
+        theDrawPos.mBodyY = -mAltitude;
+
+        if (mInPool)
+        {
+            theDrawPos.mClipHeight = theDrawPos.mBodyY;
+        }
+        else
+        {
+            float aHeightLimit = min(mPhaseCounter, 40.0f);
+            theDrawPos.mClipHeight = theDrawPos.mBodyY + aHeightLimit;
+        }
+
+        if (IsOnHighGround())
+        {
+            theDrawPos.mBodyY -= HIGH_GROUND_HEIGHT;
+        }
+
+        return;
+    }
+
+    if (mZombieType == ZombieType::ZOMBIE_DOLPHIN_RIDER)
+    {
+        theDrawPos.mBodyY = -mAltitude;
+        theDrawPos.mClipHeight = CLIP_HEIGHT_OFF;
+
+        if (mZombiePhase == ZombiePhase::PHASE_DOLPHIN_INTO_POOL)
+        {
+            Reanimation* aBodyReanim = mApp->ReanimationGet(mBodyReanimID);
+
+            if (aBodyReanim->mAnimTime >= 0.56f && aBodyReanim->mAnimTime <= 0.65f)  // 跳上海豚的起跳过程
+            {
+                theDrawPos.mClipHeight = 0.0f;
+            }
+            else if (aBodyReanim->mAnimTime >= 0.75f)  // 跳上海豚的下落过程
+            {
+                theDrawPos.mClipHeight = -mAltitude - 10.0f;
+            }
+        }
+        else if (mZombiePhase == ZombiePhase::PHASE_DOLPHIN_RIDING)
+        {
+            theDrawPos.mImageOffsetX += 70.0f;  // 额外 70 像素的横坐标偏移用于弥补跳上海豚后的 mPosX -= 70.0f
+
+            if (mZombieHeight == ZombieHeight::HEIGHT_DRAGGED_UNDER)
+            {
+                theDrawPos.mClipHeight = -mAltitude - 15.0f;
+            }
+            else
+            {
+                theDrawPos.mClipHeight = -mAltitude - 10.0f;
+            }
+        }
+        else if (mZombiePhase == ZombiePhase::PHASE_DOLPHIN_IN_JUMP)
+        {
+            theDrawPos.mImageOffsetX += 70.0f + mAltitude;
+
+            Reanimation* aBodyReanim = mApp->ReanimationGet(mBodyReanimID);
+            if (aBodyReanim->mAnimTime <= 0.06f)  // 起跳出水之前
+            {
+                theDrawPos.mClipHeight = -mAltitude - 10.0f;
+            }
+            else if (aBodyReanim->mAnimTime >= 0.5f && aBodyReanim->mAnimTime <= 0.76f) // 起跳过程中（脱离水面后至重新入水前）
+            {
+                theDrawPos.mClipHeight = -13.0f;
+            }
+        }
+        else if (mZombiePhase == ZombiePhase::PHASE_DOLPHIN_WALKING_IN_POOL || mZombiePhase == ZombiePhase::PHASE_ZOMBIE_DYING)
+        {
+            theDrawPos.mImageOffsetY += 50.0f;  // 额外 50 像素的横坐标偏移用于弥补跳跃过程中前进的距离
+
+            if (mZombiePhase == ZombiePhase::PHASE_ZOMBIE_DYING)
+            {
+                theDrawPos.mClipHeight = -mAltitude + 44.0f;
+            }
+            else if (mZombieHeight == ZombieHeight::HEIGHT_DRAGGED_UNDER)
+            {
+                theDrawPos.mClipHeight = -mAltitude + 36.0f;
+            }
+        }
+        else if (mZombiePhase == ZombiePhase::PHASE_DOLPHIN_WALKING && mZombieHeight == ZombieHeight::HEIGHT_OUT_OF_POOL)
+        {
+            theDrawPos.mClipHeight = -mAltitude;
+        }
+        else if (mZombiePhase == ZombiePhase::PHASE_DOLPHIN_WALKING_WITHOUT_DOLPHIN && mZombieHeight == ZombieHeight::HEIGHT_OUT_OF_POOL)
+        {
+            theDrawPos.mClipHeight = -mAltitude;
+        }
+    }
+    else if (mZombieType == ZombieType::ZOMBIE_SNORKEL)
+    {
+        theDrawPos.mBodyY = -mAltitude;
+        theDrawPos.mClipHeight = CLIP_HEIGHT_OFF;
+
+        if (mZombiePhase == ZombiePhase::PHASE_SNORKEL_INTO_POOL)
+        {
+            Reanimation* aBodyReanim = mApp->ReanimationGet(mBodyReanimID);
+            if (aBodyReanim->mAnimTime >= 0.8f)  // 入水后
+            {
+                theDrawPos.mClipHeight = -10.0f;
+            }
+        }
+        else if (mInPool)
+        {
+            theDrawPos.mClipHeight = -mAltitude - 5.0f;
+            theDrawPos.mClipHeight += 20.0f - 20.0f * mScaleZombie;
+        }
+    }
+    else if (mInPool)
+    {
+        theDrawPos.mBodyY = -mAltitude;
+        theDrawPos.mClipHeight = -mAltitude - 7.0f;
+        theDrawPos.mClipHeight += 10.0f - 10.0f * mScaleZombie;
+
+        if (mIsEating)
+        {
+            theDrawPos.mClipHeight += 7.0f;
+        }
+    }
+    else if (mZombiePhase == ZombiePhase::PHASE_DANCER_RISING)
+    {
+        theDrawPos.mBodyY = -mAltitude;
+        theDrawPos.mClipHeight = -mAltitude;
+
+        if (IsOnHighGround())
+        {
+            theDrawPos.mBodyY -= HIGH_GROUND_HEIGHT;
+        }
+    }
+    else if (mZombiePhase == ZombiePhase::PHASE_DIGGER_RISING || mZombiePhase == ZombiePhase::PHASE_DIGGER_RISE_WITHOUT_AXE)
+    {
+        theDrawPos.mBodyY = -mAltitude;
+
+        if (mPhaseCounter > 20)
+        {
+            theDrawPos.mClipHeight = -mAltitude;
+        }
+        else
+        {
+            theDrawPos.mClipHeight = CLIP_HEIGHT_OFF;
+        }
+    }
+    else if (mZombieType == ZombieType::ZOMBIE_BUNGEE)
+    {
+        theDrawPos.mBodyY = -mAltitude;
+        theDrawPos.mImageOffsetX -= 18.0f;
+
+        if (IsOnHighGround())
+        {
+            theDrawPos.mBodyY -= HIGH_GROUND_HEIGHT;
+        }
+
+        theDrawPos.mClipHeight = CLIP_HEIGHT_OFF;
+    }
+    else
+    {
+        theDrawPos.mBodyY = -mAltitude;
+        theDrawPos.mClipHeight = CLIP_HEIGHT_OFF;
+    }
+}
+
+bool Zombie::IsOnHighGround()
+{
+    return IsOnBoard() && mBoard->mGridSquareType[mBoard->PixelToGridXKeepOnBoard(mX + 75, mY)][mRow] == GridSquareType::GRIDSQUARE_HIGH_GROUND;
 }
 
 bool Zombie::IsTangleKelpTarget() {
@@ -990,6 +1384,68 @@ void Zombie::DropHead(unsigned int theDamageFlags) {
             mBossFireBallReanimID = ReanimationID::REANIMATIONID_NULL;
         }
     }
+}
+
+int Zombie::GetHelmDamageIndex()
+{
+    if (mHelmHealth < mHelmMaxHealth / 3)
+    {
+        return 2;
+    }
+
+    if (mHelmHealth < mHelmMaxHealth * 2 / 3)
+    {
+        return 1;
+    }
+
+    return 0;
+}
+
+int Zombie::GetBodyDamageIndex()
+{
+    if (mZombieType == ZombieType::ZOMBIE_BOSS)
+    {
+        if (mBodyHealth < mBodyMaxHealth / 2)
+        {
+            return 2;
+        }
+
+        if (mBodyHealth < mBodyMaxHealth * 4 / 5)
+        {
+            return 1;
+        }
+
+        return 0;
+    }
+    else
+    {
+        if (mBodyHealth < mBodyMaxHealth / 3)
+        {
+            return 2;
+        }
+
+        if (mBodyHealth < mBodyMaxHealth * 2 / 3)
+        {
+            return 1;
+        }
+
+        return 0;
+    }
+}
+
+int Zombie::GetShieldDamageIndex()
+{
+    if (mShieldHealth < mShieldMaxHealth / 3)
+    {
+        return 2;
+    }
+
+    if (mShieldHealth < mShieldMaxHealth * 2 / 3)
+    {
+        return 1;
+    }
+
+    return 0;
 }
 
 Plant* Zombie::FindPlantTarget(ZombieAttackType theAttackType) {

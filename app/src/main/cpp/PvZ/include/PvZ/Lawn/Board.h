@@ -308,6 +308,8 @@ public:
     void SpeedUpUpdate();
     void DrawShovelButton(Sexy::Graphics* g, LawnApp* theApp);
     void ShovelDown();
+    int PixelToGridXKeepOnBoard(int theX, int theY);
+    int PixelToGridYKeepOnBoard(int theX, int theY);
 
     void MouseMove(int x, int y);
     void MouseDown(int x, int y, int theClickCount);

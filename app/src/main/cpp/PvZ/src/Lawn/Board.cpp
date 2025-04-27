@@ -299,7 +299,7 @@ void Board::ZombiesWon(Zombie* theZombie) {
         return old_BoardZombiesWon(this, theZombie);
     }
     if (ZombieCanNotWon) {
-        Zombie_ApplyBurn(theZombie);
+        theZombie->ApplyBurn();
         theZombie->Zombie::DieNoLoot();
         return;
     }
@@ -990,7 +990,7 @@ void Board::Update() {
     }
 
     if (freezeAllZombies) {
-        for (Zombie *zombie = nullptr; Board_IterateZombies(this, &zombie); Zombie_HitIceTrap(zombie))
+        for (Zombie *zombie = nullptr; Board_IterateZombies(this, &zombie); zombie->HitIceTrap())
             ;
         freezeAllZombies = false;
     }
@@ -1563,7 +1563,7 @@ void Board::PickZombieWaves() {
             int &aZombiePoints = zombiePicker.mZombiePoints;
             aZombiePoints = i * 4 / 5 + 1;
             if (isFlagWave) {
-                int num2 = std::min(zombiePicker.mZombiePoints, 8);
+                int num2 = min(zombiePicker.mZombiePoints, 8);
                 zombiePicker.mZombiePoints = (int)(zombiePicker.mZombiePoints * 2.5f);
                 for (int k = 0; k < num2; k++) {
                     Board_PutZombieInWave(this, ZombieType::ZOMBIE_NORMAL, i, &zombiePicker);
@@ -1593,7 +1593,7 @@ void Board::PickZombieWaves() {
             int &aZombiePoints = zombiePicker.mZombiePoints;
             aZombiePoints = i * 4 / 5 + 1;
             if (isFlagWave) {
-                int num2 = std::min(zombiePicker.mZombiePoints, 8);
+                int num2 = min(zombiePicker.mZombiePoints, 8);
                 zombiePicker.mZombiePoints = (int)(zombiePicker.mZombiePoints * 2.5f);
                 for (int k = 0; k < num2; k++) {
                     Board_PutZombieInWave(this, ZombieType::ZOMBIE_NORMAL, i, &zombiePicker);
@@ -1615,7 +1615,7 @@ int Board_GetLiveGargantuarCount(Board *board) {
     int num = 0;
     Zombie *zombie = nullptr;
     while (Board_IterateZombies(board, (Zombie **)&zombie)) {
-        if (!zombie->mDead && zombie->mHasHead && !zombie->IsDeadOrDying() && Zombie_IsOnBoard(zombie)
+        if (!zombie->mDead && zombie->mHasHead && !zombie->IsDeadOrDying() && zombie->IsOnBoard()
             && (zombie->mZombieType == ZombieType::ZOMBIE_GARGANTUAR || zombie->mZombieType == ZombieType::ZOMBIE_REDEYE_GARGANTUAR)) {
             num++;
         }
@@ -1627,7 +1627,7 @@ int Board_GetLiveZombiesCount(Board *board) {
     int num = 0;
     Zombie *zombie = nullptr;
     while (Board_IterateZombies(board, (Zombie **)&zombie)) {
-        if (!zombie->mDead && zombie->mHasHead && !zombie->IsDeadOrDying() && Zombie_IsOnBoard(zombie)) {
+        if (!zombie->mDead && zombie->mHasHead && !zombie->IsDeadOrDying() && zombie->IsOnBoard()) {
             num++;
         }
     }
@@ -3283,6 +3283,18 @@ GridItem* Board::GetScaryPotAt(int theGridX, int theGridY) {
     return GetGridItemAt(GridItemType::GRIDITEM_SCARY_POT, theGridX, theGridY);
 }
 
+int Board::PixelToGridXKeepOnBoard(int theX, int theY)
+{
+    int aGridX = PixelToGridX(theX, theY);
+    return max(aGridX, 0);
+}
+
+int Board::PixelToGridYKeepOnBoard(int theX, int theY)
+{
+    int aGridY = PixelToGridY(max(theX, 80), theY);
+    return max(aGridY, 0);
+}
+
 void FixBoardAfterLoad(Board *board) {
     // 修复读档后的各种问题
     old_FixBoardAfterLoad(board);
@@ -3308,7 +3320,7 @@ void Board_FixReanimErrorAfterLoad(Board *board) {
 
         // 修复读档后盾牌贴图变为满血盾牌贴图、垃圾桶变为铁门
         if (zombie->mShieldType != ShieldType::SHIELDTYPE_NONE) {
-            int shieldDamageIndex = Zombie_GetShieldDamageIndex(zombie);
+            int shieldDamageIndex = zombie->GetShieldDamageIndex();
             switch (zombie->mShieldType) {
                 case ShieldType::SHIELDTYPE_DOOR:
                     switch (shieldDamageIndex) {
@@ -3358,7 +3370,7 @@ void Board_FixReanimErrorAfterLoad(Board *board) {
 
         // 修复读档后头盔贴图变为满血头盔贴图
         if (zombie->mHelmType != HelmType::HELMTYPE_NONE) {
-            int helmDamageIndex = Zombie_GetHelmDamageIndex(zombie);
+            int helmDamageIndex = zombie->GetHelmDamageIndex();
             switch (zombie->mHelmType) {
                 case HelmType::HELMTYPE_TRAFFIC_CONE:
                     switch (helmDamageIndex) {
@@ -3427,7 +3439,7 @@ void Board_FixReanimErrorAfterLoad(Board *board) {
 
         // 修复读档后巨人僵尸创可贴消失、红眼巨人变白眼巨人
         if (zombieType == ZombieType::ZOMBIE_GARGANTUAR || zombieType == ZombieType::ZOMBIE_REDEYE_GARGANTUAR) {
-            int bodyDamageIndex = Zombie_GetBodyDamageIndex(zombie);
+            int bodyDamageIndex = zombie->GetBodyDamageIndex();
             switch (bodyDamageIndex) {
                 case 0:
                     if (zombieType == ZombieType::ZOMBIE_REDEYE_GARGANTUAR)
@@ -3451,7 +3463,7 @@ void Board_FixReanimErrorAfterLoad(Board *board) {
 
         // 修复读档后僵尸博士机甲变全新机甲
         if (zombieType == ZombieType::ZOMBIE_BOSS) {
-            int bodyDamageIndex = Zombie_GetBodyDamageIndex(zombie);
+            int bodyDamageIndex = zombie->GetBodyDamageIndex();
             switch (bodyDamageIndex) {
                 case 1:
                     Reanimation_SetImageOverride(mBodyReanim, "Boss_head", *Sexy_IMAGE_REANIM_ZOMBIE_BOSS_HEAD_DAMAGE1_Addr);
@@ -3472,7 +3484,7 @@ void Board_FixReanimErrorAfterLoad(Board *board) {
 
         // 修复读档后冰车变全新冰车
         if (zombieType == ZombieType::ZOMBIE_ZAMBONI) {
-            int bodyDamageIndex = Zombie_GetBodyDamageIndex(zombie);
+            int bodyDamageIndex = zombie->GetBodyDamageIndex();
             switch (bodyDamageIndex) {
                 case 1:
                     Reanimation_SetImageOverride(mBodyReanim, "Zombie_zamboni_1", *Sexy_IMAGE_REANIM_ZOMBIE_ZAMBONI_1_DAMAGE1_Addr);
@@ -3487,7 +3499,7 @@ void Board_FixReanimErrorAfterLoad(Board *board) {
 
         // 修复读档后投篮车变全新投篮车
         if (zombieType == ZombieType::ZOMBIE_CATAPULT) {
-            int bodyDamageIndex = Zombie_GetBodyDamageIndex(zombie);
+            int bodyDamageIndex = zombie->GetBodyDamageIndex();
             switch (bodyDamageIndex) {
                 case 1:
                 case 2:

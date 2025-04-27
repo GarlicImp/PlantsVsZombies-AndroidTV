@@ -2,6 +2,8 @@
 #define PVZ_TV_1_1_5_ZOMBIE_H
 
 #include "PvZ/Enums.h"
+#include "PvZ/GameConstants.h"
+#include "PvZ/Symbols.h"
 
 #define MAX_ZOMBIE_FOLLOWERS 4
 #define NUM_BOBSLED_FOLLOWERS 3
@@ -164,6 +166,30 @@ public:
     int mZombieID;                            // 97
     // 大小98个整数
 
+    void RemoveColdEffects() { reinterpret_cast<void (*)(Zombie *)>(Zombie_RemoveColdEffectsAddr)(this); }
+    void ApplyButter() { reinterpret_cast<void (*)(Zombie *)>(Zombie_ApplyButterAddr)(this); }
+    void ApplyBurn() { reinterpret_cast<void (*)(Zombie *)>(Zombie_ApplyBurnAddr)(this); }
+    TodParticleSystem *AddAttachedParticle(int thePosX, int thePosY, ParticleEffect theEffect) {
+        reinterpret_cast<TodParticleSystem *(*)(Zombie *, int, int, ParticleEffect)>(Zombie_AddAttachedParticleAddr)(this, thePosX, thePosY, theEffect);
+    }
+    void StartEating() { reinterpret_cast<void (*)(Zombie *)>(Zombie_StartEatingAddr)(this); }
+    void DropArm(unsigned int theDamageFlags) { reinterpret_cast<void (*)(Zombie *, unsigned int)>(Zombie_DropArmAddr)(this, theDamageFlags); }
+    static void SetupReanimLayers(Reanimation *aReanim, ZombieType theZombieType) { reinterpret_cast<void (*)(Reanimation *, ZombieType)>(Zombie_SetupReanimLayersAddr)(aReanim, theZombieType); }
+    static void SetupShieldReanims(ZombieType theZombieType, Reanimation *aReanim) { reinterpret_cast<void (*)(ZombieType, Reanimation *)>(Zombie_SetupShieldReanimsAddr)(theZombieType, aReanim); }
+    void UpdateActions() { reinterpret_cast<void (*)(Zombie *)>(Zombie_UpdateActionsAddr)(this); }
+    void UpdatePlaying() { reinterpret_cast<void (*)(Zombie *)>(Zombie_UpdatePlayingAddr)(this); }
+    int TakeHelmDamage(int theDamage, unsigned int theDamageFlags) { reinterpret_cast<int (*)(Zombie *, int, unsigned int)>(Zombie_TakeHelmDamageAddr)(this, theDamage, theDamageFlags); }
+    int TakeFlyingDamage(int theDamage, unsigned int theDamageFlags) { reinterpret_cast<int (*)(Zombie *, int, unsigned int)>(Zombie_TakeFlyingDamageAddr)(this, theDamage, theDamageFlags); }
+    int TakeShieldDamage(int theDamage, unsigned int theDamageFlags) { reinterpret_cast<int (*)(Zombie *, int, unsigned int)>(Zombie_TakeShieldDamageAddr)(this, theDamage, theDamageFlags); }
+    void TakeBodyDamage(int theDamage, unsigned int theDamageFlags) { reinterpret_cast<void (*)(Zombie *, int, unsigned int)>(Zombie_TakeBodyDamageAddr)(this, theDamage, theDamageFlags); }
+    void UpdateDamageStates(unsigned int theDamageFlags) { reinterpret_cast<void (*)(Zombie *, unsigned int)>(Zombie_UpdateDamageStatesAddr)(this, theDamageFlags); }
+    void GetTrackPosition(const char *theTrackName, float &thePosX, float &thePosY) {
+        reinterpret_cast<void (*)(Zombie *, const char *, float &, float &)>(Zombie_GetTrackPositionAddr)(this, theTrackName, thePosX, thePosY);
+    }
+    void UpdateAnimSpeed() { reinterpret_cast<void (*)(Zombie *)>(Zombie_UpdateAnimSpeedAddr)(this); }
+    void HitIceTrap() { reinterpret_cast<void (*)(Zombie *)>(Zombie_HitIceTrapAddr)(this); }
+    void Create() { reinterpret_cast<void (*)(Zombie *)>(Zombie_ZombieAddr)(this); };
+
     void ZombieInitialize(int theRow, ZombieType theType, bool theVariant, Zombie *theParentZombie, int theFromWave, bool isVisible);
     void Draw(Sexy::Graphics *g);
     void DieNoLoot();
@@ -213,6 +239,14 @@ public:
     void SquishAllInSquare(int theX, int theY, ZombieAttackType theAttackType);
     bool IsWalkingBackwards();
     void StopEating();
+    Sexy::Rect GetZombieRect();
+    void GetDrawPos(ZombieDrawPosition& theDrawPos);
+    bool IsOnHighGround();
+    bool IsOnBoard();
+    bool EffectedByDamage(unsigned int theDamageRangeFlags);
+    int GetHelmDamageIndex();
+    int GetBodyDamageIndex();
+    int GetShieldDamageIndex();
 };
 
 class ZombieDefinition
@@ -229,8 +263,8 @@ public:
 extern ZombieDefinition gZombieDefs[NUM_ZOMBIE_TYPES];
 
 ZombieDefinition&            GetZombieDefinition(ZombieType theZombieType);
-
 /***************************************************************************************************************/
+
 inline bool zombieBloated;
 inline bool showZombieBodyHealth;
 inline bool showGargantuarHealth;
@@ -239,56 +273,6 @@ inline int maidCheats; // 女仆秘籍
 inline int boardEdgeAdjust;
 inline int zombieSetScale;
 inline ZombieDefinition gZombieTrashBinDef = {ZombieType::ZOMBIE_TRASH_BIN, ReanimationType::REANIM_ZOMBIE, 1, 99, 1, 4000, "TRASHCAN_ZOMBIE"};
-
-inline void (*Zombie_ApplyBurn)(Zombie *zombie);
-
-inline void (*Zombie_ApplyButter)(Zombie *zombie);
-
-inline void (*Zombie_GetZombieRect)(Sexy::Rect *a1, Zombie *a2);
-
-inline bool (*Zombie_EffectedByDamage)(Zombie *zombie, int flag);
-
-inline void (*Zombie_RemoveColdEffects)(Zombie *zombie);
-
-inline void (*Zombie_StartEating)(Zombie *);
-
-inline void (*Zombie_AddAttachedParticle)(Zombie *, int, int, int);
-
-inline void (*Zombie_DropArm)(Zombie *, unsigned int);
-
-inline void (*Zombie_SetupReanimLayers)(Reanimation *, ZombieType);
-
-inline void (*Zombie_SetupShieldReanims)(ZombieType, Reanimation *);
-
-inline void (*Zombie_UpdateActions)(Zombie *);
-
-inline void (*Zombie_UpdatePlaying)(Zombie *);
-
-inline bool (*Zombie_IsOnBoard)(Zombie *);
-
-inline void (*Zombie_TakeHelmDamage)(Zombie *, int, unsigned int);
-
-inline void (*Zombie_TakeFlyingDamage)(Zombie *, int, unsigned int);
-
-inline void (*Zombie_TakeShieldDamage)(Zombie *, int, unsigned int);
-
-inline void (*Zombie_TakeBodyDamage)(Zombie *, int, unsigned int);
-
-inline void (*Zombie_UpdateDamageStates)(Zombie *, unsigned int);
-
-inline int (*Zombie_GetShieldDamageIndex)(Zombie *);
-
-inline int (*Zombie_GetHelmDamageIndex)(Zombie *);
-
-inline int (*Zombie_GetBodyDamageIndex)(Zombie *);
-
-inline void (*Zombie_GetTrackPosition)(Zombie *, const char *, float *, float *);
-
-inline void (*Zombie_UpdateAnimationSpeed)(Zombie *);
-
-inline void (*Zombie_HitIceTrap)(Zombie *);
-
-inline void (*Zombie_Zombie)(Zombie *);
 
 
 inline void (*old_Zombie_Update)(Zombie *a1);
@@ -306,8 +290,6 @@ inline void (*old_Zombie_EatPlant)(Zombie *a, Plant *a2);
 inline void (*old_Zombie_DetachShield)(Zombie *zombie);
 
 inline void (*old_Zombie_ZombieInitialize)(Zombie *zombie, int theRow, ZombieType theType, bool theVariant, Zombie *theParentZombie, int theFromWave, bool isVisible);
-
-inline ZombieDefinition &(*old_GetZombieDefinition)(ZombieType type);
 
 inline void (*old_Zombie_DieNoLoot)(Zombie *);
 

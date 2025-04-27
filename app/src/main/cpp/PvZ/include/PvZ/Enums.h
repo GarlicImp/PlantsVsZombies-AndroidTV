@@ -1803,11 +1803,31 @@ public:
 //        return ((thePoint.mX >= mX) && (thePoint.mX < mX + mWidth) &&
 //                (thePoint.mY >= mY) && (thePoint.mY < mY + mHeight));
 //    }
+
+    void					Offset(_T theX, _T theY)
+    {
+        mX += theX;
+        mY += theY;
+    }
+
+//    void					Offset(const TPoint<_T>& thePoint)
+//    {
+//        mX += thePoint.mX;
+//        mY += thePoint.mY;
+//    }
 };
 
 typedef TRect<int> Rect;
 typedef TRect<double> FRect;
 } // namespace Sexy
+
+#ifndef max
+#define max(a,b)            (((a) > (b)) ? (a) : (b))
+#endif
+
+#ifndef min
+#define min(a,b)            (((a) < (b)) ? (a) : (b))
+#endif
 
 struct MotionTrailFrame {
     float mPosX;
