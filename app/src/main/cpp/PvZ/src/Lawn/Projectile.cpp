@@ -293,7 +293,7 @@ void Projectile::CheckForCollision() {
             return;
         }
         DoImpact(aZombie);
-    } else if (mApp->mGameMode == GameMode::GAMEMODE_TWO_PLAYER_VS) {
+    } else if (mApp->mGameMode == GameMode::GAMEMODE_MP_VS) {
         GridItem* aGridItem = Projectile_FindCollisionTargetGridItem(this);
         if (aGridItem) {
             Projectile_DoImpactGridItem(this, aGridItem);

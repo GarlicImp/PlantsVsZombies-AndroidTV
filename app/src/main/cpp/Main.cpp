@@ -27,7 +27,6 @@
  * Java 层已指定模块加载顺序: 先 libGameMain.so, 后 libHomura.so.
  */
 [[gnu::constructor]] void lib_main() {
-    homura::Logger::Instance().SetLevel(homura::LogLevel::INFO);
 
     // Target lib here
     constexpr char targetLibName[] = "libGameMain.so";
@@ -855,7 +854,7 @@ extern "C" JNIEXPORT void JNICALL Java_com_transmension_mobile_EnhanceActivity_n
     doKeyboardTwoPlayerDialog = is_on;
     if (!is_on) {
         LawnApp *lawnApp = (LawnApp *)*gLawnApp_Addr;
-        if (LawnApp_IsCoopMode(lawnApp) || lawnApp->mGameMode == GameMode::GAMEMODE_TWO_PLAYER_VS)
+        if (LawnApp_IsCoopMode(lawnApp) || lawnApp->mGameMode == GameMode::GAMEMODE_MP_VS)
             return;
         LawnApp_ClearSecondPlayer(lawnApp);
         Board *board = lawnApp->mBoard;
@@ -880,7 +879,7 @@ extern "C" JNIEXPORT jboolean JNICALL Java_com_transmension_mobile_EnhanceActivi
         return true;
     }
 
-    if (lawnApp->mGameMode == GameMode::GAMEMODE_TWO_PLAYER_VS && lawnApp->mVSSetupScreen != nullptr && lawnApp->mVSSetupScreen[74] == 3) {
+    if (lawnApp->mGameMode == GameMode::GAMEMODE_MP_VS && lawnApp->mVSSetupScreen != nullptr && lawnApp->mVSSetupScreen[74] == 3) {
         return true;
     }
     return false;
@@ -986,7 +985,7 @@ extern "C" JNIEXPORT void JNICALL Java_com_transmension_mobile_EnhanceActivity_n
     }
 
     int *theVSSetupScreen = lawnApp->mVSSetupScreen;
-    if (is_key_down && lawnApp->mGameMode == GameMode::GAMEMODE_TWO_PLAYER_VS && theVSSetupScreen != nullptr && theVSSetupScreen[74] == 3) {
+    if (is_key_down && lawnApp->mGameMode == GameMode::GAMEMODE_MP_VS && theVSSetupScreen != nullptr && theVSSetupScreen[74] == 3) {
         VSSetupMenu_GameButtonDown(theVSSetupScreen, buttonCode, playerIndex, 0);
         return;
     }

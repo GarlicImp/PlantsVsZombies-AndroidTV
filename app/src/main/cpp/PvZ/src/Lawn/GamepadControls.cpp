@@ -203,7 +203,7 @@ void GamepadControls_GamepadControls(GamepadControls *gamepadControls, Board *bo
     if (isKeyboardTwoPlayerMode)
         return;
     GameMode mGameMode = gamepadControls->mGameObject.mApp->mGameMode;
-    bool isTwoSeedBankMode = (mGameMode == GameMode::GAMEMODE_TWO_PLAYER_VS || (mGameMode >= GameMode::GAMEMODE_TWO_PLAYER_COOP_DAY && mGameMode <= GameMode::GAMEMODE_TWO_PLAYER_COOP_ENDLESS));
+    bool isTwoSeedBankMode = (mGameMode == GameMode::GAMEMODE_MP_VS || (mGameMode >= GameMode::GAMEMODE_TWO_PLAYER_COOP_DAY && mGameMode <= GameMode::GAMEMODE_TWO_PLAYER_COOP_ENDLESS));
     if (!keyboardMode && !isTwoSeedBankMode && mGameMode != GameMode::GAMEMODE_CHALLENGE_SLOT_MACHINE) {
         gamepadControls->mIsInShopSeedBank = true; // 是否在Shop栏。
     }
@@ -511,7 +511,7 @@ void GamepadControls_UpdatePreviewReanim(GamepadControls *gamepadControls) {
         flagDrawGray = true;
     }
     if (!Board_HasConveyorBeltSeedBank(gamepadControls->mBoard, gamepadControls->mPlayerIndex2) && cursorObject->mCursorType != CursorType::CURSOR_TYPE_PLANT_FROM_USABLE_COIN) {
-        if (gamepadControls->mIsZombie && gamepadControls->mGameObject.mApp->mGameMode == GameMode::GAMEMODE_TWO_PLAYER_VS) {
+        if (gamepadControls->mIsZombie && gamepadControls->mGameObject.mApp->mGameMode == GameMode::GAMEMODE_MP_VS) {
             if (!Board_CanTakeDeathMoney(gamepadControls->mBoard, gamepadControls->mBoard->GetCurrentPlantCost(mSeedType, SeedType::SEED_NONE))) {
                 flagUpdateCanPlant = false;
                 flagDrawGray = true;

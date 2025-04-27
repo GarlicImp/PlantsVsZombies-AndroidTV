@@ -4,22 +4,75 @@
 #include "PvZ/Misc.h"
 #include "PvZ/Lawn/LawnApp.h"
 
-static Sexy::GameButton *mChallengeScreenCloseButton;
+static Sexy::GameButton *gChallengeScreenCloseButton;
 
-void ChallengeScreen_ChallengeScreen(ChallengeScreen *challengeScreen, LawnApp *lawnApp, ChallengePage page) {
+ChallengeScreen::ChallengeScreen(LawnApp *theApp, ChallengePage thePage) {
+    Create(theApp, thePage);
+}
+
+void ChallengeScreen::Create(LawnApp* theApp, ChallengePage thePage) {
     // 去除按钮对触控的遮挡
-    old_ChallengeScreen_ChallengeScreen(challengeScreen, lawnApp, page);
-    for (auto *button : challengeScreen->mButtons) {
+    old_ChallengeScreen_ChallengeScreen(this, theApp, thePage);
+
+    for (auto *button : mButtons) {
         // 把按钮全部缩小至长宽为0
         Sexy_Widget_Resize(button, button->mX, button->mY, 0, 0);
     }
+
+//    if (thePage == CHALLENGE_PAGE_VS) {
+////        SetUnlockChallengeIndex(thePage, false);
+//        mUnlockState = UNLOCK_SHAKING;
+//        mUnlockStateCounter = 100;
+//        mUnlockChallengeIndex = 0;
+//
+//        for (int aChallengeMode = 0; aChallengeMode < NUM_CHALLENGE_MODES; aChallengeMode++) {
+//            ChallengeDefinition& aDef = GetChallengeDefinition(aChallengeMode);
+//            if (aDef.mPage == thePage)
+//                mUnlockChallengeIndex = aChallengeMode;
+//        }
+//    }
 }
 
-void ChallengeScreen_Draw(ChallengeScreen *challengeScreen, Sexy::Graphics *graphics) {
+namespace {
+ChallengeDefinition gButteredPopcornDef = {GameMode::GAMEMODE_CHALLENGE_BUTTERED_POPCORN, 37, ChallengePage::CHALLENGE_PAGE_CHALLENGE, 6, 1, "[BUTTERED_POPCORN]"};
+ChallengeDefinition gPoolPartyDef = {GameMode::GAMEMODE_CHALLENGE_POOL_PARTY, 37, ChallengePage::CHALLENGE_PAGE_CHALLENGE, 6, 2, "[POOL_PARTY]"};
+ChallengeDefinition gVSDayDef = {GameMode::GAMEMODE_MP_VS_DAY, 37, ChallengePage::CHALLENGE_PAGE_VS, 6, 1, "[MP_VS_DAY]"};
+ChallengeDefinition gVSNightDef = {GameMode::GAMEMODE_MP_VS_NIGHT, 37, ChallengePage::CHALLENGE_PAGE_VS, 6, 1, "[MP_VS_NIGHT]"};
+ChallengeDefinition gVSPoolDayDef = {GameMode::GAMEMODE_MP_VS_POOL_DAY, 37, ChallengePage::CHALLENGE_PAGE_VS, 6, 1, "[MP_VS_POOL_DAY]"};
+ChallengeDefinition gVSPoolNightDef = {GameMode::GAMEMODE_MP_VS_POOL_NIGHT, 37, ChallengePage::CHALLENGE_PAGE_VS, 6, 1, "[MP_VS_POOL_NIGHT]"};
+ChallengeDefinition gVSRoofDef = {GameMode::GAMEMODE_MP_VS_ROOF, 37, ChallengePage::CHALLENGE_PAGE_VS, 6, 1, "[MP_VS_ROOF]"};
+} // namespace
+
+ChallengeDefinition &GetChallengeDefinition(int theChallengeMode) {
+    if (theChallengeMode + 2 == GameMode::GAMEMODE_CHALLENGE_BUTTERED_POPCORN) {
+        return gButteredPopcornDef;
+    }
+
+    // if (theChallengeMode + 2 == GameMode::GAMEMODE_CHALLENGE_POOL_PARTY) {
+    //     return gPoolPartyDef;
+    // }
+
+//    if (theChallengeMode + 4 == GameMode::GAMEMODE_MP_VS) {
+//        return gVSDayDef;
+//    } else if (theChallengeMode + 3 == GameMode::GAMEMODE_MP_VS) {
+//        return gVSNightDef;
+//    } else if (theChallengeMode + 2 == GameMode::GAMEMODE_MP_VS) {
+//        return gVSPoolDayDef;
+//    } else if (theChallengeMode + 1 == GameMode::GAMEMODE_MP_VS) {
+//        return gVSPoolNightDef;
+//    } else if (theChallengeMode == GameMode::GAMEMODE_MP_VS) {
+//        return gVSRoofDef;
+//    }
+
+    return old_GetChallengeDefinition(theChallengeMode);
+}
+
+void ChallengeScreen::Draw(Sexy::Graphics *graphics) {
     // 修复小游戏界面显示奖杯数不正确
-    old_ChallengeScreen_Draw(challengeScreen, graphics);
+    old_ChallengeScreen_Draw(this, graphics);
+
     int mTotalTrophiesInPage = 0;
-    switch (challengeScreen->mPage) {
+    switch (mPageIndex) {
         case ChallengePage::CHALLENGE_PAGE_SURVIVAL:
             mTotalTrophiesInPage = 10;
             break;
@@ -39,42 +92,45 @@ void ChallengeScreen_Draw(ChallengeScreen *challengeScreen, Sexy::Graphics *grap
     }
 
     int holder[1];
-    Sexy_StrFormat(holder, "%d/%d", LawnApp_GetNumTrophies(challengeScreen->mApp, challengeScreen->mPage), mTotalTrophiesInPage);
+    Sexy_StrFormat(holder, "%d/%d", LawnApp_GetNumTrophies(mApp, mPageIndex), mTotalTrophiesInPage);
     Color theColor = {255, 240, 0, 255};
     TodDrawString(graphics, holder, 711, 62, *Sexy_FONT_BRIANNETOD16_Addr, theColor, DrawStringJustification::DS_ALIGN_CENTER);
     Sexy_String_Delete(holder);
 }
 
-void ChallengeScreen_AddedToManager(ChallengeScreen *challengeScreen, int a2) {
+void ChallengeScreen::AddedToManager(int* theWidgetManager) {
     // 记录当前游戏状态
     int holder[1];
     TodStringTranslate(holder, "[CLOSE]");
-    mChallengeScreenCloseButton = MakeButton(1000, &challengeScreen->mButtonListener, challengeScreen, holder);
-    GameButton_Resize(mChallengeScreenCloseButton, 800, 520, 170, 50);
+    gChallengeScreenCloseButton = MakeButton(1000, &mButtonListener, this, holder);
+    GameButton_Resize(gChallengeScreenCloseButton, 800, 520, 170, 50);
     Sexy_String_Delete(holder);
-    Sexy_Widget_AddWidget(challengeScreen, mChallengeScreenCloseButton);
-    return old_ChallengeScreen_AddedToManager(challengeScreen, a2);
+    Sexy_Widget_AddWidget(this, gChallengeScreenCloseButton);
+
+    return old_ChallengeScreen_AddedToManager(this, theWidgetManager);
 }
 
-void ChallengeScreen_Update(ChallengeScreen *a) {
+void ChallengeScreen::Update() {
     // 记录当前游戏状态
-    return old_ChallengeScreen_Update(a);
+    return old_ChallengeScreen_Update(this);
 }
 
-void ChallengeScreen_RemovedFromManager(ChallengeScreen *challengeScreen, int a2) {
+void ChallengeScreen::RemovedFromManager(int* theWidgetManager) {
     // 记录当前游戏状态
-    old_ChallengeScreen_RemovedFromManager(challengeScreen, a2);
-    if (mChallengeScreenCloseButton != nullptr) {
-        Sexy_Widget_RemoveWidget(challengeScreen, mChallengeScreenCloseButton);
+    old_ChallengeScreen_RemovedFromManager(this, theWidgetManager);
+
+    if (gChallengeScreenCloseButton != nullptr) {
+        Sexy_Widget_RemoveWidget(this, gChallengeScreenCloseButton);
     }
 }
 
-void ChallengeScreen_Delete2(ChallengeScreen *challengeScreen) {
+void ChallengeScreen::Delete2() {
     // 删除按钮
-    old_ChallengeScreen_Delete2(challengeScreen);
-    if (mChallengeScreenCloseButton != nullptr) {
-        GameButton_Delete(mChallengeScreenCloseButton);
-        mChallengeScreenCloseButton = nullptr;
+    old_ChallengeScreen_Delete2(this);
+
+    if (gChallengeScreenCloseButton != nullptr) {
+        GameButton_Delete(gChallengeScreenCloseButton);
+        gChallengeScreenCloseButton = nullptr;
     }
 }
 
@@ -82,42 +138,25 @@ void ChallengeScreen::ButtonPress(int theButtonId) {
     // 空函数替换，去除原有的点击进入关卡的功能
 }
 
-void ChallengeScreen_ButtonDepress(ChallengeScreen *challengeScreen, int buttonId) {
+void ChallengeScreen::ButtonDepress(int theId) {
     // 去除原有的点击进入关卡的功能
-    if (buttonId == 1000) {
-        LawnApp_KillChallengeScreen(challengeScreen->mApp);
-        LawnApp_DoBackToMain(challengeScreen->mApp);
+    if (theId == 1000) {
+        LawnApp_KillChallengeScreen(mApp);
+        LawnApp_DoBackToMain(mApp);
     }
 }
 
-void ChallengeScreen_UpdateButtons(ChallengeScreen *challengeScreen) {
+void ChallengeScreen::UpdateButtons() {
     // 空函数替换，去除默认选取第一个游戏的功能
 }
 
-
 namespace {
-ChallengeDefinition gButteredPopcornDef = {GameMode::GAMEMODE_CHALLENGE_BUTTERED_POPCORN, 37, ChallengePage::CHALLENGE_PAGE_CHALLENGE, 6, 1, "[BUTTERED_POPCORN]"};
-ChallengeDefinition gPoolPartyDef = {GameMode::GAMEMODE_CHALLENGE_POOL_PARTY, 37, ChallengePage::CHALLENGE_PAGE_CHALLENGE, 6, 2, "[POOL_PARTY]"};
-} // namespace
-
-ChallengeDefinition &GetChallengeDefinition(int index) {
-    if (index + 2 == GameMode::GAMEMODE_CHALLENGE_BUTTERED_POPCORN) {
-        return gButteredPopcornDef;
-    }
-    // if (index + 2 == GameMode::GAMEMODE_CHALLENGE_POOL_PARTY) {
-    //     return gPoolPartyDef;
-    // }
-    return old_GetChallengeDefinition(index);
-}
-
-
-namespace {
-int mChallengeScreenTouchDownX;
-int mChallengeScreenTouchDownY;
-int mChallengeItemHeight;
-int mChallengeScreenGameIndex;
-bool mChallengeItemMoved;
-bool mTouchOutSide;
+int gChallengeScreenTouchDownX;
+int gChallengeScreenTouchDownY;
+int gChallengeItemHeight;
+int gChallengeScreenGameIndex;
+bool gChallengeItemMoved;
+bool gTouchOutSide;
 
 constexpr int mPageTop = 75;
 constexpr int mPageBottom = 555;
@@ -125,13 +164,13 @@ constexpr int mPageBottom = 555;
 
 void ChallengeScreen::MouseDown(int x, int y, int theClickCount) {
     if (y > mPageBottom || y < mPageTop) {
-        mTouchOutSide = true;
+        gTouchOutSide = true;
     }
-    mChallengeScreenTouchDownX = x;
-    mChallengeScreenTouchDownY = y;
-    mChallengeItemHeight = Sexy_Image_GetHeight(*Sexy_IMAGE_CHALLENGE_NAME_BACK_Addr) + 2; // 2为缝隙大小
+    gChallengeScreenTouchDownX = x;
+    gChallengeScreenTouchDownY = y;
+    gChallengeItemHeight = Sexy_Image_GetHeight(*Sexy_IMAGE_CHALLENGE_NAME_BACK_Addr) + 2; // 2为缝隙大小
 
-    mChallengeScreenGameIndex = mScreenTopChallengeIndex;
+    gChallengeScreenGameIndex = mScreenTopChallengeIndex;
 
     //    int totalGamesInThisPage = a[376];//如果这个值是33
     //    int currentSelectedGameIndex = ChallengeScreen_GetCurrentSelectedGameIndex(
@@ -146,30 +185,30 @@ void ChallengeScreen::MouseDown(int x, int y, int theClickCount) {
 }
 
 void ChallengeScreen::MouseDrag(int x, int y) {
-    if (mTouchOutSide)
+    if (gTouchOutSide)
         return;
-    int triggerHeight = mChallengeItemHeight / 2; // 调节此处以修改小游戏列表的滚动速度。滚动太快就会有BUG，好烦。
-    if (mChallengeScreenTouchDownY - y > triggerHeight) {
+    int triggerHeight = gChallengeItemHeight / 2; // 调节此处以修改小游戏列表的滚动速度。滚动太快就会有BUG，好烦。
+    if (gChallengeScreenTouchDownY - y > triggerHeight) {
         int totalGamesInThisPage = mTotalGameInPage;
-        mChallengeScreenGameIndex += 1;
-        mChallengeScreenTouchDownY -= triggerHeight;
-        int gameIndexToScroll = mChallengeScreenGameIndex >= totalGamesInThisPage - 4 ? totalGamesInThisPage - 4 : mChallengeScreenGameIndex;
+        gChallengeScreenGameIndex += 1;
+        gChallengeScreenTouchDownY -= triggerHeight;
+        int gameIndexToScroll = gChallengeScreenGameIndex >= totalGamesInThisPage - 4 ? totalGamesInThisPage - 4 : gChallengeScreenGameIndex;
         ChallengeScreen_SetScrollTarget(this, gameIndexToScroll);
         //        ChallengeScreen_UpdateButtons(a);
-        mChallengeItemMoved = true;
-    } else if (y - mChallengeScreenTouchDownY > triggerHeight) {
-        mChallengeScreenGameIndex -= 1;
-        mChallengeScreenTouchDownY += triggerHeight;
-        int gameIndexToScroll = mChallengeScreenGameIndex <= 0 ? 0 : mChallengeScreenGameIndex;
+        gChallengeItemMoved = true;
+    } else if (y - gChallengeScreenTouchDownY > triggerHeight) {
+        gChallengeScreenGameIndex -= 1;
+        gChallengeScreenTouchDownY += triggerHeight;
+        int gameIndexToScroll = gChallengeScreenGameIndex <= 0 ? 0 : gChallengeScreenGameIndex;
         ChallengeScreen_SetScrollTarget(this, gameIndexToScroll);
         //        ChallengeScreen_UpdateButtons(a);
-        mChallengeItemMoved = true;
+        gChallengeItemMoved = true;
     }
 }
 
 void ChallengeScreen::MouseUp(int x, int y) {
-    if (!mTouchOutSide && !mChallengeItemMoved) {
-        int gameIndex = mScreenTopChallengeIndex + (y - mPageTop) / mChallengeItemHeight;
+    if (!gTouchOutSide && !gChallengeItemMoved) {
+        int gameIndex = mScreenTopChallengeIndex + (y - mPageTop) / gChallengeItemHeight;
         if (mSelectedMode == mUnk1[gameIndex]) {
             ChallengeScreen_KeyDown(this, 13);
         } else {
@@ -177,6 +216,6 @@ void ChallengeScreen::MouseUp(int x, int y) {
             mSelectedMode = mUnk1[gameIndex];
         }
     }
-    mTouchOutSide = false;
-    mChallengeItemMoved = false;
+    gTouchOutSide = false;
+    gChallengeItemMoved = false;
 }

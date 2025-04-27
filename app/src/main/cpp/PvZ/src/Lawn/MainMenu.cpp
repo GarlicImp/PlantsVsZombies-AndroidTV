@@ -446,7 +446,7 @@ void MainMenu::OnExit() {
 
 //    if (mPressedButtonId == VS_BUTTON) {
 //        LawnApp_KillMainMenu(mApp);
-        //TODO:为对战添加选择场景
+////        TODO:为对战添加选择场景
 //        LawnApp_ShowChallengeScreen(mApp, CHALLENGE_PAGE_VS);
 //        return;
 //    }

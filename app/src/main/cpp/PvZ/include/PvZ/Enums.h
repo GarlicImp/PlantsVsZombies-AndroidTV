@@ -132,7 +132,7 @@ enum ChallengePage
     CHALLENGE_PAGE_COOP = 3,
     CHALLENGE_PAGE_PUZZLE = 4,
     MAX_CHALLANGE_PAGES = 5,
-//    CHALLENGE_PAGE_VS = 6,
+    CHALLENGE_PAGE_VS = 6,
 };
 enum ChallengeState
 {
@@ -475,8 +475,8 @@ enum GameMode
     GAMEMODE_UPSELL = 72,
     GAMEMODE_INTRO = 73,
     GAMEMODE_MULTI_PLAYER = 74,
-    GAMEMODE_TWO_PLAYER_VS_HIDE = 75,
-    GAMEMODE_TWO_PLAYER_VS = 76,
+    GAMEMODE_MP_VS_HIDE = 75,
+    GAMEMODE_MP_VS = 76,
     GAMEMODE_TWO_PLAYER_COOP_DAY = 79,
     GAMEMODE_TWO_PLAYER_COOP_NIGHT = 80,
     GAMEMODE_TWO_PLAYER_COOP_POOL = 81,
@@ -491,6 +491,11 @@ enum GameMode
     GAMEMODE_CHALLENGE_RAINING_SEEDS = 90,
     GAMEMODE_CHALLENGE_BUTTERED_POPCORN = 91,
     GAMEMODE_CHALLENGE_POOL_PARTY = 92,
+    GAMEMODE_MP_VS_DAY,
+    GAMEMODE_MP_VS_NIGHT,
+    GAMEMODE_MP_VS_POOL_DAY,
+    GAMEMODE_MP_VS_POOL_NIGHT,
+    GAMEMODE_MP_VS_ROOF,
     NUM_GAME_MODES
 };
 enum GameObjectType
@@ -1742,14 +1747,6 @@ enum DrawMode { DRAWMODE_NORMAL = 0, DRAWMODE_ADDITIVE = 1 };
 }
 
 
-struct ChallengeDefinition {
-    GameMode mChallengeMode;  // 0
-    int mChallengeIconIndex;            // 1
-    ChallengePage mPage; // 2
-    int mRow;                           // 3 无用
-    int mCol;                           // 4 无用
-    const char *mChallengeName;         // 5
-};
 
 typedef std::string			SexyString;
 #define _S(x)				x
@@ -1861,10 +1858,7 @@ struct FoleyTypeData {
 class TodFoley {
 public:
     FoleyTypeData mTypeData[110];
-
-    void PlayFoley(FoleyType theFoleyType);
 };
-inline void (*old_TodFoley_PlayFoley)(TodFoley*, FoleyType theFoleyType);
 
 
 class ReanimatorCache;
@@ -2122,8 +2116,18 @@ namespace Sexy {
 
     class MemoryImage : public Image {}; // 大小58个整数
 
-    struct SexyMatrix3 {
-        float m[3][3]; // 9
+    class SexyMatrix3 {
+    public:
+        union
+        {
+            float m[3][3];
+            struct
+            {
+                float m00, m01, m02;
+                float m10, m11, m12;
+                float m20, m21, m22;
+            };
+        };
     };
 
     struct ButtonListenerVTable {

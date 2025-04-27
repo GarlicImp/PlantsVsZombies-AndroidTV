@@ -40,7 +40,6 @@
 #include "Symbols.h"
 
 inline void InitInGameFunction() {
-    Board_Move = (decltype(Board_Move))Board_MoveAddr;
     Board_ProgressMeterHasFlags = (decltype(Board_ProgressMeterHasFlags))Board_ProgressMeterHasFlagsAddr;
     Board_IsSurvivalStageWithRepick = (decltype(Board_IsSurvivalStageWithRepick))Board_IsSurvivalStageWithRepickAddr;
     Board_PickUpTool = (decltype(Board_PickUpTool))Board_PickUpToolAddr;
@@ -70,8 +69,6 @@ inline void InitInGameFunction() {
     Board_MouseDownWithTool = (decltype(Board_MouseDownWithTool))Board_MouseDownWithToolAddr;
     Board_CountPlantByType = (decltype(Board_CountPlantByType))Board_CountPlantByTypeAddr;
     Board_SetTutorialState = (decltype(Board_SetTutorialState))Board_SetTutorialStateAddr;
-    Board_DoFwoosh = (decltype(Board_DoFwoosh))Board_DoFwooshAddr;
-    //    Board_ShakeBoard = (decltype(Board_ShakeBoard)) Board_ShakeBoardAddr;
     Board_GetButterButtonRect = (decltype(Board_GetButterButtonRect))Board_GetButterButtonRectAddr;
 //     Board_GetShovelButtonRect = (void (*)(TRect *, Board *)) Board_GetShovelButtonRectAddr;
     Board_ZombieTryToGet = (decltype(Board_ZombieTryToGet))Board_ZombieTryToGetAddr;
@@ -132,7 +129,6 @@ inline void InitInGameFunction() {
     LawnApp_KillMainMenu = (decltype(LawnApp_KillMainMenu))LawnApp_KillMainMenuAddr;
     LawnApp_KillChallengeScreen = (decltype(LawnApp_KillChallengeScreen))LawnApp_KillChallengeScreenAddr;
     LawnApp_PreNewGame = (decltype(LawnApp_PreNewGame))LawnApp_PreNewGameAddr;
-//    PlayFoley = (decltype(PlayFoley))LawnApp_PlayFoleyAddr;
     LawnApp_PlayFoleyPitch = (decltype(LawnApp_PlayFoleyPitch))LawnApp_PlayFoleyPitchAddr;
     LawnApp_DoCheatDialog = (decltype(LawnApp_DoCheatDialog))LawnApp_DoCheatDialogAddr;
     LawnApp_DoCheatCodeDialog = (decltype(LawnApp_DoCheatCodeDialog))LawnApp_DoCheatCodeDialogAddr;
@@ -236,7 +232,6 @@ inline void InitInGameFunction() {
     Zombie_ApplyBurn = (decltype(Zombie_ApplyBurn))Zombie_ApplyBurnAddr;
     Zombie_StartEating = (decltype(Zombie_StartEating))Zombie_StartEatingAddr;
     Zombie_AddAttachedParticle = (decltype(Zombie_AddAttachedParticle))Zombie_AddAttachedParticleAddr;
-    Zombie_StopEating = (decltype(Zombie_StopEating))Zombie_StopEatingAddr;
     Zombie_DropArm = (decltype(Zombie_DropArm))Zombie_DropArmAddr;
     Zombie_SetupReanimLayers = (decltype(Zombie_SetupReanimLayers))Zombie_SetupReanimLayersAddr;
     Zombie_SetupShieldReanims = (decltype(Zombie_SetupShieldReanims))Zombie_SetupShieldReanimsAddr;
@@ -465,7 +460,7 @@ inline void InitInGameFunction() {
     LawnPlayerInfo_GetFlag = (decltype(LawnPlayerInfo_GetFlag))LawnPlayerInfo_GetFlagAddr;
     RandRangeInt = (decltype(RandRangeInt))RandRangeIntAddr;
     //    DrawSeedType = (void (*)(float *, float, float, int, int, float, float,float)) DrawSeedTypeAddr;
-    MailScreen_KeyDown = (decltype(MailScreen_KeyDown))MailScreen_KeyDownAddr;
+//    MailScreen_KeyDown = (decltype(MailScreen_KeyDown))MailScreen_KeyDownAddr;
     Sexy_GamepadApp_HasGamepad = (decltype(Sexy_GamepadApp_HasGamepad))Sexy_GamepadApp_HasGamepadAddr;
     Sexy_RandInt = (decltype(Sexy_RandInt))Sexy_RandIntAddr;
     Sexy_SexyMatrix3_SexyMatrix3 = (decltype(Sexy_SexyMatrix3_SexyMatrix3))Sexy_SexyMatrix3_SexyMatrix3Addr;
@@ -597,9 +592,6 @@ inline void InitHookFunction() {
     homura::HookFunction(LawnApp_IsChallengeWithoutSeedBankAddr, &LawnApp_IsChallengeWithoutSeedBank, &old_LawnApp_IsChallengeWithoutSeedBank);
     homura::HookFunction(LawnApp_TryHelpTextScreenAddr, &LawnApp_TryHelpTextScreen, nullptr);
     homura::HookFunction(LawnApp_KillSeedChooserScreenAddr, &LawnApp::KillSeedChooserScreen, &old_LawnApp_KillSeedChooserScreen);
-    homura::HookFunction(LawnApp_PlayFoleyAddr, &LawnApp::PlayFoley, nullptr);
-    homura::HookFunction(LawnApp_PlaySampleAddr, &LawnApp::PlaySample, &old_LawnApp_PlaySample);
-    homura::HookFunction(LawnApp_ReanimationGetAddr, &LawnApp::ReanimationGet, &old_LawnApp_ReanimationGet);
 //    homura::HookFunction(LawnApp_HasSeedTypeAddr, &LawnApp_HasSeedType, &old_LawnApp_HasSeedType);
 
 
@@ -656,9 +648,9 @@ inline void InitHookFunction() {
     homura::HookFunction(Board_UpdateGridItemsAddr, &Board::UpdateGridItems, &old_Board_UpdateGridItems);
     homura::HookFunction(Board_ShakeBoardAddr, &Board::ShakeBoard, &old_Board_ShakeBoard);
     homura::HookFunction(Board_DrawZenButtonsAddr, &Board::DrawZenButtons, &old_Board_DrawZenButtons);
-    homura::HookFunction(Board_AddProjectileAddr, &Board::AddProjectile, &old_Board_AddProjectile);
-    homura::HookFunction(Board_PixelToGridXAddr, &Board::PixelToGridX, &old_Board_PixelToGridX);
-    homura::HookFunction(Board_PixelToGridYAddr, &Board::PixelToGridY, &old_Board_PixelToGridY);
+//    homura::HookFunction(Board_AddProjectileAddr, &Board::AddProjectile, &old_Board_AddProjectile);
+//    homura::HookFunction(Board_PixelToGridXAddr, &Board::PixelToGridX, &old_Board_PixelToGridX);
+//    homura::HookFunction(Board_PixelToGridYAddr, &Board::PixelToGridY, &old_Board_PixelToGridY);
 //    homura::HookFunction(Board_GetNumSeedsInBankAddr, &Board::GetNumSeedsInBank, &old_Board_GetNumSeedsInBank);
 
 
@@ -689,14 +681,14 @@ inline void InitHookFunction() {
     homura::HookFunction(Challenge_IZombieSquishBrainAddr, &Challenge::IZombieSquishBrain, &old_Challenge_IZombieSquishBrain);
 
 
-    homura::HookFunction(ChallengeScreen_AddedToManagerAddr, &ChallengeScreen_AddedToManager, &old_ChallengeScreen_AddedToManager);
-    homura::HookFunction(ChallengeScreen_RemovedFromManagerAddr, &ChallengeScreen_RemovedFromManager, &old_ChallengeScreen_RemovedFromManager);
-    homura::HookFunction(ChallengeScreen_Delete2Addr, &ChallengeScreen_Delete2, &old_ChallengeScreen_Delete2);
-    homura::HookFunction(ChallengeScreen_UpdateAddr, &ChallengeScreen_Update, &old_ChallengeScreen_Update);
-    homura::HookFunction(ChallengeScreen_ChallengeScreenAddr, &ChallengeScreen_ChallengeScreen, &old_ChallengeScreen_ChallengeScreen);
-    homura::HookFunction(ChallengeScreen_DrawAddr, &ChallengeScreen_Draw, &old_ChallengeScreen_Draw);
-    homura::HookFunction(ChallengeScreen_ButtonDepressAddr, &ChallengeScreen_ButtonDepress, nullptr);
-    homura::HookFunction(ChallengeScreen_UpdateButtonsAddr, &ChallengeScreen_UpdateButtons, nullptr);
+    homura::HookFunction(ChallengeScreen_AddedToManagerAddr, &ChallengeScreen::AddedToManager, &old_ChallengeScreen_AddedToManager);
+    homura::HookFunction(ChallengeScreen_RemovedFromManagerAddr, &ChallengeScreen::RemovedFromManager, &old_ChallengeScreen_RemovedFromManager);
+    homura::HookFunction(ChallengeScreen_Delete2Addr, &ChallengeScreen::Delete2, &old_ChallengeScreen_Delete2);
+    homura::HookFunction(ChallengeScreen_UpdateAddr, &ChallengeScreen::Update, &old_ChallengeScreen_Update);
+    homura::HookFunction(ChallengeScreen_ChallengeScreenAddr, &ChallengeScreen::Create, &old_ChallengeScreen_ChallengeScreen);
+    homura::HookFunction(ChallengeScreen_DrawAddr, &ChallengeScreen::Draw, &old_ChallengeScreen_Draw);
+    homura::HookFunction(ChallengeScreen_ButtonDepressAddr, &ChallengeScreen::ButtonDepress, nullptr);
+    homura::HookFunction(ChallengeScreen_UpdateButtonsAddr, &ChallengeScreen::UpdateButtons, nullptr);
     homura::HookFunction(GetChallengeDefinitionAddr, &GetChallengeDefinition, &old_GetChallengeDefinition);
 
 
@@ -820,6 +812,7 @@ inline void InitHookFunction() {
     homura::HookFunction(Zombie_UpdateZombiePeaHeadAddr, &Zombie::UpdateZombiePeaHead, nullptr);
     homura::HookFunction(Zombie_UpdateZombieGatlingHeadAddr, &Zombie::UpdateZombieGatlingHead, nullptr);
     homura::HookFunction(Zombie_UpdateZombieJalapenoHeadAddr, &Zombie::UpdateZombieJalapenoHead, nullptr);
+//    homura::HookFunction(Zombie_UpdateZombieSquashHeadAddr, &Zombie::UpdateZombieSquashHead, nullptr);
     homura::HookFunction(Zombie_GetDancerFrameAddr, &Zombie::GetDancerFrame, nullptr);
     homura::HookFunction(Zombie_RiseFromGraveAddr, &Zombie::RiseFromGrave, &old_Zombie_RiseFromGrave);
     homura::HookFunction(Zombie_EatPlantAddr, &Zombie::EatPlant, &old_Zombie_EatPlant);
@@ -850,6 +843,7 @@ inline void InitHookFunction() {
     homura::HookFunction(Zombie_UpdateReanimAddr, &Zombie::UpdateReanim, &old_Zombie_UpdateReanim);
     homura::HookFunction(Zombie_GetBobsledPositionAddr, &Zombie::GetBobsledPosition, &old_Zombie_GetBobsledPosition);
     homura::HookFunction(Zombie_SquishAllInSquareAddr, &Zombie::SquishAllInSquare, &old_Zombie_SquishAllInSquare);
+    homura::HookFunction(Zombie_StopEatingAddr, &Zombie::StopEating, &old_Zombie_StopEating);
 
 
     homura::HookFunction(Sexy_Dialog_AddedToManagerWidgetManagerAddr, &SexyDialog_AddedToManager, &old_SexyDialog_AddedToManager);
@@ -884,10 +878,10 @@ inline void InitHookFunction() {
     homura::HookFunction(ImitaterDialog_ShowToolTipAddr, &ImitaterDialog_ShowToolTip, &old_ImitaterDialog_ShowToolTip);
 
 
-    homura::HookFunction(MailScreen_MailScreenAddr, &MailScreen_MailScreen, &old_MailScreen_MailScreen);
-    homura::HookFunction(MailScreen_AddedToManagerAddr, &MailScreen_AddedToManager, &old_MailScreen_AddedToManager);
-    homura::HookFunction(MailScreen_RemovedFromManagerAddr, &MailScreen_RemovedFromManager, &old_MailScreen_RemovedFromManager);
-    homura::HookFunction(MailScreen_Delete2Addr, &MailScreen_Delete2, &old_MailScreen_Delete2);
+    homura::HookFunction(MailScreen_MailScreenAddr, &MailScreen::Create, &old_MailScreen_MailScreen);
+    homura::HookFunction(MailScreen_AddedToManagerAddr, &MailScreen::AddedToManager, &old_MailScreen_AddedToManager);
+    homura::HookFunction(MailScreen_RemovedFromManagerAddr, &MailScreen::RemovedFromManager, &old_MailScreen_RemovedFromManager);
+    homura::HookFunction(MailScreen_Delete2Addr, &MailScreen::Delete2, &old_MailScreen_Delete2);
 
 
     homura::HookFunction(ZenGardenControls_UpdateAddr, &ZenGardenControls_Update, &old_ZenGardenControls_Update);
@@ -974,8 +968,6 @@ inline void InitHookFunction() {
     homura::HookFunction(TitleScreen_DrawAddr, &TitleScreen_Draw, &old_TitleScreen_Draw);
     homura::HookFunction(TitleScreen_UpdateAddr, &TitleScreen_Update, &old_TitleScreen_Update);
     homura::HookFunction(TitleScreen_SwitchStateAddr, &TitleScreen_SwitchState, nullptr);
-
-    homura::HookFunction(TodFoley_PlayFoleyAddr, &TodFoley::PlayFoley, &old_TodFoley_PlayFoley);
 }
 
 inline void InitVTableHookFunction() {

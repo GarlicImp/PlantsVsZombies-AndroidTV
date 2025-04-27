@@ -77,7 +77,7 @@ void Plant::PlantInitialize(int theGridX, int theGridY, SeedType theSeedType, Se
     Plant_UpdateReanim(this);
 
     // 在对战模式修改指定植物的血量
-    if (mApp->mGameMode == GameMode::GAMEMODE_TWO_PLAYER_VS) {
+    if (mApp->mGameMode == GameMode::GAMEMODE_MP_VS) {
         switch (theSeedType) {
             case SeedType::SEED_SUNFLOWER:
                 mPlantMaxHealth = 300;
@@ -541,7 +541,7 @@ GridItem *Plant::FindTargetGridItem(PlantWeapon thePlantWeapon) {
     GridItem *aGridItem = nullptr;
     GridItem *aTargetGridItem = nullptr;
     int aLastGridX = 0;
-    if (mApp->mGameMode == GameMode::GAMEMODE_TWO_PLAYER_VS) { // 如果是对战模式(关卡ID为76)
+    if (mApp->mGameMode == GameMode::GAMEMODE_MP_VS) { // 如果是对战模式(关卡ID为76)
         int mRow = mStartRow;
         while (Board_IterateGridItems(mBoard, &aGridItem)) { // 遍历场上的所有GridItem
 
@@ -588,7 +588,7 @@ void Plant::Die() {
 
 int Plant::GetCost(SeedType theSeedType, SeedType theImitaterType) {
     LawnApp *lawnApp = (LawnApp *)*gLawnApp_Addr;
-    if (lawnApp->mGameMode == GameMode::GAMEMODE_TWO_PLAYER_VS) {
+    if (lawnApp->mGameMode == GameMode::GAMEMODE_MP_VS) {
         if (theSeedType == SeedType::SEED_IMITATER && theImitaterType != SeedType::SEED_NONE) {
             theSeedType = theImitaterType;
         }
@@ -654,7 +654,7 @@ int Plant::GetRefreshTime(SeedType theSeedType, SeedType theImitaterType) {
         return 0;
     }
     LawnApp *lawnApp = (LawnApp *)*gLawnApp_Addr;
-    if (lawnApp->mGameMode == GameMode::GAMEMODE_TWO_PLAYER_VS) {
+    if (lawnApp->mGameMode == GameMode::GAMEMODE_MP_VS) {
         int refreshTime;
         if (theSeedType == SeedType::SEED_IMITATER && theImitaterType != SeedType::SEED_NONE) {
             theSeedType = theImitaterType;

@@ -266,7 +266,7 @@ PlantingReason Challenge::CanPlantAt(int theGridX, int theGridY, SeedType theSee
         }
     } else if (LawnApp_IsFinalBossLevel(mApp) && theGridX >= 8) {
         return PlantingReason::PLANTING_NOT_HERE;
-    } else if (aGameMode == GameMode::GAMEMODE_TWO_PLAYER_VS_HIDE || aGameMode == GameMode::GAMEMODE_TWO_PLAYER_VS) {
+    } else if (aGameMode == GameMode::GAMEMODE_MP_VS_HIDE || aGameMode == GameMode::GAMEMODE_MP_VS) {
         if (Challenge_IsMPSeedType(theSeedType)) {
             if (theGridX > 5 || theSeedType == SeedType::SEED_ZOMBIE_BUNGEE)
                 return PlantingReason::PLANTING_OK;

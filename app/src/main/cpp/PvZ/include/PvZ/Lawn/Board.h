@@ -7,6 +7,7 @@
 #include "Projectile.h"
 #include "Coin.h"
 #include "GridItem.h"
+#include "PvZ/Symbols.h"
 
 #define MAX_GRID_SIZE_X 9
 #define MAX_GRID_SIZE_Y 6
@@ -238,8 +239,17 @@ public:
     int *mStringSecondPlayer;                             // 5689
     int unknownMembers[8];                                // 5690 ~ 5697
 
-    Board(LawnApp* theApp);
+    Projectile* AddProjectile(int theX, int theY, int theRenderOrder, int theRow, ProjectileType theProjectileType) {
+        return reinterpret_cast<Projectile *(*)(Board *, int, int, int, int, ProjectileType)>(Board_AddProjectileAddr)(this, theX, theY, theRenderOrder, theRow, theProjectileType);
+    }
+    int PixelToGridX(int theX, int theY) { return reinterpret_cast<int (*)(Board *, int, int)>(Board_PixelToGridXAddr)(this, theX, theY); }
+    int PixelToGridY(int theX, int theY) { return reinterpret_cast<int (*)(Board *, int, int)>(Board_PixelToGridYAddr)(this, theX, theY); }
+    GridItem* GetScaryPotAt(int theGridX, int theGridY);
+    GridItem* GetGridItemAt(GridItemType theGridItemType, int theGridX, int theGridY);
+    void Move(int theX, int theY) { reinterpret_cast<void (*)(Board *, int, int)>(Board_MoveAddr)(this, theX, theY); } // 整体移动整个草坪，包括种子栏和铲子按钮等等。
+    void DoFwoosh(int theRow) { reinterpret_cast<void (*)(Board *, int)>(Board_DoFwooshAddr)(this, theRow); }
 
+    Board(LawnApp* theApp);
     void Create(LawnApp* theApp);
     void InitLevel();
     void Update();
@@ -297,12 +307,7 @@ public:
     void DrawZenButtons(Sexy::Graphics* g);
     void SpeedUpUpdate();
     void DrawShovelButton(Sexy::Graphics* g, LawnApp* theApp);
-    Projectile* AddProjectile(int theX, int theY, int theRenderOrder, int theRow, ProjectileType theProjectileType);
     void ShovelDown();
-    int PixelToGridX(int theX, int theY);
-    int PixelToGridY(int theX, int theY);
-    GridItem* GetScaryPotAt(int theGridX, int theGridY);
-    GridItem* GetGridItemAt(GridItemType theGridItemType, int theGridX, int theGridY);
 
     void MouseMove(int x, int y);
     void MouseDown(int x, int y, int theClickCount);
@@ -431,11 +436,6 @@ inline bool (*Board_IsSurvivalStageWithRepick)(Board *board);
 inline void (*Board_PickUpTool)(Board *board, GameObjectType a2, int a3);
 
 inline bool (*Board_ProgressMeterHasFlags)(Board *board);
-
-// 整体移动整个草坪，包括种子栏和铲子按钮等等。
-inline void (*Board_Move)(Board *board, int newX, int newY);
-
-inline void (*Board_DoFwoosh)(Board *board, int mRow);
 
 inline void (*Board_GetButterButtonRect)(TRect *, Board *);
 
@@ -635,12 +635,6 @@ inline void (*old_Board_GetShovelButtonRect)(TRect *rect, Board *board);
 inline void (*old_Board_DrawZenButtons)(Board *board, Sexy::Graphics *a2);
 
 inline int (*old_Board_GetNumSeedsInBank)(Board* , bool);
-
-inline Projectile* (*old_Board_AddProjectile)(Board*, int theX, int theY, int theRenderOrder, int theRow, ProjectileType theProjectileType);
-
-inline int (*old_Board_PixelToGridX)(Board*, int theX, int theY);
-
-inline int (*old_Board_PixelToGridY)(Board*, int theX, int theY);
 
 
 void FixBoardAfterLoad(Board *board);

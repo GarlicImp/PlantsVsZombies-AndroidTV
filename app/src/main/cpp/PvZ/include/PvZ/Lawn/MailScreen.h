@@ -2,6 +2,7 @@
 #define PVZ_LAWN_MAIL_SCREEN_H
 
 #include "PvZ/Enums.h"
+#include "PvZ/Symbols.h"
 
 class MailScreen : public LawnDialog {
 public:
@@ -9,7 +10,15 @@ public:
     int mPage;    // 194
     int unk2[12]; // 195 ~ 206
     // 115: 207, 111: 209
-public:
+
+    void KeyDown(int theKey, int a2, int a3) { reinterpret_cast<void (*)(MailScreen *, int, int, int)>(MailScreen_KeyDownAddr)(this, theKey, a2, a3); }
+
+    MailScreen(LawnApp* theApp);
+    void Create(LawnApp* theApp);
+    void AddedToManager(int *theWidgetManager);
+    void RemovedFromManager(int *widgetManager);
+    void Delete2();
+
     void MouseDown(int x, int y, int theClickCount);
     void MouseUp(int x, int y);
     void MouseDrag(int x, int y);
@@ -17,7 +26,7 @@ public:
     void ButtonDepress(int theId);
 };
 
-inline void (*MailScreen_KeyDown)(MailScreen *mailScreen, int keyCode, int, int);
+//inline void (*MailScreen_KeyDown)(MailScreen *mailScreen, int keyCode, int, int);
 
 
 inline void (*old_MailScreen_MailScreen)(MailScreen *mailScreen, LawnApp *lawnApp);
@@ -37,14 +46,5 @@ inline void (*old_MailScreen_MouseDown)(MailScreen *mailScreen, int x, int y, in
 inline void (*old_MailScreen_MouseDrag)(MailScreen *mailScreen, int x, int y);
 
 inline void (*old_MailScreen_MouseUp)(MailScreen *mailScreen, int x, int y);
-
-
-void MailScreen_MailScreen(MailScreen *mailScreen, LawnApp *lawnApp);
-
-void MailScreen_AddedToManager(MailScreen *mailScreen, int *widgetManager);
-
-void MailScreen_RemovedFromManager(MailScreen *mailScreen, int *widgetManager);
-
-void MailScreen_Delete2(MailScreen *mailScreen);
 
 #endif // PVZ_LAWN_MAIL_SCREEN_H
