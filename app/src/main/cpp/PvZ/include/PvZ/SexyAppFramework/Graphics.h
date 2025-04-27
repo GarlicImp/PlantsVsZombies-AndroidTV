@@ -91,9 +91,9 @@ inline void (*Sexy_Graphics_SetLinearBlend)(Sexy::Graphics *, int);
 
 inline void (*Sexy_Graphics_ClipRect)(Sexy::Graphics *, int, int, int, int);
 
-inline void (*Sexy_Graphics_FillRect)(Sexy::Graphics *graphics, TRect *rect);
+inline void (*Sexy_Graphics_FillRect)(Sexy::Graphics *graphics, Sexy::Rect *rect);
 
-inline void (*Sexy_Graphics_DrawRect)(Sexy::Graphics *graphics, TRect *rect);
+inline void (*Sexy_Graphics_DrawRect)(Sexy::Graphics *graphics, Sexy::Rect *rect);
 
 inline void (*Sexy_Graphics_DrawString)(Sexy::Graphics *a1, int *a2, int a3, int a4);
 
@@ -153,14 +153,14 @@ inline float (*TodAnimateCurveFloat)(int theTimeStart, int theTimeEnd, int theTi
 
 inline float (*TodAnimateCurveFloatTime)(float theTimeStart, float theTimeEnd, float theTimeAge, float thePositionStart, float thePositionEnd, TodCurves theCurve);
 
-inline void (*TodDrawStringWrapped)(Sexy::Graphics *graphics, int *text, TRect *theRect, Sexy::Font *theFont, Color *theColor, DrawStringJustification justification, bool a7);
+inline void (*TodDrawStringWrapped)(Sexy::Graphics *graphics, int *text, Sexy::Rect *theRect, Sexy::Font *theFont, Color *theColor, DrawStringJustification justification, bool a7);
 
 inline int (*TodDrawStringWrappedHelper)(
-    Sexy::Graphics *pGraphics, int *pInt, TRect *pRect, Sexy::Font *pFont, Color color, DrawStringJustification justification, bool i1, bool i2);
+    Sexy::Graphics *pGraphics, int *pInt, Sexy::Rect *pRect, Sexy::Font *pFont, Color color, DrawStringJustification justification, bool i1, bool i2);
 
 inline void (*Sexy_GLGraphics_SetWrapMode)(Sexy::Graphics *graphics, int a2, int a3);
 
-inline void (*Sexy_Graphics_DrawImageMatrix)(Sexy::Graphics *graphics, Sexy::Image *, Sexy::SexyMatrix3 *, TRect *, float, float, bool);
+inline void (*Sexy_Graphics_DrawImageMatrix)(Sexy::Graphics *graphics, Sexy::Image *, Sexy::SexyMatrix3 *, Sexy::Rect *, float, float, bool);
 
 
 inline void (*old_Sexy_Graphics_PushTransform)(Sexy::Graphics *, int *, bool);

@@ -604,7 +604,7 @@ void MainMenu::Draw(Sexy::Graphics* g) {
                 v18 = 0;
             unkMems3[3] = v18;
             TodAnimateCurveFloat(0, 100, v18, 0.75, 0.8, TodCurves::CURVE_SIN_WAVE);
-            TRect v38 = {0, 0, mailAlertImage->mWidth, mailAlertImage->mHeight};
+            Sexy::Rect v38 = {0, 0, mailAlertImage->mWidth, mailAlertImage->mHeight};
             Sexy_Graphics_DrawImageMatrix(g, mailAlertImage, &v42, &v38, 0.0, 0.0, 1);
         }
     }
@@ -616,9 +616,9 @@ void MainMenu::Draw(Sexy::Graphics* g) {
     Sexy_SexyTransform2D_Translate(&v42, mCameraPositionX, mCameraPositionY);
     Sexy_SexyTransform2D_Translate(&v42, 120.0, 200.0);
 
-    TRect v37 = {0, 0, m2DMarkImage->mWidth, m2DMarkImage->mHeight};
+    Sexy::Rect v37 = {0, 0, m2DMarkImage->mWidth, m2DMarkImage->mHeight};
     Sexy_Graphics_DrawImageMatrix(g, m2DMarkImage, &v42, &v37, 0.0, 0.0, 1);
-    TRect v38 = {15, 15, 90, 90};
+    Sexy::Rect v38 = {15, 15, 90, 90};
     Sexy_SexyTransform2D_Translate(&v42, -4.0, -16.0);
     Sexy_Graphics_DrawImageMatrix(g, mApp->mQRCodeImage, &v42, &v38, 0.0, 0.0, 1);
 }
@@ -682,7 +682,7 @@ void MaskHelpWidget_Draw(AchievementsWidget *achievementsWidget, Sexy::Graphics 
         Sexy_StrFormat(holder1, "[%s_TEXT]", theAchievementName);
         Color theColor = {0, 255, 0, 255};
         Color theColor1 = {255, 255, 255, 255};
-        TRect rect = {460, theAchievementY + 60, 540, 0};
+        Sexy::Rect rect = {460, theAchievementY + 60, 540, 0};
         TodDrawString(graphics, holder, 460, theAchievementY + 40, *Sexy_FONT_HOUSEOFTERROR28_Addr, theColor, DrawStringJustification::DS_ALIGN_LEFT);
         if (i == AchievementId::ACHIEVEMENT_SHOP) {
             int holder2[1];
@@ -925,7 +925,7 @@ void TrashBin::Draw(Sexy::Graphics *g) {
     //    TodReplaceNumberString(holder1,holder,"{HEIGHT}",(int)trashBin->mTrashHeight);
     //
     //    if (mTrashPileType == ZOMBIE_TRASH_BIN::PLANT_PILE) {
-    //        TRect theRect ={317,658,120,50};
+    //        Rect theRect ={317,658,120,50};
     //        Sexy::Font* theFont = *Sexy_FONT_CONTINUUMBOLD14_Addr;
     //        TodDrawStringWrapped(g, holder1, &theRect, theFont, &yellow, DrawStringJustification::DS_ALIGN_CENTER, false);
     //    }else {
@@ -1177,7 +1177,7 @@ void DaveHelp_Draw(LeaderboardsWidget *leaderboardsWidget, Sexy::Graphics *graph
             Sexy_Graphics_DrawImage(graphics, image, offsetX, offsetY);
             int holder[1];
             Sexy_StrFormat(holder, "[%s]", GetNameByAchievementId(id));
-            TRect rect = {offsetX - 42, offsetY + 125, 200, 200};
+            Sexy::Rect rect = {offsetX - 42, offsetY + 125, 200, 200};
             Color theColor = {0, 255, 0, 255};
             TodDrawStringWrapped(graphics, holder, &rect, *Sexy_FONT_HOUSEOFTERROR28_Addr, &theColor, DrawStringJustification::DS_ALIGN_CENTER, false);
             Sexy_String_Delete(holder);
@@ -1192,7 +1192,7 @@ void DaveHelp_Draw(LeaderboardsWidget *leaderboardsWidget, Sexy::Graphics *graph
         int holder1[1];
         TodStringTranslate(holder, "[LEADERBOARD_STREAK]");
         TodReplaceNumberString(holder1, holder, "{STREAK}", leaderboardsWidget->mLongestRecordPool);
-        TRect theRect = {317, 658, 120, 50};
+        Sexy::Rect theRect = {317, 658, 120, 50};
         Sexy::Font *theFont = *Sexy_FONT_CONTINUUMBOLD14_Addr;
         TodDrawStringWrapped(graphics, holder1, &theRect, theFont, &yellow, DrawStringJustification::DS_ALIGN_CENTER, false);
         Sexy_String_Delete(holder);
@@ -1204,7 +1204,7 @@ void DaveHelp_Draw(LeaderboardsWidget *leaderboardsWidget, Sexy::Graphics *graph
     int holder2[1];
     int holder3[1];
     int holder4[1];
-    TRect theRect1 = {240, 70, 800, 70};
+    Sexy::Rect theRect1 = {240, 70, 800, 70};
     TodStringTranslate(holder2, "[PLAYERS_HOUSE]");
     Sexy_StrFormat(holder3, "%s", leaderboardsWidget->mApp->mPlayerInfo->mName);
     TodReplaceString(holder4, holder2, "{PLAYER}", holder3);
@@ -1216,8 +1216,8 @@ void DaveHelp_Draw(LeaderboardsWidget *leaderboardsWidget, Sexy::Graphics *graph
 
     //    int plantHeight = plantPileHeight * leaderboardsWidget->mPlantTrashBin->mPileNum;
     //    int zombieHeight = zombiePileHeight * leaderboardsWidget->mZombieTrashBin->mPileNum;
-    //    TRect plantTrashBinRect = {leaderboardsWidget->mPlantTrashBin->mX,leaderboardsWidget->mPlantTrashBin->mY - plantHeight,addonImages.plant_can->mWidth,addonImages.plant_can->mHeight +
-    //    plantHeight}; TRect zombieTrashBinRect = {leaderboardsWidget->mZombieTrashBin->mX,leaderboardsWidget->mZombieTrashBin->mY -
+    //    Rect plantTrashBinRect = {leaderboardsWidget->mPlantTrashBin->mX,leaderboardsWidget->mPlantTrashBin->mY - plantHeight,addonImages.plant_can->mWidth,addonImages.plant_can->mHeight +
+    //    plantHeight}; Rect zombieTrashBinRect = {leaderboardsWidget->mZombieTrashBin->mX,leaderboardsWidget->mZombieTrashBin->mY -
     //    zombieHeight,addonImages.zombie_can->mWidth,addonImages.zombie_can->mHeight + zombieHeight};
     //
     //    Sexy_Graphics_SetColor(graphics, &yellow);
@@ -1228,11 +1228,11 @@ void DaveHelp_Draw(LeaderboardsWidget *leaderboardsWidget, Sexy::Graphics *graph
 
 
     //    Sexy_Graphics_SetColor(graphics, &yellow);
-    //    TRect rect = {xx,yy,xw,yh};
+    //    Rect rect = {xx,yy,xw,yh};
     //    Sexy_Graphics_DrawRect(graphics, &rect);
     //
     //    Sexy_Graphics_SetColor(graphics, &green);
-    //    TRect rect2 = {xx1,yy1,xw1,yh1};
+    //    Rect rect2 = {xx1,yy1,xw1,yh1};
     //    Sexy_Graphics_DrawRect(graphics, &rect2);
     //    if (LawnApp_EarnedGoldTrophy(leaderboardsWidget->mApp)) {
     //        Sexy_Graphics_DrawImageCel(graphics, *Sexy_IMAGE_SUNFLOWER_TROPHY_Addr, 1110, 290, 1, 0);
@@ -1260,7 +1260,7 @@ void DaveHelp_Delete2(LeaderboardsWidget *leaderboardsWidget) {
 }
 
 
-static TRect gLeaderboardAchievementsRect[12][2] = {
+static Sexy::Rect gLeaderboardAchievementsRect[12][2] = {
     {{253, 594, 485, 62}, {833, 528, 198, 68}},
     {{209, 488, 91, 106}, {0, 0, 0, 0}},
     {{269, 330, 185, 122}, {298, 453, 91, 91}},
@@ -1292,7 +1292,7 @@ void DaveHelp_MouseDown(LeaderboardsWidget *leaderboardsWidget, int x, int y, in
     }
 
     int plantHeight = plantPileHeight * leaderboardsWidget->mPlantTrashBin->mPileNum;
-    TRect plantTrashBinRect = {
+    Sexy::Rect plantTrashBinRect = {
         leaderboardsWidget->mPlantTrashBin->mX, leaderboardsWidget->mPlantTrashBin->mY - plantHeight, addonImages.plant_can->mWidth, addonImages.plant_can->mHeight + plantHeight};
 
     if (TRect_Contains(&plantTrashBinRect, x, y)) {
@@ -1308,7 +1308,7 @@ void DaveHelp_MouseDown(LeaderboardsWidget *leaderboardsWidget, int x, int y, in
     }
 
     int zombieHeight = zombiePileHeight * leaderboardsWidget->mZombieTrashBin->mPileNum;
-    TRect zombieTrashBinRect = {
+    Sexy::Rect zombieTrashBinRect = {
         leaderboardsWidget->mZombieTrashBin->mX, leaderboardsWidget->mZombieTrashBin->mY - zombieHeight, addonImages.zombie_can->mWidth, addonImages.zombie_can->mHeight + zombieHeight};
 
     if (TRect_Contains(&zombieTrashBinRect, x, y)) {
@@ -1338,7 +1338,7 @@ void DaveHelp_MouseDown(LeaderboardsWidget *leaderboardsWidget, int x, int y, in
     //        LOGD("%d %d", x, y);
     //    }
 
-    //    TRect rect = {1066, 574, 72, 72};
+    //    Rect rect = {1066, 574, 72, 72};
     //    if (TRect_Contains(&rect, x, y)) {
     //        leaderboardsWidget->mTouchDownInBackRect = true;
     //        LawnApp_PlaySample(leaderboardsWidget->mApp,*Sexy_SOUND_GRAVEBUTTON_Addr);
@@ -2958,7 +2958,7 @@ void TestMenuWidget_DrawSkin(ZombatarWidget *zombatarWidget, Sexy::Graphics *gra
 
     int holder[1];
     TodStringTranslate(holder, "[ZOMBATAR_START_TEXT]");
-    TRect rect = {160 + 295, 211, 250, 100};
+    Sexy::Rect rect = {160 + 295, 211, 250, 100};
     Sexy::Font *font = *Sexy_FONT_DWARVENTODCRAFT18_Addr;
     TodDrawStringWrapped(graphics, holder, &rect, font, &yellow, DrawStringJustification::DS_ALIGN_CENTER, false);
     Sexy_String_Delete(holder);
@@ -3006,7 +3006,7 @@ void TestMenuWidget_DrawHair(ZombatarWidget *zombatarWidget, Sexy::Graphics *gra
     if (zombatarWidget->mSelectedHair == 255) {
         int holder[1];
         TodStringTranslate(holder, "[ZOMBATAR_COLOR_ITEM_NOT_CHOSEN]");
-        TRect rect = {160 + 288, 445, 250, 100};
+        Sexy::Rect rect = {160 + 288, 445, 250, 100};
         Sexy::Font *font = *Sexy_FONT_BRIANNETOD12_Addr;
         TodDrawStringWrapped(graphics, holder, &rect, font, &white, DrawStringJustification::DS_ALIGN_LEFT, false);
         Sexy_String_Delete(holder);
@@ -3023,7 +3023,7 @@ void TestMenuWidget_DrawHair(ZombatarWidget *zombatarWidget, Sexy::Graphics *gra
     } else {
         int holder[1];
         TodStringTranslate(holder, "[ZOMBATAR_COLOR_NOT_APPLICABLE]");
-        TRect rect = {160 + 288, 445, 250, 100};
+        Sexy::Rect rect = {160 + 288, 445, 250, 100};
         Sexy::Font *font = *Sexy_FONT_BRIANNETOD12_Addr;
         TodDrawStringWrapped(graphics, holder, &rect, font, &white, DrawStringJustification::DS_ALIGN_LEFT, false);
         Sexy_String_Delete(holder);
@@ -3116,7 +3116,7 @@ void TestMenuWidget_DrawFHair(ZombatarWidget *zombatarWidget, Sexy::Graphics *gr
     if (zombatarWidget->mSelectedFHair == 255) {
         int holder[1];
         TodStringTranslate(holder, "[ZOMBATAR_COLOR_ITEM_NOT_CHOSEN]");
-        TRect rect = {160 + 288, 445, 250, 100};
+        Sexy::Rect rect = {160 + 288, 445, 250, 100};
         Sexy::Font *font = *Sexy_FONT_BRIANNETOD12_Addr;
         TodDrawStringWrapped(graphics, holder, &rect, font, &white, DrawStringJustification::DS_ALIGN_LEFT, false);
         Sexy_String_Delete(holder);
@@ -3133,7 +3133,7 @@ void TestMenuWidget_DrawFHair(ZombatarWidget *zombatarWidget, Sexy::Graphics *gr
     } else {
         int holder[1];
         TodStringTranslate(holder, "[ZOMBATAR_COLOR_NOT_APPLICABLE]");
-        TRect rect = {160 + 288, 445, 250, 100};
+        Sexy::Rect rect = {160 + 288, 445, 250, 100};
         Sexy::Font *font = *Sexy_FONT_BRIANNETOD12_Addr;
         TodDrawStringWrapped(graphics, holder, &rect, font, &white, DrawStringJustification::DS_ALIGN_LEFT, false);
         Sexy_String_Delete(holder);
@@ -3181,7 +3181,7 @@ void TestMenuWidget_DrawTidBit(ZombatarWidget *zombatarWidget, Sexy::Graphics *g
     if (zombatarWidget->mSelectedTidBit == 255) {
         int holder[1];
         TodStringTranslate(holder, "[ZOMBATAR_COLOR_ITEM_NOT_CHOSEN]");
-        TRect rect = {160 + 288, 445, 250, 100};
+        Sexy::Rect rect = {160 + 288, 445, 250, 100};
         Sexy::Font *font = *Sexy_FONT_BRIANNETOD12_Addr;
         TodDrawStringWrapped(graphics, holder, &rect, font, &white, DrawStringJustification::DS_ALIGN_LEFT, false);
         Sexy_String_Delete(holder);
@@ -3198,7 +3198,7 @@ void TestMenuWidget_DrawTidBit(ZombatarWidget *zombatarWidget, Sexy::Graphics *g
     } else {
         int holder[1];
         TodStringTranslate(holder, "[ZOMBATAR_COLOR_NOT_APPLICABLE]");
-        TRect rect = {160 + 288, 445, 250, 100};
+        Sexy::Rect rect = {160 + 288, 445, 250, 100};
         Sexy::Font *font = *Sexy_FONT_BRIANNETOD12_Addr;
         TodDrawStringWrapped(graphics, holder, &rect, font, &white, DrawStringJustification::DS_ALIGN_LEFT, false);
         Sexy_String_Delete(holder);
@@ -3242,7 +3242,7 @@ void TestMenuWidget_DrawEyeWear(ZombatarWidget *zombatarWidget, Sexy::Graphics *
     if (zombatarWidget->mSelectedEyeWear == 255) {
         int holder[1];
         TodStringTranslate(holder, "[ZOMBATAR_COLOR_ITEM_NOT_CHOSEN]");
-        TRect rect = {160 + 288, 445, 250, 100};
+        Sexy::Rect rect = {160 + 288, 445, 250, 100};
         Sexy::Font *font = *Sexy_FONT_BRIANNETOD12_Addr;
         TodDrawStringWrapped(graphics, holder, &rect, font, &white, DrawStringJustification::DS_ALIGN_LEFT, false);
         Sexy_String_Delete(holder);
@@ -3259,7 +3259,7 @@ void TestMenuWidget_DrawEyeWear(ZombatarWidget *zombatarWidget, Sexy::Graphics *
     } else {
         int holder[1];
         TodStringTranslate(holder, "[ZOMBATAR_COLOR_NOT_APPLICABLE]");
-        TRect rect = {160 + 288, 445, 250, 100};
+        Sexy::Rect rect = {160 + 288, 445, 250, 100};
         Sexy::Font *font = *Sexy_FONT_BRIANNETOD12_Addr;
         TodDrawStringWrapped(graphics, holder, &rect, font, &white, DrawStringJustification::DS_ALIGN_LEFT, false);
         Sexy_String_Delete(holder);
@@ -3315,14 +3315,14 @@ void TestMenuWidget_DrawCloth(ZombatarWidget *zombatarWidget, Sexy::Graphics *gr
     if (zombatarWidget->mSelectedCloth == 255) {
         int holder[1];
         TodStringTranslate(holder, "[ZOMBATAR_COLOR_ITEM_NOT_CHOSEN]");
-        TRect rect = {160 + 288, 445, 250, 100};
+        Sexy::Rect rect = {160 + 288, 445, 250, 100};
         Sexy::Font *font = *Sexy_FONT_BRIANNETOD12_Addr;
         TodDrawStringWrapped(graphics, holder, &rect, font, &white, DrawStringJustification::DS_ALIGN_LEFT, false);
         Sexy_String_Delete(holder);
     } else {
         int holder[1];
         TodStringTranslate(holder, "[ZOMBATAR_COLOR_NOT_APPLICABLE]");
-        TRect rect = {160 + 288, 445, 250, 100};
+        Sexy::Rect rect = {160 + 288, 445, 250, 100};
         Sexy::Font *font = *Sexy_FONT_BRIANNETOD12_Addr;
         TodDrawStringWrapped(graphics, holder, &rect, font, &white, DrawStringJustification::DS_ALIGN_LEFT, false);
         Sexy_String_Delete(holder);
@@ -3359,7 +3359,7 @@ void TestMenuWidget_DrawAccessory(ZombatarWidget *zombatarWidget, Sexy::Graphics
     if (zombatarWidget->mSelectedAccessory == 255) {
         int holder[1];
         TodStringTranslate(holder, "[ZOMBATAR_COLOR_ITEM_NOT_CHOSEN]");
-        TRect rect = {160 + 288, 445, 250, 100};
+        Sexy::Rect rect = {160 + 288, 445, 250, 100};
         Sexy::Font *font = *Sexy_FONT_BRIANNETOD12_Addr;
         TodDrawStringWrapped(graphics, holder, &rect, font, &white, DrawStringJustification::DS_ALIGN_LEFT, false);
         Sexy_String_Delete(holder);
@@ -3376,7 +3376,7 @@ void TestMenuWidget_DrawAccessory(ZombatarWidget *zombatarWidget, Sexy::Graphics
     } else {
         int holder[1];
         TodStringTranslate(holder, "[ZOMBATAR_COLOR_NOT_APPLICABLE]");
-        TRect rect = {160 + 288, 445, 250, 100};
+        Sexy::Rect rect = {160 + 288, 445, 250, 100};
         Sexy::Font *font = *Sexy_FONT_BRIANNETOD12_Addr;
         TodDrawStringWrapped(graphics, holder, &rect, font, &white, DrawStringJustification::DS_ALIGN_LEFT, false);
         Sexy_String_Delete(holder);
@@ -3422,7 +3422,7 @@ void TestMenuWidget_DrawHat(ZombatarWidget *zombatarWidget, Sexy::Graphics *grap
     if (zombatarWidget->mSelectedHat == 255) {
         int holder[1];
         TodStringTranslate(holder, "[ZOMBATAR_COLOR_ITEM_NOT_CHOSEN]");
-        TRect rect = {160 + 288, 445, 250, 100};
+        Sexy::Rect rect = {160 + 288, 445, 250, 100};
         Sexy::Font *font = *Sexy_FONT_BRIANNETOD12_Addr;
         TodDrawStringWrapped(graphics, holder, &rect, font, &white, DrawStringJustification::DS_ALIGN_LEFT, false);
         Sexy_String_Delete(holder);
@@ -3439,7 +3439,7 @@ void TestMenuWidget_DrawHat(ZombatarWidget *zombatarWidget, Sexy::Graphics *grap
     } else {
         int holder[1];
         TodStringTranslate(holder, "[ZOMBATAR_COLOR_NOT_APPLICABLE]");
-        TRect rect = {160 + 288, 445, 250, 100};
+        Sexy::Rect rect = {160 + 288, 445, 250, 100};
         Sexy::Font *font = *Sexy_FONT_BRIANNETOD12_Addr;
         TodDrawStringWrapped(graphics, holder, &rect, font, &white, DrawStringJustification::DS_ALIGN_LEFT, false);
         Sexy_String_Delete(holder);
@@ -3505,7 +3505,7 @@ void TestMenuWidget_DrawBackground(ZombatarWidget *zombatarWidget, Sexy::Graphic
     } else {
         int holder[1];
         TodStringTranslate(holder, "[ZOMBATAR_COLOR_NOT_APPLICABLE]");
-        TRect rect = {160 + 288, 445, 250, 100};
+        Sexy::Rect rect = {160 + 288, 445, 250, 100};
         Sexy::Font *font = *Sexy_FONT_BRIANNETOD12_Addr;
         TodDrawStringWrapped(graphics, holder, &rect, font, &white, DrawStringJustification::DS_ALIGN_LEFT, false);
         Sexy_String_Delete(holder);
@@ -3684,7 +3684,7 @@ void TestMenuWidget_Draw(ZombatarWidget *zombatarWidget, Sexy::Graphics *graphic
         Sexy_Graphics_DrawImage(graphics, addonImages.zombatar_portrait, 160 + 260, 210);
         int holder[1];
         TodStringTranslate(holder, "[ZOMBATAR_VIEW_PORTRAIT]");
-        TRect rect = {160 + 178, 450, 400, 100};
+        Sexy::Rect rect = {160 + 178, 450, 400, 100};
         TodDrawStringWrapped(graphics, holder, &rect, *Sexy_FONT_BRIANNETOD16_Addr, &white, DrawStringJustification::DS_ALIGN_CENTER, false);
         Sexy_String_Delete(holder);
     } else if (zombatarWidget->mShowZombieTypeSelection) {
@@ -3785,7 +3785,7 @@ void TestMenuWidget_MouseDownSkin(ZombatarWidget *zombatarWidget, int x, int y) 
     for (int i = 0; i < 12; ++i) {
         int theX = 160 + 285 + (i % 9) * 30;
         int theY = 432 + i / 9 * 30;
-        TRect rect = {theX, theY, 30, 30};
+        Sexy::Rect rect = {theX, theY, 30, 30};
         if (TRect_Contains(&rect, x, y)) {
             zombatarWidget->mSelectedSkinColor = i;
             return;
@@ -3797,7 +3797,7 @@ void TestMenuWidget_MouseDownHair(ZombatarWidget *zombatarWidget, int x, int y) 
     for (int i = 0; i < 16; ++i) {
         int theX = 160 + 198 + (i % 6) * 73;
         int theY = 162 + i / 6 * 79;
-        TRect rect = {theX, theY, 73, 79};
+        Sexy::Rect rect = {theX, theY, 73, 79};
         if (TRect_Contains(&rect, x, y)) {
             zombatarWidget->mSelectedHair = i;
             Reanimation_SetZombatarHair(zombatarWidget->mZombatarReanim, zombatarWidget->mSelectedHair, zombatarWidget->mSelectedHairColor);
@@ -3806,7 +3806,7 @@ void TestMenuWidget_MouseDownHair(ZombatarWidget *zombatarWidget, int x, int y) 
     }
     int theX = 160 + 198 + (16 % 6) * 73;
     int theY = 162 + 16 / 6 * 79;
-    TRect rect = {theX, theY, 73, 79};
+    Sexy::Rect rect = {theX, theY, 73, 79};
     if (TRect_Contains(&rect, x, y)) {
         zombatarWidget->mSelectedHair = 255;
         Reanimation_SetZombatarHair(zombatarWidget->mZombatarReanim, zombatarWidget->mSelectedHair, zombatarWidget->mSelectedHairColor);
@@ -3816,7 +3816,7 @@ void TestMenuWidget_MouseDownHair(ZombatarWidget *zombatarWidget, int x, int y) 
         for (int i = 0; i < 18; ++i) {
             int theX = 160 + 285 + (i % 9) * 30;
             int theY = 432 + i / 9 * 30;
-            TRect rect = {theX, theY, 30, 30};
+            Sexy::Rect rect = {theX, theY, 30, 30};
             if (TRect_Contains(&rect, x, y)) {
                 zombatarWidget->mSelectedHairColor = i;
                 Reanimation_SetZombatarHair(zombatarWidget->mZombatarReanim, zombatarWidget->mSelectedHair, zombatarWidget->mSelectedHairColor);
@@ -3831,7 +3831,7 @@ void TestMenuWidget_MouseDownFHair(ZombatarWidget *zombatarWidget, int x, int y)
         for (int i = 0; i < 17; ++i) {
             int theX = 160 + 198 + (i % 6) * 73;
             int theY = 162 + i / 6 * 79;
-            TRect rect = {theX, theY, 73, 79};
+            Sexy::Rect rect = {theX, theY, 73, 79};
             if (TRect_Contains(&rect, x, y)) {
                 zombatarWidget->mSelectedFHair = i;
                 Reanimation_SetZombatarFHair(zombatarWidget->mZombatarReanim, zombatarWidget->mSelectedFHair, zombatarWidget->mSelectedFHairColor);
@@ -3840,13 +3840,13 @@ void TestMenuWidget_MouseDownFHair(ZombatarWidget *zombatarWidget, int x, int y)
         }
         int theX = 160 + 198 + (17 % 6) * 73;
         int theY = 162 + 17 / 6 * 79;
-        TRect rect = {theX, theY, 73, 79};
+        Sexy::Rect rect = {theX, theY, 73, 79};
         if (TRect_Contains(&rect, x, y)) {
             zombatarWidget->mSelectedFHair = 255;
             Reanimation_SetZombatarFHair(zombatarWidget->mZombatarReanim, zombatarWidget->mSelectedFHair, zombatarWidget->mSelectedFHairColor);
             return;
         }
-        TRect next = {160 + 588, 436, addonZombatarImages.zombatar_next_button->mWidth, addonZombatarImages.zombatar_next_button->mHeight};
+        Sexy::Rect next = {160 + 588, 436, addonZombatarImages.zombatar_next_button->mWidth, addonZombatarImages.zombatar_next_button->mHeight};
         if (TRect_Contains(&next, x, y)) {
             zombatarWidget->mSelectedFHairPage++;
             return;
@@ -3855,7 +3855,7 @@ void TestMenuWidget_MouseDownFHair(ZombatarWidget *zombatarWidget, int x, int y)
         for (int i = 0; i < 7; ++i) {
             int theX = 160 + 198 + (i % 6) * 73;
             int theY = 162 + i / 6 * 79;
-            TRect rect = {theX, theY, 73, 79};
+            Sexy::Rect rect = {theX, theY, 73, 79};
             if (TRect_Contains(&rect, x, y)) {
                 zombatarWidget->mSelectedFHair = i + 17;
                 Reanimation_SetZombatarFHair(zombatarWidget->mZombatarReanim, zombatarWidget->mSelectedFHair, zombatarWidget->mSelectedFHairColor);
@@ -3864,13 +3864,13 @@ void TestMenuWidget_MouseDownFHair(ZombatarWidget *zombatarWidget, int x, int y)
         }
         int theX = 160 + 198 + (7 % 6) * 73;
         int theY = 162 + 7 / 6 * 79;
-        TRect rect = {theX, theY, 73, 79};
+        Sexy::Rect rect = {theX, theY, 73, 79};
         if (TRect_Contains(&rect, x, y)) {
             zombatarWidget->mSelectedFHair = 255;
             Reanimation_SetZombatarFHair(zombatarWidget->mZombatarReanim, zombatarWidget->mSelectedFHair, zombatarWidget->mSelectedFHairColor);
             return;
         }
-        TRect prev = {160 + 209, 436, addonZombatarImages.zombatar_next_button->mWidth, addonZombatarImages.zombatar_next_button->mHeight};
+        Sexy::Rect prev = {160 + 209, 436, addonZombatarImages.zombatar_next_button->mWidth, addonZombatarImages.zombatar_next_button->mHeight};
         if (TRect_Contains(&prev, x, y)) {
             zombatarWidget->mSelectedFHairPage--;
             return;
@@ -3881,7 +3881,7 @@ void TestMenuWidget_MouseDownFHair(ZombatarWidget *zombatarWidget, int x, int y)
         for (int i = 0; i < 18; ++i) {
             int theX = 160 + 285 + (i % 9) * 30;
             int theY = 432 + i / 9 * 30;
-            TRect rect = {theX, theY, 30, 30};
+            Sexy::Rect rect = {theX, theY, 30, 30};
             if (TRect_Contains(&rect, x, y)) {
                 zombatarWidget->mSelectedFHairColor = i;
                 Reanimation_SetZombatarFHair(zombatarWidget->mZombatarReanim, zombatarWidget->mSelectedFHair, zombatarWidget->mSelectedFHairColor);
@@ -3895,7 +3895,7 @@ void TestMenuWidget_MouseDownTidBit(ZombatarWidget *zombatarWidget, int x, int y
     for (int i = 0; i < 14; ++i) {
         int theX = 160 + 198 + (i % 6) * 73;
         int theY = 162 + i / 6 * 79;
-        TRect rect = {theX, theY, 73, 79};
+        Sexy::Rect rect = {theX, theY, 73, 79};
         if (TRect_Contains(&rect, x, y)) {
             zombatarWidget->mSelectedTidBit = i;
             Reanimation_SetZombatarTidBits(zombatarWidget->mZombatarReanim, zombatarWidget->mSelectedTidBit, zombatarWidget->mSelectedTidBitColor);
@@ -3904,7 +3904,7 @@ void TestMenuWidget_MouseDownTidBit(ZombatarWidget *zombatarWidget, int x, int y
     }
     int theX = 160 + 198 + (14 % 6) * 73;
     int theY = 162 + 14 / 6 * 79;
-    TRect rect = {theX, theY, 73, 79};
+    Sexy::Rect rect = {theX, theY, 73, 79};
     if (TRect_Contains(&rect, x, y)) {
         zombatarWidget->mSelectedTidBit = 255;
         Reanimation_SetZombatarTidBits(zombatarWidget->mZombatarReanim, zombatarWidget->mSelectedTidBit, zombatarWidget->mSelectedTidBitColor);
@@ -3915,7 +3915,7 @@ void TestMenuWidget_MouseDownTidBit(ZombatarWidget *zombatarWidget, int x, int y
         for (int i = 0; i < 18; ++i) {
             int theX = 160 + 285 + (i % 9) * 30;
             int theY = 432 + i / 9 * 30;
-            TRect rect = {theX, theY, 30, 30};
+            Sexy::Rect rect = {theX, theY, 30, 30};
             if (TRect_Contains(&rect, x, y)) {
                 zombatarWidget->mSelectedTidBitColor = i;
                 Reanimation_SetZombatarTidBits(zombatarWidget->mZombatarReanim, zombatarWidget->mSelectedTidBit, zombatarWidget->mSelectedTidBitColor);
@@ -3930,7 +3930,7 @@ void TestMenuWidget_MouseDownEyeWear(ZombatarWidget *zombatarWidget, int x, int 
     for (int i = 0; i < 16; ++i) {
         int theX = 160 + 198 + (i % 6) * 73;
         int theY = 162 + i / 6 * 79;
-        TRect rect = {theX, theY, 73, 79};
+        Sexy::Rect rect = {theX, theY, 73, 79};
         if (TRect_Contains(&rect, x, y)) {
             zombatarWidget->mSelectedEyeWear = i;
             Reanimation_SetZombatarEyeWear(zombatarWidget->mZombatarReanim, zombatarWidget->mSelectedEyeWear, zombatarWidget->mSelectedEyeWearColor);
@@ -3939,7 +3939,7 @@ void TestMenuWidget_MouseDownEyeWear(ZombatarWidget *zombatarWidget, int x, int 
     }
     int theX = 160 + 198 + (16 % 6) * 73;
     int theY = 162 + 16 / 6 * 79;
-    TRect rect = {theX, theY, 73, 79};
+    Sexy::Rect rect = {theX, theY, 73, 79};
     if (TRect_Contains(&rect, x, y)) {
         zombatarWidget->mSelectedEyeWear = 255;
         Reanimation_SetZombatarEyeWear(zombatarWidget->mZombatarReanim, zombatarWidget->mSelectedEyeWear, zombatarWidget->mSelectedEyeWearColor);
@@ -3950,7 +3950,7 @@ void TestMenuWidget_MouseDownEyeWear(ZombatarWidget *zombatarWidget, int x, int 
         for (int i = 0; i < 18; ++i) {
             int theX = 160 + 285 + (i % 9) * 30;
             int theY = 432 + i / 9 * 30;
-            TRect rect = {theX, theY, 30, 30};
+            Sexy::Rect rect = {theX, theY, 30, 30};
             if (TRect_Contains(&rect, x, y)) {
                 zombatarWidget->mSelectedEyeWearColor = i;
                 Reanimation_SetZombatarEyeWear(zombatarWidget->mZombatarReanim, zombatarWidget->mSelectedEyeWear, zombatarWidget->mSelectedEyeWearColor);
@@ -3964,7 +3964,7 @@ void TestMenuWidget_MouseDownCloth(ZombatarWidget *zombatarWidget, int x, int y)
     for (int i = 0; i < 12; ++i) {
         int theX = 160 + 198 + (i % 6) * 73;
         int theY = 162 + i / 6 * 79;
-        TRect rect = {theX, theY, 73, 79};
+        Sexy::Rect rect = {theX, theY, 73, 79};
         if (TRect_Contains(&rect, x, y)) {
             zombatarWidget->mSelectedCloth = i;
             return;
@@ -3972,7 +3972,7 @@ void TestMenuWidget_MouseDownCloth(ZombatarWidget *zombatarWidget, int x, int y)
     }
     int theX = 160 + 198 + (12 % 6) * 73;
     int theY = 162 + 12 / 6 * 79;
-    TRect rect = {theX, theY, 73, 79};
+    Sexy::Rect rect = {theX, theY, 73, 79};
     if (TRect_Contains(&rect, x, y)) {
         zombatarWidget->mSelectedCloth = 255;
         return;
@@ -3983,7 +3983,7 @@ void TestMenuWidget_MouseDownAccessory(ZombatarWidget *zombatarWidget, int x, in
     for (int i = 0; i < 15; ++i) {
         int theX = 160 + 198 + (i % 6) * 73;
         int theY = 162 + i / 6 * 79;
-        TRect rect = {theX, theY, 73, 79};
+        Sexy::Rect rect = {theX, theY, 73, 79};
         if (TRect_Contains(&rect, x, y)) {
             zombatarWidget->mSelectedAccessory = i;
             Reanimation_SetZombatarAccessories(zombatarWidget->mZombatarReanim, zombatarWidget->mSelectedAccessory, zombatarWidget->mSelectedAccessoryColor);
@@ -3992,7 +3992,7 @@ void TestMenuWidget_MouseDownAccessory(ZombatarWidget *zombatarWidget, int x, in
     }
     int theX = 160 + 198 + (15 % 6) * 73;
     int theY = 162 + 15 / 6 * 79;
-    TRect rect = {theX, theY, 73, 79};
+    Sexy::Rect rect = {theX, theY, 73, 79};
     if (TRect_Contains(&rect, x, y)) {
         zombatarWidget->mSelectedAccessory = 255;
         Reanimation_SetZombatarAccessories(zombatarWidget->mZombatarReanim, zombatarWidget->mSelectedAccessory, zombatarWidget->mSelectedAccessoryColor);
@@ -4003,7 +4003,7 @@ void TestMenuWidget_MouseDownAccessory(ZombatarWidget *zombatarWidget, int x, in
         for (int i = 0; i < 18; ++i) {
             int theX = 160 + 285 + (i % 9) * 30;
             int theY = 432 + i / 9 * 30;
-            TRect rect = {theX, theY, 30, 30};
+            Sexy::Rect rect = {theX, theY, 30, 30};
             if (TRect_Contains(&rect, x, y)) {
                 zombatarWidget->mSelectedAccessoryColor = i;
                 Reanimation_SetZombatarAccessories(zombatarWidget->mZombatarReanim, zombatarWidget->mSelectedAccessory, zombatarWidget->mSelectedAccessoryColor);
@@ -4017,7 +4017,7 @@ void TestMenuWidget_MouseDownHat(ZombatarWidget *zombatarWidget, int x, int y) {
     for (int i = 0; i < 14; ++i) {
         int theX = 160 + 198 + (i % 6) * 73;
         int theY = 162 + i / 6 * 79;
-        TRect rect = {theX, theY, 73, 79};
+        Sexy::Rect rect = {theX, theY, 73, 79};
         if (TRect_Contains(&rect, x, y)) {
             zombatarWidget->mSelectedHat = i;
             Reanimation_SetZombatarHats(zombatarWidget->mZombatarReanim, zombatarWidget->mSelectedHat, zombatarWidget->mSelectedHatColor);
@@ -4026,7 +4026,7 @@ void TestMenuWidget_MouseDownHat(ZombatarWidget *zombatarWidget, int x, int y) {
     }
     int theX = 160 + 198 + (14 % 6) * 73;
     int theY = 162 + 14 / 6 * 79;
-    TRect rect = {theX, theY, 73, 79};
+    Sexy::Rect rect = {theX, theY, 73, 79};
     if (TRect_Contains(&rect, x, y)) {
         zombatarWidget->mSelectedHat = 255;
         Reanimation_SetZombatarHats(zombatarWidget->mZombatarReanim, zombatarWidget->mSelectedHat, zombatarWidget->mSelectedHatColor);
@@ -4037,7 +4037,7 @@ void TestMenuWidget_MouseDownHat(ZombatarWidget *zombatarWidget, int x, int y) {
         for (int i = 0; i < 18; ++i) {
             int theX = 160 + 285 + (i % 9) * 30;
             int theY = 432 + i / 9 * 30;
-            TRect rect = {theX, theY, 30, 30};
+            Sexy::Rect rect = {theX, theY, 30, 30};
             if (TRect_Contains(&rect, x, y)) {
                 zombatarWidget->mSelectedHatColor = i;
                 Reanimation_SetZombatarHats(zombatarWidget->mZombatarReanim, zombatarWidget->mSelectedHat, zombatarWidget->mSelectedHatColor);
@@ -4052,13 +4052,13 @@ void TestMenuWidget_MouseDownBackground(ZombatarWidget *zombatarWidget, int x, i
         for (int i = 0; i < 18; ++i) {
             int theX = 160 + 198 + (i % 6) * 73;
             int theY = 162 + i / 6 * 79;
-            TRect rect = {theX, theY, 73, 79};
+            Sexy::Rect rect = {theX, theY, 73, 79};
             if (TRect_Contains(&rect, x, y)) {
                 zombatarWidget->mSelectedBackground = i;
                 return;
             }
         }
-        TRect next = {160 + 588, 436, addonZombatarImages.zombatar_next_button->mWidth, addonZombatarImages.zombatar_next_button->mHeight};
+        Sexy::Rect next = {160 + 588, 436, addonZombatarImages.zombatar_next_button->mWidth, addonZombatarImages.zombatar_next_button->mHeight};
         if (TRect_Contains(&next, x, y)) {
             zombatarWidget->mSelectedBackgroundPage++;
             return;
@@ -4067,13 +4067,13 @@ void TestMenuWidget_MouseDownBackground(ZombatarWidget *zombatarWidget, int x, i
         for (int i = 0; i < 11; ++i) {
             int theX = 160 + 198 + (i % 6) * 73;
             int theY = 162 + i / 6 * 79;
-            TRect rect = {theX, theY, 73, 79};
+            Sexy::Rect rect = {theX, theY, 73, 79};
             if (TRect_Contains(&rect, x, y)) {
                 zombatarWidget->mSelectedBackground = i + 18 * zombatarWidget->mSelectedBackgroundPage;
                 return;
             }
         }
-        TRect prev = {160 + 209, 436, addonZombatarImages.zombatar_next_button->mWidth, addonZombatarImages.zombatar_next_button->mHeight};
+        Sexy::Rect prev = {160 + 209, 436, addonZombatarImages.zombatar_next_button->mWidth, addonZombatarImages.zombatar_next_button->mHeight};
         if (TRect_Contains(&prev, x, y)) {
             zombatarWidget->mSelectedBackgroundPage--;
             return;
@@ -4082,18 +4082,18 @@ void TestMenuWidget_MouseDownBackground(ZombatarWidget *zombatarWidget, int x, i
         for (int i = 0; i < 18; ++i) {
             int theX = 160 + 198 + (i % 6) * 73;
             int theY = 162 + i / 6 * 79;
-            TRect rect = {theX, theY, 73, 79};
+            Sexy::Rect rect = {theX, theY, 73, 79};
             if (TRect_Contains(&rect, x, y)) {
                 zombatarWidget->mSelectedBackground = i + 18 * zombatarWidget->mSelectedBackgroundPage;
                 return;
             }
         }
-        TRect next = {160 + 588, 436, addonZombatarImages.zombatar_next_button->mWidth, addonZombatarImages.zombatar_next_button->mHeight};
+        Sexy::Rect next = {160 + 588, 436, addonZombatarImages.zombatar_next_button->mWidth, addonZombatarImages.zombatar_next_button->mHeight};
         if (TRect_Contains(&next, x, y)) {
             zombatarWidget->mSelectedBackgroundPage++;
             return;
         }
-        TRect prev = {160 + 209, 436, addonZombatarImages.zombatar_next_button->mWidth, addonZombatarImages.zombatar_next_button->mHeight};
+        Sexy::Rect prev = {160 + 209, 436, addonZombatarImages.zombatar_next_button->mWidth, addonZombatarImages.zombatar_next_button->mHeight};
         if (TRect_Contains(&prev, x, y)) {
             zombatarWidget->mSelectedBackgroundPage--;
             return;
@@ -4105,7 +4105,7 @@ void TestMenuWidget_MouseDownBackground(ZombatarWidget *zombatarWidget, int x, i
         for (int i = 0; i < 18; ++i) {
             int theX = 160 + 285 + (i % 9) * 30;
             int theY = 432 + i / 9 * 30;
-            TRect rect = {theX, theY, 30, 30};
+            Sexy::Rect rect = {theX, theY, 30, 30};
             if (TRect_Contains(&rect, x, y)) {
                 zombatarWidget->mSelectedBackgroundColor = i;
                 return;
@@ -4126,7 +4126,7 @@ void TestMenuWidget_MouseDown(ZombatarWidget *zombatarWidget, int x, int y) {
         return;
     }
     for (char i = 0; i < ZombatarWidget::MaxTabNum; ++i) {
-        TRect rect = {160 + 67, 152 + i * 43, 125, 47};
+        Sexy::Rect rect = {160 + 67, 152 + i * 43, 125, 47};
         if (TRect_Contains(&rect, x, y)) {
             zombatarWidget->mSelectedTab = i;
             zombatarWidget->mSelectedFHairPage = 0;

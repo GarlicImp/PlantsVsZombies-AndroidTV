@@ -158,9 +158,9 @@ void StoreScreen_MouseDown(int *storeScreen, int x, int y, int theClickCount) {
     int mNextButtonHeight = Sexy_Image_GetHeight(*Sexy_IMAGE_STORE_NEXTBUTTON_Addr);
     int mBackButtonWidth = Sexy_Image_GetWidth(*Sexy_IMAGE_STORE_MAINMENUBUTTON_Addr);
     int mBackButtonHeight = Sexy_Image_GetHeight(*Sexy_IMAGE_STORE_MAINMENUBUTTON_Addr);
-    TRect mPrevButtonRect = {storeScreen[198] + 172, storeScreen[199] + 375, mPrevButtonWidth, mPrevButtonHeight};
-    TRect mNextButtonRect = {storeScreen[198] + 573, storeScreen[199] + 373, mNextButtonWidth, mNextButtonHeight};
-    TRect mBackButtonRect = {storeScreen[198] + 305, storeScreen[199] + 510, mBackButtonWidth, mBackButtonHeight};
+    Sexy::Rect mPrevButtonRect = {storeScreen[198] + 172, storeScreen[199] + 375, mPrevButtonWidth, mPrevButtonHeight};
+    Sexy::Rect mNextButtonRect = {storeScreen[198] + 573, storeScreen[199] + 373, mNextButtonWidth, mNextButtonHeight};
+    Sexy::Rect mBackButtonRect = {storeScreen[198] + 305, storeScreen[199] + 510, mBackButtonWidth, mBackButtonHeight};
 
     if (TRect_Contains(&mBackButtonRect, x, y)) {
         mStoreScreenTouchState = StoreScreenTouchState::Back;
@@ -202,7 +202,7 @@ void StoreScreen_MouseDown(int *storeScreen, int x, int y, int theClickCount) {
             //                 theImageHeight);
             //            int theImageWidth = 80;
             //            int theImageHeight = 80;
-            TRect itemRect = {theX - theImageWidth / 2, theY - theImageHeight, theImageWidth, theImageHeight};
+            Sexy::Rect itemRect = {theX - theImageWidth / 2, theY - theImageHeight, theImageWidth, theImageHeight};
             if (TRect_Contains(&itemRect, x, y)) {
                 if (mSelectedStoreItemType != storeItemType) {
                     StoreScreen_SetSelectedSlot((int)storeScreen, i);

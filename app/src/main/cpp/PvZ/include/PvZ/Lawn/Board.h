@@ -300,7 +300,7 @@ public:
     void InitLawnMowers();
     void PickZombieWaves();
     void DrawUITop(Sexy::Graphics* g);
-//    void GetShovelButtonRect(TRect *rect);
+//    void GetShovelButtonRect(Rect *rect);
     void UpdateLevelEndSequence();
     void UpdateGridItems();
     void ShakeBoard(int theShakeAmountX, int theShakeAmountY);
@@ -361,7 +361,7 @@ inline int choiceSeedPacketIndex;
 inline SeedType choiceSeedType = SeedType::SEED_NONE;
 inline bool isImitaterSeed;
 inline bool setSeedPacket;
-inline TRect mTouchVSShovelRect = {0, 85, 56, 56};
+inline Sexy::Rect mTouchVSShovelRect = {0, 85, 56, 56};
 inline bool hideCoverLayer;
 inline bool infiniteSun; // 无限阳光
 inline bool drawDebugText;
@@ -437,7 +437,7 @@ inline void (*Board_PickUpTool)(Board *board, GameObjectType a2, int a3);
 
 inline bool (*Board_ProgressMeterHasFlags)(Board *board);
 
-inline void (*Board_GetButterButtonRect)(TRect *, Board *);
+inline void (*Board_GetButterButtonRect)(Sexy::Rect *, Board *);
 
 inline Zombie *(*Board_ZombieTryToGet)(Board *, Zombie *);
 
@@ -463,7 +463,7 @@ inline bool (*Board_CanTakeSunMoney)(Board *, int, int);
 
 inline GridItem *(*Board_GetGridItemAt)(Board *, GridItemType, int, int);
 
-inline void (*Board_GetZenButtonRect)(TRect *, Board *, GameObjectType);
+inline void (*Board_GetZenButtonRect)(Sexy::Rect *, Board *, GameObjectType);
 
 inline GridItem *(*Board_GetLadderAt)(Board *, int, int);
 
@@ -630,7 +630,7 @@ inline void (*old_Board_ShakeBoard)(Board *board, int theShakeAmountX, int theSh
 
 inline void (*old_Board_UpdateFog)(Board *board);
 
-inline void (*old_Board_GetShovelButtonRect)(TRect *rect, Board *board);
+inline void (*old_Board_GetShovelButtonRect)(Sexy::Rect *rect, Board *board);
 
 inline void (*old_Board_DrawZenButtons)(Board *board, Sexy::Graphics *a2);
 
@@ -649,9 +649,9 @@ Sexy::Image *GetIconByAchievementId(AchievementId::AchievementId theAchievementI
 
 void Board_FixReanimErrorAfterLoad(Board *board);
 
-void Board_GetShovelButtonRect(TRect *, Board *);
+void Board_GetShovelButtonRect(Sexy::Rect *, Board *);
 
-bool TRect_Contains(TRect *rect, int x, int y);
+bool TRect_Contains(Sexy::Rect *rect, int x, int y);
 
 void Board_MouseDragSecond(Board *board, int x, int y);
 

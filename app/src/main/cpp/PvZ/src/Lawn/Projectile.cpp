@@ -191,8 +191,8 @@ Zombie* Projectile::FindCollisionMindControlledTarget() {
     Zombie* aZombie = nullptr;
     Zombie* aBestZombie = nullptr;
     int aMinX = 0;
-    TRect zombieRect;
-    TRect projectileRect;
+    Sexy::Rect zombieRect;
+    Sexy::Rect projectileRect;
     Projectile_GetProjectileRect(&projectileRect, this);
     while (Board_IterateZombies(mBoard, &aZombie)) {
         if (!aZombie->mDead && aZombie->mRow == mRow && aZombie->mMindControlled) {
@@ -223,8 +223,8 @@ void Projectile::CheckForCollision() {
     if (mMotionType == ProjectileMotion::MOTION_HOMING) {
         Zombie* aZombie = Board_ZombieTryToGet(mBoard, mTargetZombieID);
         if (aZombie && Zombie_EffectedByDamage(aZombie, mDamageRangeFlags)) {
-            TRect projectileRect;
-            TRect zombieRect;
+            Sexy::Rect projectileRect;
+            Sexy::Rect zombieRect;
             Projectile_GetProjectileRect(&projectileRect, this);
             Zombie_GetZombieRect(&zombieRect, aZombie);
             int rectOverlap = GetRectOverlap(&projectileRect, &zombieRect);

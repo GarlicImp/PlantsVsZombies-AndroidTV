@@ -70,7 +70,7 @@ inline void InitInGameFunction() {
     Board_CountPlantByType = (decltype(Board_CountPlantByType))Board_CountPlantByTypeAddr;
     Board_SetTutorialState = (decltype(Board_SetTutorialState))Board_SetTutorialStateAddr;
     Board_GetButterButtonRect = (decltype(Board_GetButterButtonRect))Board_GetButterButtonRectAddr;
-//     Board_GetShovelButtonRect = (void (*)(TRect *, Board *)) Board_GetShovelButtonRectAddr;
+//     Board_GetShovelButtonRect = (void (*)(Rect *, Board *)) Board_GetShovelButtonRectAddr;
     Board_ZombieTryToGet = (decltype(Board_ZombieTryToGet))Board_ZombieTryToGetAddr;
     Board_MakeRenderOrder = (decltype(Board_MakeRenderOrder))Board_MakeRenderOrderAddr;
     Board_PlantUsesAcceleratedPricing = (decltype(Board_PlantUsesAcceleratedPricing))Board_PlantUsesAcceleratedPricingAddr;
@@ -204,25 +204,6 @@ inline void InitInGameFunction() {
     Sexy_Graphics_DrawImageMatrix = (decltype(Sexy_Graphics_DrawImageMatrix))Sexy_Graphics_DrawImageMatrixAddr;
     Sexy_GLGraphics_SetWrapMode = (decltype(Sexy_GLGraphics_SetWrapMode))Sexy_GLGraphics_SetWrapModeAddr;
     TodDrawImageCelF = (decltype(TodDrawImageCelF))TodDrawImageCelFAddr;
-
-
-    Plant_GetImage = (decltype(Plant_GetImage))Plant_GetImageAddr;
-    Plant_GetPlantRect = (decltype(Plant_GetPlantRect))Plant_GetPlantRectAddr;
-    Plant_NotOnGround = (decltype(Plant_NotOnGround))Plant_NotOnGroundAddr;
-    Plant_IsOnBoard = (decltype(Plant_IsOnBoard))Plant_IsOnBoardAddr;
-    Plant_UpdateAbilities = (decltype(Plant_UpdateAbilities))Plant_UpdateAbilitiesAddr;
-    Plant_Animate = (decltype(Plant_Animate))Plant_AnimateAddr;
-    Plant_UpdateReanim = (decltype(Plant_UpdateReanim))Plant_UpdateReanimAddr;
-    Plant_IsFlying = (decltype(Plant_IsFlying))Plant_IsFlyingAddr;
-    Plant_IsNocturnal = (decltype(Plant_IsNocturnal))Plant_IsNocturnalAddr;
-    Plant_IsAquatic = (decltype(Plant_IsAquatic))Plant_IsAquaticAddr;
-    Plant_DrawShadow = (decltype(Plant_DrawShadow))Plant_DrawShadowAddr;
-    Plant_IsPartOfUpgradableTo = (decltype(Plant_IsPartOfUpgradableTo))Plant_IsPartOfUpgradableToAddr;
-    Plant_GetDamageRangeFlags = (decltype(Plant_GetDamageRangeFlags))Plant_GetDamageRangeFlagsAddr;
-    Plant_IsInPlay = (decltype(Plant_IsInPlay))Plant_IsInPlayAddr;
-    Plant_DrawMagnetItemsOnTop = (decltype(Plant_DrawMagnetItemsOnTop))Plant_DrawMagnetItemsOnTopAddr;
-    Plant_DrawMagnetItems = (decltype(Plant_DrawMagnetItems))Plant_DrawMagnetItemsAddr;
-    GetPlantDefinition = (decltype(GetPlantDefinition))GetPlantDefinitionAddr;
 
 
     Zombie_GetZombieRect = (decltype(Zombie_GetZombieRect))Zombie_GetZombieRectAddr;
@@ -487,7 +468,7 @@ inline void InitInGameFunction() {
     Sexy_SexyAppBase_CopyImage = (decltype(Sexy_SexyAppBase_CopyImage))Sexy_SexyAppBase_CopyImageAddr;
     Sexy_SexyAppBase_CopyImage2 = (decltype(Sexy_SexyAppBase_CopyImage2))Sexy_SexyAppBase_CopyImage2Addr;
     Sexy_MemoryImage_MemoryImage = (decltype(Sexy_MemoryImage_MemoryImage))Sexy_MemoryImage_MemoryImageAddr;
-    //    Sexy_MemoryImage_ClearRect=(void (*)(Sexy::Image *,TRect*))Sexy_MemoryImage_ClearRectAddr;
+    //    Sexy_MemoryImage_ClearRect=(void (*)(Sexy::Image *,Rect*))Sexy_MemoryImage_ClearRectAddr;
     Sexy_MemoryImage_GetBits = (decltype(Sexy_MemoryImage_GetBits))Sexy_MemoryImage_GetBitsAddr;
     Sexy_MemoryImage_Create = (decltype(Sexy_MemoryImage_Create))Sexy_MemoryImage_CreateAddr;
     Sexy_MemoryImage_SetImageMode = (decltype(Sexy_MemoryImage_SetImageMode))Sexy_MemoryImage_SetImageModeAddr;

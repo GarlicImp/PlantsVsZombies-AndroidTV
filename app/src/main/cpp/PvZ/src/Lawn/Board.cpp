@@ -242,7 +242,7 @@ void Board::DrawFadeOut(Sexy::Graphics* g) {
     }
 
     Sexy_Graphics_SetColorizeImages(g, true);
-    TRect fullScreenRect = {-240, -60, 1280, 720};
+    Rect fullScreenRect = {-240, -60, 1280, 720};
     // 修复BUG的核心原理，就是不要在此处PushState和PopState，而是直接FillRect。这将保留graphics的trans属性。
     Sexy_Graphics_FillRect(g, &fullScreenRect);
 }
@@ -847,7 +847,7 @@ void Board::SpeedUpUpdate() {
     mChallenge->Update();
 }
 
-bool TRect_Contains(TRect *rect, int x, int y) {
+bool TRect_Contains(Rect *rect, int x, int y) {
     return rect->mX < x && rect->mY < y && rect->mX + rect->mWidth > x && rect->mY + rect->mHeight > y;
 }
 
@@ -1324,7 +1324,7 @@ void Board_DrawHammerButton(Board *board, Sexy::Graphics *graphics, LawnApp *law
     if (!keyboardMode)
         return;
     float tmp = graphics->mTransY;
-    TRect rect;
+    Rect rect;
     Board_GetButterButtonRect(&rect, board);
     Sexy_Graphics_DrawImage(graphics, *Sexy_IMAGE_SHOVELBANK_Addr, rect.mX, rect.mY);
     Sexy_Graphics_DrawImage(graphics, *Sexy_IMAGE_HAMMER_ICON_Addr, rect.mX - 7, rect.mY - 3);
@@ -1346,7 +1346,7 @@ void Board_DrawButterButton(Board *board, Sexy::Graphics *graphics, LawnApp *law
             return;
     }
     float tmp = graphics->mTransY;
-    TRect rect;
+    Rect rect;
     Board_GetButterButtonRect(&rect, board);
     Sexy_Graphics_DrawImage(graphics, *Sexy_IMAGE_SHOVELBANK_Addr, rect.mX, rect.mY);
     if (board->mChallenge->mChallengeState == ChallengeState::STATECHALLENGE_SHOVEL_FLASHING) {
@@ -1381,7 +1381,7 @@ void Board::DrawShovelButton(Sexy::Graphics* g, LawnApp* theApp) {
     }
 
     float tmp = g->mTransY;
-    TRect rect;
+    Rect rect;
     Board_GetShovelButtonRect(&rect, this);
     Sexy_Graphics_DrawImage(g, *Sexy_IMAGE_SHOVELBANK_Addr, rect.mX, rect.mY);
 
@@ -1513,7 +1513,7 @@ void Board::DoPlantingEffects(int theGridX, int theGridY, Plant* thePlant) {
         return;
     }
 
-    if (Plant_IsFlying(mSeedType)) {
+    if (Plant::IsFlying(mSeedType)) {
         mApp->PlayFoley(FoleyType::FOLEY_PLANT);
         return;
     }
@@ -1679,7 +1679,7 @@ bool Board::MouseHitTest(int x, int y, HitResult *theHitResult, bool thePlayerIn
             return true;
         }
     } else {
-        TRect shovelButtonRect;
+        Rect shovelButtonRect;
         Board_GetShovelButtonRect(&shovelButtonRect, this);
         if (mShowShovel && TRect_Contains(&shovelButtonRect, x, y)) {
             theHitResult->mObjectType = GameObjectType::OBJECT_TYPE_SHOVEL;
@@ -1688,7 +1688,7 @@ bool Board::MouseHitTest(int x, int y, HitResult *theHitResult, bool thePlayerIn
     }
 
     if (LawnApp_IsCoopMode(mApp)) {
-        TRect butterButtonRect;
+        Rect butterButtonRect;
         Board_GetButterButtonRect(&butterButtonRect, this);
         if (mShowButter && TRect_Contains(&butterButtonRect, x, y)) {
             theHitResult->mObjectType = GameObjectType::OBJECT_TYPE_BUTTER;
@@ -1697,7 +1697,7 @@ bool Board::MouseHitTest(int x, int y, HitResult *theHitResult, bool thePlayerIn
     }
 
     if (mGameMode == GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN || mGameMode == GameMode::GAMEMODE_TREE_OF_WISDOM) {
-        TRect rect;
+        Rect rect;
         for (int i = GameObjectType::OBJECT_TYPE_WATERING_CAN; i <= GameObjectType::OBJECT_TYPE_TREE_OF_WISDOM_GARDEN; i++) {
             if (Board_CanUseGameObject(this, (GameObjectType)i)) {
                 Board_GetZenButtonRect(&rect, this, (GameObjectType)i);
@@ -1761,7 +1761,7 @@ int mTouchDownY;
 bool mSendKeyWhenTouchUp;
 TouchState::TouchState mTouchState = TouchState::None;
 float mHeavyWeaponX;
-TRect slotMachineRect = {250, 0, 320, 100};
+Rect slotMachineRect = {250, 0, 320, 100};
 } // namespace
 
 // 触控落下手指在此处理
@@ -3162,7 +3162,7 @@ void Board::DrawUITop(Sexy::Graphics* g) {
     old_Board_DrawUITop(this, g);
 }
 
-void Board_GetShovelButtonRect(TRect *rect, Board *board) {
+void Board_GetShovelButtonRect(Rect *rect, Board *board) {
     old_Board_GetShovelButtonRect(rect, board);
 }
 

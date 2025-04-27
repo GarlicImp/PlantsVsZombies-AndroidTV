@@ -111,8 +111,8 @@ public:
     int mTargetCol;                           // 36
     float mAltitude;                          // 37
     bool mHitUmbrella;                        // 152
-    TRect mZombieRect;                        // 39 ~ 42
-    TRect mZombieAttackRect;                  // 43 ~ 46
+    Sexy::Rect mZombieRect;                        // 39 ~ 42
+    Sexy::Rect mZombieAttackRect;                  // 43 ~ 46
     int mChilledCounter;                      // 47
     int mButteredCounter;                     // 48
     int mIceTrapCounter;                      // 49
@@ -244,7 +244,7 @@ inline void (*Zombie_ApplyBurn)(Zombie *zombie);
 
 inline void (*Zombie_ApplyButter)(Zombie *zombie);
 
-inline void (*Zombie_GetZombieRect)(TRect *a1, Zombie *a2);
+inline void (*Zombie_GetZombieRect)(Sexy::Rect *a1, Zombie *a2);
 
 inline bool (*Zombie_EffectedByDamage)(Zombie *zombie, int flag);
 

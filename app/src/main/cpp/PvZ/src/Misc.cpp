@@ -1201,7 +1201,7 @@ void MessageWidget_Draw(CustomMessageWidget *messageWidget, Sexy::Graphics *grap
         Color theColor = {255, 255, 255, std::clamp(messageWidget->mDuration * 15, 0, 255)};
         int holder[1];
         Sexy_StrFormat(holder, messageWidget->mLabel);
-        TRect theRect;
+        Sexy::Rect theRect;
         theRect.mY = num2 - theFont->mAscent;
         theRect.mHeight = 600;
         theRect.mWidth = 800;
@@ -1328,7 +1328,7 @@ Sexy::Widget *Sexy_Widget_FindWidget(Sexy::Widget *parent, int id) {
     return (*((Sexy::Widget * (**)(Sexy::Widget *, int)) parent->vTable + 9))(parent, id); // FindWidget();
 }
 
-void Sexy_MemoryImage_ClearRect(Sexy::Image *a1, TRect *a2) {
+void Sexy_MemoryImage_ClearRect(Sexy::Image *a1, Sexy::Rect *a2) {
     int mY;     // r4
     int *mBits; // r7
     int v7;     // r0

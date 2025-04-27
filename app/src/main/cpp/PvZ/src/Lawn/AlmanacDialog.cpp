@@ -73,7 +73,7 @@ void AlmanacDialog_SetPage(AlmanacDialog *almanacDialog, int targetPage) {
 namespace {
 int mAlmanacDialogTouchDownY;
 bool isTouchDownInTextRect;
-TRect mTextRect = {482, 360, 258, 173};
+Sexy::Rect mTextRect = {482, 360, 258, 173};
 } // namespace
 
 void AlmanacDialog_MouseDown(AlmanacDialog *almanacDialog, int x, int y, int a4) {
@@ -149,7 +149,7 @@ void AlmanacDialog_AlmanacDialog(AlmanacDialog *almanacDialog, LawnApp *lawnApp)
     //   为泳池背景加入PoolEffect。这里挖空背景图，挖出一块透明方形
     Sexy::Image *gPlantBackImage = *Sexy_IMAGE_ALMANAC_PLANTBACK_Addr;
     Sexy::Image *gPoolBackImage = *Sexy_IMAGE_ALMANAC_GROUNDNIGHTPOOL_Addr;
-    TRect blankRect = {mAlmanacPlantRectX + 240, mAlmanacPlantRectY + 60, gPoolBackImage->mWidth, gPoolBackImage->mHeight};
+    Sexy::Rect blankRect = {mAlmanacPlantRectX + 240, mAlmanacPlantRectY + 60, gPoolBackImage->mWidth, gPoolBackImage->mHeight};
     Sexy_MemoryImage_ClearRect(gPlantBackImage, &blankRect);
 }
 
@@ -211,8 +211,8 @@ void AlmanacDialog_DrawPlants_Unmodified(AlmanacDialog *almanacDialog, Sexy::Gra
         }
     }
 
-    if (Plant_IsAquatic(mSelectedSeed)) {
-        if (Plant_IsNocturnal(mSelectedSeed)) {
+    if (Plant::IsAquatic(mSelectedSeed)) {
+        if (Plant::IsNocturnal(mSelectedSeed)) {
             Sexy_Graphics_DrawImage(graphics, *Sexy_IMAGE_ALMANAC_GROUNDNIGHTPOOL_Addr, mAlmanacPlantRectX, mAlmanacPlantRectY);
             if (Sexy_SexyAppBase_Is3DAccelerated(almanacDialog->mApp)) {
                 Sexy_Graphics_SetClipRect(graphics, 475, 0, 397, 500);
@@ -231,7 +231,7 @@ void AlmanacDialog_DrawPlants_Unmodified(AlmanacDialog *almanacDialog, Sexy::Gra
                 Sexy_Graphics_ClearClipRect(graphics);
             }
         }
-    } else if (Plant_IsNocturnal(mSelectedSeed) || mSelectedSeed == SeedType::SEED_GRAVEBUSTER || mSelectedSeed == SeedType::SEED_PLANTERN) {
+    } else if (Plant::IsNocturnal(mSelectedSeed) || mSelectedSeed == SeedType::SEED_GRAVEBUSTER || mSelectedSeed == SeedType::SEED_PLANTERN) {
         Sexy_Graphics_DrawImage(graphics, *Sexy_IMAGE_ALMANAC_GROUNDNIGHT_Addr, mAlmanacPlantRectX, mAlmanacPlantRectY);
     } else if (mSelectedSeed == SeedType::SEED_FLOWERPOT) {
         Sexy_Graphics_DrawImage(graphics, *Sexy_IMAGE_ALMANAC_GROUNDROOF_Addr, mAlmanacPlantRectX, mAlmanacPlantRectY);
@@ -275,8 +275,8 @@ void AlmanacDialog_DrawPlants(AlmanacDialog *almanacDialog, Sexy::Graphics *grap
     //   为泳池背景加入PoolEffect。此函数改变了原版绘制顺序，将背景图放在泳池的后面绘制
 
     SeedType mSelectedSeed = almanacDialog->mSelectedSeed;
-    if (Plant_IsAquatic(mSelectedSeed)) {
-        if (Plant_IsNocturnal(mSelectedSeed)) {
+    if (Plant::IsAquatic(mSelectedSeed)) {
+        if (Plant::IsNocturnal(mSelectedSeed)) {
             Sexy_Graphics_DrawImage(graphics, *Sexy_IMAGE_ALMANAC_GROUNDNIGHTPOOL_Addr, mAlmanacPlantRectX, mAlmanacPlantRectY + 10);
             if (Sexy_SexyAppBase_Is3DAccelerated(almanacDialog->mApp)) {
                 //                Sexy_Graphics_SetClipRect(graphics, 475, 0, 397, 500);
@@ -295,7 +295,7 @@ void AlmanacDialog_DrawPlants(AlmanacDialog *almanacDialog, Sexy::Graphics *grap
                 //                Sexy_Graphics_ClearClipRect(graphics);
             }
         }
-    } else if (Plant_IsNocturnal(mSelectedSeed) || mSelectedSeed == SeedType::SEED_GRAVEBUSTER || mSelectedSeed == SeedType::SEED_PLANTERN) {
+    } else if (Plant::IsNocturnal(mSelectedSeed) || mSelectedSeed == SeedType::SEED_GRAVEBUSTER || mSelectedSeed == SeedType::SEED_PLANTERN) {
         Sexy_Graphics_DrawImage(graphics, *Sexy_IMAGE_ALMANAC_GROUNDNIGHT_Addr, mAlmanacPlantRectX, mAlmanacPlantRectY);
     } else if (mSelectedSeed == SeedType::SEED_FLOWERPOT) {
         Sexy_Graphics_DrawImage(graphics, *Sexy_IMAGE_ALMANAC_GROUNDROOF_Addr, mAlmanacPlantRectX + 10, mAlmanacPlantRectY + 12);
