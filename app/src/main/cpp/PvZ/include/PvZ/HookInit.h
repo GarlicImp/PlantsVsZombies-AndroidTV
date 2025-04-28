@@ -316,18 +316,9 @@ inline void InitInGameFunction() {
     Challenge_PlantAdded = (decltype(Challenge_PlantAdded))Challenge_PlantAddedAddr;
 
 
-    Projectile_GetProjectileRect = (decltype(Projectile_GetProjectileRect))Projectile_GetProjectileRectAddr;
-    Projectile_Die = (decltype(Projectile_Die))Projectile_DieAddr;
-    Projectile_FindCollisionTargetPlant = (decltype(Projectile_FindCollisionTargetPlant))Projectile_FindCollisionTargetPlantAddr;
-    Projectile_CantHitHighGround = (decltype(Projectile_CantHitHighGround))Projectile_CantHitHighGroundAddr;
-    Projectile_FindCollisionTarget = (decltype(Projectile_FindCollisionTarget))Projectile_FindCollisionTargetAddr;
-    Projectile_FindCollisionTargetGridItem = (decltype(Projectile_FindCollisionTargetGridItem))Projectile_FindCollisionTargetGridItemAddr;
-    Projectile_DoImpactGridItem = (decltype(Projectile_DoImpactGridItem))Projectile_DoImpactGridItemAddr;
-    Projectile_PlayImpactSound = (decltype(Projectile_PlayImpactSound))Projectile_PlayImpactSoundAddr;
-    Projectile_IsSplashDamage = (decltype(Projectile_IsSplashDamage))Projectile_IsSplashDamageAddr;
-    Projectile_DoSplashDamage = (decltype(Projectile_DoSplashDamage))Projectile_DoSplashDamageAddr;
-    Projectile_GetDamageFlags = (decltype(Projectile_GetDamageFlags))Projectile_GetDamageFlagsAddr;
-    Projectile_PeaAboutToHitTorchwood = (decltype(Projectile_PeaAboutToHitTorchwood))Projectile_PeaAboutToHitTorchwoodAddr;
+//    Projectile_FindCollisionTargetPlant = (decltype(Projectile_FindCollisionTargetPlant))Projectile_FindCollisionTargetPlantAddr;
+//    Projectile_FindCollisionTarget = (decltype(Projectile_FindCollisionTarget))Projectile_FindCollisionTargetAddr;
+//    Projectile_FindCollisionTargetGridItem = (decltype(Projectile_FindCollisionTargetGridItem))Projectile_FindCollisionTargetGridItemAddr;
 
 
     GameButton_IsMouseOver = (decltype(GameButton_IsMouseOver))GameButton_IsMouseOverAddr;
@@ -398,7 +389,6 @@ inline void InitInGameFunction() {
     Coin_GetSunScale = (decltype(Coin_GetSunScale))Coin_GetSunScaleAddr;
 
 
-    GetRectOverlap = (decltype(GetRectOverlap))GetRectOverlapAddr;
     Sexy_StrFormat = (decltype(Sexy_StrFormat))Sexy_StrFormatAddr;
     TodStringTranslate = (decltype(TodStringTranslate))TodStringTranslateAddr;
     //    DrawSeedPacket = (void (*)(Sexy::Graphics *, int, int, int, int, float, int, bool, bool, bool,bool)) DrawSeedPacketAddr;

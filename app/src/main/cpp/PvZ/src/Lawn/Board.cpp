@@ -3295,6 +3295,77 @@ int Board::PixelToGridYKeepOnBoard(int theX, int theY)
     return max(aGridY, 0);
 }
 
+int GetRectOverlap(const Rect& rect1, const Rect& rect2)
+{
+    int xmax, rmin, rmax;
+
+    if (rect1.mX < rect2.mX)
+    {
+        rmin = rect1.mX + rect1.mWidth;
+        rmax = rect2.mX + rect2.mWidth;
+        xmax = rect2.mX;
+    }
+    else
+    {
+        rmin = rect2.mX + rect2.mWidth;
+        rmax = rect1.mX + rect1.mWidth;
+        xmax = rect1.mX;
+    }
+
+    if (rmin > xmax && rmin > rmax)
+    {
+        rmin = rmax;
+    }
+
+    return rmin - xmax;
+}
+
+bool GetCircleRectOverlap(int theCircleX, int theCircleY, int theRadius, const Rect& theRect)
+{
+    int dx = 0;  // 圆心与矩形较近一条纵边的横向距离
+    int dy = 0;  // 圆心与矩形较近一条横边的纵向距离
+    bool xOut = false;  // 圆心横坐标是否不在矩形范围内
+    bool yOut = false;  // 圆心纵坐标是否不在矩形范围内
+
+    if (theCircleX < theRect.mX)
+    {
+        xOut = true;
+        dx = theRect.mX - theCircleX;
+    }
+    else if (theCircleX > theRect.mX + theRect.mWidth)
+    {
+        xOut = true;
+        dx = theCircleX - theRect.mX - theRect.mWidth;
+    }
+    if (theCircleY < theRect.mY)
+    {
+        yOut = true;
+        dy = theRect.mY - theCircleY;
+    }
+    else if (theCircleY > theRect.mY + theRect.mHeight)
+    {
+        yOut = true;
+        dy = theCircleY - theRect.mY - theRect.mHeight;
+    }
+
+    if (!xOut && !yOut)  // 如果圆心在矩形内
+    {
+        return true;
+    }
+    else if (xOut && yOut)
+    {
+        return dx * dx + dy * dy <= theRadius * theRadius;
+    }
+    else if (xOut)
+    {
+        return dx <= theRadius;
+    }
+    else
+    {
+        return dy <= theRadius;
+    }
+}
+
 void FixBoardAfterLoad(Board *board) {
     // 修复读档后的各种问题
     old_FixBoardAfterLoad(board);

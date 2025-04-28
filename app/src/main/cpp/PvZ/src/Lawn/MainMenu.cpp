@@ -2901,25 +2901,24 @@ void ZombatarWidget_ZombatarWidget(ZombatarWidget *zombatarWidget, LawnApp *lawn
     Sexy_Widget_AddWidget(zombatarWidget, deleteButton);
     zombatarWidget->mDeleteButton = deleteButton;
 
-    Zombie *zombie = (Zombie *)operator new(sizeof(Zombie));
-    zombie->Create();
-    zombie->mBoard = nullptr;
-    zombie->ZombieInitialize(0, ZombieType::ZOMBIE_FLAG, false, nullptr, -3, true);
-    Reanimation *aBodyReanim = zombie->mApp->ReanimationGet(zombie->mBodyReanimID);
+    auto *aZombie = new Zombie;
+    aZombie->mBoard = nullptr;
+    aZombie->ZombieInitialize(0, ZombieType::ZOMBIE_FLAG, false, nullptr, -3, true);
+    Reanimation *aBodyReanim = aZombie->mApp->ReanimationGet(aZombie->mBodyReanimID);
     ReanimatorTrackInstance *aHeadTrackInstance = Reanimation_GetTrackInstanceByName(aBodyReanim, "anim_head1");
     aHeadTrackInstance->mImageOverride = *Sexy_IMAGE_BLANK_Addr;
 
     Reanimation *aZombatarHeadReanim = LawnApp_AddReanimation(lawnApp, 0, 0, 0, ReanimationType::REANIM_ZOMBATAR_HEAD);
     Reanimation_PlayReanim(aZombatarHeadReanim, "anim_head_idle", ReanimLoopType::REANIM_LOOP, 0, 15.0);
     aZombatarHeadReanim->AssignRenderGroupToTrack("anim_hair", -1);
-    zombie->mBossFireBallReanimID = LawnApp_ReanimationGetID(zombie->mApp, aZombatarHeadReanim);
+    aZombie->mBossFireBallReanimID = LawnApp_ReanimationGetID(aZombie->mApp, aZombatarHeadReanim);
     AttachEffect *attachEffect = AttachReanim(&aHeadTrackInstance->mAttachmentID, aZombatarHeadReanim, 0.0f, 0.0f);
     TodScaleRotateTransformMatrix(&attachEffect->mOffset, -20.0, -1.0, 0.2, 1.0, 1.0);
     zombatarWidget->mZombatarReanim = aZombatarHeadReanim;
-    zombie->ReanimShowPrefix("anim_hair", -1);
-    zombie->ReanimShowPrefix("anim_head2", -1);
-    zombie->Update();
-    zombatarWidget->mPreviewZombie = zombie;
+    aZombie->ReanimShowPrefix("anim_hair", -1);
+    aZombie->ReanimShowPrefix("anim_head2", -1);
+    aZombie->Update();
+    zombatarWidget->mPreviewZombie = aZombie;
 
     zombatarWidget->mShowExistingZombatarPortrait = addonImages.zombatar_portrait != nullptr;
     gMainMenuZombatarWidget->mShowZombieTypeSelection = false;

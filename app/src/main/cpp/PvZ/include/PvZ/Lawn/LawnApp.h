@@ -93,13 +93,16 @@ public:
     int *mDaveHelp;                                 // 707
     int *mMaskHelpWidget;                           // 708
 
+    Reanimation *ReanimationGet(ReanimationID theReanimationID) { return reinterpret_cast<Reanimation *(*)(LawnApp *, ReanimationID)>(LawnApp_ReanimationGetAddr)(this, theReanimationID); }
+
     void KillSeedChooserScreen();
     bool IsIZombieLevel();
+    bool IsWallnutBowlingLevel();
     void PlayFoley(FoleyType theFoleyType) { reinterpret_cast<void (*)(LawnApp *, FoleyType)>(LawnApp_PlayFoleyAddr)(this, theFoleyType); }
     void PlaySample(int theSoundNum) { reinterpret_cast<void (*)(LawnApp *, int)>(LawnApp_PlaySampleAddr)(this, theSoundNum); }
     bool IsAdventureMode();
     bool IsScaryPotterLevel();
-    Reanimation *ReanimationGet(ReanimationID theReanimationID) { reinterpret_cast<void (*)(LawnApp *, ReanimationID)>(LawnApp_ReanimationGetAddr)(this, theReanimationID); }
+
 };
 
 /***************************************************************************************************************/

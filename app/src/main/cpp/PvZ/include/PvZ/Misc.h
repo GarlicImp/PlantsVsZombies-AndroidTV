@@ -17,8 +17,6 @@ inline void (*Sexy_StrFormat)(int *holder, const char *theFormat, ...);
 
 inline void (*TodStringTranslate)(int *holder, const char *theText);
 
-inline int (*GetRectOverlap)(Sexy::Rect *a1, Sexy::Rect *a2);
-
 inline int (*LawnPlayerInfo_GetFlag)(PlayerInfo *, int);
 
 inline void (*GetFlashingColor)(Color *, int, int);
