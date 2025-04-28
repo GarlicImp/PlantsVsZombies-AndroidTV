@@ -835,6 +835,38 @@ Rect Plant::GetPlantRect()
     return aRect;
 }
 
+Rect Plant::GetPlantAttackRect(PlantWeapon thePlantWeapon)
+{
+    Rect aRect;
+    if (mApp->IsWallnutBowlingLevel())
+    {
+        aRect = Rect(mX, mY, mWidth - 20, mHeight);
+    }
+    else if (thePlantWeapon == PlantWeapon::WEAPON_SECONDARY && mSeedType == SeedType::SEED_SPLITPEA)
+    {
+        aRect = Rect(0, mY, mX + 16, mHeight);
+    }
+    else switch (mSeedType)
+        {
+            case SeedType::SEED_LEFTPEATER:     aRect = Rect(0,             mY,             mX,                 mHeight);               break;
+            case SeedType::SEED_SQUASH:         aRect = Rect(mX + 20,       mY,             mWidth - 35,        mHeight);               break;
+            case SeedType::SEED_CHOMPER:        aRect = Rect(mX + 80,       mY,             40,                 mHeight);               break;
+            case SeedType::SEED_SPIKEWEED:
+            case SeedType::SEED_SPIKEROCK:      aRect = Rect(mX + 20,       mY,             mWidth - 50,        mHeight);               break;
+            case SeedType::SEED_POTATOMINE:     aRect = Rect(mX,            mY,             mWidth - 25,        mHeight);               break;
+            case SeedType::SEED_TORCHWOOD:      aRect = Rect(mX + 50,       mY,             30,                 mHeight);               break;
+            case SeedType::SEED_PUFFSHROOM:
+            case SeedType::SEED_SEASHROOM:      aRect = Rect(mX + 60,       mY,             230,                mHeight);               break;
+            case SeedType::SEED_FUMESHROOM:     aRect = Rect(mX + 60,       mY,             340,                mHeight);               break;
+            case SeedType::SEED_GLOOMSHROOM:    aRect = Rect(mX - 80,       mY - 80,        240,                240);                   break;
+            case SeedType::SEED_TANGLEKELP:     aRect = Rect(mX,            mY,             mWidth,             mHeight);               break;
+            case SeedType::SEED_CATTAIL:        aRect = Rect(-BOARD_WIDTH,  -BOARD_HEIGHT,  BOARD_WIDTH * 2,    BOARD_HEIGHT * 2);      break;
+            default:                            aRect = Rect(mX + 60,       mY,             BOARD_WIDTH,        mHeight);               break;
+        }
+
+    return aRect;
+}
+
 Image* Plant::GetImage(SeedType theSeedType)
 {
     Image** aImages = GetPlantDefinition(theSeedType).mPlantImage;

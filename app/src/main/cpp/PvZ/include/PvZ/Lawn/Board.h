@@ -248,6 +248,12 @@ public:
     GridItem* GetGridItemAt(GridItemType theGridItemType, int theGridX, int theGridY);
     void Move(int theX, int theY) { reinterpret_cast<void (*)(Board *, int, int)>(Board_MoveAddr)(this, theX, theY); } // 整体移动整个草坪，包括种子栏和铲子按钮等等。
     void DoFwoosh(int theRow) { reinterpret_cast<void (*)(Board *, int)>(Board_DoFwooshAddr)(this, theRow); }
+    bool IteratePlants(Plant *&thePlant) { return reinterpret_cast<bool (*)(Board *, Plant *&)>(Board_IteratePlantsAddr)(this, thePlant); }
+    bool IterateZombies(Zombie *&theZombie) { return reinterpret_cast<bool (*)(Board *, Zombie *&)>(Board_IterateZombiesAddr)(this, theZombie); }
+    Plant *GetTopPlantAt(int theGridX, int theGridY, PlantPriority thePriority) {
+        return reinterpret_cast<Plant *(*)(Board *, int, int, PlantPriority)>(Board_GetTopPlantAtAddr)(this, theGridX, theGridY, thePriority);
+    }
+
 
     Board(LawnApp* theApp);
     void Create(LawnApp* theApp);
@@ -321,6 +327,8 @@ public:
     void KeyDown(Sexy::KeyCode theKey);
 };
 
+int	GetRectOverlap(const Sexy::Rect& rect1, const Sexy::Rect& rect2);
+bool GetCircleRectOverlap(int theCircleX, int theCircleY, int theRadius, const Sexy::Rect& theRect);
 /***************************************************************************************************************/
 inline int theBuildLadderX;
 inline int theBuildPlantX;

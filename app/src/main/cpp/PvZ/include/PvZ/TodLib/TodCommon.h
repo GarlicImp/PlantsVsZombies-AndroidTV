@@ -7,6 +7,7 @@
 
 #include "PvZ/Enums.h"
 
+inline void				SetBit(uint& theNum, int theIdx, bool theValue = true)		{ if (theValue) theNum |= 1 << theIdx; else theNum &= ~(1 << theIdx); }
 inline bool				TestBit(uint theNum, int theIdx)							{ return theNum & (1 << theIdx); }
 
 #endif // PLANTSVSZOMBIES_ANDROIDTV_TODCOMMON_H

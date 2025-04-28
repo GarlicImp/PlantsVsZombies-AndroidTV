@@ -1448,6 +1448,16 @@ int Zombie::GetShieldDamageIndex()
     return 0;
 }
 
+bool Zombie::IsFireResistant()
+{
+    return
+        mZombieType == ZombieType::ZOMBIE_CATAPULT ||
+        mZombieType == ZombieType::ZOMBIE_ZAMBONI ||
+        mShieldType == ShieldType::SHIELDTYPE_DOOR ||
+        mShieldType == ShieldType::SHIELDTYPE_LADDER ||
+        mShieldType == ShieldType::SHIELDTYPE_TRASH_BIN;
+}
+
 Plant* Zombie::FindPlantTarget(ZombieAttackType theAttackType) {
     return old_Zombie_FindPlantTarget(this, theAttackType);
 }

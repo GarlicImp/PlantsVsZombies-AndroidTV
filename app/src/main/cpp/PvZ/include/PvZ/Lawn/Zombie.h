@@ -170,7 +170,7 @@ public:
     void ApplyButter() { reinterpret_cast<void (*)(Zombie *)>(Zombie_ApplyButterAddr)(this); }
     void ApplyBurn() { reinterpret_cast<void (*)(Zombie *)>(Zombie_ApplyBurnAddr)(this); }
     TodParticleSystem *AddAttachedParticle(int thePosX, int thePosY, ParticleEffect theEffect) {
-        reinterpret_cast<TodParticleSystem *(*)(Zombie *, int, int, ParticleEffect)>(Zombie_AddAttachedParticleAddr)(this, thePosX, thePosY, theEffect);
+       return reinterpret_cast<TodParticleSystem *(*)(Zombie *, int, int, ParticleEffect)>(Zombie_AddAttachedParticleAddr)(this, thePosX, thePosY, theEffect);
     }
     void StartEating() { reinterpret_cast<void (*)(Zombie *)>(Zombie_StartEatingAddr)(this); }
     void DropArm(unsigned int theDamageFlags) { reinterpret_cast<void (*)(Zombie *, unsigned int)>(Zombie_DropArmAddr)(this, theDamageFlags); }
@@ -247,6 +247,7 @@ public:
     int GetHelmDamageIndex();
     int GetBodyDamageIndex();
     int GetShieldDamageIndex();
+    bool IsFireResistant();
 };
 
 class ZombieDefinition

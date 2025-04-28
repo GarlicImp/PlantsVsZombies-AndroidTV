@@ -198,7 +198,7 @@ public:
     void DrawShadow(Sexy::Graphics *g, float theOffsetX, float theOffsetY) {
         reinterpret_cast<void (*)(Plant *, Sexy::Graphics *, float, float)>(Plant_DrawShadowAddr)(this, g, theOffsetX, theOffsetY);
     }
-    bool IsPartOfUpgradableTo(SeedType theUpgradedType) { reinterpret_cast<bool (*)(Plant *, SeedType)>(Plant_IsPartOfUpgradableToAddr)(this, theUpgradedType);}
+    bool IsPartOfUpgradableTo(SeedType theUpgradedType) { return reinterpret_cast<bool (*)(Plant *, SeedType)>(Plant_IsPartOfUpgradableToAddr)(this, theUpgradedType);}
     void DrawMagnetItems(Sexy::Graphics *g) { reinterpret_cast<void (*)(Plant *, Sexy::Graphics *)>(Plant_DrawMagnetItemsAddr)(this, g); }
 
     void PlantInitialize(int theGridX, int theGridY, SeedType theSeedType, SeedType theImitaterType, int a6);
@@ -216,6 +216,7 @@ public:
     static bool IsUpgrade(SeedType theSeedType);
     int GetDamageRangeFlags(PlantWeapon thePlantWeapon);
     Sexy::Rect GetPlantRect();
+    Sexy::Rect GetPlantAttackRect(PlantWeapon thePlantWeapon);
     bool NotOnGround();
     static void DrawSeedType(Sexy::Graphics *g, SeedType theSeedType, SeedType theImitaterType, DrawVariation theDrawVariation, float thePosX, float thePosY);
     void SetSleeping(bool theIsAsleep);

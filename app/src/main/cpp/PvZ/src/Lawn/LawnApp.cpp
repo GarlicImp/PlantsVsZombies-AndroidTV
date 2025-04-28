@@ -478,6 +478,17 @@ bool LawnApp::IsIZombieLevel() {
         || mGameMode == GameMode::GAMEMODE_PUZZLE_I_ZOMBIE_ENDLESS;
 }
 
+bool LawnApp::IsWallnutBowlingLevel()
+{
+    if (mBoard == nullptr)
+        return false;
+
+    if (mGameMode == GameMode::GAMEMODE_CHALLENGE_WALLNUT_BOWLING || mGameMode == GameMode::GAMEMODE_CHALLENGE_WALLNUT_BOWLING_2)
+        return true;
+
+    return IsAdventureMode() && mPlayerInfo->mLevel == 5;
+}
+
 bool LawnApp::IsAdventureMode() {
     return mGameMode == GameMode::GAMEMODE_ADVENTURE;
 }
