@@ -3,22 +3,43 @@
 
 #include "PvZ/Enums.h"
 
-inline int *(*ZenGarden_GetStinky)(int **zenGarden);
+class LawnApp;
+class Board;
+class SpecialGridPlacement {
+public:
+    int mPixelX;
+    int mPixelY;
+    int mGridX;
+    int mGridY;
+};
 
-inline bool (*ZenGarden_IsStinkyHighOnChocolate)(int *zenGarden);
+class ZenGarden {
+public:
+    LawnApp *mApp;          //+0x0
+    Board *mBoard;          //+0x4
+    GardenType mGardenType; //+0x8
 
-inline void (*ZenGarden_OpenStore)(int *);
+    SpecialGridPlacement *GetSpecialGridPlacements(int &theCount);
+    int GridToPixelX(int theGridX, int theGridY);
+    int GridToPixelY(int theGridX, int theGridY);
+};
 
-inline int (*ZenGarden_GetPottedPlantInWheelbarrow)(int *);
+inline int *(*ZenGarden_GetStinky)(ZenGarden **zenGarden);
 
-inline void (*ZenGarden_DrawPottedPlant)(int *a1, Sexy::Graphics *g, float x, float y, PottedPlant *thePottedPlant, float theScale, bool theDrawPot);
+inline bool (*ZenGarden_IsStinkyHighOnChocolate)(ZenGarden *zenGarden);
+
+inline void (*ZenGarden_OpenStore)(ZenGarden *);
+
+inline int (*ZenGarden_GetPottedPlantInWheelbarrow)(ZenGarden *);
+
+inline void (*ZenGarden_DrawPottedPlant)(ZenGarden *a1, Sexy::Graphics *g, float x, float y, PottedPlant *thePottedPlant, float theScale, bool theDrawPot);
 
 inline float (*PlantFlowerPotHeightOffset)(SeedType, float);
 
 
-inline void (*old_ZenGarden_DrawBackdrop)(int *zenGarden, int *graphics);
+inline void (*old_ZenGarden_DrawBackdrop)(ZenGarden *zenGarden, int *graphics);
 
 
-void ZenGarden_DrawBackdrop(int *zenGarden, int *graphics);
+void ZenGarden_DrawBackdrop(ZenGarden *zenGarden, int *graphics);
 
 #endif // PVZ_LAWN_ZEN_GARDEN_H

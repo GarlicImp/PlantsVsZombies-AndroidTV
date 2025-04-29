@@ -107,7 +107,7 @@ void Zombie::Update() {
         return;
     }
     if (mZombieType == ZombieType::ZOMBIE_FLAG && mBossFireBallReanimID != 0) {
-        Reanimation *reanimation = LawnApp_ReanimationTryToGet(mApp, mBossFireBallReanimID);
+        Reanimation *reanimation = mApp->ReanimationTryToGet(mBossFireBallReanimID);
         if (reanimation != nullptr)
             Reanimation_Update(reanimation);
     }
@@ -338,7 +338,7 @@ void Zombie::BossDestroyIceballInRow(int theRow) {
     if (theRow != mFireballRow)
         return;
 
-    Reanimation *aFireBallReanim = LawnApp_ReanimationTryToGet(mApp, mBossFireBallReanimID);
+    Reanimation *aFireBallReanim = mApp->ReanimationTryToGet(mBossFireBallReanimID);
     if (aFireBallReanim && !mIsFireBall) {
         LawnApp_AddTodParticle(mApp, mPosX + 80.0, mAnimCounter + 80.0, 400000, ParticleEffect::PARTICLE_ICEBALL_DEATH);
 
@@ -1222,7 +1222,7 @@ void Zombie::DrawReanim(Sexy::Graphics *graphics, ZombieDrawPosition *theZombieD
     // 大头贴专门Draw一下
     old_Zombie_DrawReanim(this, graphics, theZombieDrawPosition, theBaseRenderGroup);
     if (IsZombatarZombie(mZombieType)) {
-        Reanimation *reanimation = LawnApp_ReanimationTryToGet(mApp, mBossFireBallReanimID);
+        Reanimation *reanimation = mApp->ReanimationTryToGet(mBossFireBallReanimID);
         if (reanimation != nullptr) {
             Reanimation_Draw(reanimation, graphics);
         }
@@ -1235,7 +1235,7 @@ void Zombie::DropHead(unsigned int theDamageFlags) {
     // TODO: 大头贴僵尸掉头时掉饰品(掉 hat 和 eyeWear)
     old_Zombie_DropHead(this, theDamageFlags);
     if (IsZombatarZombie(mZombieType)) {
-        Reanimation *reanimation = LawnApp_ReanimationTryToGet(mApp, mBossFireBallReanimID);
+        Reanimation *reanimation = mApp->ReanimationTryToGet(mBossFireBallReanimID);
         if (reanimation != nullptr) {
             int index[2] = {Reanimation_GetZombatarHatTrackIndex(reanimation), Reanimation_GetZombatarEyeWearTrackIndex(reanimation)};
             for (int i = 0; i < 2; ++i) {
@@ -1387,7 +1387,7 @@ void Zombie::SetupLostArmReanim() {
             ReanimShowPrefix("Zombie_outerarm_hand", -1);
             break;
     }
-    Reanimation *reanimation = LawnApp_ReanimationTryToGet(mApp, mBodyReanimID);
+    Reanimation *reanimation = mApp->ReanimationTryToGet(mBodyReanimID);
     if (reanimation != nullptr) {
         switch (mZombieType) {
             case ZombieType::ZOMBIE_FOOTBALL:
@@ -1428,7 +1428,7 @@ void Zombie::SetupLostArmReanim() {
                 break;
             case ZombieType::ZOMBIE_FLAG: {
                 Reanimation_SetImageOverride(reanimation, "Zombie_outerarm_upper", *Sexy_IMAGE_REANIM_ZOMBIE_OUTERARM_UPPER2_Addr);
-                Reanimation *reanimation2 = LawnApp_ReanimationTryToGet(mApp, mSpecialHeadReanimID);
+                Reanimation *reanimation2 = mApp->ReanimationTryToGet(mSpecialHeadReanimID);
                 if (reanimation2 != nullptr) {
                     Reanimation_SetImageOverride(reanimation2, "Zombie_flag", *Sexy_IMAGE_REANIM_ZOMBIE_FLAG3_Addr);
                 }

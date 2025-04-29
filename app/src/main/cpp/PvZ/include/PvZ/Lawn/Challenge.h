@@ -3,6 +3,7 @@
 
 #include "../SexyAppFramework/Graphics.h"
 #include "PvZ/Enums.h"
+#include "PvZ/Symbols.h"
 
 #define BEGHOULED_MAX_GRIDSIZEX 8
 #define BEGHOULED_MAX_GRIDSIZEY 5
@@ -72,8 +73,16 @@ public:
     ReanimationID mReanimHeavyWeaponID3;  // 79
     // 大小80个整数
 
-    Challenge();
+    bool MouseDown(int x, int y, int theClickCount, HitResult *theHitResult, int thePlayerIndex) {
+        return reinterpret_cast<bool (*)(Challenge *, int, int, int, HitResult *, int)>(Challenge_MouseDownAddr)(this, x, y, theClickCount, theHitResult, thePlayerIndex);
+    }
+    void TreeOfWisdomOpenStore() { reinterpret_cast<void (*)(Challenge *)>(Challenge_TreeOfWisdomOpenStoreAddr)(this); }
+    bool IsMPSuddenDeath() { return reinterpret_cast<bool (*)(Challenge *)>(Challenge_IsMPSuddenDeathAddr)(this); };
+    void IZombieScoreBrain(GridItem *theBrain) { reinterpret_cast<void (*)(Challenge *, GridItem *)>(Challenge_IZombieScoreBrainAddr)(this, theBrain); }
+    void GraveDangerSpawnGraveAt(int theGridX, int theGridY) { reinterpret_cast<void (*)(Challenge *, int, int)>(Challenge_GraveDangerSpawnGraveAtAddr)(this, theGridX, theGridY); }
+    void PlantAdded(Plant *thePlant) { reinterpret_cast<void (*)(Challenge *, Plant *)>(Challenge_PlantAddedAddr)(this, thePlant); }
 
+    Challenge();
     void Create();
     void Update();
     void HeavyWeaponFire(float a2, float a3);
@@ -89,47 +98,27 @@ public:
     void DrawHeavyWeapon(Sexy::Graphics *g);
     bool UpdateZombieSpawning();
     void HeavyWeaponPacketClicked(SeedPacket *theSeedPacket);
+    static int IsMPSeedType(SeedType theSeedType);
+    static int IsZombieSeedType(SeedType theSeedType);
+    void IZombieSetPlantFilterEffect(Plant *thePlant, FilterEffect theFilterEffect);
     static ZombieType IZombieSeedTypeToZombieType(SeedType theSeedType);
+    void IZombiePlaceZombie(ZombieType theZombieType, int theGridX, int theGridY);
     void StartLevel();
     void Delete();
     void ScaryPotterOpenPot(GridItem *theScaryPot);
     GridItem *IZombieGetBrainTarget(Zombie *theZombie);
     void IZombieSquishBrain(GridItem *theBrain);
+    int ScaryPotterCountSunInPot(GridItem *theGridItem);
+    SeedType GetArtChallengeSeed(int theGridX, int theGridY);
+    void InitZombieWavesFromList(ZombieType *theZombieList, int theListLength);
+    void IZombieSetupPlant(Plant *thePlant);
+    void HeavyWeaponReanimUpdate();
 };
 
 /***************************************************************************************************************/
 inline int targetWavesToJump = 1;
 inline bool requestJumpSurvivalStage;
 inline bool stopSpawning; // 暂停刷怪
-
-
-inline int (*Challenge_ScaryPotterCountSunInPot)(Challenge *a1, GridItem *a2);
-
-inline void (*Challenge_IZombieScoreBrain)(Challenge *, GridItem *);
-
-inline bool (*Challenge_MouseDown)(Challenge *, int, int, int, HitResult *, int);
-
-inline SeedType (*Challenge_GetArtChallengeSeed)(Challenge *, int, int);
-
-inline void (*Challenge_TreeOfWisdomOpenStore)(Challenge *);
-
-inline bool (*Challenge_IsZombieSeedType)(SeedType type);
-
-inline bool (*Challenge_IsMPSeedType)(SeedType type);
-
-inline bool (*Challenge_IsMPSuddenDeath)(Challenge *);
-
-inline void (*Challenge_InitZombieWavesFromList)(Challenge *, ZombieType *, int);
-
-inline void (*Challenge_IZombieSetupPlant)(Challenge *challenge, Plant *plant);
-
-inline void (*Challenge_IZombiePlaceZombie)(Challenge *challenge, ZombieType, int, int);
-
-inline void (*Challenge_GraveDangerSpawnGraveAt)(Challenge *challenge, int x, int y);
-
-inline void (*Challenge_IZombieSetPlantFilterEffect)(Challenge *, Plant *, FilterEffectType);
-
-inline void (*Challenge_PlantAdded)(Challenge *, Plant *);
 
 
 inline void (*old_Challenge_Update)(Challenge *a);

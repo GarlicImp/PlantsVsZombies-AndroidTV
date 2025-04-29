@@ -366,7 +366,7 @@ void DrawSeedPacket(Sexy::Graphics *graphics,
         Sexy_Graphics_SetColorizeImages(&newGraphics, true);
         Sexy_Graphics_ClipRect(&newGraphics, x, y, graphics->mScaleX * 50.0f, coolDownHeight * graphics->mScaleY);
         if (isSeedPacketSelected) {
-            if (Challenge_IsMPSeedType(seedType)) {
+            if (Challenge::IsMPSeedType(seedType)) {
                 TodDrawImageScaledF(&newGraphics, *Sexy_IMAGE_ZOMBIE_SEEDPACKET_Addr, x, y, graphics->mScaleX, graphics->mScaleY);
             } else {
                 TodDrawImageCelScaledF(&newGraphics, *Sexy_IMAGE_SEEDS_Addr, x, y, celToDraw, 0, graphics->mScaleX, graphics->mScaleY);
@@ -582,22 +582,22 @@ void FixPixelsOnAlphaEdgeForBlending(Sexy::Image *theImage) {
     }
 }
 
-Sexy::Image *FilterEffectCreateImage(Sexy::Image *image, FilterEffectType theFilterEffect) {
+Sexy::Image *FilterEffectCreateImage(Sexy::Image *image, FilterEffect theFilterEffect) {
     Sexy::Image *memoryImage = Sexy_SexyAppBase_CopyImage((LawnApp *)*gLawnApp_Addr, image);
     memoryImage->mWidth = image->mWidth;
     memoryImage->mHeight = image->mHeight;
     FixPixelsOnAlphaEdgeForBlending(memoryImage);
     switch (theFilterEffect) {
-        case FilterEffectType::FILTEREFFECT_WASHED_OUT:
+        case FilterEffect::FILTEREFFECT_WASHED_OUT:
             FilterEffectDoWashedOut(memoryImage);
             break;
-        case FilterEffectType::FILTEREFFECT_LESS_WASHED_OUT:
+        case FilterEffect::FILTEREFFECT_LESS_WASHED_OUT:
             FilterEffectDoLessWashedOut(memoryImage);
             break;
-        case FilterEffectType::FILTEREFFECT_WHITE:
+        case FilterEffect::FILTEREFFECT_WHITE:
             FilterEffectDoWhite(memoryImage);
             break;
-        case FilterEffectType::FILTEREFFECT_CUSTOM:
+        case FilterEffect::FILTEREFFECT_CUSTOM:
             FilterEffectDoLumSat(memoryImage, 1.05, 0.8); // 仅MainMenu显示房子雾蒙蒙效果时用到。数值是自己瞎调的
             break;
     }
@@ -609,14 +609,14 @@ Sexy::Image *FilterEffectCreateImage(Sexy::Image *image, FilterEffectType theFil
 }
 
 
-static std::unordered_map<Sexy::Image *, Sexy::Image *> gFilterEffectMaps[FilterEffectType::NUM_FILTEREFFECT];
+static std::unordered_map<Sexy::Image *, Sexy::Image *> gFilterEffectMaps[FilterEffect::NUM_FILTEREFFECT];
 
-Sexy::Image *FilterEffectGetImage(Sexy::Image *image, FilterEffectType mFilterEffect) {
+Sexy::Image *FilterEffectGetImage(Sexy::Image *image, FilterEffect mFilterEffect) {
     // 变灰的植物贴图在这里处理
     if (!imitater) {
         return image;
     }
-    if (mFilterEffect == FilterEffectType::FILTEREFFECT_NONE) {
+    if (mFilterEffect == FilterEffect::FILTEREFFECT_NONE) {
         return image;
     }
     std::unordered_map<Sexy::Image *, Sexy::Image *> &currentMap = gFilterEffectMaps[mFilterEffect];
@@ -653,9 +653,9 @@ void ReanimatorCache_DrawCachedPlant(ReanimatorCache *a1, Sexy::Graphics *graphi
             return;
         }
         if (drawVariation == DrawVariation::VARIATION_IMITATER) {
-            image = FilterEffectGetImage(image, FilterEffectType::FILTEREFFECT_WASHED_OUT);
+            image = FilterEffectGetImage(image, FilterEffect::FILTEREFFECT_WASHED_OUT);
         } else if (drawVariation == DrawVariation::VARIATION_IMITATER_LESS) {
-            image = FilterEffectGetImage(image, FilterEffectType::FILTEREFFECT_LESS_WASHED_OUT);
+            image = FilterEffectGetImage(image, FilterEffect::FILTEREFFECT_LESS_WASHED_OUT);
         }
         int a, b, c, d;
         ReanimatorCache_GetPlantImageSize(a1, theSeedType, &a, &b, &c, &d);

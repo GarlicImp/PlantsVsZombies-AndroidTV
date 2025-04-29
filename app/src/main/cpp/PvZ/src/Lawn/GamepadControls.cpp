@@ -179,7 +179,7 @@ void GamepadControls_Update(GamepadControls *gamepadControls, float a2) {
 
     old_GamepadControls_Update(gamepadControls, a2);
 
-    //    Reanimation *mCursorReanim = LawnApp_ReanimationTryToGet(gamepadControls->mGameObject.mApp, gamepadControls->mCursorReanimID);
+    //    Reanimation *mCursorReanim = ReanimationTryToGet(gamepadControls->mGameObject.mApp, gamepadControls->mCursorReanimID);
     //    LOGD("%d",mCursorReanim);
     //    if (mCursorReanim != nullptr) {
     //        if ((gamepadControls->mPlayerIndex2 == 0 &&(mIsZombie == TouchPlayerIndex::Player1 || gPlayerIndexSecond == TouchPlayerIndex::Player1)) || (gamepadControls->mPlayerIndex2 == 1
@@ -216,7 +216,7 @@ void GamepadControls_ButtonDownFireCobcannonTest(GamepadControls *gamepadControl
 }
 
 void GamepadControls_InvalidatePreviewReanim(GamepadControls *gamepadControls) {
-    Reanimation *mPreviewReanim4 = LawnApp_ReanimationTryToGet(gamepadControls->mGameObject.mApp, gamepadControls->mPreviewReanimID4);
+    Reanimation *mPreviewReanim4 = gamepadControls->mGameObject.mApp->ReanimationTryToGet(gamepadControls->mPreviewReanimID4);
     if (mPreviewReanim4 != nullptr) {
         Reanimation_ReanimationDie(mPreviewReanim4);
         gamepadControls->mPreviewReanimID4 = ReanimationID::REANIMATIONID_NULL;
@@ -228,12 +228,12 @@ void GamepadControls_InvalidatePreviewReanim(GamepadControls *gamepadControls) {
     }
 }
 
-FilterEffectType GetFilterEffectTypeBySeedType(SeedType mSeedType) {
+FilterEffect GetFilterEffectTypeBySeedType(SeedType mSeedType) {
     if (mSeedType == SeedType::SEED_HYPNOSHROOM || mSeedType == SeedType::SEED_SQUASH || mSeedType == SeedType::SEED_POTATOMINE || mSeedType == SeedType::SEED_GARLIC
         || mSeedType == SeedType::SEED_LILYPAD) {
-        return FilterEffectType::FILTEREFFECT_LESS_WASHED_OUT;
+        return FilterEffect::FILTEREFFECT_LESS_WASHED_OUT;
     }
-    return FilterEffectType::FILTEREFFECT_WASHED_OUT;
+    return FilterEffect::FILTEREFFECT_WASHED_OUT;
 }
 
 void GamepadControls_UpdatePreviewReanim(GamepadControls *gamepadControls) {
@@ -465,9 +465,9 @@ void GamepadControls_UpdatePreviewReanim(GamepadControls *gamepadControls) {
         flagUpdateChangeType = true;
     } else {
         // 如果目标预览植物类型没变化, 则为模仿者上色
-        Reanimation *mPreviewReanim4 = LawnApp_ReanimationTryToGet(gamepadControls->mGameObject.mApp, gamepadControls->mPreviewReanimID4);
+        Reanimation *mPreviewReanim4 = gamepadControls->mGameObject.mApp->ReanimationTryToGet(gamepadControls->mPreviewReanimID4);
         if (mPreviewReanim4 != nullptr) {
-            FilterEffectType aFilterEffect = isImitater ? GetFilterEffectTypeBySeedType(mSeedType) : FilterEffectType::FILTEREFFECT_NONE;
+            FilterEffect aFilterEffect = isImitater ? GetFilterEffectTypeBySeedType(mSeedType) : FilterEffect::FILTEREFFECT_NONE;
             mPreviewReanim4->mFilterEffect = aFilterEffect;
             if (mSeedType == SeedType::SEED_THREEPEATER || mSeedType == SeedType::SEED_SPLITPEA || mSeedType == SeedType::SEED_PEASHOOTER || mSeedType == SeedType::SEED_SNOWPEA
                 || mSeedType == SeedType::SEED_REPEATER || mSeedType == SeedType::SEED_GATLINGPEA || mSeedType == SeedType::SEED_LEFTPEATER) {
@@ -482,7 +482,7 @@ void GamepadControls_UpdatePreviewReanim(GamepadControls *gamepadControls) {
                     int mNumEffects = attachment->mNumEffects;
                     for (int j = 0; j < mNumEffects; ++j) {
                         if (attachment->mEffectArray[j].mEffectType == AttachEffect::Reanim) {
-                            Reanimation *attachReanim = LawnApp_ReanimationTryToGet(lawnApp, attachment->mEffectArray[j].mEffectID);
+                            Reanimation *attachReanim = lawnApp->ReanimationTryToGet(attachment->mEffectArray[j].mEffectID);
                             if (attachReanim != nullptr) {
                                 attachReanim->mFilterEffect = aFilterEffect;
                             }
@@ -493,7 +493,7 @@ void GamepadControls_UpdatePreviewReanim(GamepadControls *gamepadControls) {
         }
     }
 
-    Reanimation *mPreviewReanim4 = LawnApp_ReanimationTryToGet(gamepadControls->mGameObject.mApp, gamepadControls->mPreviewReanimID4);
+    Reanimation *mPreviewReanim4 = gamepadControls->mGameObject.mApp->ReanimationTryToGet(gamepadControls->mPreviewReanimID4);
     if (mPreviewReanim4 == nullptr)
         return;
 

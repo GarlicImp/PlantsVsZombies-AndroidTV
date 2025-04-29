@@ -133,7 +133,6 @@ inline void InitInGameFunction() {
     LawnApp_DoCheatDialog = (decltype(LawnApp_DoCheatDialog))LawnApp_DoCheatDialogAddr;
     LawnApp_DoCheatCodeDialog = (decltype(LawnApp_DoCheatCodeDialog))LawnApp_DoCheatCodeDialogAddr;
     LawnApp_DoUserDialog = (decltype(LawnApp_DoUserDialog))LawnApp_DoUserDialogAddr;
-    LawnApp_ReanimationTryToGet = (decltype(LawnApp_ReanimationTryToGet))LawnApp_ReanimationTryToGetAddr;
     LawnApp_IsFirstTimeAdventureMode = (decltype(LawnApp_IsFirstTimeAdventureMode))LawnApp_IsFirstTimeAdventureModeAddr;
     LawnApp_IsAdventureMode = (decltype(LawnApp_IsAdventureMode))LawnApp_IsAdventureModeAddr;
     LawnApp_IsWallnutBowlingLevel = (decltype(LawnApp_IsWallnutBowlingLevel))LawnApp_IsWallnutBowlingLevelAddr;
@@ -297,28 +296,6 @@ inline void InitInGameFunction() {
     ZenGarden_GetPottedPlantInWheelbarrow = (decltype(ZenGarden_GetPottedPlantInWheelbarrow))ZenGarden_GetPottedPlantInWheelbarrowAddr;
     ZenGarden_DrawPottedPlant = (decltype(ZenGarden_DrawPottedPlant))ZenGarden_DrawPottedPlantAddr;
     PlantFlowerPotHeightOffset = (decltype(PlantFlowerPotHeightOffset))PlantFlowerPotHeightOffsetAddr;
-
-
-    Challenge_GetArtChallengeSeed = (decltype(Challenge_GetArtChallengeSeed))Challenge_GetArtChallengeSeedAddr;
-    Challenge_TreeOfWisdomOpenStore = (decltype(Challenge_TreeOfWisdomOpenStore))Challenge_TreeOfWisdomOpenStoreAddr;
-    Challenge_IZombieScoreBrain = (decltype(Challenge_IZombieScoreBrain))Challenge_IZombieScoreBrainAddr;
-    Challenge_MouseDown = (decltype(Challenge_MouseDown))Challenge_MouseDownAddr;
-    Challenge_IsZombieSeedType = (decltype(Challenge_IsZombieSeedType))Challenge_IsZombieSeedTypeAddr;
-    Challenge_IsMPSeedType = (decltype(Challenge_IsMPSeedType))Challenge_IsMPSeedTypeAddr;
-    Challenge_IsMPSuddenDeath = (decltype(Challenge_IsMPSuddenDeath))Challenge_IsMPSuddenDeathAddr;
-    Challenge_InitZombieWavesFromList = (decltype(Challenge_InitZombieWavesFromList))Challenge_InitZombieWavesFromListAddr;
-    // Challenge_IZombieSeedTypeToZombieType = (ZombieType (*)(a::a)) Challenge_IZombieSeedTypeToZombieTypeAddr;
-    Challenge_ScaryPotterCountSunInPot = (decltype(Challenge_ScaryPotterCountSunInPot))Challenge_ScaryPotterCountSunInPotAddr;
-    Challenge_IZombieSetupPlant = (decltype(Challenge_IZombieSetupPlant))Challenge_IZombieSetupPlantAddr;
-    Challenge_IZombiePlaceZombie = (decltype(Challenge_IZombiePlaceZombie))Challenge_IZombiePlaceZombieAddr;
-    Challenge_GraveDangerSpawnGraveAt = (decltype(Challenge_GraveDangerSpawnGraveAt))Challenge_GraveDangerSpawnGraveAtAddr;
-    Challenge_IZombieSetPlantFilterEffect = (decltype(Challenge_IZombieSetPlantFilterEffect))Challenge_IZombieSetPlantFilterEffectAddr;
-    Challenge_PlantAdded = (decltype(Challenge_PlantAdded))Challenge_PlantAddedAddr;
-
-
-    //    Projectile_FindCollisionTargetPlant = (decltype(Projectile_FindCollisionTargetPlant))Projectile_FindCollisionTargetPlantAddr;
-    //    Projectile_FindCollisionTarget = (decltype(Projectile_FindCollisionTarget))Projectile_FindCollisionTargetAddr;
-    //    Projectile_FindCollisionTargetGridItem = (decltype(Projectile_FindCollisionTargetGridItem))Projectile_FindCollisionTargetGridItemAddr;
 
 
     GameButton_IsMouseOver = (decltype(GameButton_IsMouseOver))GameButton_IsMouseOverAddr;

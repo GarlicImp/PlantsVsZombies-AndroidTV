@@ -313,6 +313,9 @@ public:
     void ShovelDown();
     int PixelToGridXKeepOnBoard(int theX, int theY);
     int PixelToGridYKeepOnBoard(int theX, int theY);
+    int GridToPixelX(int theGridX, int theGridY);
+    int GridToPixelY(int theGridX, int theGridY);
+    static int MakeRenderOrder(RenderLayer theRenderLayer, int theRow, int theLayerOffset);
 
     void MouseMove(int x, int y);
     void MouseDown(int x, int y, int theClickCount);
