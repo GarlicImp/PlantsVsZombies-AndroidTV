@@ -95,8 +95,17 @@ void Sexy_String_Delete(int *holder) {
     }
 }
 
-void DrawSeedPacket(Sexy::Graphics *graphics, float x, float y, SeedType seedType, SeedType imitaterType, float coolDownPercent,
-                    int grayness, bool drawCostText, bool isInGame, bool isZombieSeed, bool isSeedPacketSelected) {
+void DrawSeedPacket(Sexy::Graphics *graphics,
+                    float x,
+                    float y,
+                    SeedType seedType,
+                    SeedType imitaterType,
+                    float coolDownPercent,
+                    int grayness,
+                    bool drawCostText,
+                    bool isInGame,
+                    bool isZombieSeed,
+                    bool isSeedPacketSelected) {
     // 修复选中紫卡、模仿者卡时卡片背景变为普通卡片背景
 
     SeedType realSeedType = imitaterType != SeedType::SEED_NONE && seedType == SeedType::SEED_IMITATER ? imitaterType : seedType;

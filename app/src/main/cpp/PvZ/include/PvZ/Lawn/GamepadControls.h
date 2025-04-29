@@ -5,29 +5,29 @@
 
 class GamepadControls : public BaseGamepadControls {
 public:
-    float mRangeFrom0to30UpdateFresh;       // 43
-    int *mSelectorParticle;                 // 44
-    int mSelectedSeedIndex;                 // 45
-    SeedType mSelectedSeedType;   // 46
-    bool mIsZombie;                         // 188
-    bool mCanPickUp;                        // 189
-    int mSelectedUpgradableType;            // 48
-    int mCobCannonPlantIndexInList;         // 49
-    bool mIsCobCannonSelected;              // 200
-    float mUpdateAdd_a2_Or_Minus_2xa2;      // 51
-    int mPreviewReanimID1;                  // 52
-    int mCursorReanimID;                    // 53
-    int mPreviewReanimID3;                  // 54
-    int mUnkCobCannonRelated;               // 55
-    ReanimationID mPreviewReanimID4;        // 56
-    SeedType mPreviewingSeedType;           // 57
-    Sexy::Image *mPreviewImage;             // 58
-    Zombie *mButterZombie;                  // 59
-    int mShovelRelated2;                    // 60
-    bool mIsShowingDigIndicator;            // 244
-    bool mIsInShopSeedBank;                 // 245
-    int mSelectedShopSeedIndex;             // 62
-    int unk4[3];                            // 63 ~ 65
+    float mRangeFrom0to30UpdateFresh;  // 43
+    int *mSelectorParticle;            // 44
+    int mSelectedSeedIndex;            // 45
+    SeedType mSelectedSeedType;        // 46
+    bool mIsZombie;                    // 188
+    bool mCanPickUp;                   // 189
+    int mSelectedUpgradableType;       // 48
+    int mCobCannonPlantIndexInList;    // 49
+    bool mIsCobCannonSelected;         // 200
+    float mUpdateAdd_a2_Or_Minus_2xa2; // 51
+    int mPreviewReanimID1;             // 52
+    int mCursorReanimID;               // 53
+    int mPreviewReanimID3;             // 54
+    int mUnkCobCannonRelated;          // 55
+    ReanimationID mPreviewReanimID4;   // 56
+    SeedType mPreviewingSeedType;      // 57
+    Sexy::Image *mPreviewImage;        // 58
+    Zombie *mButterZombie;             // 59
+    int mShovelRelated2;               // 60
+    bool mIsShowingDigIndicator;       // 244
+    bool mIsInShopSeedBank;            // 245
+    int mSelectedShopSeedIndex;        // 62
+    int unk4[3];                       // 63 ~ 65
 }; // 大小66个整数
 
 class ZenGardenControls : public GamepadControls {
@@ -37,7 +37,7 @@ public:
 
 /***************************************************************************************************************/
 // buttonCode 是按键键值，对应关系如下：
-enum ButtonCode{
+enum ButtonCode {
     BUTTONCODE_LUP = 0,
     BUTTONCODE_LDOWN = 1,
     BUTTONCODE_LLEFT = 2,

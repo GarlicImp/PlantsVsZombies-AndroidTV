@@ -1,11 +1,11 @@
 #include "PvZ/Lawn/AlmanacDialog.h"
-#include "PvZ/Symbols.h"
-#include "PvZ/SexyAppFramework/Graphics.h"
-#include "PvZ/Misc.h"
 #include "PvZ/Enums.h"
 #include "PvZ/Lawn//Plant.h"
 #include "PvZ/Lawn/Board.h"
 #include "PvZ/Lawn/LawnApp.h"
+#include "PvZ/Misc.h"
+#include "PvZ/SexyAppFramework/Graphics.h"
+#include "PvZ/Symbols.h"
 
 #include <cstddef>
 
@@ -266,7 +266,8 @@ void AlmanacDialog_DrawPlants_Unmodified(AlmanacDialog *almanacDialog, Sexy::Gra
     *(float *)almanacDialog->unk2 = -v22;
     graphics->mTransY = v23;
     Color v39 = {143, 67, 27, 255};
-    TodDrawStringWrappedHelper(graphics, (int *)&almanacDialog->mDescriptionString, &almanacDialog->mDescriptionRect, *Sexy_FONT_BRIANNETOD16_Addr, v39, DrawStringJustification::DS_ALIGN_LEFT, true, true);
+    TodDrawStringWrappedHelper(
+        graphics, (int *)&almanacDialog->mDescriptionString, &almanacDialog->mDescriptionRect, *Sexy_FONT_BRIANNETOD16_Addr, v39, DrawStringJustification::DS_ALIGN_LEFT, true, true);
     Sexy_Graphics_PopState(graphics);
 }
 
@@ -371,7 +372,8 @@ void AlmanacDialog_DrawPlants(AlmanacDialog *almanacDialog, Sexy::Graphics *grap
     *(float *)almanacDialog->unk2 = -v22;
     graphics->mTransY = v23;
     Color v39 = {143, 67, 27, 255};
-    TodDrawStringWrappedHelper(graphics, (int *)&almanacDialog->mDescriptionString, &almanacDialog->mDescriptionRect, *Sexy_FONT_BRIANNETOD16_Addr, v39, DrawStringJustification::DS_ALIGN_LEFT, true, true);
+    TodDrawStringWrappedHelper(
+        graphics, (int *)&almanacDialog->mDescriptionString, &almanacDialog->mDescriptionRect, *Sexy_FONT_BRIANNETOD16_Addr, v39, DrawStringJustification::DS_ALIGN_LEFT, true, true);
     Sexy_Graphics_PopState(graphics);
 }
 

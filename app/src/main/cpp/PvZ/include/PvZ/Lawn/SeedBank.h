@@ -19,7 +19,7 @@ public:
 
     SeedBank(bool thePlayerIndex);
     void Create(bool thePlayerIndex);
-    void Draw(Sexy::Graphics* g);
+    void Draw(Sexy::Graphics *g);
     bool MouseHitTest(int x, int y, HitResult *theHitResult);
     void UpdateWidth();
     void Move(int x, int y);

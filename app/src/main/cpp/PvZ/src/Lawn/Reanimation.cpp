@@ -1,11 +1,11 @@
 #include "PvZ/Lawn/Reanimation.h"
-#include "PvZ/SexyAppFramework/Graphics.h"
-#include "PvZ/Misc.h"
 #include "PvZ/Enums.h"
 #include "PvZ/Lawn/MainMenu.h"
+#include "PvZ/Misc.h"
+#include "PvZ/SexyAppFramework/Graphics.h"
 #include <regex>
 
-bool Reanimation::DrawTrack(Sexy::Graphics *g, int theTrackIndex, int theRenderGroup, TodTriangleGroup* theTriangleGroup) {
+bool Reanimation::DrawTrack(Sexy::Graphics *g, int theTrackIndex, int theRenderGroup, TodTriangleGroup *theTriangleGroup) {
     // 修复模仿者植物变白
     if (mFilterEffect != FilterEffectType::FILTEREFFECT_NONE) {
         ReanimatorTransform *reanimatorTransform = mReanimatorTransforms + theTrackIndex;
@@ -354,12 +354,10 @@ bool Reanimation::ShouldTriggerTimedEvent(float theEventTime) {
         return theEventTime >= mLastFrameTime || theEventTime < mAnimTime;
 }
 
-void Reanimation::AssignRenderGroupToTrack(const char* theTrackName, int theRenderGroup)
-{
+void Reanimation::AssignRenderGroupToTrack(const char *theTrackName, int theRenderGroup) {
     for (int i = 0; i < mDefinition->mTrackCount; i++)
-        if (strcasecmp(mDefinition->mTracks[i].mName, theTrackName) == 0)
-        {
-            mTrackInstances[i].mRenderGroup = theRenderGroup;  // 仅设置首个名称恰好为 theTrackName 的轨道
+        if (strcasecmp(mDefinition->mTracks[i].mName, theTrackName) == 0) {
+            mTrackInstances[i].mRenderGroup = theRenderGroup; // 仅设置首个名称恰好为 theTrackName 的轨道
             return;
         }
 }

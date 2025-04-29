@@ -1,7 +1,7 @@
 #include "PvZ/Lawn/CutScene.h"
 #include "PvZ/Enums.h"
-#include "PvZ/Lawn/LawnApp.h"
 #include "PvZ/Lawn/Board.h"
+#include "PvZ/Lawn/LawnApp.h"
 
 void CutScene_ShowShovel(CutScene *cutScene) {
     LawnApp *lawnApp = cutScene->mApp;

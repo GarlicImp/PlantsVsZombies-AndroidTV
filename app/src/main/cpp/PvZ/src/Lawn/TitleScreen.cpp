@@ -1,8 +1,8 @@
 #include "PvZ/Lawn/TitleScreen.h"
-#include "PvZ/Symbols.h"
-#include "PvZ/SexyAppFramework/Graphics.h"
 #include "PvZ/Enums.h"
 #include "PvZ/GlobalVariable.h"
+#include "PvZ/SexyAppFramework/Graphics.h"
+#include "PvZ/Symbols.h"
 
 void TitleScreen_Draw(TitleScreen *titleScreen, Sexy::Graphics *graphics) {
     old_TitleScreen_Draw(titleScreen, graphics);

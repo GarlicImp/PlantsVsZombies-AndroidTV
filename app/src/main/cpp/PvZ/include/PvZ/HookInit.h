@@ -70,7 +70,7 @@ inline void InitInGameFunction() {
     Board_CountPlantByType = (decltype(Board_CountPlantByType))Board_CountPlantByTypeAddr;
     Board_SetTutorialState = (decltype(Board_SetTutorialState))Board_SetTutorialStateAddr;
     Board_GetButterButtonRect = (decltype(Board_GetButterButtonRect))Board_GetButterButtonRectAddr;
-//     Board_GetShovelButtonRect = (void (*)(Rect *, Board *)) Board_GetShovelButtonRectAddr;
+    //     Board_GetShovelButtonRect = (void (*)(Rect *, Board *)) Board_GetShovelButtonRectAddr;
     Board_ZombieTryToGet = (decltype(Board_ZombieTryToGet))Board_ZombieTryToGetAddr;
     Board_MakeRenderOrder = (decltype(Board_MakeRenderOrder))Board_MakeRenderOrderAddr;
     Board_PlantUsesAcceleratedPricing = (decltype(Board_PlantUsesAcceleratedPricing))Board_PlantUsesAcceleratedPricingAddr;
@@ -316,9 +316,9 @@ inline void InitInGameFunction() {
     Challenge_PlantAdded = (decltype(Challenge_PlantAdded))Challenge_PlantAddedAddr;
 
 
-//    Projectile_FindCollisionTargetPlant = (decltype(Projectile_FindCollisionTargetPlant))Projectile_FindCollisionTargetPlantAddr;
-//    Projectile_FindCollisionTarget = (decltype(Projectile_FindCollisionTarget))Projectile_FindCollisionTargetAddr;
-//    Projectile_FindCollisionTargetGridItem = (decltype(Projectile_FindCollisionTargetGridItem))Projectile_FindCollisionTargetGridItemAddr;
+    //    Projectile_FindCollisionTargetPlant = (decltype(Projectile_FindCollisionTargetPlant))Projectile_FindCollisionTargetPlantAddr;
+    //    Projectile_FindCollisionTarget = (decltype(Projectile_FindCollisionTarget))Projectile_FindCollisionTargetAddr;
+    //    Projectile_FindCollisionTargetGridItem = (decltype(Projectile_FindCollisionTargetGridItem))Projectile_FindCollisionTargetGridItemAddr;
 
 
     GameButton_IsMouseOver = (decltype(GameButton_IsMouseOver))GameButton_IsMouseOverAddr;
@@ -377,18 +377,6 @@ inline void InitInGameFunction() {
     GameObject_EndDraw = (decltype(GameObject_EndDraw))GameObject_EndDrawAddr;
 
 
-    Coin_MouseDown = (decltype(Coin_MouseDown))Coin_MouseDownAddr;
-    Coin_Collect = (decltype(Coin_Collect))Coin_CollectAddr;
-    Coin_Die = (decltype(Coin_Die))Coin_DieAddr;
-    Coin_IsLevelAward = (decltype(Coin_IsLevelAward))Coin_IsLevelAwardAddr;
-    Coin_IsPresentWithAdvice = (decltype(Coin_IsPresentWithAdvice))Coin_IsPresentWithAdviceAddr;
-    Coin_IsMoney = (decltype(Coin_IsMoney))Coin_IsMoneyAddr;
-    Coin_PlayGroundSound = (decltype(Coin_PlayGroundSound))Coin_PlayGroundSoundAddr;
-    Coin_GetDisappearTime = (decltype(Coin_GetDisappearTime))Coin_GetDisappearTimeAddr;
-    Coin_StartFade = (decltype(Coin_StartFade))Coin_StartFadeAddr;
-    Coin_GetSunScale = (decltype(Coin_GetSunScale))Coin_GetSunScaleAddr;
-
-
     Sexy_StrFormat = (decltype(Sexy_StrFormat))Sexy_StrFormatAddr;
     TodStringTranslate = (decltype(TodStringTranslate))TodStringTranslateAddr;
     //    DrawSeedPacket = (void (*)(Sexy::Graphics *, int, int, int, int, float, int, bool, bool, bool,bool)) DrawSeedPacketAddr;
@@ -403,7 +391,7 @@ inline void InitInGameFunction() {
     LawnPlayerInfo_GetFlag = (decltype(LawnPlayerInfo_GetFlag))LawnPlayerInfo_GetFlagAddr;
     RandRangeInt = (decltype(RandRangeInt))RandRangeIntAddr;
     //    DrawSeedType = (void (*)(float *, float, float, int, int, float, float,float)) DrawSeedTypeAddr;
-//    MailScreen_KeyDown = (decltype(MailScreen_KeyDown))MailScreen_KeyDownAddr;
+    //    MailScreen_KeyDown = (decltype(MailScreen_KeyDown))MailScreen_KeyDownAddr;
     Sexy_GamepadApp_HasGamepad = (decltype(Sexy_GamepadApp_HasGamepad))Sexy_GamepadApp_HasGamepadAddr;
     Sexy_RandInt = (decltype(Sexy_RandInt))Sexy_RandIntAddr;
     Sexy_SexyMatrix3_SexyMatrix3 = (decltype(Sexy_SexyMatrix3_SexyMatrix3))Sexy_SexyMatrix3_SexyMatrix3Addr;
@@ -424,7 +412,6 @@ inline void InitInGameFunction() {
     SaveGameContext_SyncInt = (decltype(SaveGameContext_SyncInt))SaveGameContext_SyncIntAddr;
     Sexy_ScrollbarWidget_SetMaxValue = (decltype(Sexy_ScrollbarWidget_SetMaxValue))Sexy_ScrollbarWidget_SetMaxValueAddr;
     PlantDrawHeightOffset = (decltype(PlantDrawHeightOffset))PlantDrawHeightOffsetAddr;
-    //    GetChallengeDefinition = (ChallengeDefinition& (*)(int)) GetChallengeDefinitionAddr;
     TypingCheck_SetPhrase = (decltype(TypingCheck_SetPhrase))TypingCheck_SetPhraseAddr;
     Sexy_SexyAppBase_RegistryReadString = (decltype(Sexy_SexyAppBase_RegistryReadString))Sexy_SexyAppBase_RegistryReadStringAddr;
     Sexy_SexyAppBase_CopyImage = (decltype(Sexy_SexyAppBase_CopyImage))Sexy_SexyAppBase_CopyImageAddr;
@@ -535,7 +522,7 @@ inline void InitHookFunction() {
     homura::HookFunction(LawnApp_IsChallengeWithoutSeedBankAddr, &LawnApp_IsChallengeWithoutSeedBank, &old_LawnApp_IsChallengeWithoutSeedBank);
     homura::HookFunction(LawnApp_TryHelpTextScreenAddr, &LawnApp_TryHelpTextScreen, nullptr);
     homura::HookFunction(LawnApp_KillSeedChooserScreenAddr, &LawnApp::KillSeedChooserScreen, &old_LawnApp_KillSeedChooserScreen);
-//    homura::HookFunction(LawnApp_HasSeedTypeAddr, &LawnApp_HasSeedType, &old_LawnApp_HasSeedType);
+    //    homura::HookFunction(LawnApp_HasSeedTypeAddr, &LawnApp_HasSeedType, &old_LawnApp_HasSeedType);
 
 
     homura::HookFunction(Board_UpdateAddr, &Board::Update, &old_Board_Update);
@@ -591,10 +578,10 @@ inline void InitHookFunction() {
     homura::HookFunction(Board_UpdateGridItemsAddr, &Board::UpdateGridItems, &old_Board_UpdateGridItems);
     homura::HookFunction(Board_ShakeBoardAddr, &Board::ShakeBoard, &old_Board_ShakeBoard);
     homura::HookFunction(Board_DrawZenButtonsAddr, &Board::DrawZenButtons, &old_Board_DrawZenButtons);
-//    homura::HookFunction(Board_AddProjectileAddr, &Board::AddProjectile, &old_Board_AddProjectile);
-//    homura::HookFunction(Board_PixelToGridXAddr, &Board::PixelToGridX, &old_Board_PixelToGridX);
-//    homura::HookFunction(Board_PixelToGridYAddr, &Board::PixelToGridY, &old_Board_PixelToGridY);
-//    homura::HookFunction(Board_GetNumSeedsInBankAddr, &Board::GetNumSeedsInBank, &old_Board_GetNumSeedsInBank);
+    //    homura::HookFunction(Board_AddProjectileAddr, &Board::AddProjectile, &old_Board_AddProjectile);
+    //    homura::HookFunction(Board_PixelToGridXAddr, &Board::PixelToGridX, &old_Board_PixelToGridX);
+    //    homura::HookFunction(Board_PixelToGridYAddr, &Board::PixelToGridY, &old_Board_PixelToGridY);
+    //    homura::HookFunction(Board_GetNumSeedsInBankAddr, &Board::GetNumSeedsInBank, &old_Board_GetNumSeedsInBank);
 
 
     homura::HookFunction(FixBoardAfterLoadAddr, &FixBoardAfterLoad, &old_FixBoardAfterLoad);
@@ -676,7 +663,7 @@ inline void InitHookFunction() {
     homura::HookFunction(SeedChooserScreen_ClickedSeedInChooserAddr, &SeedChooserScreen::ClickedSeedInChooser, &old_SeedChooserScreen_ClickedSeedInChooser);
     homura::HookFunction(SeedChooserScreen_CrazyDavePickSeedsAddr, &SeedChooserScreen::CrazyDavePickSeeds, &old_SeedChooserScreen_CrazyDavePickSeeds);
     homura::HookFunction(SeedChooserScreen_OnStartButtonAddr, &SeedChooserScreen::OnStartButton, &old_SeedChooserScreen_OnStartButton);
-//    homura::HookFunction(SeedChooserScreen_UpdateAddr, &SeedChooserScreen::Update, &old_SeedChooserScreen_Update);
+    //    homura::HookFunction(SeedChooserScreen_UpdateAddr, &SeedChooserScreen::Update, &old_SeedChooserScreen_Update);
     homura::HookFunction(SeedChooserScreen_SeedNotAllowedToPickAddr, &SeedChooserScreen::SeedNotAllowedToPick, &old_SeedChooserScreen_SeedNotAllowedToPick);
     homura::HookFunction(SeedChooserScreen_ClickedSeedInBankAddr, &SeedChooserScreen::ClickedSeedInBank, &old_SeedChooserScreen_ClickedSeedInBank);
     homura::HookFunction(SeedChooserScreen_GameButtonDownAddr, &SeedChooserScreen::GameButtonDown, &old_SeedChooserScreen_GameButtonDown);
@@ -755,7 +742,7 @@ inline void InitHookFunction() {
     homura::HookFunction(Zombie_UpdateZombiePeaHeadAddr, &Zombie::UpdateZombiePeaHead, nullptr);
     homura::HookFunction(Zombie_UpdateZombieGatlingHeadAddr, &Zombie::UpdateZombieGatlingHead, nullptr);
     homura::HookFunction(Zombie_UpdateZombieJalapenoHeadAddr, &Zombie::UpdateZombieJalapenoHead, nullptr);
-//    homura::HookFunction(Zombie_UpdateZombieSquashHeadAddr, &Zombie::UpdateZombieSquashHead, nullptr);
+    //    homura::HookFunction(Zombie_UpdateZombieSquashHeadAddr, &Zombie::UpdateZombieSquashHead, nullptr);
     homura::HookFunction(Zombie_GetDancerFrameAddr, &Zombie::GetDancerFrame, nullptr);
     homura::HookFunction(Zombie_RiseFromGraveAddr, &Zombie::RiseFromGrave, &old_Zombie_RiseFromGrave);
     homura::HookFunction(Zombie_EatPlantAddr, &Zombie::EatPlant, &old_Zombie_EatPlant);
@@ -795,8 +782,8 @@ inline void InitHookFunction() {
 
     homura::HookFunction(SeedBank_DrawAddr, &SeedBank::Draw, &old_SeedBank_Draw);
     homura::HookFunction(SeedBank_MouseHitTestAddr, &SeedBank::MouseHitTest, nullptr);
-//    homura::HookFunction(SeedBank_SeedBankAddr, &SeedBank::Create, &old_SeedBank_SeedBank);
-//    homura::HookFunction(SeedBank_UpdateWidthAddr, &SeedBank::UpdateWidth, &old_SeedBank_UpdateWidth);
+    //    homura::HookFunction(SeedBank_SeedBankAddr, &SeedBank::Create, &old_SeedBank_SeedBank);
+    //    homura::HookFunction(SeedBank_UpdateWidthAddr, &SeedBank::UpdateWidth, &old_SeedBank_UpdateWidth);
     homura::HookFunction(SeedBank_MoveAddr, &SeedBank::Move, nullptr);
 
 
@@ -1029,7 +1016,7 @@ inline void InitOpenSL() {
 
 inline void InitIntroVideo() {
 
-//        MSHookFunction(j_AGVideoOpenAddr,(void *) AGVideoOpen,nullptr);
+    //        MSHookFunction(j_AGVideoOpenAddr,(void *) AGVideoOpen,nullptr);
     //    MSHookFunction(j_AGVideoShowAddr,(void *) AGVideoShow,nullptr);
     //    MSHookFunction(j_AGVideoEnableAddr,(void *) AGVideoEnable,nullptr);
     //    MSHookFunction(j_AGVideoIsPlayingAddr,(void *) AGVideoIsPlaying,nullptr);
@@ -1038,11 +1025,11 @@ inline void InitIntroVideo() {
     //    MSHookFunction(j_AGVideoResumeAddr,(void *) AGVideoResume,nullptr);
 
     const std::string libGameMain{"libGameMain.so"};
-//    homura::HookPltFunction(libGameMain, AGVideoOpenOffset, AGVideoOpen, nullptr);
-//    homura::HookPltFunction(libGameMain, AGVideoShowOffset, AGVideoShow, nullptr);
-//    homura::HookPltFunction(libGameMain, AGVideoEnableOffset, AGVideoEnable, nullptr);
-//    homura::HookPltFunction(libGameMain, AGVideoIsPlayingOffset, AGVideoIsPlaying, nullptr);
-//    homura::HookPltFunction(libGameMain, AGVideoPlayOffset, AGVideoPlay, nullptr);
+    //    homura::HookPltFunction(libGameMain, AGVideoOpenOffset, AGVideoOpen, nullptr);
+    //    homura::HookPltFunction(libGameMain, AGVideoShowOffset, AGVideoShow, nullptr);
+    //    homura::HookPltFunction(libGameMain, AGVideoEnableOffset, AGVideoEnable, nullptr);
+    //    homura::HookPltFunction(libGameMain, AGVideoIsPlayingOffset, AGVideoIsPlaying, nullptr);
+    //    homura::HookPltFunction(libGameMain, AGVideoPlayOffset, AGVideoPlay, nullptr);
 }
 
 

@@ -1,10 +1,10 @@
 #include "PvZ/Lawn/StoreScreen.h"
-#include "PvZ/Symbols.h"
-#include "PvZ/SexyAppFramework/Graphics.h"
-#include "PvZ/Misc.h"
 #include "PvZ/GlobalVariable.h"
 #include "PvZ/Lawn/Board.h"
 #include "PvZ/Lawn/LawnApp.h"
+#include "PvZ/Misc.h"
+#include "PvZ/SexyAppFramework/Graphics.h"
+#include "PvZ/Symbols.h"
 
 void StoreScreen_AddedToManager(int *a, int a2) {
 

@@ -6,24 +6,11 @@
 
 #define MAX_MAGNET_ITEMS 5
 
-enum PlantSubClass
-{
-    SUBCLASS_NORMAL = 0,
-    SUBCLASS_SHOOTER = 1
-};
+enum PlantSubClass { SUBCLASS_NORMAL = 0, SUBCLASS_SHOOTER = 1 };
 
-enum PlantWeapon
-{
-    WEAPON_PRIMARY,
-    WEAPON_SECONDARY
-};
+enum PlantWeapon { WEAPON_PRIMARY, WEAPON_SECONDARY };
 
-enum PlantOnBungeeState
-{
-    NOT_ON_BUNGEE,
-    GETTING_GRABBED_BY_BUNGEE,
-    RISING_WITH_BUNGEE
-};
+enum PlantOnBungeeState { NOT_ON_BUNGEE, GETTING_GRABBED_BY_BUNGEE, RISING_WITH_BUNGEE };
 
 enum PlantState // Prefix: STATE
 {
@@ -78,28 +65,11 @@ enum PlantState // Prefix: STATE
     STATE_LILYPAD_INVULNERABLE
 };
 
-enum PLANT_LAYER
-{
-    PLANT_LAYER_BELOW = -1,
-    PLANT_LAYER_MAIN,
-    PLANT_LAYER_REANIM,
-    PLANT_LAYER_REANIM_HEAD,
-    PLANT_LAYER_REANIM_BLINK,
-    PLANT_LAYER_ON_TOP,
-    NUM_PLANT_LAYERS
-};
+enum PLANT_LAYER { PLANT_LAYER_BELOW = -1, PLANT_LAYER_MAIN, PLANT_LAYER_REANIM, PLANT_LAYER_REANIM_HEAD, PLANT_LAYER_REANIM_BLINK, PLANT_LAYER_ON_TOP, NUM_PLANT_LAYERS };
 
-enum PLANT_ORDER
-{
-    PLANT_ORDER_LILYPAD,
-    PLANT_ORDER_NORMAL,
-    PLANT_ORDER_PUMPKIN,
-    PLANT_ORDER_FLYER,
-    PLANT_ORDER_CHERRYBOMB
-};
+enum PLANT_ORDER { PLANT_ORDER_LILYPAD, PLANT_ORDER_NORMAL, PLANT_ORDER_PUMPKIN, PLANT_ORDER_FLYER, PLANT_ORDER_CHERRYBOMB };
 
-enum MagnetItemType
-{
+enum MagnetItemType {
     MAGNET_ITEM_NONE,
     MAGNET_ITEM_PAIL_1,
     MAGNET_ITEM_PAIL_2,
@@ -110,7 +80,7 @@ enum MagnetItemType
     MAGNET_ITEM_DOOR_1,
     MAGNET_ITEM_DOOR_2,
     MAGNET_ITEM_DOOR_3,
-    //MAGNET_ITEM_PROPELLER,
+    // MAGNET_ITEM_PROPELLER,
     MAGNET_ITEM_POGO_1,
     MAGNET_ITEM_POGO_2,
     MAGNET_ITEM_POGO_3,
@@ -125,71 +95,70 @@ enum MagnetItemType
     MAGNET_ITEM_PICK_AXE
 };
 
-class MagnetItem
-{
+class MagnetItem {
 public:
-    float                   mPosX;                          //+0x0
-    float                   mPosY;                          //+0x4
-    float                   mDestOffsetX;                   //+0x8
-    float                   mDestOffsetY;                   //+0xC
-    MagnetItemType          mItemType;                      //+0x10
+    float mPosX;              //+0x0
+    float mPosY;              //+0x4
+    float mDestOffsetX;       //+0x8
+    float mDestOffsetY;       //+0xC
+    MagnetItemType mItemType; //+0x10
 };
 
 class GridItem;
 
 class Plant : public GameObject {
 public:
-    SeedType mSeedType;                                    // 13
-    int mPlantCol;                                         // 14
-    int mAnimCounter;                                      // 15
-    int mFrame;                                            // 16
-    int mFrameLength;                                      // 17
-    int mNumFrames;                                        // 18
-    PlantState mState;                                     // 19
-    int mPlantHealth;                                      // 20
-    int mPlantMaxHealth;                                   // 21
-    int mSubclass;                                         // 22
-    int mDisappearCountdown;                               // 23
-    int mDoSpecialCountdown;                               // 24
-    int mStateCountdown;                                   // 25
-    int mLaunchCounter;                                    // 26
-    int mLaunchRate;                                       // 27
-    Sexy::Rect mPlantRect;                                      // 28 ~ 31
-    Sexy::Rect mPlantAttackRect;                                // 32 ~ 35
-    int mTargetX;                                          // 36
-    int mTargetY;                                          // 37
-    int mStartRow;                                         // 38
-    int *mParticleID;                                      // 39
-    int mShootingCounter;                                  // 40
-    ReanimationID mBodyReanimID;                           // 41
-    ReanimationID mHeadReanimID;                           // 42
-    ReanimationID mHeadReanimID2;                          // 43
-    ReanimationID mHeadReanimID3;                          // 44
-    ReanimationID mBlinkReanimID;                          // 45
-    ReanimationID mLightReanimID;                          // 46
-    ReanimationID mSleepingReanimID;                       // 47
-    int mBlinkCountdown;                                   // 48
-    int mRecentlyEatenCountdown;                           // 49
-    int mEatenFlashCountdown;                              // 50
-    int mBeghouledFlashCountdown;                          // 51
-    float mShakeOffsetX;                                   // 52
-    float mShakeOffsetY;                                   // 53
-    MagnetItem mMagnetItems[MAX_MAGNET_ITEMS];             // 54 ~ 78
-    int mTargetZombieID;                                   // 79
-    int mWakeUpCounter;                                    // 80
-    PlantOnBungeeState mOnBungeeState;                     // 81
-    SeedType mImitaterType;                                // 82
-    int mPottedPlantIndex;                                 // 83
-    bool mAnimPing;                                        // 336
-    bool mDead;                                            // 337
-    bool mSquished;                                        // 338
-    bool mIsAsleep;                                        // 339
-    bool mIsOnBoard;                                       // 340
-    bool mHighlighted;                                     // 341
-    bool mInFlowerPot;                                     // 342
-    bool mGloveGrabbed;                                    // 343
-    int unk;                                               // 86
-    int mPlantIndexInList;                                 // 87
+    SeedType mSeedType;                        // 13
+    int mPlantCol;                             // 14
+    int mAnimCounter;                          // 15
+    int mFrame;                                // 16
+    int mFrameLength;                          // 17
+    int mNumFrames;                            // 18
+    PlantState mState;                         // 19
+    int mPlantHealth;                          // 20
+    int mPlantMaxHealth;                       // 21
+    int mSubclass;                             // 22
+    int mDisappearCountdown;                   // 23
+    int mDoSpecialCountdown;                   // 24
+    int mStateCountdown;                       // 25
+    int mLaunchCounter;                        // 26
+    int mLaunchRate;                           // 27
+    Sexy::Rect mPlantRect;                     // 28 ~ 31
+    Sexy::Rect mPlantAttackRect;               // 32 ~ 35
+    int mTargetX;                              // 36
+    int mTargetY;                              // 37
+    int mStartRow;                             // 38
+    int *mParticleID;                          // 39
+    int mShootingCounter;                      // 40
+    ReanimationID mBodyReanimID;               // 41
+    ReanimationID mHeadReanimID;               // 42
+    ReanimationID mHeadReanimID2;              // 43
+    ReanimationID mHeadReanimID3;              // 44
+    ReanimationID mBlinkReanimID;              // 45
+    ReanimationID mLightReanimID;              // 46
+    ReanimationID mSleepingReanimID;           // 47
+    int mBlinkCountdown;                       // 48
+    int mRecentlyEatenCountdown;               // 49
+    int mEatenFlashCountdown;                  // 50
+    int mBeghouledFlashCountdown;              // 51
+    float mShakeOffsetX;                       // 52
+    float mShakeOffsetY;                       // 53
+    MagnetItem mMagnetItems[MAX_MAGNET_ITEMS]; // 54 ~ 78
+    int mTargetZombieID;                       // 79
+    int mWakeUpCounter;                        // 80
+    PlantOnBungeeState mOnBungeeState;         // 81
+    SeedType mImitaterType;                    // 82
+    int mPottedPlantIndex;                     // 83
+    bool mAnimPing;                            // 336
+    bool mDead;                                // 337
+    bool mSquished;                            // 338
+    bool mIsAsleep;                            // 339
+    bool mIsOnBoard;                           // 340
+    bool mHighlighted;                         // 341
+    bool mInFlowerPot;                         // 342
+    bool mGloveGrabbed;                        // 343
+    int unk;                                   // 86
+    int mPlantIndexInList;                     // 87
     // 大小88个整数
 
     void UpdateAbilities() { reinterpret_cast<void (*)(Plant *)>(Plant_UpdateAbilitiesAddr)(this); }
@@ -198,16 +167,16 @@ public:
     void DrawShadow(Sexy::Graphics *g, float theOffsetX, float theOffsetY) {
         reinterpret_cast<void (*)(Plant *, Sexy::Graphics *, float, float)>(Plant_DrawShadowAddr)(this, g, theOffsetX, theOffsetY);
     }
-    bool IsPartOfUpgradableTo(SeedType theUpgradedType) { return reinterpret_cast<bool (*)(Plant *, SeedType)>(Plant_IsPartOfUpgradableToAddr)(this, theUpgradedType);}
+    bool IsPartOfUpgradableTo(SeedType theUpgradedType) { return reinterpret_cast<bool (*)(Plant *, SeedType)>(Plant_IsPartOfUpgradableToAddr)(this, theUpgradedType); }
     void DrawMagnetItems(Sexy::Graphics *g) { reinterpret_cast<void (*)(Plant *, Sexy::Graphics *)>(Plant_DrawMagnetItemsAddr)(this, g); }
 
     void PlantInitialize(int theGridX, int theGridY, SeedType theSeedType, SeedType theImitaterType, int a6);
     void Update();
     void Draw(Sexy::Graphics *g);
     void DoSpecial();
-    GridItem* FindTargetGridItem(PlantWeapon thePlantWeapon);
+    GridItem *FindTargetGridItem(PlantWeapon thePlantWeapon);
     void Die();
-    static Sexy::Image* GetImage(SeedType theSeedType);
+    static Sexy::Image *GetImage(SeedType theSeedType);
     static int GetCost(SeedType theSeedType, SeedType theImitaterType);
     static int GetRefreshTime(SeedType theSeedType, SeedType theImitaterType);
     static bool IsNocturnal(SeedType theSeedtype);
@@ -223,25 +192,24 @@ public:
     void UpdateReanimColor();
     bool IsOnBoard();
     bool IsInPlay();
-    void PlayBodyReanim(const char* theTrackName, ReanimLoopType theLoopType, int theBlendTime, float theAnimRate);
+    void PlayBodyReanim(const char *theTrackName, ReanimLoopType theLoopType, int theBlendTime, float theAnimRate);
     void SpikeweedAttack();
     void SpikeRockTakeDamage();
     bool DrawMagnetItemsOnTop();
     void SetImitaterFilterEffect();
 };
 
-class PlantDefinition
-{
+class PlantDefinition {
 public:
-    SeedType                mSeedType;          //+0x0
-    Sexy::Image**           mPlantImage;        //+0x4
-    ReanimationType         mReanimationType;   //+0x8
-    int                     mPacketIndex;       //+0xC
-    int                     mSeedCost;          //+0x10
-    int                     mRefreshTime;       //+0x14
-    PlantSubClass           mSubClass;          //+0x18
-    int                     mLaunchRate;        //+0x1C
-    const SexyChar*         mPlantName;         //+0x20
+    SeedType mSeedType;               //+0x0
+    Sexy::Image **mPlantImage;        //+0x4
+    ReanimationType mReanimationType; //+0x8
+    int mPacketIndex;                 //+0xC
+    int mSeedCost;                    //+0x10
+    int mRefreshTime;                 //+0x14
+    PlantSubClass mSubClass;          //+0x18
+    int mLaunchRate;                  //+0x1C
+    const SexyChar *mPlantName;       //+0x20
 };
 extern PlantDefinition gPlantDefs[SeedType::NUM_SEED_TYPES];
 
@@ -272,9 +240,9 @@ inline void (*old_Plant_PlantInitialize)(Plant *plant, int theGridX, int theGrid
 
 inline bool (*old_Plant_IsUpgrade)(SeedType theSeedType);
 
-inline void (*old_Plant_Die)(Plant* this_);
+inline void (*old_Plant_Die)(Plant *this_);
 
-inline void (*old_Plant_PlayBodyReanim)(Plant*, const char* theTrackName, ReanimLoopType theLoopType, int theBlendTime, float theAnimRate);
+inline void (*old_Plant_PlayBodyReanim)(Plant *, const char *theTrackName, ReanimLoopType theLoopType, int theBlendTime, float theAnimRate);
 
 // inline void (*old_Plant_CobCannonFire)(Plant* plant, int x, int y);
 

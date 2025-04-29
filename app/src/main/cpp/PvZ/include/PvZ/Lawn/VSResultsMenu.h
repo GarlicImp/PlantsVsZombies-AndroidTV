@@ -7,7 +7,6 @@ class VSResultsMenu {
     int m;
 
 public:
-
 };
 
 inline void (*old_VSResultsMenu_Update)(int *a);

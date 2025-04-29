@@ -363,7 +363,6 @@ inline void *Zombie_GetBobsledPositionAddr;
 inline void *Zombie_SquishAllInSquareAddr;
 
 
-
 inline void *SeedChooserScreen_UpdateAddr;
 inline void *SeedChooserScreen_EnableStartButtonAddr;
 inline void *SeedChooserScreen_HasPacketAddr;
@@ -2214,7 +2213,7 @@ inline bool GetFunctionAddr() {
     Sexy_SOUND_MENU_L_ST_Addr = (int *)dlsym(handle, "_ZN4Sexy15SOUND_MENU_L_STE");
     Sexy_SOUND_MENU_C_ST_Addr = (int *)dlsym(handle, "_ZN4Sexy15SOUND_MENU_C_STE");
     Sexy_SOUND_MENU_R_ST_Addr = (int *)dlsym(handle, "_ZN4Sexy15SOUND_MENU_R_STE");
-    Sexy_SOUND_THROW_Addr = (int*)dlsym(handle, "_ZN4Sexy11SOUND_THROWE");
+    Sexy_SOUND_THROW_Addr = (int *)dlsym(handle, "_ZN4Sexy11SOUND_THROWE");
     LawnApp_FULLSCREEN_RECT_Addr = (int *)dlsym(handle, "_ZN7LawnApp15FULLSCREEN_RECTE");
     VSResultsMenu_msPlayerRecords_Addr = (int *)dlsym(handle, "_ZN13VSResultsMenu15msPlayerRecordsE");
 

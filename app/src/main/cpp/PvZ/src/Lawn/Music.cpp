@@ -1,10 +1,10 @@
 #include "PvZ/Lawn/Music.h"
-#include "PvZ/Symbols.h"
-#include "PvZ/SexyAppFramework/Graphics.h"
 #include "PvZ/Enums.h"
 #include "PvZ/GlobalVariable.h"
 #include "PvZ/Lawn/Board.h"
 #include "PvZ/Lawn/LawnApp.h"
+#include "PvZ/SexyAppFramework/Graphics.h"
+#include "PvZ/Symbols.h"
 
 #define HIWORD(a) ((a) >> 16)
 #define LOWORD(a) ((a) & 0xFFFF)

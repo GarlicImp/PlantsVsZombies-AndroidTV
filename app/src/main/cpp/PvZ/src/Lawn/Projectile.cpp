@@ -11,22 +11,20 @@
 #include "PvZ/TodLib/TodCommon.h"
 using namespace Sexy;
 
-ProjectileDefinition gProjectileDefinition[] = {
-    { ProjectileType::PROJECTILE_PEA,           0,  20  },
-    { ProjectileType::PROJECTILE_SNOWPEA,       0,  20  },
-    { ProjectileType::PROJECTILE_CABBAGE,       0,  40  },
-    { ProjectileType::PROJECTILE_MELON,         0,  80  },
-    { ProjectileType::PROJECTILE_PUFF,          0,  20  },
-    { ProjectileType::PROJECTILE_WINTERMELON,   0,  80  },
-    { ProjectileType::PROJECTILE_FIREBALL,      0,  40  },
-    { ProjectileType::PROJECTILE_STAR,          0,  20  },
-    { ProjectileType::PROJECTILE_SPIKE,         0,  20  },
-    { ProjectileType::PROJECTILE_BASKETBALL,    0,  75  },
-    { ProjectileType::PROJECTILE_KERNEL,        0,  20  },
-    { ProjectileType::PROJECTILE_COBBIG,        0,  300 },
-    { ProjectileType::PROJECTILE_BUTTER,        0,  40  },
-    { ProjectileType::PROJECTILE_ZOMBIE_PEA,    0,  20  }
-};
+ProjectileDefinition gProjectileDefinition[] = {{ProjectileType::PROJECTILE_PEA, 0, 20},
+                                                {ProjectileType::PROJECTILE_SNOWPEA, 0, 20},
+                                                {ProjectileType::PROJECTILE_CABBAGE, 0, 40},
+                                                {ProjectileType::PROJECTILE_MELON, 0, 80},
+                                                {ProjectileType::PROJECTILE_PUFF, 0, 20},
+                                                {ProjectileType::PROJECTILE_WINTERMELON, 0, 80},
+                                                {ProjectileType::PROJECTILE_FIREBALL, 0, 40},
+                                                {ProjectileType::PROJECTILE_STAR, 0, 20},
+                                                {ProjectileType::PROJECTILE_SPIKE, 0, 20},
+                                                {ProjectileType::PROJECTILE_BASKETBALL, 0, 75},
+                                                {ProjectileType::PROJECTILE_KERNEL, 0, 20},
+                                                {ProjectileType::PROJECTILE_COBBIG, 0, 300},
+                                                {ProjectileType::PROJECTILE_BUTTER, 0, 40},
+                                                {ProjectileType::PROJECTILE_ZOMBIE_PEA, 0, 20}};
 
 int Projectile::ProjectileInitialize(int theX, int theY, int theRenderOrder, int theRow, ProjectileType theProjectileType) {
     //    projectile->mNewProjectileLastX = theX;
@@ -56,36 +54,25 @@ int Projectile::ProjectileInitialize(int theX, int theY, int theRenderOrder, int
     return old_Projectile_ProjectileInitialize(this, theX, theY, theRenderOrder, theRow, theProjectileType);
 }
 
-Plant* Projectile::FindCollisionTargetPlant()
-{
+Plant* Projectile::FindCollisionTargetPlant() {
     Rect aProjectileRect = GetProjectileRect();
 
     Plant* aPlant = nullptr;
-    while (mBoard->IteratePlants(aPlant))
-    {
+    while (mBoard->IteratePlants(aPlant)) {
         if (aPlant->mRow != mRow)
             continue;
 
-        if (mProjectileType == ProjectileType::PROJECTILE_ZOMBIE_PEA)
-        {
-            if (aPlant->mSeedType == SeedType::SEED_PUFFSHROOM ||
-                aPlant->mSeedType == SeedType::SEED_SUNSHROOM ||
-                aPlant->mSeedType == SeedType::SEED_POTATOMINE ||
-                aPlant->mSeedType == SeedType::SEED_SPIKEWEED ||
-                aPlant->mSeedType == SeedType::SEED_SPIKEROCK ||
-                aPlant->mSeedType == SeedType::SEED_LILYPAD)  // 僵尸豌豆不能击中低矮植物
+        if (mProjectileType == ProjectileType::PROJECTILE_ZOMBIE_PEA) {
+            if (aPlant->mSeedType == SeedType::SEED_PUFFSHROOM || aPlant->mSeedType == SeedType::SEED_SUNSHROOM || aPlant->mSeedType == SeedType::SEED_POTATOMINE
+                || aPlant->mSeedType == SeedType::SEED_SPIKEWEED || aPlant->mSeedType == SeedType::SEED_SPIKEROCK || aPlant->mSeedType == SeedType::SEED_LILYPAD) // 僵尸豌豆不能击中低矮植物
                 continue;
         }
 
         Rect aPlantRect = aPlant->GetPlantRect();
-        if (GetRectOverlap(aProjectileRect, aPlantRect) > 8)
-        {
-            if (mProjectileType == ProjectileType::PROJECTILE_ZOMBIE_PEA)
-            {
+        if (GetRectOverlap(aProjectileRect, aPlantRect) > 8) {
+            if (mProjectileType == ProjectileType::PROJECTILE_ZOMBIE_PEA) {
                 return mBoard->GetTopPlantAt(aPlant->mPlantCol, aPlant->mRow, PlantPriority::TOPPLANT_EATING_ORDER);
-            }
-            else
-            {
+            } else {
                 return mBoard->GetTopPlantAt(aPlant->mPlantCol, aPlant->mRow, PlantPriority::TOPPLANT_CATAPULT_ORDER);
             }
         }
@@ -94,8 +81,7 @@ Plant* Projectile::FindCollisionTargetPlant()
     return nullptr;
 }
 
-bool Projectile::PeaAboutToHitTorchwood()
-{
+bool Projectile::PeaAboutToHitTorchwood() {
     if (mMotionType != ProjectileMotion::MOTION_STRAIGHT)
         return false;
 
@@ -103,16 +89,13 @@ bool Projectile::PeaAboutToHitTorchwood()
         return false;
 
     Plant* aPlant = nullptr;
-    while (mBoard->IteratePlants(aPlant))
-    {
-        if (aPlant->mSeedType == SeedType::SEED_TORCHWOOD && aPlant->mRow == mRow && !aPlant->NotOnGround() && mHitTorchwoodGridX != aPlant->mPlantCol)
-        {
+    while (mBoard->IteratePlants(aPlant)) {
+        if (aPlant->mSeedType == SeedType::SEED_TORCHWOOD && aPlant->mRow == mRow && !aPlant->NotOnGround() && mHitTorchwoodGridX != aPlant->mPlantCol) {
             Rect aPlantAttackRect = aPlant->GetPlantAttackRect(PlantWeapon::WEAPON_PRIMARY);
             Rect aProjectileRect = GetProjectileRect();
             aProjectileRect.mX += 40;
 
-            if (GetRectOverlap(aPlantAttackRect, aProjectileRect) > 10)
-            {
+            if (GetRectOverlap(aPlantAttackRect, aProjectileRect) > 10) {
                 return true;
             }
         }
@@ -121,9 +104,8 @@ bool Projectile::PeaAboutToHitTorchwood()
     return false;
 }
 
-Zombie* Projectile::FindCollisionTarget()
-{
-    if (PeaAboutToHitTorchwood())  // “卡火炬”的原理，这段代码在两版内测版中均不存在
+Zombie* Projectile::FindCollisionTarget() {
+    if (PeaAboutToHitTorchwood()) // “卡火炬”的原理，这段代码在两版内测版中均不存在
         return nullptr;
 
     Rect aProjectileRect = GetProjectileRect();
@@ -131,25 +113,19 @@ Zombie* Projectile::FindCollisionTarget()
     int aMinX = 0;
 
     Zombie* aZombie = nullptr;
-    while (mBoard->IterateZombies(aZombie))
-    {
-        if ((aZombie->mZombieType == ZombieType::ZOMBIE_BOSS || aZombie->mRow == mRow) && aZombie->EffectedByDamage((unsigned int)mDamageRangeFlags))
-        {
-            if (aZombie->mZombiePhase == ZombiePhase::PHASE_SNORKEL_WALKING_IN_POOL && mPosZ >= 45.0f)
-            {
+    while (mBoard->IterateZombies(aZombie)) {
+        if ((aZombie->mZombieType == ZombieType::ZOMBIE_BOSS || aZombie->mRow == mRow) && aZombie->EffectedByDamage((unsigned int)mDamageRangeFlags)) {
+            if (aZombie->mZombiePhase == ZombiePhase::PHASE_SNORKEL_WALKING_IN_POOL && mPosZ >= 45.0f) {
                 continue;
             }
 
-            if (mProjectileType == ProjectileType::PROJECTILE_STAR && mProjectileAge < 25 && mVelX >= 0.0f && aZombie->mZombieType == ZombieType::ZOMBIE_DIGGER)
-            {
+            if (mProjectileType == ProjectileType::PROJECTILE_STAR && mProjectileAge < 25 && mVelX >= 0.0f && aZombie->mZombieType == ZombieType::ZOMBIE_DIGGER) {
                 continue;
             }
 
             Rect aZombieRect = aZombie->GetZombieRect();
-            if (GetRectOverlap(aProjectileRect, aZombieRect) > 0)
-            {
-                if (aBestZombie == nullptr || aZombie->mX < aMinX)
-                {
+            if (GetRectOverlap(aProjectileRect, aZombieRect) > 0) {
+                if (aBestZombie == nullptr || aZombie->mX < aMinX) {
                     aBestZombie = aZombie;
                     aMinX = aZombie->mX;
                 }
@@ -160,32 +136,18 @@ Zombie* Projectile::FindCollisionTarget()
     return aBestZombie;
 }
 
-Rect Projectile::GetProjectileRect()
-{
-    if (mProjectileType == ProjectileType::PROJECTILE_PEA ||
-        mProjectileType == ProjectileType::PROJECTILE_SNOWPEA ||
-        mProjectileType == ProjectileType::PROJECTILE_ZOMBIE_PEA)
-    {
+Rect Projectile::GetProjectileRect() {
+    if (mProjectileType == ProjectileType::PROJECTILE_PEA || mProjectileType == ProjectileType::PROJECTILE_SNOWPEA || mProjectileType == ProjectileType::PROJECTILE_ZOMBIE_PEA) {
         return Rect(mX - 15, mY, mWidth + 15, mHeight);
-    }
-    else if (mProjectileType == ProjectileType::PROJECTILE_COBBIG)
-    {
+    } else if (mProjectileType == ProjectileType::PROJECTILE_COBBIG) {
         return Rect(mX + mWidth / 2 - 115, mY + mHeight / 2 - 115, 230, 230);
-    }
-    else if (mProjectileType == ProjectileType::PROJECTILE_MELON || mProjectileType == ProjectileType::PROJECTILE_WINTERMELON)
-    {
+    } else if (mProjectileType == ProjectileType::PROJECTILE_MELON || mProjectileType == ProjectileType::PROJECTILE_WINTERMELON) {
         return Rect(mX + 20, mY, 60, mHeight);
-    }
-    else if (mProjectileType == ProjectileType::PROJECTILE_FIREBALL)
-    {
+    } else if (mProjectileType == ProjectileType::PROJECTILE_FIREBALL) {
         return Rect(mX, mY, mWidth - 10, mHeight);
-    }
-    else if (mProjectileType == ProjectileType::PROJECTILE_SPIKE)
-    {
+    } else if (mProjectileType == ProjectileType::PROJECTILE_SPIKE) {
         return Rect(mX - 25, mY, mWidth + 25, mHeight);
-    }
-    else
-    {
+    } else {
         return Rect(mX, mY, mWidth, mHeight);
     }
 }
@@ -227,48 +189,35 @@ void Projectile::Update() {
     return old_Projectile_Update(this);
 }
 
-void Projectile::PlayImpactSound(Zombie* theZombie)
-{
+void Projectile::PlayImpactSound(Zombie* theZombie) {
     bool aPlayHelmSound = true;
     bool aPlaySplatSound = true;
-    if (mProjectileType == ProjectileType::PROJECTILE_KERNEL)
-    {
+    if (mProjectileType == ProjectileType::PROJECTILE_KERNEL) {
         mApp->PlayFoley(FoleyType::FOLEY_KERNEL_SPLAT);
         aPlayHelmSound = false;
         aPlaySplatSound = false;
-    }
-    else if (mProjectileType == ProjectileType::PROJECTILE_BUTTER)
-    {
+    } else if (mProjectileType == ProjectileType::PROJECTILE_BUTTER) {
         mApp->PlayFoley(FoleyType::FOLEY_BUTTER);
         aPlaySplatSound = false;
-    }
-    else if (mProjectileType == ProjectileType::PROJECTILE_FIREBALL && IsSplashDamage(theZombie))
-    {
+    } else if (mProjectileType == ProjectileType::PROJECTILE_FIREBALL && IsSplashDamage(theZombie)) {
         mApp->PlayFoley(FoleyType::FOLEY_IGNITE);
         aPlayHelmSound = false;
         aPlaySplatSound = false;
-    }
-    else if (mProjectileType == ProjectileType::PROJECTILE_MELON || mProjectileType == ProjectileType::PROJECTILE_WINTERMELON)
-    {
+    } else if (mProjectileType == ProjectileType::PROJECTILE_MELON || mProjectileType == ProjectileType::PROJECTILE_WINTERMELON) {
         mApp->PlayFoley(FoleyType::FOLEY_MELONIMPACT);
         aPlaySplatSound = false;
     }
 
-    if (aPlayHelmSound && theZombie)
-    {
-        if (theZombie->mHelmType == HELMTYPE_PAIL)
-        {
+    if (aPlayHelmSound && theZombie) {
+        if (theZombie->mHelmType == HELMTYPE_PAIL) {
             mApp->PlayFoley(FoleyType::FOLEY_SHIELD_HIT);
             aPlaySplatSound = false;
-        }
-        else if (theZombie->mHelmType == HELMTYPE_TRAFFIC_CONE || theZombie->mHelmType == HELMTYPE_DIGGER || theZombie->mHelmType == HELMTYPE_FOOTBALL)
-        {
+        } else if (theZombie->mHelmType == HELMTYPE_TRAFFIC_CONE || theZombie->mHelmType == HELMTYPE_DIGGER || theZombie->mHelmType == HELMTYPE_FOOTBALL) {
             mApp->PlayFoley(FoleyType::FOLEY_PLASTIC_HIT);
         }
     }
 
-    if (aPlaySplatSound)
-    {
+    if (aPlaySplatSound) {
         mApp->PlayFoley(FoleyType::FOLEY_SPLAT);
     }
 }
@@ -314,7 +263,7 @@ void Projectile::DoImpact(Zombie* theZombie) {
         aEffect = ParticleEffect::PARTICLE_SNOWPEA_SPLAT;
     } else if (mProjectileType == ProjectileType::PROJECTILE_FIREBALL) {
         if (IsSplashDamage(theZombie)) {
-            Reanimation *aFireReanim = LawnApp_AddReanimation(mApp, mPosX + 38.0f, mPosY - 20.0f, mRenderOrder + 1, ReanimationType::REANIM_JALAPENO_FIRE);
+            Reanimation* aFireReanim = LawnApp_AddReanimation(mApp, mPosX + 38.0f, mPosY - 20.0f, mRenderOrder + 1, ReanimationType::REANIM_JALAPENO_FIRE);
             aFireReanim->mAnimTime = 0.25f;
             aFireReanim->mAnimRate = 24.0f;
             Reanimation_OverrideScale(aFireReanim, 0.7f, 0.4f);
@@ -439,7 +388,7 @@ void Projectile::CheckForCollision() {
     }
 
     if (mProjectileType == ProjectileType::PROJECTILE_ZOMBIE_PEA) {
-        Plant *aPlant = FindCollisionTargetPlant();
+        Plant* aPlant = FindCollisionTargetPlant();
         if (aPlant) {
             const ProjectileDefinition& aProjectileDef = GetProjectileDef();
             aPlant->mPlantHealth -= aProjectileDef.mDamage;
@@ -450,7 +399,7 @@ void Projectile::CheckForCollision() {
             Die();
             return;
         }
-        Zombie *aZombie = FindCollisionMindControlledTarget();
+        Zombie* aZombie = FindCollisionMindControlledTarget();
         if (aZombie) {
             if (aZombie->mOnHighGround && CantHitHighGround()) {
                 return;
@@ -479,58 +428,41 @@ void Projectile::CheckForCollision() {
     }
 }
 
-bool Projectile::CantHitHighGround()
-{
+bool Projectile::CantHitHighGround() {
     if (mMotionType == ProjectileMotion::MOTION_BACKWARDS || mMotionType == ProjectileMotion::MOTION_HOMING)
         return false;
 
-    return (
-               mProjectileType == ProjectileType::PROJECTILE_PEA ||
-               mProjectileType == ProjectileType::PROJECTILE_SNOWPEA ||
-               mProjectileType == ProjectileType::PROJECTILE_STAR ||
-               mProjectileType == ProjectileType::PROJECTILE_PUFF ||
-               mProjectileType == ProjectileType::PROJECTILE_FIREBALL
-               ) && !mOnHighGround;
+    return (mProjectileType == ProjectileType::PROJECTILE_PEA || mProjectileType == ProjectileType::PROJECTILE_SNOWPEA || mProjectileType == ProjectileType::PROJECTILE_STAR
+            || mProjectileType == ProjectileType::PROJECTILE_PUFF || mProjectileType == ProjectileType::PROJECTILE_FIREBALL)
+        && !mOnHighGround;
 }
 
-bool Projectile::IsSplashDamage(Zombie* theZombie)
-{
+bool Projectile::IsSplashDamage(Zombie* theZombie) {
     if (mProjectileType && theZombie && theZombie->IsFireResistant())
         return false;
 
-    return
-        mProjectileType == ProjectileType::PROJECTILE_MELON ||
-        mProjectileType == ProjectileType::PROJECTILE_WINTERMELON ||
-        mProjectileType == ProjectileType::PROJECTILE_FIREBALL;
+    return mProjectileType == ProjectileType::PROJECTILE_MELON || mProjectileType == ProjectileType::PROJECTILE_WINTERMELON || mProjectileType == ProjectileType::PROJECTILE_FIREBALL;
 }
 
-unsigned int Projectile::GetDamageFlags(Zombie* theZombie)
-{
+unsigned int Projectile::GetDamageFlags(Zombie* theZombie) {
     unsigned int aDamageFlags = 0U;
 
-    if (IsSplashDamage(theZombie))
-    {
+    if (IsSplashDamage(theZombie)) {
         SetBit(aDamageFlags, (int)DamageFlags::DAMAGE_HITS_SHIELD_AND_BODY, true);
-    }
-    else if (mMotionType == ProjectileMotion::MOTION_LOBBED || mMotionType == ProjectileMotion::MOTION_BACKWARDS)
-    {
+    } else if (mMotionType == ProjectileMotion::MOTION_LOBBED || mMotionType == ProjectileMotion::MOTION_BACKWARDS) {
         SetBit(aDamageFlags, (int)DamageFlags::DAMAGE_BYPASSES_SHIELD, true);
-    }
-    else if (mMotionType == ProjectileMotion::MOTION_STAR && mVelX < 0.0f)
-    {
+    } else if (mMotionType == ProjectileMotion::MOTION_STAR && mVelX < 0.0f) {
         SetBit(aDamageFlags, (int)DamageFlags::DAMAGE_BYPASSES_SHIELD, true);
     }
 
-    if (mProjectileType == ProjectileType::PROJECTILE_SNOWPEA || mProjectileType == ProjectileType::PROJECTILE_WINTERMELON)
-    {
+    if (mProjectileType == ProjectileType::PROJECTILE_SNOWPEA || mProjectileType == ProjectileType::PROJECTILE_WINTERMELON) {
         SetBit(aDamageFlags, (int)DamageFlags::DAMAGE_FREEZE, true);
     }
 
     return aDamageFlags;
 }
 
-ProjectileDefinition& Projectile::GetProjectileDef()
-{
+ProjectileDefinition& Projectile::GetProjectileDef() {
     ProjectileDefinition& aProjectileDef = gProjectileDefinition[(int)mProjectileType];
 
     return aProjectileDef;

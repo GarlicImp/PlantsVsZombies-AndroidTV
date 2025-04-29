@@ -49,6 +49,6 @@ public:
     float MagnitudeSquared() const { return x * x + y * y; }
 };
 
-}
+} // namespace Sexy
 
 #endif // PLANTSVSZOMBIES_ANDROIDTV_SEXYVECTOR_H

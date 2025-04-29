@@ -1,7 +1,4 @@
 #include "PvZ/Lawn/Challenge.h"
-#include "PvZ/Symbols.h"
-#include "PvZ/SexyAppFramework/Graphics.h"
-#include "PvZ/Misc.h"
 #include "PvZ/Android/IntroVideo.h"
 #include "PvZ/GlobalVariable.h"
 #include "PvZ/Lawn/Board.h"
@@ -9,8 +6,11 @@
 #include "PvZ/Lawn/LawnApp.h"
 #include "PvZ/Lawn/Plant.h"
 #include "PvZ/Lawn/Reanimation.h"
-#include "PvZ/Lawn/Zombie.h"
 #include "PvZ/Lawn/SeedPacket.h"
+#include "PvZ/Lawn/Zombie.h"
+#include "PvZ/Misc.h"
+#include "PvZ/SexyAppFramework/Graphics.h"
+#include "PvZ/Symbols.h"
 
 #include <cstddef>
 
@@ -87,8 +87,8 @@ void Challenge::HeavyWeaponFire(float a2, float a3) {
     return old_Challenge_HeavyWeaponFire(this, a2, a3);
 }
 
-void Challenge_HeavyWeaponReanimUpdate(Challenge *challenge) {
-    Reanimation *heavyWeaponReanim = LawnApp_ReanimationTryToGet(challenge->mApp, challenge->mReanimHeavyWeaponID2);
+void Challenge_HeavyWeaponReanimUpdate(Challenge* challenge) {
+    Reanimation* heavyWeaponReanim = LawnApp_ReanimationTryToGet(challenge->mApp, challenge->mReanimHeavyWeaponID2);
     if (heavyWeaponReanim == nullptr)
         return;
     SexyTransform2D sexyTransform2D;
@@ -114,7 +114,7 @@ void Challenge::HeavyWeaponUpdate() {
 void Challenge::IZombieDrawPlant(Sexy::Graphics* g, Plant* thePlant) {
     // 参照PC内测版源代码，在IZ模式绘制植物的函数开始前额外绘制纸板效果。
 
-    Reanimation *mBodyReanim = LawnApp_ReanimationTryToGet(mApp, thePlant->mBodyReanimID);
+    Reanimation* mBodyReanim = LawnApp_ReanimationTryToGet(mApp, thePlant->mBodyReanimID);
     if (mBodyReanim != nullptr) {
         Challenge_IZombieSetPlantFilterEffect(this, thePlant, FilterEffectType::FILTEREFFECT_WHITE);
         float aOffsetX = g->mTransX;
@@ -233,7 +233,7 @@ PlantingReason Challenge::CanPlantAt(int theGridX, int theGridY, SeedType theSee
         }
         if (theSeedType == SeedType::SEED_ZOMBIE_BUNGEE) {
             if (theGridX < num) {
-                Zombie *zombie = nullptr;
+                Zombie* zombie = nullptr;
                 while (Board_IterateZombies(mBoard, &zombie)) {
                     if (zombie->mZombieType == ZombieType::ZOMBIE_BUNGEE) {
                         int aGridX = mBoard->PixelToGridX(zombie->mX, zombie->mY);
@@ -318,7 +318,7 @@ void Challenge::TreeOfWisdomFertilize() {
     old_Challenge_TreeOfWisdomFertilize(this);
 
     // 检查智慧树成就
-    PlayerInfo *playerInfo = mApp->mPlayerInfo;
+    PlayerInfo* playerInfo = mApp->mPlayerInfo;
     if (playerInfo->mChallengeRecords[GameMode::GAMEMODE_TREE_OF_WISDOM - 2] >= 99) {
         Board_GrantAchievement(mBoard, AchievementId::ACHIEVEMENT_TREE, true);
     }
@@ -349,31 +349,56 @@ void Challenge::LastStandUpdate() {
 ZombieType Challenge::IZombieSeedTypeToZombieType(SeedType theSeedType) {
     // 此处可修改VS和IZ中的僵尸类型
     switch (theSeedType) {
-        case SEED_ZOMBIE_NORMAL:		    return ZOMBIE_NORMAL;
-        case SEED_ZOMBIE_TRASH_BIN:		    return ZOMBIE_TRASH_BIN;
-        case SEED_ZOMBIE_TRAFFIC_CONE:	    return ZOMBIE_TRAFFIC_CONE;
-        case SEED_ZOMBIE_POLEVAULTER:	    return ZOMBIE_POLEVAULTER;
-        case SEED_ZOMBIE_PAIL:			    return ZOMBIE_PAIL;
-        case SEED_ZOMBIE_FLAG:		        return ZOMBIE_FLAG;
-        case SEED_ZOMBIE_NEWSPAPER:		    return ZOMBIE_NEWSPAPER;
-        case SEED_ZOMBIE_SCREEN_DOOR:	    return ZOMBIE_DOOR;
-        case SEED_ZOMBIE_FOOTBALL:		    return ZOMBIE_FOOTBALL;
-        case SEED_ZOMBIE_DANCER:		    return ZOMBIE_DANCER;
-        case SEED_ZOMBONI:				    return ZOMBIE_ZAMBONI;
-        case SEED_ZOMBIE_JACK_IN_THE_BOX:   return ZOMBIE_JACK_IN_THE_BOX;
-        case SEED_ZOMBIE_DIGGER:		    return ZOMBIE_DIGGER;
-        case SEED_ZOMBIE_POGO:			    return ZOMBIE_POGO;
-        case SEED_ZOMBIE_BUNGEE:		    return ZOMBIE_BUNGEE;
-        case SEED_ZOMBIE_LADDER:		    return ZOMBIE_LADDER;
-        case SEED_ZOMBIE_CATAPULT:		    return ZOMBIE_CATAPULT;
-        case SEED_ZOMBIE_GARGANTUAR:	    return ZOMBIE_GARGANTUAR;
-        case SEED_ZOMBIE_UNKNOWN:           return ZOMBIE_REDEYE_GARGANTUAR;
-        case SEED_ZOMBIE_DUCKY_TUBE:        return ZOMBIE_DUCKY_TUBE;
-        case SEED_ZOMBIE_SNORKEL:           return ZOMBIE_SNORKEL;
-        case SEED_ZOMBIE_DOLPHIN_RIDER:     return ZOMBIE_DOLPHIN_RIDER;
-        case SEED_ZOMBIE_IMP:			    return ZOMBIE_IMP;
-        case SEED_ZOMBIE_BALLOON:		    return ZOMBIE_BALLOON;
-        default:                            return ZOMBIE_INVALID;
+        case SEED_ZOMBIE_NORMAL:
+            return ZOMBIE_NORMAL;
+        case SEED_ZOMBIE_TRASH_BIN:
+            return ZOMBIE_TRASH_BIN;
+        case SEED_ZOMBIE_TRAFFIC_CONE:
+            return ZOMBIE_TRAFFIC_CONE;
+        case SEED_ZOMBIE_POLEVAULTER:
+            return ZOMBIE_POLEVAULTER;
+        case SEED_ZOMBIE_PAIL:
+            return ZOMBIE_PAIL;
+        case SEED_ZOMBIE_FLAG:
+            return ZOMBIE_FLAG;
+        case SEED_ZOMBIE_NEWSPAPER:
+            return ZOMBIE_NEWSPAPER;
+        case SEED_ZOMBIE_SCREEN_DOOR:
+            return ZOMBIE_DOOR;
+        case SEED_ZOMBIE_FOOTBALL:
+            return ZOMBIE_FOOTBALL;
+        case SEED_ZOMBIE_DANCER:
+            return ZOMBIE_DANCER;
+        case SEED_ZOMBONI:
+            return ZOMBIE_ZAMBONI;
+        case SEED_ZOMBIE_JACK_IN_THE_BOX:
+            return ZOMBIE_JACK_IN_THE_BOX;
+        case SEED_ZOMBIE_DIGGER:
+            return ZOMBIE_DIGGER;
+        case SEED_ZOMBIE_POGO:
+            return ZOMBIE_POGO;
+        case SEED_ZOMBIE_BUNGEE:
+            return ZOMBIE_BUNGEE;
+        case SEED_ZOMBIE_LADDER:
+            return ZOMBIE_LADDER;
+        case SEED_ZOMBIE_CATAPULT:
+            return ZOMBIE_CATAPULT;
+        case SEED_ZOMBIE_GARGANTUAR:
+            return ZOMBIE_GARGANTUAR;
+        case SEED_ZOMBIE_UNKNOWN:
+            return ZOMBIE_REDEYE_GARGANTUAR;
+        case SEED_ZOMBIE_DUCKY_TUBE:
+            return ZOMBIE_DUCKY_TUBE;
+        case SEED_ZOMBIE_SNORKEL:
+            return ZOMBIE_SNORKEL;
+        case SEED_ZOMBIE_DOLPHIN_RIDER:
+            return ZOMBIE_DOLPHIN_RIDER;
+        case SEED_ZOMBIE_IMP:
+            return ZOMBIE_IMP;
+        case SEED_ZOMBIE_BALLOON:
+            return ZOMBIE_BALLOON;
+        default:
+            return ZOMBIE_INVALID;
     }
 }
 
@@ -393,7 +418,7 @@ bool Challenge::UpdateZombieSpawning() {
 void Challenge::HeavyWeaponPacketClicked(SeedPacket* theSeedPacket) {
     // 修复疯狂点击毁灭菇导致GridItem数量超出上限而闪退
     if (theSeedPacket->mPacketType == SeedType::SEED_DOOMSHROOM) {
-        GridItem *gridItem = nullptr;
+        GridItem* gridItem = nullptr;
         while (Board_IterateGridItems(mBoard, &gridItem)) {
             if (gridItem->mGridItemType == GridItemType::GRIDITEM_CRATER) {
                 GridItem_GridItemDie(gridItem);
@@ -408,8 +433,8 @@ void Challenge::StartLevel() {
     old_Challenge_StartLevel(this);
 
     if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAVY_WEAPON && heavyWeaponAccel) {
-        Native::BridgeApp *bridgeApp = Native_BridgeApp_getSingleton();
-        JNIEnv *env = Native_BridgeApp_getJNIEnv(bridgeApp);
+        Native::BridgeApp* bridgeApp = Native_BridgeApp_getSingleton();
+        JNIEnv* env = Native_BridgeApp_getJNIEnv(bridgeApp);
         jobject activity = Native_NativeApp_getActivity(bridgeApp->mNativeApp);
         jclass cls = env->GetObjectClass(activity);
         jmethodID methodID = env->GetMethodID(cls, "startOrientationListener", "()V");
@@ -422,8 +447,8 @@ void Challenge::Delete() {
     old_Challenge_Delete(this);
 
     if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAVY_WEAPON && heavyWeaponAccel) {
-        Native::BridgeApp *bridgeApp = Native_BridgeApp_getSingleton();
-        JNIEnv *env = Native_BridgeApp_getJNIEnv(bridgeApp);
+        Native::BridgeApp* bridgeApp = Native_BridgeApp_getSingleton();
+        JNIEnv* env = Native_BridgeApp_getJNIEnv(bridgeApp);
         jobject activity = Native_NativeApp_getActivity(bridgeApp->mNativeApp);
         jclass cls = env->GetObjectClass(activity);
         jmethodID methodID = env->GetMethodID(cls, "stopOrientationListener", "()V");
@@ -436,27 +461,26 @@ void Challenge::ScaryPotterOpenPot(GridItem* theScaryPot) {
     return old_Challenge_ScaryPotterOpenPot(this, theScaryPot);
 }
 
-GridItem* Challenge::IZombieGetBrainTarget(Zombie* theZombie)
-{
+GridItem* Challenge::IZombieGetBrainTarget(Zombie* theZombie) {
     return old_Challenge_IZombieGetBrainTarget(this, theZombie);
-//    if (theZombie->mZombieType == ZOMBIE_BUNGEE || theZombie->IsWalkingBackwards())
-//        return nullptr;
-//
-//    Rect aZombieRect = theZombie->GetZombieAttackRect();
-//    if (theZombie->mZombiePhase == PHASE_POLEVAULTER_PRE_VAULT)
-//    {
-//        aZombieRect = Rect(50 + theZombie->mX, 0, 20, 115);
-//    }
-//    if (theZombie->mZombieType == ZOMBIE_BALLOON)
-//    {
-//        aZombieRect.mX += 25;
-//    }
-//
-//    if (aZombieRect.mX > 20)
-//        return nullptr;
-//
-//    GridItem* aBrain = mBoard->GetGridItemAt(GRIDITEM_IZOMBIE_BRAIN, 0, theZombie->mRow);
-//    return (aBrain && aBrain->mGridItemState != GRIDITEM_STATE_BRAIN_SQUISHED) ? aBrain : nullptr;
+    //    if (theZombie->mZombieType == ZOMBIE_BUNGEE || theZombie->IsWalkingBackwards())
+    //        return nullptr;
+    //
+    //    Rect aZombieRect = theZombie->GetZombieAttackRect();
+    //    if (theZombie->mZombiePhase == PHASE_POLEVAULTER_PRE_VAULT)
+    //    {
+    //        aZombieRect = Rect(50 + theZombie->mX, 0, 20, 115);
+    //    }
+    //    if (theZombie->mZombieType == ZOMBIE_BALLOON)
+    //    {
+    //        aZombieRect.mX += 25;
+    //    }
+    //
+    //    if (aZombieRect.mX > 20)
+    //        return nullptr;
+    //
+    //    GridItem* aBrain = mBoard->GetGridItemAt(GRIDITEM_IZOMBIE_BRAIN, 0, theZombie->mRow);
+    //    return (aBrain && aBrain->mGridItemState != GRIDITEM_STATE_BRAIN_SQUISHED) ? aBrain : nullptr;
 }
 
 void Challenge::IZombieSquishBrain(GridItem* theBrain) {

@@ -1,8 +1,8 @@
 #ifndef PVZ_LAWN_CHALLENGE_H
 #define PVZ_LAWN_CHALLENGE_H
 
-#include "PvZ/Enums.h"
 #include "../SexyAppFramework/Graphics.h"
+#include "PvZ/Enums.h"
 
 #define BEGHOULED_MAX_GRIDSIZEX 8
 #define BEGHOULED_MAX_GRIDSIZEY 5
@@ -28,48 +28,48 @@ class HitResult;
 
 class Challenge {
 public:
-    int *vTable;                                    // 0
-    int unk1[3];                                    // 1 ~ 3
-    LawnApp *mApp;                                  // 4
-    Board *mBoard;                                  // 5
-    int *mHelpBarWidget;                            // 6
-    bool mBeghouledMouseCapture;                    // 28
-    int mBeghouledMouseDownX;                       // 8
-    int mBeghouledMouseDownY;                       // 9
-    bool mBeghouledEated[9][6];                     // 40 ~  93
-    bool mBeghouledPurcasedUpgrade[3];              // 94 ~ 96
-    int mBeghouledMatchesThisMove;                  // 25
-    ChallengeState mChallengeState; // 26
-    int mChallengeStateCounter;                     // 27
-    int mConveyorBeltCounter;                       // 28
-    int unk2;                                       // 29
-    int mChallengeScore;                            // 30
-    bool mShowBowlingLine;                          // 124
+    int *vTable;                          // 0
+    int unk1[3];                          // 1 ~ 3
+    LawnApp *mApp;                        // 4
+    Board *mBoard;                        // 5
+    int *mHelpBarWidget;                  // 6
+    bool mBeghouledMouseCapture;          // 28
+    int mBeghouledMouseDownX;             // 8
+    int mBeghouledMouseDownY;             // 9
+    bool mBeghouledEated[9][6];           // 40 ~  93
+    bool mBeghouledPurcasedUpgrade[3];    // 94 ~ 96
+    int mBeghouledMatchesThisMove;        // 25
+    ChallengeState mChallengeState;       // 26
+    int mChallengeStateCounter;           // 27
+    int mConveyorBeltCounter;             // 28
+    int unk2;                             // 29
+    int mChallengeScore;                  // 30
+    bool mShowBowlingLine;                // 124
     SeedType mLastConveyorSeedType;       // 32
-    int mSurvivalStage;                             // 33
-    int mSlotMachineRollCount;                      // 34
-    int mReanimChallenge;                           // 35
-    int mReanimCloud[6];                            // 36 ~ 41
-    int mCloudCounter[6];                           // 42 ~ 47
-    int mChallengeGridX;                            // 48
-    int mChallengeGridY;                            // 49
-    int mScaryPotterPots;                           // 50
-    int mRainCounter;                               // 51
-    int mTreeOfWisdomTalkIndex;                     // 52
-    int unk3[14];                                   // 53 ~ 66
-    float mHeavyWeaponX;                            // 67
-    float mHeavyWeaponY;                            // 68
-    float mHeavyWeaponAngle;                        // 69
-    int unkHeavyWeaponWithInitValue1000;            // 70
-    int mHeavyWeaponCatTailAttackCounter;           // 71
-    int mHeavyWeaponCatTailLevel;                   // 72
-    int mHeavyWeaponPeaLevel;                       // 73
-    int mHeavyWeaponSnowPeaCounter;                 // 74
-    int mHeavyWeaponTorchWoodCounter;               // 75
-    int unkHeavyWeaponWithInitValue10;              // 76
-    ReanimationID mReanimHeavyWeaponID1;            // 77
-    ReanimationID mReanimHeavyWeaponID2;            // 78
-    ReanimationID mReanimHeavyWeaponID3;            // 79
+    int mSurvivalStage;                   // 33
+    int mSlotMachineRollCount;            // 34
+    int mReanimChallenge;                 // 35
+    int mReanimCloud[6];                  // 36 ~ 41
+    int mCloudCounter[6];                 // 42 ~ 47
+    int mChallengeGridX;                  // 48
+    int mChallengeGridY;                  // 49
+    int mScaryPotterPots;                 // 50
+    int mRainCounter;                     // 51
+    int mTreeOfWisdomTalkIndex;           // 52
+    int unk3[14];                         // 53 ~ 66
+    float mHeavyWeaponX;                  // 67
+    float mHeavyWeaponY;                  // 68
+    float mHeavyWeaponAngle;              // 69
+    int unkHeavyWeaponWithInitValue1000;  // 70
+    int mHeavyWeaponCatTailAttackCounter; // 71
+    int mHeavyWeaponCatTailLevel;         // 72
+    int mHeavyWeaponPeaLevel;             // 73
+    int mHeavyWeaponSnowPeaCounter;       // 74
+    int mHeavyWeaponTorchWoodCounter;     // 75
+    int unkHeavyWeaponWithInitValue10;    // 76
+    ReanimationID mReanimHeavyWeaponID1;  // 77
+    ReanimationID mReanimHeavyWeaponID2;  // 78
+    ReanimationID mReanimHeavyWeaponID3;  // 79
     // 大小80个整数
 
     Challenge();
@@ -77,24 +77,24 @@ public:
     void Create();
     void Update();
     void HeavyWeaponFire(float a2, float a3);
-    void IZombieDrawPlant(Sexy::Graphics* g, Plant* thePlant);
+    void IZombieDrawPlant(Sexy::Graphics *g, Plant *thePlant);
     void HeavyWeaponUpdate();
-    bool IZombieEatBrain(Zombie* theZombie);
-    void DrawArtChallenge(Sexy::Graphics* g);
+    bool IZombieEatBrain(Zombie *theZombie);
+    void DrawArtChallenge(Sexy::Graphics *g);
     PlantingReason CanPlantAt(int theGridX, int theGridY, SeedType theSeedType);
     void InitLevel();
     void InitZombieWaves();
     void TreeOfWisdomFertilize();
     void LastStandUpdate();
-    void DrawHeavyWeapon(Sexy::Graphics* g);
+    void DrawHeavyWeapon(Sexy::Graphics *g);
     bool UpdateZombieSpawning();
-    void HeavyWeaponPacketClicked(SeedPacket* theSeedPacket);
+    void HeavyWeaponPacketClicked(SeedPacket *theSeedPacket);
     static ZombieType IZombieSeedTypeToZombieType(SeedType theSeedType);
     void StartLevel();
     void Delete();
-    void ScaryPotterOpenPot(GridItem* theScaryPot);
-    GridItem* IZombieGetBrainTarget(Zombie* theZombie);
-    void IZombieSquishBrain(GridItem* theBrain);
+    void ScaryPotterOpenPot(GridItem *theScaryPot);
+    GridItem *IZombieGetBrainTarget(Zombie *theZombie);
+    void IZombieSquishBrain(GridItem *theBrain);
 };
 
 /***************************************************************************************************************/
@@ -156,10 +156,10 @@ inline void (*old_Challenge_StartLevel)(Challenge *challenge);
 
 inline void (*old_Challenge_Delete)(Challenge *challenge);
 
-inline void (*old_Challenge_ScaryPotterOpenPot)(Challenge*, GridItem* theScaryPot);
+inline void (*old_Challenge_ScaryPotterOpenPot)(Challenge *, GridItem *theScaryPot);
 
-inline GridItem* (*old_Challenge_IZombieGetBrainTarget)(Challenge*, Zombie* theZombie);
+inline GridItem *(*old_Challenge_IZombieGetBrainTarget)(Challenge *, Zombie *theZombie);
 
-inline void (*old_Challenge_IZombieSquishBrain)(Challenge*, GridItem* theBrain);
+inline void (*old_Challenge_IZombieSquishBrain)(Challenge *, GridItem *theBrain);
 
 #endif // PVZ_LAWN_CHALLENGE_H

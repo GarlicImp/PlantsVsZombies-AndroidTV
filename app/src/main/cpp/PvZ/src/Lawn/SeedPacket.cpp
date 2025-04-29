@@ -1,13 +1,13 @@
 #include "PvZ/Lawn/SeedPacket.h"
-#include "PvZ/Symbols.h"
-#include "PvZ/SexyAppFramework/Graphics.h"
-#include "PvZ/Misc.h"
 #include "PvZ/GlobalVariable.h"
 #include "PvZ/Lawn/Board.h"
-#include "PvZ/Lawn/LawnApp.h"
-#include "PvZ/MagicAddr.h"
 #include "PvZ/Lawn/GamepadControls.h"
+#include "PvZ/Lawn/LawnApp.h"
 #include "PvZ/Lawn/SeedBank.h"
+#include "PvZ/MagicAddr.h"
+#include "PvZ/Misc.h"
+#include "PvZ/SexyAppFramework/Graphics.h"
+#include "PvZ/Symbols.h"
 
 void SeedPacket::Update() {
     if (mRefreshing && seedPacketFastCoolDown) {
@@ -49,7 +49,7 @@ void SeedPacket::UpdateSelected() {
     return old_SeedPacket_UpdateSelected(this);
 }
 
-void SeedPacket::DrawOverlay(Sexy::Graphics* g) {
+void SeedPacket::DrawOverlay(Sexy::Graphics *g) {
     // 绘制卡片冷却进度倒计时
     old_SeedPacket_DrawOverlay(this, g);
 
@@ -66,7 +66,7 @@ void SeedPacket::DrawOverlay(Sexy::Graphics* g) {
     }
 }
 
-void SeedPacket::Draw(Sexy::Graphics* g) {
+void SeedPacket::Draw(Sexy::Graphics *g) {
     // 绘制卡片冷却进度倒计时
     old_SeedPacket_Draw(this, g);
 }

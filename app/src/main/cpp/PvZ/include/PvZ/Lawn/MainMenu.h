@@ -5,47 +5,47 @@
 
 class MainMenu : public Sexy::MenuWidget {
 public:
-    ReanimationID mMainMenuReanimID;   // 70 , PSV 59
-    float mCameraPositionX;            // 71
-    float mCameraPositionY;            // 72
-    LawnApp *mApp;                     // 73
-    int unkMem1;                       // 74
-    int mScene;                        // 75
-    int mSceneNext;                    // 76
-    char *MPlayingTrackName;           // 77
-    int mTransitionCounter;            // 78
-    ReanimationID mSkyReanimID;        // 79 ,PSV 68
-    ReanimationID mSky2ReanimID;       // 80 ,PSV 69
-    ReanimationID mHouseReanimID;      // 81 ,PSV 70
-    ReanimationID mZombieHandReanimID;           // 82
-    ReanimationID mCrowReanimID;                 // 83 , psv 72
-    ReanimationID mFallingLeavesReanimID;        // 84
-    ReanimationID mButterflyReanimID;            // 85
-    ReanimationID mUnkReanimID2;                 // 86
-    MainMenuButtonId mPressedButtonId; // 87
-    char *mExitTrackName;              // 88
-    int mEnterReanimationCounter;      // 89
-    int mExitCounter;                  // 90
-    bool unk1;                         // 364
-    bool mFirstTimeAdventure;          // 365
-    bool mMiniGameLocked;              // 366
-    bool mCoopModeLocked;              // 367
-    bool mPuzzleModeLocked;            // 368
-    bool mSurvivalModeLocked;          // 369
-    bool mVSModeLocked;                // 370
-    bool unkBool3;                     // 371
-    bool unkBool4;                     // 372
-    bool unkBool5;                     // 373
-    int unkMems3[5];                   // 94 ~ 98
-    bool mRetainWidgetsOnExit;         // 396
-    float mXUnkFloat1;                 // 100
-    float mYUnkFloat2;                 // 101
-    float mFadeCounterFloat;           // 102
-    bool unkMems4[16];                 // 103 ~ 106
-    Sexy::Image *m2DMarkImage;         // 107
+    ReanimationID mMainMenuReanimID;      // 70 , PSV 59
+    float mCameraPositionX;               // 71
+    float mCameraPositionY;               // 72
+    LawnApp *mApp;                        // 73
+    int unkMem1;                          // 74
+    int mScene;                           // 75
+    int mSceneNext;                       // 76
+    char *MPlayingTrackName;              // 77
+    int mTransitionCounter;               // 78
+    ReanimationID mSkyReanimID;           // 79 ,PSV 68
+    ReanimationID mSky2ReanimID;          // 80 ,PSV 69
+    ReanimationID mHouseReanimID;         // 81 ,PSV 70
+    ReanimationID mZombieHandReanimID;    // 82
+    ReanimationID mCrowReanimID;          // 83 , psv 72
+    ReanimationID mFallingLeavesReanimID; // 84
+    ReanimationID mButterflyReanimID;     // 85
+    ReanimationID mUnkReanimID2;          // 86
+    MainMenuButtonId mPressedButtonId;    // 87
+    char *mExitTrackName;                 // 88
+    int mEnterReanimationCounter;         // 89
+    int mExitCounter;                     // 90
+    bool unk1;                            // 364
+    bool mFirstTimeAdventure;             // 365
+    bool mMiniGameLocked;                 // 366
+    bool mCoopModeLocked;                 // 367
+    bool mPuzzleModeLocked;               // 368
+    bool mSurvivalModeLocked;             // 369
+    bool mVSModeLocked;                   // 370
+    bool unkBool3;                        // 371
+    bool unkBool4;                        // 372
+    bool unkBool5;                        // 373
+    int unkMems3[5];                      // 94 ~ 98
+    bool mRetainWidgetsOnExit;            // 396
+    float mXUnkFloat1;                    // 100
+    float mYUnkFloat2;                    // 101
+    float mFadeCounterFloat;              // 102
+    bool unkMems4[16];                    // 103 ~ 106
+    Sexy::Image *m2DMarkImage;            // 107
     // 大小108个整数
 public:
-    void Creat(LawnApp* theApp);
+    void Creat(LawnApp *theApp);
     void KeyDown(Sexy::KeyCode theKeyCode);
     void ButtonDepress(MainMenuButtonId theSelectedButton);
     void Update();
@@ -57,12 +57,12 @@ public:
     void OnScene(int theScene);
     void SyncButtons();
     void UpdateCameraPosition();
-    void AddedToManager(int* a2);
-    void RemovedFromManager(int* a2);
-    void DrawOverlay(Sexy::Graphics* g);
-    void DrawFade(Sexy::Graphics* g);
+    void AddedToManager(int *a2);
+    void RemovedFromManager(int *a2);
+    void DrawOverlay(Sexy::Graphics *g);
+    void DrawFade(Sexy::Graphics *g);
     void Delete2();
-    void Draw(Sexy::Graphics* g);
+    void Draw(Sexy::Graphics *g);
     void ButtonPress(MainMenuButtonId theSelectedButton);
 };
 

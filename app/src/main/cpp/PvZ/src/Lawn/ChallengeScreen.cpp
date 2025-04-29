@@ -1,8 +1,8 @@
 #include "PvZ/Lawn/ChallengeScreen.h"
-#include "PvZ/Symbols.h"
-#include "PvZ/SexyAppFramework/Graphics.h"
-#include "PvZ/Misc.h"
 #include "PvZ/Lawn/LawnApp.h"
+#include "PvZ/Misc.h"
+#include "PvZ/SexyAppFramework/Graphics.h"
+#include "PvZ/Symbols.h"
 
 static Sexy::GameButton *gChallengeScreenCloseButton;
 
@@ -10,7 +10,7 @@ ChallengeScreen::ChallengeScreen(LawnApp *theApp, ChallengePage thePage) {
     Create(theApp, thePage);
 }
 
-void ChallengeScreen::Create(LawnApp* theApp, ChallengePage thePage) {
+void ChallengeScreen::Create(LawnApp *theApp, ChallengePage thePage) {
     // 去除按钮对触控的遮挡
     old_ChallengeScreen_ChallengeScreen(this, theApp, thePage);
 
@@ -19,18 +19,18 @@ void ChallengeScreen::Create(LawnApp* theApp, ChallengePage thePage) {
         Sexy_Widget_Resize(button, button->mX, button->mY, 0, 0);
     }
 
-//    if (thePage == CHALLENGE_PAGE_VS) {
-////        SetUnlockChallengeIndex(thePage, false);
-//        mUnlockState = UNLOCK_SHAKING;
-//        mUnlockStateCounter = 100;
-//        mUnlockChallengeIndex = 0;
-//
-//        for (int aChallengeMode = 0; aChallengeMode < NUM_CHALLENGE_MODES; aChallengeMode++) {
-//            ChallengeDefinition& aDef = GetChallengeDefinition(aChallengeMode);
-//            if (aDef.mPage == thePage)
-//                mUnlockChallengeIndex = aChallengeMode;
-//        }
-//    }
+    //    if (thePage == CHALLENGE_PAGE_VS) {
+    ////        SetUnlockChallengeIndex(thePage, false);
+    //        mUnlockState = UNLOCK_SHAKING;
+    //        mUnlockStateCounter = 100;
+    //        mUnlockChallengeIndex = 0;
+    //
+    //        for (int aChallengeMode = 0; aChallengeMode < NUM_CHALLENGE_MODES; aChallengeMode++) {
+    //            ChallengeDefinition& aDef = GetChallengeDefinition(aChallengeMode);
+    //            if (aDef.mPage == thePage)
+    //                mUnlockChallengeIndex = aChallengeMode;
+    //        }
+    //    }
 }
 
 namespace {
@@ -52,17 +52,17 @@ ChallengeDefinition &GetChallengeDefinition(int theChallengeMode) {
     //     return gPoolPartyDef;
     // }
 
-//    if (theChallengeMode + 4 == GameMode::GAMEMODE_MP_VS) {
-//        return gVSDayDef;
-//    } else if (theChallengeMode + 3 == GameMode::GAMEMODE_MP_VS) {
-//        return gVSNightDef;
-//    } else if (theChallengeMode + 2 == GameMode::GAMEMODE_MP_VS) {
-//        return gVSPoolDayDef;
-//    } else if (theChallengeMode + 1 == GameMode::GAMEMODE_MP_VS) {
-//        return gVSPoolNightDef;
-//    } else if (theChallengeMode == GameMode::GAMEMODE_MP_VS) {
-//        return gVSRoofDef;
-//    }
+    //    if (theChallengeMode + 4 == GameMode::GAMEMODE_MP_VS) {
+    //        return gVSDayDef;
+    //    } else if (theChallengeMode + 3 == GameMode::GAMEMODE_MP_VS) {
+    //        return gVSNightDef;
+    //    } else if (theChallengeMode + 2 == GameMode::GAMEMODE_MP_VS) {
+    //        return gVSPoolDayDef;
+    //    } else if (theChallengeMode + 1 == GameMode::GAMEMODE_MP_VS) {
+    //        return gVSPoolNightDef;
+    //    } else if (theChallengeMode == GameMode::GAMEMODE_MP_VS) {
+    //        return gVSRoofDef;
+    //    }
 
     return old_GetChallengeDefinition(theChallengeMode);
 }
@@ -98,7 +98,7 @@ void ChallengeScreen::Draw(Sexy::Graphics *graphics) {
     Sexy_String_Delete(holder);
 }
 
-void ChallengeScreen::AddedToManager(int* theWidgetManager) {
+void ChallengeScreen::AddedToManager(int *theWidgetManager) {
     // 记录当前游戏状态
     int holder[1];
     TodStringTranslate(holder, "[CLOSE]");
@@ -115,7 +115,7 @@ void ChallengeScreen::Update() {
     return old_ChallengeScreen_Update(this);
 }
 
-void ChallengeScreen::RemovedFromManager(int* theWidgetManager) {
+void ChallengeScreen::RemovedFromManager(int *theWidgetManager) {
     // 记录当前游戏状态
     old_ChallengeScreen_RemovedFromManager(this, theWidgetManager);
 

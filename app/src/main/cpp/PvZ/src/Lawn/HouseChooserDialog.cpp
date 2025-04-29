@@ -1,9 +1,9 @@
 #include "PvZ/Lawn/HouseChooserDialog.h"
-#include "PvZ/Symbols.h"
-#include "PvZ/Misc.h"
 #include "PvZ/Enums.h"
 #include "PvZ/Lawn/Board.h"
 #include "PvZ/Lawn/LawnApp.h"
+#include "PvZ/Misc.h"
+#include "PvZ/Symbols.h"
 
 bool HouseChooserDialog_IsHouseAvaliable(HouseType::HouseType houseType) {
     LawnApp *lawnApp = (LawnApp *)*gLawnApp_Addr;

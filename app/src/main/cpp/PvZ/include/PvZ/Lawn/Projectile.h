@@ -8,47 +8,46 @@ class Plant;
 class Zombie;
 class GridItem;
 
-class ProjectileDefinition
-{
+class ProjectileDefinition {
 public:
-    ProjectileType          mProjectileType;
-    int                     mImageRow;
-    int                     mDamage;
+    ProjectileType mProjectileType;
+    int mImageRow;
+    int mDamage;
 };
 extern ProjectileDefinition gProjectileDefinition[NUM_PROJECTILES];
 
 class Projectile : public GameObject {
 public:
-    int mFrame;                                     // 13
-    int mNumFrames;                                 // 14
-    int mAnimCounter;                               // 15
-    float mPosX;                                    // 16
-    float mPosY;                                    // 17
-    float mPosZ;                                    // 18
-    float mVelX;                                    // 19
-    float mVelY;                                    // 20
-    float mVelZ;                                    // 21
-    float mAccZ;                                    // 22
-    float mShadowY;                                 // 23
-    bool mDead;                                     // 96
-                                                    //    short mNewProjectileLastX; // 在对齐空隙新增成员，98 ~ 99
-    int mAnimTicksPerFrame;                         // 25
-    ProjectileMotion mMotionType; // 26
+    int mFrame;                     // 13
+    int mNumFrames;                 // 14
+    int mAnimCounter;               // 15
+    float mPosX;                    // 16
+    float mPosY;                    // 17
+    float mPosZ;                    // 18
+    float mVelX;                    // 19
+    float mVelY;                    // 20
+    float mVelZ;                    // 21
+    float mAccZ;                    // 22
+    float mShadowY;                 // 23
+    bool mDead;                     // 96
+                                    //    short mNewProjectileLastX; // 在对齐空隙新增成员，98 ~ 99
+    int mAnimTicksPerFrame;         // 25
+    ProjectileMotion mMotionType;   // 26
     ProjectileType mProjectileType; // 27
-    int mProjectileAge;                             // 28
-    int mClickBackoffCounter;                       // 29
-    float mRotation;                                // 30
-    float mRotationSpeed;                           // 31
-    bool mOnHighGround;                             // 128
-                                                    //    short mNewProjectileLastY; // 在对齐空隙新增成员，130 ~ 131
-    int mDamageRangeFlags;                          // 33
-    int mHitTorchwoodGridX;                         // 34
-    int *mAttachmentID;                             // 35
-    float mCobTargetX;                              // 36
-    int mCobTargetRow;                              // 37
-    Zombie *mTargetZombieID;                        // 38
-    int mLastPortalX;                               // 39
-    int unkInt;                                     // 40
+    int mProjectileAge;             // 28
+    int mClickBackoffCounter;       // 29
+    float mRotation;                // 30
+    float mRotationSpeed;           // 31
+    bool mOnHighGround;             // 128
+                                    //    short mNewProjectileLastY; // 在对齐空隙新增成员，130 ~ 131
+    int mDamageRangeFlags;          // 33
+    int mHitTorchwoodGridX;         // 34
+    int *mAttachmentID;             // 35
+    float mCobTargetX;              // 36
+    int mCobTargetRow;              // 37
+    Zombie *mTargetZombieID;        // 38
+    int mLastPortalX;               // 39
+    int unkInt;                     // 40
     // 大小41个整数
 
     void Die() { reinterpret_cast<void (*)(Projectile *)>(Projectile_DieAddr)(this); }
@@ -60,18 +59,18 @@ public:
     void ConvertToFireball(int theGridX);
     void ConvertToPea(int theGridX);
     void Update();
-    void DoImpact(Zombie* theZombie);
+    void DoImpact(Zombie *theZombie);
     void CheckForCollision();
-    Zombie* FindCollisionMindControlledTarget();
-    ProjectileDefinition&   GetProjectileDef();
+    Zombie *FindCollisionMindControlledTarget();
+    ProjectileDefinition &GetProjectileDef();
     Sexy::Rect GetProjectileRect();
-    Plant* FindCollisionTargetPlant();
+    Plant *FindCollisionTargetPlant();
     bool CantHitHighGround();
-    bool IsSplashDamage(Zombie* theZombie);
-    void PlayImpactSound(Zombie* theZombie);
-    unsigned int GetDamageFlags(Zombie* theZombie);
+    bool IsSplashDamage(Zombie *theZombie);
+    void PlayImpactSound(Zombie *theZombie);
+    unsigned int GetDamageFlags(Zombie *theZombie);
     bool PeaAboutToHitTorchwood();
-    Zombie* FindCollisionTarget();
+    Zombie *FindCollisionTarget();
 };
 
 /***************************************************************************************************************/
@@ -85,11 +84,11 @@ inline bool isOnlyTouchFireWood;
 inline bool ColdPeaCanPassFireWood;
 
 
-//inline Plant *(*Projectile_FindCollisionTargetPlant)(Projectile *a1);
+// inline Plant *(*Projectile_FindCollisionTargetPlant)(Projectile *a1);
 //
-//inline Zombie *(*Projectile_FindCollisionTarget)(Projectile *a);
+// inline Zombie *(*Projectile_FindCollisionTarget)(Projectile *a);
 //
-//inline GridItem *(*Projectile_FindCollisionTargetGridItem)(Projectile *a);
+// inline GridItem *(*Projectile_FindCollisionTargetGridItem)(Projectile *a);
 
 
 inline int (*old_Projectile_ProjectileInitialize)(Projectile *projectile, int theX, int theY, int theRenderOrder, int theRow, ProjectileType theProjectileType);

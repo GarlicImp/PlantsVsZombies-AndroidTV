@@ -1,15 +1,15 @@
 #include "PvZ/Lawn/GridItem.h"
-#include "PvZ/Symbols.h"
-#include "PvZ/SexyAppFramework/Graphics.h"
-#include "PvZ/Misc.h"
 #include "PvZ/GlobalVariable.h"
 #include "PvZ/Lawn/Board.h"
 #include "PvZ/Lawn/Challenge.h"
+#include "PvZ/Lawn/GamepadControls.h"
+#include "PvZ/Lawn/LawnApp.h"
 #include "PvZ/Lawn/Reanimation.h"
 #include "PvZ/Lawn/ZenGarden.h"
 #include "PvZ/MagicAddr.h"
-#include "PvZ/Lawn/LawnApp.h"
-#include "PvZ/Lawn/GamepadControls.h"
+#include "PvZ/Misc.h"
+#include "PvZ/SexyAppFramework/Graphics.h"
+#include "PvZ/Symbols.h"
 
 #include <numbers>
 
@@ -53,18 +53,27 @@ void GridItem::DrawScaryPot(Sexy::Graphics* g) {
             Reanimation_Reanimation(&aReanim);
             Reanimation_ReanimationInitializeType(&aReanim, 0.0, 0.0, ReanimationType::REANIM_SUN);
             Reanimation_OverrideScale(&aReanim, 0.5f, 0.5f);
-            Reanimation_Update(&aReanim);                                                              // 一次Update是必要的，否则绘制出来是Empty
+            Reanimation_Update(&aReanim);                                                  // 一次Update是必要的，否则绘制出来是Empty
             aReanim.mFrameStart = (mBoard->mMainCounter / 10) % (aReanim.mFrameCount - 1); // 这行代码可让阳光动起来
 
             for (int i = 0; i < aSuns; i++) {
                 float aOffsetX = 42.0f;
                 float aOffsetY = 62.0f;
-                switch (i)
-                {
-                    case 1:     aOffsetX += 3.0f;       aOffsetY -= 20.0f;          break;
-                    case 2:     aOffsetX -= 6.0f;       aOffsetY -= 10.0f;          break;
-                    case 3:     aOffsetX += 6.0f;       aOffsetY -= 5.0f;           break;
-                    case 4:     aOffsetX += 5.0f;       //aOffsetY -= 15.0f;          break;
+                switch (i) {
+                    case 1:
+                        aOffsetX += 3.0f;
+                        aOffsetY -= 20.0f;
+                        break;
+                    case 2:
+                        aOffsetX -= 6.0f;
+                        aOffsetY -= 10.0f;
+                        break;
+                    case 3:
+                        aOffsetX += 6.0f;
+                        aOffsetY -= 5.0f;
+                        break;
+                    case 4:
+                        aOffsetX += 5.0f; // aOffsetY -= 15.0f;          break;
                 }
 
                 Reanimation_SetPosition(&aReanim, aXPos + aOffsetX, aYPos + aOffsetY);
@@ -118,7 +127,7 @@ void GridItem::DrawStinky(Sexy::Graphics* g) {
     // 在玩家选取巧克力时，高亮显示光标下方且没喂巧克力的Stinky。
     // 从而修复Stinky无法在醒着时喂巧克力、修复Stinky在喂过巧克力后还能继续喂巧克力。
     // 因为游戏通过Stinky是否高亮来判断是否能喂Stinky。这个机制是为鼠标操作而生，但渡维不加改动地将其用于按键操作，导致无法在Stinky醒着时喂它。
-    GamepadControls*aGamePad = mBoard->mGamepadControls1;
+    GamepadControls* aGamePad = mBoard->mGamepadControls1;
     int aCursorX = aGamePad->mCursorPositionX;
     int aCursorY = aGamePad->mCursorPositionY;
     int aCursorGridX = mBoard->PixelToGridX(aCursorX, aCursorY);
@@ -131,7 +140,7 @@ void GridItem::DrawStinky(Sexy::Graphics* g) {
         return old_GridItem_DrawStinky(this, g);
     }
     // 如果Stinky在光标位置处
-    CursorObject *aCursorObject = mBoard->mCursorObject1;
+    CursorObject* aCursorObject = mBoard->mCursorObject1;
     CursorType aCursorType = aCursorObject->mCursorType;
     if (aCursorType == CursorType::CURSOR_TYPE_CHOCOLATE) {
         // 如果光标类型为巧克力
@@ -179,7 +188,7 @@ void GridItem::DrawCrater(Sexy::Graphics* g) {
     }
 
     bool fading = mGridItemCounter < 9000;
-    Sexy::Image * aImage = *Sexy_IMAGE_CRATER_Addr;
+    Sexy::Image* aImage = *Sexy_IMAGE_CRATER_Addr;
     int theCelCol = 0;
 
     if (Board_IsPoolSquare(mBoard, mGridX, mGridY)) {
