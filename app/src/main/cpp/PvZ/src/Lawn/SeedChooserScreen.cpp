@@ -1,12 +1,12 @@
 #include "PvZ/Lawn/SeedChooserScreen.h"
-#include "PvZ/Symbols.h"
-#include "PvZ/Misc.h"
 #include "PvZ/GlobalVariable.h"
 #include "PvZ/Lawn/Board.h"
 #include "PvZ/Lawn/CutScene.h"
 #include "PvZ/Lawn/GamepadControls.h"
 #include "PvZ/Lawn/LawnApp.h"
 #include "PvZ/Lawn/SeedBank.h"
+#include "PvZ/Misc.h"
+#include "PvZ/Symbols.h"
 
 namespace {
 constexpr int mSeedPacketWidth = 53;
@@ -25,7 +25,7 @@ SeedChooserScreen::SeedChooserScreen(bool theIsZombieChooser) {
 void SeedChooserScreen::Create(bool theIsZombieChooser) {
     // 记录当前游戏状态，同时修复在没解锁商店图鉴时依然显示相应按钮的问题、对战选种子界面的按钮问题；
     // 还添加了生存模式保留上次选卡，添加坚果艺术关卡默认选择坚果，添加向日葵艺术关卡默认选择坚果、杨桃、萝卜伞
-    mApp = (LawnApp*)*Sexy_gSexyAppBase_Addr;
+    mApp = (LawnApp *)*Sexy_gSexyAppBase_Addr;
     mBoard = mApp->mBoard;
     GameMode mGameMode = mApp->mGameMode;
     if (CutScene_IsSurvivalRepick(mBoard->mCutScene) && !LawnApp_IsCoopMode(mApp)) {
@@ -211,7 +211,7 @@ bool SeedChooserScreen::SeedNotAllowedToPick(SeedType theSeedType) {
     }
     // 此处添加一些逻辑，就可以自定义Ban卡
     // 此处Ban卡仅对植物方生效，theSeedType取值范围是0~39。
-    
+
     return old_SeedChooserScreen_SeedNotAllowedToPick(this, theSeedType);
 }
 
@@ -225,7 +225,7 @@ ZombieType SeedChooserScreen::GetZombieType(ZombieType theZombieType) {
     return theZombieType > ZOMBIE_REDEYE_GARGANTUAR ? ZOMBIE_INVALID : theZombieType;
 }
 
-void SeedChooserScreen::ClickedSeedInChooser(ChosenSeed* theChosenSeed, int thePlayerIndex) {
+void SeedChooserScreen::ClickedSeedInChooser(ChosenSeed *theChosenSeed, int thePlayerIndex) {
     // 实现1P结盟选卡选满后自动转换为2P选卡
     if (LawnApp_IsCoopMode(mApp))
         thePlayerIndex = !m1PChoosingSeeds;
@@ -241,7 +241,7 @@ void SeedChooserScreen::CrazyDavePickSeeds() {
     return old_SeedChooserScreen_CrazyDavePickSeeds(this);
 }
 
-void SeedChooserScreen::ClickedSeedInBank(ChosenSeed* theChosenSeed, unsigned int thePlayerIndex) {
+void SeedChooserScreen::ClickedSeedInBank(ChosenSeed *theChosenSeed, unsigned int thePlayerIndex) {
     // 解决结盟1P选够4个种子之后，无法点击种子栏内的已选种子来退选的问题
     if (LawnApp_IsCoopMode(mApp)) {
         thePlayerIndex = theChosenSeed->mChosenPlayerIndex;
@@ -278,7 +278,8 @@ void SeedChooserScreen::GameButtonDown(ButtonCode theButton, unsigned int thePla
     return old_SeedChooserScreen_GameButtonDown(this, theButton, thePlayerIndex);
 }
 
-void SeedChooserScreen::DrawPacket(Sexy::Graphics* g, int x, int y, SeedType theSeedType, SeedType theImitaterType, float thePercentDark, int theGrayness, Color* theColor, bool theDrawCost, bool theUseCurrentCost) {
+void SeedChooserScreen::DrawPacket(
+    Sexy::Graphics *g, int x, int y, SeedType theSeedType, SeedType theImitaterType, float thePercentDark, int theGrayness, Color *theColor, bool theDrawCost, bool theUseCurrentCost) {
     // 修复SeedChooser里的卡片亮度不正确。
     // 已选的卡片grayness为55，不推荐的卡片grayness为115。theColor则固定为{255,255,255,255}。
 
@@ -309,7 +310,7 @@ void SeedChooserScreen::ButtonDepress(int theId) {
     return old_SeedChooserScreen_ButtonDepress(this, theId);
 }
 
-void SeedChooserScreen::GetSeedPositionInBank(int theIndex, int* x, int* y, int thePlayerIndex) {
+void SeedChooserScreen::GetSeedPositionInBank(int theIndex, int *x, int *y, int thePlayerIndex) {
     // 修复对战选卡时的错位
     if (mApp->mGameMode == GameMode::GAMEMODE_MP_VS) {
         int SeedPacketPositionX = Board_GetSeedPacketPositionX(mBoard, theIndex, 0, mIsZombieChooser);
@@ -326,8 +327,7 @@ void SeedChooserScreen::ShowToolTip(unsigned int thePlayerIndex) {
 
     if (mApp->mGameMode == GameMode::GAMEMODE_MP_VS && mIsZombieChooser) {
         SeedType aSeedType = SeedChooserScreen_SeedHitTest(this, mCursorPositionX2, mCursorPositionY2);
-        if (mChosenSeeds[aSeedType - SeedType::SEED_ZOMBIE_TOMBSTONE].mSeedState == ChosenSeedState::SEED_IN_BANK
-            && mChosenSeeds[aSeedType - SeedType::SEED_ZOMBIE_TOMBSTONE].mCrazyDavePicked) {
+        if (mChosenSeeds[aSeedType - SeedType::SEED_ZOMBIE_TOMBSTONE].mSeedState == ChosenSeedState::SEED_IN_BANK && mChosenSeeds[aSeedType - SeedType::SEED_ZOMBIE_TOMBSTONE].mCrazyDavePicked) {
             int holder[1];
             TodStringTranslate(holder, "[ZOMBIE_BOSS_WANTS]");
             ToolTipWidget_SetWarningText(mToolTipWidget2, holder);
@@ -441,8 +441,7 @@ void SeedChooserScreen::MouseDown(int x, int y, int theClickCount) {
         return;
     }
 
-    if (!mIsZombieChooser && (mChosenSeeds[aSeedType].mSeedState == ChosenSeedState::SEED_FLYING_TO_BANK
-            || mChosenSeeds[aSeedType].mSeedState == ChosenSeedState::SEED_FLYING_TO_CHOOSER)) {
+    if (!mIsZombieChooser && (mChosenSeeds[aSeedType].mSeedState == ChosenSeedState::SEED_FLYING_TO_BANK || mChosenSeeds[aSeedType].mSeedState == ChosenSeedState::SEED_FLYING_TO_CHOOSER)) {
         return;
     }
 

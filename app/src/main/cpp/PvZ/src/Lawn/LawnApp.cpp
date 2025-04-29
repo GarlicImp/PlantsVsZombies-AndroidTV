@@ -122,7 +122,8 @@ void LawnApp_DoConfirmBackToMain(LawnApp *lawnApp, bool save) {
         LawnApp_DoBackToMain(lawnApp);
         return;
     }
-    if ((gameMode == GameMode::GAMEMODE_MP_VS || gameMode == GameMode::GAMEMODE_TREE_OF_WISDOM || enableNewOptionsDialog) && Sexy_SexyAppBase_GetDialog(lawnApp, Dialogs::DIALOG_NEWOPTIONS) == nullptr) {
+    if ((gameMode == GameMode::GAMEMODE_MP_VS || gameMode == GameMode::GAMEMODE_TREE_OF_WISDOM || enableNewOptionsDialog)
+        && Sexy_SexyAppBase_GetDialog(lawnApp, Dialogs::DIALOG_NEWOPTIONS) == nullptr) {
         LawnApp_DoNewOptions(lawnApp, false, 0);
         return;
     }
@@ -177,13 +178,13 @@ void LawnApp_UpdateApp(LawnApp *lawnApp) {
     old_LawnApp_UpDateApp(lawnApp);
 }
 
-void LawnApp_ShowAwardScreen(LawnApp* lawnApp, int a2) {
-    //记录当前游戏状态
+void LawnApp_ShowAwardScreen(LawnApp *lawnApp, int a2) {
+    // 记录当前游戏状态
     return old_LawnApp_ShowAwardScreen(lawnApp, a2);
 }
 
-void LawnApp_KillAwardScreen(LawnApp* lawnApp) {
-    //记录当前游戏状态
+void LawnApp_KillAwardScreen(LawnApp *lawnApp) {
+    // 记录当前游戏状态
     return old_LawnApp_KillAwardScreen(lawnApp);
 }
 
@@ -478,8 +479,7 @@ bool LawnApp::IsIZombieLevel() {
         || mGameMode == GameMode::GAMEMODE_PUZZLE_I_ZOMBIE_ENDLESS;
 }
 
-bool LawnApp::IsWallnutBowlingLevel()
-{
+bool LawnApp::IsWallnutBowlingLevel() {
     if (mBoard == nullptr)
         return false;
 

@@ -3,48 +3,44 @@
 
 #include "PvZ/Enums.h"
 
-enum
-{
-    RENDER_GROUP_HIDDEN = -1,
-    RENDER_GROUP_NORMAL = 0
-};
+enum { RENDER_GROUP_HIDDEN = -1, RENDER_GROUP_NORMAL = 0 };
 
 class Reanimation {
 public:
-    int unk1[4];                                       // 0 ~ 3
-    ReanimationType mReanimationType; // 4
-    float mAnimTime;                                   // 5
-    float mAnimRate;                                   // 6
-    ReanimatorDefinition *mDefinition;                 // 7
-    ReanimLoopType mLoopType;          // 8
-    bool mDead;                                        // 36
-    int mFrameStart;                                   // 10
-    int mFrameCount;                                   // 11
-    int mFrameBasePose;                                // 12
-    SexyTransform2D mOverlayMatrix;                    // 13 ~ 21
-    Color mColorOverride;                              // 22 ~ 25
-    ReanimatorTrackInstance *mTrackInstances;          // 26
-    int mLoopCount;                                    // 27
-    int *mReanimationHolder;                           // 28
-    bool mIsAttachment;                                // 116
-    int mRenderOrder;                                  // 30
-    Color mExtraAdditiveColor;                         // 31 ~ 34
-    bool mEnableExtraAdditiveDraw;                     // 140
-    Color mExtraOverlayColor;                          // 36 ~ 39
-    bool mEnableExtraOverlayDraw;                      // 160
-    float mLastFrameTime;                              // 41
-    FilterEffectType mFilterEffect;  // 42
-    Color mCustomFilterEffectColor;                    // 43 ~ 46
-    int unk2[4];                                       // 47 ~ 50
-    ReanimatorTransform *mReanimatorTransforms;        // 51
-    bool unkBool;                                      // 208
-    float unkFloatWithInitialValue_1;                  // 53
-    int mReanimationID;                                // 54
+    int unk1[4];                                // 0 ~ 3
+    ReanimationType mReanimationType;           // 4
+    float mAnimTime;                            // 5
+    float mAnimRate;                            // 6
+    ReanimatorDefinition *mDefinition;          // 7
+    ReanimLoopType mLoopType;                   // 8
+    bool mDead;                                 // 36
+    int mFrameStart;                            // 10
+    int mFrameCount;                            // 11
+    int mFrameBasePose;                         // 12
+    SexyTransform2D mOverlayMatrix;             // 13 ~ 21
+    Color mColorOverride;                       // 22 ~ 25
+    ReanimatorTrackInstance *mTrackInstances;   // 26
+    int mLoopCount;                             // 27
+    int *mReanimationHolder;                    // 28
+    bool mIsAttachment;                         // 116
+    int mRenderOrder;                           // 30
+    Color mExtraAdditiveColor;                  // 31 ~ 34
+    bool mEnableExtraAdditiveDraw;              // 140
+    Color mExtraOverlayColor;                   // 36 ~ 39
+    bool mEnableExtraOverlayDraw;               // 160
+    float mLastFrameTime;                       // 41
+    FilterEffectType mFilterEffect;             // 42
+    Color mCustomFilterEffectColor;             // 43 ~ 46
+    int unk2[4];                                // 47 ~ 50
+    ReanimatorTransform *mReanimatorTransforms; // 51
+    bool unkBool;                               // 208
+    float unkFloatWithInitialValue_1;           // 53
+    int mReanimationID;                         // 54
     // 大小55个整数
 public:
-    bool DrawTrack(Sexy::Graphics *g, int theTrackIndex, int theRenderGroup, TodTriangleGroup* theTriangleGroup);
+    bool DrawTrack(Sexy::Graphics *g, int theTrackIndex, int theRenderGroup, TodTriangleGroup *theTriangleGroup);
     bool ShouldTriggerTimedEvent(float theEventTime);
-    void AssignRenderGroupToTrack(const char* theTrackName, int theRenderGroup);
+    void AssignRenderGroupToTrack(const char *theTrackName, int theRenderGroup);
 };
 
 class ReanimationHolder {
@@ -117,7 +113,7 @@ inline void (*TodScaleRotateTransformMatrix)(Sexy::SexyMatrix3 *, float, float, 
 inline void (*Reanimation_GetTrackMatrix)(Reanimation *pInstance, int i, SexyTransform2D *pD);
 
 
-inline bool (*old_Reanimation_DrawTrack)(Reanimation *reanim, Sexy::Graphics *g, int theTrackIndex, int theRenderGroup, TodTriangleGroup* theTriangleGroup);
+inline bool (*old_Reanimation_DrawTrack)(Reanimation *reanim, Sexy::Graphics *g, int theTrackIndex, int theRenderGroup, TodTriangleGroup *theTriangleGroup);
 
 inline void (*old_ReanimatorLoadDefinitions)(ReanimationParams *theReanimationParamArray, int theReanimationParamArraySize);
 

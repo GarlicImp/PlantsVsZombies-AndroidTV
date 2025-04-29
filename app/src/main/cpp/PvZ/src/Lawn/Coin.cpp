@@ -23,7 +23,7 @@ void Coin::GamepadCursorOver(int thePlayerIndex) {
 void Coin::Update() {
     if (BanDropCoin && (mType <= CoinType::COIN_LARGESUN || mType == CoinType::COIN_COOP_DOUBLE_SUN || mType == CoinType::COIN_VS_ZOMBIE_BRAIN)) {
         // 开启了"禁止掉落阳光金币"时
-        Coin_Die(this);
+        Die();
         return;
     }
 
@@ -42,7 +42,7 @@ void Coin::Update() {
     } else if (mType == CoinType::COIN_VS_ZOMBIE_BRAIN) {
         // 如果没有关闭自动拾取，则为对战模式的僵尸方阳光也加入自动拾取。
         if (mCoinAge > 79 && !mIsBeingCollected) {
-            Coin_Collect(this, 0);
+            Collect(0);
         }
     }
     if (LawnApp_IsCoopMode(mApp) && (mType == CoinType::COIN_SUN || mType == CoinType::COIN_COOP_DOUBLE_SUN || mType == CoinType::COIN_SMALLSUN || mType == CoinType::COIN_LARGESUN)) {
@@ -50,7 +50,7 @@ void Coin::Update() {
         mCoinAge = 0;
     }
 
-    if (Coin_IsLevelAward(this)) {
+    if (IsLevelAward()) {
         // 为关卡结束后的奖励掉落物关闭自动拾取。
         mCoinAge = 0;
     }
@@ -70,7 +70,7 @@ void Coin::UpdateFallForAward() {
         mVelX *= 0.95f;
         mVelY *= 0.95f;
         if (mCoinAge >= 80) {
-            Coin_Collect(this, 0);
+            Collect(0);
         }
     } else if (mCoinMotion == CoinMotion::COIN_MOTION_FROM_FROM_VS_WON) {
         float v30 = mVelY + 0.2;
@@ -89,7 +89,7 @@ void Coin::UpdateFallForAward() {
             }
         }
         if (mCoinAge > 199) {
-            Coin_Collect(this, 0);
+            Collect(0);
         }
     } else if (mCoinMotion == CoinMotion::COIN_MOTION_FROM_NEAR_CURSOR) {
         if (mPlayerIndex >= 0) {
@@ -102,7 +102,7 @@ void Coin::UpdateFallForAward() {
             v55 = v55 - v40;
             float v42 = v55 - mPosX;
             if ((v41 * v41 + v42 * v42) < 1225.0) {
-                Coin_Collect(this, mPlayerIndex);
+                Collect(mPlayerIndex);
                 return;
             }
             float v43 = v41 * 400.0;
@@ -128,15 +128,12 @@ void Coin::UpdateFallForAward() {
         }
 
         mPosX += mVelX;
-        if (mPosX > BOARD_WIDTH - mWidth && mCoinMotion != CoinMotion::COIN_MOTION_FROM_BOSS)
-        {
+        if (mPosX > BOARD_WIDTH - mWidth && mCoinMotion != CoinMotion::COIN_MOTION_FROM_BOSS) {
             mPosX = BOARD_WIDTH - mWidth;
-//            mVelX = -0.4f - RandRangeFloat(0.0f, 0.4f);
-        }
-        else if (mPosX < 0.0f)
-        {
+            //            mVelX = -0.4f - RandRangeFloat(0.0f, 0.4f);
+        } else if (mPosX < 0.0f) {
             mPosX = 0.0f;
-//            mVelX = 0.4f + RandRangeFloat(0.0f, 0.4f);
+            //            mVelX = 0.4f + RandRangeFloat(0.0f, 0.4f);
         }
     } else {
         if (mNeedsBouncyArrow && !mHasBouncyArrow) {
@@ -147,17 +144,17 @@ void Coin::UpdateFallForAward() {
             } else if (mType == CoinType::COIN_VS_PLANT_TROPHY || mType == CoinType::COIN_VS_ZOMBIE_TROPHY) {
                 aParticleOffsetY -= 20.0;
                 int aRenderOrder = Board_MakeRenderOrder(700000, mRow, mHasBouncyArrow);
-                TodParticleSystem* aParticle = LawnApp_AddTodParticle(mApp, mPosX, mPosY, aRenderOrder, ParticleEffect::PARTICLE_TROPHY_SPARKLE);
-                AttachParticle(mAttachment + 2, aParticle, 0, 0.0);
+                TodParticleSystem *aParticle = LawnApp_AddTodParticle(mApp, mPosX, mPosY, aRenderOrder, ParticleEffect::PARTICLE_TROPHY_SPARKLE);
+                AttachParticle(mAttachmentID + 2, aParticle, 0, 0.0);
             } else if (mType == CoinType::COIN_AWARD_MONEY_BAG || mType == CoinType::COIN_AWARD_BAG_DIAMOND) {
                 aParticleOffsetY -= 2.0;
                 aParticleOffsetX += 2.0;
-            } else if (mType == CoinType::COIN_AWARD_PRESENT || Coin_IsPresentWithAdvice(this)) {
+            } else if (mType == CoinType::COIN_AWARD_PRESENT || IsPresentWithAdvice()) {
                 aParticleOffsetY -= 20.0;
             } else if (mType == CoinType::COIN_AWARD_SILVER_SUNFLOWER || mType == CoinType::COIN_AWARD_GOLD_SUNFLOWER) {
                 aParticleOffsetX -= 6.0f;
                 aParticleOffsetY -= 40.0f;
-            } else if (Coin_IsMoney(this)) {
+            } else if (IsMoney()) {
                 aParticleOffsetX += 12.0f;
                 aParticleOffsetY += 21.0f;
             }
@@ -165,45 +162,41 @@ void Coin::UpdateFallForAward() {
             ParticleEffect aEffect;
             if (mType == CoinType::COIN_FINAL_SEED_PACKET) {
                 aEffect = ParticleEffect::PARTICLE_SEED_PACKET;
-            } else if (Coin_IsMoney(this)) {
+            } else if (IsMoney()) {
                 aEffect = ParticleEffect::PARTICLE_COIN_PICKUP_ARROW;
             } else {
                 aEffect = ParticleEffect::PARTICLE_AWARD_PICKUP_ARROW;
             }
 
-            TodParticleSystem* aParticle = LawnApp_AddTodParticle(mApp, mPosX + aParticleOffsetX, mPosY + aParticleOffsetY, 0, aEffect);
-            AttachParticle(mAttachment, aParticle, aParticleOffsetX, aParticleOffsetY);
+            TodParticleSystem *aParticle = LawnApp_AddTodParticle(mApp, mPosX + aParticleOffsetX, mPosY + aParticleOffsetY, 0, aEffect);
+            AttachParticle(mAttachmentID, aParticle, aParticleOffsetX, aParticleOffsetY);
             mHasBouncyArrow = true;
         }
 
         if (!mHitGround) {
             mHitGround = true;
-            Coin_PlayGroundSound(this);
+            PlayGroundSound();
         }
 
         mPosY = mGroundY;
         mPosX = std::round(mPosX);
 
 
-        if (mApp->mGameMode != GameMode::GAMEMODE_CHALLENGE_LAST_STAND || mBoard == nullptr ||
-             mBoard->mChallenge->mChallengeState == ChallengeState::STATECHALLENGE_LAST_STAND_ONSLAUGHT) {
-            if (!Coin_IsLevelAward(this) && !Coin_IsPresentWithAdvice(this)) {
+        if (mApp->mGameMode != GameMode::GAMEMODE_CHALLENGE_LAST_STAND || mBoard == nullptr || mBoard->mChallenge->mChallengeState == ChallengeState::STATECHALLENGE_LAST_STAND_ONSLAUGHT) {
+            if (!IsLevelAward() && !IsPresentWithAdvice()) {
                 ++mDisappearCounter;
-                if (mDisappearCounter >= Coin_GetDisappearTime(this)) {
-                    Coin_StartFade(this);
+                if (mDisappearCounter >= GetDisappearTime()) {
+                    StartFade();
                 }
             }
         }
     }
 
     if (mCoinMotion == CoinMotion::COIN_MOTION_FROM_PLANT || mCoinMotion == CoinMotion::COIN_MOTION_FROM_FROM_GRAVE) {
-        float aFinalScale = Coin_GetSunScale(this);
-        if (mScale < aFinalScale)
-        {
+        float aFinalScale = GetSunScale();
+        if (mScale < aFinalScale) {
             mScale += 0.02f;
-        }
-        else
-        {
+        } else {
             mScale = aFinalScale;
         }
     }

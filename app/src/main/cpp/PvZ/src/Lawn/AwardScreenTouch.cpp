@@ -1,7 +1,7 @@
-#include "PvZ/Symbols.h"
 #include "PvZ/Lawn/AwardScreen.h"
 #include "PvZ/Lawn/Board.h"
 #include "PvZ/Lawn/LawnApp.h"
+#include "PvZ/Symbols.h"
 
 void AwardScreen_MouseDown(int *awardScreen, int x, int y, int theClickCount) {
     Sexy::GameButton *gameButton = *((Sexy::GameButton **)awardScreen + 65);

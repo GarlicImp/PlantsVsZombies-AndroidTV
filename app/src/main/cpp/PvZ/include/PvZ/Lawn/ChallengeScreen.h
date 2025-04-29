@@ -39,9 +39,9 @@ public:
     ChallengeScreen(LawnApp *theApp, ChallengePage thePage);
     void Create(LawnApp *theApp, ChallengePage thePage);
     void Draw(Sexy::Graphics *graphics);
-    void AddedToManager(int* theWidgetManager);
+    void AddedToManager(int *theWidgetManager);
     void Update();
-    void RemovedFromManager(int* theWidgetManager);
+    void RemovedFromManager(int *theWidgetManager);
     void Delete2();
     void ButtonPress(int theButtonId);
     void ButtonDepress(int theId);
@@ -54,12 +54,12 @@ public:
 
 class ChallengeDefinition {
 public:
-    GameMode mChallengeMode;            // 0
-    int mChallengeIconIndex;            // 1
-    ChallengePage mPage;                // 2
-    int mRow;                           // 3 无用
-    int mCol;                           // 4 无用
-    const char *mChallengeName;         // 5
+    GameMode mChallengeMode;    // 0
+    int mChallengeIconIndex;    // 1
+    ChallengePage mPage;        // 2
+    int mRow;                   // 3 无用
+    int mCol;                   // 4 无用
+    const char *mChallengeName; // 5
 };
 extern ChallengeDefinition gChallengeDefs[NUM_CHALLENGE_MODES];
 
@@ -74,11 +74,11 @@ inline void (*old_ChallengeScreen_ChallengeScreen)(ChallengeScreen *challengeScr
 
 inline void (*old_ChallengeScreen_Draw)(ChallengeScreen *challengeScreen, Sexy::Graphics *graphics);
 
-inline void (*old_ChallengeScreen_AddedToManager)(ChallengeScreen *a, int* a2);
+inline void (*old_ChallengeScreen_AddedToManager)(ChallengeScreen *a, int *a2);
 
 inline void (*old_ChallengeScreen_Update)(ChallengeScreen *a);
 
-inline void (*old_ChallengeScreen_RemovedFromManager)(ChallengeScreen *a, int* a2);
+inline void (*old_ChallengeScreen_RemovedFromManager)(ChallengeScreen *a, int *a2);
 
 inline void (*old_ChallengeScreen_Delete2)(ChallengeScreen *challengeScreen);
 

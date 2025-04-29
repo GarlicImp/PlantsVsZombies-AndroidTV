@@ -6,92 +6,92 @@
 
 class LawnApp : public SexyAppBase {
 public:
-    Board *mBoard;                                  // 552
-    TitleScreen *mTitleScreen;                      // 553
-    MainMenu *mGameSelector;                        // 554
-    int unk1[2];                                    // 555 ~ 556
-    int *mHelpTextScreen;                           // 557
-    int unkUnk;                                     // 558
-    int *mVSSetupScreen;                            // 559
-    int *mVSResultsScreen;                          // 560
-    SeedChooserScreen *mSeedChooserScreen;          // 561
-    SeedChooserScreen *mZombieChooserScreen;        // 562
-    int *mAwardScreen;                              // 563
-    CreditScreen *mCreditScreen;                    // 564
-    ChallengeScreen *mChallengeScreen;              // 565
-    TodFoley *mSoundSystem;                         // 566
-    int *unk3[7];                                   // 567 ~ 573
-    bool mRegisterResourcesLoaded;                  // 2296
-    bool mTodCheatKeys;                             // 2297
-    bool mNewIs3DAccelerated;                       // 2298，在对齐间隙插入新成员
-    GameMode mGameMode;                   // 575
-    GameScenes mGameScene;              // 576
-    bool mLoadingZombiesThreadCompleted;            // 2308
-    bool mFirstTimeGameSelector;                    // 2309
-    int mGamesPlayed;                               // 578
-    int mMaxExecutions;                             // 579
-    int mMaxPlays;                                  // 580
-    int mMaxTime;                                   // 581
-    bool mEasyPlantingCheat;                        // 2328
-    PoolEffect *mPoolEffect;                        // 583
-    int *mZenGarden;                                // 584
-    EffectSystem *mEffectSystem;                    // 585
-    ReanimatorCache *mReanimatorCache;              // 586
-    PlayerInfo *mPlayerInfo;                        // 587
-    int unk6;                                       // 588
-    int *mLastLevelStats;                           // 589
-    bool mCloseRequest;                             // 2360
-    int mAppCounter;                                // 591
-    Music2 *mMusic;                                 // 592
-    int mCrazyDaveReanimID;                         // 593
-    CrazyDaveState mCrazyDaveState; // 594
-    int mCrazyDaveBlinkCounter;                     // 595
-    int mCrazyDaveBlinkReanimID;                    // 596
-    int mCrazyDaveMessageIndex;                     // 597
-    int *mCrazyDaveMessageText;                     // 598
-    int mAppRandSeed;                               // 599;
-    int unk7;                                       // 600
-    int *mProfileMgr;                               // 601
-    int unk8[35];                                   // 602 ~ 636
-    Sexy::Image *mQRCodeImage;                      // 637
-    int unk8_1[7];                                  // 638 ~ 644
-    int mInitialSunMoney;                           // 645     // 这个数据能给玩家加初始阳光
-    bool mIsFullVersion;                            // 2584
-    int unk9[7];                                    // 647 ~ 653
-    BoardResult mBoardResult;          // 654
-    bool mKilledYetiAndRestarted;                   // 2620
-    int *mKonamiCheck;                              // 656
-    int *mMustacheCheck;                            // 657
-    int *mMoustacheCheck;                           // 658
-    int *mSuperMowerCheck;                          // 659
-    int *mSuperMowerCheck2;                         // 660
-    int *mFutureCheck;                              // 661
-    int *mPinataCheck;                              // 662
-    int *mDanceCheck;                               // 663
-    int *mDaisyCheck;                               // 664
-    int *mSukhbirCheck;                             // 665
-    bool mMustacheMode;                             // 2664
-    bool mSuperMowerMode;                           // 2665
-    bool mFutureMode;                               // 2666
-    bool mPinataMode;                               // 2667
-    bool mDanceMode;                                // 2668
-    bool mDaisyMode;                                // 2669
-    bool mSukhbirMode;                              // 2670
-    int unk10;                                      // 668
-    bool mMuteSoundsForCutscene;                    // 2676
-    bool unkBool2;                                  // 2677
-    int unk11;                                      // 670
-    int mTwoPlayerState;                            // 671
-    int unk12[3];                                   // 672 ~ 674
-    int *mMailBox;                                  // 675
-    int unk13[26];                                  // 676 ~ 701
-    int *mHelpBarWidget;                            // 702
-    int unk14;                                      // 703
-    int *mLogComposer;                              // 704
-    int *MLogManager;                               // 705
-    int mLaunchTime;                                // 706
-    int *mDaveHelp;                                 // 707
-    int *mMaskHelpWidget;                           // 708
+    Board *mBoard;                           // 552
+    TitleScreen *mTitleScreen;               // 553
+    MainMenu *mGameSelector;                 // 554
+    int unk1[2];                             // 555 ~ 556
+    int *mHelpTextScreen;                    // 557
+    int unkUnk;                              // 558
+    int *mVSSetupScreen;                     // 559
+    int *mVSResultsScreen;                   // 560
+    SeedChooserScreen *mSeedChooserScreen;   // 561
+    SeedChooserScreen *mZombieChooserScreen; // 562
+    int *mAwardScreen;                       // 563
+    CreditScreen *mCreditScreen;             // 564
+    ChallengeScreen *mChallengeScreen;       // 565
+    TodFoley *mSoundSystem;                  // 566
+    int *unk3[7];                            // 567 ~ 573
+    bool mRegisterResourcesLoaded;           // 2296
+    bool mTodCheatKeys;                      // 2297
+    bool mNewIs3DAccelerated;                // 2298，在对齐间隙插入新成员
+    GameMode mGameMode;                      // 575
+    GameScenes mGameScene;                   // 576
+    bool mLoadingZombiesThreadCompleted;     // 2308
+    bool mFirstTimeGameSelector;             // 2309
+    int mGamesPlayed;                        // 578
+    int mMaxExecutions;                      // 579
+    int mMaxPlays;                           // 580
+    int mMaxTime;                            // 581
+    bool mEasyPlantingCheat;                 // 2328
+    PoolEffect *mPoolEffect;                 // 583
+    int *mZenGarden;                         // 584
+    EffectSystem *mEffectSystem;             // 585
+    ReanimatorCache *mReanimatorCache;       // 586
+    PlayerInfo *mPlayerInfo;                 // 587
+    int unk6;                                // 588
+    int *mLastLevelStats;                    // 589
+    bool mCloseRequest;                      // 2360
+    int mAppCounter;                         // 591
+    Music2 *mMusic;                          // 592
+    int mCrazyDaveReanimID;                  // 593
+    CrazyDaveState mCrazyDaveState;          // 594
+    int mCrazyDaveBlinkCounter;              // 595
+    int mCrazyDaveBlinkReanimID;             // 596
+    int mCrazyDaveMessageIndex;              // 597
+    int *mCrazyDaveMessageText;              // 598
+    int mAppRandSeed;                        // 599;
+    int unk7;                                // 600
+    int *mProfileMgr;                        // 601
+    int unk8[35];                            // 602 ~ 636
+    Sexy::Image *mQRCodeImage;               // 637
+    int unk8_1[7];                           // 638 ~ 644
+    int mInitialSunMoney;                    // 645     // 这个数据能给玩家加初始阳光
+    bool mIsFullVersion;                     // 2584
+    int unk9[7];                             // 647 ~ 653
+    BoardResult mBoardResult;                // 654
+    bool mKilledYetiAndRestarted;            // 2620
+    int *mKonamiCheck;                       // 656
+    int *mMustacheCheck;                     // 657
+    int *mMoustacheCheck;                    // 658
+    int *mSuperMowerCheck;                   // 659
+    int *mSuperMowerCheck2;                  // 660
+    int *mFutureCheck;                       // 661
+    int *mPinataCheck;                       // 662
+    int *mDanceCheck;                        // 663
+    int *mDaisyCheck;                        // 664
+    int *mSukhbirCheck;                      // 665
+    bool mMustacheMode;                      // 2664
+    bool mSuperMowerMode;                    // 2665
+    bool mFutureMode;                        // 2666
+    bool mPinataMode;                        // 2667
+    bool mDanceMode;                         // 2668
+    bool mDaisyMode;                         // 2669
+    bool mSukhbirMode;                       // 2670
+    int unk10;                               // 668
+    bool mMuteSoundsForCutscene;             // 2676
+    bool unkBool2;                           // 2677
+    int unk11;                               // 670
+    int mTwoPlayerState;                     // 671
+    int unk12[3];                            // 672 ~ 674
+    int *mMailBox;                           // 675
+    int unk13[26];                           // 676 ~ 701
+    int *mHelpBarWidget;                     // 702
+    int unk14;                               // 703
+    int *mLogComposer;                       // 704
+    int *MLogManager;                        // 705
+    int mLaunchTime;                         // 706
+    int *mDaveHelp;                          // 707
+    int *mMaskHelpWidget;                    // 708
 
     Reanimation *ReanimationGet(ReanimationID theReanimationID) { return reinterpret_cast<Reanimation *(*)(LawnApp *, ReanimationID)>(LawnApp_ReanimationGetAddr)(this, theReanimationID); }
 
@@ -102,7 +102,6 @@ public:
     void PlaySample(int theSoundNum) { reinterpret_cast<void (*)(LawnApp *, int)>(LawnApp_PlaySampleAddr)(this, theSoundNum); }
     bool IsAdventureMode();
     bool IsScaryPotterLevel();
-
 };
 
 /***************************************************************************************************************/
@@ -219,7 +218,7 @@ inline TodParticleSystem *(*LawnApp_ParticleTryToGet)(LawnApp *lawnApp, int);
 
 inline void (*old_LawnApp_DoBackToMain)(LawnApp *lawnApp);
 
-inline void (*old_LawnApp_ShowAwardScreen)(LawnApp* lawnApp, int a2);
+inline void (*old_LawnApp_ShowAwardScreen)(LawnApp *lawnApp, int a2);
 
 inline void (*old_LawnApp_KillAwardScreen)(LawnApp *lawnApp);
 

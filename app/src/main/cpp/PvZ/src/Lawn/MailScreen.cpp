@@ -1,8 +1,8 @@
 #include "PvZ/Lawn/MailScreen.h"
-#include "PvZ/Symbols.h"
-#include "PvZ/SexyAppFramework/Graphics.h"
-#include "PvZ/Misc.h"
 #include "PvZ/Lawn/LawnApp.h"
+#include "PvZ/Misc.h"
+#include "PvZ/SexyAppFramework/Graphics.h"
+#include "PvZ/Symbols.h"
 
 namespace {
 Sexy::GameButton *mMailScreenCloseButton;
@@ -14,7 +14,7 @@ MailScreen::MailScreen(LawnApp *theApp) {
     Create(theApp);
 }
 
-void MailScreen::Create(LawnApp* theApp) {
+void MailScreen::Create(LawnApp *theApp) {
     // 修复MailScreen的可触控区域不为全屏。
     old_MailScreen_MailScreen(this, theApp);
 

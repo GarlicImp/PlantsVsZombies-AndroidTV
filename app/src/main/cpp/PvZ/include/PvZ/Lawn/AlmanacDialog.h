@@ -5,33 +5,33 @@
 
 class AlmanacDialog : public LawnDialog {
 public:
-    int *mScrollListener;                                                    // 191
-    LawnApp *mApp;                                                           // 192
-    Sexy::GameButton *mViewPlantButton;                                      // 193
-    Sexy::GameButton *mViewZombieButton;                                     // 194
-    Sexy::CustomScrollbarWidget *mScrollTextView;                            // 195
-    int mOpenPage;                                                           // 196
-    SeedType mSelectedSeed;                                        // 197
-    ZombieType mSelectedZombie;                                  // 198
-    Plant *mPlant;                                                           // 199
-    Zombie *mZombie;                                                         // 200
-    Sexy::Rect mUnkRect;                                                          // 201 ~ 204
-    Sexy::Rect mDescriptionRect;                                                  // 205 ~ 208
-    Sexy::Rect mCostRect;                                                         // 209 ~ 212
-    Sexy::Rect mWaitTimeRect;                                                     // 213 ~ 216
-    int unk2[2];                                                             // 217 ~ 218
-    char *mNameString;                                                       // 219
-    char *mDescriptionHeaderString;                                          // 220
-    char *mDescriptionStringTmp;                                             // 221
-    char *mDescriptionString;                                                // 222
-    char *mCostString;                                                       // 223
-    char *mWaitTimeString;                                                   // 224
+    int *mScrollListener;                           // 191
+    LawnApp *mApp;                                  // 192
+    Sexy::GameButton *mViewPlantButton;             // 193
+    Sexy::GameButton *mViewZombieButton;            // 194
+    Sexy::CustomScrollbarWidget *mScrollTextView;   // 195
+    int mOpenPage;                                  // 196
+    SeedType mSelectedSeed;                         // 197
+    ZombieType mSelectedZombie;                     // 198
+    Plant *mPlant;                                  // 199
+    Zombie *mZombie;                                // 200
+    Sexy::Rect mUnkRect;                            // 201 ~ 204
+    Sexy::Rect mDescriptionRect;                    // 205 ~ 208
+    Sexy::Rect mCostRect;                           // 209 ~ 212
+    Sexy::Rect mWaitTimeRect;                       // 213 ~ 216
+    int unk2[2];                                    // 217 ~ 218
+    char *mNameString;                              // 219
+    char *mDescriptionHeaderString;                 // 220
+    char *mDescriptionStringTmp;                    // 221
+    char *mDescriptionString;                       // 222
+    char *mCostString;                              // 223
+    char *mWaitTimeString;                          // 224
     DrawStringJustification mWaitTimeJustification; // 225
     DrawStringJustification mJustification;         // 226
-    bool mSetupFinished;                                                     // 227 * 4
-    double unk3;                                                             // 228 ~ 229
-    int *mHelpBarWidget;                                                     // 230
-    int unk4[11];                                                            // 231 ~ 233
+    bool mSetupFinished;                            // 227 * 4
+    double unk3;                                    // 228 ~ 229
+    int *mHelpBarWidget;                            // 230
+    int unk4[11];                                   // 231 ~ 233
 }; // 115: 234, 111: 236
 
 inline bool (*AlmanacDialog_KeyDown)(AlmanacDialog *, int);

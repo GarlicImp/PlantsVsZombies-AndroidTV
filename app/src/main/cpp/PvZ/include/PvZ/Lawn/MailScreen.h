@@ -13,8 +13,8 @@ public:
 
     void KeyDown(int theKey, int a2, int a3) { reinterpret_cast<void (*)(MailScreen *, int, int, int)>(MailScreen_KeyDownAddr)(this, theKey, a2, a3); }
 
-    MailScreen(LawnApp* theApp);
-    void Create(LawnApp* theApp);
+    MailScreen(LawnApp *theApp);
+    void Create(LawnApp *theApp);
     void AddedToManager(int *theWidgetManager);
     void RemovedFromManager(int *widgetManager);
     void Delete2();
@@ -26,7 +26,7 @@ public:
     void ButtonDepress(int theId);
 };
 
-//inline void (*MailScreen_KeyDown)(MailScreen *mailScreen, int keyCode, int, int);
+// inline void (*MailScreen_KeyDown)(MailScreen *mailScreen, int keyCode, int, int);
 
 
 inline void (*old_MailScreen_MailScreen)(MailScreen *mailScreen, LawnApp *lawnApp);

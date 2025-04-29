@@ -1,9 +1,9 @@
 #include "PvZ/Lawn/ImitaterDialog.h"
-#include "PvZ/SexyAppFramework/Graphics.h"
-#include "PvZ/Misc.h"
 #include "PvZ/GlobalVariable.h"
 #include "PvZ/Lawn/LawnApp.h"
 #include "PvZ/Lawn/SeedChooserScreen.h"
+#include "PvZ/Misc.h"
+#include "PvZ/SexyAppFramework/Graphics.h"
 
 void ImitaterDialog_ImitaterDialog(LawnDialog *instance, int playerIndex) {
     // 记录当前游戏状态

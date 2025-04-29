@@ -197,12 +197,11 @@ inline Sexy::Image *(*ReanimatorCache_MakeCachedPlantFrame)(ReanimatorCache *, S
 
 inline Sexy::MemoryImage *(*ReanimatorCache_MakeBlankCanvasImage)(ReanimatorCache *, int, int);
 
-inline void (*ReanimatorCache_DrawReanimatorFrame)(
-    ReanimatorCache *, Sexy::Graphics *g, float x, float y, ReanimationType reanimType, char *trackName, DrawVariation variation);
+inline void (*ReanimatorCache_DrawReanimatorFrame)(ReanimatorCache *, Sexy::Graphics *g, float x, float y, ReanimationType reanimType, char *trackName, DrawVariation variation);
 
 inline TodAllocator *(*FindGlobalAllocator)(int aSize);
 
-inline void (*AttachParticle)(int *, TodParticleSystem *, float, float);
+inline void (*AttachParticle)(AttachmentID *, TodParticleSystem *, float, float);
 
 inline void (*TodLoadResources)(int *);
 
@@ -245,8 +244,7 @@ inline void (*old_ReanimatorCache_LoadCachedImages)(ReanimatorCache *a1);
 
 inline void (*old_ReanimatorCache_UpdateReanimationForVariation)(ReanimatorCache *a1, Reanimation *a, DrawVariation theDrawVariation);
 
-inline void (*old_ReanimatorCache_DrawCachedPlant)(
-    ReanimatorCache *a1, Sexy::Graphics *graphics, float thePosX, float thePosY, SeedType theSeedType, DrawVariation drawVariation);
+inline void (*old_ReanimatorCache_DrawCachedPlant)(ReanimatorCache *a1, Sexy::Graphics *graphics, float thePosX, float thePosY, SeedType theSeedType, DrawVariation drawVariation);
 
 inline Sexy::Image *(*old_ReanimatorCache_MakeCachedZombieFrame)(ReanimatorCache *reanimatorCache, ZombieType zombieType);
 
@@ -277,7 +275,8 @@ inline void (*old_CreditScreen_Delete2)(Sexy::Widget *creditScreen);
 
 int randomInt(int a, int b);
 
-void DrawSeedPacket(Sexy::Graphics *graphics,float x,float y,SeedType seedType,SeedType imitaterType,float coolDownPercent,int grayness,bool drawCostText,bool isInGame,bool isZombieSeed,bool a11);
+void DrawSeedPacket(
+    Sexy::Graphics *graphics, float x, float y, SeedType seedType, SeedType imitaterType, float coolDownPercent, int grayness, bool drawCostText, bool isInGame, bool isZombieSeed, bool a11);
 
 void ReanimatorCache_DrawCachedPlant(ReanimatorCache *a1, Sexy::Graphics *graphics, float thePosX, float thePosY, SeedType theSeedType, DrawVariation theDrawVariation);
 
@@ -356,7 +355,6 @@ void HelpBarWidget_HelpBarWidget(Sexy::Widget *a);
 void LawnPlayerInfo_AddCoins(PlayerInfo *playerInfo, int theAmount);
 
 void SaveGameContext_SyncReanimationDef(int *theSaveGameContext, ReanimatorDefinition **a2);
-
 
 
 #endif // PVZ_MISC_H

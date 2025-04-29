@@ -6,30 +6,30 @@
 class HitResult;
 class SeedPacket : public GameObject {
 public:
-    int mRefreshCounter;                       // 13
-    int mRefreshTime;                          // 14
-    int mIndex;                                // 15
-    int mOffsetY;                              // 16
+    int mRefreshCounter;             // 13
+    int mRefreshTime;                // 14
+    int mIndex;                      // 15
+    int mOffsetY;                    // 16
     SeedType mPacketType;            // 17
     SeedType mImitaterType;          // 18
-    int mSlotMachineCountDown;                 // 19
+    int mSlotMachineCountDown;       // 19
     SeedType mSlotMachiningNextSeed; // 20
-    float mSlotMachiningPosition;              // 21
-    bool mActive;                              // 88
-    bool mRefreshing;                          // 89
-    int mTimesUsed;                            // 23
-    SeedBank *mSeedBank;                       // 24
-    float mLastSelectedTime;                   // 25
-    int unknownIntMember1;                     // 26
-    int unknownIntMember2;                     // 27
-    bool mSelectedBy2P;                        // 112
-    bool mSelectedBy1P;                        // 113
+    float mSlotMachiningPosition;    // 21
+    bool mActive;                    // 88
+    bool mRefreshing;                // 89
+    int mTimesUsed;                  // 23
+    SeedBank *mSeedBank;             // 24
+    float mLastSelectedTime;         // 25
+    int unknownIntMember1;           // 26
+    int unknownIntMember2;           // 27
+    bool mSelectedBy2P;              // 112
+    bool mSelectedBy1P;              // 113
     // 大小29个整数
 public:
     void Update();
     void UpdateSelected();
-    void DrawOverlay(Sexy::Graphics* g);
-    void Draw(Sexy::Graphics* g);
+    void DrawOverlay(Sexy::Graphics *g);
+    void Draw(Sexy::Graphics *g);
     void FlashIfReady();
 };
 
@@ -67,7 +67,6 @@ inline void (*old_SeedPacket_FlashIfReady)(SeedPacket *seedPacket);
 bool SeedPacket_BeginDraw(SeedPacket *a, Sexy::Graphics *a2);
 
 void SeedPacket_EndDraw(SeedPacket *a, Sexy::Graphics *a2);
-
 
 
 #endif // PVZ_LAWN_SEED_PACKET_H

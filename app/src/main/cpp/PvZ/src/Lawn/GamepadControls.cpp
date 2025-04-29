@@ -1,17 +1,17 @@
 #include "PvZ/Lawn/GamepadControls.h"
-#include "PvZ/Symbols.h"
-#include "PvZ/SexyAppFramework/Graphics.h"
-#include "PvZ/Misc.h"
 #include "PvZ/GlobalVariable.h"
 #include "PvZ/Lawn/Board.h"
 #include "PvZ/Lawn/Challenge.h"
 #include "PvZ/Lawn/LawnApp.h"
 #include "PvZ/Lawn/Plant.h"
 #include "PvZ/Lawn/Reanimation.h"
+#include "PvZ/Lawn/SeedBank.h"
 #include "PvZ/Lawn/ZenGarden.h"
 #include "PvZ/Lawn/Zombie.h"
 #include "PvZ/MagicAddr.h"
-#include "PvZ/Lawn/SeedBank.h"
+#include "PvZ/Misc.h"
+#include "PvZ/SexyAppFramework/Graphics.h"
+#include "PvZ/Symbols.h"
 
 void GamepadControls_pickUpCobCannon(int gamePad, int cobCannon) {
     // 用于拿起指定的加农炮
@@ -303,7 +303,8 @@ void GamepadControls_UpdatePreviewReanim(GamepadControls *gamepadControls) {
             ZombieDefinition &theZombieDefinition = GetZombieDefinition(theZombieType);
             Reanimation *zombieReanim = LawnApp_AddReanimation(lawnApp, -20.0, -35 - theDrawHeightOffset, theRenderOrder + 1, theZombieDefinition.mReanimationType);
             Zombie::SetupReanimLayers(zombieReanim, theZombieType);
-            if (theZombieType == ZombieType::ZOMBIE_DOOR || theZombieType == ZombieType::ZOMBIE_TRASH_BIN || theZombieType == ZombieType::ZOMBIE_NEWSPAPER || theZombieType == ZombieType::ZOMBIE_LADDER) {
+            if (theZombieType == ZombieType::ZOMBIE_DOOR || theZombieType == ZombieType::ZOMBIE_TRASH_BIN || theZombieType == ZombieType::ZOMBIE_NEWSPAPER
+                || theZombieType == ZombieType::ZOMBIE_LADDER) {
                 Zombie::SetupShieldReanims(theZombieType, zombieReanim);
             }
             zombieReanim->mIsAttachment = true;

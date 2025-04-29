@@ -1,13 +1,13 @@
 #include "PvZ/Lawn/MainMenu.h"
-#include "PvZ/Symbols.h"
-#include "PvZ/SexyAppFramework/Graphics.h"
-#include "PvZ/Misc.h"
 #include "Homura/Logger.h"
 #include "PvZ/GlobalVariable.h"
 #include "PvZ/Lawn/Board.h"
 #include "PvZ/Lawn/LawnApp.h"
 #include "PvZ/Lawn/Reanimation.h"
 #include "PvZ/Lawn/Zombie.h"
+#include "PvZ/Misc.h"
+#include "PvZ/SexyAppFramework/Graphics.h"
+#include "PvZ/Symbols.h"
 
 #include <cstddef>
 
@@ -103,7 +103,7 @@ void MainMenu::Update() {
             FoleyType aType = MainMenu_GetFoleyTypeByScene(mScene);
             if (gAchievementState == NOT_SHOWING) {
                 if (!TodFoley_IsFoleyPlaying(mApp->mSoundSystem, aType) && mExitCounter == 0) {
-//                    mApp->PlayFoley(aType);
+                    //                    mApp->PlayFoley(aType);
                     LawnApp_SetFoleyVolume(mApp, aType, 0);
                 }
                 if (mEnterReanimationCounter > 0) {
@@ -189,7 +189,7 @@ void MainMenu::Update() {
 
 void MainMenu::ButtonPress(MainMenuButtonId theSelectedButton) {
     // 按下按钮的声音
-    LawnApp* gLawnApp = (LawnApp *)*gLawnApp_Addr;
+    LawnApp *gLawnApp = (LawnApp *)*gLawnApp_Addr;
     if (MainMenu_InTransition(gLawnApp->mGameSelector))
         return;
 
@@ -444,12 +444,12 @@ void MainMenu::OnExit() {
         LawnApp_ShowZombatarScreen(mApp);
     }
 
-//    if (mPressedButtonId == VS_BUTTON) {
-//        LawnApp_KillMainMenu(mApp);
-////        TODO:为对战添加选择场景
-//        LawnApp_ShowChallengeScreen(mApp, CHALLENGE_PAGE_VS);
-//        return;
-//    }
+    //    if (mPressedButtonId == VS_BUTTON) {
+    //        LawnApp_KillMainMenu(mApp);
+    ////        TODO:为对战添加选择场景
+    //        LawnApp_ShowChallengeScreen(mApp, CHALLENGE_PAGE_VS);
+    //        return;
+    //    }
 
     old_MainMenu_OnExit(this);
 }
@@ -465,7 +465,7 @@ void MainMenu::SyncButtons() {
     MainMenu_EnableButtons(this);
 }
 
-void MainMenu::Creat(LawnApp* theApp) {
+void MainMenu::Creat(LawnApp *theApp) {
     old_MainMenu_MainMenu(this, theApp);
 }
 
@@ -487,12 +487,13 @@ void MainMenu::UpdateCameraPosition() {
     }
 }
 
-void MainMenu::AddedToManager(int* a2) {
+void MainMenu::AddedToManager(int *a2) {
     old_MainMenu_AddedToManager(this, a2);
     if (!showHouse)
         return;
     Reanimation *reanimation = LawnApp_AddReanimation(mApp, 0, 0, 0, ReanimationType::REANIM_LEADERBOARDS_HOUSE);
-    //    Reanimation *reanimation = LawnApp_AddReanimation(mainMenu->mApp, mainMenu->mCameraPositionX + theOffsetX,mainMenu->mCameraPositionY + theOffsetY, 0, ReanimationType::REANIM_LEADERBOARDS_HOUSE);
+    //    Reanimation *reanimation = LawnApp_AddReanimation(mainMenu->mApp, mainMenu->mCameraPositionX + theOffsetX,mainMenu->mCameraPositionY + theOffsetY, 0,
+    //    ReanimationType::REANIM_LEADERBOARDS_HOUSE);
     reanimation->mCustomFilterEffectColor = {142, 146, 232, 92};
     reanimation->mFilterEffect = FilterEffectType::FILTEREFFECT_CUSTOM;
 
@@ -501,7 +502,7 @@ void MainMenu::AddedToManager(int* a2) {
     mHouseReanimID = LawnApp_ReanimationGetID(mApp, reanimation);
 }
 
-void MainMenu::RemovedFromManager(int* a2) {
+void MainMenu::RemovedFromManager(int *a2) {
     // 记录当前游戏状态
     if (gMainMenuAchievementsWidget != nullptr) {
         Sexy_Widget_RemoveWidget(this, gMainMenuAchievementsWidget);
@@ -525,7 +526,7 @@ void MainMenu::Delete2() {
     }
 }
 
-void MainMenu::Draw(Sexy::Graphics* g) {
+void MainMenu::Draw(Sexy::Graphics *g) {
     // 实现绘制房子
     if (!showHouse)
         return old_MainMenu_Draw(this, g);
@@ -623,7 +624,7 @@ void MainMenu::Draw(Sexy::Graphics* g) {
     Sexy_Graphics_DrawImageMatrix(g, mApp->mQRCodeImage, &v42, &v38, 0.0, 0.0, 1);
 }
 
-void MainMenu::DrawOverlay(Sexy::Graphics* g) {
+void MainMenu::DrawOverlay(Sexy::Graphics *g) {
     // 在成就界面存在时，不显示冒险关卡数
     if (gMainMenuAchievementsWidget != nullptr) {
         return;
@@ -1076,7 +1077,7 @@ void LeaderboardsWidget_LeaderboardsWidget(LeaderboardsWidget *this_, LawnApp *l
         Reanimation_Update(reanim); // 一次Update是必要的，否则绘制出来是Empty
         this_->mLeaderboardReanimations->backgroundReanim[i] = reanim;
     }
-    this_->mLeaderboardReanimations->backgroundReanim[1]->AssignRenderGroupToTrack("survival button 1", 1);                   // 设置无尽模式按钮
+    this_->mLeaderboardReanimations->backgroundReanim[1]->AssignRenderGroupToTrack("survival button 1", 1);                               // 设置无尽模式按钮
     Reanimation_SetImageOverride(this_->mLeaderboardReanimations->backgroundReanim[1], "survival button 1", addonImages.survival_button); // 设置无尽模式按钮
     Reanimation_HideTrack(this_->mLeaderboardReanimations->backgroundReanim[1], "house 1", true);                                         // 隐藏默认房屋
     Reanimation_HideTrack(this_->mLeaderboardReanimations->backgroundReanim[1], "house achievements 1", true);                            // 隐藏默认房屋
@@ -1100,8 +1101,7 @@ void LeaderboardsWidget_LeaderboardsWidget(LeaderboardsWidget *this_, LawnApp *l
     Sexy_Widget_Move(this_->mPlantTrashBin, plantSexyTransform2D.m[0][2], plantSexyTransform2D.m[1][2]);
 
     for (int i = 0; i < AchievementId::MAX_ACHIEVEMENTS; ++i) {
-        this_->mAchievements[i] =
-            lawnApp->mPlayerInfo->mAchievements[LeaderboardsWidget_GetAchievementIdByReanimationType((ReanimationType)(ReanimationType::REANIM_ACHIEVEMENT_HOME_SECURITY + i))];
+        this_->mAchievements[i] = lawnApp->mPlayerInfo->mAchievements[LeaderboardsWidget_GetAchievementIdByReanimationType((ReanimationType)(ReanimationType::REANIM_ACHIEVEMENT_HOME_SECURITY + i))];
         Reanimation *reanim = (Reanimation *)operator new(sizeof(Reanimation));
         Reanimation_Reanimation(reanim);
         Reanimation_ReanimationInitializeType(reanim, 0.0, 0.0, (ReanimationType)(ReanimationType::REANIM_ACHIEVEMENT_HOME_SECURITY + i));
@@ -2941,7 +2941,13 @@ void TestMenuWidget_Update(ZombatarWidget *zombatarWidget) {
 
 void TestMenuWidget_DrawZombieSelection(ZombatarWidget *zombatarWidget, Sexy::Graphics *graphics) {
     // TODO: 做僵尸选择功能
-    ZombieType types[] = {ZombieType::ZOMBIE_NORMAL, ZombieType::ZOMBIE_FLAG, ZombieType::ZOMBIE_TRAFFIC_CONE, ZombieType::ZOMBIE_DOOR, ZombieType::ZOMBIE_TRASH_BIN, ZombieType::ZOMBIE_PAIL, ZombieType::ZOMBIE_DUCKY_TUBE};
+    ZombieType types[] = {ZombieType::ZOMBIE_NORMAL,
+                          ZombieType::ZOMBIE_FLAG,
+                          ZombieType::ZOMBIE_TRAFFIC_CONE,
+                          ZombieType::ZOMBIE_DOOR,
+                          ZombieType::ZOMBIE_TRASH_BIN,
+                          ZombieType::ZOMBIE_PAIL,
+                          ZombieType::ZOMBIE_DUCKY_TUBE};
 }
 
 void TestMenuWidget_DrawSkin(ZombatarWidget *zombatarWidget, Sexy::Graphics *graphics) {

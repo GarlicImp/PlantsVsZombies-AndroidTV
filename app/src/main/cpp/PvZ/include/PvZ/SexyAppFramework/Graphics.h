@@ -155,8 +155,7 @@ inline float (*TodAnimateCurveFloatTime)(float theTimeStart, float theTimeEnd, f
 
 inline void (*TodDrawStringWrapped)(Sexy::Graphics *graphics, int *text, Sexy::Rect *theRect, Sexy::Font *theFont, Color *theColor, DrawStringJustification justification, bool a7);
 
-inline int (*TodDrawStringWrappedHelper)(
-    Sexy::Graphics *pGraphics, int *pInt, Sexy::Rect *pRect, Sexy::Font *pFont, Color color, DrawStringJustification justification, bool i1, bool i2);
+inline int (*TodDrawStringWrappedHelper)(Sexy::Graphics *pGraphics, int *pInt, Sexy::Rect *pRect, Sexy::Font *pFont, Color color, DrawStringJustification justification, bool i1, bool i2);
 
 inline void (*Sexy_GLGraphics_SetWrapMode)(Sexy::Graphics *graphics, int a2, int a3);
 

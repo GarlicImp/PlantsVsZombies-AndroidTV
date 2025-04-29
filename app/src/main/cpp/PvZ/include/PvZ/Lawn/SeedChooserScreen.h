@@ -6,8 +6,7 @@
 
 class SeedChooserScreen : public Sexy::Widget {
 private:
-    enum
-    {
+    enum {
         SeedChooserScreen_Start = 100,
         SeedChooserScreen_Random = 101,
         SeedChooserScreen_ViewLawn = 102,
@@ -18,42 +17,42 @@ private:
     };
 
 public:
-    Sexy::ButtonListener mButtonListener;            // 64
-    int unkMem1;                                     // 65
-    Sexy::GameButton *mImitaterButton;               // 66
-    ChosenSeed mChosenSeeds[54];                     // 67 ~ 930
-    LawnApp *mApp;                                   // 931
-    Board *mBoard;                                   // 932
-    int mSeedChooserAge;                             // 933
-    int mSeedsInFlight;                              // 934
-    int mSeedsInBothBank;                            // 935
-    int mSeedsIn1PBank;                              // 936
-    int unkMem2;                                     // 937
-    int *mToolTipWidget1;                            // 938
-    int *mToolTipWidget2;                            // 939
-    int mToolTipWidgetState1;                        // 940
-    int mToolTipWidgetState2;                        // 941
-    int mCursorPositionX1;                           // 942
-    int mCursorPositionX2;                           // 943
-    int mCursorPositionY1;                           // 944
-    int mCursorPositionY2;                           // 945
-    SeedChooserState mChooseState; // 946
-    int mViewLawnTime;                               // 947
-    bool unkBool;                                    // 3792
-    int mPlayerIndex;                                // 949
-    SeedType mSeedType1;                   // 950
-    SeedType mSeedType2;                   // 951
-    float unkF;                                      // 952
-    bool mIsZombieChooser;                           // 3812
-    SeedBank *mSeedBank1;                            // 954
-    SeedBank *mSeedBank2;                            // 955
-    int unkCounter;                                  // 956
-    int mImitaterDialogOpened;                       // 957
-    Sexy::GameButton *mViewLawnButton;               // 958
-    Sexy::GameButton *mStoreButton;                  // 959
-    Sexy::GameButton *mStartButton;                  // 960
-    Sexy::GameButton *mAlmanacButton;                // 961
-    int unkMems3[4];                                 // 962 ~ 965
+    Sexy::ButtonListener mButtonListener; // 64
+    int unkMem1;                          // 65
+    Sexy::GameButton *mImitaterButton;    // 66
+    ChosenSeed mChosenSeeds[54];          // 67 ~ 930
+    LawnApp *mApp;                        // 931
+    Board *mBoard;                        // 932
+    int mSeedChooserAge;                  // 933
+    int mSeedsInFlight;                   // 934
+    int mSeedsInBothBank;                 // 935
+    int mSeedsIn1PBank;                   // 936
+    int unkMem2;                          // 937
+    int *mToolTipWidget1;                 // 938
+    int *mToolTipWidget2;                 // 939
+    int mToolTipWidgetState1;             // 940
+    int mToolTipWidgetState2;             // 941
+    int mCursorPositionX1;                // 942
+    int mCursorPositionX2;                // 943
+    int mCursorPositionY1;                // 944
+    int mCursorPositionY2;                // 945
+    SeedChooserState mChooseState;        // 946
+    int mViewLawnTime;                    // 947
+    bool unkBool;                         // 3792
+    int mPlayerIndex;                     // 949
+    SeedType mSeedType1;                  // 950
+    SeedType mSeedType2;                  // 951
+    float unkF;                           // 952
+    bool mIsZombieChooser;                // 3812
+    SeedBank *mSeedBank1;                 // 954
+    SeedBank *mSeedBank2;                 // 955
+    int unkCounter;                       // 956
+    int mImitaterDialogOpened;            // 957
+    Sexy::GameButton *mViewLawnButton;    // 958
+    Sexy::GameButton *mStoreButton;       // 959
+    Sexy::GameButton *mStartButton;       // 960
+    Sexy::GameButton *mAlmanacButton;     // 961
+    int unkMems3[4];                      // 962 ~ 965
     // 大小966个整数
 
     SeedChooserScreen(bool theIsZombieChooser);
@@ -63,16 +62,16 @@ public:
     void RebuildHelpbar();
     SeedType GetZombieSeedType(SeedType theSeedType);
     ZombieType GetZombieType(ZombieType theZombieType);
-    void ClickedSeedInChooser(ChosenSeed* theChosenSeed, int thePlayerIndex);
+    void ClickedSeedInChooser(ChosenSeed *theChosenSeed, int thePlayerIndex);
     void CrazyDavePickSeeds();
     void OnStartButton();
     void Update();
     bool SeedNotAllowedToPick(SeedType theSeedType);
-    void ClickedSeedInBank(ChosenSeed* theChosenSeed, unsigned int thePlayerIndex);
+    void ClickedSeedInBank(ChosenSeed *theChosenSeed, unsigned int thePlayerIndex);
     void GameButtonDown(ButtonCode theButton, unsigned int thePlayerIndex);
-    void DrawPacket(Sexy::Graphics* g, int x, int y, SeedType theSeedType, SeedType theImitaterType, float thePercentDark, int theGrayness, Color* theColor, bool theDrawCost, bool theUseCurrentCost);
+    void DrawPacket(Sexy::Graphics *g, int x, int y, SeedType theSeedType, SeedType theImitaterType, float thePercentDark, int theGrayness, Color *theColor, bool theDrawCost, bool theUseCurrentCost);
     void ButtonDepress(int theId);
-    void GetSeedPositionInBank(int theIndex, int* x, int* y, int thePlayerIndex);
+    void GetSeedPositionInBank(int theIndex, int *x, int *y, int thePlayerIndex);
     void ShowToolTip(unsigned int thePlayerIndex);
     static SeedType GetZombieIndexBySeedType(SeedType theSeedType);
 

@@ -5,7 +5,6 @@ class VSSetUpMenu {
     int m;
 
 public:
-
 };
 
 inline void (*VSSetupMenu_GameButtonDown)(int *a, int a2, unsigned int a3, int a4);
