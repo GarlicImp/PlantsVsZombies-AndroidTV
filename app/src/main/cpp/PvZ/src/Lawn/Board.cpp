@@ -312,7 +312,7 @@ Plant *Board::AddPlant(int theGridX, int theGridY, SeedType theSeedType, SeedTyp
     if (theIsDoEffect) {
         DoPlantingEffects(theGridX, theGridY, aPlant);
     }
-    Challenge_PlantAdded(mChallenge, aPlant);
+    mChallenge->PlantAdded(aPlant);
 
     // 检查成就！
     Board_DoPlantingAchievementCheck(this, theSeedType);
@@ -378,7 +378,7 @@ void Board_parseFormationSegment(Board *board, char *segment) {
                 plant->mPlantHealth = (plant->mPlantMaxHealth * (3 - damageState) / 3) - 1;
             }
             if (isIZombieLevel) {
-                Challenge_IZombieSetupPlant(board->mChallenge, plant);
+                board->mChallenge->IZombieSetupPlant(plant);
             }
             // Skip to next coordinate
             while (*cursor != ' ' && *cursor != '\0') {
@@ -562,9 +562,9 @@ void Board::DrawCoverLayer(Sexy::Graphics *g, int theRow) {
 
     if (mBackground <= BackgroundType::BACKGROUND_4_FOG) {
         // 如果是前院(0 1)或者泳池(2 3)，则绘制草丛。整个草丛都是动画而非贴图，没有僵尸来的时候草丛会保持在动画第一帧。
-        Reanimation *reanimation = LawnApp_ReanimationTryToGet(mApp, mCoverLayerAnimIDs[theRow]);
-        if (reanimation != nullptr) {
-            Reanimation_Draw(reanimation, g);
+        Reanimation *aReanim = mApp->ReanimationTryToGet(mCoverLayerAnimIDs[theRow]);
+        if (aReanim != nullptr) {
+            Reanimation_Draw(aReanim, g);
         }
     }
     if (theRow == 6) {
@@ -1014,7 +1014,7 @@ void Board::Update() {
             if (choiceSeedType < SeedType::NUM_SEED_TYPES && !mGamepadControls2->mIsZombie) {
                 mSeedBank2->mSeedPackets[choiceSeedPacketIndex].mPacketType = isImitaterSeed ? SeedType::SEED_IMITATER : choiceSeedType;
                 mSeedBank2->mSeedPackets[choiceSeedPacketIndex].mImitaterType = isImitaterSeed ? choiceSeedType : SeedType::SEED_NONE;
-            } else if (Challenge_IsZombieSeedType(choiceSeedType) && mGamepadControls2->mIsZombie)
+            } else if (Challenge::IsZombieSeedType(choiceSeedType) && mGamepadControls2->mIsZombie)
                 mSeedBank2->mSeedPackets[choiceSeedPacketIndex].mPacketType = choiceSeedType;
         }
         setSeedPacket = false;
@@ -1068,7 +1068,7 @@ void Board::Update() {
                     if (isImitaterPlant)
                         theBuiltPlant->SetImitaterFilterEffect();
                     if (isIZMode)
-                        Challenge_IZombieSetupPlant(mChallenge, theBuiltPlant);
+                        mChallenge->IZombieSetupPlant(theBuiltPlant);
                 }
             }
         }
@@ -1079,7 +1079,7 @@ void Board::Update() {
                 if (isImitaterPlant)
                     theBuiltPlant->SetImitaterFilterEffect();
                 if (isIZMode)
-                    Challenge_IZombieSetupPlant(mChallenge, theBuiltPlant);
+                    mChallenge->IZombieSetupPlant(theBuiltPlant);
             }
         }
         // 单列
@@ -1089,7 +1089,7 @@ void Board::Update() {
                 if (isImitaterPlant)
                     theBuiltPlant->SetImitaterFilterEffect();
                 if (isIZMode)
-                    Challenge_IZombieSetupPlant(mChallenge, theBuiltPlant);
+                    mChallenge->IZombieSetupPlant(theBuiltPlant);
             }
         }
         // 单格
@@ -1098,7 +1098,7 @@ void Board::Update() {
             if (isImitaterPlant)
                 theBuiltPlant->SetImitaterFilterEffect();
             if (isIZMode)
-                Challenge_IZombieSetupPlant(mChallenge, theBuiltPlant);
+                mChallenge->IZombieSetupPlant(theBuiltPlant);
         }
         plantBuild = false;
     }
@@ -1121,18 +1121,18 @@ void Board::Update() {
             else if (BuildZombieX == 9 && BuildZombieY == 6)
                 for (int x = 0; x < colsCount; ++x)
                     for (int y = 0; y < rowsCount; ++y)
-                        Challenge_IZombiePlaceZombie(mChallenge, theBuildZombieType, x, y);
+                        mChallenge->IZombiePlaceZombie(theBuildZombieType, x, y);
             // 单行
             else if (BuildZombieX == 9 && BuildZombieY < 6)
                 for (int x = 0; x < colsCount; ++x)
-                    Challenge_IZombiePlaceZombie(mChallenge, theBuildZombieType, x, BuildZombieY);
+                    mChallenge->IZombiePlaceZombie(theBuildZombieType, x, BuildZombieY);
             // 单列
             else if (BuildZombieX < 9 && BuildZombieY == 6)
                 for (int y = 0; y < rowsCount; ++y)
-                    Challenge_IZombiePlaceZombie(mChallenge, theBuildZombieType, BuildZombieX, y);
+                    mChallenge->IZombiePlaceZombie(theBuildZombieType, BuildZombieX, y);
             // 单格
             else if (BuildZombieX < colsCount && BuildZombieY < rowsCount)
-                Challenge_IZombiePlaceZombie(mChallenge, theBuildZombieType, BuildZombieX, BuildZombieY);
+                mChallenge->IZombiePlaceZombie(theBuildZombieType, BuildZombieX, BuildZombieY);
         }
         zombieBuild = false;
     }
@@ -1151,7 +1151,7 @@ void Board::Update() {
             }
             for (int x = 0; x < colsCount; ++x) {
                 for (int y = 0; y < rowsCount; ++y) {
-                    Challenge_GraveDangerSpawnGraveAt(mChallenge, x, y);
+                    mChallenge->GraveDangerSpawnGraveAt(x, y);
                 }
             }
         }
@@ -1164,7 +1164,7 @@ void Board::Update() {
                 }
             }
             for (int x = 0; x < colsCount; ++x) {
-                Challenge_GraveDangerSpawnGraveAt(mChallenge, x, BuildZombieY);
+                mChallenge->GraveDangerSpawnGraveAt(x, BuildZombieY);
             }
         }
         // 单列
@@ -1176,12 +1176,12 @@ void Board::Update() {
                 }
             }
             for (int y = 0; y < rowsCount; ++y) {
-                Challenge_GraveDangerSpawnGraveAt(mChallenge, BuildZombieX, y);
+                mChallenge->GraveDangerSpawnGraveAt(BuildZombieX, y);
             }
         }
         // 单格
         else if (BuildZombieX < 9 && BuildZombieY < 6) {
-            Challenge_GraveDangerSpawnGraveAt(mChallenge, BuildZombieX, BuildZombieY);
+            mChallenge->GraveDangerSpawnGraveAt(BuildZombieX, BuildZombieY);
         }
         graveBuild = false;
     }
@@ -1985,7 +1985,7 @@ void Board::MouseDown(int x, int y, int theClickCount) {
         return;
     }
 
-    if (Challenge_MouseDown(mChallenge, x, y, 0, &hitResult, 0)) {
+    if (mChallenge->MouseDown(x, y, 0, &hitResult, 0)) {
         if (LawnApp_IsScaryPotterLevel(mApp)) {
             requestDrawShovelInCursor = false;
         }
@@ -2601,7 +2601,7 @@ void Board::MouseDownSecond(int x, int y, int theClickCount) {
         return;
     }
 
-    if (Challenge_MouseDown(mChallenge, x, y, 0, &hitResult, 0)) {
+    if (mChallenge->MouseDown(x, y, 0, &hitResult, 0)) {
         if (LawnApp_IsScaryPotterLevel(mApp)) {
             requestDrawShovelInCursor = false;
         }
@@ -3001,7 +3001,7 @@ void Board::ButtonDepress(int theId) {
         } else if (lawnApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN) {
             ZenGarden_OpenStore(lawnApp->mZenGarden);
         } else if (lawnApp->mGameMode == GameMode::GAMEMODE_TREE_OF_WISDOM) {
-            Challenge_TreeOfWisdomOpenStore(lawnApp->mBoard->mChallenge);
+            lawnApp->mBoard->mChallenge->TreeOfWisdomOpenStore();
         }
     }
     old_Board_ButtonDepress(this, theId);
@@ -3292,9 +3292,48 @@ int Board::PixelToGridXKeepOnBoard(int theX, int theY) {
     return max(aGridX, 0);
 }
 
+int Board::GridToPixelX(int theGridX, int theGridY) {
+    if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN) {
+        if (mBackground == BackgroundType::BACKGROUND_GREENHOUSE || mBackground == BackgroundType::BACKGROUND_MUSHROOM_GARDEN || mBackground == BackgroundType::BACKGROUND_ZOMBIQUARIUM) {
+            return mApp->mZenGarden->GridToPixelX(theGridX, theGridY);
+        }
+    }
+
+    return theGridX * 80 + LAWN_XMIN;
+}
+
 int Board::PixelToGridYKeepOnBoard(int theX, int theY) {
     int aGridY = PixelToGridY(max(theX, 80), theY);
     return max(aGridY, 0);
+}
+
+int Board::GridToPixelY(int theGridX, int theGridY) {
+    if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN) {
+        if (mBackground == BackgroundType::BACKGROUND_GREENHOUSE || mBackground == BackgroundType::BACKGROUND_MUSHROOM_GARDEN || mBackground == BackgroundType::BACKGROUND_ZOMBIQUARIUM) {
+            return mApp->mZenGarden->GridToPixelY(theGridX, theGridY);
+        }
+    }
+
+    int aY;
+    if (StageHasRoof()) {
+        int aSlopeOffset;
+        if (theGridX < 5) {
+            aSlopeOffset = (5 - theGridX) * 20;
+        } else {
+            aSlopeOffset = 0;
+        }
+        aY = theGridY * 85 + aSlopeOffset + LAWN_YMIN - 10;
+    } else if (StageHasPool()) {
+        aY = theGridY * 85 + LAWN_YMIN;
+    } else {
+        aY = theGridY * 100 + LAWN_YMIN;
+    }
+
+    if (theGridX != -1 && mGridSquareType[theGridX][theGridY] == GridSquareType::GRIDSQUARE_HIGH_GROUND) {
+        aY -= HIGH_GROUND_HEIGHT;
+    }
+
+    return aY;
 }
 
 int GetRectOverlap(const Rect &rect1, const Rect &rect2) {
@@ -3348,6 +3387,10 @@ bool GetCircleRectOverlap(int theCircleX, int theCircleY, int theRadius, const R
     } else {
         return dy <= theRadius;
     }
+}
+
+int Board::MakeRenderOrder(RenderLayer theRenderLayer, int theRow, int theLayerOffset) {
+    return theRow * (int)RenderLayer::RENDER_LAYER_ROW_OFFSET + theRenderLayer + theLayerOffset;
 }
 
 void FixBoardAfterLoad(Board *board) {

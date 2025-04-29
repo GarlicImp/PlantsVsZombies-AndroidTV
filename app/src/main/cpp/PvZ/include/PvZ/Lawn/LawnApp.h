@@ -4,6 +4,8 @@
 #include "PvZ/Enums.h"
 #include "PvZ/Symbols.h"
 
+class ZenGarden;
+
 class LawnApp : public SexyAppBase {
 public:
     Board *mBoard;                           // 552
@@ -34,7 +36,7 @@ public:
     int mMaxTime;                            // 581
     bool mEasyPlantingCheat;                 // 2328
     PoolEffect *mPoolEffect;                 // 583
-    int *mZenGarden;                         // 584
+    ZenGarden *mZenGarden;                   // 584
     EffectSystem *mEffectSystem;             // 585
     ReanimatorCache *mReanimatorCache;       // 586
     PlayerInfo *mPlayerInfo;                 // 587
@@ -94,6 +96,7 @@ public:
     int *mMaskHelpWidget;                    // 708
 
     Reanimation *ReanimationGet(ReanimationID theReanimationID) { return reinterpret_cast<Reanimation *(*)(LawnApp *, ReanimationID)>(LawnApp_ReanimationGetAddr)(this, theReanimationID); }
+    Reanimation *ReanimationTryToGet(ReanimationID theReanimationID) { return reinterpret_cast<Reanimation *(*)(LawnApp *, ReanimationID)>(LawnApp_ReanimationTryToGetAddr)(this, theReanimationID); }
 
     void KillSeedChooserScreen();
     bool IsIZombieLevel();
@@ -129,8 +132,6 @@ inline void (*LawnApp_DoCheatDialog)(LawnApp *lawnApp);
 inline void (*LawnApp_DoCheatCodeDialog)(LawnApp *lawnApp);
 
 inline void (*LawnApp_DoUserDialog)(LawnApp *lawnApp);
-
-inline Reanimation *(*LawnApp_ReanimationTryToGet)(LawnApp *lawnApp, ReanimationID a2);
 
 inline void (*LawnApp_ClearSecondPlayer)(LawnApp *lawnApp);
 

@@ -308,9 +308,9 @@ void Sexy_MemoryImage_PopTransform(Sexy::Image *image);
 
 void Sexy_MemoryImage_ClearRect(Sexy::Image *a1, Sexy::Rect *a2);
 
-Sexy::Image *FilterEffectCreateImage(Sexy::Image *image, FilterEffectType);
+Sexy::Image *FilterEffectCreateImage(Sexy::Image *image, FilterEffect);
 
-Sexy::Image *FilterEffectGetImage(Sexy::Image *image, FilterEffectType);
+Sexy::Image *FilterEffectGetImage(Sexy::Image *image, FilterEffect);
 
 bool Sexy_SexyAppBase_Is3DAccelerated(LawnApp *);
 

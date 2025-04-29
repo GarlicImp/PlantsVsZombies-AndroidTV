@@ -47,7 +47,7 @@ void GridItem::DrawScaryPot(Sexy::Graphics* g) {
             }
             ReanimatorCache_DrawCachedZombie(mApp->mReanimatorCache, &aInsideGraphics, theOffsetX + aXPos, theOffsetY + aYPos, mZombieType);
         } else if (mScaryPotType == ScaryPotType::SCARYPOT_SUN) {
-            int aSuns = Challenge_ScaryPotterCountSunInPot(mBoard->mChallenge, this);
+            int aSuns = mBoard->mChallenge->ScaryPotterCountSunInPot(this);
 
             Reanimation aReanim;
             Reanimation_Reanimation(&aReanim);

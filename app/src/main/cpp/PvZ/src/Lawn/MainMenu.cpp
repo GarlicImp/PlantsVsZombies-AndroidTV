@@ -335,7 +335,7 @@ void MainMenu::KeyDown(Sexy::KeyCode theKeyCode) {
 
 void MainMenu_UpdateHouseReanim(MainMenu *mainMenu) {
 
-    Reanimation *mMainMenuReanim = LawnApp_ReanimationTryToGet(mainMenu->mApp, mainMenu->mMainMenuReanimID);
+    Reanimation *mMainMenuReanim = mainMenu->mApp->ReanimationTryToGet(mainMenu->mMainMenuReanimID);
     if (mMainMenuReanim == nullptr)
         return;
     Reanimation_SetImageDefinition(mMainMenuReanim, "leaderboards", addonImages.leaderboards);
@@ -346,7 +346,7 @@ void MainMenu_UpdateHouseReanim(MainMenu *mainMenu) {
     Reanimation_SetImageOrigin(mMainMenuReanim, "Hood3", addonImages.hood3_house);
     Reanimation_SetImageOrigin(mMainMenuReanim, "Hood4", addonImages.hood4_house);
     Reanimation_SetImageOrigin(mMainMenuReanim, "ground color copy", addonImages.house_hill_house);
-    Reanimation *houseReanimation = LawnApp_ReanimationTryToGet(mainMenu->mApp, mainMenu->mHouseReanimID);
+    Reanimation *houseReanimation = mainMenu->mApp->ReanimationTryToGet(mainMenu->mHouseReanimID);
     if (houseReanimation == nullptr)
         return;
     LawnApp_SetHouseReanim(mainMenu->mApp, houseReanimation);
@@ -381,7 +381,7 @@ void MainMenu_EnableButtons(MainMenu *mainMenu) {
     zombatarButton->mFocusLinks[2] = zombatarButton->mFocusLinks[0];
     zombatarButton->mFocusLinks[3] = zombatarButton->mFocusLinks[0];
     Sexy_Widget_Resize(zombatarButton, addonImages.SelectorScreen_WoodSign3->mWidth / 2, 0, addonImages.SelectorScreen_WoodSign3->mWidth, addonImages.SelectorScreen_WoodSign3->mHeight);
-    Reanimation *mainMenuReanim = LawnApp_ReanimationTryToGet(mainMenu->mApp, mainMenu->mMainMenuReanimID);
+    Reanimation *mainMenuReanim = mainMenu->mApp->ReanimationTryToGet(mainMenu->mMainMenuReanimID);
     if (mainMenuReanim == nullptr)
         return;
     Reanimation_HideTrack(mainMenuReanim, "unlock stem", true);
@@ -399,7 +399,7 @@ void MainMenu_EnableButtons(MainMenu *mainMenu) {
 
     //    if (mainMenu->mPressedButtonId == UNLOCK_BUTTON) {
     //        LOGD("123123213");
-    //        Reanimation *mainMenuReanim = LawnApp_ReanimationTryToGet(mainMenu->mApp, mainMenu->mMainMenuReanimID);
+    //        Reanimation *mainMenuReanim = ReanimationTryToGet(mainMenu->mApp, mainMenu->mMainMenuReanimID);
     //        if (mainMenuReanim != nullptr) {
     //            int index = Reanimation_FindTrackIndex(mainMenuReanim, "unlock");
     //            ReanimatorTrack *reanimatorTrack = mainMenuReanim->mDefinition->mTracks + index;
@@ -480,7 +480,7 @@ int theOffsetY1 = 60;
 void MainMenu::UpdateCameraPosition() {
     old_MainMenu_UpdateCameraPosition(this);
     if (showHouse) {
-        Reanimation *houseAnim = LawnApp_ReanimationTryToGet(mApp, mHouseReanimID);
+        Reanimation *houseAnim = mApp->ReanimationTryToGet(mHouseReanimID);
         if (houseAnim != nullptr) {
             Reanimation_SetPosition(houseAnim, mCameraPositionX + theOffsetX, mCameraPositionY + theOffsetY);
         }
@@ -495,7 +495,7 @@ void MainMenu::AddedToManager(int *a2) {
     //    Reanimation *reanimation = LawnApp_AddReanimation(mainMenu->mApp, mainMenu->mCameraPositionX + theOffsetX,mainMenu->mCameraPositionY + theOffsetY, 0,
     //    ReanimationType::REANIM_LEADERBOARDS_HOUSE);
     reanimation->mCustomFilterEffectColor = {142, 146, 232, 92};
-    reanimation->mFilterEffect = FilterEffectType::FILTEREFFECT_CUSTOM;
+    reanimation->mFilterEffect = FilterEffect::FILTEREFFECT_CUSTOM;
 
 
     LawnApp_SetHouseReanim(mApp, reanimation);
@@ -537,11 +537,11 @@ void MainMenu::Draw(Sexy::Graphics *g) {
         || (*(int (**)(LawnApp *, int))(*(uint32_t *)mApp + 412))(mApp, 60))
         return;
 
-    Reanimation *mainMenuReanim = LawnApp_ReanimationTryToGet(mApp, mMainMenuReanimID);
+    Reanimation *mainMenuReanim = mApp->ReanimationTryToGet(mMainMenuReanimID);
     if (mainMenuReanim == nullptr)
         return;
-    Reanimation *skyReanim = LawnApp_ReanimationTryToGet(mApp, mSkyReanimID);
-    Reanimation *sky2Reanim = LawnApp_ReanimationTryToGet(mApp, mSky2ReanimID);
+    Reanimation *skyReanim = mApp->ReanimationTryToGet(mSkyReanimID);
+    Reanimation *sky2Reanim = mApp->ReanimationTryToGet(mSky2ReanimID);
 
     if (skyReanim != nullptr && sky2Reanim != nullptr) {
         Reanimation_DrawRenderGroup(skyReanim, g, 0);
@@ -552,7 +552,7 @@ void MainMenu::Draw(Sexy::Graphics *g) {
         sky2Reanim->mOverlayMatrix = tmp;
     }
     Reanimation_DrawRenderGroup(mainMenuReanim, g, 1);
-    Reanimation *houseAnim = LawnApp_ReanimationTryToGet(mApp, mHouseReanimID);
+    Reanimation *houseAnim = mApp->ReanimationTryToGet(mHouseReanimID);
     if (houseAnim != nullptr) {
 
         int TrackIndex = Reanimation_FindTrackIndex(mainMenuReanim, "House");
@@ -568,12 +568,12 @@ void MainMenu::Draw(Sexy::Graphics *g) {
     }
     Reanimation_DrawRenderGroup(mainMenuReanim, g, 0);
     if (mScene == 2) {
-        Reanimation *butterFlyReanim = LawnApp_ReanimationTryToGet(mApp, mButterflyReanimID);
+        Reanimation *butterFlyReanim = mApp->ReanimationTryToGet(mButterflyReanimID);
         if (butterFlyReanim != nullptr) {
             Reanimation_Draw(butterFlyReanim, g);
         }
     }
-    Reanimation *crowReanim = LawnApp_ReanimationTryToGet(mApp, mCrowReanimID);
+    Reanimation *crowReanim = mApp->ReanimationTryToGet(mCrowReanimID);
     if (crowReanim != nullptr && (!unkBool5 || mExitCounter <= 65)) {
         Reanimation_Draw(crowReanim, g);
     }

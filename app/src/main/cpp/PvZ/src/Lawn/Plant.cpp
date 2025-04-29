@@ -334,7 +334,7 @@ void Plant::Draw(Sexy::Graphics *g) {
     if (IsInPlay() && LawnApp_IsIZombieLevel(mApp)) {
         mBoard->mChallenge->IZombieDrawPlant(g, this);
     } else if (mBodyReanimID != 0) {
-        Reanimation *reanimation2 = LawnApp_ReanimationTryToGet(mApp, mBodyReanimID);
+        Reanimation *reanimation2 = mApp->ReanimationTryToGet(mBodyReanimID);
         if (reanimation2 != nullptr) {
             //            if (plant->mGloveGrabbed)
             //            {
@@ -505,7 +505,7 @@ void Plant::DrawSeedType(Sexy::Graphics *g, SeedType theSeedType, SeedType theIm
         v25 = v25 + g->mScaleX * 80.0;
         g->mScaleX = -g->mScaleX;
     }
-    if (Challenge_IsZombieSeedType(theSeedType2)) {
+    if (Challenge::IsZombieSeedType(theSeedType2)) {
         ZombieType theZombieType = Challenge::IZombieSeedTypeToZombieType(theSeedType2);
         if (theZombieType != ZombieType::ZOMBIE_INVALID) {
             ReanimatorCache_DrawCachedZombie(lawnApp->mReanimatorCache, g, thePosX, thePosY, theZombieType);
@@ -699,7 +699,7 @@ int Plant::GetRefreshTime(SeedType theSeedType, SeedType theImitaterType) {
         if (theSeedType == SeedType::SEED_IMITATER && theImitaterType != SeedType::SEED_NONE) {
             theSeedType = theImitaterType;
         }
-        if (Challenge_IsMPSeedType(theSeedType)) {
+        if (Challenge::IsMPSeedType(theSeedType)) {
             switch (theSeedType) {
                 case SeedType::SEED_ZOMBIE_TRASH_BIN:
                 case SeedType::SEED_ZOMBIE_TRAFFIC_CONE:
@@ -751,7 +751,7 @@ int Plant::GetRefreshTime(SeedType theSeedType, SeedType theImitaterType) {
                     break;
             }
         }
-        if (Challenge_IsMPSuddenDeath(lawnApp->mBoard->mChallenge) && *Challenge_gVSSuddenDeathMode_Addr == 1) {
+        if (lawnApp->mBoard->mChallenge->IsMPSuddenDeath() && *Challenge_gVSSuddenDeathMode_Addr == 1) {
             if (theSeedType == SeedType::SEED_ZOMBIE_TOMBSTONE || theSeedType == SeedType::SEED_SUNFLOWER || theSeedType == SeedType::SEED_TALLNUT || theSeedType == SeedType::SEED_WALLNUT
                 || theSeedType == SeedType::SEED_ZOMBIE_SCREEN_DOOR || theSeedType == SeedType::SEED_PUMPKINSHELL || theSeedType == SeedType::SEED_ZOMBIE_TRASH_BIN) {
                 return refreshTime;
@@ -866,17 +866,17 @@ Image *Plant::GetImage(SeedType theSeedType) {
 }
 
 void Plant::SetImitaterFilterEffect() {
-    FilterEffectType aFilterEffect = GetFilterEffectTypeBySeedType(mSeedType);
-    Reanimation *mBodyReanim = LawnApp_ReanimationTryToGet(mApp, mBodyReanimID);
+    FilterEffect aFilterEffect = GetFilterEffectTypeBySeedType(mSeedType);
+    Reanimation *mBodyReanim = mApp->ReanimationTryToGet(mBodyReanimID);
     if (mBodyReanim != nullptr)
         mBodyReanim->mFilterEffect = aFilterEffect;
-    Reanimation *mHeadReanim = LawnApp_ReanimationTryToGet(mApp, mHeadReanimID);
+    Reanimation *mHeadReanim = mApp->ReanimationTryToGet(mHeadReanimID);
     if (mHeadReanim != nullptr)
         mHeadReanim->mFilterEffect = aFilterEffect;
-    Reanimation *mHeadReanim2 = LawnApp_ReanimationTryToGet(mApp, mHeadReanimID2);
+    Reanimation *mHeadReanim2 = mApp->ReanimationTryToGet(mHeadReanimID2);
     if (mHeadReanim2 != nullptr)
         mHeadReanim2->mFilterEffect = aFilterEffect;
-    Reanimation *mHeadReanim3 = LawnApp_ReanimationTryToGet(mApp, mHeadReanimID3);
+    Reanimation *mHeadReanim3 = mApp->ReanimationTryToGet(mHeadReanimID3);
     if (mHeadReanim3 != nullptr)
         mHeadReanim3->mFilterEffect = aFilterEffect;
 }

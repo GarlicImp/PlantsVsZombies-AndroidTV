@@ -14,10 +14,30 @@
 
 #include <cstddef>
 
+SeedType gArtChallengeWallnut[MAX_GRID_SIZE_Y][MAX_GRID_SIZE_X] = {{SEED_NONE, SEED_NONE, SEED_NONE, SEED_NONE, SEED_WALLNUT, SEED_WALLNUT, SEED_WALLNUT, SEED_NONE, SEED_NONE},
+                                                                   {SEED_NONE, SEED_NONE, SEED_NONE, SEED_WALLNUT, SEED_NONE, SEED_NONE, SEED_NONE, SEED_WALLNUT, SEED_NONE},
+                                                                   {SEED_NONE, SEED_NONE, SEED_NONE, SEED_WALLNUT, SEED_NONE, SEED_NONE, SEED_NONE, SEED_WALLNUT, SEED_NONE},
+                                                                   {SEED_NONE, SEED_NONE, SEED_NONE, SEED_WALLNUT, SEED_NONE, SEED_NONE, SEED_NONE, SEED_WALLNUT, SEED_NONE},
+                                                                   {SEED_NONE, SEED_NONE, SEED_NONE, SEED_NONE, SEED_WALLNUT, SEED_WALLNUT, SEED_WALLNUT, SEED_NONE, SEED_NONE},
+                                                                   {SEED_NONE, SEED_NONE, SEED_NONE, SEED_NONE, SEED_NONE, SEED_NONE, SEED_NONE, SEED_NONE, SEED_NONE}};
+
+SeedType gArtChallengeSunFlower[MAX_GRID_SIZE_Y][MAX_GRID_SIZE_X] = {{SEED_NONE, SEED_NONE, SEED_STARFRUIT, SEED_STARFRUIT, SEED_STARFRUIT, SEED_NONE, SEED_NONE, SEED_NONE, SEED_NONE},
+                                                                     {SEED_NONE, SEED_STARFRUIT, SEED_WALLNUT, SEED_WALLNUT, SEED_WALLNUT, SEED_STARFRUIT, SEED_NONE, SEED_NONE, SEED_NONE},
+                                                                     {SEED_NONE, SEED_NONE, SEED_STARFRUIT, SEED_STARFRUIT, SEED_STARFRUIT, SEED_NONE, SEED_NONE, SEED_NONE, SEED_NONE},
+                                                                     {SEED_NONE, SEED_NONE, SEED_NONE, SEED_UMBRELLA, SEED_NONE, SEED_NONE, SEED_NONE, SEED_NONE, SEED_NONE},
+                                                                     {SEED_NONE, SEED_NONE, SEED_UMBRELLA, SEED_UMBRELLA, SEED_UMBRELLA, SEED_NONE, SEED_NONE, SEED_NONE, SEED_NONE},
+                                                                     {SEED_NONE, SEED_NONE, SEED_NONE, SEED_NONE, SEED_NONE, SEED_NONE, SEED_NONE, SEED_NONE, SEED_NONE}};
+
+SeedType gArtChallengeStarFruit[MAX_GRID_SIZE_Y][MAX_GRID_SIZE_X] = {{SEED_NONE, SEED_NONE, SEED_NONE, SEED_STARFRUIT, SEED_NONE, SEED_NONE, SEED_NONE, SEED_NONE, SEED_NONE},
+                                                                     {SEED_NONE, SEED_NONE, SEED_NONE, SEED_STARFRUIT, SEED_STARFRUIT, SEED_NONE, SEED_NONE, SEED_NONE, SEED_NONE},
+                                                                     {SEED_NONE, SEED_STARFRUIT, SEED_STARFRUIT, SEED_STARFRUIT, SEED_STARFRUIT, SEED_STARFRUIT, SEED_STARFRUIT, SEED_NONE, SEED_NONE},
+                                                                     {SEED_NONE, SEED_NONE, SEED_NONE, SEED_STARFRUIT, SEED_STARFRUIT, SEED_STARFRUIT, SEED_NONE, SEED_NONE, SEED_NONE},
+                                                                     {SEED_NONE, SEED_NONE, SEED_NONE, SEED_STARFRUIT, SEED_NONE, SEED_NONE, SEED_STARFRUIT, SEED_NONE, SEED_NONE},
+                                                                     {SEED_NONE, SEED_NONE, SEED_NONE, SEED_NONE, SEED_NONE, SEED_NONE, SEED_NONE, SEED_NONE, SEED_NONE}};
+
 Challenge::Challenge() {
     Create();
 }
-
 
 void Challenge::Create() {
     if (requestJumpSurvivalStage) {
@@ -31,7 +51,6 @@ void Challenge::Create() {
 
     old_Challenge_Challenge(this);
 }
-
 
 void Challenge::Update() {
     if (requestJumpSurvivalStage) {
@@ -77,7 +96,6 @@ void Challenge::Update() {
     return old_Challenge_Update(this);
 }
 
-
 void Challenge::HeavyWeaponFire(float a2, float a3) {
     // 设定重型武器子弹的发射角度
     if (a2 == 0 && a3 == 1) {
@@ -87,15 +105,16 @@ void Challenge::HeavyWeaponFire(float a2, float a3) {
     return old_Challenge_HeavyWeaponFire(this, a2, a3);
 }
 
-void Challenge_HeavyWeaponReanimUpdate(Challenge* challenge) {
-    Reanimation* heavyWeaponReanim = LawnApp_ReanimationTryToGet(challenge->mApp, challenge->mReanimHeavyWeaponID2);
+void Challenge::HeavyWeaponReanimUpdate() {
+    Reanimation* heavyWeaponReanim = mApp->ReanimationTryToGet(mReanimHeavyWeaponID2);
     if (heavyWeaponReanim == nullptr)
         return;
+
     SexyTransform2D sexyTransform2D;
     Sexy_SexyTransform2D_SexyTransform2D(&sexyTransform2D);
     Sexy_SexyTransform2D_Translate(&sexyTransform2D, -129.55, -71.45);
-    Sexy_SexyTransform2D_RotateRad(&sexyTransform2D, challenge->mHeavyWeaponAngle);
-    Sexy_SexyTransform2D_Translate(&sexyTransform2D, challenge->mHeavyWeaponX, challenge->mHeavyWeaponY);
+    Sexy_SexyTransform2D_RotateRad(&sexyTransform2D, mHeavyWeaponAngle);
+    Sexy_SexyTransform2D_Translate(&sexyTransform2D, mHeavyWeaponX, mHeavyWeaponY);
     Sexy_SexyTransform2D_Translate(&sexyTransform2D, 129.55, 71.45);
     Sexy_SexyTransform2D_Translate(&sexyTransform2D, 0.0, -20.0);
     heavyWeaponReanim->mOverlayMatrix = sexyTransform2D;
@@ -107,16 +126,16 @@ void Challenge::HeavyWeaponUpdate() {
 
     if (angle1 != 0) {
         mHeavyWeaponAngle = acosf(angle1) - 1.5708f;
-        Challenge_HeavyWeaponReanimUpdate(this);
+        HeavyWeaponReanimUpdate();
     }
 }
 
 void Challenge::IZombieDrawPlant(Sexy::Graphics* g, Plant* thePlant) {
     // 参照PC内测版源代码，在IZ模式绘制植物的函数开始前额外绘制纸板效果。
 
-    Reanimation* mBodyReanim = LawnApp_ReanimationTryToGet(mApp, thePlant->mBodyReanimID);
+    Reanimation* mBodyReanim = mApp->ReanimationTryToGet(thePlant->mBodyReanimID);
     if (mBodyReanim != nullptr) {
-        Challenge_IZombieSetPlantFilterEffect(this, thePlant, FilterEffectType::FILTEREFFECT_WHITE);
+        IZombieSetPlantFilterEffect(thePlant, FilterEffect::FILTEREFFECT_WHITE);
         float aOffsetX = g->mTransX;
         float aOffsetY = g->mTransY;
         Color theColor;
@@ -156,10 +175,10 @@ void Challenge::IZombieDrawPlant(Sexy::Graphics* g, Plant* thePlant) {
         theColor.mBlue = 160;
         theColor.mAlpha = 255;
         Sexy_Graphics_SetColor(g, &theColor);
-        Challenge_IZombieSetPlantFilterEffect(this, thePlant, FilterEffectType::FILTEREFFECT_NONE);
+        IZombieSetPlantFilterEffect(thePlant, FilterEffect::FILTEREFFECT_NONE);
         Reanimation_DrawRenderGroup(mBodyReanim, g, 0);
 
-        Challenge_IZombieSetPlantFilterEffect(this, thePlant, FilterEffectType::FILTEREFFECT_NONE);
+        IZombieSetPlantFilterEffect(thePlant, FilterEffect::FILTEREFFECT_NONE);
         Sexy_Graphics_SetDrawMode(g, DrawMode::DRAWMODE_NORMAL);
         Sexy_Graphics_SetColorizeImages(g, false);
     }
@@ -178,7 +197,7 @@ bool Challenge::IZombieEatBrain(Zombie* theZombie) {
     if (mHealth <= 0) {
         LawnApp_PlaySample(mApp, *Sexy_SOUND_GULP_Addr);
         GridItem_GridItemDie(aBrain);
-        Challenge_IZombieScoreBrain(this, aBrain);
+        IZombieScoreBrain(aBrain);
     }
     return true;
 }
@@ -191,7 +210,7 @@ void Challenge::DrawArtChallenge(Sexy::Graphics* g) {
 
     for (int theGridY = 0; theGridY < 6; theGridY++) {
         for (int theGridX = 0; theGridX < 9; theGridX++) {
-            SeedType ArtChallengeSeed = Challenge_GetArtChallengeSeed(this, theGridX, theGridY);
+            SeedType ArtChallengeSeed = GetArtChallengeSeed(theGridX, theGridY);
             if (ArtChallengeSeed != SeedType::SEED_NONE && Board_GetTopPlantAt(mBoard, theGridX, theGridY, PlantPriority::TOPPLANT_ONLY_NORMAL_POSITION) == nullptr) {
                 int x = Board_GridToPixelX(mBoard, theGridX, theGridY);
                 int y = Board_GridToPixelY(mBoard, theGridX, theGridY);
@@ -245,14 +264,14 @@ PlantingReason Challenge::CanPlantAt(int theGridX, int theGridY, SeedType theSee
                 return PlantingReason::PLANTING_OK;
             }
             return PlantingReason::PLANTING_NOT_HERE;
-        } else if (Challenge_IsZombieSeedType(theSeedType)) {
+        } else if (IsZombieSeedType(theSeedType)) {
             if (theGridX >= num) {
                 return PlantingReason::PLANTING_OK;
             }
             return PlantingReason::PLANTING_NOT_HERE;
         }
     } else if (LawnApp_IsArtChallenge(mApp)) {
-        SeedType artChallengeSeed = Challenge_GetArtChallengeSeed(this, theGridX, theGridY);
+        SeedType artChallengeSeed = GetArtChallengeSeed(theGridX, theGridY);
         if (artChallengeSeed != SeedType::SEED_NONE && artChallengeSeed != theSeedType && theSeedType != SeedType::SEED_LILYPAD && theSeedType != SeedType::SEED_PUMPKINSHELL) {
             return PlantingReason::PLANTING_NOT_ON_ART;
         }
@@ -267,7 +286,7 @@ PlantingReason Challenge::CanPlantAt(int theGridX, int theGridY, SeedType theSee
     } else if (LawnApp_IsFinalBossLevel(mApp) && theGridX >= 8) {
         return PlantingReason::PLANTING_NOT_HERE;
     } else if (aGameMode == GameMode::GAMEMODE_MP_VS_HIDE || aGameMode == GameMode::GAMEMODE_MP_VS) {
-        if (Challenge_IsMPSeedType(theSeedType)) {
+        if (IsMPSeedType(theSeedType)) {
             if (theGridX > 5 || theSeedType == SeedType::SEED_ZOMBIE_BUNGEE)
                 return PlantingReason::PLANTING_OK;
             return PlantingReason::PLANTING_NOT_PASSED_LINE_VS;
@@ -310,7 +329,7 @@ void Challenge::InitZombieWaves() {
                                    ZombieType::ZOMBIE_DOLPHIN_RIDER,
                                    ZombieType::ZOMBIE_LADDER,
                                    ZombieType::ZOMBIE_GARGANTUAR};
-        Challenge_InitZombieWavesFromList(this, zombieList, sizeof(zombieList) / sizeof(zombieList[0]));
+        InitZombieWavesFromList(zombieList, sizeof(zombieList) / sizeof(zombieList[0]));
     }
 }
 
@@ -344,6 +363,29 @@ void Challenge::LastStandUpdate() {
         mBoardStoreButton->mBtnNoDraw = false;
         mBoardStoreButton->mDisabled = false;
     }
+}
+
+int Challenge::IsMPSeedType(SeedType theSeedType) {
+    return theSeedType >= SEED_ZOMBIE_TOMBSTONE && theSeedType <= SEED_ZOMBIE_BALLOON;
+}
+
+int Challenge::IsZombieSeedType(SeedType theSeedType) {
+    return theSeedType >= SEED_ZOMBIE_TOMBSTONE && theSeedType <= SEED_ZOMBIE_BALLOON;
+}
+
+void Challenge::IZombieSetPlantFilterEffect(Plant* thePlant, FilterEffect theFilterEffect) {
+    Reanimation* aBodyReanim = mApp->ReanimationTryToGet(thePlant->mBodyReanimID);
+    Reanimation* aHeadReanim = mApp->ReanimationTryToGet(thePlant->mHeadReanimID);
+    Reanimation* aHeadReanim2 = mApp->ReanimationTryToGet(thePlant->mHeadReanimID2);
+    Reanimation* aHeadReanim3 = mApp->ReanimationTryToGet(thePlant->mHeadReanimID3);
+    if (aBodyReanim)
+        aBodyReanim->mFilterEffect = theFilterEffect;
+    if (aHeadReanim)
+        aHeadReanim->mFilterEffect = theFilterEffect;
+    if (aHeadReanim2)
+        aHeadReanim2->mFilterEffect = theFilterEffect;
+    if (aHeadReanim3)
+        aHeadReanim3->mFilterEffect = theFilterEffect;
 }
 
 ZombieType Challenge::IZombieSeedTypeToZombieType(SeedType theSeedType) {
@@ -399,6 +441,19 @@ ZombieType Challenge::IZombieSeedTypeToZombieType(SeedType theSeedType) {
             return ZOMBIE_BALLOON;
         default:
             return ZOMBIE_INVALID;
+    }
+}
+
+void Challenge::IZombiePlaceZombie(ZombieType theZombieType, int theGridX, int theGridY) {
+    Zombie* aZombie = mBoard->AddZombieInRow(theZombieType, theGridY, 0, 0);
+    if (theZombieType == ZOMBIE_BUNGEE) {
+        aZombie->mTargetCol = theGridX;
+        aZombie->SetRow(theGridX);
+        aZombie->mPosX = mBoard->GridToPixelX(theGridX, theGridY);
+        aZombie->mPosY = aZombie->GetPosYBasedOnRow(theGridY);
+        aZombie->mRenderOrder = Board::MakeRenderOrder(RENDER_LAYER_GRAVE_STONE, theGridY, 7);
+    } else {
+        aZombie->mPosX = mBoard->GridToPixelX(theGridX, theGridY) - 30.0f;
     }
 }
 
@@ -485,4 +540,51 @@ GridItem* Challenge::IZombieGetBrainTarget(Zombie* theZombie) {
 
 void Challenge::IZombieSquishBrain(GridItem* theBrain) {
     return old_Challenge_IZombieSquishBrain(this, theBrain);
+}
+
+int Challenge::ScaryPotterCountSunInPot(GridItem* theScaryPot) {
+    return theScaryPot->mSunCount;
+}
+
+SeedType Challenge::GetArtChallengeSeed(int theGridX, int theGridY) {
+    if (theGridY < 6) {
+
+        GameMode aGameMode = mApp->mGameMode;
+        if (aGameMode == GAMEMODE_CHALLENGE_ART_CHALLENGE_WALLNUT)
+            return gArtChallengeWallnut[theGridY][theGridX];
+        if (aGameMode == GAMEMODE_CHALLENGE_ART_CHALLENGE_SUNFLOWER)
+            return gArtChallengeSunFlower[theGridY][theGridX];
+        if (aGameMode == GAMEMODE_CHALLENGE_SEEING_STARS)
+            return gArtChallengeStarFruit[theGridY][theGridX];
+    }
+    return SEED_NONE;
+}
+
+void Challenge::InitZombieWavesFromList(ZombieType* theZombieList, int theListLength) {
+    for (int i = 0; i < theListLength; i++) {
+        mBoard->mZombieAllowed[(int)theZombieList[i]] = true;
+    }
+}
+
+void Challenge::IZombieSetupPlant(Plant* thePlant) {
+    Reanimation* aBodyReanim = mApp->ReanimationTryToGet(thePlant->mBodyReanimID);
+    Reanimation* aHeadReanim = mApp->ReanimationTryToGet(thePlant->mHeadReanimID);
+    Reanimation* aHeadReanim2 = mApp->ReanimationTryToGet(thePlant->mHeadReanimID2);
+    Reanimation* aHeadReanim3 = mApp->ReanimationTryToGet(thePlant->mHeadReanimID3);
+    if (aBodyReanim)
+        aBodyReanim->mAnimRate = 0;
+    if (aHeadReanim)
+        aHeadReanim->mAnimRate = 0;
+    if (aHeadReanim2)
+        aHeadReanim2->mAnimRate = 0;
+    if (aHeadReanim3)
+        aHeadReanim3->mAnimRate = 0;
+
+    if (thePlant->mSeedType == SEED_POTATOMINE) {
+        thePlant->PlayBodyReanim("anim_armed", REANIM_LOOP, 0, 0);
+        thePlant->mState = STATE_POTATO_ARMED;
+    }
+
+    thePlant->mBlinkCountdown = 0;
+    thePlant->UpdateReanim();
 }

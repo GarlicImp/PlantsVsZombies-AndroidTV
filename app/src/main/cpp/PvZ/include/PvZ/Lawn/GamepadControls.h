@@ -117,7 +117,7 @@ inline void (*old_ZenGardenControls_Update)(ZenGardenControls *a1, float a2);
 
 void GamepadControls_GamepadControls(GamepadControls *gamepadControls, Board *board, int a3, int a4);
 
-FilterEffectType GetFilterEffectTypeBySeedType(SeedType mSeedType);
+FilterEffect GetFilterEffectTypeBySeedType(SeedType mSeedType);
 
 void GamepadControls_pickUpCobCannon(int, int);
 
