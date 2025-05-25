@@ -285,7 +285,7 @@ void Plant::Draw(Sexy::Graphics *g) {
     if (IsOnBoard()) {
         thePlant = mBoard->GetPumpkinAt(mPlantCol, mRow);
         if (thePlant != nullptr) {
-            Plant *plant2 = Board_GetTopPlantAt(mBoard, mPlantCol, mRow, PlantPriority::TOPPLANT_ONLY_NORMAL_POSITION);
+            Plant *plant2 = mBoard->GetTopPlantAt(mPlantCol, mRow, PlantPriority::TOPPLANT_ONLY_NORMAL_POSITION);
             if (plant2 != nullptr && plant2->mRenderOrder > thePlant->mRenderOrder) {
                 plant2 = nullptr;
             }
@@ -352,8 +352,8 @@ void Plant::Draw(Sexy::Graphics *g) {
         SeedType seedType = SeedType::SEED_NONE;
         SeedType seedType2 = SeedType::SEED_NONE;
         if (mBoard != nullptr) {
-            seedType = Board_GetSeedTypeInCursor(mBoard, 0);
-            seedType2 = Board_GetSeedTypeInCursor(mBoard, 1);
+            seedType = mBoard->GetSeedTypeInCursor(0);
+            seedType2 = mBoard->GetSeedTypeInCursor(1);
         }
         if ((IsPartOfUpgradableTo(seedType) && mBoard->CanPlantAt(mPlantCol, mRow, seedType) == PlantingReason::PLANTING_OK)
             || (IsPartOfUpgradableTo(seedType2) && mBoard->CanPlantAt(mPlantCol, mRow, seedType2) == PlantingReason::PLANTING_OK)) {
@@ -555,11 +555,11 @@ void Plant::DoSpecial() {
 
     if (mSeedType == SeedType::SEED_CHERRYBOMB) {
         // 用于成就
-        int num1 = Board_GetLiveZombiesCount(mBoard);
+        int num1 = mBoard->GetLiveZombiesCount();
         old_Plant_DoSpecial(this);
-        int num2 = Board_GetLiveZombiesCount(mBoard);
+        int num2 = mBoard->GetLiveZombiesCount();
         if (num1 - num2 >= 10 && !LawnApp_IsLittleTroubleLevel(mApp)) {
-            Board_GrantAchievement(mBoard, AchievementId::ACHIEVEMENT_EXPLODONATOR, true);
+            mBoard->GrantAchievement(AchievementId::ACHIEVEMENT_EXPLODONATOR, true);
         }
         return;
     }
@@ -579,7 +579,7 @@ GridItem *Plant::FindTargetGridItem(PlantWeapon thePlantWeapon) {
     int aLastGridX = 0;
     if (mApp->mGameMode == GameMode::GAMEMODE_MP_VS) { // 如果是对战模式(关卡ID为76)
         int mRow = mStartRow;
-        while (Board_IterateGridItems(mBoard, &aGridItem)) { // 遍历场上的所有GridItem
+        while (mBoard->IterateGridItems(aGridItem)) { // 遍历场上的所有GridItem
 
             GridItemType mGridItemType = aGridItem->mGridItemType;
             if (mGridItemType != GridItemType::GRIDITEM_GRAVESTONE && mGridItemType != GridItemType::GRIDITEM_VS_TARGET_ZOMBIE) {

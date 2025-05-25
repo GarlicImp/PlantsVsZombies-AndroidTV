@@ -105,6 +105,9 @@ public:
     void PlaySample(int theSoundNum) { reinterpret_cast<void (*)(LawnApp *, int)>(LawnApp_PlaySampleAddr)(this, theSoundNum); }
     bool IsAdventureMode();
     bool IsScaryPotterLevel();
+    bool IsSlotMachineLevel();
+    bool IsSquirrelLevel();
+    bool IsSurvivalEndless(GameMode theGameMode);
 };
 
 /***************************************************************************************************************/

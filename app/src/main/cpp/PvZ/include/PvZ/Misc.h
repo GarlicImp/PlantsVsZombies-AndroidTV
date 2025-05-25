@@ -191,8 +191,6 @@ inline void (*Sexy_Widget_DeferOverlay)(Sexy::Widget *, int);
 
 inline int (*Mailbox_GetNumUnseenMessages)(int *);
 
-inline void (*LawnMower_StartMower)(int *);
-
 inline Sexy::Image *(*ReanimatorCache_MakeCachedPlantFrame)(ReanimatorCache *, SeedType, DrawVariation);
 
 inline Sexy::MemoryImage *(*ReanimatorCache_MakeBlankCanvasImage)(ReanimatorCache *, int, int);

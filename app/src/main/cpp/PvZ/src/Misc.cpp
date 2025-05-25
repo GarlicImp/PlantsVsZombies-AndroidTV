@@ -379,7 +379,7 @@ void DrawSeedPacket(Sexy::Graphics *graphics,
     if (drawCostText) {
         int tmpHolder[1];
         Board *board = lawnApp->mBoard;
-        if (board != nullptr && Board_PlantUsesAcceleratedPricing(board, realSeedType)) {
+        if (board != nullptr && board->PlantUsesAcceleratedPricing(realSeedType)) {
             if (isInGame) {
                 int CurrentPlantCost = board->GetCurrentPlantCost(seedType, imitaterType);
                 Sexy_StrFormat(tmpHolder, "%d", CurrentPlantCost);

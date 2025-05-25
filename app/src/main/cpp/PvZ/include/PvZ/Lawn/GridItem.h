@@ -2,6 +2,7 @@
 #define PVZ_LAWN_GRID_ITEM_H
 
 #include "PvZ/Enums.h"
+#include "PvZ/Symbols.h"
 
 class GridItem {
 public:
@@ -32,6 +33,8 @@ public:
     int unkMems[14];                         // 62 ~ 75
     // 大小76个整数
 
+    void GridItemDie() { reinterpret_cast<void (*)(GridItem *)>(GridItem_GridItemDieAddr)(this); }
+
     void DrawScaryPot(Sexy::Graphics *g);
     void Update();
     void UpdateScaryPot();
@@ -42,9 +45,6 @@ public:
 
 /***************************************************************************************************************/
 inline bool transparentVase;
-
-
-inline void (*GridItem_GridItemDie)(GridItem *gridItem);
 
 
 inline void (*old_GridItem_Update)(GridItem *a1);

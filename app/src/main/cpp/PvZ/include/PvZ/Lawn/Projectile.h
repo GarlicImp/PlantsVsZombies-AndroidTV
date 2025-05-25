@@ -45,7 +45,7 @@ public:
     int *mAttachmentID;             // 35
     float mCobTargetX;              // 36
     int mCobTargetRow;              // 37
-    Zombie *mTargetZombieID;        // 38
+    ZombieID mTargetZombieID;       // 38
     int mLastPortalX;               // 39
     int unkInt;                     // 40
     // 大小41个整数

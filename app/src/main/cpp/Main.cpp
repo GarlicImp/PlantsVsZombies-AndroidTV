@@ -818,7 +818,7 @@ extern "C" JNIEXPORT jstring JNICALL Java_com_android_support_CkHomuraMenu_GetCu
     KeyValuePair *hashTable[HASH_SIZE] = {nullptr};
 
     Plant *plant = nullptr;
-    while (Board_IteratePlants(board, &plant)) {
+    while (board->IteratePlants(plant)) {
         if (plant->mDead)
             continue;
         SeedType mSeedType = plant->mSeedType;
@@ -833,7 +833,7 @@ extern "C" JNIEXPORT jstring JNICALL Java_com_android_support_CkHomuraMenu_GetCu
         bool canBeAsleep = Plant::IsNocturnal(mSeedType);
         bool wakeUp = canBeAsleep && !mIsAsleep;
         bool imitaterMorphed = mSeedType == SeedType::SEED_IMITATER || mImitaterType == SeedType::SEED_IMITATER;
-        bool ladder = canHaveLadder && Board_GetLadderAt(board, mPlantCol, mRow) != nullptr;
+        bool ladder = canHaveLadder && board->GetLadderAt(mPlantCol, mRow) != nullptr;
         int key = mSeedType | (wakeUp << 6) | (imitaterMorphed << 7) | (ladder << 8);
         int value = mPlantCol | (mRow << 4);
 

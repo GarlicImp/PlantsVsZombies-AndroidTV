@@ -143,7 +143,7 @@ void Native_AudioOutput_shutdown(Native::AudioOutput *audioOutput) {
 }
 
 int Native_AudioOutput_write(Native::AudioOutput *audioOutput, const void *a2, int a3) {
-    //    return old_Native_AudioOutput_write(audioOutput,a2,a3);
+    //    return old_Native_AudioOutput_write(audioOutput,thePlayerIndex,a3);
     AudioWrite(a2, a3);
     return a3;
 }

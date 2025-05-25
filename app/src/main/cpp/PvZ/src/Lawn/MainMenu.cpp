@@ -81,7 +81,7 @@ void MainMenu::Update() {
         float num = mFadeCounterFloat + 0.005;
         mFadeCounterFloat = fmin(num, 1.0f);
     } else {
-        if (MainMenu_InTransition(this)) {
+        if (InTransition()) {
             gFoleyVolumeCounter++;
             FoleyType aType = MainMenu_GetFoleyTypeByScene(mScene);
             FoleyType aNextType = MainMenu_GetFoleyTypeByScene(mSceneNext);
@@ -190,7 +190,7 @@ void MainMenu::Update() {
 void MainMenu::ButtonPress(MainMenuButtonId theSelectedButton) {
     // 按下按钮的声音
     LawnApp *gLawnApp = (LawnApp *)*gLawnApp_Addr;
-    if (MainMenu_InTransition(gLawnApp->mGameSelector))
+    if (gLawnApp->mGameSelector->InTransition())
         return;
 
     switch (theSelectedButton) {
@@ -216,7 +216,7 @@ void MainMenu::ButtonPress(MainMenuButtonId theSelectedButton) {
 
 void MainMenu::ButtonDepress(MainMenuButtonId theSelectedButton) {
     // 为1.1.5解锁触控或确认键进入“更多游戏模式”
-    if (MainMenu_InTransition(this))
+    if (InTransition())
         return;
     if (mIsFading)
         return;
@@ -226,7 +226,7 @@ void MainMenu::ButtonDepress(MainMenuButtonId theSelectedButton) {
         return; // 在进入、退出成就时不允许玩家操作
     if (theSelectedButton == MORE_WAYS_BUTTON) {
         // 如果当前选中的按钮为"更多游戏方式"
-        MainMenu_SetScene(this, MENUSCENE_MORE_WAYS);
+        SetScene(MENUSCENE_MORE_WAYS);
         return;
     }
 
@@ -234,7 +234,7 @@ void MainMenu::ButtonDepress(MainMenuButtonId theSelectedButton) {
     switch (theSelectedButton) {
         case ADVENTURE_BUTTON:
         case START_ADVENTURE_BUTTON:
-            MainMenu_StartAdventureMode(this);
+            StartAdventureMode();
             if (LawnPlayerInfo_GetFlag(mApp->mPlayerInfo, 4096) && mApp->mPlayerInfo->mLevel == 35) {
                 mPressedButtonId = STORE_BUTTON;
                 unkBool3 = true;
@@ -296,7 +296,7 @@ void MainMenu::ButtonDepress(MainMenuButtonId theSelectedButton) {
 
 void MainMenu::KeyDown(Sexy::KeyCode theKeyCode) {
     // 为1.1.5解锁左方向键进入“更多游戏模式”
-    if (MainMenu_InTransition(this))
+    if (InTransition())
         return;
     if (mIsFading)
         return;
@@ -326,7 +326,7 @@ void MainMenu::KeyDown(Sexy::KeyCode theKeyCode) {
     MainMenuButtonId mSelectedButton = (MainMenuButtonId)mFocusedChildWidget->mWidgetId;
     if ((mSelectedButton == ADVENTURE_BUTTON || mSelectedButton == MORE_WAYS_BUTTON || mSelectedButton == START_ADVENTURE_BUTTON) && theKeyCode == Sexy::Left) {
         // 如果当前选中的按钮为"冒险模式"或者为"更多游戏方式"，同时玩家又按下了左方向键
-        MainMenu_SetScene(this, MENUSCENE_MORE_WAYS);
+        SetScene(MENUSCENE_MORE_WAYS);
         return;
     }
 
@@ -579,7 +579,7 @@ void MainMenu::Draw(Sexy::Graphics *g) {
     }
     Sexy_MenuWidget_Draw(this, g);
     Sexy_Widget_DeferOverlay(this, 0);
-    if (!MainMenu_InTransition(this))
+    if (!InTransition())
         (*((void (**)(MainMenu *, Sexy::Graphics *))vTable + 129))(this, g);
     SexyTransform2D v42;
     ReanimatorTransform v43;

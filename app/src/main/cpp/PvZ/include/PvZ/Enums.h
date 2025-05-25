@@ -1769,8 +1769,10 @@ public:
     bool mUnkBool;                    // 147
     bool mVolatile;                   // 148
     int unk2[20];                     // 38 ~ 57
-}; // 大小58个整数
-
+    // 大小58个整数
+    int GetWidth() { return mWidth; };
+    int GetHeight() { return mHeight; };
+};
 
 // public:
 class Font {

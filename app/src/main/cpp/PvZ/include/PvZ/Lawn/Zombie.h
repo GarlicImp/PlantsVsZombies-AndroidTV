@@ -124,8 +124,8 @@ public:
     int mFlyingHealth;                               // 61
     int mFlyingMaxHealth;                            // 62
     bool mDead;                                      // 252
-    Zombie *mRelatedZombieID;                        // 64
-    Zombie *mFollowerZombieID[MAX_ZOMBIE_FOLLOWERS]; // 65 ~ 68
+    ZombieID mRelatedZombieID;                        // 64
+    ZombieID mFollowerZombieID[MAX_ZOMBIE_FOLLOWERS]; // 65 ~ 68
     bool mPlayingSong;                               // 276
     int mParticleOffsetX;                            // 70
     int mParticleOffsetY;                            // 71

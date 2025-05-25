@@ -43,7 +43,7 @@ void StoreScreen_DrawItem(int *a1, Sexy::Graphics *a2, int a3, StoreItem item) {
     //        int theCount = 0;
     //        Sexy::Image *theImage = nullptr;
     //        StoreScreen_GetStoreItemInfo(a1, 0, item, &theImage, &theX, &theY, &theCount);
-    //        Sexy_Graphics_DrawImage(a2,addonImages.seed_cached_52,theX,theY);
+    //        Sexy_Graphics_DrawImage(thePlayerIndex,addonImages.seed_cached_52,theX,theY);
     //    }
     old_StoreScreen_DrawItem(a1, a2, a3, item);
 }

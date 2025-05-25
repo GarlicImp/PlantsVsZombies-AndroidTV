@@ -81,7 +81,7 @@ void SeedChooserScreen::Create(bool theIsZombieChooser) {
 
     if (mGameMode == GameMode::GAMEMODE_CHALLENGE_ART_CHALLENGE_WALLNUT) {
         ChosenSeed *theChosenSeed = &(mChosenSeeds[SeedType::SEED_WALLNUT]);
-        theChosenSeed->mX = Board_GetSeedPacketPositionX(mBoard, 0, 0, 0);
+        theChosenSeed->mX = mBoard->GetSeedPacketPositionX(0, 0, 0);
         theChosenSeed->mY = 8;
         theChosenSeed->mEndX = theChosenSeed->mX;
         theChosenSeed->mEndY = theChosenSeed->mY;
@@ -313,7 +313,7 @@ void SeedChooserScreen::ButtonDepress(int theId) {
 void SeedChooserScreen::GetSeedPositionInBank(int theIndex, int *x, int *y, int thePlayerIndex) {
     // 修复对战选卡时的错位
     if (mApp->mGameMode == GameMode::GAMEMODE_MP_VS) {
-        int SeedPacketPositionX = Board_GetSeedPacketPositionX(mBoard, theIndex, 0, mIsZombieChooser);
+        int SeedPacketPositionX = mBoard->GetSeedPacketPositionX(theIndex, 0, mIsZombieChooser);
         *x = mSeedBank1->mX + SeedPacketPositionX - mX;
         *y = mSeedBank1->mY + 8 - mY;
         return;

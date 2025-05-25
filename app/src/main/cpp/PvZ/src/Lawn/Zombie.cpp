@@ -352,7 +352,7 @@ void Zombie::BurnRow(int theRow) {
     // 辣椒僵尸被魅惑后的爆炸函数
 
     Zombie *aZombie = nullptr;
-    while (Board_IterateZombies(mBoard, &aZombie)) {
+    while (mBoard->IterateZombies(aZombie)) {
         if ((aZombie->mZombieType == ZombieType::ZOMBIE_BOSS || aZombie->mRow == theRow) && aZombie->EffectedByDamage(127)) {
             aZombie->RemoveColdEffects();
             aZombie->ApplyBurn();
@@ -360,13 +360,13 @@ void Zombie::BurnRow(int theRow) {
     }
 
     GridItem *aGridItem = nullptr;
-    while (Board_IterateGridItems(mBoard, &aGridItem)) {
+    while (mBoard->IterateGridItems(aGridItem)) {
         if (aGridItem->mGridY == theRow && aGridItem->mGridItemType == GridItemType::GRIDITEM_LADDER) {
-            GridItem_GridItemDie(aGridItem);
+            aGridItem->GridItemDie();
         }
     }
 
-    Zombie *aBossZombie = Board_GetBossZombie(mBoard);
+    Zombie *aBossZombie = mBoard->GetBossZombie();
     if (aBossZombie && aBossZombie->mFireballRow == theRow) {
         aBossZombie->BossDestroyIceballInRow(theRow);
     }
@@ -389,7 +389,7 @@ void Zombie::UpdateZombieJalapenoHead() {
             BurnRow(mRow);
         } else {
             Plant *aPlant = nullptr;
-            while (Board_IteratePlants(mBoard, &aPlant)) {
+            while (mBoard->IteratePlants(aPlant)) {
                 // Rect aPlantRect = aPlant->GetPlantRect();
                 if (aPlant->mRow == mRow && !aPlant->NotOnGround()) {
                     mBoard->mPlantsEaten++;
@@ -705,7 +705,7 @@ void Zombie::EatPlant(Plant *thePlant) {
     }
     int aPlantCol = thePlant->mPlantCol;
     int aRow = thePlant->mRow;
-    if (Board_GetLadderAt(mBoard, aPlantCol, aRow) != nullptr && mZombieType == ZombieType::ZOMBIE_DIGGER && mZombiePhase == ZombiePhase::PHASE_DIGGER_WALKING_WITHOUT_AXE && !IsWalkingBackwards()) {
+    if (mBoard->GetLadderAt(aPlantCol, aRow) != nullptr && mZombieType == ZombieType::ZOMBIE_DIGGER && mZombiePhase == ZombiePhase::PHASE_DIGGER_WALKING_WITHOUT_AXE && !IsWalkingBackwards()) {
         StopEating();
         if (mZombieHeight == ZombieHeight::HEIGHT_ZOMBIE_NORMAL && mUseLadderCol != aPlantCol) {
             mZombieHeight = ZombieHeight::HEIGHT_UP_LADDER;
@@ -735,7 +735,7 @@ void Zombie::BossSpawnAttack() {
     } else if (mBossMode == 2) {
         mSummonCounter = RandRangeInt(150, 250);
     }
-    mTargetRow = Board_PickRowForNewZombie(mBoard, 0);
+    mTargetRow = mBoard->PickRowForNewZombie(ZombieType::ZOMBIE_NORMAL);
     switch (mTargetRow) {
         case 0:
             PlayZombieReanim("anim_spawn_1", ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD, 20, 12.0);
@@ -942,7 +942,7 @@ bool Zombie::IsZombatarZombie(ZombieType theType) {
 
 void Zombie::DieNoLoot() {
     if (mZombieType == ZombieType::ZOMBIE_GARGANTUAR && mBoard != nullptr && mApp->mGameScene == GameScenes::SCENE_PLAYING) {
-        Board_GrantAchievement(mBoard, AchievementId::ACHIEVEMENT_GARG, true);
+        mBoard->GrantAchievement(AchievementId::ACHIEVEMENT_GARG, true);
     }
 
     if (IsZombatarZombie(mZombieType)) {
@@ -960,7 +960,7 @@ void Zombie::DrawBungeeCord(Sexy::Graphics *graphics, int theOffsetX, int theOff
     GetTrackPosition("Zombie_bungi_body", aPosX, aPosY);
     bool aSetClip = false;
     if (IsOnBoard() && LawnApp_IsFinalBossLevel(mApp)) {
-        Zombie *aBossZombie = Board_GetBossZombie(mBoard);
+        Zombie *aBossZombie = mBoard->GetBossZombie();
         int aClipAmount = 55;
         if (aBossZombie->mZombiePhase == ZombiePhase::PHASE_BOSS_BUNGEES_LEAVE) {
             Reanimation *reanimation = mApp->ReanimationGet(aBossZombie->mBodyReanimID);
@@ -1210,7 +1210,7 @@ bool Zombie::IsTangleKelpTarget() {
         return true;
     }
     Plant *aPlant = nullptr;
-    while (Board_IteratePlants(mBoard, &aPlant)) {
+    while (mBoard->IteratePlants(aPlant)) {
         if (!aPlant->mDead && aPlant->mSeedType == SeedType::SEED_TANGLEKELP && aPlant->mTargetZombieID == mZombieID) {
             return true;
         }

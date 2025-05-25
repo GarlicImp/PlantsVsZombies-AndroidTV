@@ -93,7 +93,7 @@ void Coin::UpdateFallForAward() {
         }
     } else if (mCoinMotion == CoinMotion::COIN_MOTION_FROM_NEAR_CURSOR) {
         if (mPlayerIndex >= 0) {
-            GamepadControls *gamepadControls = Board_GetGamepadControlsByPlayerIndex(mBoard, mPlayerIndex);
+            GamepadControls *gamepadControls = mBoard->GetGamepadControlsByPlayerIndex(mPlayerIndex);
             float v55 = gamepadControls->mCursorPositionX;
             float v56 = gamepadControls->mCursorPositionY;
             float v40 = (float)mWidth / 2;
@@ -143,7 +143,7 @@ void Coin::UpdateFallForAward() {
                 aParticleOffsetX += 2.0;
             } else if (mType == CoinType::COIN_VS_PLANT_TROPHY || mType == CoinType::COIN_VS_ZOMBIE_TROPHY) {
                 aParticleOffsetY -= 20.0;
-                int aRenderOrder = Board_MakeRenderOrder(700000, mRow, mHasBouncyArrow);
+                int aRenderOrder = Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_UI_TOP, mRow, mHasBouncyArrow);
                 TodParticleSystem *aParticle = LawnApp_AddTodParticle(mApp, mPosX, mPosY, aRenderOrder, ParticleEffect::PARTICLE_TROPHY_SPARKLE);
                 AttachParticle(mAttachmentID + 2, aParticle, 0, 0.0);
             } else if (mType == CoinType::COIN_AWARD_MONEY_BAG || mType == CoinType::COIN_AWARD_BAG_DIAMOND) {

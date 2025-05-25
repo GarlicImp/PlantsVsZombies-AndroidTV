@@ -2,6 +2,7 @@
 #define PVZ_LAWN_MAIN_MENU_H
 
 #include "PvZ/Enums.h"
+#include "PvZ/Symbols.h"
 
 class MainMenu : public Sexy::MenuWidget {
 public:
@@ -45,6 +46,10 @@ public:
     Sexy::Image *m2DMarkImage;            // 107
     // 大小108个整数
 public:
+    bool InTransition() { return reinterpret_cast<bool (*)(MainMenu *)>(MainMenu_InTransitionAddr)(this); };
+    void SetScene(MainMenuScene theScene) { reinterpret_cast<void (*)(MainMenu *, MainMenuScene)>(MainMenu_SetSceneAddr)(this, theScene); };
+    void StartAdventureMode() { reinterpret_cast<void (*)(MainMenu *)>(MainMenu_StartAdventureModeAddr)(this); };
+
     void Creat(LawnApp *theApp);
     void KeyDown(Sexy::KeyCode theKeyCode);
     void ButtonDepress(MainMenuButtonId theSelectedButton);
@@ -66,11 +71,6 @@ public:
     void ButtonPress(MainMenuButtonId theSelectedButton);
 };
 
-inline bool (*MainMenu_InTransition)(MainMenu *);
-
-inline void (*MainMenu_SetScene)(MainMenu *, MainMenuScene scene);
-
-inline void (*MainMenu_StartAdventureMode)(MainMenu *);
 
 inline void (*DaveHelp_DaveHelp)(LeaderboardsWidget *leaderboardsWidget, LawnApp *lawnApp);
 
