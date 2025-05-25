@@ -57,7 +57,8 @@ void GamepadControls_pickUpCobCannon(int gamePad, int cobCannon) {
     if (cobCannon != v8 && *(uint32_t *)(cobCannon + 76) == 37 && *((uint32_t *)gamePad + 24) != 8) {
         v14 = *((uint8_t *)gamePad + 200);
         if (!*((uint8_t *)gamePad + 200)) {
-            Board_ClearCursor((Board *)v10, v9);
+            Board *aBoard = reinterpret_cast<Board *>(v10); // 显式类型转换
+            aBoard->ClearCursor(v9);
             v15 = *(uint32_t *)(v13 + 348);
             v16 = (int)*((float *)gamePad + 27);
             v17 = (int)*((float *)gamePad + 28);
@@ -113,10 +114,10 @@ void GamepadControls_Draw(GamepadControls *gamepadControls, Sexy::Graphics *grap
             }
         }
         if (LawnApp_IsWhackAZombieLevel(lawnApp)) {
-            int theGridX = Board_PixelToGridXKeepOnBoard(board, gamepadControls->mCursorPositionX, gamepadControls->mCursorPositionY);
-            int theGridY = Board_PixelToGridYKeepOnBoard(board, gamepadControls->mCursorPositionX, gamepadControls->mCursorPositionY);
-            int thePixelX = Board_GridToPixelX(gamepadControls->mBoard, theGridX, theGridY);
-            int thePixelY = Board_GridToPixelY(gamepadControls->mBoard, theGridX, theGridY);
+            int theGridX = board->PixelToGridXKeepOnBoard(gamepadControls->mCursorPositionX, gamepadControls->mCursorPositionY);
+            int theGridY = board->PixelToGridYKeepOnBoard(gamepadControls->mCursorPositionX, gamepadControls->mCursorPositionY);
+            int thePixelX = gamepadControls->mBoard->GridToPixelX(theGridX, theGridY);
+            int thePixelY = gamepadControls->mBoard->GridToPixelY(theGridX, theGridY);
             graphics->mTransX += thePixelX;
             graphics->mTransY += thePixelY;
             GamepadControls_DrawPreview(gamepadControls, graphics);
@@ -138,10 +139,10 @@ void GamepadControls_Draw(GamepadControls *gamepadControls, Sexy::Graphics *grap
 void GamepadControls_Update(GamepadControls *gamepadControls, float a2) {
     Board *board = gamepadControls->mBoard;
     LawnApp *lawnApp = gamepadControls->mGameObject.mApp;
-    int theGridX = Board_PixelToGridXKeepOnBoard(board, gamepadControls->mCursorPositionX, gamepadControls->mCursorPositionY);
-    int theGridY = Board_PixelToGridYKeepOnBoard(board, gamepadControls->mCursorPositionX, gamepadControls->mCursorPositionY);
-    int mGridCenterPositionX = Board_GridToPixelX(board, theGridX, theGridY) + Board_GridCellWidth(board, theGridX, theGridY) / 2;
-    int mGridCenterPositionY = Board_GridToPixelY(board, theGridX, theGridY) + Board_GridCellHeight(board, theGridX, theGridY) / 2;
+    int theGridX = board->PixelToGridXKeepOnBoard(gamepadControls->mCursorPositionX, gamepadControls->mCursorPositionY);
+    int theGridY = board->PixelToGridYKeepOnBoard(gamepadControls->mCursorPositionX, gamepadControls->mCursorPositionY);
+    int mGridCenterPositionX = board->GridToPixelX(theGridX, theGridY) + board->GridCellWidth(theGridX, theGridY) / 2;
+    int mGridCenterPositionY = board->GridToPixelY(theGridX, theGridY) + board->GridCellHeight(theGridX, theGridY) / 2;
     // 键盘双人模式 平滑移动光标
     if (isKeyboardTwoPlayerMode) {
         if (gamepadControls->mPlayerIndex2 == 0) {
@@ -256,8 +257,8 @@ void GamepadControls_UpdatePreviewReanim(GamepadControls *gamepadControls) {
 
     GameMode mGameMode = lawnApp->mGameMode;
     Board *board = gamepadControls->mBoard;
-    int theGridX = Board_PixelToGridXKeepOnBoard(board, gamepadControls->mCursorPositionX, gamepadControls->mCursorPositionY);
-    int theGridY = Board_PixelToGridYKeepOnBoard(board, gamepadControls->mCursorPositionX, gamepadControls->mCursorPositionY);
+    int theGridX = board->PixelToGridXKeepOnBoard(gamepadControls->mCursorPositionX, gamepadControls->mCursorPositionY);
+    int theGridY = board->PixelToGridYKeepOnBoard(gamepadControls->mCursorPositionX, gamepadControls->mCursorPositionY);
     SeedBank *seedBank = GamepadControls_GetSeedBank(gamepadControls);
     SeedType mSeedType = cursorObject->mType;
     bool isImitater = seedBank->mSeedPackets[gamepadControls->mSelectedSeedIndex].mPacketType == SeedType::SEED_IMITATER;
@@ -283,8 +284,8 @@ void GamepadControls_UpdatePreviewReanim(GamepadControls *gamepadControls) {
     if (gamepadControls->mPreviewingSeedType != mSeedType && mSeedType != SeedType::SEED_NONE) {
         Reanimation *theNewPreviewingReanim = nullptr;
         GamepadControls_InvalidatePreviewReanim(gamepadControls);
-        int mRenderOrder = gamepadControls->mIsZombie ? 303000 : 302000;
-        int theRenderOrder = Board_MakeRenderOrder(mRenderOrder, theGridY, 100);
+        RenderLayer aRenderLayer = gamepadControls->mIsZombie ? RENDER_LAYER_ZOMBIE : RENDER_LAYER_PLANT;
+        int aRenderOrder = Board::MakeRenderOrder(aRenderLayer, theGridY, 100);
         float theDrawHeightOffset = PlantDrawHeightOffset(board, 0, mSeedType, theGridX, theGridY);
         if (gamepadControls->mIsZombie) {
             ZombieType theZombieType = Challenge::IZombieSeedTypeToZombieType(mSeedType);
@@ -301,7 +302,7 @@ void GamepadControls_UpdatePreviewReanim(GamepadControls *gamepadControls) {
                     break;
             }
             ZombieDefinition &theZombieDefinition = GetZombieDefinition(theZombieType);
-            Reanimation *zombieReanim = LawnApp_AddReanimation(lawnApp, -20.0, -35 - theDrawHeightOffset, theRenderOrder + 1, theZombieDefinition.mReanimationType);
+            Reanimation *zombieReanim = LawnApp_AddReanimation(lawnApp, -20.0, -35 - theDrawHeightOffset, aRenderOrder + 1, theZombieDefinition.mReanimationType);
             Zombie::SetupReanimLayers(zombieReanim, theZombieType);
             if (theZombieType == ZombieType::ZOMBIE_DOOR || theZombieType == ZombieType::ZOMBIE_TRASH_BIN || theZombieType == ZombieType::ZOMBIE_NEWSPAPER
                 || theZombieType == ZombieType::ZOMBIE_LADDER) {
@@ -399,7 +400,7 @@ void GamepadControls_UpdatePreviewReanim(GamepadControls *gamepadControls) {
         } else {
             if (mSeedType >= SeedType::NUM_SEED_TYPES || mSeedType == SeedType::NUM_SEEDS_IN_CHOOSER)
                 return;
-            Reanimation *plantReanim = LawnApp_AddReanimation(lawnApp, 0.0, theDrawHeightOffset, theRenderOrder + 2, GetPlantDefinition(mSeedType).mReanimationType);
+            Reanimation *plantReanim = LawnApp_AddReanimation(lawnApp, 0.0, theDrawHeightOffset, aRenderOrder + 2, GetPlantDefinition(mSeedType).mReanimationType);
             plantReanim->mIsAttachment = true;
             if (isImitater)
                 plantReanim->mFilterEffect = GetFilterEffectTypeBySeedType(mSeedType);
@@ -408,7 +409,7 @@ void GamepadControls_UpdatePreviewReanim(GamepadControls *gamepadControls) {
             // 为豌豆家族加入其stem动画
             if (mSeedType == SeedType::SEED_PEASHOOTER || mSeedType == SeedType::SEED_SNOWPEA || mSeedType == SeedType::SEED_REPEATER || mSeedType == SeedType::SEED_GATLINGPEA
                 || mSeedType == SeedType::SEED_LEFTPEATER) {
-                Reanimation *plantReanimAttachment = LawnApp_AddReanimation(lawnApp, 0.0, theDrawHeightOffset, theRenderOrder + 3, GetPlantDefinition(mSeedType).mReanimationType);
+                Reanimation *plantReanimAttachment = LawnApp_AddReanimation(lawnApp, 0.0, theDrawHeightOffset, aRenderOrder + 3, GetPlantDefinition(mSeedType).mReanimationType);
                 plantReanimAttachment->mLoopType = ReanimLoopType::REANIM_LOOP;
                 if (isImitater)
                     plantReanimAttachment->mFilterEffect = GetFilterEffectTypeBySeedType(mSeedType);
@@ -420,14 +421,14 @@ void GamepadControls_UpdatePreviewReanim(GamepadControls *gamepadControls) {
             }
             // 为反向射手的两个头、三发射手的三个头加入动画
             if (mSeedType == SeedType::SEED_SPLITPEA) {
-                Reanimation *plantReanimAttachment1 = LawnApp_AddReanimation(lawnApp, 0.0, 0.0, theRenderOrder + 3, GetPlantDefinition(mSeedType).mReanimationType);
+                Reanimation *plantReanimAttachment1 = LawnApp_AddReanimation(lawnApp, 0.0, 0.0, aRenderOrder + 3, GetPlantDefinition(mSeedType).mReanimationType);
                 plantReanimAttachment1->mAnimRate = plantReanim->mAnimRate;
                 plantReanimAttachment1->mLoopType = ReanimLoopType::REANIM_LOOP;
                 if (isImitater)
                     plantReanimAttachment1->mFilterEffect = GetFilterEffectTypeBySeedType(mSeedType);
                 Reanimation_SetFramesForLayer(plantReanimAttachment1, "anim_head_idle");
                 Reanimation_AttachToAnotherReanimation(plantReanimAttachment1, plantReanim, "anim_idle");
-                Reanimation *plantReanimAttachment2 = LawnApp_AddReanimation(lawnApp, 0.0, 0.0, theRenderOrder + 3, GetPlantDefinition(mSeedType).mReanimationType);
+                Reanimation *plantReanimAttachment2 = LawnApp_AddReanimation(lawnApp, 0.0, 0.0, aRenderOrder + 3, GetPlantDefinition(mSeedType).mReanimationType);
                 plantReanimAttachment2->mAnimRate = plantReanim->mAnimRate;
                 plantReanimAttachment2->mLoopType = ReanimLoopType::REANIM_LOOP;
                 if (isImitater)
@@ -436,21 +437,21 @@ void GamepadControls_UpdatePreviewReanim(GamepadControls *gamepadControls) {
                 Reanimation_AttachToAnotherReanimation(plantReanimAttachment2, plantReanim, "anim_idle");
             } else if (mSeedType == SeedType::SEED_THREEPEATER) {
                 plantReanim->mAnimRate = RandRangeFloat(15.0, 20.0);
-                Reanimation *plantReanimAttachment1 = LawnApp_AddReanimation(lawnApp, 0.0, 0.0, theRenderOrder + 3, GetPlantDefinition(mSeedType).mReanimationType);
+                Reanimation *plantReanimAttachment1 = LawnApp_AddReanimation(lawnApp, 0.0, 0.0, aRenderOrder + 3, GetPlantDefinition(mSeedType).mReanimationType);
                 plantReanimAttachment1->mAnimRate = plantReanim->mAnimRate;
                 plantReanimAttachment1->mLoopType = ReanimLoopType::REANIM_LOOP;
                 if (isImitater)
                     plantReanimAttachment1->mFilterEffect = GetFilterEffectTypeBySeedType(mSeedType);
                 Reanimation_SetFramesForLayer(plantReanimAttachment1, "anim_head_idle1");
                 Reanimation_AttachToAnotherReanimation(plantReanimAttachment1, plantReanim, "anim_head1");
-                Reanimation *plantReanimAttachment2 = LawnApp_AddReanimation(lawnApp, 0.0, 0.0, theRenderOrder + 3, GetPlantDefinition(mSeedType).mReanimationType);
+                Reanimation *plantReanimAttachment2 = LawnApp_AddReanimation(lawnApp, 0.0, 0.0, aRenderOrder + 3, GetPlantDefinition(mSeedType).mReanimationType);
                 plantReanimAttachment2->mAnimRate = plantReanim->mAnimRate;
                 plantReanimAttachment2->mLoopType = ReanimLoopType::REANIM_LOOP;
                 if (isImitater)
                     plantReanimAttachment2->mFilterEffect = GetFilterEffectTypeBySeedType(mSeedType);
                 Reanimation_SetFramesForLayer(plantReanimAttachment2, "anim_head_idle2");
                 Reanimation_AttachToAnotherReanimation(plantReanimAttachment2, plantReanim, "anim_head2");
-                Reanimation *plantReanimAttachment3 = LawnApp_AddReanimation(lawnApp, 0.0, 0.0, theRenderOrder + 3, GetPlantDefinition(mSeedType).mReanimationType);
+                Reanimation *plantReanimAttachment3 = LawnApp_AddReanimation(lawnApp, 0.0, 0.0, aRenderOrder + 3, GetPlantDefinition(mSeedType).mReanimationType);
                 plantReanimAttachment3->mAnimRate = plantReanim->mAnimRate;
                 plantReanimAttachment3->mLoopType = ReanimLoopType::REANIM_LOOP;
                 if (isImitater)
@@ -511,14 +512,14 @@ void GamepadControls_UpdatePreviewReanim(GamepadControls *gamepadControls) {
         flagUpdateCanPlant = false;
         flagDrawGray = true;
     }
-    if (!Board_HasConveyorBeltSeedBank(gamepadControls->mBoard, gamepadControls->mPlayerIndex2) && cursorObject->mCursorType != CursorType::CURSOR_TYPE_PLANT_FROM_USABLE_COIN) {
+    if (!gamepadControls->mBoard->HasConveyorBeltSeedBank(gamepadControls->mPlayerIndex2) && cursorObject->mCursorType != CursorType::CURSOR_TYPE_PLANT_FROM_USABLE_COIN) {
         if (gamepadControls->mIsZombie && gamepadControls->mGameObject.mApp->mGameMode == GameMode::GAMEMODE_MP_VS) {
-            if (!Board_CanTakeDeathMoney(gamepadControls->mBoard, gamepadControls->mBoard->GetCurrentPlantCost(mSeedType, SeedType::SEED_NONE))) {
+            if (!gamepadControls->mBoard->CanTakeDeathMoney(gamepadControls->mBoard->GetCurrentPlantCost(mSeedType, SeedType::SEED_NONE))) {
                 flagUpdateCanPlant = false;
                 flagDrawGray = true;
             }
         } else {
-            if (!Board_CanTakeSunMoney(gamepadControls->mBoard, gamepadControls->mBoard->GetCurrentPlantCost(mSeedType, SeedType::SEED_NONE), gamepadControls->mPlayerIndex2)) {
+            if (!gamepadControls->mBoard->CanTakeSunMoney(gamepadControls->mBoard->GetCurrentPlantCost(mSeedType, SeedType::SEED_NONE), gamepadControls->mPlayerIndex2)) {
                 flagUpdateCanPlant = false;
                 flagDrawGray = true;
             }
@@ -567,8 +568,8 @@ void GamepadControls_DrawPreview(GamepadControls *gamepadControls, Sexy::Graphic
         }
     }
     if (mGameMode == GameMode::GAMEMODE_CHALLENGE_COLUMN) {
-        int mGridX = Board_PixelToGridXKeepOnBoard(board, gamepadControls->mCursorPositionX, gamepadControls->mCursorPositionY);
-        int mGridY = Board_PixelToGridYKeepOnBoard(board, gamepadControls->mCursorPositionX, gamepadControls->mCursorPositionY);
+        int mGridX = board->PixelToGridXKeepOnBoard(gamepadControls->mCursorPositionX, gamepadControls->mCursorPositionY);
+        int mGridY = board->PixelToGridYKeepOnBoard(gamepadControls->mCursorPositionX, gamepadControls->mCursorPositionY);
         SeedType mSelectedSeedType = gamepadControls->mSelectedSeedType;
         if (mSelectedSeedType != SeedType::SEED_NONE) {
             Sexy_Graphics_SetColorizeImages(graphics, true);
@@ -576,10 +577,10 @@ void GamepadControls_DrawPreview(GamepadControls *gamepadControls, Sexy::Graphic
             Sexy_Graphics_SetColor(graphics, &theColor);
             Sexy_Graphics_Translate(graphics, -256, -256);
             if (dynamicPreview) { // 修复动态预览时植物错位
-                int thePixelY = Board_GridToPixelY(gamepadControls->mBoard, mGridX, mGridY);
+                int thePixelY = gamepadControls->mBoard->GridToPixelY(mGridX, mGridY);
                 for (int i = 0; i != 6; ++i) {
                     if (board->CanPlantAt(mGridX, i, mSelectedSeedType) == PlantingReason::PLANTING_OK) {
-                        int theGridPixelY = Board_GridToPixelY(gamepadControls->mBoard, mGridX, i);
+                        int theGridPixelY = gamepadControls->mBoard->GridToPixelY(mGridX, i);
                         Sexy_Graphics_DrawImage(graphics, gamepadControls->mPreviewImage, 0, theGridPixelY - thePixelY);
                     }
                 }

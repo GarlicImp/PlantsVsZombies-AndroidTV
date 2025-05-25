@@ -51,7 +51,7 @@ void SeedBank::Draw(Sexy::Graphics *g) {
     }
     if (LawnApp_IsSlotMachineLevel(mApp)) {
         Sexy_Graphics_DrawImage(g, *Sexy_IMAGE_SUNBANK_Addr, 0, 0);
-    } else if (Board_HasConveyorBeltSeedBank(mBoard, mIsZombie)) {
+    } else if (mBoard->HasConveyorBeltSeedBank(mIsZombie)) {
         if (LawnApp_IsCoopMode(mApp)) {
             Sexy_Graphics_DrawImage(g, *Sexy_IMAGE_CONVEYORBELT_BACKDROP_COOP_Addr, 0, 0);
             Sexy_Graphics_DrawImageCel(g, *Sexy_IMAGE_CONVEYORBELT_COOP_Addr, 7, 63, 0, mConveyorBeltCounter / 4 % 6);
@@ -64,11 +64,11 @@ void SeedBank::Draw(Sexy::Graphics *g) {
     } else if (LawnApp_IsCoopMode(mApp)) {
         Sexy_Graphics_DrawImage(g, *Sexy_IMAGE_SEEDBANK_COOP_Addr, 0, 0);
     } else if (mApp->mGameMode == GameMode::GAMEMODE_MP_VS && mIsZombie) {
-        int theSeedBankExtraWidth = Board_GetSeedBankExtraWidth(mBoard);
+        int theSeedBankExtraWidth = mBoard->GetSeedBankExtraWidth();
         Sexy_Graphics_DrawImage(g, *Sexy_IMAGE_ZOMBIE_SEEDBANK_Addr, theSeedBankExtraWidth, 0);
     } else {
         Sexy::Image *seedBankImage = *Sexy_IMAGE_SEEDBANK_Addr;
-        int theSeedBankExtraWidth = Board_GetSeedBankExtraWidth(mBoard);
+        int theSeedBankExtraWidth = mBoard->GetSeedBankExtraWidth();
         int theRect[4];
         theRect[0] = seedBankImage->mWidth - 12 - theSeedBankExtraWidth;
         theRect[1] = 0;
@@ -160,7 +160,7 @@ void SeedBank::Draw(Sexy::Graphics *g) {
         if (mY > -(*(int (**)(Sexy::Image *))(*Sexy_IMAGE_SEEDBANK_Addr + 20))(*Sexy_IMAGE_SEEDBANK_Addr))
             Sexy_Graphics_DrawImage(g, *Sexy_IMAGE_SLOTMACHINE_OVERLAY_Addr, 189, -2);
     }
-    if (!Board_HasConveyorBeltSeedBank(mBoard, 0)) {
+    if (!mBoard->HasConveyorBeltSeedBank(0)) {
         int theMoney;
         if (mIsZombie) {
             theMoney = mBoard->mDeathMoney & ~mBoard->mDeathMoney >> 31; // mDeathMoney
@@ -181,7 +181,7 @@ void SeedBank::Draw(Sexy::Graphics *g) {
             theColor.mBlue = 0;
             theColor.mAlpha = 255;
         }
-        TodDrawString(g, holder, mIsZombie ? (408 + Board_GetSeedBankExtraWidth(mBoard)) : 38, 78, *Sexy_FONT_CONTINUUMBOLD14_Addr, theColor, DrawStringJustification::DS_ALIGN_CENTER);
+        TodDrawString(g, holder, mIsZombie ? (408 + mBoard->GetSeedBankExtraWidth()) : 38, 78, *Sexy_FONT_CONTINUUMBOLD14_Addr, theColor, DrawStringJustification::DS_ALIGN_CENTER);
         Sexy_String_Delete(holder);
 
         if (LawnApp_IsTwinSunbankMode(mApp)) {
@@ -247,7 +247,7 @@ void SeedBank::Move(int x, int y) {
     mX = x;
     mY = y;
     if (mApp->mGameMode == GameMode::GAMEMODE_MP_VS) {
-        int theSeedBankExtraWidth = Board_GetSeedBankExtraWidth(mBoard);
+        int theSeedBankExtraWidth = mBoard->GetSeedBankExtraWidth();
         if (mIsZombie) {
             mX += (5 - theSeedBankExtraWidth / 2);
         } else {

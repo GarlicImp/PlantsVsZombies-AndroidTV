@@ -193,14 +193,14 @@ void ChallengeScreen::MouseDrag(int x, int y) {
         gChallengeScreenGameIndex += 1;
         gChallengeScreenTouchDownY -= triggerHeight;
         int gameIndexToScroll = gChallengeScreenGameIndex >= totalGamesInThisPage - 4 ? totalGamesInThisPage - 4 : gChallengeScreenGameIndex;
-        ChallengeScreen_SetScrollTarget(this, gameIndexToScroll);
+        SetScrollTarget(gameIndexToScroll);
         //        ChallengeScreen_UpdateButtons(a);
         gChallengeItemMoved = true;
     } else if (y - gChallengeScreenTouchDownY > triggerHeight) {
         gChallengeScreenGameIndex -= 1;
         gChallengeScreenTouchDownY += triggerHeight;
         int gameIndexToScroll = gChallengeScreenGameIndex <= 0 ? 0 : gChallengeScreenGameIndex;
-        ChallengeScreen_SetScrollTarget(this, gameIndexToScroll);
+        SetScrollTarget(gameIndexToScroll);
         //        ChallengeScreen_UpdateButtons(a);
         gChallengeItemMoved = true;
     }
@@ -210,7 +210,7 @@ void ChallengeScreen::MouseUp(int x, int y) {
     if (!gTouchOutSide && !gChallengeItemMoved) {
         int gameIndex = mScreenTopChallengeIndex + (y - mPageTop) / gChallengeItemHeight;
         if (mSelectedMode == mUnk1[gameIndex]) {
-            ChallengeScreen_KeyDown(this, 13);
+            KeyDown(Sexy::Ok);
         } else {
             LawnApp_PlaySample(mApp, *Sexy_SOUND_BUTTONCLICK_Addr);
             mSelectedMode = mUnk1[gameIndex];

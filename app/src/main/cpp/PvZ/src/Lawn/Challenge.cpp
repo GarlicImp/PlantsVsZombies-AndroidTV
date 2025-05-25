@@ -196,7 +196,7 @@ bool Challenge::IZombieEatBrain(Zombie* theZombie) {
     aBrain->mGridItemCounter = mHealth;
     if (mHealth <= 0) {
         LawnApp_PlaySample(mApp, *Sexy_SOUND_GULP_Addr);
-        GridItem_GridItemDie(aBrain);
+        aBrain->GridItemDie();
         IZombieScoreBrain(aBrain);
     }
     return true;
@@ -211,9 +211,9 @@ void Challenge::DrawArtChallenge(Sexy::Graphics* g) {
     for (int theGridY = 0; theGridY < 6; theGridY++) {
         for (int theGridX = 0; theGridX < 9; theGridX++) {
             SeedType ArtChallengeSeed = GetArtChallengeSeed(theGridX, theGridY);
-            if (ArtChallengeSeed != SeedType::SEED_NONE && Board_GetTopPlantAt(mBoard, theGridX, theGridY, PlantPriority::TOPPLANT_ONLY_NORMAL_POSITION) == nullptr) {
-                int x = Board_GridToPixelX(mBoard, theGridX, theGridY);
-                int y = Board_GridToPixelY(mBoard, theGridX, theGridY);
+            if (ArtChallengeSeed != SeedType::SEED_NONE && mBoard->GetTopPlantAt(theGridX, theGridY, PlantPriority::TOPPLANT_ONLY_NORMAL_POSITION) == nullptr) {
+                int x = mBoard->GridToPixelX(theGridX, theGridY);
+                int y = mBoard->GridToPixelY(theGridX, theGridY);
                 Plant::DrawSeedType(g, ArtChallengeSeed, SeedType::SEED_NONE, DrawVariation::VARIATION_NORMAL, x, y);
             }
         }
@@ -222,11 +222,11 @@ void Challenge::DrawArtChallenge(Sexy::Graphics* g) {
     if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_ART_CHALLENGE_WALLNUT) {
         Color theColor = {255, 255, 255, 255};
         Sexy_Graphics_SetColor(g, &theColor);
-        int x1 = Board_GridToPixelX(mBoard, 4, 1);
-        int y1 = Board_GridToPixelY(mBoard, 4, 1);
+        int x1 = mBoard->GridToPixelX(4, 1);
+        int y1 = mBoard->GridToPixelY(4, 1);
         Sexy_Graphics_DrawImage(g, addonImages.googlyeye, x1, y1);
-        int x2 = Board_GridToPixelX(mBoard, 6, 1);
-        int y2 = Board_GridToPixelY(mBoard, 6, 1);
+        int x2 = mBoard->GridToPixelX(6, 1);
+        int y2 = mBoard->GridToPixelY(6, 1);
         Sexy_Graphics_DrawImage(g, addonImages.googlyeye, x2, y2);
     }
 
@@ -252,11 +252,11 @@ PlantingReason Challenge::CanPlantAt(int theGridX, int theGridY, SeedType theSee
         }
         if (theSeedType == SeedType::SEED_ZOMBIE_BUNGEE) {
             if (theGridX < num) {
-                Zombie* zombie = nullptr;
-                while (Board_IterateZombies(mBoard, &zombie)) {
-                    if (zombie->mZombieType == ZombieType::ZOMBIE_BUNGEE) {
-                        int aGridX = mBoard->PixelToGridX(zombie->mX, zombie->mY);
-                        if (aGridX == theGridX && zombie->mRow == theGridY) {
+                Zombie* aZombie = nullptr;
+                while (mBoard->IterateZombies(aZombie)) {
+                    if (aZombie->mZombieType == ZombieType::ZOMBIE_BUNGEE) {
+                        int aGridX = mBoard->PixelToGridX(aZombie->mX, aZombie->mY);
+                        if (aGridX == theGridX && aZombie->mRow == theGridY) {
                             return PlantingReason::PLANTING_NOT_HERE;
                         }
                     }
@@ -292,7 +292,7 @@ PlantingReason Challenge::CanPlantAt(int theGridX, int theGridY, SeedType theSee
             return PlantingReason::PLANTING_NOT_PASSED_LINE_VS;
         }
         if (theSeedType == SeedType::SEED_GRAVEBUSTER) {
-            if (Board_GetGridItemAt(mBoard, GridItemType::GRIDITEM_GRAVESTONE, theGridX, theGridY) == nullptr)
+            if (mBoard->GetGridItemAt(GridItemType::GRIDITEM_GRAVESTONE, theGridX, theGridY) == nullptr)
                 return PlantingReason::PLANTING_ONLY_ON_GRAVES;
         } else {
             if (theGridX <= 5)
@@ -307,10 +307,10 @@ void Challenge::InitLevel() {
     old_Challenge_InitLevel(this);
 
     if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_BUTTERED_POPCORN) {
-        Board_NewPlant(mBoard, 0, 0, SeedType::SEED_COBCANNON, SeedType::SEED_NONE, -1);
-        Board_NewPlant(mBoard, 0, 1, SeedType::SEED_COBCANNON, SeedType::SEED_NONE, -1);
-        Board_NewPlant(mBoard, 0, 4, SeedType::SEED_COBCANNON, SeedType::SEED_NONE, -1);
-        Board_NewPlant(mBoard, 0, 5, SeedType::SEED_COBCANNON, SeedType::SEED_NONE, -1);
+        mBoard->NewPlant(0, 0, SeedType::SEED_COBCANNON, SeedType::SEED_NONE, -1);
+        mBoard->NewPlant(0, 1, SeedType::SEED_COBCANNON, SeedType::SEED_NONE, -1);
+        mBoard->NewPlant(0, 4, SeedType::SEED_COBCANNON, SeedType::SEED_NONE, -1);
+        mBoard->NewPlant(0, 5, SeedType::SEED_COBCANNON, SeedType::SEED_NONE, -1);
     }
 }
 
@@ -339,7 +339,7 @@ void Challenge::TreeOfWisdomFertilize() {
     // 检查智慧树成就
     PlayerInfo* playerInfo = mApp->mPlayerInfo;
     if (playerInfo->mChallengeRecords[GameMode::GAMEMODE_TREE_OF_WISDOM - 2] >= 99) {
-        Board_GrantAchievement(mBoard, AchievementId::ACHIEVEMENT_TREE, true);
+        mBoard->GrantAchievement(AchievementId::ACHIEVEMENT_TREE, true);
     }
 }
 
@@ -473,10 +473,10 @@ bool Challenge::UpdateZombieSpawning() {
 void Challenge::HeavyWeaponPacketClicked(SeedPacket* theSeedPacket) {
     // 修复疯狂点击毁灭菇导致GridItem数量超出上限而闪退
     if (theSeedPacket->mPacketType == SeedType::SEED_DOOMSHROOM) {
-        GridItem* gridItem = nullptr;
-        while (Board_IterateGridItems(mBoard, &gridItem)) {
-            if (gridItem->mGridItemType == GridItemType::GRIDITEM_CRATER) {
-                GridItem_GridItemDie(gridItem);
+        GridItem* aGridItem = nullptr;
+        while (mBoard->IterateGridItems(aGridItem)) {
+            if (aGridItem->mGridItemType == GridItemType::GRIDITEM_CRATER) {
+                aGridItem->GridItemDie();
             }
         }
     }

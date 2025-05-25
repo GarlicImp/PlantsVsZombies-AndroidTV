@@ -250,7 +250,7 @@ void Projectile::DoImpact(Zombie* theZombie) {
     } else if (mProjectileType == ProjectileType::PROJECTILE_WINTERMELON) {
         LawnApp_AddTodParticle(mApp, aLastPosX + 30.0f, aLastPosY + 30.0f, mRenderOrder + 1, ParticleEffect::PARTICLE_WINTERMELON);
     } else if (mProjectileType == ProjectileType::PROJECTILE_COBBIG) {
-        int aRenderOrder = Board_MakeRenderOrder(RenderLayer::RENDER_LAYER_GROUND, mCobTargetRow, 2);
+        int aRenderOrder = Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_GROUND, mCobTargetRow, 2);
         LawnApp_AddTodParticle(mApp, mPosX + 80.0f, mPosY + 40.0f, aRenderOrder, ParticleEffect::PARTICLE_BLASTMARK);
         LawnApp_AddTodParticle(mApp, mPosX + 80.0f, mPosY + 40.0f, mRenderOrder + 1, ParticleEffect::PARTICLE_POPCORNSPLASH);
         LawnApp_PlaySample(mApp, *Sexy_SOUND_DOOMSHROOM_Addr);
@@ -323,7 +323,7 @@ Zombie* Projectile::FindCollisionMindControlledTarget() {
     int aMinX = 0;
 
     Sexy::Rect aProjectileRect = GetProjectileRect();
-    while (Board_IterateZombies(mBoard, &aZombie)) {
+    while (mBoard->IterateZombies(aZombie)) {
         if (!aZombie->mDead && aZombie->mRow == mRow && aZombie->mMindControlled) {
             Sexy::Rect zombieRect = aZombie->GetZombieRect();
             int rectOverlap = GetRectOverlap(aProjectileRect, zombieRect);
@@ -350,7 +350,7 @@ void Projectile::CheckForCollision() {
     }
 
     if (mMotionType == ProjectileMotion::MOTION_HOMING) {
-        Zombie* aZombie = Board_ZombieTryToGet(mBoard, mTargetZombieID);
+        Zombie* aZombie = mBoard->ZombieTryToGet(mTargetZombieID);
         if (aZombie && aZombie->EffectedByDamage(mDamageRangeFlags)) {
             Sexy::Rect aProjectileRect = GetProjectileRect();
             Sexy::Rect aZombieRect = aZombie->GetZombieRect();

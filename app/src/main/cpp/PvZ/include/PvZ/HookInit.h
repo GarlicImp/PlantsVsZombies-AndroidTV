@@ -40,86 +40,6 @@
 #include "Symbols.h"
 
 inline void InitInGameFunction() {
-    Board_ProgressMeterHasFlags = (decltype(Board_ProgressMeterHasFlags))Board_ProgressMeterHasFlagsAddr;
-    Board_IsSurvivalStageWithRepick = (decltype(Board_IsSurvivalStageWithRepick))Board_IsSurvivalStageWithRepickAddr;
-    Board_PickUpTool = (decltype(Board_PickUpTool))Board_PickUpToolAddr;
-    Board_IteratePlants = (decltype(Board_IteratePlants))Board_IteratePlantsAddr;
-    Board_IterateProjectiles = (decltype(Board_IterateProjectiles))Board_IterateProjectilesAddr;
-    Board_IterateCoins = (decltype(Board_IterateCoins))Board_IterateCoinsAddr;
-    Board_IterateLawnMowers = (decltype(Board_IterateLawnMowers))Board_IterateLawnMowersAddr;
-    Board_IterateParticles = (decltype(Board_IterateParticles))Board_IterateParticlesAddr;
-    Board_IterateGridItems = (decltype(Board_IterateGridItems))Board_IterateGridItemsAddr;
-    Board_IterateZombies = (decltype(Board_IterateZombies))Board_IterateZombiesAddr;
-    Board_GameAxisMove = (decltype(Board_GameAxisMove))Board_GameAxisMoveAddr;
-    Board_InitCoverLayer = (decltype(Board_InitCoverLayer))Board_InitCoverLayerAddr;
-    Board_LoadBackgroundImages = (decltype(Board_LoadBackgroundImages))Board_LoadBackgroundImagesAddr;
-    Board_HasConveyorBeltSeedBank = (decltype(Board_HasConveyorBeltSeedBank))Board_HasConveyorBeltSeedBankAddr;
-    // Board_UpdateGridItems = (int (*)(Board *)) Board_UpdateGridItemsAddr;
-    Board_ZombieHitTest = (decltype(Board_ZombieHitTest))Board_ZombieHitTestAddr;
-    Board_GetTopPlantAt = (decltype(Board_GetTopPlantAt))Board_GetTopPlantAtAddr;
-    Board_NewPlant = (decltype(Board_NewPlant))Board_NewPlantAddr;
-    Board_CanUseGameObject = (decltype(Board_CanUseGameObject))Board_CanUseGameObjectAddr;
-    Board_ToolHitTest = (decltype(Board_ToolHitTest))Board_ToolHitTestAddr;
-    Board_RefreshSeedPacketFromCursor = (decltype(Board_RefreshSeedPacketFromCursor))Board_RefreshSeedPacketFromCursorAddr;
-    Board_GetPlantsOnLawn = (decltype(Board_GetPlantsOnLawn))Board_GetPlantsOnLawnAddr;
-    Board_GridToPixelX = (decltype(Board_GridToPixelX))Board_GridToPixelXAddr;
-    Board_GridToPixelY = (decltype(Board_GridToPixelY))Board_GridToPixelYAddr;
-    Board_AddALadder = (decltype(Board_AddALadder))Board_AddALadderAddr;
-    Board_ClearCursor = (decltype(Board_ClearCursor))Board_ClearCursorAddr;
-    Board_MouseDownWithTool = (decltype(Board_MouseDownWithTool))Board_MouseDownWithToolAddr;
-    Board_CountPlantByType = (decltype(Board_CountPlantByType))Board_CountPlantByTypeAddr;
-    Board_SetTutorialState = (decltype(Board_SetTutorialState))Board_SetTutorialStateAddr;
-    Board_GetButterButtonRect = (decltype(Board_GetButterButtonRect))Board_GetButterButtonRectAddr;
-    //     Board_GetShovelButtonRect = (void (*)(Rect *, Board *)) Board_GetShovelButtonRectAddr;
-    Board_ZombieTryToGet = (decltype(Board_ZombieTryToGet))Board_ZombieTryToGetAddr;
-    Board_MakeRenderOrder = (decltype(Board_MakeRenderOrder))Board_MakeRenderOrderAddr;
-    Board_PlantUsesAcceleratedPricing = (decltype(Board_PlantUsesAcceleratedPricing))Board_PlantUsesAcceleratedPricingAddr;
-    Board_IsPlantInCursor = (decltype(Board_IsPlantInCursor))Board_IsPlantInCursorAddr;
-    Board_MouseDownWithPlant = (decltype(Board_MouseDownWithPlant))Board_MouseDownWithPlantAddr;
-    Board_CanInteractWithBoardButtons = (decltype(Board_CanInteractWithBoardButtons))Board_CanInteractWithBoardButtonsAddr;
-    Board_RemoveAllPlants = (decltype(Board_RemoveAllPlants))Board_RemoveAllPlantsAddr;
-    Board_GetSeedBankExtraWidth = (decltype(Board_GetSeedBankExtraWidth))Board_GetSeedBankExtraWidthAddr;
-    Board_GetSeedPacketPositionX = (decltype(Board_GetSeedPacketPositionX))Board_GetSeedPacketPositionXAddr;
-    Board_AddCoin = (decltype(Board_AddCoin))Board_AddCoinAddr;
-    Board_CanTakeSunMoney = (decltype(Board_CanTakeSunMoney))Board_CanTakeSunMoneyAddr;
-    Board_GetZenButtonRect = (decltype(Board_GetZenButtonRect))Board_GetZenButtonRectAddr;
-    Board_GetGridItemAt = (decltype(Board_GetGridItemAt))Board_GetGridItemAtAddr;
-    Board_GetLadderAt = (decltype(Board_GetLadderAt))Board_GetLadderAtAddr;
-    Board_PixelToGridXKeepOnBoard = (decltype(Board_PixelToGridXKeepOnBoard))Board_PixelToGridXKeepOnBoardAddr;
-    Board_PixelToGridYKeepOnBoard = (decltype(Board_PixelToGridYKeepOnBoard))Board_PixelToGridYKeepOnBoardAddr;
-    Board_IsValidCobCannonSpotHelper = (decltype(Board_IsValidCobCannonSpotHelper))Board_IsValidCobCannonSpotHelperAddr;
-    Board_PickRowForNewZombie = (decltype(Board_PickRowForNewZombie))Board_PickRowForNewZombieAddr;
-    Board_IsPoolSquare = (decltype(Board_IsPoolSquare))Board_IsPoolSquareAddr;
-    Board_ZombiePickerInit = (decltype(Board_ZombiePickerInit))Board_ZombiePickerInitAddr;
-    Board_GetIntroducedZombieType = (decltype(Board_GetIntroducedZombieType))Board_GetIntroducedZombieTypeAddr;
-    Board_ZombiePickerInitForWave = (decltype(Board_ZombiePickerInitForWave))Board_ZombiePickerInitForWaveAddr;
-    Board_PutZombieInWave = (decltype(Board_PutZombieInWave))Board_PutZombieInWaveAddr;
-    Board_PickZombieType = (decltype(Board_PickZombieType))Board_PickZombieTypeAddr;
-    Board_HasLevelAwardDropped = (decltype(Board_HasLevelAwardDropped))Board_HasLevelAwardDroppedAddr;
-    Board_SpawnZombiesFromGraves = (decltype(Board_SpawnZombiesFromGraves))Board_SpawnZombiesFromGravesAddr;
-    Board_ClearAdvice = (decltype(Board_ClearAdvice))Board_ClearAdviceAddr;
-    Board_NextWaveComing = (decltype(Board_NextWaveComing))Board_NextWaveComingAddr;
-    Board_TotalZombiesHealthInWave = (decltype(Board_TotalZombiesHealthInWave))Board_TotalZombiesHealthInWaveAddr;
-    Board_ClearAdviceImmediately = (decltype(Board_ClearAdviceImmediately))Board_ClearAdviceImmediatelyAddr;
-    Board_DisplayAdviceAgain = (decltype(Board_DisplayAdviceAgain))Board_DisplayAdviceAgainAddr;
-    Board_GridCellWidth = (decltype(Board_GridCellWidth))Board_GridCellWidthAddr;
-    Board_GridCellHeight = (decltype(Board_GridCellHeight))Board_GridCellHeightAddr;
-    // Board_GetPumpkinAt=(Plant* (*)(Board*,int,int))Board_GetPumpkinAtAddr;
-    Board_GetSeedTypeInCursor = (decltype(Board_GetSeedTypeInCursor))Board_GetSeedTypeInCursorAddr;
-    Board_TryToSaveGame = (decltype(Board_TryToSaveGame))Board_TryToSaveGameAddr;
-    Board_KillAllZombiesInRadius = (decltype(Board_KillAllZombiesInRadius))Board_KillAllZombiesInRadiusAddr;
-    Board_RemoveCutsceneZombies = (decltype(Board_RemoveCutsceneZombies))Board_RemoveCutsceneZombiesAddr;
-    Board_CountZombiesOnScreen = (decltype(Board_CountZombiesOnScreen))Board_CountZombiesOnScreenAddr;
-    Board_GetPosYBasedOnRow = (decltype(Board_GetPosYBasedOnRow))Board_GetPosYBasedOnRowAddr;
-    Board_CanTakeDeathMoney = (decltype(Board_CanTakeDeathMoney))Board_CanTakeDeathMoneyAddr;
-    Board_GetBossZombie = (decltype(Board_GetBossZombie))Board_GetBossZombieAddr;
-    //    Board_GetFlowerPotAt=(int* (*)(int*,int,int))Board_GetFlowerPotAtAddr;
-    Board_RemoveAllMowers = (decltype(Board_RemoveAllMowers))Board_RemoveAllMowersAddr;
-    Board_ResetLawnMowers = (decltype(Board_ResetLawnMowers))Board_ResetLawnMowersAddr;
-    Board_RemoveAllZombies = (decltype(Board_RemoveAllZombies))Board_RemoveAllZombiesAddr;
-    Board_GetGamepadControlsByPlayerIndex = (decltype(Board_GetGamepadControlsByPlayerIndex))Board_GetGamepadControlsByPlayerIndexAddr;
-
-
     LawnApp_ClearSecondPlayer = (decltype(LawnApp_ClearSecondPlayer))LawnApp_ClearSecondPlayerAddr;
     LawnApp_IsWhackAZombieLevel = (decltype(LawnApp_IsWhackAZombieLevel))LawnApp_IsWhackAZombieLevelAddr;
     LawnApp_IsScaryPotterLevel = (decltype(LawnApp_IsScaryPotterLevel))LawnApp_IsScaryPotterLevelAddr;
@@ -256,8 +176,6 @@ inline void InitInGameFunction() {
     CutScene_IsBeforePreloading = (decltype(CutScene_IsBeforePreloading))CutScene_IsBeforePreloadingAddr;
 
 
-    ChallengeScreen_SetScrollTarget = (decltype(ChallengeScreen_SetScrollTarget))ChallengeScreen_SetScrollTargetAddr;
-    ChallengeScreen_KeyDown = (decltype(ChallengeScreen_KeyDown))ChallengeScreen_KeyDownAddr;
     //    ChallengeScreen_UpdateButtons=(void (*)(ChallengeScreen *))ChallengeScreen_UpdateButtonsAddr;
 
 
@@ -279,11 +197,6 @@ inline void InitInGameFunction() {
     TodAnimateCurve = (decltype(TodAnimateCurve))TodAnimateCurveAddr;
     TodAnimateCurveFloat = (decltype(TodAnimateCurveFloat))TodAnimateCurveFloatAddr;
     TodAnimateCurveFloatTime = (decltype(TodAnimateCurveFloatTime))TodAnimateCurveFloatTimeAddr;
-
-
-    MainMenu_InTransition = (decltype(MainMenu_InTransition))MainMenu_InTransitionAddr;
-    MainMenu_SetScene = (decltype(MainMenu_SetScene))MainMenu_SetSceneAddr;
-    MainMenu_StartAdventureMode = (decltype(MainMenu_StartAdventureMode))MainMenu_StartAdventureModeAddr;
 
 
     CursorObject_Draw = (decltype(CursorObject_Draw))CursorObject_DrawAddr;
@@ -372,7 +285,6 @@ inline void InitInGameFunction() {
     Sexy_GamepadApp_HasGamepad = (decltype(Sexy_GamepadApp_HasGamepad))Sexy_GamepadApp_HasGamepadAddr;
     Sexy_RandInt = (decltype(Sexy_RandInt))Sexy_RandIntAddr;
     Sexy_SexyMatrix3_SexyMatrix3 = (decltype(Sexy_SexyMatrix3_SexyMatrix3))Sexy_SexyMatrix3_SexyMatrix3Addr;
-    GridItem_GridItemDie = (decltype(GridItem_GridItemDie))GridItem_GridItemDieAddr;
     Sexy_SexyAppBase_GetImage = (decltype(Sexy_SexyAppBase_GetImage))Sexy_SexyAppBase_GetImageAddr;
     Sexy_Widget_Resize = (decltype(Sexy_Widget_Resize))Sexy_Widget_ResizeAddr;
     Sexy_Widget_Widget = (decltype(Sexy_Widget_Widget))Sexy_Widget_WidgetAddr;
@@ -468,7 +380,6 @@ inline void InitInGameFunction() {
     Sexy_MenuWidget_Draw = (decltype(Sexy_MenuWidget_Draw))Sexy_MenuWidget_DrawAddr;
     Sexy_Widget_DeferOverlay = (decltype(Sexy_Widget_DeferOverlay))Sexy_Widget_DeferOverlayAddr;
     Mailbox_GetNumUnseenMessages = (decltype(Mailbox_GetNumUnseenMessages))Mailbox_GetNumUnseenMessagesAddr;
-    LawnMower_StartMower = (decltype(LawnMower_StartMower))LawnMower_StartMowerAddr;
 
     Native_BridgeApp_getJNIEnv = (decltype(Native_BridgeApp_getJNIEnv))Native_BridgeApp_getJNIEnvAddr;
     Native_NativeApp_getActivity = (decltype(Native_NativeApp_getActivity))Native_NativeApp_getActivityAddr;
@@ -550,7 +461,7 @@ inline void InitHookFunction() {
     homura::HookFunction(Board_InitLawnMowersAddr, &Board::InitLawnMowers, &old_Board_InitLawnMowers);
     homura::HookFunction(Board_PickZombieWavesAddr, &Board::PickZombieWaves, &old_Board_PickZombieWaves);
     homura::HookFunction(Board_DrawUITopAddr, &Board::DrawUITop, &old_Board_DrawUITop);
-    homura::HookFunction(Board_GetShovelButtonRectAddr, &Board_GetShovelButtonRect, &old_Board_GetShovelButtonRect);
+    homura::HookFunction(Board_GetShovelButtonRectAddr, &Board::GetShovelButtonRect, &old_Board_GetShovelButtonRect);
     homura::HookFunction(Board_UpdateLevelEndSequenceAddr, &Board::UpdateLevelEndSequence, &old_Board_UpdateLevelEndSequence);
     homura::HookFunction(Board_UpdateGridItemsAddr, &Board::UpdateGridItems, &old_Board_UpdateGridItems);
     homura::HookFunction(Board_ShakeBoardAddr, &Board::ShakeBoard, &old_Board_ShakeBoard);
@@ -658,7 +569,7 @@ inline void InitHookFunction() {
     homura::HookFunction(MainMenu_ExitAddr, &MainMenu::Exit, &old_MainMenu_Exit);
     homura::HookFunction(MainMenu_UpdateExitAddr, &MainMenu::UpdateExit, &old_MainMenu_UpdateExit);
     homura::HookFunction(MainMenu_OnExitAddr, &MainMenu::OnExit, &old_MainMenu_OnExit);
-    //    MSHookFunction(MainMenu_SetSceneAddr, (void *) MainMenu_SetScene, (void **) &old_MainMenu_SetScene);
+    //    MSHookFunction(MainMenu_SetSceneAddr, (void *) SetScene, (void **) &old_MainMenu_SetScene);
     homura::HookFunction(MainMenu_OnSceneAddr, &MainMenu::OnScene, &old_MainMenu_OnScene);
     homura::HookFunction(MainMenu_SyncButtonsAddr, &MainMenu::SyncButtons, &old_MainMenu_SyncButtons);
     homura::HookFunction(MainMenu_MainMenuAddr, &MainMenu::Creat, &old_MainMenu_MainMenu);

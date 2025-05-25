@@ -13,7 +13,7 @@ void HelpOptionsDialog_ButtonDepress(HelpOptionsDialog *a, int a2) {
             LawnApp_LawnMessageBox(a->mApp, Dialogs::DIALOG_MESSAGE, "[DIALOG_WARNING]", "[CHANGE_USER_FORBID]", "[DIALOG_BUTTON_OK]", "", 3);
         return;
     }
-    //    if( a2 == 0){
+    //    if( thePlayerIndex == 0){
     //        int * lawnApp = (int*)a[HELPOPTIONS_LAWNAPP_OFFSET];
     //        GameMode::GameMode mGameMode = (GameMode::GameMode) *(lawnApp + LAWNAPP_GAMEMODE_OFFSET);
     //        if (mGameMode >= GameMode::GAMEMODE_MP_VS && mGameMode < GameMode::GAMEMODE_TWO_PLAYER_COOP_ENDLESS) {

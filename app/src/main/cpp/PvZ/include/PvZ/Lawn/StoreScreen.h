@@ -2,6 +2,14 @@
 #define PVZ_LAWN_STORE_SCREEN_H
 
 #include "PvZ/Enums.h"
+#include "PvZ/Symbols.h"
+
+class StoreScreen {
+public:
+//    int SetSelectedSlot(int theIndex) { return reinterpret_cast<int (*)(StoreScreen*, int)>(StoreScreen_SetSelectedSlotAddr)(this, theIndex);};
+//
+//    void MouseDown(int x, int y, int theClickCount);
+};
 
 inline void (*StoreScreen_AdvanceCrazyDaveDialog)(int *);
 

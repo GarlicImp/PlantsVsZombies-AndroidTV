@@ -343,7 +343,7 @@ void Music_UpdateMusicBurst2(Music *music) {
     aDrumsJumpOrder = 1.0;
     switch (mMusicBurstState) {
         case MusicBurstState::MUSIC_BURST_OFF:
-            if (Board_CountZombiesOnScreen(music->mApp->mBoard) > 10 || music->mBurstOverride == 1) {
+            if (music->mApp->mBoard->CountZombiesOnScreen() > 10 || music->mBurstOverride == 1) {
                 music->mMusicBurstState = MusicBurstState::MUSIC_BURST_STARTING;
                 music->mBurstStateCounter = 400;
             }
@@ -387,7 +387,7 @@ void Music_UpdateMusicBurst2(Music *music) {
                 aDrumsJumpOrder = 0.0;
             if (music->mBurstStateCounter)
                 break;
-            if (Board_CountZombiesOnScreen(music->mApp->mBoard) < 4 && music->mBurstOverride == -1 || music->mBurstOverride == 2) {
+            if (music->mApp->mBoard->CountZombiesOnScreen() < 4 && music->mBurstOverride == -1 || music->mBurstOverride == 2) {
                 if (!isNightMoonGrainsMode) {
                     music->mMusicBurstState = MusicBurstState::MUSIC_BURST_FINISHING;
                     music->mBurstStateCounter = 800;

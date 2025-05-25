@@ -500,6 +500,23 @@ bool LawnApp::IsScaryPotterLevel() {
     return IsAdventureMode() && mPlayerInfo->mLevel == 35;
 }
 
+bool LawnApp::IsSlotMachineLevel()
+{
+    return (mBoard && mGameMode == GameMode::GAMEMODE_CHALLENGE_SLOT_MACHINE);
+}
+
+bool LawnApp::IsSquirrelLevel()
+{
+    return mBoard && mGameMode == GameMode::GAMEMODE_CHALLENGE_SQUIRREL;
+}
+
+bool LawnApp::IsSurvivalEndless(GameMode theGameMode)
+{
+    int aLevel = theGameMode - GameMode::GAMEMODE_SURVIVAL_ENDLESS_STAGE_1;
+    return aLevel >= 0 && aLevel <= 4;
+}
+
+
 
 static bool zombatarResLoaded;
 

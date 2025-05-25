@@ -18,8 +18,8 @@ void GridItem::DrawScaryPot(Sexy::Graphics* g) {
 
     int aImageCol = mGridItemState - GridItemState::GRIDITEM_STATE_SCARY_POT_QUESTION;
 
-    int aXPos = Board_GridToPixelX(mBoard, mGridX, mGridY) - 5;
-    int aYPos = Board_GridToPixelY(mBoard, mGridX, mGridY) - 15;
+    int aXPos = mBoard->GridToPixelX(mGridX, mGridY) - 5;
+    int aYPos = mBoard->GridToPixelY(mGridX, mGridY) - 15;
     TodDrawImageCelCenterScaledF(g, *Sexy_IMAGE_PLANTSHADOW2_Addr, aXPos - 5.0, aYPos + 72.0, 0, 1.3, 1.3);
 
     if (mTransparentCounter > 0) { // 如果罐子要被照透(透明度不为0)
@@ -153,8 +153,8 @@ void GridItem::DrawStinky(Sexy::Graphics* g) {
 
 void GridItem::DrawSquirrel(Sexy::Graphics* g) {
     // 绘制松鼠
-    float aXPos = Board_GridToPixelX(mBoard, mGridX, mGridY);
-    float aYPos = Board_GridToPixelY(mBoard, mGridX, mGridY);
+    float aXPos = mBoard->GridToPixelX(mGridX, mGridY);
+    float aYPos = mBoard->GridToPixelY(mGridX, mGridY);
     switch (mGridItemState) {
         case GridItemState::GRIDITEM_STATE_SQUIRREL_PEEKING:
             aYPos += TodAnimateCurve(50, 0, mGridItemCounter, 0, -40.0f, TodCurves::CURVE_BOUNCE_SLOW_MIDDLE);
@@ -178,8 +178,8 @@ void GridItem::DrawSquirrel(Sexy::Graphics* g) {
 
 void GridItem::DrawCrater(Sexy::Graphics* g) {
     // 绘制屋顶月夜弹坑
-    float aXPos = Board_GridToPixelX(mBoard, mGridX, mGridY) - 8.0f;
-    float aYPos = Board_GridToPixelY(mBoard, mGridX, mGridY) + 40.0f;
+    float aXPos = mBoard->GridToPixelX(mGridX, mGridY) - 8.0f;
+    float aYPos = mBoard->GridToPixelY(mGridX, mGridY) + 40.0f;
     if (mGridItemCounter < 25) {
         int aAlpha = TodAnimateCurve(25, 0, mGridItemCounter, 255, 0, TodCurves::CURVE_LINEAR);
         Color color = {255, 255, 255, aAlpha};
@@ -191,7 +191,7 @@ void GridItem::DrawCrater(Sexy::Graphics* g) {
     Sexy::Image* aImage = *Sexy_IMAGE_CRATER_Addr;
     int theCelCol = 0;
 
-    if (Board_IsPoolSquare(mBoard, mGridX, mGridY)) {
+    if (mBoard->IsPoolSquare(mGridX, mGridY)) {
         if (Board_StageIsNight(mBoard)) {
             aImage = *Sexy_IMAGE_CRATER_WATER_NIGHT_Addr;
         } else {

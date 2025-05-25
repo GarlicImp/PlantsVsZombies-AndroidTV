@@ -98,20 +98,20 @@ void SeedPacket::FlashIfReady() {
     if (mSeedBank != nullptr) {
         playerIndex = mSeedBank->mIsZombie;
     }
-    if (!Board_HasConveyorBeltSeedBank(mBoard, playerIndex) && mSeedBank != nullptr) {
+    if (!mBoard->HasConveyorBeltSeedBank(playerIndex) && mSeedBank != nullptr) {
         LawnApp_AddTodParticle(mApp, mSeedBank->mX + mX, mSeedBank->mY + mY, 100000 + 2, ParticleEffect::PARTICLE_SEED_PACKET_FLASH);
     }
     TutorialState tutorialState = mBoard->mTutorialState;
     if (tutorialState == TutorialState::TUTORIAL_LEVEL_1_REFRESH_PEASHOOTER) {
-        Board_SetTutorialState(mBoard, TutorialState::TUTORIAL_LEVEL_1_PICK_UP_PEASHOOTER);
+        mBoard->SetTutorialState(TutorialState::TUTORIAL_LEVEL_1_PICK_UP_PEASHOOTER);
         return;
     }
     if (tutorialState == TutorialState::TUTORIAL_LEVEL_2_REFRESH_SUNFLOWER && mPacketType == SeedType::SEED_SUNFLOWER) {
-        Board_SetTutorialState(mBoard, TutorialState::TUTORIAL_LEVEL_2_PICK_UP_SUNFLOWER);
+        mBoard->SetTutorialState(TutorialState::TUTORIAL_LEVEL_2_PICK_UP_SUNFLOWER);
         return;
     }
     if (tutorialState == TutorialState::TUTORIAL_MORESUN_REFRESH_SUNFLOWER && mPacketType == SeedType::SEED_SUNFLOWER) {
-        Board_SetTutorialState(mBoard, TutorialState::TUTORIAL_MORESUN_PICK_UP_SUNFLOWER);
+        mBoard->SetTutorialState(TutorialState::TUTORIAL_MORESUN_PICK_UP_SUNFLOWER);
         return;
     }
 }

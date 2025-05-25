@@ -1,13 +1,15 @@
 #ifndef PVZ_LAWN_BOARD_H
 #define PVZ_LAWN_BOARD_H
 
-#include "Coin.h"
-#include "GridItem.h"
-#include "Plant.h"
-#include "Projectile.h"
 #include "PvZ/Enums.h"
 #include "PvZ/Symbols.h"
+
+#include "Plant.h"
 #include "Zombie.h"
+#include "Projectile.h"
+#include "Coin.h"
+#include "LawnMower.h"
+#include "GridItem.h"
 
 #define MAX_GRID_SIZE_X 9
 #define MAX_GRID_SIZE_Y 6
@@ -241,16 +243,80 @@ public:
     }
     int PixelToGridX(int theX, int theY) { return reinterpret_cast<int (*)(Board *, int, int)>(Board_PixelToGridXAddr)(this, theX, theY); }
     int PixelToGridY(int theX, int theY) { return reinterpret_cast<int (*)(Board *, int, int)>(Board_PixelToGridYAddr)(this, theX, theY); }
+    GridItem *GetLadderAt(int theGridX, int theGridY);
     GridItem *GetScaryPotAt(int theGridX, int theGridY);
     GridItem *GetGridItemAt(GridItemType theGridItemType, int theGridX, int theGridY);
     void Move(int theX, int theY) { reinterpret_cast<void (*)(Board *, int, int)>(Board_MoveAddr)(this, theX, theY); } // 整体移动整个草坪，包括种子栏和铲子按钮等等。
     void DoFwoosh(int theRow) { reinterpret_cast<void (*)(Board *, int)>(Board_DoFwooshAddr)(this, theRow); }
     bool IteratePlants(Plant *&thePlant) { return reinterpret_cast<bool (*)(Board *, Plant *&)>(Board_IteratePlantsAddr)(this, thePlant); }
     bool IterateZombies(Zombie *&theZombie) { return reinterpret_cast<bool (*)(Board *, Zombie *&)>(Board_IterateZombiesAddr)(this, theZombie); }
+    bool IterateProjectiles(Projectile *&theProjectile) { return reinterpret_cast<bool (*)(Board *, Projectile *&)>(Board_IterateProjectilesAddr)(this, theProjectile); }
+    bool IterateCoins(Coin *&theCoin) { return reinterpret_cast<bool (*)(Board *, Coin *&)>(Board_IterateCoinsAddr)(this, theCoin); }
+    bool IterateLawnMowers(LawnMower *&theLawnMower) { return reinterpret_cast<bool (*)(Board *, LawnMower *&)>(Board_IterateLawnMowersAddr)(this, theLawnMower); }
+    bool IterateParticles(TodParticleSystem *& theParticle){ return reinterpret_cast<bool (*)(Board *, TodParticleSystem *&)>(Board_IterateParticlesAddr)(this, theParticle); }
+    bool IterateGridItems(GridItem *&theGridItem) { return reinterpret_cast<bool (*)(Board *, GridItem *&)>(Board_IterateGridItemsAddr)(this, theGridItem); }
     Plant *GetTopPlantAt(int theGridX, int theGridY, PlantPriority thePriority) {
         return reinterpret_cast<Plant *(*)(Board *, int, int, PlantPriority)>(Board_GetTopPlantAtAddr)(this, theGridX, theGridY, thePriority);
     }
-
+    bool ProgressMeterHasFlags() { return reinterpret_cast<bool (*)(Board *)>(Board_ProgressMeterHasFlagsAddr)(this); }
+    bool IsSurvivalStageWithRepick() { return reinterpret_cast<bool (*)(Board *)>(Board_IsSurvivalStageWithRepickAddr)(this); }
+    void PickUpTool(GameObjectType theObjectType, int thePlayerIndex) { reinterpret_cast<void (*)(Board *, GameObjectType, int)>(Board_PickUpToolAddr)(this, theObjectType, thePlayerIndex); }
+    int GameAxisMove(int theButton, int thePlayerIndex, int theIsLongPress) {
+        return reinterpret_cast<int (*)(Board *, int, int, int)>(Board_GameAxisMoveAddr)(this, theButton, thePlayerIndex, theIsLongPress);
+    }
+    int InitCoverLayer() { return reinterpret_cast<int (*)(Board *)>(Board_InitCoverLayerAddr)(this); }
+    void LoadBackgroundImages() { reinterpret_cast<void (*)(Board *)>(Board_LoadBackgroundImagesAddr)(this); }
+    bool HasConveyorBeltSeedBank(int thePlayerIndex) { return reinterpret_cast<bool (*)(Board *, int)>(Board_HasConveyorBeltSeedBankAddr)(this, thePlayerIndex); }
+    Zombie *ZombieHitTest(int theMouseX, int theMouseY, int thePlayerIndex) {
+        return reinterpret_cast<Zombie *(*)(Board *, int, int, int)>(Board_ZombieHitTestAddr)(this, theMouseX, theMouseY, thePlayerIndex);
+    }
+    void ClearAdviceImmediately() { reinterpret_cast<void (*)(Board *)>(Board_ClearAdviceImmediatelyAddr)(this); }
+    void DisplayAdviceAgain(const SexyString &theAdvice, MessageStyle theMessageStyle, AdviceType theHelpIndex) {
+        reinterpret_cast<void (*)(Board *, const SexyString &, MessageStyle, AdviceType)>(Board_DisplayAdviceAgainAddr)(this, theAdvice, theMessageStyle, theHelpIndex);
+    }
+    Plant *NewPlant(int theGridX, int theGridY, SeedType theSeedType, SeedType theImitaterType, int thePlayerIndex) {
+        return reinterpret_cast<Plant *(*)(Board *, int, int, SeedType, SeedType, int)>(Board_NewPlantAddr)(this, theGridX, theGridY, theSeedType, theImitaterType, thePlayerIndex);
+    }
+    bool CanUseGameObject(GameObjectType theGameObject) { return reinterpret_cast<int (*)(Board *, GameObjectType)>(Board_CanUseGameObjectAddr)(this, theGameObject); }
+    Plant *ToolHitTest(int theX, int theY) { return reinterpret_cast<Plant *(*)(Board *, int, int)>(Board_ToolHitTestAddr)(this, theX, theY); }
+    void RefreshSeedPacketFromCursor(int thePlayerIndex) { reinterpret_cast<void (*)(Board *, int)>(Board_RefreshSeedPacketFromCursorAddr)(this, thePlayerIndex); }
+    Plant *GetPlantsOnLawn(int theGridX, int theGridY, PlantsOnLawn *thePlantOnLawn) { // 检查加农炮用
+        return reinterpret_cast<Plant *(*)(Board *, int, int, PlantsOnLawn *)>(Board_GetPlantsOnLawnAddr)(this, theGridX, theGridY, thePlantOnLawn);
+    }
+    GridItem *AddALadder(int theGridX, int theGridY) { return reinterpret_cast<GridItem *(*)(Board *, int, int)>(Board_AddALadderAddr)(this, theGridX, theGridY); }
+    void ClearCursor(int thePlayerIndex) { reinterpret_cast<void (*)(Board *, int)>(Board_ClearCursorAddr)(this, thePlayerIndex); }
+    void MouseDownWithTool(int x, int y, int theClickCount, CursorType theCursorType, int thePlayerIndex) {
+        reinterpret_cast<void (*)(Board *, int, int, int, CursorType, int)>(Board_MouseDownWithToolAddr)(this, x, y, theClickCount, theCursorType, thePlayerIndex);
+    }
+    void SetTutorialState(TutorialState theTutorialState) { reinterpret_cast<void (*)(Board *, TutorialState)>(Board_SetTutorialStateAddr)(this, theTutorialState); }
+    Sexy::Rect GetButterButtonRect() { return reinterpret_cast<Sexy::Rect (*)(Board *)>(Board_GetButterButtonRectAddr)(this); }
+    Zombie *ZombieTryToGet(ZombieID theZombieID) { return reinterpret_cast<Zombie *(*)(Board *, ZombieID)>(Board_ZombieTryToGetAddr)(this, theZombieID); }
+    void MouseDownWithPlant(int x, int y, int theClickCount) { reinterpret_cast<void (*)(Board *, int, int, int)>(Board_MouseDownWithPlantAddr)(this, x, y, theClickCount); }
+    bool CanInteractWithBoardButtons() { return reinterpret_cast<bool (*)(Board *)>(Board_CanInteractWithBoardButtonsAddr)(this); }
+    int GetSeedPacketPositionX(int theIndex, int theUnkInt, bool theUnkBool) {
+        return reinterpret_cast<int (*)(Board *, int, int, bool)>(Board_GetSeedPacketPositionXAddr)(this, theIndex, theUnkInt, theUnkBool);
+    }
+    Coin *AddCoin(int theX, int theY, CoinType theCoinType, CoinMotion theCoinMotion) {
+        return reinterpret_cast<Coin *(*)(Board *, int, int, CoinType, CoinMotion)>(Board_AddCoinAddr)(this, theX, theY, theCoinType, theCoinMotion);
+    }
+    bool CanTakeSunMoney(int theAmount, int thePlayerIndex) { return reinterpret_cast<bool (*)(Board *, int, int)>(Board_CanTakeSunMoneyAddr)(this, theAmount, thePlayerIndex); }
+    Sexy::Rect GetZenButtonRect(GameObjectType theObjectType) { return reinterpret_cast<Sexy::Rect (*)(Board *, GameObjectType)>(Board_GetZenButtonRectAddr)(this, theObjectType); }
+    int PickRowForNewZombie(ZombieType theZombieType) { return reinterpret_cast<int (*)(Board *, ZombieType)>(Board_PickRowForNewZombieAddr)(this, theZombieType); }
+    ZombieType GetIntroducedZombieType() { return reinterpret_cast<ZombieType (*)(Board *)>(Board_GetIntroducedZombieTypeAddr)(this); }
+    ZombieType PickZombieType(int theZombiePoints, int theWaveIndex, ZombiePicker *theZombiePicker) {
+        return reinterpret_cast<ZombieType (*)(Board *, int, int, ZombiePicker *)>(Board_PickZombieTypeAddr)(this, theZombiePoints, theWaveIndex, theZombiePicker);
+    }
+    bool HasLevelAwardDropped() { return reinterpret_cast<bool (*)(Board *)>(Board_HasLevelAwardDroppedAddr)(this); }
+    void SpawnZombiesFromGraves() { reinterpret_cast<void (*)(Board *)>(Board_SpawnZombiesFromGravesAddr)(this); }
+    void ClearAdvice(AdviceType theHelpIndex) { reinterpret_cast<void (*)(Board *)>(Board_ClearAdviceAddr)(this); }
+    void NextWaveComing() { reinterpret_cast<void (*)(Board *)>(Board_NextWaveComingAddr)(this); }
+    int GridCellWidth(int theGridX, int theGridY) { return reinterpret_cast<int (*)(Board *, int, int)>(Board_GridCellWidthAddr)(this, theGridX, theGridY); }
+    int GridCellHeight(int theGridX, int theGridY) { return reinterpret_cast<int (*)(Board *, int, int)>(Board_GridCellHeightAddr)(this, theGridX, theGridY); }
+    SeedType GetSeedTypeInCursor(int thePlayerIndex) { return reinterpret_cast<SeedType (*)(Board *, int)>(Board_GetSeedTypeInCursorAddr)(this, thePlayerIndex); }
+    void TryToSaveGame() { reinterpret_cast<void (*)(Board *)>(Board_TryToSaveGameAddr)(this); }
+    bool CanTakeDeathMoney(int theAmount) { return reinterpret_cast<bool (*)(Board *, int)>(Board_CanTakeDeathMoneyAddr)(this, theAmount); }
+    void RemoveAllMowers() { reinterpret_cast<void (*)(Board *)>(Board_RemoveAllMowersAddr)(this); }
+    void ResetLawnMowers() { reinterpret_cast<void (*)(Board *)>(Board_ResetLawnMowersAddr)(this); }
 
     Board(LawnApp *theApp);
     void Create(LawnApp *theApp);
@@ -316,6 +382,31 @@ public:
     int GridToPixelX(int theGridX, int theGridY);
     int GridToPixelY(int theGridX, int theGridY);
     static int MakeRenderOrder(RenderLayer theRenderLayer, int theRow, int theLayerOffset);
+    int GetLiveGargantuarCount();
+    int GetLiveZombiesCount();
+    void FixReanimErrorAfterLoad();
+    void DoPlantingAchievementCheck(SeedType theSeedType);
+    bool GrantAchievement(AchievementId::AchievementId theAchievementId, bool theIsShow);
+    int CountPlantByType(SeedType theSeedType);
+    void ParseFormationSegment(char *theSegment);
+    void LoadFormation(char *theFormation);
+    int GetSeedBankExtraWidth();
+    Sexy::Rect GetShovelButtonRect();
+    bool PlantUsesAcceleratedPricing(SeedType theSeedType);
+    bool IsPlantInCursor();
+    void RemoveAllPlants();
+    void RemoveAllZombies();
+    bool IsValidCobCannonSpotHelper(int theGridX, int theGridY);
+    bool IsPoolSquare(int theGridX, int theGridY);
+    void PutZombieInWave(ZombieType theZombieType, int theWaveNumber, ZombiePicker* theZombiePicker);
+    int TotalZombiesHealthInWave(int theWaveIndex);
+    void KillAllZombiesInRadius(int theRow, int theX, int theY, int theRadius, int theRowRange, bool theBurn, int theDamageRangeFlags);
+    void RemoveCutsceneZombies();
+    int CountZombiesOnScreen();
+    float GetPosYBasedOnRow(float thePosX, int theRow);
+    Zombie *GetBossZombie();
+    GamepadControls *GetGamepadControlsByPlayerIndex(int thePlayerIndex);
+
 
     void MouseMove(int x, int y);
     void MouseDown(int x, int y, int theClickCount);
@@ -381,43 +472,6 @@ inline bool ZombieCanNotWon;
 inline bool PumpkinWithLadder; // AddPlant
 inline bool endlessLastStand;
 
-// 检查加农炮用
-inline Plant *(*Board_GetPlantsOnLawn)(Board *board, unsigned int a2, unsigned int a3, int *a4);
-
-inline int (*Board_GridToPixelX)(Board *board, unsigned int a2, unsigned int a3);
-
-inline int (*Board_GridToPixelY)(Board *board, unsigned int a2, unsigned int a3);
-
-inline int (*Board_PixelToGridY)(Board *board, unsigned int a2, unsigned int a3);
-
-inline int (*Board_LoadBackgroundImages)(Board *board);
-
-inline GridItem *(*Board_AddALadder)(Board *board, int x, int y);
-
-inline Plant *(*Board_ToolHitTest)(Board *board, int a2, int a3);
-
-inline int (*Board_RefreshSeedPacketFromCursor)(Board *board, int a2);
-
-inline int (*Board_CanUseGameObject)(Board *board, GameObjectType a2);
-
-inline Plant *(*Board_NewPlant)(Board *board, int a2, int a3, SeedType a4, SeedType a5, int a6);
-
-inline Plant *(*Board_GetTopPlantAt)(Board *board, unsigned int a2, unsigned int a3, PlantPriority a4);
-
-inline int (*Board_ClearCursor)(Board *board, int a2);
-
-inline int (*Board_MouseDownWithTool)(Board *board, int a2, int a3, int a4, int a5, int a6);
-
-inline int (*Board_CountPlantByType)(Board *board, int a2);
-
-inline int (*Board_SetTutorialState)(Board *board, int a2);
-
-inline Zombie *(*Board_ZombieHitTest)(Board *board, int a2, int a3, int a4);
-
-inline int (*Board_HasConveyorBeltSeedBank)(Board *board, int a2);
-
-inline int (*Board_InitCoverLayer)(Board *board);
-
 // isLongPress的数值为：首次按下为0，后续按下为1
 // playerIndex为0或者1，代表玩家1或者2
 // buttonCode和GameButton通用
@@ -425,119 +479,6 @@ inline int (*Board_InitCoverLayer)(Board *board);
 // 下 1
 // 左 2
 // 右 3
-inline int (*Board_GameAxisMove)(Board *board, int buttonCode, int playerIndex, int isLongPress);
-
-inline bool (*Board_IterateZombies)(Board *board, Zombie **zombie);
-
-inline bool (*Board_IterateGridItems)(Board *board, GridItem **gridItem);
-
-inline bool (*Board_IteratePlants)(Board *board, Plant **plant);
-
-inline bool (*Board_IterateProjectiles)(Board *board, Projectile **projectile);
-
-inline bool (*Board_IterateCoins)(Board *board, Coin **coin);
-
-inline bool (*Board_IterateLawnMowers)(Board *board, int **lawnMower);
-
-inline bool (*Board_IterateParticles)(Board *, TodParticleSystem **);
-
-inline bool (*Board_IsSurvivalStageWithRepick)(Board *board);
-
-inline void (*Board_PickUpTool)(Board *board, GameObjectType a2, int a3);
-
-inline bool (*Board_ProgressMeterHasFlags)(Board *board);
-
-inline void (*Board_GetButterButtonRect)(Sexy::Rect *, Board *);
-
-inline Zombie *(*Board_ZombieTryToGet)(Board *, Zombie *);
-
-inline int (*Board_MakeRenderOrder)(int, int, int);
-
-inline bool (*Board_PlantUsesAcceleratedPricing)(Board *board, SeedType seedType);
-
-inline bool (*Board_CanInteractWithBoardButtons)(Board *board);
-
-inline bool (*Board_IsPlantInCursor)(Board *board);
-
-inline void (*Board_MouseDownWithPlant)(Board *, int, int, int);
-
-inline void (*Board_RemoveAllPlants)(Board *);
-
-inline int (*Board_GetSeedBankExtraWidth)(Board *);
-
-inline int (*Board_GetSeedPacketPositionX)(Board *, int, int, bool);
-
-inline Coin *(*Board_AddCoin)(Board *, int, int, int, int);
-
-inline bool (*Board_CanTakeSunMoney)(Board *, int, int);
-
-inline GridItem *(*Board_GetGridItemAt)(Board *, GridItemType, int, int);
-
-inline void (*Board_GetZenButtonRect)(Sexy::Rect *, Board *, GameObjectType);
-
-inline GridItem *(*Board_GetLadderAt)(Board *, int, int);
-
-inline int (*Board_PixelToGridXKeepOnBoard)(Board *, int, int);
-
-inline int (*Board_PixelToGridYKeepOnBoard)(Board *, int, int);
-
-inline bool (*Board_IsValidCobCannonSpotHelper)(Board *, int, int);
-
-inline int (*Board_PickRowForNewZombie)(Board *, int);
-
-inline bool (*Board_IsPoolSquare)(Board *, int, int);
-
-inline void (*Board_ZombiePickerInit)(ZombiePicker *);
-
-inline ZombieType (*Board_GetIntroducedZombieType)(Board *);
-
-inline void (*Board_ZombiePickerInitForWave)(ZombiePicker *);
-
-inline void (*Board_PutZombieInWave)(Board *, ZombieType, int, ZombiePicker *);
-
-inline ZombieType (*Board_PickZombieType)(Board *, int, int, ZombiePicker *);
-
-inline bool (*Board_HasLevelAwardDropped)(Board *);
-
-inline void (*Board_SpawnZombiesFromGraves)(Board *);
-
-inline void (*Board_ClearAdvice)(Board *, int);
-
-inline void (*Board_NextWaveComing)(Board *);
-
-inline int (*Board_TotalZombiesHealthInWave)(Board *, int);
-
-inline void (*Board_ClearAdviceImmediately)(Board *);
-
-inline void (*Board_DisplayAdviceAgain)(Board *, int *, MessageStyle, AdviceType);
-
-inline int (*Board_GridCellWidth)(Board *, int, int);
-
-inline int (*Board_GridCellHeight)(Board *, int, int);
-
-inline SeedType (*Board_GetSeedTypeInCursor)(Board *, int);
-
-inline int (*Board_KillAllZombiesInRadius)(Board *, int, int, int, int, int, bool, int);
-
-inline void (*Board_TryToSaveGame)(Board *board);
-
-inline void (*Board_RemoveCutsceneZombies)(Board *);
-
-inline int (*Board_CountZombiesOnScreen)(Board *);
-
-inline float (*Board_GetPosYBasedOnRow)(Board *board, float, int);
-
-inline bool (*Board_CanTakeDeathMoney)(Board *, int);
-
-inline Zombie *(*Board_GetBossZombie)(Board *);
-
-inline void (*Board_RemoveAllMowers)(Board *);
-
-inline void (*Board_ResetLawnMowers)(Board *board);
-
-inline void (*Board_RemoveAllZombies)(Board *);
-
-inline GamepadControls *(*Board_GetGamepadControlsByPlayerIndex)(Board *, int);
 
 
 inline void (*old_FixBoardAfterLoad)(Board *board);
@@ -640,7 +581,7 @@ inline void (*old_Board_ShakeBoard)(Board *board, int theShakeAmountX, int theSh
 
 inline void (*old_Board_UpdateFog)(Board *board);
 
-inline void (*old_Board_GetShovelButtonRect)(Sexy::Rect *rect, Board *board);
+inline Sexy::Rect (*old_Board_GetShovelButtonRect)(Board *board);
 
 inline void (*old_Board_DrawZenButtons)(Board *board, Sexy::Graphics *a2);
 
@@ -659,29 +600,17 @@ Sexy::Image *GetIconByAchievementId(AchievementId::AchievementId theAchievementI
 
 void Board_FixReanimErrorAfterLoad(Board *board);
 
-void Board_GetShovelButtonRect(Sexy::Rect *, Board *);
-
 bool TRect_Contains(Sexy::Rect *rect, int x, int y);
 
 void Board_MouseDragSecond(Board *board, int x, int y);
 
 void Board_MouseUpSecond(Board *board, int x, int y, int theClickCount);
 
-void Board_LoadFormation(Board *board, const char *formation);
-
-bool Board_GrantAchievement(Board *board, AchievementId::AchievementId theAchievementId, bool show);
-
 void Board_DoPlantingAchievementCheck(Board *board, SeedType theType);
-
-int Board_GetLiveZombiesCount(Board *board);
 
 bool Board_ZenGardenItemNumIsZero(Board *, CursorType);
 
 void Board_SetGrids(Board *board);
-
-void Board_parseFormationSegment(Board *board, char *segment);
-
-void Board_LoadFormation(Board *board, char *formation);
 
 bool Board_KeyUp(Board *board, int keyCode);
 
@@ -696,8 +625,6 @@ void Board_DrawHammerButton(Board *board, Sexy::Graphics *graphics, LawnApp *law
 void Board_DrawButterButton(Board *board, Sexy::Graphics *graphics, LawnApp *lawnApp);
 
 void Board_DrawStartButton(Board *board, Sexy::Graphics *graphics, LawnApp *lawnApp);
-
-int Board_GetLiveGargantuarCount(Board *board);
 
 void Board_UpdateButtons(Board *board);
 
