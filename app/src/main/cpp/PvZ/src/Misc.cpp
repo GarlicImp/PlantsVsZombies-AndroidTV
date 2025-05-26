@@ -1,13 +1,13 @@
 #include "PvZ/Misc.h"
 #include "PvZ/GlobalVariable.h"
-#include "PvZ/Lawn/Board.h"
-#include "PvZ/Lawn/Challenge.h"
+#include "PvZ/Lawn/Board/Board.h"
+#include "PvZ/Lawn/Board/Challenge.h"
+#include "PvZ/Lawn/Board/Plant.h"
+#include "PvZ/Lawn/Board/Zombie.h"
 #include "PvZ/Lawn/LawnApp.h"
-#include "PvZ/Lawn/Plant.h"
-#include "PvZ/Lawn/Reanimation.h"
-#include "PvZ/Lawn/Zombie.h"
-#include "PvZ/SexyAppFramework/Graphics.h"
+#include "PvZ/SexyAppFramework/Graphics/Graphics.h"
 #include "PvZ/Symbols.h"
+#include "PvZ/TodLib/Effect/Reanimator.h"
 
 #include <cassert>
 
@@ -631,81 +631,6 @@ Sexy::Image *FilterEffectGetImage(Sexy::Image *image, FilterEffect mFilterEffect
 }
 
 void FilterEffectDisposeForApp() {}
-
-void ReanimatorCache::LoadCachedImages() {
-    // 此时尚未加载AddonImages！不可在此处替换贴图们
-    old_ReanimatorCache_LoadCachedImages(this);
-}
-
-void ReanimatorCache::UpdateReanimationForVariation(Reanimation *theReanim, DrawVariation theDrawVariation) {
-    // 修复商店花盆不显示、修复花园花盆不显示、修复花园手套和推车预览不显示。原理就是Reanimation_Update。
-    old_ReanimatorCache_UpdateReanimationForVariation(this, theReanim, theDrawVariation);
-    float tmp = theReanim->mAnimRate;
-    //    Reanimation_SetAnimRate(theReanim, 0.0f);
-    Reanimation_Update(theReanim);
-    //    Reanimation_SetAnimRate(theReanim, tmp);
-}
-
-void ReanimatorCache_DrawCachedPlant(ReanimatorCache *a1, Sexy::Graphics *graphics, float thePosX, float thePosY, SeedType theSeedType, DrawVariation drawVariation) {
-    if (drawVariation == DrawVariation::VARIATION_IMITATER_LESS || drawVariation == DrawVariation::VARIATION_IMITATER || drawVariation == DrawVariation::VARIATION_NORMAL) {
-        Sexy::Image *image = a1->mPlantImages[theSeedType];
-        if (image == nullptr) {
-            return;
-        }
-        if (drawVariation == DrawVariation::VARIATION_IMITATER) {
-            image = FilterEffectGetImage(image, FilterEffect::FILTEREFFECT_WASHED_OUT);
-        } else if (drawVariation == DrawVariation::VARIATION_IMITATER_LESS) {
-            image = FilterEffectGetImage(image, FilterEffect::FILTEREFFECT_LESS_WASHED_OUT);
-        }
-        int a, b, c, d;
-        ReanimatorCache_GetPlantImageSize(a1, theSeedType, &a, &b, &c, &d);
-        float xScaled = graphics->mScaleX;
-        float yScaled = graphics->mScaleY;
-        // 修复关闭3D加速后SeedPacket上不显示植物
-        //        if (Sexy_SexyAppBase_Is3DAccelerated(a1->mApp)) {
-        TodDrawImageScaledF(graphics, image, thePosX + xScaled * a, thePosY + yScaled * b, xScaled, yScaled);
-        //        } else {
-        //            if (xScaled == 1.0 && yScaled == 1.0) {
-        //                Sexy_Graphics_DrawImage(graphics, image, thePosX + a, thePosY + b);
-        //                return;
-        //            }
-        //        }
-    } else {
-        return old_ReanimatorCache_DrawCachedPlant(a1, graphics, thePosX, thePosY, theSeedType, drawVariation);
-    }
-}
-
-// 为红眼巨人增加SeedPacket图标
-Sexy::Image *ReanimatorCache::MakeCachedZombieFrame(ZombieType theZombieType) {
-
-    if (theZombieType != ZombieType::ZOMBIE_REDEYE_GARGANTUAR) {
-        return old_ReanimatorCache_MakeCachedZombieFrame(this, theZombieType);
-    }
-
-    Sexy_MemoryImage_Delete(mZombieImages[theZombieType]);
-    mZombieImages[theZombieType] = nullptr;
-
-    Sexy::MemoryImage *BlankCanvasImage = ReanimatorCache_MakeBlankCanvasImage(this, (theZombieType == ZombieType::ZOMBIE_ZAMBONI ? 512 : 256), 256);
-    Sexy::Graphics graphics;
-    Sexy_Graphics_Graphics2(&graphics, BlankCanvasImage);
-    Sexy_Graphics_SetLinearBlend(&graphics, 1);
-    ZombieType zombieType_reanim = theZombieType != ZombieType::ZOMBIE_CACHED_POLEVAULTER_WITH_POLE ? theZombieType : ZombieType::ZOMBIE_POLEVAULTER;
-    ReanimationType reanimationType = GetZombieDefinition(zombieType_reanim).mReanimationType;
-    float x = 40;
-    float y = 60;
-    Reanimation reanimation;
-    Reanimation_Reanimation(&reanimation);
-    Reanimation_ReanimationInitializeType(&reanimation, x, y, reanimationType);
-    Reanimation_SetFramesForLayer(&reanimation, "anim_idle");
-    Zombie::SetupReanimLayers(&reanimation, zombieType_reanim);
-    Reanimation_SetImageOverride(&reanimation, "anim_head1", *Sexy_IMAGE_REANIM_ZOMBIE_GARGANTUAR_HEAD_REDEYE_Addr);
-    Reanimation_Update(&reanimation);
-    Reanimation_Draw(&reanimation, &graphics);
-    Reanimation_Delete2(&reanimation);
-    mZombieImages[theZombieType] = BlankCanvasImage;
-    Sexy_Graphics_Delete2(&graphics);
-    return BlankCanvasImage;
-}
 
 void DrawSeedType(Sexy::Graphics *graphics, float x, float y, SeedType theSeedType, SeedType theImitaterType, float xOffset, float yOffset, float scale) {
     // 和Plant_DrawSeedType配合使用，用于绘制卡槽内的模仿者SeedPacket变白效果。

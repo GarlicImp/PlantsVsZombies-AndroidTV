@@ -5,38 +5,39 @@
 #include "Misc.h"
 #include "PvZ/Android/IntroVideo.h"
 #include "PvZ/Android/OpenSL.h"
-#include "PvZ/Lawn/AlmanacDialog.h"
-#include "PvZ/Lawn/AwardScreen.h"
-#include "PvZ/Lawn/Board.h"
-#include "PvZ/Lawn/Challenge.h"
-#include "PvZ/Lawn/ChallengeScreen.h"
-#include "PvZ/Lawn/Coin.h"
-#include "PvZ/Lawn/ConfirmBackToMainDialog.h"
-#include "PvZ/Lawn/CutScene.h"
+#include "PvZ/Lawn/Board/Board.h"
+#include "PvZ/Lawn/Board/Challenge.h"
+#include "PvZ/Lawn/Board/Coin.h"
+#include "PvZ/Lawn/Board/CutScene.h"
+#include "PvZ/Lawn/Board/GridItem.h"
+#include "PvZ/Lawn/Board/Plant.h"
+#include "PvZ/Lawn/Board/Projectile.h"
+#include "PvZ/Lawn/Board/SeedBank.h"
+#include "PvZ/Lawn/Board/SeedPacket.h"
+#include "PvZ/Lawn/Board/ZenGarden.h"
+#include "PvZ/Lawn/Board/Zombie.h"
 #include "PvZ/Lawn/GamepadControls.h"
-#include "PvZ/Lawn/GridItem.h"
-#include "PvZ/Lawn/HelpOptionsDialog.h"
-#include "PvZ/Lawn/HelpTextScreen.h"
-#include "PvZ/Lawn/HouseChooserDialog.h"
-#include "PvZ/Lawn/ImitaterDialog.h"
 #include "PvZ/Lawn/LawnApp.h"
-#include "PvZ/Lawn/MailScreen.h"
-#include "PvZ/Lawn/MainMenu.h"
-#include "PvZ/Lawn/Music.h"
-#include "PvZ/Lawn/Plant.h"
-#include "PvZ/Lawn/Projectile.h"
-#include "PvZ/Lawn/Reanimation.h"
-#include "PvZ/Lawn/SeedBank.h"
-#include "PvZ/Lawn/SeedChooserScreen.h"
-#include "PvZ/Lawn/SeedPacket.h"
-#include "PvZ/Lawn/SettingsDialog.h"
-#include "PvZ/Lawn/StoreScreen.h"
-#include "PvZ/Lawn/TitleScreen.h"
-#include "PvZ/Lawn/VSResultsMenu.h"
-#include "PvZ/Lawn/VSSetupMenu.h"
-#include "PvZ/Lawn/ZenGarden.h"
-#include "PvZ/Lawn/Zombie.h"
-#include "PvZ/SexyAppFramework/Graphics.h"
+#include "PvZ/Lawn/System/Music.h"
+#include "PvZ/Lawn/System/ReanimationLawn.h"
+#include "PvZ/Lawn/Widget/AlmanacDialog.h"
+#include "PvZ/Lawn/Widget/AwardScreen.h"
+#include "PvZ/Lawn/Widget/ChallengeScreen.h"
+#include "PvZ/Lawn/Widget/ConfirmBackToMainDialog.h"
+#include "PvZ/Lawn/Widget/HelpOptionsDialog.h"
+#include "PvZ/Lawn/Widget/HelpTextScreen.h"
+#include "PvZ/Lawn/Widget/HouseChooserDialog.h"
+#include "PvZ/Lawn/Widget/ImitaterDialog.h"
+#include "PvZ/Lawn/Widget/MailScreen.h"
+#include "PvZ/Lawn/Widget/MainMenu.h"
+#include "PvZ/Lawn/Widget/SeedChooserScreen.h"
+#include "PvZ/Lawn/Widget/SettingsDialog.h"
+#include "PvZ/Lawn/Widget/StoreScreen.h"
+#include "PvZ/Lawn/Widget/TitleScreen.h"
+#include "PvZ/Lawn/Widget/VSResultsMenu.h"
+#include "PvZ/Lawn/Widget/VSSetupMenu.h"
+#include "PvZ/SexyAppFramework/Graphics/Graphics.h"
+#include "PvZ/TodLib/Effect/Reanimator.h"
 #include "Symbols.h"
 
 inline void InitInGameFunction() {
@@ -274,7 +275,6 @@ inline void InitInGameFunction() {
     HouseChooserDialog_GameButtonDown = (decltype(HouseChooserDialog_GameButtonDown))HouseChooserDialog_GameButtonDownAddr;
     ReanimAtlas_GetEncodedReanimAtlas = (decltype(ReanimAtlas_GetEncodedReanimAtlas))ReanimAtlas_GetEncodedReanimAtlasAddr;
     ReanimatorEnsureDefinitionLoaded = (decltype(ReanimatorEnsureDefinitionLoaded))ReanimatorEnsureDefinitionLoadedAddr;
-    ReanimatorCache_GetPlantImageSize = (decltype(ReanimatorCache_GetPlantImageSize))ReanimatorCache_GetPlantImageSizeAddr;
     ReanimatorCache_MakeCachedPlantFrame = (decltype(ReanimatorCache_MakeCachedPlantFrame))ReanimatorCache_MakeCachedPlantFrameAddr;
     ReanimatorCache_MakeBlankCanvasImage = (decltype(ReanimatorCache_MakeBlankCanvasImage))ReanimatorCache_MakeBlankCanvasImageAddr;
     ReanimatorCache_DrawReanimatorFrame = (decltype(ReanimatorCache_DrawReanimatorFrame))ReanimatorCache_DrawReanimatorFrameAddr;
@@ -699,7 +699,7 @@ inline void InitHookFunction() {
     //    MSHookFunction(FilterEffectDisposeForAppAddr,(void *) FilterEffectDisposeForApp,nullptr);
     //    MSHookFunction(FilterEffectGetImageAddr,(void *) FilterEffectGetImage,nullptr);
     homura::HookFunction(Reanimation_DrawTrackAddr, &Reanimation::DrawTrack, &old_Reanimation_DrawTrack);
-    homura::HookFunction(ReanimatorCache_DrawCachedPlantAddr, &ReanimatorCache_DrawCachedPlant, &old_ReanimatorCache_DrawCachedPlant);
+    homura::HookFunction(ReanimatorCache_DrawCachedPlantAddr, &ReanimatorCache::DrawCachedPlant, &old_ReanimatorCache_DrawCachedPlant);
     homura::HookFunction(ReanimatorCache_UpdateReanimationForVariationAddr, &ReanimatorCache::UpdateReanimationForVariation, &old_ReanimatorCache_UpdateReanimationForVariation);
     homura::HookFunction(ReanimatorCache_LoadCachedImagesAddr, &ReanimatorCache::LoadCachedImages, &old_ReanimatorCache_LoadCachedImages);
     homura::HookFunction(ReanimatorCache_MakeCachedZombieFrameAddr, &ReanimatorCache::MakeCachedZombieFrame, &old_ReanimatorCache_MakeCachedZombieFrame);

@@ -2583,48 +2583,6 @@ public:
     int mAttachmentID;
 }; // 大小199个整数
 
-struct ReanimCacheImageVariation {
-    SeedType mSeedType;
-    DrawVariation mDrawVariation;
-    Sexy::Image *mImage;
-};
-
-struct TodListNode_ReanimCacheImageVariation {
-    ReanimCacheImageVariation mValue;
-    TodListNode_ReanimCacheImageVariation *mNext;
-    TodListNode_ReanimCacheImageVariation *mPrev;
-};
-
-struct TodAllocator {
-    void *mFreeList;
-    void *mBlockList;
-    int mGrowCount;
-    int mTotalItems;
-    int mItemSize;
-};
-
-struct TodList_ReanimCacheImageVariation {
-    TodListNode_ReanimCacheImageVariation *mHead;
-    TodListNode_ReanimCacheImageVariation *mTail;
-    int mSize;
-    TodAllocator *mpAllocator;
-};
-
-class ReanimatorCache {
-public:
-    TodList_ReanimCacheImageVariation mImageVariationList;
-    Sexy::MemoryImage *mPlantImages[SeedType::NUM_SEED_TYPES];             // 4 ~ 57
-    Sexy::MemoryImage *mLawnMowers[4];                                     // 58 ~ 61
-    Sexy::MemoryImage *mZombieImages[ZombieType::NUM_CACHED_ZOMBIE_TYPES]; // 62 ~ 97
-    LawnApp *mApp;                                                         // 98
-    // 大小99个整数
-public:
-    void UpdateReanimationForVariation(Reanimation *theReanim, DrawVariation theDrawVariation);
-    void LoadCachedImages();
-    Sexy::Image *MakeCachedZombieFrame(ZombieType theZombieType);
-};
-
-
 struct PerfTimer {
     int unk[5];
 };
