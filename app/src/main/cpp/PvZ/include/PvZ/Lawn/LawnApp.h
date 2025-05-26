@@ -1,8 +1,9 @@
 #ifndef PVZ_LAWN_LAWN_APP_H
 #define PVZ_LAWN_LAWN_APP_H
 
-#include "PvZ/Enums.h"
+#include "PvZ/Lawn/Common/ConstEnums.h"
 #include "PvZ/Symbols.h"
+#include "PvZ/SexyAppFramework/Graphics/Image.h"
 
 class ZenGarden;
 

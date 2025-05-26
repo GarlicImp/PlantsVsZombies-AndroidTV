@@ -1,5 +1,5 @@
 #include "PvZ/TodLib/Effect/Reanimator.h"
-#include "PvZ/Enums.h"
+#include "PvZ/Lawn/Common/ConstEnums.h"
 #include "PvZ/Lawn/Widget/MainMenu.h"
 #include "PvZ/Misc.h"
 #include "PvZ/SexyAppFramework/Graphics/Graphics.h"

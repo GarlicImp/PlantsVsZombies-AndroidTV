@@ -1,7 +1,85 @@
 #ifndef PVZ_LAWN_REANIMATION_H
 #define PVZ_LAWN_REANIMATION_H
 
-#include "PvZ/Enums.h"
+#include "AttachEffect.h"
+#include "EffectSystem.h"
+#include "PvZ/Lawn/Common/ConstEnums.h"
+#include "PvZ/SexyAppFramework/Misc/SexyMatrix.h"
+
+namespace Sexy
+{
+class Font;
+class Image;
+class Graphics;
+class MemoryImage;
+};
+
+// ######################################################################################################################################################
+// ############################################################### 以下为动画定义相关内容 ###############################################################
+// ######################################################################################################################################################
+
+// ====================================================================================================
+// ★ 【动画器定义】
+// ----------------------------------------------------------------------------------------------------
+// 用于描述一种动画类型与该动画的数据文件的文件名及标志之间的对应关系。
+// ====================================================================================================
+class ReanimatorDefinition {
+public:
+    ReanimatorTrack *mTracks; // 0
+    int mTrackCount;          // 1
+    float mFPS;               // 2
+    int *mReanimAtlas;        // 3
+}; // 大小4个整数
+
+// ====================================================================================================
+// ★ 【动画参数】
+// ----------------------------------------------------------------------------------------------------
+// 用于描述一种动画类型与该动画的数据文件的文件名及标志之间的对应关系。
+// ====================================================================================================
+class ReanimationParams {
+public:
+    ReanimationType mReanimationType;
+    const char *mReanimFileName;
+    int mReanimParamFlags;
+};
+
+class ReanimatorTransform {
+public:
+    float mTransX;        // 0
+    float mTransY;        // 1
+    float mSkewX;         // 2
+    float mSkewY;         // 3
+    float mScaleX;        // 4
+    float mScaleY;        // 5
+    float mFrame;         // 6
+    float mAlpha;         // 7
+    Sexy::Image *mImage;  // 8
+    Sexy::Image *mImage2; // 9
+    int *mFont;           // 10
+    char *mName;          // 11
+}; // 大小12个整数
+
+class ReanimatorTrackInstance {
+public:
+    int mBlendCounter;                   // 0
+    int mBlendTime;                      // 1
+    ReanimatorTransform mBlendTransform; // 2 ~ 13
+    float mShakeOverride;                // 14
+    float mShakeX;                       // 15
+    float mShakeY;                       // 16
+    unsigned short mAttachmentID;        // 17
+    Sexy::Image *mImageOverride;         // 18
+    int mRenderGroup;                    // 19
+    Sexy::Color mTrackColor;             // 20 ~ 23
+    bool mIgnoreClipRect;                // 96
+    bool mTruncateDisappearingFrames;    // 97
+    bool mIgnoreColorOverride;           // 98
+    bool mIgnoreExtraAdditiveColor;      // 99
+}; // 大小25个整数
+
+// ######################################################################################################################################################
+// ############################################################## 以下正式开始动画相关声明 ##############################################################
+// ######################################################################################################################################################
 
 enum { RENDER_GROUP_HIDDEN = -1, RENDER_GROUP_NORMAL = 0 };
 
@@ -17,27 +95,27 @@ public:
     int mFrameStart;                            // 10
     int mFrameCount;                            // 11
     int mFrameBasePose;                         // 12
-    SexyTransform2D mOverlayMatrix;             // 13 ~ 21
-    Color mColorOverride;                       // 22 ~ 25
+    Sexy::SexyTransform2D mOverlayMatrix;       // 13 ~ 21
+    Sexy::Color mColorOverride;                 // 22 ~ 25
     ReanimatorTrackInstance *mTrackInstances;   // 26
     int mLoopCount;                             // 27
     int *mReanimationHolder;                    // 28
     bool mIsAttachment;                         // 116
     int mRenderOrder;                           // 30
-    Color mExtraAdditiveColor;                  // 31 ~ 34
+    Sexy::Color mExtraAdditiveColor;            // 31 ~ 34
     bool mEnableExtraAdditiveDraw;              // 140
-    Color mExtraOverlayColor;                   // 36 ~ 39
+    Sexy::Color mExtraOverlayColor;             // 36 ~ 39
     bool mEnableExtraOverlayDraw;               // 160
     float mLastFrameTime;                       // 41
     FilterEffect mFilterEffect;                 // 42
-    Color mCustomFilterEffectColor;             // 43 ~ 46
+    Sexy::Color mCustomFilterEffectColor;       // 43 ~ 46
     int unk2[4];                                // 47 ~ 50
     ReanimatorTransform *mReanimatorTransforms; // 51
     bool unkBool;                               // 208
     float unkFloatWithInitialValue_1;           // 53
     int mReanimationID;                         // 54
     // 大小55个整数
-public:
+
     bool DrawTrack(Sexy::Graphics *g, int theTrackIndex, int theRenderGroup, TodTriangleGroup *theTriangleGroup);
     bool ShouldTriggerTimedEvent(float theEventTime);
     void AssignRenderGroupToTrack(const char *theTrackName, int theRenderGroup);
@@ -56,7 +134,6 @@ public:
     int unk2[3];                     // 3 ~ 5
     char *mName;                     // 6
 };
-
 /***************************************************************************************************************/
 inline void (*Reanimation_SetPosition)(Reanimation *a, float a2, float a3);
 
@@ -110,7 +187,7 @@ inline void (*Reanimation_GetFrameTime)(Reanimation *, ReanimatorFrameTime *pTim
 
 inline void (*TodScaleRotateTransformMatrix)(Sexy::SexyMatrix3 *, float, float, float, float, float);
 
-inline void (*Reanimation_GetTrackMatrix)(Reanimation *pInstance, int i, SexyTransform2D *pD);
+inline void (*Reanimation_GetTrackMatrix)(Reanimation *pInstance, int i, Sexy::SexyTransform2D *pD);
 
 
 inline bool (*old_Reanimation_DrawTrack)(Reanimation *reanim, Sexy::Graphics *g, int theTrackIndex, int theRenderGroup, TodTriangleGroup *theTriangleGroup);

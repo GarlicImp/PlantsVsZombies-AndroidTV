@@ -10,8 +10,11 @@
 #include "PvZ/SexyAppFramework/Graphics/Graphics.h"
 #include "PvZ/Symbols.h"
 #include "PvZ/TodLib/Effect/Reanimator.h"
+#include "PvZ/Lawn/Board/CursorObject.h"
 
 #include <numbers>
+
+using namespace Sexy;
 
 void GridItem::DrawScaryPot(Sexy::Graphics* g) {
     // 修复路灯花照透罐子

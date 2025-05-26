@@ -1,7 +1,9 @@
 #ifndef PVZ_LAWN_TITLE_SCREEN_H
 #define PVZ_LAWN_TITLE_SCREEN_H
 
-#include "PvZ/Enums.h"
+#include "PvZ/Lawn/Common/ConstEnums.h"
+#include "PvZ/SexyAppFramework/Widget/ButtonListener.h"
+#include "PvZ/SexyAppFramework/Widget/Widget.h"
 
 class TitleScreen : public Sexy::Widget {
 

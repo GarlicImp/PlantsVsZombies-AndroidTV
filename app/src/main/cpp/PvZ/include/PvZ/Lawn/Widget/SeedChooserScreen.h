@@ -1,7 +1,7 @@
 #ifndef PVZ_LAWN_SEED_CHOOSER_SCREEN_H
 #define PVZ_LAWN_SEED_CHOOSER_SCREEN_H
 
-#include "PvZ/Enums.h"
+#include "PvZ/Lawn/Common/ConstEnums.h"
 #include "PvZ/Lawn/GamepadControls.h"
 
 class SeedChooserScreen : public Sexy::Widget {
@@ -69,7 +69,7 @@ public:
     bool SeedNotAllowedToPick(SeedType theSeedType);
     void ClickedSeedInBank(ChosenSeed *theChosenSeed, unsigned int thePlayerIndex);
     void GameButtonDown(ButtonCode theButton, unsigned int thePlayerIndex);
-    void DrawPacket(Sexy::Graphics *g, int x, int y, SeedType theSeedType, SeedType theImitaterType, float thePercentDark, int theGrayness, Color *theColor, bool theDrawCost, bool theUseCurrentCost);
+    void DrawPacket(Sexy::Graphics *g, int x, int y, SeedType theSeedType, SeedType theImitaterType, float thePercentDark, int theGrayness, Sexy::Color *theColor, bool theDrawCost, bool theUseCurrentCost);
     void ButtonDepress(int theId);
     void GetSeedPositionInBank(int theIndex, int *x, int *y, int thePlayerIndex);
     void ShowToolTip(unsigned int thePlayerIndex);

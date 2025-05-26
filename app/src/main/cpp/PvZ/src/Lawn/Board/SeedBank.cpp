@@ -11,6 +11,8 @@
 #include "PvZ/SexyAppFramework/Graphics/Graphics.h"
 #include "PvZ/Symbols.h"
 
+using namespace Sexy;
+
 SeedBank::SeedBank(bool thePlayerIndex) {
     Create(thePlayerIndex);
 }

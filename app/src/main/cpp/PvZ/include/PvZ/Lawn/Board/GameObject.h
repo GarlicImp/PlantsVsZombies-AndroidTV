@@ -1,0 +1,30 @@
+//
+// Created by 28636 on 2025/5/26.
+//
+
+#ifndef PLANTSVSZOMBIES_ANDROIDTV_GAMEOBJECT_H
+#define PLANTSVSZOMBIES_ANDROIDTV_GAMEOBJECT_H
+
+#include "PvZ/Lawn/Common/ConstEnums.h"
+#include "PvZ/SexyAppFramework/Graphics/Graphics.h"
+
+class LawnApp;
+class Board;
+
+class GameObject {
+public:
+    int *vTable;        // 0
+    int placeHolder[3]; // 1 ~ 3
+    LawnApp *mApp;      // 4
+    Board *mBoard;      // 5
+    int mX;             // 6
+    int mY;             // 7
+    int mWidth;         // 8
+    int mHeight;        // 9
+    bool mVisible;      // 40
+    int mRow;           // 11
+    int mRenderOrder;   // 12
+}; // 大小13个整数
+
+
+#endif // PLANTSVSZOMBIES_ANDROIDTV_GAMEOBJECT_H

@@ -1,7 +1,7 @@
 #ifndef PVZ_LAWN_MUSIC_H
 #define PVZ_LAWN_MUSIC_H
 
-#include "PvZ/Enums.h"
+#include "PvZ/Lawn/Common/ConstEnums.h"
 
 class Music { // 加载XBOX版xm格式音乐时用。优：音质好、有鼓点。缺：鼓点BUG多，xm格式难以修改
 public:

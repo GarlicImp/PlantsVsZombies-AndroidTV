@@ -1,7 +1,8 @@
 #ifndef PVZ_LAWN_IMITATER_DIALOG_H
 #define PVZ_LAWN_IMITATER_DIALOG_H
 
-#include "PvZ/Enums.h"
+#include "LawnDialog.h"
+#include "PvZ/Lawn/Common/ConstEnums.h"
 
 inline SeedType (*ImitaterDialog_SeedHitTest)(LawnDialog *, int, int);
 

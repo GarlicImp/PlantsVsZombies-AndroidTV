@@ -1,7 +1,7 @@
 #ifndef PVZ_ANDROID_OPENSL_H
 #define PVZ_ANDROID_OPENSL_H
 
-#include "PvZ/Enums.h"
+#include "PvZ/Lawn/Common/ConstEnums.h"
 
 #include <SLES/OpenSLES.h>
 #include <SLES/OpenSLES_Android.h>

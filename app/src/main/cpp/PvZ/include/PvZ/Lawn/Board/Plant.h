@@ -1,7 +1,8 @@
 #ifndef PVZ_LAWN_PLANT_H
 #define PVZ_LAWN_PLANT_H
 
-#include "PvZ/Enums.h"
+#include "GameObject.h"
+#include "PvZ/Lawn/Common/ConstEnums.h"
 #include "PvZ/Symbols.h"
 
 #define MAX_MAGNET_ITEMS 5

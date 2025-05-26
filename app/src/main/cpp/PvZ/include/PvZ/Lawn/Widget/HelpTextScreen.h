@@ -1,7 +1,8 @@
 #ifndef PVZ_LAWN_HELP_TEXT_SCREEN_H
 #define PVZ_LAWN_HELP_TEXT_SCREEN_H
 
-#include "PvZ/Enums.h"
+#include "PvZ/Lawn/Common/ConstEnums.h"
+#include "PvZ/SexyAppFramework/Widget/Widget.h"
 
 inline void (*HelpTextScreen_KeyDown)(Sexy::Widget *, int);
 

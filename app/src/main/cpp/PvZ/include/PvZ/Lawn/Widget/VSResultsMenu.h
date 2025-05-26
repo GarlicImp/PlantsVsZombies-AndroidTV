@@ -1,11 +1,10 @@
 #ifndef PVZ_LAWN_VS_RESULTS_MENU_H
 #define PVZ_LAWN_VS_RESULTS_MENU_H
 
-#include "PvZ/Enums.h"
+#include "PvZ/Lawn/Common/ConstEnums.h"
+#include "PvZ/SexyAppFramework/Widget/Widget.h"
 
 class VSResultsMenu {
-    int m;
-
 public:
 };
 

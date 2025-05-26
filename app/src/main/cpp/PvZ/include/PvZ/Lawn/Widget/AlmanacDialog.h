@@ -1,7 +1,10 @@
 #ifndef PVZ_LAWN_ALMANAC_DIALOG_H
 #define PVZ_LAWN_ALMANAC_DIALOG_H
 
-#include "PvZ/Enums.h"
+#include "LawnDialog.h"
+#include "PvZ/Lawn/Common/ConstEnums.h"
+#include "PvZ/SexyAppFramework/Widget/CustomScrollbarWidget.h"
+
 
 class AlmanacDialog : public LawnDialog {
 public:

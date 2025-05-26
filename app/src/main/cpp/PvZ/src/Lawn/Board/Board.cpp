@@ -22,10 +22,13 @@
 #include "PvZ/Lawn/Widget/SeedChooserScreen.h"
 #include "PvZ/Misc.h"
 #include "PvZ/SexyAppFramework/Graphics/Graphics.h"
+#include "PvZ/SexyAppFramework/Widget/GameButton.h"
 #include "PvZ/Symbols.h"
 #include "PvZ/TodLib/Effect/Reanimator.h"
+#include "PvZ/Lawn/Board/CursorObject.h"
 #include <cstddef>
 #include <cstdio>
+
 using namespace Sexy;
 
 Board::Board(LawnApp *theApp) {

@@ -1,7 +1,8 @@
 #ifndef PVZ_LAWN_GAMEPAD_CONTROLS_H
 #define PVZ_LAWN_GAMEPAD_CONTROLS_H
 
-#include "PvZ/Enums.h"
+#include "PvZ/Lawn/Common/ConstEnums.h"
+#include "PvZ/Misc.h"
 
 class GamepadControls : public BaseGamepadControls {
 public:

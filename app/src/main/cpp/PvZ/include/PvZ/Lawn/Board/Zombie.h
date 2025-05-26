@@ -1,7 +1,8 @@
 #ifndef PVZ_TV_1_1_5_ZOMBIE_H
 #define PVZ_TV_1_1_5_ZOMBIE_H
 
-#include "PvZ/Enums.h"
+#include "GameObject.h"
+#include "PvZ/Lawn/Common/ConstEnums.h"
 #include "PvZ/Lawn/Common/GameConstants.h"
 #include "PvZ/Symbols.h"
 

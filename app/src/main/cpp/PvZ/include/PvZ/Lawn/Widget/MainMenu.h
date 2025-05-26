@@ -1,8 +1,13 @@
 #ifndef PVZ_LAWN_MAIN_MENU_H
 #define PVZ_LAWN_MAIN_MENU_H
 
-#include "PvZ/Enums.h"
+#include "LeaderboardsWidget.h"
+#include "PvZ/Lawn/Common/ConstEnums.h"
+#include "PvZ/Lawn/Widget/AchievementsWidget.h"
+#include "PvZ/SexyAppFramework/Misc/KeyCodes.h"
+#include "PvZ/SexyAppFramework/Widget/MenuWidget.h"
 #include "PvZ/Symbols.h"
+#include "ZombatarWidget.h"
 
 class MainMenu : public Sexy::MenuWidget {
 public:
