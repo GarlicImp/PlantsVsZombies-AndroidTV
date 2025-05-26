@@ -18,7 +18,7 @@ void SeedPacket::Update() {
 
     if (requestPause) {
 
-        if (LawnApp_IsIZombieLevel(mApp)) {
+        if (mApp->IsIZombieLevel()) {
             // 在IZ模式不暂停刷新种子卡片
             return old_SeedPacket_Update(this);
         }
@@ -35,7 +35,7 @@ void SeedPacket::Update() {
 }
 
 void SeedPacket::UpdateSelected() {
-    if (mApp->mGameMode == GameMode::GAMEMODE_MP_VS || LawnApp_IsCoopMode(mApp)) {
+    if (mApp->mGameMode == GameMode::GAMEMODE_MP_VS || mApp->IsCoopMode()) {
         // 如果是双人模式关卡(对战或结盟)，则使用下面的逻辑来更新当前选中的卡片。用于修复1P和2P的卡片选择框同时出现在两个人各自的植物栏里(也就是植物栏一共出现四个选择框)的问题。
         int mSelectedSeedIndex1P = mBoard->mGamepadControls1->mSelectedSeedIndex;
         int mSelectedSeedIndex2P = mBoard->mGamepadControls2->mSelectedSeedIndex;
@@ -99,7 +99,7 @@ void SeedPacket::FlashIfReady() {
         playerIndex = mSeedBank->mIsZombie;
     }
     if (!mBoard->HasConveyorBeltSeedBank(playerIndex) && mSeedBank != nullptr) {
-        LawnApp_AddTodParticle(mApp, mSeedBank->mX + mX, mSeedBank->mY + mY, 100000 + 2, ParticleEffect::PARTICLE_SEED_PACKET_FLASH);
+        mApp->AddTodParticle(mSeedBank->mX + mX, mSeedBank->mY + mY, 100000 + 2, ParticleEffect::PARTICLE_SEED_PACKET_FLASH);
     }
     TutorialState tutorialState = mBoard->mTutorialState;
     if (tutorialState == TutorialState::TUTORIAL_LEVEL_1_REFRESH_PEASHOOTER) {

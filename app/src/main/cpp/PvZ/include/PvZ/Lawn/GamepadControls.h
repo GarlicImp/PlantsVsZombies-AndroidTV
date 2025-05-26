@@ -15,9 +15,9 @@ public:
     int mCobCannonPlantIndexInList;    // 49
     bool mIsCobCannonSelected;         // 200
     float mUpdateAdd_a2_Or_Minus_2xa2; // 51
-    int mPreviewReanimID1;             // 52
-    int mCursorReanimID;               // 53
-    int mPreviewReanimID3;             // 54
+    ReanimationID mPreviewReanimID1;   // 52
+    ReanimationID mCursorReanimID;     // 53
+    ReanimationID mPreviewReanimID3;   // 54
     int mUnkCobCannonRelated;          // 55
     ReanimationID mPreviewReanimID4;   // 56
     SeedType mPreviewingSeedType;      // 57

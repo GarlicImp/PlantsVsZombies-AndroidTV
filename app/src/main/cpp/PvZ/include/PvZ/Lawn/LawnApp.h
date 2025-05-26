@@ -97,17 +97,112 @@ public:
 
     Reanimation *ReanimationGet(ReanimationID theReanimationID) { return reinterpret_cast<Reanimation *(*)(LawnApp *, ReanimationID)>(LawnApp_ReanimationGetAddr)(this, theReanimationID); }
     Reanimation *ReanimationTryToGet(ReanimationID theReanimationID) { return reinterpret_cast<Reanimation *(*)(LawnApp *, ReanimationID)>(LawnApp_ReanimationTryToGetAddr)(this, theReanimationID); }
+    void ClearSecondPlayer() { reinterpret_cast<void (*)(LawnApp *)>(LawnApp_ClearSecondPlayerAddr)(this); }
+    bool CanShowStore() { return reinterpret_cast<bool (*)(LawnApp *)>(LawnApp_CanShowStoreAddr)(this); }
+    bool CanShowAlmanac() { return reinterpret_cast<bool (*)(LawnApp *)>(LawnApp_CanShowAlmanacAddr)(this); }
+    void KillNewOptionsDialog() { reinterpret_cast<void (*)(LawnApp *)>(LawnApp_KillNewOptionsDialogAddr)(this); }
+    void KillMainMenu() { reinterpret_cast<void (*)(LawnApp *)>(LawnApp_KillMainMenuAddr)(this); }
+    void KillChallengeScreen() { reinterpret_cast<void (*)(LawnApp *)>(LawnApp_KillChallengeScreenAddr)(this); }
+    void PreNewGame(GameMode theGameMode, bool theLookForSavedGame) { reinterpret_cast<void (*)(LawnApp *, GameMode, bool)>(LawnApp_PreNewGameAddr)(this, theGameMode, theLookForSavedGame); }
+    void PlayFoleyPitch(FoleyType theFoleyType, float thePitch) { reinterpret_cast<void (*)(LawnApp *, FoleyType, float)>(LawnApp_PreNewGameAddr)(this, theFoleyType, thePitch); }
+    void DoCheatDialog() { reinterpret_cast<void (*)(LawnApp *)>(LawnApp_DoCheatDialogAddr)(this); }
+    void DoCheatCodeDialog() { reinterpret_cast<void (*)(LawnApp *)>(LawnApp_DoCheatCodeDialogAddr)(this); }
+    void DoUserDialog() { reinterpret_cast<void (*)(LawnApp *)>(LawnApp_DoUserDialogAddr)(this); }
+    bool IsFirstTimeAdventureMode() { return reinterpret_cast<bool (*)(LawnApp *)>(LawnApp_IsFirstTimeAdventureModeAddr)(this); }
+    // 阻塞式函数，能创建并立即展示一个带按钮的对话框。按钮个数由最后一个参数决定。其返回值就是用户按下的按钮ID，一般情况下只可能为1000或1001。
+    int LawnMessageBox(Dialogs theDialogId, // 用于标识本对话框的ID，以便于用KillDialog(theDialogId)关闭此对话框。一般用不到，所以随便填个数字就可以。
+                       const SexyChar *theHeaderName,
+                       const SexyChar *theLinesName,
+                       const SexyChar *theButton1Name,
+                       const SexyChar *theButton2Name,
+                       int theButtonMode) // 取值为0，1，2，3。其中0就是无按钮；1和2会展示两个按钮，其ID分别为1000和1001；3只会展示一个按钮，其ID为1000。
+    {
+        return reinterpret_cast<int (*)(LawnApp *, Dialogs, const SexyChar *, const SexyChar *, const SexyChar *, const SexyChar *, int)>(LawnApp_LawnMessageBoxAddr)(
+            this, theDialogId, theHeaderName, theLinesName, theButton1Name, theButton2Name, theButtonMode);
+    }
+    TodParticleSystem *AddTodParticle(float theX, float theY, int theRenderOrder, ParticleEffect theEffect) {
+        return reinterpret_cast<TodParticleSystem *(*)(LawnApp *, float, float, int, ParticleEffect)>(LawnApp_AddTodParticleAddr)(this, theX, theY, theRenderOrder, theEffect);
+    }
+    ParticleSystemID ParticleGetID(TodParticleSystem *theParticle) { return reinterpret_cast<ParticleSystemID (*)(LawnApp *, TodParticleSystem *)>(LawnApp_ParticleGetIDAddr)(this, theParticle); }
+    Reanimation *AddReanimation(float theX, float theY, int theRenderOrder, ReanimationType theReanimationType) {
+        return reinterpret_cast<Reanimation *(*)(LawnApp *, float, float, int, ReanimationType)>(LawnApp_AddReanimationAddr)(this, theX, theY, theRenderOrder, theReanimationType);
+    }
+    bool IsSurvivalMode() { return reinterpret_cast<bool (*)(LawnApp *)>(LawnApp_IsSurvivalModeAddr)(this); }
+    bool HasFinishedAdventure() { return reinterpret_cast<bool (*)(LawnApp *)>(LawnApp_HasFinishedAdventureAddr)(this); }
+    void KillVSResultsScreen() { reinterpret_cast<void (*)(LawnApp *)>(LawnApp_KillVSResultsScreenAddr)(this); }
+    void HideHelpBarWidget() { reinterpret_cast<void (*)(LawnApp *)>(LawnApp_HideHelpBarWidgetAddr)(this); }
+    void ShowHelpTextScreen(int a) { reinterpret_cast<void (*)(LawnApp *, int)>(LawnApp_ShowHelpTextScreenAddr)(this, a); }
+    void ShowChallengeScreen(ChallengePage thePage) { reinterpret_cast<void (*)(LawnApp *, ChallengePage)>(LawnApp_ShowHelpTextScreenAddr)(this, thePage); }
+    void CrazyDaveStopTalking() { reinterpret_cast<void (*)(LawnApp *)>(LawnApp_CrazyDaveStopTalkingAddr)(this); }
+    void DoRetryAchievementsDialog() { reinterpret_cast<void (*)(LawnApp *)>(LawnApp_DoRetryAchievementsDialogAddr)(this); }
+    bool EarnedGoldTrophy() { return reinterpret_cast<bool (*)(LawnApp *)>(LawnApp_EarnedGoldTrophyAddr)(this); }
+    void RemoveReanimation(ReanimationID theReanimationID) { reinterpret_cast<void (*)(LawnApp *, ReanimationID)>(LawnApp_RemoveReanimationAddr)(this, theReanimationID); }
+    ReanimationID ReanimationGetID(Reanimation *theReanimation) { return reinterpret_cast<ReanimationID (*)(LawnApp *, Reanimation *)>(LawnApp_ReanimationGetIDAddr)(this, theReanimation); }
+    void KillAlmanacDialog() { reinterpret_cast<void (*)(LawnApp *)>(LawnApp_KillAlmanacDialogAddr)(this); }
+    int GetNumTrophies(ChallengePage thePage) { return reinterpret_cast<int (*)(LawnApp *, ChallengePage)>(LawnApp_GetNumTrophiesAddr)(this, thePage); }
+    void ShowMainMenuScreen() { reinterpret_cast<void (*)(LawnApp *)>(LawnApp_ShowMainMenuScreenAddr)(this); }
+    TodParticleSystem *ParticleTryToGet(ParticleSystemID theParticleID) {
+        return reinterpret_cast<TodParticleSystem *(*)(LawnApp *, ParticleSystemID)>(LawnApp_ParticleTryToGetAddr)(this, theParticleID);
+    }
+    void KillHelpTextScreen() { reinterpret_cast<void (*)(LawnApp *)>(LawnApp_KillHelpTextScreenAddr)(this); }
+    void NextTestDialog() { reinterpret_cast<void (*)(LawnApp *)>(LawnApp_NextTestDialogAddr)(this); }
 
+    LawnApp() { Create(); };
+    void Create();
+    void Init();
+    bool IsNight();
+    inline bool	IsIceDemo() { return false; }
+    void HardwareInit();
+    void DoBackToMain();
+    bool CanShopLevel();
+    void DoNewOptions(bool theFromGameSelector, unsigned int a3);
+    int GetNumPreloadingTasks();
+    void DoConfirmBackToMain(bool theIsSave);
+    int TrophiesNeedForGoldSunflower();
+    int GamepadToPlayerIndex(unsigned int thePlayerIndex);
+    void ShowCreditScreen(bool theIsFromMainMenu);
+    void OnSessionTaskFailed();
+    void UpdateApp();
+    void ShowAwardScreen(AwardType theAwardType);
+    void KillAwardScreen();
+    void LoadLevelConfiguration(int a2, int a3);
+    void LoadingThreadProc();
+    bool IsChallengeWithoutSeedBank();
+    void TryHelpTextScreen(int theScreenPage);
     void KillSeedChooserScreen();
     bool IsIZombieLevel();
     bool IsWallnutBowlingLevel();
     void PlayFoley(FoleyType theFoleyType) { reinterpret_cast<void (*)(LawnApp *, FoleyType)>(LawnApp_PlayFoleyAddr)(this, theFoleyType); }
     void PlaySample(int theSoundNum) { reinterpret_cast<void (*)(LawnApp *, int)>(LawnApp_PlaySampleAddr)(this, theSoundNum); }
     bool IsAdventureMode();
+    bool IsPuzzleMode();
+    bool IsLittleTroubleLevel();
     bool IsScaryPotterLevel();
     bool IsSlotMachineLevel();
+    bool IsArtChallenge();
     bool IsSquirrelLevel();
     bool IsSurvivalEndless(GameMode theGameMode);
+    bool IsWhackAZombieLevel();
+    bool IsCoopMode();
+    bool IsTwinSunbankMode();
+    bool IsFinalBossLevel();
+    void LoadAddonImages();
+    void LoadAddonSounds();
+    Sexy::Image *GetImageByFileName(const char *theFileName);
+    int GetSoundByFileName(const char *theFileName);
+    void KillDialog(Dialogs theId);
+    void Load(const char *theGroupName);
+    void DoConvertImitaterImages();
+    int GetSeedsAvailable(int theIsZombieChooser);
+    bool GrantAchievement(AchievementId theAchievementId);
+    void SetFoleyVolume(FoleyType theFoleyType, double theVolume);
+    void ShowLeaderboards();
+    void KillLeaderboards();
+    void ShowZombatarScreen();
+    void KillZombatarScreen();
+    void SetHouseReanim(Reanimation *theHouseAnim);
+    void LoadZombatarResources();
+    PottedPlant *GetPottedPlantByIndex(int thePottedPlantIndex);
 };
 
 /***************************************************************************************************************/
@@ -116,113 +211,12 @@ inline bool doCheatDialog;     // 菜单DoCheatDialog
 inline bool doCheatCodeDialog; // 菜单DoCheatCodeDialog
 
 
-inline void (*LawnApp_KillChallengeScreen)(LawnApp *lawnApp);
-
-inline void (*LawnApp_KillMainMenu)(LawnApp *lawnApp);
-
-inline void (*LawnApp_KillNewOptionsDialog)(LawnApp *lawnApp);
-
-inline void (*LawnApp_PreNewGame)(LawnApp *lawnApp, GameMode a2, bool a3);
-
-inline bool (*LawnApp_CanShowStore)(LawnApp *lawnApp);
-
-inline bool (*LawnApp_CanShowAlmanac)(LawnApp *lawnApp);
-
-inline void (*LawnApp_PlayFoleyPitch)(LawnApp *lawnApp, FoleyType theFoleyType, float aPitch);
-
-inline void (*LawnApp_DoCheatDialog)(LawnApp *lawnApp);
-
-inline void (*LawnApp_DoCheatCodeDialog)(LawnApp *lawnApp);
-
-inline void (*LawnApp_DoUserDialog)(LawnApp *lawnApp);
-
-inline void (*LawnApp_ClearSecondPlayer)(LawnApp *lawnApp);
-
-inline bool (*LawnApp_IsScaryPotterLevel)(LawnApp *lawnApp);
-
-inline bool (*LawnApp_IsWhackAZombieLevel)(LawnApp *lawnApp);
-
-inline bool (*LawnApp_IsFirstTimeAdventureMode)(LawnApp *lawnApp);
-
-inline bool (*LawnApp_IsAdventureMode)(LawnApp *lawnApp);
-
-inline bool (*LawnApp_IsWallnutBowlingLevel)(LawnApp *lawnApp);
-
-inline bool (*LawnApp_IsCoopMode)(LawnApp *lawnApp);
-
-inline bool (*LawnApp_IsTwinSunbankMode)(LawnApp *lawnApp);
-
-inline bool (*LawnApp_IsIZombieLevel)(LawnApp *lawnApp);
-
-inline bool (*LawnApp_IsSurvivalMode)(LawnApp *);
-
-inline bool (*LawnApp_IsPuzzleMode)(LawnApp *);
-
-inline bool (*LawnApp_IsFinalBossLevel)(LawnApp *);
-
-inline bool (*LawnApp_IsArtChallenge)(LawnApp *);
-
-// 阻塞式函数，能创建并立即展示一个带按钮的对话框。按钮个数由最后一个参数决定。其返回值就是用户按下的按钮ID，一般情况下只可能为1000或1001。
-inline int (*LawnApp_LawnMessageBox)(LawnApp *lawnApp,
-                                     Dialogs theDialogId, // 用于标识本对话框的ID，以便于用KillDialog(theDialogId)关闭此对话框。一般用不到，所以随便填个数字就可以。
-                                     const char *theHeaderName,
-                                     const char *theLinesName,
-                                     const char *theButton1Name,
-                                     const char *theButton2Name,
-                                     int theButtonMode); // 取值为0，1，2，3。其中0就是无按钮；1和2会展示两个按钮，其ID分别为1000和1001；3只会展示一个按钮，其ID为1000。
-
-inline TodParticleSystem *(*LawnApp_AddTodParticle)(LawnApp *lawnApp, float, float, int, ParticleEffect);
-
-inline int (*LawnApp_ParticleGetID)(LawnApp *, TodParticleSystem *);
-
-inline Reanimation *(*LawnApp_AddReanimation)(LawnApp *, float, float, int, ReanimationType);
-
-inline void (*LawnApp_ShowChallengeScreen)(LawnApp *, ChallengePage);
-
-inline bool (*LawnApp_HasFinishedAdventure)(LawnApp *);
-
-inline void (*LawnApp_KillVSResultsScreen)(LawnApp *);
-
-inline void (*LawnApp_HideHelpBarWidget)(LawnApp *);
-
-inline void (*LawnApp_ShowHelpTextScreen)(LawnApp *, int);
-
-inline int (*LawnApp_GetPottedPlantByIndex)(LawnApp *, int);
-
-inline void (*LawnApp_CrazyDaveStopTalking)(LawnApp *);
-
-inline void (*LawnApp_NextTestDialog)(LawnApp *);
-
-inline void (*LawnApp_DoRetryAchievementsDialog)(LawnApp *);
-
-inline bool (*LawnApp_EarnedGoldTrophy)(LawnApp *);
-
-inline void (*LawnApp_RemoveReanimation)(LawnApp *, int);
-
-inline ReanimationID (*LawnApp_ReanimationGetID)(LawnApp *, Reanimation *);
-
-inline bool (*LawnApp_IsSlotMachineLevel)(LawnApp *);
-
-inline void (*LawnApp_KillAlmanacDialog)(LawnApp *);
-
-inline void (*LawnApp_KillHelpTextScreen)(LawnApp *);
-
-inline bool (*LawnApp_IsLittleTroubleLevel)(LawnApp *);
-
 inline int *(*Sexy_SexyAppBase_GetDialog)(LawnApp *lawnApp, Dialogs dialogId);
-
-inline int (*LawnApp_GetNumTrophies)(LawnApp *, ChallengePage);
-
-inline bool (*LawnApp_IsSurvivalEndless)(LawnApp *lawnApp, GameMode);
-
-inline void (*LawnApp_ShowMainMenuScreen)(LawnApp *lawnApp);
-
-inline TodParticleSystem *(*LawnApp_ParticleTryToGet)(LawnApp *lawnApp, int);
 
 
 inline void (*old_LawnApp_DoBackToMain)(LawnApp *lawnApp);
 
-inline void (*old_LawnApp_ShowAwardScreen)(LawnApp *lawnApp, int a2);
+inline void (*old_LawnApp_ShowAwardScreen)(LawnApp *lawnApp, AwardType a2);
 
 inline void (*old_LawnApp_KillAwardScreen)(LawnApp *lawnApp);
 
@@ -259,75 +253,7 @@ inline bool (*old_LawnApp_HasSeedType)(LawnApp *lawnApp, SeedType theSeedType, i
 inline void (*old_LawnApp_DoNewOptions)(LawnApp *lawnApp, bool a2, unsigned int a3);
 
 
-void LawnApp_LawnApp(LawnApp *lawnApp);
-
-void LawnApp_Init(LawnApp *lawnApp);
-
-void LawnApp_HardwareInit(LawnApp *lawnApp);
-
-int LawnApp_GetNumPreloadingTasks(LawnApp *lawnApp);
-
-void LawnApp_DoConfirmBackToMain(LawnApp *lawnApp, bool save);
-
-int LawnApp_TrophiesNeedForGoldSunflower(LawnApp *lawnApp);
-
-int LawnApp_GamepadToPlayerIndex(LawnApp *lawnApp, unsigned int a2);
-
-void LawnApp_ShowCreditScreen(LawnApp *lawnApp, bool isFromMainMenu);
-
-void LawnApp_OnSessionTaskFailed(LawnApp *lawnApp);
-
-void LawnApp_UpdateApp(LawnApp *lawnApp);
-
-void LawnApp_ShowAwardScreen(LawnApp *lawnApp, int a2);
-
-void LawnApp_KillAwardScreen(LawnApp *lawnApp);
-
-void LawnApp_LoadLevelConfiguration(LawnApp *lawnApp, int a2, int a3);
-
-void LawnApp_LoadingThreadProc(LawnApp *lawnApp);
-
-void LawnApp_TryHelpTextScreen(LawnApp *lawnApp, int a2);
-
-void LawnApp_LoadAddonImages(LawnApp *lawnApp);
-
-void LawnApp_LoadAddonSounds(LawnApp *lawnApp);
-
-void LawnApp_Load(LawnApp *lawnApp, const char *theGroupName);
-
-void LawnApp_ShowZombatarScreen(LawnApp *lawnApp);
-
-void LawnApp_KillZombatarScreen(LawnApp *lawnApp);
-
-bool LawnApp_CanShopLevel(LawnApp *lawnApp);
-
-void LawnApp_DoNewOptions(LawnApp *lawnApp, bool a2, unsigned int a3);
-
-Sexy::Image *LawnApp_GetImageByFileName(LawnApp *lawnApp, const char *fileName);
-
-int LawnApp_GetSoundByFileName(LawnApp *lawnApp, const char *fileName);
-
 void LawnApp_PlaySample(LawnApp *lawnApp, int soundId);
-
-bool LawnApp_GrantAchievement(LawnApp *lawnApp, AchievementId::AchievementId theAchievementId);
-
-void LawnApp_DoBackToMain(LawnApp *lawnApp);
-
-bool LawnApp_IsChallengeWithoutSeedBank(LawnApp *);
-
-bool LawnApp_IsNight(LawnApp *);
-
-void LawnApp_SetFoleyVolume(LawnApp *lawnApp, FoleyType type, double theVolume);
-
-void LawnApp_KillDialog(LawnApp *lawnApp, Dialogs id);
-
-void LawnApp_ShowLeaderboards(LawnApp *lawnApp);
-
-void LawnApp_KillLeaderboards(LawnApp *lawnApp);
-
-void LawnApp_SetHouseReanim(LawnApp *lawnApp, Reanimation *houseAnimation);
-
-void LawnApp_LoadZombatarResources(LawnApp *lawnApp);
 
 bool LawnApp_HasSeedType(LawnApp *lawnApp, SeedType theSeedType, int playerIndex);
 

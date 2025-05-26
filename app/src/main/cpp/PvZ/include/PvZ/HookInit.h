@@ -40,56 +40,9 @@
 #include "Symbols.h"
 
 inline void InitInGameFunction() {
-    LawnApp_ClearSecondPlayer = (decltype(LawnApp_ClearSecondPlayer))LawnApp_ClearSecondPlayerAddr;
-    LawnApp_IsWhackAZombieLevel = (decltype(LawnApp_IsWhackAZombieLevel))LawnApp_IsWhackAZombieLevelAddr;
-    LawnApp_IsScaryPotterLevel = (decltype(LawnApp_IsScaryPotterLevel))LawnApp_IsScaryPotterLevelAddr;
-    LawnApp_CanShowStore = (decltype(LawnApp_CanShowStore))LawnApp_CanShowStoreAddr;
-    LawnApp_CanShowAlmanac = (decltype(LawnApp_CanShowAlmanac))LawnApp_CanShowAlmanacAddr;
-    LawnApp_KillNewOptionsDialog = (decltype(LawnApp_KillNewOptionsDialog))LawnApp_KillNewOptionsDialogAddr;
-    LawnApp_KillMainMenu = (decltype(LawnApp_KillMainMenu))LawnApp_KillMainMenuAddr;
-    LawnApp_KillChallengeScreen = (decltype(LawnApp_KillChallengeScreen))LawnApp_KillChallengeScreenAddr;
-    LawnApp_PreNewGame = (decltype(LawnApp_PreNewGame))LawnApp_PreNewGameAddr;
-    LawnApp_PlayFoleyPitch = (decltype(LawnApp_PlayFoleyPitch))LawnApp_PlayFoleyPitchAddr;
-    LawnApp_DoCheatDialog = (decltype(LawnApp_DoCheatDialog))LawnApp_DoCheatDialogAddr;
-    LawnApp_DoCheatCodeDialog = (decltype(LawnApp_DoCheatCodeDialog))LawnApp_DoCheatCodeDialogAddr;
-    LawnApp_DoUserDialog = (decltype(LawnApp_DoUserDialog))LawnApp_DoUserDialogAddr;
-    LawnApp_IsFirstTimeAdventureMode = (decltype(LawnApp_IsFirstTimeAdventureMode))LawnApp_IsFirstTimeAdventureModeAddr;
-    LawnApp_IsAdventureMode = (decltype(LawnApp_IsAdventureMode))LawnApp_IsAdventureModeAddr;
-    LawnApp_IsWallnutBowlingLevel = (decltype(LawnApp_IsWallnutBowlingLevel))LawnApp_IsWallnutBowlingLevelAddr;
-    LawnApp_IsCoopMode = (decltype(LawnApp_IsCoopMode))LawnApp_IsCoopModeAddr;
-    LawnApp_IsTwinSunbankMode = (decltype(LawnApp_IsTwinSunbankMode))LawnApp_IsTwinSunbankModeAddr;
-    LawnApp_LawnMessageBox = (decltype(LawnApp_LawnMessageBox))LawnApp_LawnMessageBoxAddr;
-    LawnApp_IsIZombieLevel = (decltype(LawnApp_IsIZombieLevel))LawnApp_IsIZombieLevelAddr;
-    LawnApp_AddTodParticle = (decltype(LawnApp_AddTodParticle))LawnApp_AddTodParticleAddr;
-    LawnApp_ParticleGetID = (decltype(LawnApp_ParticleGetID))LawnApp_ParticleGetIDAddr;
-    LawnApp_AddReanimation = (decltype(LawnApp_AddReanimation))LawnApp_AddReanimationAddr;
-    LawnApp_IsSurvivalMode = (decltype(LawnApp_IsSurvivalMode))LawnApp_IsSurvivalModeAddr;
-    LawnApp_IsPuzzleMode = (decltype(LawnApp_IsPuzzleMode))LawnApp_IsPuzzleModeAddr;
-    LawnApp_HasFinishedAdventure = (decltype(LawnApp_HasFinishedAdventure))LawnApp_HasFinishedAdventureAddr;
-    LawnApp_IsFinalBossLevel = (decltype(LawnApp_IsFinalBossLevel))LawnApp_IsFinalBossLevelAddr;
-    LawnApp_IsArtChallenge = (decltype(LawnApp_IsArtChallenge))LawnApp_IsArtChallengeAddr;
-    LawnApp_KillVSResultsScreen = (decltype(LawnApp_KillVSResultsScreen))LawnApp_KillVSResultsScreenAddr;
-    LawnApp_HideHelpBarWidget = (decltype(LawnApp_HideHelpBarWidget))LawnApp_HideHelpBarWidgetAddr;
-    LawnApp_ShowHelpTextScreen = (decltype(LawnApp_ShowHelpTextScreen))LawnApp_ShowHelpTextScreenAddr;
-    LawnApp_ShowChallengeScreen = (decltype(LawnApp_ShowChallengeScreen))LawnApp_ShowChallengeScreenAddr;
-    LawnApp_GetPottedPlantByIndex = (decltype(LawnApp_GetPottedPlantByIndex))LawnApp_GetPottedPlantByIndexAddr;
-    LawnApp_CrazyDaveStopTalking = (decltype(LawnApp_CrazyDaveStopTalking))LawnApp_CrazyDaveStopTalkingAddr;
-    LawnApp_DoRetryAchievementsDialog = (decltype(LawnApp_DoRetryAchievementsDialog))LawnApp_DoRetryAchievementsDialogAddr;
-    LawnApp_EarnedGoldTrophy = (decltype(LawnApp_EarnedGoldTrophy))LawnApp_EarnedGoldTrophyAddr;
-    LawnApp_RemoveReanimation = (decltype(LawnApp_RemoveReanimation))LawnApp_RemoveReanimationAddr;
-    LawnApp_ReanimationGetID = (decltype(LawnApp_ReanimationGetID))LawnApp_ReanimationGetIDAddr;
-    LawnApp_IsSlotMachineLevel = (decltype(LawnApp_IsSlotMachineLevel))LawnApp_IsSlotMachineLevelAddr;
-    LawnApp_KillAlmanacDialog = (decltype(LawnApp_KillAlmanacDialog))LawnApp_KillAlmanacDialogAddr;
-    LawnApp_IsLittleTroubleLevel = (decltype(LawnApp_IsLittleTroubleLevel))LawnApp_IsLittleTroubleLevelAddr;
     Sexy_SexyAppBase_GetDialog = (decltype(Sexy_SexyAppBase_GetDialog))Sexy_SexyAppBase_GetDialogAddr;
     Sexy_SexyAppBase_EraseFile = (decltype(Sexy_SexyAppBase_EraseFile))Sexy_SexyAppBase_EraseFileAddr;
     Sexy_Ratio_Set = (decltype(Sexy_Ratio_Set))Sexy_Ratio_SetAddr;
-    LawnApp_GetNumTrophies = (decltype(LawnApp_GetNumTrophies))LawnApp_GetNumTrophiesAddr;
-    LawnApp_IsSurvivalEndless = (decltype(LawnApp_IsSurvivalEndless))LawnApp_IsSurvivalEndlessAddr;
-    LawnApp_ShowMainMenuScreen = (decltype(LawnApp_ShowMainMenuScreen))LawnApp_ShowMainMenuScreenAddr;
-    LawnApp_ParticleTryToGet = (decltype(LawnApp_ParticleTryToGet))LawnApp_ParticleTryToGetAddr;
-    LawnApp_KillHelpTextScreen = (decltype(LawnApp_KillHelpTextScreen))LawnApp_KillHelpTextScreenAddr;
-    LawnApp_NextTestDialog = (decltype(LawnApp_NextTestDialog))LawnApp_NextTestDialogAddr;
 
 
     Sexy_Graphics_SetDrawMode = (decltype(Sexy_Graphics_SetDrawMode))Sexy_Graphics_SetDrawModeAddr;
@@ -389,26 +342,26 @@ inline void InitInGameFunction() {
 
 
 inline void InitHookFunction() {
-    homura::HookFunction(LawnApp_LawnAppAddr, &LawnApp_LawnApp, &old_LawnApp_LawnApp);
-    homura::HookFunction(LawnApp_InitAddr, &LawnApp_Init, &old_LawnApp_Init);
-    homura::HookFunction(LawnApp_IsNightAddr, &LawnApp_IsNight, &old_LawnApp_IsNight);
-    homura::HookFunction(LawnApp_HardwareInitAddr, &LawnApp_HardwareInit, &old_LawnApp_HardwareInit);
-    homura::HookFunction(LawnApp_DoBackToMainAddr, &LawnApp_DoBackToMain, &old_LawnApp_DoBackToMain);
-    homura::HookFunction(LawnApp_CanShopLevelAddr, &LawnApp_CanShopLevel, &old_LawnApp_CanShopLevel);
-    homura::HookFunction(LawnApp_DoNewOptionsAddr, &LawnApp_DoNewOptions, &old_LawnApp_DoNewOptions);
-    homura::HookFunction(LawnApp_GetNumPreloadingTasksAddr, &LawnApp_GetNumPreloadingTasks, &old_LawnApp_GetNumPreloadingTasks);
-    homura::HookFunction(LawnApp_DoConfirmBackToMainAddr, &LawnApp_DoConfirmBackToMain, nullptr);
-    homura::HookFunction(LawnApp_TrophiesNeedForGoldSunflowerAddr, &LawnApp_TrophiesNeedForGoldSunflower, nullptr);
-    homura::HookFunction(LawnApp_GamepadToPlayerIndexAddr, &LawnApp_GamepadToPlayerIndex, &old_LawnApp_GamepadToPlayerIndex);
-    homura::HookFunction(LawnApp_ShowCreditScreenAddr, &LawnApp_ShowCreditScreen, &old_LawnApp_ShowCreditScreen);
-    homura::HookFunction(LawnApp_OnSessionTaskFailedAddr, &LawnApp_OnSessionTaskFailed, nullptr);
-    homura::HookFunction(LawnApp_UpdateAppAddr, &LawnApp_UpdateApp, &old_LawnApp_UpDateApp);
-    homura::HookFunction(LawnApp_ShowAwardScreenAddr, &LawnApp_ShowAwardScreen, &old_LawnApp_ShowAwardScreen);
-    homura::HookFunction(LawnApp_KillAwardScreenAddr, &LawnApp_KillAwardScreen, &old_LawnApp_KillAwardScreen);
-    homura::HookFunction(LawnApp_LoadLevelConfigurationAddr, &LawnApp_LoadLevelConfiguration, &old_LawnApp_LoadLevelConfiguration);
-    homura::HookFunction(LawnApp_LoadingThreadProcAddr, &LawnApp_LoadingThreadProc, &old_LawnApp_LoadingThreadProc);
-    homura::HookFunction(LawnApp_IsChallengeWithoutSeedBankAddr, &LawnApp_IsChallengeWithoutSeedBank, &old_LawnApp_IsChallengeWithoutSeedBank);
-    homura::HookFunction(LawnApp_TryHelpTextScreenAddr, &LawnApp_TryHelpTextScreen, nullptr);
+    homura::HookFunction(LawnApp_LawnAppAddr, &LawnApp::Create, &old_LawnApp_LawnApp);
+    homura::HookFunction(LawnApp_InitAddr, &LawnApp::Init, &old_LawnApp_Init);
+    homura::HookFunction(LawnApp_IsNightAddr, &LawnApp::IsNight, &old_LawnApp_IsNight);
+    homura::HookFunction(LawnApp_HardwareInitAddr, &LawnApp::HardwareInit, &old_LawnApp_HardwareInit);
+    homura::HookFunction(LawnApp_DoBackToMainAddr, &LawnApp::DoBackToMain, &old_LawnApp_DoBackToMain);
+    homura::HookFunction(LawnApp_CanShopLevelAddr, &LawnApp::CanShopLevel, &old_LawnApp_CanShopLevel);
+    homura::HookFunction(LawnApp_DoNewOptionsAddr, &LawnApp::DoNewOptions, &old_LawnApp_DoNewOptions);
+    homura::HookFunction(LawnApp_GetNumPreloadingTasksAddr, &LawnApp::GetNumPreloadingTasks, &old_LawnApp_GetNumPreloadingTasks);
+    homura::HookFunction(LawnApp_DoConfirmBackToMainAddr, &LawnApp::DoConfirmBackToMain, nullptr);
+    homura::HookFunction(LawnApp_TrophiesNeedForGoldSunflowerAddr, &LawnApp::TrophiesNeedForGoldSunflower, nullptr);
+    homura::HookFunction(LawnApp_GamepadToPlayerIndexAddr, &LawnApp::GamepadToPlayerIndex, &old_LawnApp_GamepadToPlayerIndex);
+    homura::HookFunction(LawnApp_ShowCreditScreenAddr, &LawnApp::ShowCreditScreen, &old_LawnApp_ShowCreditScreen);
+    homura::HookFunction(LawnApp_OnSessionTaskFailedAddr, &LawnApp::OnSessionTaskFailed, nullptr);
+    homura::HookFunction(LawnApp_UpdateAppAddr, &LawnApp::UpdateApp, &old_LawnApp_UpDateApp);
+    homura::HookFunction(LawnApp_ShowAwardScreenAddr, &LawnApp::ShowAwardScreen, &old_LawnApp_ShowAwardScreen);
+    homura::HookFunction(LawnApp_KillAwardScreenAddr, &LawnApp::KillAwardScreen, &old_LawnApp_KillAwardScreen);
+    homura::HookFunction(LawnApp_LoadLevelConfigurationAddr, &LawnApp::LoadLevelConfiguration, &old_LawnApp_LoadLevelConfiguration);
+    homura::HookFunction(LawnApp_LoadingThreadProcAddr, &LawnApp::LoadingThreadProc, &old_LawnApp_LoadingThreadProc);
+    homura::HookFunction(LawnApp_IsChallengeWithoutSeedBankAddr, &LawnApp::IsChallengeWithoutSeedBank, &old_LawnApp_IsChallengeWithoutSeedBank);
+    homura::HookFunction(LawnApp_TryHelpTextScreenAddr, &LawnApp::TryHelpTextScreen, nullptr);
     homura::HookFunction(LawnApp_KillSeedChooserScreenAddr, &LawnApp::KillSeedChooserScreen, &old_LawnApp_KillSeedChooserScreen);
     //    homura::HookFunction(LawnApp_HasSeedTypeAddr, &LawnApp_HasSeedType, &old_LawnApp_HasSeedType);
 
@@ -572,7 +525,7 @@ inline void InitHookFunction() {
     //    MSHookFunction(MainMenu_SetSceneAddr, (void *) SetScene, (void **) &old_MainMenu_SetScene);
     homura::HookFunction(MainMenu_OnSceneAddr, &MainMenu::OnScene, &old_MainMenu_OnScene);
     homura::HookFunction(MainMenu_SyncButtonsAddr, &MainMenu::SyncButtons, &old_MainMenu_SyncButtons);
-    homura::HookFunction(MainMenu_MainMenuAddr, &MainMenu::Creat, &old_MainMenu_MainMenu);
+    homura::HookFunction(MainMenu_MainMenuAddr, &MainMenu::Create, &old_MainMenu_MainMenu);
     homura::HookFunction(MainMenu_UpdateCameraPositionAddr, &MainMenu::UpdateCameraPosition, &old_MainMenu_UpdateCameraPosition);
     homura::HookFunction(MainMenu_AddedToManagerAddr, &MainMenu::AddedToManager, &old_MainMenu_AddedToManager);
     homura::HookFunction(MainMenu_RemovedFromManagerAddr, &MainMenu::RemovedFromManager, &old_MainMenu_RemovedFromManager);

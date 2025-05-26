@@ -61,7 +61,7 @@ void StoreScreen_ButtonDepress(int *storeScreen, int buttonId) {
             storeScreen[197] = 1;
             LawnApp_PlaySample(lawnApp, *Sexy_SOUND_HATCHBACK_CLOSE_Addr);
             storeScreen[188] = 0;
-            LawnApp_CrazyDaveStopTalking(lawnApp);
+            lawnApp->CrazyDaveStopTalking();
             StoreScreen_EnableButtons(storeScreen, false);
             do {
                 newPageIndex = storeScreen[192] - 1;
@@ -81,7 +81,7 @@ void StoreScreen_ButtonDepress(int *storeScreen, int buttonId) {
             storeScreen[197] = 2;
             LawnApp_PlaySample(lawnApp, *Sexy_SOUND_HATCHBACK_CLOSE_Addr);
             storeScreen[188] = 0;
-            LawnApp_CrazyDaveStopTalking(lawnApp);
+            lawnApp->CrazyDaveStopTalking();
             StoreScreen_EnableButtons(storeScreen, false);
             do {
                 newPageIndex = storeScreen[192] + 1;
@@ -110,14 +110,15 @@ void StoreScreen_PurchaseItem(int *storeScreen, StoreItem item) {
             return;
         }
     }
-    LawnApp_GrantAchievement(lawnApp, AchievementId::ACHIEVEMENT_MORTICULTURALIST);
+    lawnApp->GrantAchievement(AchievementId::ACHIEVEMENT_SHOP);
 }
 
 void StoreScreen_Draw(int *storeScreen, Sexy::Graphics *a2) {
     // 绘制商店页数字符串
     old_StoreScreen_Draw(storeScreen, a2);
     int theTotalPages = 0;
-    if (LawnApp_HasFinishedAdventure((LawnApp *)storeScreen[184]) && showHouse) {
+    LawnApp *aApp = (LawnApp *)storeScreen[184];
+    if (aApp->HasFinishedAdventure() && showHouse) {
         theTotalPages = 5;
     } else {
         for (int i = 0; i < 4; ++i) {

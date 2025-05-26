@@ -5,7 +5,7 @@
 #include "PvZ/Misc.h"
 #include "PvZ/Symbols.h"
 
-bool HouseChooserDialog_IsHouseAvaliable(HouseType::HouseType houseType) {
+bool HouseChooserDialog_IsHouseAvaliable(HouseType houseType) {
     LawnApp *lawnApp = (LawnApp *)*gLawnApp_Addr;
     return houseType == 0 || lawnApp->mPlayerInfo->mPurchases[StoreItem::STORE_ITEM_BLUEPRINT_BLING + houseType] > 0;
 }
@@ -17,7 +17,7 @@ void HouseChooserDialog_MouseDown(HouseChooserDialog *a, int x, int y, int theCo
     int houseIdToSelect = HouseType::Invalid;
     for (int i = 0; i < 5; ++i) {
         Sexy::Rect rect = {75 + 90 * i, 125, width, height};
-        if (TRect_Contains(&rect, x, y) && HouseChooserDialog_IsHouseAvaliable((HouseType::HouseType)i)) {
+        if (TRect_Contains(&rect, x, y) && HouseChooserDialog_IsHouseAvaliable((HouseType)i)) {
             houseIdToSelect = i;
             break;
         }

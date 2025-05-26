@@ -28,7 +28,7 @@ void SeedChooserScreen::Create(bool theIsZombieChooser) {
     mApp = (LawnApp *)*Sexy_gSexyAppBase_Addr;
     mBoard = mApp->mBoard;
     GameMode mGameMode = mApp->mGameMode;
-    if (CutScene_IsSurvivalRepick(mBoard->mCutScene) && !LawnApp_IsCoopMode(mApp)) {
+    if (CutScene_IsSurvivalRepick(mBoard->mCutScene) && !mApp->IsCoopMode()) {
         GamepadControls *gamePad = mBoard->mGamepadControls1;
         SeedBank *mSeedBank = GamepadControls_GetSeedBank(gamePad);
         int mNumPackets = mSeedBank->mNumPackets;
@@ -124,13 +124,13 @@ void SeedChooserScreen::Create(bool theIsZombieChooser) {
         }
     } else {
         if (mStoreButton != nullptr) {
-            if (!LawnApp_CanShowStore(mApp)) { // 去除在未解锁商店时商店按钮
+            if (!mApp->CanShowStore()) { // 去除在未解锁商店时商店按钮
                 mStoreButton->mDisabled = true;
                 mStoreButton->mBtnNoDraw = true;
             }
         }
         if (mAlmanacButton != nullptr) {
-            if (!LawnApp_CanShowAlmanac(mApp)) { // 去除在未解锁图鉴时的图鉴按钮
+            if (!mApp->CanShowAlmanac()) { // 去除在未解锁图鉴时的图鉴按钮
                 mAlmanacButton->mDisabled = true;
                 mAlmanacButton->mBtnNoDraw = true;
             }
@@ -141,7 +141,7 @@ void SeedChooserScreen::Create(bool theIsZombieChooser) {
         int holder[1];
         TodStringTranslate(holder, "[MENU_BUTTON]");
         mSeedChooserScreenMainMenuButton = MakeButton(104, &mButtonListener, this, holder);
-        GameButton_Resize(mSeedChooserScreenMainMenuButton, LawnApp_IsCoopMode(mApp) ? 345 : 650, -3, 120, 80);
+        GameButton_Resize(mSeedChooserScreenMainMenuButton, mApp->IsCoopMode() ? 345 : 650, -3, 120, 80);
         Sexy_String_Delete(holder);
         Sexy_Widget_AddWidget(this, mSeedChooserScreenMainMenuButton);
     }
@@ -183,7 +183,7 @@ void SeedChooserScreen::Update() {
 
 void SeedChooserScreen::EnableStartButton(int theIsEnabled) {
     // 双人键盘模式下结盟选满后直接开始
-    if (theIsEnabled && LawnApp_IsCoopMode(mApp) && isKeyboardTwoPlayerMode) {
+    if (theIsEnabled && mApp->IsCoopMode() && isKeyboardTwoPlayerMode) {
         old_SeedChooserScreen_EnableStartButton(this, theIsEnabled);
         OnStartButton();
         mBoard->mSeedBank2->mSeedPackets[3].mPacketType = mSeedType2;
@@ -227,7 +227,7 @@ ZombieType SeedChooserScreen::GetZombieType(ZombieType theZombieType) {
 
 void SeedChooserScreen::ClickedSeedInChooser(ChosenSeed *theChosenSeed, int thePlayerIndex) {
     // 实现1P结盟选卡选满后自动转换为2P选卡
-    if (LawnApp_IsCoopMode(mApp))
+    if (mApp->IsCoopMode())
         thePlayerIndex = !m1PChoosingSeeds;
 
     old_SeedChooserScreen_ClickedSeedInChooser(this, theChosenSeed, thePlayerIndex);
@@ -243,7 +243,7 @@ void SeedChooserScreen::CrazyDavePickSeeds() {
 
 void SeedChooserScreen::ClickedSeedInBank(ChosenSeed *theChosenSeed, unsigned int thePlayerIndex) {
     // 解决结盟1P选够4个种子之后，无法点击种子栏内的已选种子来退选的问题
-    if (LawnApp_IsCoopMode(mApp)) {
+    if (mApp->IsCoopMode()) {
         thePlayerIndex = theChosenSeed->mChosenPlayerIndex;
     }
 
@@ -252,7 +252,7 @@ void SeedChooserScreen::ClickedSeedInBank(ChosenSeed *theChosenSeed, unsigned in
 
 void SeedChooserScreen::GameButtonDown(ButtonCode theButton, unsigned int thePlayerIndex) {
     // 修复结盟2P无法选择模仿者
-    if (LawnApp_IsCoopMode(mApp) && theButton == 6) {
+    if (mApp->IsCoopMode() && theButton == 6) {
         if (mChooseState == SeedChooserState::CHOOSE_VIEW_LAWN) {
             return old_SeedChooserScreen_GameButtonDown(this, theButton, thePlayerIndex);
         }
@@ -303,7 +303,7 @@ void SeedChooserScreen::ButtonDepress(int theId) {
 
     if (theId == SeedChooserScreen_Menu) {
         LawnApp_PlaySample(mApp, *Sexy_SOUND_PAUSE_Addr);
-        LawnApp_DoNewOptions(mApp, false, 0);
+        mApp->DoNewOptions(false, 0);
         return;
     }
 
@@ -364,7 +364,7 @@ void SeedChooserScreen::MouseMove(int x, int y) {
 void SeedChooserScreen::MouseDown(int x, int y, int theClickCount) {
     GameMode mGameMode = mApp->mGameMode;
 
-    m1PChoosingSeeds = !LawnApp_IsCoopMode(mApp) || mSeedsIn1PBank < 4;
+    m1PChoosingSeeds = !mApp->IsCoopMode() || mSeedsIn1PBank < 4;
 
     bool mViewLawnButtonDisabled = mViewLawnButton == nullptr || !CutScene_IsSurvivalRepick(mBoard->mCutScene);
     bool mStoreButtonDisabled = mStoreButton == nullptr || mStoreButton->mDisabled;

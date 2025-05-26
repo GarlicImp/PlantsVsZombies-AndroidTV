@@ -176,6 +176,7 @@ public:
     void HitIceTrap() { reinterpret_cast<void (*)(Zombie *)>(Zombie_HitIceTrapAddr)(this); }
     void Create() { reinterpret_cast<void (*)(Zombie *)>(Zombie_ZombieAddr)(this); };
 
+    Zombie() { Create(); }
     void ZombieInitialize(int theRow, ZombieType theType, bool theVariant, Zombie *theParentZombie, int theFromWave, bool isVisible);
     void Draw(Sexy::Graphics *g);
     void DieNoLoot();

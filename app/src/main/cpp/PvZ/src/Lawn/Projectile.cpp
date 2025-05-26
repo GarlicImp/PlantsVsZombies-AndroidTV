@@ -246,13 +246,13 @@ void Projectile::DoImpact(Zombie* theZombie) {
     float aSplatPosX = mPosX + 12.0f;
     float aSplatPosY = mPosY + 12.0f;
     if (mProjectileType == ProjectileType::PROJECTILE_MELON) {
-        LawnApp_AddTodParticle(mApp, aLastPosX + 30.0f, aLastPosY + 30.0f, mRenderOrder + 1, ParticleEffect::PARTICLE_MELONSPLASH);
+        mApp->AddTodParticle(aLastPosX + 30.0f, aLastPosY + 30.0f, mRenderOrder + 1, ParticleEffect::PARTICLE_MELONSPLASH);
     } else if (mProjectileType == ProjectileType::PROJECTILE_WINTERMELON) {
-        LawnApp_AddTodParticle(mApp, aLastPosX + 30.0f, aLastPosY + 30.0f, mRenderOrder + 1, ParticleEffect::PARTICLE_WINTERMELON);
+        mApp->AddTodParticle(aLastPosX + 30.0f, aLastPosY + 30.0f, mRenderOrder + 1, ParticleEffect::PARTICLE_WINTERMELON);
     } else if (mProjectileType == ProjectileType::PROJECTILE_COBBIG) {
         int aRenderOrder = Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_GROUND, mCobTargetRow, 2);
-        LawnApp_AddTodParticle(mApp, mPosX + 80.0f, mPosY + 40.0f, aRenderOrder, ParticleEffect::PARTICLE_BLASTMARK);
-        LawnApp_AddTodParticle(mApp, mPosX + 80.0f, mPosY + 40.0f, mRenderOrder + 1, ParticleEffect::PARTICLE_POPCORNSPLASH);
+        mApp->AddTodParticle(mPosX + 80.0f, mPosY + 40.0f, aRenderOrder, ParticleEffect::PARTICLE_BLASTMARK);
+        mApp->AddTodParticle(mPosX + 80.0f, mPosY + 40.0f, mRenderOrder + 1, ParticleEffect::PARTICLE_POPCORNSPLASH);
         LawnApp_PlaySample(mApp, *Sexy_SOUND_DOOMSHROOM_Addr);
         mBoard->ShakeBoard(3, -4);
     } else if (mProjectileType == ProjectileType::PROJECTILE_PEA) {
@@ -263,7 +263,7 @@ void Projectile::DoImpact(Zombie* theZombie) {
         aEffect = ParticleEffect::PARTICLE_SNOWPEA_SPLAT;
     } else if (mProjectileType == ProjectileType::PROJECTILE_FIREBALL) {
         if (IsSplashDamage(theZombie)) {
-            Reanimation* aFireReanim = LawnApp_AddReanimation(mApp, mPosX + 38.0f, mPosY - 20.0f, mRenderOrder + 1, ReanimationType::REANIM_JALAPENO_FIRE);
+            Reanimation* aFireReanim = mApp->AddReanimation(mPosX + 38.0f, mPosY - 20.0f, mRenderOrder + 1, ReanimationType::REANIM_JALAPENO_FIRE);
             aFireReanim->mAnimTime = 0.25f;
             aFireReanim->mAnimRate = 24.0f;
             Reanimation_OverrideScale(aFireReanim, 0.7f, 0.4f);
@@ -305,7 +305,7 @@ void Projectile::DoImpact(Zombie* theZombie) {
                 aPosY = 20.0f;
             theZombie->AddAttachedParticle(aPosX, aPosY, aEffect);
         } else {
-            LawnApp_AddTodParticle(mApp, aSplatPosX, aSplatPosY, mRenderOrder + 1, aEffect);
+            mApp->AddTodParticle(aSplatPosX, aSplatPosY, mRenderOrder + 1, aEffect);
         }
     }
 
@@ -395,7 +395,7 @@ void Projectile::CheckForCollision() {
             aPlant->mEatenFlashCountdown = max(aPlant->mEatenFlashCountdown, 25);
 
             mApp->PlayFoley(FoleyType::FOLEY_SPLAT);
-            LawnApp_AddTodParticle(mApp, mPosX - 3.0f, mPosY + 17.0f, mRenderOrder + 1, ParticleEffect::PARTICLE_PEA_SPLAT);
+            mApp->AddTodParticle(mPosX - 3.0f, mPosY + 17.0f, mRenderOrder + 1, ParticleEffect::PARTICLE_PEA_SPLAT);
             Die();
             return;
         }

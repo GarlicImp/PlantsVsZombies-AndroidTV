@@ -218,7 +218,7 @@ void Plant::Update() {
 
     GameScenes mGameScene = mApp->mGameScene;
 
-    if ((!IsOnBoard() || mGameScene != GameScenes::SCENE_LEVEL_INTRO || !LawnApp_IsWallnutBowlingLevel(mApp)) && (!IsOnBoard() || mApp->mGameMode != GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN)
+    if ((!IsOnBoard() || mGameScene != GameScenes::SCENE_LEVEL_INTRO || !mApp->IsWallnutBowlingLevel()) && (!IsOnBoard() || mApp->mGameMode != GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN)
         && (!IsOnBoard() || !CutScene_ShouldRunUpsellBoard(mBoard->mCutScene)) && IsOnBoard() && mGameScene != GameScenes::SCENE_PLAYING) {
         return;
     }
@@ -331,7 +331,7 @@ void Plant::Draw(Sexy::Graphics *g) {
     }
     num += mShakeOffsetX;
     num2 += mShakeOffsetY;
-    if (IsInPlay() && LawnApp_IsIZombieLevel(mApp)) {
+    if (IsInPlay() && mApp->IsIZombieLevel()) {
         mBoard->mChallenge->IZombieDrawPlant(g, this);
     } else if (mBodyReanimID != 0) {
         Reanimation *reanimation2 = mApp->ReanimationTryToGet(mBodyReanimID);
@@ -558,7 +558,7 @@ void Plant::DoSpecial() {
         int num1 = mBoard->GetLiveZombiesCount();
         old_Plant_DoSpecial(this);
         int num2 = mBoard->GetLiveZombiesCount();
-        if (num1 - num2 >= 10 && !LawnApp_IsLittleTroubleLevel(mApp)) {
+        if (num1 - num2 >= 10 && !mApp->IsLittleTroubleLevel()) {
             mBoard->GrantAchievement(AchievementId::ACHIEVEMENT_EXPLODONATOR, true);
         }
         return;

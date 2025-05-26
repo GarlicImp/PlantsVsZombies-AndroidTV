@@ -50,7 +50,8 @@ public:
     void SetScene(MainMenuScene theScene) { reinterpret_cast<void (*)(MainMenu *, MainMenuScene)>(MainMenu_SetSceneAddr)(this, theScene); };
     void StartAdventureMode() { reinterpret_cast<void (*)(MainMenu *)>(MainMenu_StartAdventureModeAddr)(this); };
 
-    void Creat(LawnApp *theApp);
+    MainMenu(LawnApp *theApp) { Create(theApp); }
+    void Create(LawnApp *theApp);
     void KeyDown(Sexy::KeyCode theKeyCode);
     void ButtonDepress(MainMenuButtonId theSelectedButton);
     void Update();

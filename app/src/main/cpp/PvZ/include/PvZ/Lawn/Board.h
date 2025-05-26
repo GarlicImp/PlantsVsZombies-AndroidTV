@@ -194,7 +194,7 @@ public:
     int mFlagRaiseCounter;                      // 5581
     int mIceTrapCounter;                        // 5582
     int mBoardRandSeed;                         // 5583
-    int mPoolSparklyParticleID;                 // 5584
+    ParticleSystemID mPoolSparklyParticleID;    // 5584
     Reanimation *mFwooshID[6][12];              // 5585 ~ 5656
     int mFwooshCountDown;                       // 5657
     int mTimeStopCounter;                       // 5658
@@ -386,7 +386,7 @@ public:
     int GetLiveZombiesCount();
     void FixReanimErrorAfterLoad();
     void DoPlantingAchievementCheck(SeedType theSeedType);
-    bool GrantAchievement(AchievementId::AchievementId theAchievementId, bool theIsShow);
+    bool GrantAchievement(AchievementId theAchievementId, bool theIsShow);
     int CountPlantByType(SeedType theSeedType);
     void ParseFormationSegment(char *theSegment);
     void LoadFormation(char *theFormation);
@@ -594,9 +594,9 @@ void SyncReanimation(Board *a1, Reanimation *a2, int *theSaveGameContext);
 
 int LawnSaveGame(Board *board, int *a2);
 
-const char *GetNameByAchievementId(AchievementId::AchievementId theAchievementId);
+const char *GetNameByAchievementId(AchievementId theAchievementId);
 
-Sexy::Image *GetIconByAchievementId(AchievementId::AchievementId theAchievementId);
+Sexy::Image *GetIconByAchievementId(AchievementId theAchievementId);
 
 void Board_FixReanimErrorAfterLoad(Board *board);
 
@@ -622,7 +622,7 @@ bool Board_StageHas6Rows(Board *board);
 
 void Board_DrawHammerButton(Board *board, Sexy::Graphics *graphics, LawnApp *lawnApp);
 
-void Board_DrawButterButton(Board *board, Sexy::Graphics *graphics, LawnApp *lawnApp);
+void Board_DrawButterButton(Board *board, Sexy::Graphics *graphics, LawnApp *theApp);
 
 void Board_DrawStartButton(Board *board, Sexy::Graphics *graphics, LawnApp *lawnApp);
 

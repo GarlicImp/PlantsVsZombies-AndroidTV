@@ -86,7 +86,8 @@ void HelpTextScreen_Delete2(Sexy::Widget *helpTextScreen) {
 
 void HelpTextScreen_ButtonDepress(Sexy::Widget *helpTextScreen, int id) {
     if (id == 1000) {
-        LawnApp_KillHelpTextScreen((LawnApp *)*gLawnApp_Addr);
+        LawnApp *gLawnApp = (LawnApp *)*gLawnApp_Addr;
+        gLawnApp->KillHelpTextScreen();
     } else
         return old_HelpTextScreen_ButtonDepress(helpTextScreen, id);
 }

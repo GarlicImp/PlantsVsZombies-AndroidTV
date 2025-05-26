@@ -87,16 +87,16 @@ void MainMenu::Update() {
             FoleyType aNextType = MainMenu_GetFoleyTypeByScene(mSceneNext);
             if (!TodFoley_IsFoleyPlaying(mApp->mSoundSystem, aNextType)) {
                 mApp->PlayFoley(aNextType);
-                LawnApp_SetFoleyVolume(mApp, aNextType, 0);
+                mApp->SetFoleyVolume(aNextType, 0);
             }
             float theVolume = TodAnimateCurveFloat(0, 93, gFoleyVolumeCounter, mApp->mPlayerInfo->mSoundVolume, 0, TodCurves::CURVE_BOUNCE_SLOW_MIDDLE);
             if (gFoleyVolumeCounter >= 46) {
-                LawnApp_SetFoleyVolume(mApp, aNextType, theVolume);
+                mApp->SetFoleyVolume(aNextType, theVolume);
                 if (TodFoley_IsFoleyPlaying(mApp->mSoundSystem, aType)) {
                     TodFoley_StopFoley(mApp->mSoundSystem, aType);
                 }
             } else {
-                LawnApp_SetFoleyVolume(mApp, aType, theVolume);
+                mApp->SetFoleyVolume(aType, theVolume);
             }
         } else {
             gFoleyVolumeCounter = 0;
@@ -104,20 +104,20 @@ void MainMenu::Update() {
             if (gAchievementState == NOT_SHOWING) {
                 if (!TodFoley_IsFoleyPlaying(mApp->mSoundSystem, aType) && mExitCounter == 0) {
                     //                    mApp->PlayFoley(aType);
-                    LawnApp_SetFoleyVolume(mApp, aType, 0);
+                    mApp->SetFoleyVolume(aType, 0);
                 }
                 if (mEnterReanimationCounter > 0) {
                     float theVolume = TodAnimateCurveFloat(110, 0, mEnterReanimationCounter, 0, mApp->mPlayerInfo->mSoundVolume, TodCurves::CURVE_LINEAR);
-                    LawnApp_SetFoleyVolume(mApp, aType, theVolume);
+                    mApp->SetFoleyVolume(aType, theVolume);
                 }
             }
             if (gAchievementState == SLIDING_IN) {
                 float theVolume = TodAnimateCurveFloat(100, 0, gMainMenuAchievementCounter, mApp->mPlayerInfo->mSoundVolume, 0, TodCurves::CURVE_LINEAR);
-                LawnApp_SetFoleyVolume(mApp, aType, theVolume);
+                mApp->SetFoleyVolume(aType, theVolume);
             }
             if (gAchievementState == SLIDING_OUT && gMainMenuAchievementCounter <= 100) {
                 float theVolume = TodAnimateCurveFloat(100, 0, gMainMenuAchievementCounter, 0, mApp->mPlayerInfo->mSoundVolume, TodCurves::CURVE_LINEAR);
-                LawnApp_SetFoleyVolume(mApp, aType, theVolume);
+                mApp->SetFoleyVolume(aType, theVolume);
             }
         }
     }
@@ -248,7 +248,7 @@ void MainMenu::ButtonDepress(MainMenuButtonId theSelectedButton) {
         case VS_BUTTON: // 如果按下了对战按钮
             if (mVSModeLocked) {
                 // 如果没解锁结盟（冒险2-1解锁）
-                LawnApp_LawnMessageBox(mApp, Dialogs::DIALOG_MESSAGE, "[MODE_LOCKED]", "[VS_LOCKED_MESSAGE]", "[DIALOG_BUTTON_OK]", "", 3);
+                mApp->LawnMessageBox(Dialogs::DIALOG_MESSAGE, "[MODE_LOCKED]", "[VS_LOCKED_MESSAGE]", "[DIALOG_BUTTON_OK]", "", 3);
                 return;
             }
             mPressedButtonId = theSelectedButton;
@@ -257,7 +257,7 @@ void MainMenu::ButtonDepress(MainMenuButtonId theSelectedButton) {
         case VS_COOP_BUTTON: // 如果按下了结盟按钮
             if (mCoopModeLocked) {
                 // 如果没解锁结盟（冒险2-1解锁）
-                LawnApp_LawnMessageBox(mApp, Dialogs::DIALOG_MESSAGE, "[MODE_LOCKED]", "[COOP_LOCKED_MESSAGE]", "[DIALOG_BUTTON_OK]", "", 3);
+                mApp->LawnMessageBox(Dialogs::DIALOG_MESSAGE, "[MODE_LOCKED]", "[COOP_LOCKED_MESSAGE]", "[DIALOG_BUTTON_OK]", "", 3);
                 return;
             }
             mPressedButtonId = theSelectedButton;
@@ -349,7 +349,7 @@ void MainMenu_UpdateHouseReanim(MainMenu *mainMenu) {
     Reanimation *houseReanimation = mainMenu->mApp->ReanimationTryToGet(mainMenu->mHouseReanimID);
     if (houseReanimation == nullptr)
         return;
-    LawnApp_SetHouseReanim(mainMenu->mApp, houseReanimation);
+    mainMenu->mApp->SetHouseReanim(houseReanimation);
 }
 
 void MainMenu::SyncProfile(bool a2) {
@@ -435,17 +435,17 @@ void MainMenu::OnExit() {
     TodFoley_StopFoley(mApp->mSoundSystem, FoleyType::FOLEY_MENU_RIGHT);
 
     if (mPressedButtonId == HOUSE_BUTTON) {
-        LawnApp_KillMainMenu(mApp);
-        LawnApp_ShowLeaderboards(mApp);
+        mApp->KillMainMenu();
+        mApp->ShowLeaderboards();
     }
 
     if (mPressedButtonId == UNLOCK_BUTTON) {
-        LawnApp_KillMainMenu(mApp);
-        LawnApp_ShowZombatarScreen(mApp);
+        mApp->KillMainMenu();
+        mApp->ShowZombatarScreen();
     }
 
     //    if (mPressedButtonId == VS_BUTTON) {
-    //        LawnApp_KillMainMenu(mApp);
+    //        KillMainMenu(mApp);
     ////        TODO:为对战添加选择场景
     //        LawnApp_ShowChallengeScreen(mApp, CHALLENGE_PAGE_VS);
     //        return;
@@ -465,7 +465,7 @@ void MainMenu::SyncButtons() {
     MainMenu_EnableButtons(this);
 }
 
-void MainMenu::Creat(LawnApp *theApp) {
+void MainMenu::Create(LawnApp *theApp) {
     old_MainMenu_MainMenu(this, theApp);
 }
 
@@ -491,15 +491,15 @@ void MainMenu::AddedToManager(int *a2) {
     old_MainMenu_AddedToManager(this, a2);
     if (!showHouse)
         return;
-    Reanimation *reanimation = LawnApp_AddReanimation(mApp, 0, 0, 0, ReanimationType::REANIM_LEADERBOARDS_HOUSE);
+    Reanimation *reanimation = mApp->AddReanimation(0, 0, 0, ReanimationType::REANIM_LEADERBOARDS_HOUSE);
     //    Reanimation *reanimation = LawnApp_AddReanimation(mainMenu->mApp, mainMenu->mCameraPositionX + theOffsetX,mainMenu->mCameraPositionY + theOffsetY, 0,
     //    ReanimationType::REANIM_LEADERBOARDS_HOUSE);
     reanimation->mCustomFilterEffectColor = {142, 146, 232, 92};
     reanimation->mFilterEffect = FilterEffect::FILTEREFFECT_CUSTOM;
 
 
-    LawnApp_SetHouseReanim(mApp, reanimation);
-    mHouseReanimID = LawnApp_ReanimationGetID(mApp, reanimation);
+    mApp->SetHouseReanim(reanimation);
+    mHouseReanimID = mApp->ReanimationGetID(reanimation);
 }
 
 void MainMenu::RemovedFromManager(int *a2) {
@@ -675,8 +675,8 @@ void MaskHelpWidget_Draw(AchievementsWidget *achievementsWidget, Sexy::Graphics 
             Sexy_Graphics_SetColorizeImages(graphics, true);
             Sexy_Graphics_SetColor(graphics, &gray);
         }
-        Sexy_Graphics_DrawImage(graphics, GetIconByAchievementId((AchievementId::AchievementId)i), 330, theAchievementY - 5);
-        const char *theAchievementName = GetNameByAchievementId((AchievementId::AchievementId)i);
+        Sexy_Graphics_DrawImage(graphics, GetIconByAchievementId((AchievementId)i), 330, theAchievementY - 5);
+        const char *theAchievementName = GetNameByAchievementId((AchievementId)i);
         int holder[1];
         int holder1[1];
         Sexy_StrFormat(holder, "[%s]", theAchievementName);
@@ -935,7 +935,7 @@ void TrashBin::Draw(Sexy::Graphics *g) {
 }
 
 int LeaderboardsWidget_GetAchievementIdByReanimationType(ReanimationType type) {
-    AchievementId::AchievementId id = AchievementId::ACHIEVEMENT_HOME_SECURITY;
+    AchievementId id = AchievementId::ACHIEVEMENT_HOME_SECURITY;
     switch (type) {
         case ReanimationType::REANIM_ACHIEVEMENT_HOME_SECURITY:
             id = AchievementId::ACHIEVEMENT_HOME_SECURITY;
@@ -1023,8 +1023,8 @@ int LeaderboardsWidget_GetAchievementIdByDrawOrder(int drawOrder) {
 void LeaderboardsWidget_ButtonDepress(Sexy::ButtonListener *listener, int id) {
     if (id == 1000) {
         LawnApp *lawnApp = (LawnApp *)*gLawnApp_Addr;
-        LawnApp_KillLeaderboards(lawnApp);
-        LawnApp_ShowMainMenuScreen(lawnApp);
+        lawnApp->KillLeaderboards();
+        lawnApp->ShowMainMenuScreen();
     }
 }
 
@@ -1065,7 +1065,7 @@ void LeaderboardsWidget_LeaderboardsWidget(LeaderboardsWidget *this_, LawnApp *l
         Reanimation_SetAnimRate(reanim, 0.0f);
         reanim->mLoopType = ReanimLoopType::REANIM_LOOP;
         if (i == 0) {
-            LawnApp_SetHouseReanim(this_->mApp, reanim);
+            this_->mApp->SetHouseReanim(reanim);
             Reanimation_SetPosition(reanim, 456.9f, 129.3f);
         }
         if (i == 1 || i == 2 || i == 3) {
@@ -1163,7 +1163,7 @@ void DaveHelp_Draw(LeaderboardsWidget *leaderboardsWidget, Sexy::Graphics *graph
         if (!leaderboardsWidget->mAchievements[num])
             continue;
         if (leaderboardsWidget->mHighLightAchievement && num == leaderboardsWidget->mFocusedAchievementIndex) {
-            auto id = AchievementId::AchievementId(LeaderboardsWidget_GetAchievementIdByReanimationType(ReanimationType(num + ReanimationType::REANIM_ACHIEVEMENT_HOME_SECURITY))
+            auto id = AchievementId(LeaderboardsWidget_GetAchievementIdByReanimationType(ReanimationType(num + ReanimationType::REANIM_ACHIEVEMENT_HOME_SECURITY))
                                                    + AchievementId::ACHIEVEMENT_HOME_SECURITY);
             Sexy::Image *image = GetIconByAchievementId(id);
             Color color;
@@ -1186,7 +1186,7 @@ void DaveHelp_Draw(LeaderboardsWidget *leaderboardsWidget, Sexy::Graphics *graph
         }
     }
 
-    if (LawnApp_HasFinishedAdventure(leaderboardsWidget->mApp)) {
+    if (leaderboardsWidget->mApp->HasFinishedAdventure()) {
         Reanimation_DrawRenderGroup(leaderboardsWidget->mLeaderboardReanimations->backgroundReanim[1], graphics, 1);
         int holder[1];
         int holder1[1];
@@ -1301,7 +1301,7 @@ void DaveHelp_MouseDown(LeaderboardsWidget *leaderboardsWidget, int x, int y, in
         int holder2[1];
         TodStringTranslate(holder1, "[PLANTS_KILLED]");
         TodReplaceNumberString(holder2, holder1, "{PLANTS}", leaderboardsWidget->mApp->mPlayerInfo->mGameStats.mMiscStats[GameStats::PLANTS_KILLED]);
-        LawnApp_LawnMessageBox(leaderboardsWidget->mApp, Dialogs::DIALOG_MESSAGE, (char *)*holder2, "", "[DIALOG_BUTTON_OK]", "", 3);
+        leaderboardsWidget->mApp->LawnMessageBox(Dialogs::DIALOG_MESSAGE, (char *)*holder2, "", "[DIALOG_BUTTON_OK]", "", 3);
         Sexy_String_Delete(holder1);
         Sexy_String_Delete(holder2);
         return;
@@ -1317,7 +1317,7 @@ void DaveHelp_MouseDown(LeaderboardsWidget *leaderboardsWidget, int x, int y, in
         int holder2[1];
         TodStringTranslate(holder1, "[ZOMBIES_KILLED]");
         TodReplaceNumberString(holder2, holder1, "{ZOMBIES}", leaderboardsWidget->mApp->mPlayerInfo->mGameStats.mMiscStats[GameStats::ZOMBIES_KILLED]);
-        LawnApp_LawnMessageBox(leaderboardsWidget->mApp, Dialogs::DIALOG_MESSAGE, (char *)*holder2, "", "[DIALOG_BUTTON_OK]", "", 3);
+        leaderboardsWidget->mApp->LawnMessageBox(Dialogs::DIALOG_MESSAGE, (char *)*holder2, "", "[DIALOG_BUTTON_OK]", "", 3);
         Sexy_String_Delete(holder1);
         Sexy_String_Delete(holder2);
         return;
@@ -1367,8 +1367,8 @@ void DaveHelp_KeyDown(LeaderboardsWidget *leaderboardsWidget, int keyCode) {
             leaderboardsWidget->mHighLightAchievement = false;
             return;
         }
-        LawnApp_KillLeaderboards(leaderboardsWidget->mApp);
-        LawnApp_ShowMainMenuScreen(leaderboardsWidget->mApp);
+        leaderboardsWidget->mApp->KillLeaderboards();
+        leaderboardsWidget->mApp->ShowMainMenuScreen();
         return;
     }
     if (keyCode == Sexy::Up || keyCode == Sexy::Down || keyCode == Sexy::Left || keyCode == Sexy::Right) {
@@ -1409,7 +1409,7 @@ void DaveHelp_KeyDown(LeaderboardsWidget *leaderboardsWidget, int keyCode) {
         int holder2[1];
         TodStringTranslate(holder1, "[PLANTS_KILLED]");
         TodReplaceNumberString(holder2, holder1, "{PLANTS}", leaderboardsWidget->mApp->mPlayerInfo->mGameStats.mMiscStats[GameStats::PLANTS_KILLED]);
-        LawnApp_LawnMessageBox(leaderboardsWidget->mApp, Dialogs::DIALOG_MESSAGE, (char *)*holder2, "", "[DIALOG_BUTTON_OK]", "", 3);
+        leaderboardsWidget->mApp->LawnMessageBox(Dialogs::DIALOG_MESSAGE, (char *)*holder2, "", "[DIALOG_BUTTON_OK]", "", 3);
         Sexy_String_Delete(holder1);
         Sexy_String_Delete(holder2);
         return;
@@ -1420,7 +1420,7 @@ void DaveHelp_KeyDown(LeaderboardsWidget *leaderboardsWidget, int keyCode) {
         int holder2[1];
         TodStringTranslate(holder1, "[ZOMBIES_KILLED]");
         TodReplaceNumberString(holder2, holder1, "{ZOMBIES}", leaderboardsWidget->mApp->mPlayerInfo->mGameStats.mMiscStats[GameStats::ZOMBIES_KILLED]);
-        LawnApp_LawnMessageBox(leaderboardsWidget->mApp, Dialogs::DIALOG_MESSAGE, (char *)*holder2, "", "[DIALOG_BUTTON_OK]", "", 3);
+        leaderboardsWidget->mApp->LawnMessageBox(Dialogs::DIALOG_MESSAGE, (char *)*holder2, "", "[DIALOG_BUTTON_OK]", "", 3);
         Sexy_String_Delete(holder1);
         Sexy_String_Delete(holder2);
         return;
@@ -1455,15 +1455,14 @@ void ZombatarWidget_ButtonPress(ZombatarWidget *zombatarWidget, int id) {}
 void ZombatarWidget_ButtonDepress(ZombatarWidget *zombatarWidget, int id) {
     if (id == 1000) {
         LawnApp *lawnApp = (LawnApp *)*gLawnApp_Addr;
-        LawnApp_KillZombatarScreen(lawnApp);
-        LawnApp_ShowMainMenuScreen(lawnApp);
+        lawnApp->KillZombatarScreen();
+        lawnApp->ShowMainMenuScreen();
         return;
     }
 
     if (id == 1001) {
         LawnApp *lawnApp = (LawnApp *)*gLawnApp_Addr;
-        if (LawnApp_LawnMessageBox(
-                lawnApp, Dialogs::DIALOG_MESSAGE, "[ZOMBATAR_FINISHED_WARNING_HEADER]", "[ZOMBATAR_FINISHED_WARNING_TEXT]", "[ZOMBATAR_FINISHED_BUTTON_TEXT]", "[ZOMBATAR_BACK_BUTTON_TEXT]", 1)
+        if (lawnApp->LawnMessageBox(Dialogs::DIALOG_MESSAGE, "[ZOMBATAR_FINISHED_WARNING_HEADER]", "[ZOMBATAR_FINISHED_WARNING_TEXT]", "[ZOMBATAR_FINISHED_BUTTON_TEXT]", "[ZOMBATAR_BACK_BUTTON_TEXT]", 1)
             == 1001)
             return;
 
@@ -1522,7 +1521,7 @@ void ZombatarWidget_ButtonDepress(ZombatarWidget *zombatarWidget, int id) {
 
     if (id == 1004) {
         LawnApp *lawnApp = (LawnApp *)*gLawnApp_Addr;
-        if (LawnApp_LawnMessageBox(lawnApp, Dialogs::DIALOG_MESSAGE, "[ZOMBATAR_DELETE_HEADER]", "[ZOMBATAR_DELETE_BODY]", "[BUTTON_OK]", "[BUTTON_CANCEL]", 1) == 1001)
+        if (lawnApp->LawnMessageBox(Dialogs::DIALOG_MESSAGE, "[ZOMBATAR_DELETE_HEADER]", "[ZOMBATAR_DELETE_BODY]", "[BUTTON_OK]", "[BUTTON_CANCEL]", 1) == 1001)
             return;
         gMainMenuZombatarWidget->mShowExistingZombatarPortrait = false;
         if (addonImages.zombatar_portrait != nullptr) {
@@ -2832,13 +2831,13 @@ bool ZombatarWidget_AccessoryIsColorized(int tab, int accessory) {
     }
 }
 
-void ZombatarWidget_ZombatarWidget(ZombatarWidget *zombatarWidget, LawnApp *lawnApp) {
-    TestMenuWidget_TestMenuWidget(zombatarWidget);
-    LawnApp_LoadZombatarResources(lawnApp);
-    LawnApp_Load(lawnApp, "DelayLoad_Almanac");
-    zombatarWidget->mApp = lawnApp;
+ZombatarWidget::ZombatarWidget(LawnApp *theApp) {
+    TestMenuWidget_TestMenuWidget(this);
+    theApp->LoadZombatarResources();
+    theApp->Load("DelayLoad_Almanac");
+    mApp = theApp;
     Sexy::ButtonListener *mZombatarListener = (Sexy::ButtonListener *)operator new(sizeof(Sexy::ButtonListener));
-    zombatarWidget->mButtonListener = mZombatarListener;
+    mButtonListener = mZombatarListener;
     Sexy::ButtonListenerVTable *mVTable = (Sexy::ButtonListenerVTable *)operator new(sizeof(Sexy::ButtonListenerVTable));
     mZombatarListener->vTable = mVTable;
     //    mVTable->ButtonPress = (void *) ZombatarWidget_ButtonPress;
@@ -2851,55 +2850,55 @@ void ZombatarWidget_ZombatarWidget(ZombatarWidget *zombatarWidget, LawnApp *lawn
 
     int holder[1];
     Sexy_StrFormat(holder, "[CLOSE]");
-    Sexy::GameButton *backButton = MakeButton(1000, mZombatarListener, zombatarWidget, holder);
+    Sexy::GameButton *backButton = MakeButton(1000, mZombatarListener, this, holder);
     Sexy_String_Delete(holder);
     Sexy_Widget_Resize(backButton, 471, 628, addonZombatarImages.zombatar_mainmenuback_highlight->mWidth, addonZombatarImages.zombatar_mainmenuback_highlight->mHeight);
-    Sexy_Widget_AddWidget(zombatarWidget, backButton);
+    Sexy_Widget_AddWidget(this, backButton);
     backButton->mDrawStoneButton = false;
     backButton->mButtonImage = *Sexy_IMAGE_BLANK_Addr;
     backButton->mDownImage = addonZombatarImages.zombatar_mainmenuback_highlight;
     backButton->mOverImage = addonZombatarImages.zombatar_mainmenuback_highlight;
-    zombatarWidget->mBackButton = backButton;
+    mBackButton = backButton;
 
     int holder1[1];
     Sexy_StrFormat(holder1, "[OK]");
     Sexy::GameButton *finishButton = MakeButton(1001, mZombatarListener, nullptr, holder1);
     Sexy_String_Delete(holder1);
     Sexy_Widget_Resize(finishButton, 160 + 523, 565, addonZombatarImages.zombatar_finished_button->mWidth, addonZombatarImages.zombatar_finished_button->mHeight);
-    Sexy_Widget_AddWidget(zombatarWidget, finishButton);
+    Sexy_Widget_AddWidget(this, finishButton);
     finishButton->mDrawStoneButton = false;
     finishButton->mButtonImage = addonZombatarImages.zombatar_finished_button;
     finishButton->mDownImage = addonZombatarImages.zombatar_finished_button_highlight;
     finishButton->mOverImage = addonZombatarImages.zombatar_finished_button_highlight;
-    zombatarWidget->mFinishButton = finishButton;
+    mFinishButton = finishButton;
 
     int holder2[1];
     Sexy_StrFormat(holder2, "[OK]");
     Sexy::GameButton *viewPortraitButton = MakeButton(1002, mZombatarListener, nullptr, holder2);
     Sexy_String_Delete(holder2);
     Sexy_Widget_Resize(viewPortraitButton, 160 + 75, 565, addonZombatarImages.zombatar_view_button->mWidth, addonZombatarImages.zombatar_view_button->mHeight);
-    Sexy_Widget_AddWidget(zombatarWidget, viewPortraitButton);
+    Sexy_Widget_AddWidget(this, viewPortraitButton);
     viewPortraitButton->mDrawStoneButton = false;
     viewPortraitButton->mButtonImage = addonZombatarImages.zombatar_view_button;
     viewPortraitButton->mDownImage = addonZombatarImages.zombatar_view_button_highlight;
     viewPortraitButton->mOverImage = addonZombatarImages.zombatar_view_button_highlight;
-    zombatarWidget->mViewPortraitButton = viewPortraitButton;
+    mViewPortraitButton = viewPortraitButton;
 
     int holder3[1];
     Sexy_StrFormat(holder3, "[ZOMBATAR_NEW_BUTTON]");
     Sexy::GameButton *newButton = MakeButton(1003, mZombatarListener, nullptr, holder3);
     Sexy_String_Delete(holder3);
     Sexy_Widget_Resize(newButton, 578, 490, 170, 50);
-    Sexy_Widget_AddWidget(zombatarWidget, newButton);
-    zombatarWidget->mNewButton = newButton;
+    Sexy_Widget_AddWidget(this, newButton);
+    mNewButton = newButton;
 
     int holder4[1];
     Sexy_StrFormat(holder4, "[ZOMBATAR_DELETE_BUTTON]");
     Sexy::GameButton *deleteButton = MakeButton(1004, mZombatarListener, nullptr, holder4);
     Sexy_String_Delete(holder4);
     Sexy_Widget_Resize(deleteButton, 314, 490, 170, 50);
-    Sexy_Widget_AddWidget(zombatarWidget, deleteButton);
-    zombatarWidget->mDeleteButton = deleteButton;
+    Sexy_Widget_AddWidget(this, deleteButton);
+    mDeleteButton = deleteButton;
 
     auto *aZombie = new Zombie;
     aZombie->mBoard = nullptr;
@@ -2908,22 +2907,22 @@ void ZombatarWidget_ZombatarWidget(ZombatarWidget *zombatarWidget, LawnApp *lawn
     ReanimatorTrackInstance *aHeadTrackInstance = Reanimation_GetTrackInstanceByName(aBodyReanim, "anim_head1");
     aHeadTrackInstance->mImageOverride = *Sexy_IMAGE_BLANK_Addr;
 
-    Reanimation *aZombatarHeadReanim = LawnApp_AddReanimation(lawnApp, 0, 0, 0, ReanimationType::REANIM_ZOMBATAR_HEAD);
+    Reanimation *aZombatarHeadReanim = theApp->AddReanimation(0, 0, 0, ReanimationType::REANIM_ZOMBATAR_HEAD);
     Reanimation_PlayReanim(aZombatarHeadReanim, "anim_head_idle", ReanimLoopType::REANIM_LOOP, 0, 15.0);
     aZombatarHeadReanim->AssignRenderGroupToTrack("anim_hair", -1);
-    aZombie->mBossFireBallReanimID = LawnApp_ReanimationGetID(aZombie->mApp, aZombatarHeadReanim);
+    aZombie->mBossFireBallReanimID = aZombie->mApp->ReanimationGetID(aZombatarHeadReanim);
     AttachEffect *attachEffect = AttachReanim(&aHeadTrackInstance->mAttachmentID, aZombatarHeadReanim, 0.0f, 0.0f);
     TodScaleRotateTransformMatrix(&attachEffect->mOffset, -20.0, -1.0, 0.2, 1.0, 1.0);
-    zombatarWidget->mZombatarReanim = aZombatarHeadReanim;
+    mZombatarReanim = aZombatarHeadReanim;
     aZombie->ReanimShowPrefix("anim_hair", -1);
     aZombie->ReanimShowPrefix("anim_head2", -1);
     aZombie->Update();
-    zombatarWidget->mPreviewZombie = aZombie;
+    mPreviewZombie = aZombie;
 
-    zombatarWidget->mShowExistingZombatarPortrait = addonImages.zombatar_portrait != nullptr;
-    gMainMenuZombatarWidget->mShowZombieTypeSelection = false;
+    mShowExistingZombatarPortrait = addonImages.zombatar_portrait != nullptr;
+    mShowZombieTypeSelection = false;
 
-    ZombatarWidget_SetDefault(zombatarWidget);
+    ZombatarWidget_SetDefault(this);
 }
 
 void TestMenuWidget_Update(ZombatarWidget *zombatarWidget) {
@@ -4185,8 +4184,8 @@ void TestMenuWidget_MouseUp(ZombatarWidget *zombatarWidget, int x, int y) {}
 void TestMenuWidget_KeyDown(ZombatarWidget *zombatarWidget, int keyCode) {
     if (keyCode == Sexy::Back || keyCode == Sexy::Back2) {
         LawnApp *lawnApp = (LawnApp *)*gLawnApp_Addr;
-        LawnApp_KillZombatarScreen(lawnApp);
-        LawnApp_ShowMainMenuScreen(lawnApp);
+        lawnApp->KillZombatarScreen();
+        lawnApp->ShowMainMenuScreen();
         return;
     }
     if (keyCode == Sexy::Up) {

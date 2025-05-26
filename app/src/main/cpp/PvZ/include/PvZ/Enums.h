@@ -1279,7 +1279,6 @@ enum TouchPlayerIndex { None = -1, Player1 = 0, Player2 = 1 };
 }
 
 
-namespace AchievementId {
 enum AchievementId {
     ACHIEVEMENT_HOME_SECURITY = 0,    // 完成冒险模式
     ACHIEVEMENT_MORTICULTURALIST = 1, // 收集全部49种植物
@@ -1295,7 +1294,6 @@ enum AchievementId {
     ACHIEVEMENT_TREE = 11,            // 让智慧树长到100英尺高
     MAX_ACHIEVEMENTS
 };
-}
 
 enum MainMenuButtonId {
     START_ADVENTURE_BUTTON = 0,
@@ -1450,8 +1448,6 @@ enum FoleyType {
 
 enum FilterEffect { FILTEREFFECT_NONE = -1, FILTEREFFECT_WASHED_OUT = 0, FILTEREFFECT_LESS_WASHED_OUT = 1, FILTEREFFECT_WHITE = 2, FILTEREFFECT_CUSTOM = 3, NUM_FILTEREFFECT };
 
-
-namespace HouseType {
 enum HouseType {
     Invalid = -1,
     BLUEPRINT_BLING = 0,
@@ -1460,7 +1456,6 @@ enum HouseType {
     BLUEPRINT_FUTURE = 3,
     BLUEPRINT_CLOWN = 4,
 };
-}
 
 namespace MusicTune {
 enum MusicTune {
@@ -2179,7 +2174,7 @@ struct GameStats {
 
     enum MiscStat { ZOMBIES_KILLED = 0, PLANTS_KILLED = 1, MONEY = 2, TREE_HEIGHT = 4, ENDLESS_FLAGS = 5, MOWED_ZOMBIES = 6, STINKY_CHOCOLATES = 7 };
 
-    HouseType::HouseType mHouseType; // 0
+    HouseType mHouseType; // 0
     int unk;                         // 1
     int mMiscStats[9];               // 2 ~ 10
     char mFavoritePlants[49];        // 44 ~ 92
@@ -2480,6 +2475,8 @@ public:
     unsigned char mSelectedBackground;
     unsigned char mSelectedBackgroundColor;
     unsigned char mSelectedBackgroundPage;
+
+    ZombatarWidget(LawnApp *theApp);
 
 }; // 我想用ZombatarWidget取代TestMenuWidget。
 

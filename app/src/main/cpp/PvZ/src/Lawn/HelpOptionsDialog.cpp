@@ -8,9 +8,9 @@ void HelpOptionsDialog_ButtonDepress(HelpOptionsDialog *a, int a2) {
     // 修复在游戏战斗中打开新版暂停菜单时可以切换用户
     if (a2 == 1) {
         if (isMainMenu)
-            LawnApp_DoUserDialog(a->mApp);
+            a->mApp->DoUserDialog();
         else
-            LawnApp_LawnMessageBox(a->mApp, Dialogs::DIALOG_MESSAGE, "[DIALOG_WARNING]", "[CHANGE_USER_FORBID]", "[DIALOG_BUTTON_OK]", "", 3);
+            a->mApp->LawnMessageBox(Dialogs::DIALOG_MESSAGE, "[DIALOG_WARNING]", "[CHANGE_USER_FORBID]", "[DIALOG_BUTTON_OK]", "", 3);
         return;
     }
     //    if( thePlayerIndex == 0){

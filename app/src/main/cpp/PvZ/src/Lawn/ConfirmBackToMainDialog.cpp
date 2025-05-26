@@ -22,6 +22,6 @@ void ConfirmBackToMainDialog_ButtonDepress(ConfirmBackToMainDialog *a, int a2) {
     // 修复重新开始时不关闭NEWOPTIONS
     old_ConfirmBackToMainDialog_ButtonDepress(a, a2);
     if (a2 == 1) {
-        LawnApp_KillDialog(a->mApp, Dialogs::DIALOG_NEWOPTIONS);
+        a->mApp->KillDialog(Dialogs::DIALOG_NEWOPTIONS);
     }
 }

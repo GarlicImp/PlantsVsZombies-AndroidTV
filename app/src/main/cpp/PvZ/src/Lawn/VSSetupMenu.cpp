@@ -21,13 +21,14 @@ void VSSetupMenu_KeyDown(int *a, int a2) {
     // 修复在对战的阵营选取界面无法按返回键退出的BUG。
     if (a2 == 27) {
         int VSSetupState = *((uint32_t *)a + 74);
+        LawnApp *aLawnApp = *((LawnApp **)a + 73);
         switch (VSSetupState) {
             case 1:
             case 2:
-                LawnApp_DoBackToMain(*((LawnApp **)a + 73));
+                aLawnApp->DoBackToMain();
                 return;
             case 3:
-                LawnApp_DoNewOptions(*((LawnApp **)a + 73), 0, 0);
+                aLawnApp->DoNewOptions(0, 0);
                 return;
         }
     }

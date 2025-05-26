@@ -45,7 +45,7 @@ void Coin::Update() {
             Collect(0);
         }
     }
-    if (LawnApp_IsCoopMode(mApp) && (mType == CoinType::COIN_SUN || mType == CoinType::COIN_COOP_DOUBLE_SUN || mType == CoinType::COIN_SMALLSUN || mType == CoinType::COIN_LARGESUN)) {
+    if (mApp->IsCoopMode() && (mType == CoinType::COIN_SUN || mType == CoinType::COIN_COOP_DOUBLE_SUN || mType == CoinType::COIN_SMALLSUN || mType == CoinType::COIN_LARGESUN)) {
         // 在结盟模式关闭阳光自动拾取。
         mCoinAge = 0;
     }
@@ -144,7 +144,7 @@ void Coin::UpdateFallForAward() {
             } else if (mType == CoinType::COIN_VS_PLANT_TROPHY || mType == CoinType::COIN_VS_ZOMBIE_TROPHY) {
                 aParticleOffsetY -= 20.0;
                 int aRenderOrder = Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_UI_TOP, mRow, mHasBouncyArrow);
-                TodParticleSystem *aParticle = LawnApp_AddTodParticle(mApp, mPosX, mPosY, aRenderOrder, ParticleEffect::PARTICLE_TROPHY_SPARKLE);
+                TodParticleSystem *aParticle = mApp->AddTodParticle(mPosX, mPosY, aRenderOrder, ParticleEffect::PARTICLE_TROPHY_SPARKLE);
                 AttachParticle(mAttachmentID + 2, aParticle, 0, 0.0);
             } else if (mType == CoinType::COIN_AWARD_MONEY_BAG || mType == CoinType::COIN_AWARD_BAG_DIAMOND) {
                 aParticleOffsetY -= 2.0;
@@ -168,7 +168,7 @@ void Coin::UpdateFallForAward() {
                 aEffect = ParticleEffect::PARTICLE_AWARD_PICKUP_ARROW;
             }
 
-            TodParticleSystem *aParticle = LawnApp_AddTodParticle(mApp, mPosX + aParticleOffsetX, mPosY + aParticleOffsetY, 0, aEffect);
+            TodParticleSystem *aParticle = mApp->AddTodParticle(mPosX + aParticleOffsetX, mPosY + aParticleOffsetY, 0, aEffect);
             AttachParticle(mAttachmentID, aParticle, aParticleOffsetX, aParticleOffsetY);
             mHasBouncyArrow = true;
         }

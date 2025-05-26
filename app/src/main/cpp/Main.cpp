@@ -854,9 +854,9 @@ extern "C" JNIEXPORT void JNICALL Java_com_transmension_mobile_EnhanceActivity_n
     doKeyboardTwoPlayerDialog = is_on;
     if (!is_on) {
         LawnApp *lawnApp = (LawnApp *)*gLawnApp_Addr;
-        if (LawnApp_IsCoopMode(lawnApp) || lawnApp->mGameMode == GameMode::GAMEMODE_MP_VS)
+        if (lawnApp->IsCoopMode() || lawnApp->mGameMode == GameMode::GAMEMODE_MP_VS)
             return;
-        LawnApp_ClearSecondPlayer(lawnApp);
+        lawnApp->ClearSecondPlayer();
         Board *board = lawnApp->mBoard;
         if (board != nullptr) {
             GamepadControls *gamepadControls2 = board->mGamepadControls2;
@@ -875,7 +875,7 @@ extern "C" JNIEXPORT jboolean JNICALL Java_com_transmension_mobile_EnhanceActivi
         return true;
     }
     SeedChooserScreen *seedChooserScreen = lawnApp->mSeedChooserScreen;
-    if (LawnApp_IsCoopMode(lawnApp) && seedChooserScreen != nullptr && mFocusWidget == seedChooserScreen) {
+    if (lawnApp->IsCoopMode() && seedChooserScreen != nullptr && mFocusWidget == seedChooserScreen) {
         return true;
     }
 
@@ -979,7 +979,7 @@ extern "C" JNIEXPORT void JNICALL Java_com_transmension_mobile_EnhanceActivity_n
         return;
     }
     SeedChooserScreen *seedChooserScreen = lawnApp->mSeedChooserScreen;
-    if (is_key_down && LawnApp_IsCoopMode(lawnApp) && seedChooserScreen != nullptr && mFocusWidget == seedChooserScreen) {
+    if (is_key_down && lawnApp->IsCoopMode() && seedChooserScreen != nullptr && mFocusWidget == seedChooserScreen) {
         seedChooserScreen->GameButtonDown((ButtonCode)buttonCode, playerIndex);
         return;
     }

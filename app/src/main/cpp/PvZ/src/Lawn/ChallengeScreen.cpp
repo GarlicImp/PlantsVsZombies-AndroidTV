@@ -92,7 +92,7 @@ void ChallengeScreen::Draw(Sexy::Graphics *graphics) {
     }
 
     int holder[1];
-    Sexy_StrFormat(holder, "%d/%d", LawnApp_GetNumTrophies(mApp, mPageIndex), mTotalTrophiesInPage);
+    Sexy_StrFormat(holder, "%d/%d", mApp->GetNumTrophies(mPageIndex), mTotalTrophiesInPage);
     Color theColor = {255, 240, 0, 255};
     TodDrawString(graphics, holder, 711, 62, *Sexy_FONT_BRIANNETOD16_Addr, theColor, DrawStringJustification::DS_ALIGN_CENTER);
     Sexy_String_Delete(holder);
@@ -141,8 +141,8 @@ void ChallengeScreen::ButtonPress(int theButtonId) {
 void ChallengeScreen::ButtonDepress(int theId) {
     // 去除原有的点击进入关卡的功能
     if (theId == 1000) {
-        LawnApp_KillChallengeScreen(mApp);
-        LawnApp_DoBackToMain(mApp);
+        mApp->KillChallengeScreen();
+        mApp->DoBackToMain();
     }
 }
 
