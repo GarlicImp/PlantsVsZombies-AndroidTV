@@ -2,6 +2,7 @@
 #define PVZ_MISC_H
 
 #include "Enums.h"
+#include "PvZ/TodLib/Common/TodList.h"
 
 inline int (*CursorObject_Draw)(CursorObject *a, Sexy::Graphics *a2);
 
@@ -125,8 +126,6 @@ inline void (*FilterEffectDoLumSat)(Sexy::Image *theImage, float aLum, float aSa
 
 inline int **(*ReanimAtlas_GetEncodedReanimAtlas)(int *, int *);
 
-inline void (*ReanimatorCache_GetPlantImageSize)(ReanimatorCache *, int, int *, int *, int *, int *);
-
 inline int *(*Sexy_ResourceManager_GetSoundThrow)(int *, int *);
 
 inline float (*RandRangeFloat)(float, float);
@@ -238,14 +237,6 @@ inline int (*old_SexyDialog_RemovedFromManager)(void *instance, void *instance1)
 
 inline void (*old_LawnMower_Update)(int *lawnMover);
 
-inline void (*old_ReanimatorCache_LoadCachedImages)(ReanimatorCache *a1);
-
-inline void (*old_ReanimatorCache_UpdateReanimationForVariation)(ReanimatorCache *a1, Reanimation *a, DrawVariation theDrawVariation);
-
-inline void (*old_ReanimatorCache_DrawCachedPlant)(ReanimatorCache *a1, Sexy::Graphics *graphics, float thePosX, float thePosY, SeedType theSeedType, DrawVariation drawVariation);
-
-inline Sexy::Image *(*old_ReanimatorCache_MakeCachedZombieFrame)(ReanimatorCache *reanimatorCache, ZombieType zombieType);
-
 inline void (*old_HelpBarWidget_HelpBarWidget)(Sexy::Widget *a);
 
 inline bool (*old_CursorObject_BeginDraw)(CursorObject *cursorObject, Sexy::Graphics *graphics);
@@ -275,8 +266,6 @@ int randomInt(int a, int b);
 
 void DrawSeedPacket(
     Sexy::Graphics *graphics, float x, float y, SeedType seedType, SeedType imitaterType, float coolDownPercent, int grayness, bool drawCostText, bool isInGame, bool isZombieSeed, bool a11);
-
-void ReanimatorCache_DrawCachedPlant(ReanimatorCache *a1, Sexy::Graphics *graphics, float thePosX, float thePosY, SeedType theSeedType, DrawVariation theDrawVariation);
 
 void DrawSeedType(Sexy::Graphics *graphics, float x, float y, SeedType theSeedType, SeedType theImitaterType, float xOffset, float yOffset, float scale);
 

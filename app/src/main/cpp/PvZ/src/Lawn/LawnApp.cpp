@@ -1,13 +1,13 @@
 #include "PvZ/Lawn/LawnApp.h"
 #include "PvZ/GlobalVariable.h"
-#include "PvZ/Lawn/Board.h"
-#include "PvZ/Lawn/ChallengeScreen.h"
-#include "PvZ/Lawn/ConfirmBackToMainDialog.h"
-#include "PvZ/Lawn/MainMenu.h"
-#include "PvZ/Lawn/Music.h"
-#include "PvZ/Lawn/Reanimation.h"
+#include "PvZ/Lawn/Board/Board.h"
+#include "PvZ/Lawn/System/Music.h"
+#include "PvZ/Lawn/Widget/ChallengeScreen.h"
+#include "PvZ/Lawn/Widget/ConfirmBackToMainDialog.h"
+#include "PvZ/Lawn/Widget/MainMenu.h"
 #include "PvZ/Misc.h"
 #include "PvZ/Symbols.h"
+#include "PvZ/TodLib/Effect/Reanimator.h"
 
 using namespace Sexy;
 
