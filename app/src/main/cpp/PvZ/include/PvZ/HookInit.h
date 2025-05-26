@@ -39,6 +39,10 @@
 #include "PvZ/SexyAppFramework/Graphics/Graphics.h"
 #include "PvZ/TodLib/Effect/Reanimator.h"
 #include "Symbols.h"
+#include "PvZ/Lawn/Board/CursorObject.h"
+#include "PvZ/SexyAppFramework/Widget/ButtonWidget.h"
+#include "PvZ/Lawn/Widget/CreditScreen.h"
+#include "PvZ/Lawn/System/PoolEffect.h"
 
 inline void InitInGameFunction() {
     Sexy_SexyAppBase_GetDialog = (decltype(Sexy_SexyAppBase_GetDialog))Sexy_SexyAppBase_GetDialogAddr;

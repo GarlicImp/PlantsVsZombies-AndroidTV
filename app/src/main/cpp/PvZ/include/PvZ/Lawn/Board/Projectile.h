@@ -1,7 +1,8 @@
 #ifndef PVZ_LAWN_PROJECTILE_H
 #define PVZ_LAWN_PROJECTILE_H
 
-#include "PvZ/Enums.h"
+#include "GameObject.h"
+#include "PvZ/Lawn/Common/ConstEnums.h"
 #include "PvZ/Symbols.h"
 
 class Plant;

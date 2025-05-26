@@ -1,10 +1,51 @@
 #ifndef PVZ_MISC_H
 #define PVZ_MISC_H
 
-#include "Enums.h"
+#include "PvZ/Lawn/Board/GameObject.h"
+#include "PvZ/Lawn/Board/MessageWidget.h"
+#include "PvZ/Lawn/Common/ConstEnums.h"
+#include "PvZ/Lawn/Widget/AchievementsWidget.h"
+#include "PvZ/Lawn/Widget/ZombatarWidget.h"
+#include "PvZ/SexyAppFramework/Misc/SexyMatrix.h"
+#include "PvZ/SexyAppFramework/Widget/Checkbox.h"
+#include "PvZ/SexyAppFramework/Widget/GameButton.h"
 #include "PvZ/TodLib/Common/TodList.h"
+#include "TodLib/Common/TodCommon.h"
 
-inline int (*CursorObject_Draw)(CursorObject *a, Sexy::Graphics *a2);
+class BaseGamepadControls {
+public:
+    int *mVtable;                    // 0
+    GameObject mGameObject;          // 1 ~ 13
+    Board *mBoard;                   // 14
+    SeedBank *mSeedBank;             // 15
+    float mUnkFirstHighlightRelated; // 16
+    int mShovelRelated1;             // 17
+    float mGamepadAccLeftX;
+    float mGamepadAccLeftY;
+    float mGridCenterPositionX;    // 20
+    float mGridCenterPositionY;    // 21
+    float mRightPositionX;         // 22
+    float mRightPositionY;         // 23
+    int mGamepadState;             // 24
+    int unk1;                      // 25
+    float mDigIndicatorPercentage; // 26 , 每按下一次铲除键就加2.3
+    float mCursorPositionX;        // 27
+    float mCursorPositionY;        // 28
+    float mGamepadVelocityLeftX;   // 29
+    float mGamepadVelocityLeftY;   // 30
+    float mGamepadVelocityRightX;  // 31
+    float mGamepadVelocityRightY;  // 32
+    int unk2[4];                   // 33 ~ 36
+    int mPlayerIndex1;             // 37
+    int mPlayerIndex2;             // 38
+    float mCursorPositionYJitter;  // 39
+    float mUpdateAdd0Dot016;       // 40
+    int unkMems[2];                // 41 ~ 42
+    // 大小43个整数
+public:
+    void GetGamepadVelocity(float *horizontal, float *vertical);
+};
+
 
 inline int (*StoreScreen_SetSelectedSlot)(int a1, int a2);
 
@@ -20,7 +61,7 @@ inline void (*TodStringTranslate)(int *holder, const char *theText);
 
 inline int (*LawnPlayerInfo_GetFlag)(PlayerInfo *, int);
 
-inline void (*GetFlashingColor)(Color *, int, int);
+inline void (*GetFlashingColor)(Sexy::Color *, int, int);
 
 inline bool (*Sexy_GamepadApp_HasGamepad)(LawnApp *);
 
@@ -40,8 +81,6 @@ inline Sexy::GameButton *(*MakeButton)(int id, Sexy::ButtonListener *listener, S
 
 inline Sexy::Checkbox *(*MakeNewCheckbox)(int id, int **listener, Sexy::Widget *theParent, bool checkedByDefault);
 
-inline void (*Sexy_ButtonWidget_ButtonWidget)(Sexy::ButtonWidget *, int, Sexy::ButtonListener *);
-
 inline void (*GameButton_Draw)(Sexy::GameButton *a, Sexy::Graphics *a2);
 
 inline void (*GameButton_OnPressed)(Sexy::GameButton *a);
@@ -52,13 +91,13 @@ inline void (*Sexy_SexyMatrix3_SexyMatrix3)(int *);
 
 inline int (*RandRangeInt)(int, int);
 
-inline void (*Sexy_SexyTransform2D_SexyTransform2D)(SexyTransform2D *);
+inline void (*Sexy_SexyTransform2D_SexyTransform2D)(Sexy::SexyTransform2D *);
 
-inline void (*Sexy_SexyTransform2D_Scale)(SexyTransform2D *, float, float);
+inline void (*Sexy_SexyTransform2D_Scale)(Sexy::SexyTransform2D *, float, float);
 
-inline void (*Sexy_SexyTransform2D_Translate)(SexyTransform2D *, float, float);
+inline void (*Sexy_SexyTransform2D_Translate)(Sexy::SexyTransform2D *, float, float);
 
-inline void (*Sexy_SexyTransform2D_RotateRad)(SexyTransform2D *, float);
+inline void (*Sexy_SexyTransform2D_RotateRad)(Sexy::SexyTransform2D *, float);
 
 inline bool (*GameObject_BeginDraw)(int *, float *);
 
@@ -130,8 +169,6 @@ inline int *(*Sexy_ResourceManager_GetSoundThrow)(int *, int *);
 
 inline float (*RandRangeFloat)(float, float);
 
-inline unsigned int (*PoolEffect_BilinearLookupFixedPoint)(PoolEffect *, unsigned int, unsigned int);
-
 inline bool (*TodFoley_IsFoleyPlaying)(TodFoley *soundSystem, FoleyType theFoleyType);
 
 inline void (*TodFoley_StopFoley)(TodFoley *soundSystem, FoleyType theFoleyType);
@@ -158,9 +195,7 @@ inline void (*MaskHelpWidget_MaskHelpWidget)(AchievementsWidget *, LawnApp *);
 
 inline void (*MaskHelpWidget_Delete)(AchievementsWidget *);
 
-inline void (*TrashBin_Delete)(TrashBin *a1);
-
-inline void (*TodParticleSystem_OverrideColor)(TodParticleSystem *, char *theEmitterName, Color *theColor);
+inline void (*TodParticleSystem_OverrideColor)(TodParticleSystem *, char *theEmitterName, Sexy::Color *theColor);
 
 inline void (*TodParticleSystem_OverrideImage)(TodParticleSystem *, char *theEmitterName, Sexy::Image *);
 
@@ -184,15 +219,11 @@ inline void (*Sexy_WidgetContainer_MarkDirty)(Sexy::WidgetContainer *);
 
 inline void (*ReanimatorEnsureDefinitionLoaded)(ReanimationType type, bool b);
 
-inline void (*Sexy_MenuWidget_Draw)(Sexy::MenuWidget *, Sexy::Graphics *);
-
 inline void (*Sexy_Widget_DeferOverlay)(Sexy::Widget *, int);
 
 inline int (*Mailbox_GetNumUnseenMessages)(int *);
 
 inline Sexy::Image *(*ReanimatorCache_MakeCachedPlantFrame)(ReanimatorCache *, SeedType, DrawVariation);
-
-inline Sexy::MemoryImage *(*ReanimatorCache_MakeBlankCanvasImage)(ReanimatorCache *, int, int);
 
 inline void (*ReanimatorCache_DrawReanimatorFrame)(ReanimatorCache *, Sexy::Graphics *g, float x, float y, ReanimationType reanimType, char *trackName, DrawVariation variation);
 
@@ -211,8 +242,6 @@ inline void (*TestMenuWidget_TestMenuWidget)(ZombatarWidget *);
 inline void (*Sexy_SexyAppBase_EraseFile)(SexyAppBase *, int *);
 
 inline void (*SaveGameContext_SyncInt)(int *, int *);
-
-inline void (*Sexy_ScrollbarWidget_SetMaxValue)(Sexy::ScrollbarWidget *, double);
 
 inline void (*Sexy_Ratio_Set)(int *, int, int);
 
@@ -239,10 +268,6 @@ inline void (*old_LawnMower_Update)(int *lawnMover);
 
 inline void (*old_HelpBarWidget_HelpBarWidget)(Sexy::Widget *a);
 
-inline bool (*old_CursorObject_BeginDraw)(CursorObject *cursorObject, Sexy::Graphics *graphics);
-
-inline void (*old_CursorObject_EndDraw)(CursorObject *cursorObject, Sexy::Graphics *graphics);
-
 inline void (*old_Sexy_ExtractLoadingSoundsResources)(int *a, int *theManager);
 
 inline FoleyParams *(*old_LookupFoley)(FoleyType type);
@@ -254,12 +279,6 @@ inline void (*old_MessageWidget_ClearLabel)(CustomMessageWidget *messageWidget);
 inline void (*old_MessageWidget_SetLabel)(CustomMessageWidget *messageWidget, int *label, MessageStyle theStyle);
 
 inline void (*old_MessageWidget_Update)(CustomMessageWidget *messageWidget);
-
-inline void (*old_CreditScreen_CreditScreen)(Sexy::Widget *a, LawnApp *a2, bool a3);
-
-inline void (*old_CreditScreen_RemovedFromManager)(Sexy::Widget *creditScreen, int a2);
-
-inline void (*old_CreditScreen_Delete2)(Sexy::Widget *creditScreen);
 
 
 int randomInt(int a, int b);
@@ -303,12 +322,6 @@ bool Sexy_SexyAppBase_Is3DAccelerated(LawnApp *);
 
 void Sexy_SexyAppBase_Set3DAccelerated(LawnApp *, bool);
 
-bool CursorObject_BeginDraw(CursorObject *cursorObject, Sexy::Graphics *graphics);
-
-void CursorObject_EndDraw(CursorObject *cursorObject, Sexy::Graphics *graphics);
-
-void PoolEffect_PoolEffectDraw(PoolEffect *poolEffect, Sexy::Graphics *graphics, bool theIsNight);
-
 int SexyDialog_AddedToManager(void *instance, void *instance1);
 
 int SexyDialog_RemovedFromManager(void *instance, void *instance1);
@@ -326,14 +339,6 @@ void MessageWidget_Update(CustomMessageWidget *messageWidget);
 void MessageWidget_Draw(CustomMessageWidget *messageWidget, Sexy::Graphics *graphics);
 
 void Sexy_ExtractLoadingSoundsResources(int *a, int *theManager);
-
-void CustomScrollbarWidget_RemoveScrollButtons(Sexy::CustomScrollbarWidget *scrollbarWidget);
-
-void CreditScreen_CreditScreen(Sexy::Widget *creditScreen, LawnApp *a2, bool a3);
-
-void CreditScreen_RemovedFromManager(Sexy::Widget *creditScreen, int a2);
-
-void CreditScreen_Delete2(Sexy::Widget *creditScreen);
 
 void WaitForSecondPlayerDialog_WaitForSecondPlayerDialog(int *a, int *a2);
 

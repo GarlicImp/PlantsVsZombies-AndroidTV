@@ -1,7 +1,7 @@
 #ifndef PVZ_LAWN_CUT_SCENE_H
 #define PVZ_LAWN_CUT_SCENE_H
 
-#include "PvZ/Enums.h"
+#include "PvZ/Lawn/Common/ConstEnums.h"
 
 class CutScene {
 public:

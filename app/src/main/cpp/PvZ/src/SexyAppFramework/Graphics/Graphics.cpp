@@ -1,5 +1,6 @@
 #include "PvZ/SexyAppFramework/Graphics/Graphics.h"
-#include "PvZ/Enums.h"
+#include "PvZ/Lawn/Common/ConstEnums.h"
+#include "PvZ/TodLib/Common/TodCommon.h"
 
 void Sexy_Graphics_PushTransform(Sexy::Graphics *graphics, int *transform, bool concatenate) {
     old_Sexy_Graphics_PushTransform(graphics, transform, concatenate);
@@ -26,14 +27,14 @@ void Sexy_Graphics_DrawTrianglesTex2(Sexy::Graphics *graphics, Sexy::Image *theT
     }
 }
 
-void Sexy_Graphics_DrawImageColorized(Sexy::Graphics *graphics, Sexy::Image *image, Color *color, int x, int y) {
+void Sexy_Graphics_DrawImageColorized(Sexy::Graphics *graphics, Sexy::Image *image, Sexy::Color *color, int x, int y) {
     Sexy_Graphics_SetColor(graphics, color);
     Sexy_Graphics_SetColorizeImages(graphics, true);
     Sexy_Graphics_DrawImage(graphics, image, x, y);
     Sexy_Graphics_SetColorizeImages(graphics, false);
 }
 
-void Sexy_Graphics_DrawImageColorizedScaled(Sexy::Graphics *graphics, Sexy::Image *image, Color *color, float x, float y, float xScaled, float yScaled) {
+void Sexy_Graphics_DrawImageColorizedScaled(Sexy::Graphics *graphics, Sexy::Image *image, Sexy::Color *color, float x, float y, float xScaled, float yScaled) {
     Sexy_Graphics_SetColor(graphics, color);
     Sexy_Graphics_SetColorizeImages(graphics, true);
     TodDrawImageScaledF(graphics, image, x, y, xScaled, yScaled);

@@ -1,7 +1,8 @@
 #ifndef PVZ_LAWN_ZEN_GARDEN_H
 #define PVZ_LAWN_ZEN_GARDEN_H
 
-#include "PvZ/Enums.h"
+#include "PvZ/Lawn/Common/ConstEnums.h"
+#include "PvZ/SexyAppFramework/Graphics/Graphics.h"
 
 class LawnApp;
 class Board;

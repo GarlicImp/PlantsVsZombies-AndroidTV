@@ -1,7 +1,7 @@
 #ifndef PVZ_ANDROID_INTRO_VIDEO_H
 #define PVZ_ANDROID_INTRO_VIDEO_H
 
-#include "PvZ/Enums.h"
+#include "PvZ/Lawn/Common/ConstEnums.h"
 
 #include <jni.h>
 

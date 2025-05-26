@@ -1,7 +1,7 @@
 #ifndef PVZ_LAWN_SEED_BANK_H
 #define PVZ_LAWN_SEED_BANK_H
 
-#include "PvZ/Enums.h"
+#include "PvZ/Lawn/Common/ConstEnums.h"
 #include "SeedPacket.h"
 
 class HitResult;

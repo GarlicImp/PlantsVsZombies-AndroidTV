@@ -1,7 +1,9 @@
 #ifndef PVZ_LAWN_CHALLENGE_SCREEN_H
 #define PVZ_LAWN_CHALLENGE_SCREEN_H
 
-#include "PvZ/Enums.h"
+#include "PvZ/Lawn/Common/ConstEnums.h"
+#include "PvZ/SexyAppFramework/Misc/KeyCodes.h"
+#include "PvZ/SexyAppFramework/Widget/Dialog.h"
 #include "PvZ/Symbols.h"
 
 #define NUM_CHALLENGE_MODES ((int)GameMode::NUM_GAME_MODES - 1)

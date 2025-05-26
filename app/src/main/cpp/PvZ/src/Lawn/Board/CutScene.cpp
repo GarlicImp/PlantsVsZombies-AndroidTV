@@ -1,6 +1,6 @@
 #include "PvZ/Lawn/Board/CutScene.h"
-#include "PvZ/Enums.h"
 #include "PvZ/Lawn/Board/Board.h"
+#include "PvZ/Lawn/Common/ConstEnums.h"
 #include "PvZ/Lawn/LawnApp.h"
 
 void CutScene_ShowShovel(CutScene *cutScene) {

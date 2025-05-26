@@ -1,15 +1,18 @@
 #ifndef PVZ_LAWN_BOARD_H
 #define PVZ_LAWN_BOARD_H
 
-#include "PvZ/Enums.h"
+#include "PvZ/Lawn/Common/ConstEnums.h"
+#include "PvZ/SexyAppFramework/Widget/ButtonListener.h"
+#include "PvZ/SexyAppFramework/Widget/Widget.h"
 #include "PvZ/Symbols.h"
 
-#include "Plant.h"
-#include "Zombie.h"
-#include "Projectile.h"
 #include "Coin.h"
-#include "LawnMower.h"
 #include "GridItem.h"
+#include "LawnMower.h"
+#include "Plant.h"
+#include "Projectile.h"
+#include "PvZ/SexyAppFramework/Misc/KeyCodes.h"
+#include "Zombie.h"
 
 #define MAX_GRID_SIZE_X 9
 #define MAX_GRID_SIZE_Y 6

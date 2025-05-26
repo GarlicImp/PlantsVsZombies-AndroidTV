@@ -49,7 +49,7 @@ void ReanimatorCache::GetPlantImageSize(SeedType theSeedType, int& theOffsetX, i
 
 void ReanimatorCache::DrawCachedPlant(Graphics *graphics, float thePosX, float thePosY, SeedType theSeedType, DrawVariation theDrawVariation) {
     if (theDrawVariation == DrawVariation::VARIATION_IMITATER_LESS || theDrawVariation == DrawVariation::VARIATION_IMITATER || theDrawVariation == DrawVariation::VARIATION_NORMAL) {
-        Sexy::Image *image = mPlantImages[theSeedType];
+        Image *image = (Image *)mPlantImages[theSeedType];
         if (image == nullptr) {
             return;
         }
@@ -77,18 +77,18 @@ void ReanimatorCache::DrawCachedPlant(Graphics *graphics, float thePosX, float t
 }
 
 // 为红眼巨人增加SeedPacket图标
-Sexy::Image *ReanimatorCache::MakeCachedZombieFrame(ZombieType theZombieType) {
+Sexy::MemoryImage *ReanimatorCache::MakeCachedZombieFrame(ZombieType theZombieType) {
 
     if (theZombieType != ZombieType::ZOMBIE_REDEYE_GARGANTUAR) {
         return old_ReanimatorCache_MakeCachedZombieFrame(this, theZombieType);
     }
 
-    Sexy_MemoryImage_Delete(mZombieImages[theZombieType]);
+    Sexy_MemoryImage_Delete((Image *)mZombieImages[theZombieType]);
     mZombieImages[theZombieType] = nullptr;
 
     Sexy::MemoryImage *BlankCanvasImage = ReanimatorCache_MakeBlankCanvasImage(this, (theZombieType == ZombieType::ZOMBIE_ZAMBONI ? 512 : 256), 256);
     Sexy::Graphics graphics;
-    Sexy_Graphics_Graphics2(&graphics, BlankCanvasImage);
+    Sexy_Graphics_Graphics2(&graphics, (Image *)BlankCanvasImage);
     Sexy_Graphics_SetLinearBlend(&graphics, 1);
     ZombieType zombieType_reanim = theZombieType != ZombieType::ZOMBIE_CACHED_POLEVAULTER_WITH_POLE ? theZombieType : ZombieType::ZOMBIE_POLEVAULTER;
     ReanimationType reanimationType = GetZombieDefinition(zombieType_reanim).mReanimationType;

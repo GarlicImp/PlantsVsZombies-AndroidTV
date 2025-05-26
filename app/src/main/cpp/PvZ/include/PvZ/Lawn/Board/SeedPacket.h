@@ -1,7 +1,8 @@
 #ifndef PVZ_LAWN_SEED_PACKET_H
 #define PVZ_LAWN_SEED_PACKET_H
 
-#include "PvZ/Enums.h"
+#include "GameObject.h"
+#include "PvZ/Lawn/Common/ConstEnums.h"
 
 class HitResult;
 class SeedPacket : public GameObject {

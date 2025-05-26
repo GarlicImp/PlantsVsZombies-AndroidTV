@@ -12,6 +12,7 @@
 #include "PvZ/SexyAppFramework/Graphics/Graphics.h"
 #include "PvZ/Symbols.h"
 #include "PvZ/TodLib/Effect/Reanimator.h"
+#include "PvZ/Lawn/Board/CursorObject.h"
 
 void GamepadControls_pickUpCobCannon(int gamePad, int cobCannon) {
     // 用于拿起指定的加农炮
@@ -573,7 +574,7 @@ void GamepadControls_DrawPreview(GamepadControls *gamepadControls, Sexy::Graphic
         SeedType mSelectedSeedType = gamepadControls->mSelectedSeedType;
         if (mSelectedSeedType != SeedType::SEED_NONE) {
             Sexy_Graphics_SetColorizeImages(graphics, true);
-            Color theColor = {255, 255, 255, 125};
+            Sexy::Color theColor = {255, 255, 255, 125};
             Sexy_Graphics_SetColor(graphics, &theColor);
             Sexy_Graphics_Translate(graphics, -256, -256);
             if (dynamicPreview) { // 修复动态预览时植物错位

@@ -1,9 +1,14 @@
 #ifndef PVZ_SYMBOLS_H
 #define PVZ_SYMBOLS_H
 
-#include "PvZ/Enums.h"
+#include "PvZ/Lawn/Common/ConstEnums.h"
+#include "PvZ/SexyAppFramework/Graphics/Font.h"
 
 #include <dlfcn.h>
+
+namespace Sexy {
+class Image;
+}
 
 inline void *Board_UpdateAddr;
 inline void *Board_BoardAddr;

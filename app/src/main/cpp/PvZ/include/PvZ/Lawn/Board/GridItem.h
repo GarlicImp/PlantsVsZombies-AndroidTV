@@ -1,7 +1,8 @@
 #ifndef PVZ_LAWN_GRID_ITEM_H
 #define PVZ_LAWN_GRID_ITEM_H
 
-#include "PvZ/Enums.h"
+#include "PvZ/Lawn/Common/ConstEnums.h"
+#include "PvZ/SexyAppFramework/Graphics/Graphics.h"
 #include "PvZ/Symbols.h"
 
 class GridItem {

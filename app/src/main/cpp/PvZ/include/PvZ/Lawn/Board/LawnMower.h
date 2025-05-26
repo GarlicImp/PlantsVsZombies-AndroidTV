@@ -5,7 +5,7 @@
 #ifndef PLANTSVSZOMBIES_ANDROIDTV_LAWNMOWER_H
 #define PLANTSVSZOMBIES_ANDROIDTV_LAWNMOWER_H
 
-#include "PvZ/Enums.h"
+#include "PvZ/Lawn/Common/ConstEnums.h"
 #include "PvZ/Symbols.h"
 
 class LawnApp;

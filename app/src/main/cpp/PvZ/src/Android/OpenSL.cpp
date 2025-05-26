@@ -1,5 +1,5 @@
 #include "PvZ/Android/OpenSL.h"
-#include "PvZ/Enums.h"
+#include "PvZ/Lawn/Common/ConstEnums.h"
 
 #include <SLES/OpenSLES.h>
 #include <SLES/OpenSLES_Android.h>

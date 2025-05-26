@@ -1,23 +1,62 @@
 #ifndef PVZ_SEXY_GRAPHICS_H
 #define PVZ_SEXY_GRAPHICS_H
 
-#include "PvZ/Enums.h"
+#include "../Misc/Common.h"
+#include "../Misc/Rect.h"
+#include "Color.h"
+#include "Image.h"
+#include "PvZ/Lawn/Common/ConstEnums.h"
 
-inline Color black = {0, 0, 0, 255};
+namespace Sexy {
 
-inline Color gray = {80, 80, 80, 255};
+class Font;
+class SexyMatrix3;
+class Transform;
 
-inline Color white = {255, 255, 255, 255};
+class Graphics {
+public:
+    int *vTable;                  // 0
+    Sexy::Image *mDestImage;      // 1
+    float mTransX;                // 2
+    float mTransY;                // 3
+    float mScaleX;                // 4
+    float mScaleY;                // 5
+    float unk1[2];                // 6 ~ 7
+    Rect mClipRect;               // 8 ~ 11
+    int unk2[3];                  // 12 ~ 14
+    Color mColorUnknown;          // 15 ~ 18
+    Color mColor;                 // 19 ~ 22
+    int *mFont;                   // 23
+    DrawMode::DrawMode mDrawMode; // 24
+    bool mColorizeImages;         // 100
+    bool mFastStretch;            // 101
+    bool unkbool1;                // 102
+    bool mLinearBlend;            // 103
+    bool unkbool2;                // 104
+    bool mGlobalScale;            // 105
+    bool mGlobalTrackDeviceState; // 106
+    int *unkPushPopTramsform;     // 27
+    int unkInt;                   // 28
+    int m3D;                      // 29
+    int unk3[6];                  // 30 ~ 35
+}; // 大小36个整数
+} // namespace Sexy
 
-inline Color blue = {0, 255, 255, 255};
+inline Sexy::Color black = {0, 0, 0, 255};
 
-inline Color yellow = {255, 255, 0, 255};
+inline Sexy::Color gray = {80, 80, 80, 255};
 
-inline Color brown = {205, 133, 63, 255};
+inline Sexy::Color white = {255, 255, 255, 255};
 
-inline Color green = {0, 250, 154, 255};
+inline Sexy::Color blue = {0, 255, 255, 255};
 
-inline Color gZombatarSkinColor[] = {
+inline Sexy::Color yellow = {255, 255, 0, 255};
+
+inline Sexy::Color brown = {205, 133, 63, 255};
+
+inline Sexy::Color green = {0, 250, 154, 255};
+
+inline Sexy::Color gZombatarSkinColor[] = {
     {134, 147, 122, 255},
     {79, 135, 94, 255},
     {127, 135, 94, 255},
@@ -32,7 +71,7 @@ inline Color gZombatarSkinColor[] = {
     {104, 121, 90, 255},
 };
 
-inline Color gZombatarAccessoryColor[] = {
+inline Sexy::Color gZombatarAccessoryColor[] = {
     {151, 33, 33, 255},
     {199, 53, 53, 255},
     {220, 112, 47, 255},
@@ -53,7 +92,7 @@ inline Color gZombatarAccessoryColor[] = {
     {255, 255, 255, 255},
 };
 
-inline Color gZombatarAccessoryColor2[] = {
+inline Sexy::Color gZombatarAccessoryColor2[] = {
     {238, 19, 24, 255},
     {247, 89, 215, 255},
     {239, 198, 253, 255},
@@ -123,39 +162,13 @@ inline void (*Sexy_Graphics_ClearRect)(Sexy::Graphics *a, int, int, int, int);
 
 inline void (*Sexy_Graphics_Translate)(Sexy::Graphics *, int, int);
 
-inline void (*Sexy_Graphics_SetColor)(Sexy::Graphics *a, Color *a2);
+inline void (*Sexy_Graphics_SetColor)(Sexy::Graphics *a, Sexy::Color *a2);
 
 inline void (*Sexy_Graphics_DrawTrianglesTex)(Sexy::Graphics *graphics, Sexy::Image *theTexture, SexyVertex2D (*theVertices)[3], int theNumTriangles);
 
 inline int *(*Sexy_Graphics_GetColor)(Sexy::Graphics *);
 
 inline void (*Sexy_Graphics_SetScale)(Sexy::Graphics *, float, float, float, float);
-
-inline void (*TodDrawImageCelF)(Sexy::Graphics *, Sexy::Image *, float, float, int, int);
-
-inline int (*TodDrawImageCelCenterScaledF)(Sexy::Graphics *a1, Sexy::Image *a2, float a3, float a4, int a5, float a6, float a7);
-
-inline void (*TodDrawImageScaledF)(Sexy::Graphics *g, Sexy::Image *image, float x, float y, float xScaled, float yScaled);
-
-inline void (*TodDrawImageCelScaledF)(Sexy::Graphics *, Sexy::Image *, float, float, int, int, float, float);
-
-inline void (*TodDrawImageCenterScaledF)(Sexy::Graphics *, Sexy::Image *, float, float, float, float);
-
-inline void (*TodDrawString)(Sexy::Graphics *, int *, int, int, Sexy::Font *, Color color, DrawStringJustification);
-
-inline void (*TodScaleTransformMatrix)(int *, float, float, float, float);
-
-inline void (*TodDrawStringMatrix)(Sexy::Graphics *, Sexy::Font *, int *, int *, Color *);
-
-inline int (*TodAnimateCurve)(int theTimeStart, int theTimeEnd, int theTimeAge, int thePositionStart, int thePositionEnd, TodCurves theCurve);
-
-inline float (*TodAnimateCurveFloat)(int theTimeStart, int theTimeEnd, int theTimeAge, float thePositionStart, float thePositionEnd, TodCurves theCurve);
-
-inline float (*TodAnimateCurveFloatTime)(float theTimeStart, float theTimeEnd, float theTimeAge, float thePositionStart, float thePositionEnd, TodCurves theCurve);
-
-inline void (*TodDrawStringWrapped)(Sexy::Graphics *graphics, int *text, Sexy::Rect *theRect, Sexy::Font *theFont, Color *theColor, DrawStringJustification justification, bool a7);
-
-inline int (*TodDrawStringWrappedHelper)(Sexy::Graphics *pGraphics, int *pInt, Sexy::Rect *pRect, Sexy::Font *pFont, Color color, DrawStringJustification justification, bool i1, bool i2);
 
 inline void (*Sexy_GLGraphics_SetWrapMode)(Sexy::Graphics *graphics, int a2, int a3);
 
@@ -173,8 +186,8 @@ void Sexy_Graphics_PopTransform(Sexy::Graphics *graphics);
 
 void Sexy_Graphics_DrawTrianglesTex2(Sexy::Graphics *graphics, Sexy::Image *theTexture, TriVertex (*theVertices)[3], int theNumTriangles);
 
-void Sexy_Graphics_DrawImageColorized(Sexy::Graphics *graphics, Sexy::Image *image, Color *color, int x, int y);
+void Sexy_Graphics_DrawImageColorized(Sexy::Graphics *graphics, Sexy::Image *image, Sexy::Color *color, int x, int y);
 
-void Sexy_Graphics_DrawImageColorizedScaled(Sexy::Graphics *graphics, Sexy::Image *image, Color *color, float x, float y, float xScaled, float yScaled);
+void Sexy_Graphics_DrawImageColorizedScaled(Sexy::Graphics *graphics, Sexy::Image *image, Sexy::Color *color, float x, float y, float xScaled, float yScaled);
 
 #endif // PVZ_SEXY_GRAPHICS_H

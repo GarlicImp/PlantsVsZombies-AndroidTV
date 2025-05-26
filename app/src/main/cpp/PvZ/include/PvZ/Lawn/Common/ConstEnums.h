@@ -1,7 +1,7 @@
 #ifndef PVZ_ENUMS_H
 #define PVZ_ENUMS_H
 
-#include "MagicAddr.h"
+#include "PvZ/MagicAddr.h"
 
 #include <jni.h>
 
@@ -1510,104 +1510,10 @@ namespace ResType {
 enum ResType { ResType_Image, ResType_Sound, ResType_Font, ResType_Music, ResType_Reanim, ResType_Particle, ResType_Trail };
 }
 
-
-namespace PixelFormat {
-enum PixelFormat {
-    kPixelFormat_None = -1,
-    kPixelFormat_Automatic,
-    kPixelFormat_RGBA8888,
-    kPixelFormat_RGBA4444,
-    kPixelFormat_RGBA5551,
-    kPixelFormat_RGB565,
-    kPixelFormat_RGB888,
-    kPixelFormat_L8,
-    kPixelFormat_A8,
-    kPixelFormat_LA88,
-    kPixelFormat_RGB_PVRTC2,
-    kPixelFormat_RGB_PVRTC4,
-    kPixelFormat_RGBA_PVRTC2,
-    kPixelFormat_RGBA_PVRTC4
-};
-}
-
-
 namespace DrawMode {
 enum DrawMode { DRAWMODE_NORMAL = 0, DRAWMODE_ADDITIVE = 1 };
 }
 
-
-typedef std::string SexyString;
-#define _S(x) x
-
-typedef SexyString::value_type SexyChar;
-
-struct SexyRGBA {
-    unsigned char b, g, r, a;
-};
-typedef unsigned char uchar;
-typedef unsigned short ushort;
-typedef unsigned int uint;
-typedef unsigned long ulong;
-// typedef __int64 int64;
-
-
-struct Color {
-    int mRed;
-    int mGreen;
-    int mBlue;
-    int mAlpha;
-};
-
-namespace Sexy {
-template <class _T>
-class TRect {
-public:
-    _T mX;
-    _T mY;
-    _T mWidth;
-    _T mHeight;
-
-    TRect(_T theX, _T theY, _T theWidth, _T theHeight)
-        : mX(theX)
-        , mY(theY)
-        , mWidth(theWidth)
-        , mHeight(theHeight) {}
-
-    TRect(const TRect<_T> &theTRect)
-        : mX(theTRect.mX)
-        , mY(theTRect.mY)
-        , mWidth(theTRect.mWidth)
-        , mHeight(theTRect.mHeight) {}
-
-    TRect()
-        : mX(0)
-        , mY(0)
-        , mWidth(0)
-        , mHeight(0) {}
-
-    bool Contains(_T theX, _T theY) const { return ((theX >= mX) && (theX < mX + mWidth) && (theY >= mY) && (theY < mY + mHeight)); }
-
-    //    bool					Contains(const TPoint<_T>& thePoint) const
-    //    {
-    //        return ((thePoint.mX >= mX) && (thePoint.mX < mX + mWidth) &&
-    //                (thePoint.mY >= mY) && (thePoint.mY < mY + mHeight));
-    //    }
-
-    void Offset(_T theX, _T theY) {
-        mX += theX;
-        mY += theY;
-    }
-
-    //    void					Offset(const TPoint<_T>& thePoint)
-    //    {
-    //        mX += thePoint.mX;
-    //        mY += thePoint.mY;
-    //    }
-};
-
-typedef TRect<int> Rect;
-typedef TRect<double> FRect;
-} // namespace Sexy
 
 #ifndef max
 #define max(a, b) (((a) > (b)) ? (a) : (b))
@@ -1704,13 +1610,6 @@ public:
 
 class ReanimatorCache;
 
-
-struct FlagsMod {
-public:
-    int mAddFlags;
-    int mRemoveFlags;
-};
-
 struct TodSmoothArray {
     int mItem;
     float mWeight;
@@ -1718,340 +1617,7 @@ struct TodSmoothArray {
     float mSecondLastPicked;
 };
 
-struct Insets {
-public:
-    int mLeft;
-    int mTop;
-    int mRight;
-    int mBottom;
-};
-
 class LawnApp;
-
-namespace Sexy {
-// public:
-class Image {
-public:
-    int *vTable;                      // 0
-    int placeHolder[2];               // 1 ~ 2
-    bool unkBool;                     // 12
-    int unkMmWidthems1[2];            // 4 ~ 5
-    int *stringUnk1;                  // 6
-    int *stringUnk2;                  // 7
-    int *stringUnk3;                  // 8
-    int mWidth;                       // 9
-    int mHeight;                      // 10
-    int mPitch;                       // 11
-    int mStride;                      // 12
-    PixelFormat::PixelFormat mFormat; // 13
-    int mPixelFormatHint;             // 14
-    int mNumRows;                     // 15
-    int mNumCols;                     // 16
-    int *mAnimInfo;                   // 17
-    int unk[6];                       // 18 ~ 23
-    int mHorizonWrapMode;             // 24
-    int mVertWrapMode;                // 25
-    int mTag;                         // 26
-    int unkMems3;                     // 27 ，实际上Sexy::Image就到这里，下面是MemoryImage的成员
-    LawnApp *mApp;                    // 28
-    int unkMems4;                     // 29
-    unsigned int *mBits;              // 30
-    int mBitsChangedCount;            // 31
-    int unk1[4];                      // 32 ~ 35
-    bool mUnkModeRelated;             // 144
-    bool mUnkMode1;                   // 145
-    bool mUnkMode2;                   // 146
-    bool mUnkBool;                    // 147
-    bool mVolatile;                   // 148
-    int unk2[20];                     // 38 ~ 57
-    // 大小58个整数
-    int GetWidth() { return mWidth; };
-    int GetHeight() { return mHeight; };
-};
-
-// public:
-class Font {
-public:
-    int *vTable;
-    int mAscent;
-    int mAscentPadding;
-    int mHeight;
-    int mLineSpacingOffset;
-};
-
-// public:
-class Graphics {
-public:
-    int *vTable;                  // 0
-    Sexy::Image *mDestImage;      // 1
-    float mTransX;                // 2
-    float mTransY;                // 3
-    float mScaleX;                // 4
-    float mScaleY;                // 5
-    float unk1[2];                // 6 ~ 7
-    Rect mClipRect;               // 8 ~ 11
-    int unk2[3];                  // 12 ~ 14
-    Color mColorUnknown;          // 15 ~ 18
-    Color mColor;                 // 19 ~ 22
-    int *mFont;                   // 23
-    DrawMode::DrawMode mDrawMode; // 24
-    bool mColorizeImages;         // 100
-    bool mFastStretch;            // 101
-    bool unkbool1;                // 102
-    bool mLinearBlend;            // 103
-    bool unkbool2;                // 104
-    bool mGlobalScale;            // 105
-    bool mGlobalTrackDeviceState; // 106
-    int *unkPushPopTramsform;     // 27
-    int unkInt;                   // 28
-    int m3D;                      // 29
-    int unk3[6];                  // 30 ~ 35
-}; // 大小36个整数
-
-// public:
-class WidgetContainer {
-public:
-    int *vTable;                  // 0
-    int mWidgetsUnk[5];           // 1 ~ 5
-    int *mWidgetManager;          // 6
-    WidgetContainer *mParent;     // 7
-    bool mUpdateIteratorModified; // 32
-    int *mUpdateIterator;         // 9
-    int mLastWMUpdateCount;       // 10
-    int mUpdateCnt;               // 11
-    int unkMember;                // 12
-    int mX;                       // 13
-    int mY;                       // 14
-    int mWidth;                   // 15
-    int mHeight;                  // 16
-    bool mHasAlpha;               // 68
-    bool mClip;                   // 69
-    FlagsMod mWidgetFlagsMod;     // 18 ~ 19
-    int mPriority;                // 20
-    int mZOrder;                  // 21
-    int unk[6];                   // 22 ~ 27
-    int mWidgetId;                // 28
-}; // 大小未知，目前认为是29个整数。反正Widget是64个整数，足够了。
-
-class Widget : public WidgetContainer {
-public:
-    bool mVisible;               // 116
-    bool mMouseVisible;          // 117
-    bool mDisabled;              // 118
-    bool mHasFocus;              // 119
-    bool mIsDown;                // 120
-    bool mIsOver;                // 121
-    bool mHasTransparencies;     // 122
-    int mColorsUnk[2];           // 32 ~ 33
-    Insets mMouseInsets;         // 34 ~ 37
-    bool mDoFinger;              // 152
-    bool mWantsFocus;            // 153
-    int unk1[11];                // 38 ~ 48
-    Widget *mFocusLinks[4];      // 49 ~ 52 ，上下左右
-    int unk2[2];                 // 53 ~ 54
-    Widget *mFocusedChildWidget; // 55
-    int unk3[4];                 // 56 ~ 59
-    int *mAnimatorForState[4];   // 60 ~ 63
-}; // 大小64个整数！
-
-class Checkbox : public Widget {
-public:
-    int unknownMember[8];   // 64 ~ 71
-    int *mListener;         // 72
-    Image *mUncheckedImage; // 73
-    Image *mCheckedImage;   // 74
-    int mId;                // 75
-    bool mChecked;          // 304
-    Rect mCheckedRect;      // 77 ~ 80
-    Rect mUncheckedRect;    // 81 ~ 84
-    Color mOutlineColor;    // 85 ~ 88
-    Color mBkgColor;        // 89 ~ 92
-    Color mCheckColor;      // 93 ~ 96
-}; // 大小97个整数
-
-
-class SelectableWidget : public Widget {
-public:
-    Color mUnkColor;  // 64 ~ 67
-    float unkMems[4]; // 68 ~ 71
-}; // 大小72个整数
-
-struct TextLayout {
-    int unk[84];
-}; // 大小84个整数
-
-class ButtonWidget : public SelectableWidget {
-public:
-    int *mLabel;            // 72
-    int *mStringUnk2;       // 73
-    TextLayout mTextLayout; // 74 ~ 157
-    int unkMem1[9];         // 158 ~ 166
-    Insets mInsets;         // 167 ~ 170
-    int unkMems2[2];        // 171 ~ 172
-    Image *mButtonImage;    // 173
-    Image *mOverImage;      // 174
-    Image *mDownImage;      // 175
-    Image *mDisabledImage;  // 176
-    Rect mNormalRect;       // 177 ~ 180
-    Rect mOverRect;         // 181 ~ 184
-    Rect mDownRect;         // 185 ~ 188
-    Rect mDisabledRect;     // 189 ~ 192
-    bool unkBool1;          // 772
-    bool mBtnNoDraw;        // 773
-    bool unkBool2;          // 774
-    int unkMems3[2];        // 194 ~ 195
-    double mOverAlpha;      // 197 ~ 198
-    int unkMems4[4];        // 198 ~ 201
-    bool unkBool3;          // 808
-    bool unkBool4;          // 809
-    int unkMem2;            // 203
-}; // 大小204个整数
-
-class DialogButton : public ButtonWidget {
-public:
-    Image *mImage;   // 204
-    int unkMems4[4]; // 205 ~ 208
-    LawnApp *mApp;   // 209
-}; // 大小210个整数
-
-class GameButton : public DialogButton {
-public:
-    int unkMems4[2];                // 210  ~ 211
-    bool unkBool5;                  // 848
-    int unkMems5[2];                // 213 ~ 214
-    Sexy::Image *mOverOverlayImage; // 215
-    bool mDrawStoneButton;          // 864
-    int unkMems6[13];               // 217 ~ 229
-}; // 大小230个整数
-
-
-class ScrollbarWidget : public Widget {
-public:
-    int unkMem;             // 64
-    Widget *mUpButton;      // 65
-    Widget *mDownButton;    // 66
-    bool mInvisIfNoScroll;  // 268
-    int mId;                // 68
-    double mValue;          // 69 ~ 70
-    double mMaxValue;       // 71 ~ 72
-    double mPageSize;       // 73 ~ 74
-    bool mHorizontal;       // 300
-    int mButtonLength;      // 76
-    bool mPressedOnThumb;   // 77
-    int mMouseDownThumbPos; // 78
-    int mMouseDownX;        // 79
-    int mMouseDownY;        // 80
-    int mUpdateMode;        // 81
-    int mUpdateAcc;         // 82
-    int mButtonAcc;         // 83
-    int mLastMouseX;        // 84
-    int mLastMouseY;        // 85
-    int *mScrollListener;   // 86
-    Image *mThumbImage;     // 87
-    Image *mBarImage;       // 88
-    Image *mPagingImage;    // 89
-}; // 大小90个整数
-
-class CustomScrollbarWidget : public ScrollbarWidget {
-    // 没有新增任何成员，6，这个类不知道什么意义
-}; // 大小90个整数
-
-
-class MemoryImage : public Image {}; // 大小58个整数
-
-class SexyMatrix3 {
-public:
-    union {
-        float m[3][3];
-        struct {
-            float m00, m01, m02;
-            float m10, m11, m12;
-            float m20, m21, m22;
-        };
-    };
-};
-
-struct ButtonListenerVTable {
-    void *Delete;
-    void *Delete2;
-    void *ButtonPress;
-    void *ButtonPress2;
-    void *ButtonDepress;
-    void *ButtonDownTick;
-    void *ButtonMouseEnter;
-    void *ButtonMouseLeave;
-    void *ButtonMouseMove;
-};
-
-struct ButtonListener {
-    ButtonListenerVTable *vTable;
-};
-
-class MenuWidget : public Widget {
-public:
-    Sexy::ButtonListener mButtonListener; // 64
-    bool mIsFading;                       // 260
-    bool unkBool2;                        // 261
-    int *mMenuParser;                     // 66
-    int *mSourceFileName;                 // 67
-    int unkInt1;                          // 68
-    Sexy::Image *mImage;                  // 69
-}; // 大小70个整数
-
-class Dialog : public Widget {
-public:
-    Sexy::ButtonListener mButtonListener; // 64
-    int *mDialogListener;                 // 65
-    Image *mComponentImage;               // 66
-    DialogButton *mYesButton;             // 67
-    DialogButton *mNoButton;              // 68
-    int mNumButtons;                      // 69
-    int *mDialogHeader;                   // 70
-    int *mDialogFooter;                   // 71
-    int *mDialogLines;                    // 72
-    int *mUnkText;                        // 73
-    TextLayout mTextLayout;               // 74 ~ 157
-    int unk1[3];                          // 158 ~ 160
-    int mButtonMode;                      // 161
-    int *mHeaderFont;                     // 162
-    int *mLinesFont;                      // 163
-    int mTextAlign;                       // 164
-    int mLineSpacingOffset;               // 165
-    int mButtonHeight;                    // 166
-    Insets mBackgroundInsets;             // 167 ~ 170
-    Insets mContentInsets;                // 171 ~ 174
-    int mSpaceAfterHeader;                // 175
-    bool mDragging;                       // 176
-    int mDragMouseX;                      // 177
-    int mDragMouseY;                      // 178
-    int mId;                              // 179
-    bool mIsModal;                        // 180
-    int mResult;                          // 181
-    int mButtonHorzSpacing;               // 182
-    int mButtonSidePadding;               // 183
-}; // 大小184个整数
-
-enum KeyCode { Invalid = -1, Ok = 13, Back = 27, Back2 = 305, Left = 37, Up = 38, Right = 39, Down = 40, Shovel = 49, Hammer = 50 };
-
-class WidgetAnimator {
-public:
-    int *vTable;            // 0
-    int unk[2];             // 1 ~ 2
-    Widget *mWidget;        // 3
-    int mUpdateCounter;     // 4
-    bool mHideOnCompletion; // 20
-};
-}; // namespace Sexy
-
-class ReanimTrackWidgetAnimator : public Sexy::WidgetAnimator {
-public:
-    LawnApp *mApp;                 // 6
-    Sexy::Widget *mLawnMenuWidget; // 7
-    int *mTrackName1;              // 8
-    int *mTrackName2;              // 9
-    int *mTrackName3;              // 10
-    int unk2[2];                   // 11 ~ 12
-};
 
 class CreditScreen;
 
@@ -2063,10 +1629,6 @@ class TitleScreen;
 
 class EffectSystem;
 
-
-struct SexyTransform2D : Sexy::SexyMatrix3 {};
-
-
 class ChallengeScreen;
 
 
@@ -2077,49 +1639,11 @@ class ReanimatorTransform;
 class ReanimatorDefinition;
 
 
-class GameObject {
-public:
-    int *vTable;        // 0
-    int placeHolder[3]; // 1 ~ 3
-    LawnApp *mApp;      // 4
-    Board *mBoard;      // 5
-    int mX;             // 6
-    int mY;             // 7
-    int mWidth;         // 8
-    int mHeight;        // 9
-    bool mVisible;      // 40
-    int mRow;           // 11
-    int mRenderOrder;   // 12
-}; // 大小13个整数
-
 class SeedPacket;
 class SeedBank;
 class Plant;
 class Zombie;
 class Coin;
-
-
-class CursorObject : public GameObject {
-public:
-    int mSeedBankIndex;        // 13
-    SeedType mType;            // 14
-    SeedType mImitaterType;    // 15
-    CursorType mCursorType;    // 16
-    Coin *mCoinID;             // 17
-    Plant *mGlovePlantID;      // 18
-    Plant *mDuplicatorPlantID; // 19
-    Plant *mCobCannonPlantID;  // 20
-    int mHammerDownCounter;    // 21
-    int mReanimCursorID;       // 22
-}; // 大小23个整数
-
-
-class CursorPreview : public GameObject {
-public:
-    int mGridX;      // 13
-    int mGridY;      // 14
-    int playerIndex; // 15
-}; // 大小16个整数
 
 struct ShopSeedPacket {
     int unknown[21];
@@ -2133,42 +1657,6 @@ class Challenge;
 struct PlantRbTree {
     int unk[6];
 };
-
-
-class BaseGamepadControls {
-public:
-    int *mVtable;                    // 0
-    GameObject mGameObject;          // 1 ~ 13
-    Board *mBoard;                   // 14
-    SeedBank *mSeedBank;             // 15
-    float mUnkFirstHighlightRelated; // 16
-    int mShovelRelated1;             // 17
-    float mGamepadAccLeftX;
-    float mGamepadAccLeftY;
-    float mGridCenterPositionX;    // 20
-    float mGridCenterPositionY;    // 21
-    float mRightPositionX;         // 22
-    float mRightPositionY;         // 23
-    int mGamepadState;             // 24
-    int unk1;                      // 25
-    float mDigIndicatorPercentage; // 26 , 每按下一次铲除键就加2.3
-    float mCursorPositionX;        // 27
-    float mCursorPositionY;        // 28
-    float mGamepadVelocityLeftX;   // 29
-    float mGamepadVelocityLeftY;   // 30
-    float mGamepadVelocityRightX;  // 31
-    float mGamepadVelocityRightY;  // 32
-    int unk2[4];                   // 33 ~ 36
-    int mPlayerIndex1;             // 37
-    int mPlayerIndex2;             // 38
-    float mCursorPositionYJitter;  // 39
-    float mUpdateAdd0Dot016;       // 40
-    int unkMems[2];                // 41 ~ 42
-    // 大小43个整数
-public:
-    void GetGamepadVelocity(float *horizontal, float *vertical);
-};
-
 
 struct GameStats {
 
@@ -2310,15 +1798,6 @@ struct TriVertex {
 };
 
 
-class PoolEffect {
-public:
-    CausticEffect *mCausticGrayscaleImage; // 0
-    Sexy::Image *mCausticImage;            // 1
-    LawnApp *mApp;                         // 2
-    int mPoolCounter;                      // 3
-}; // 大小4个整数
-
-
 class ProfileMgr {
 public:
     int *vTable;                // 0
@@ -2353,133 +1832,14 @@ public:
     int unk3;       // 29
 }; // 大小30个整数
 
-class MessageWidget {
-public:
-    int *vTable;                     // 0
-    int unk[3];                      // 1 ~ 3
-    LawnApp *mApp;                   // 4
-    char mLabel[128];                // 5 ~ 36
-    int mDisplayTime;                // 37
-    int mDuration;                   // 38
-    MessageStyle mMessageStyle;      // 39
-    Reanimation *mTextReanimID[128]; // 40 ~ 167
-    ReanimationType mReanimType;     // 168
-    int mSlideOffTime;               // 169
-    float unkFloatWithInitValue1;    // 170
-    char mLabelNext[128];            // 171 ~ 202
-    MessageStyle mMessageStyleNext;  // 203
-}; // 大小204个整数
-
-class CustomMessageWidget : public MessageWidget {
-public:
-    Sexy::Image *mIcon; // 204
-}; // 大小205个整数
-
 struct Curve1DUtil {
     int unk[16];
 };
-
-
-class AchievementsWidget : public Sexy::Widget {
-public:
-    Sexy::ButtonListener mButtonListener; // 64
-    LawnApp *mApp;                        // 65
-    int mMouseDownY;
-    int mLastDownY;
-    int mLastDownY1;
-    long mLastTimeMs;
-    long mLastTimeMs1;
-    float mVelocity;
-    float mAccY;
-    bool mIsScrolling;
-}; // 我想用AchievementsWidget取代MaskHelpWidget。MaskHelpWidget的大小是66个整数。
 
 struct LeaderboardReanimations {
     Reanimation *backgroundReanim[5];
     Reanimation *achievementReanim[12];
 };
-
-class TrashBin : public Sexy::Widget {
-public:
-    enum TrashPileType { PLANT_PILE = 0, ZOMBIE_PILE = 1 };
-
-    TrashPileType mTrashPileType; // 64
-    float mTrashHeight;           // 65
-    Sexy::Image *mPileImage[10];  // 66 ~ 75
-    bool mMirrorPile[10];         // 76 ~ 78
-    int mRandomPileWeight[6];     // 79 ~ 84
-    int mPileNum;                 // 85
-    // 大小86个整数
-
-    TrashBin(TrashPileType theTrashPileType, float theHeight);
-    void Create(TrashPileType theTrashPileType, float theHeight);
-    void Draw(Sexy::Graphics *g);
-};
-
-class LeaderboardsWidget : public Sexy::Widget {
-public:
-    LawnApp *mApp;                                     // 64
-    TrashBin *mZombieTrashBin;                         // 65
-    TrashBin *mPlantTrashBin;                          // 66
-    bool mAchievements[12];                            // 67 ~ 69
-    LeaderboardReanimations *mLeaderboardReanimations; // 70
-    int mLongestRecordPool;                            // 71
-    Sexy::GameButton *mBackButton;
-    Sexy::ButtonListener *mButtonListener;
-    int mFocusedAchievementIndex;
-    bool mHighLightAchievement;
-}; // 我想用LeaderboardsWidget取代DaveHelp。
-
-class ZombatarWidget : public Sexy::MenuWidget {
-public:
-    enum TabType { SKIN = 0, HAIR = 1, FHAIR = 2, TIDBIT = 3, EYEWEAR = 4, CLOTHES = 5, ACCESSORY = 6, HAT = 7, BACKGROUND = 8, MaxTabNum = 9 };
-
-    enum AccessoryNum {
-        HairNum = 16,
-        FHairNum = 24,
-        TidBitNum = 14,
-        EyeWearNum = 16,
-        ClothNum = 12,
-        AccessoryNum = 15,
-        HatNum = 14,
-        BackgroundNum = 83,
-    };
-
-    Sexy::ButtonListener *mButtonListener;
-    LawnApp *mApp;
-    Zombie *mPreviewZombie;
-    Sexy::GameButton *mBackButton;
-    Sexy::GameButton *mFinishButton;
-    Sexy::GameButton *mViewPortraitButton;
-    Sexy::GameButton *mNewButton;
-    Sexy::GameButton *mDeleteButton;
-    Reanimation *mZombatarReanim;
-    bool mShowExistingZombatarPortrait;
-    bool mShowZombieTypeSelection;
-    unsigned char mSelectedTab;
-    unsigned char mSelectedSkinColor;
-    unsigned char mSelectedHair;
-    unsigned char mSelectedHairColor;
-    unsigned char mSelectedFHair;
-    unsigned char mSelectedFHairColor;
-    unsigned char mSelectedFHairPage; // 0 or 1
-    unsigned char mSelectedTidBit;
-    unsigned char mSelectedTidBitColor;
-    unsigned char mSelectedEyeWear;
-    unsigned char mSelectedEyeWearColor;
-    unsigned char mSelectedCloth;
-    unsigned char mSelectedAccessory;
-    unsigned char mSelectedAccessoryColor;
-    unsigned char mSelectedHat;
-    unsigned char mSelectedHatColor;
-    unsigned char mSelectedBackground;
-    unsigned char mSelectedBackgroundColor;
-    unsigned char mSelectedBackgroundPage;
-
-    ZombatarWidget(LawnApp *theApp);
-
-}; // 我想用ZombatarWidget取代TestMenuWidget。
-
 
 struct ReanimatorTrack {
     int unk;
@@ -2495,56 +1855,7 @@ struct ReanimatorFrameTime {
     int mAnimFrameAfterInt;  // 2
 };
 
-class ReanimatorTransform {
-public:
-    float mTransX;        // 0
-    float mTransY;        // 1
-    float mSkewX;         // 2
-    float mSkewY;         // 3
-    float mScaleX;        // 4
-    float mScaleY;        // 5
-    float mFrame;         // 6
-    float mAlpha;         // 7
-    Sexy::Image *mImage;  // 8
-    Sexy::Image *mImage2; // 9
-    int *mFont;           // 10
-    char *mName;          // 11
-}; // 大小12个整数
-
 class Attachment;
-
-class ReanimatorTrackInstance {
-public:
-    int mBlendCounter;                   // 0
-    int mBlendTime;                      // 1
-    ReanimatorTransform mBlendTransform; // 2 ~ 13
-    float mShakeOverride;                // 14
-    float mShakeX;                       // 15
-    float mShakeY;                       // 16
-    unsigned short mAttachmentID;        // 17
-    Sexy::Image *mImageOverride;         // 18
-    int mRenderGroup;                    // 19
-    Color mTrackColor;                   // 20 ~ 23
-    bool mIgnoreClipRect;                // 96
-    bool mTruncateDisappearingFrames;    // 97
-    bool mIgnoreColorOverride;           // 98
-    bool mIgnoreExtraAdditiveColor;      // 99
-}; // 大小25个整数
-
-class ReanimatorDefinition {
-public:
-    ReanimatorTrack *mTracks; // 0
-    int mTrackCount;          // 1
-    float mFPS;               // 2
-    int *mReanimAtlas;        // 3
-}; // 大小4个整数
-
-class ReanimationParams {
-public:
-    ReanimationType mReanimationType;
-    const char *mReanimFileName;
-    int mReanimParamFlags;
-};
 
 class TodParticleSystem {
 public:
@@ -2562,87 +1873,9 @@ public:
     int mParticleId;            // 14
 }; // 大小15个整数
 
-
-struct AttachEffect {
-    enum EffectType { Particle, Trail, Reanim, Attachment, Other };
-    ReanimationID mEffectID;      // 0
-    EffectType mEffectType;       // 1
-    SexyTransform2D mOffset;      // 2 ~ 10
-    bool mDontDrawIfParentHidden; // 44
-    bool mDontPropogateColor;     // 45
-}; // 大小12个整数
-
-class Attachment {
-public:
-    int unk[4];                    // 0 ~ 3
-    AttachEffect mEffectArray[16]; // 4 ~ 195
-    int mNumEffects;               // 196
-    bool mDead;                    //
-    bool mActive;
-    bool mUsesClipping;
-    int mAttachmentID;
-}; // 大小199个整数
-
 struct PerfTimer {
     int unk[5];
 };
-
-class CreditScreen : public Sexy::Widget {
-public:
-    enum CreditsPhase {
-        CREDITS_MAIN1 = 0,
-        CREDITS_MAIN2 = 1,
-        CREDITS_MAIN3 = 2,
-        CREDITS_END = 3,
-    };
-
-public:
-    Sexy::ButtonListener mButtonListener; // 64
-    LawnApp *mApp;                        // 65
-    CreditsPhase mCreditsPhase;           // 66
-    int mCreditsPhaseCounter;             // 67
-    int mCreditsReanimID;                 // 68
-    int mFogParticleID;                   // 69
-    int mBlinkCountdown;                  // 70
-    Sexy::Widget *mOverlayWidget;         // 71
-    bool mDrawBrain;                      // 288
-    float mBrainPosX;                     // 73
-    float mBrainPosY;                     // 74
-    int mUpdateCount;                     // 75
-    int mDrawCount;                       // 76
-    int unkInt1;                          // 77
-    PerfTimer mTimerSinceStart;           // 78 ~ 82
-    int unkInt2;                          // 83
-    bool mDontSync;                       // 336
-    bool mCreditsPaused;                  // 337
-    int unkInt3[3];                       // 85 ~ 87
-    bool mPreloaded;                      // 352
-    int unkInt4;                          // 89
-    double mScrollPositionY1;             // 90 ~ 91
-    double mScrollPositionY2;             // 92 ~ 93
-    bool mIsFromMainMenu;                 // 376,即94
-
-}; // 大小95个整数
-
-
-class LawnDialog : public Sexy::Dialog {
-public:
-    LawnApp *mApp; // 184
-#ifdef VERSION_111
-    int mIsZombie;
-#endif
-    int mButtonDelay;                 // 185
-    Sexy::Widget *mReanimationWidget; // 186
-    bool mDrawStandardBack;           // 748
-    Sexy::GameButton *mLawnYesButton; // 188
-    Sexy::GameButton *mLawnNoButton;  // 189
-    bool mTallBottom;                 // 760
-    bool mVerticalCenterText;         // 761
-    bool unkBool;                     // 762
-#ifdef VERSION_111
-    int unk2;
-#endif
-}; // 115: 191, 111: 193
 
 namespace ImageLib {
 class Image {
@@ -2708,18 +1941,4 @@ public:
     unsigned long color;
 };
 
-#define MAX_TRIANGLES 256
-
-class TodTriangleGroup {
-public:
-    Sexy::Image *mImage;
-    TriVertex mVertArray[MAX_TRIANGLES][3];
-    int mTriangleCount;
-    int mDrawMode;
-
-    //    TodTriangleGroup();
-    //    void                        DrawGroup(Sexy::Graphics* g);
-    //    void                        AddTriangle(Sexy::Graphics* g, Sexy::Image* theImage, const SexyMatrix3& theMatrix, const Rect& theClipRect, const Color& theColor, int theDrawMode, const Rect&
-    //    theSrcRect);
-};
 #endif // PVZ_ENUMS_H

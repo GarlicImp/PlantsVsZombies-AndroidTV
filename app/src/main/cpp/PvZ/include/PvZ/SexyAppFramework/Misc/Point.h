@@ -1,0 +1,66 @@
+//
+// Created by 28636 on 2025/5/26.
+//
+
+#ifndef PLANTSVSZOMBIES_ANDROIDTV_POINT_H
+#define PLANTSVSZOMBIES_ANDROIDTV_POINT_H
+
+#include "PvZ/SexyAppFramework/Misc/Common.h"
+
+namespace Sexy
+{
+
+template<class _T> class TPoint
+{
+public:
+    _T						mX;
+    _T						mY;
+
+public:
+    TPoint(_T theX, _T theY) :
+        mX(theX),
+        mY(theY)
+    {
+    }
+
+    TPoint(const TPoint<_T>& theTPoint) :
+        mX(theTPoint.mX),
+        mY(theTPoint.mY)
+    {
+    }
+
+    TPoint() :
+        mX(0),
+        mY(0)
+    {
+    }
+
+    inline bool operator==(const TPoint& p)
+    {
+        return ((p.mX == mX) && (p.mY == mY));
+    }
+
+    inline bool operator!=(const TPoint& p)
+    {
+        return ((p.mX != mX) || (p.mY != mY));
+    }
+
+    TPoint operator+(const TPoint& p) const {return TPoint(mX+p.mX, mY+p.mY);}
+    TPoint operator-(const TPoint& p) const {return TPoint(mX-p.mX, mY-p.mY);}
+    TPoint operator*(const TPoint& p) const {return TPoint(mX*p.mX, mY*p.mY);}
+    TPoint operator/(const TPoint& p) const {return TPoint(mX/p.mX, mY/p.mY);}
+    TPoint& operator+=(const TPoint& p)  {mX+=p.mX; mY+=p.mY; return *this;}
+    TPoint& operator-=(const TPoint& p)  {mX-=p.mX; mY-=p.mY; return *this;}
+    TPoint& operator*=(const TPoint& p)  {mX*=p.mX; mY*=p.mY; return *this;}
+    TPoint& operator/=(const TPoint& p)  {mX/=p.mX; mY/=p.mY; return *this;}
+    TPoint operator*(_T s) const {return TPoint(mX*s, mY*s);}
+    TPoint operator/(_T s) const {return TPoint(mX/s, mY/s);}
+};
+
+typedef TPoint<int> Point;
+typedef TPoint<double> FPoint;
+
+};
+
+
+#endif // PLANTSVSZOMBIES_ANDROIDTV_POINT_H
