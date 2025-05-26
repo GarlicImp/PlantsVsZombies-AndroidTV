@@ -46,7 +46,7 @@ void Board::Create(LawnApp *theApp) {
     GameButton_Resize(mBoardMenuButton, 705, -3, 120, 80);
     mBoardMenuButton->mBtnNoDraw = true;
     mBoardMenuButton->mDisabled = true;
-    if (LawnApp_IsCoopMode(theApp) || theApp->mGameMode == GameMode::GAMEMODE_MP_VS) {
+    if (theApp->IsCoopMode() || theApp->mGameMode == GameMode::GAMEMODE_MP_VS) {
         GameButton_Resize(mBoardMenuButton, 880, -3, 120, 80);
     } else if (theApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN || theApp->mGameMode == GameMode::GAMEMODE_TREE_OF_WISDOM) {
         GameButton_Resize(mBoardMenuButton, 650, 550, 170, 120);
@@ -86,7 +86,7 @@ void Board::Create(LawnApp *theApp) {
 void Board::InitLevel() {
     old_Board_InitLevel(this);
     mNewWallNutAndSunFlowerAndChomperOnly =
-        !(LawnApp_IsScaryPotterLevel(mApp) || LawnApp_IsIZombieLevel(mApp) || LawnApp_IsWhackAZombieLevel(mApp) || HasConveyorBeltSeedBank(0) || LawnApp_IsChallengeWithoutSeedBank(mApp));
+        !(mApp->IsScaryPotterLevel() || mApp->IsIZombieLevel() || mApp->IsWhackAZombieLevel() || HasConveyorBeltSeedBank(0) || mApp->IsChallengeWithoutSeedBank());
     mNewPeaShooterCount = 0;
 }
 
@@ -348,7 +348,7 @@ Plant *Board::AddPlant(int theGridX, int theGridY, SeedType theSeedType, SeedTyp
 // 布阵用
 void Board::ParseFormationSegment(char *theSegment) {
     SeedType seedType = SeedType::SEED_PEASHOOTER;
-    bool isIZombieLevel = LawnApp_IsIZombieLevel(mApp);
+    bool isIZombieLevel = mApp->IsIZombieLevel();
     bool wakeUp = false;
     bool imitaterMorphed = false;
     bool addLadder = false;
@@ -948,7 +948,7 @@ void Board::Update() {
 
         // 为夜晚泳池场景补全泳池反射闪光特效
         //        if ( this->mBackground == BackgroundType::BACKGROUND_4_FOG && this->mPoolSparklyParticleID == 0 && this->mDrawCount > 0 ){
-        //            TodParticleSystem * poolSparklyParticle = LawnApp_AddTodParticle(this->mApp, 450.0, 295.0, 220000, a::PARTICLE_POOL_SPARKLY);
+        //            TodParticleSystem * poolSparklyParticle = AddTodParticle(this->mApp, 450.0, 295.0, 220000, a::PARTICLE_POOL_SPARKLY);
         //            this->mPoolSparklyParticleID = LawnApp_ParticleGetID(this->mApp, poolSparklyParticle);
         //        }
     }
@@ -1074,7 +1074,7 @@ void Board::Update() {
         int colsCount = (theBuildPlantType == SeedType::SEED_COBCANNON) ? 8 : 9; // 玉米加农炮不种在九列
         int width = (theBuildPlantType == SeedType::SEED_COBCANNON) ? 2 : 1;     // 玉米加农炮宽度两列
         int rowsCount = Board_StageHas6Rows(this) ? 6 : 5;
-        bool isIZMode = LawnApp_IsIZombieLevel(mApp);
+        bool isIZMode = mApp->IsIZombieLevel();
         // 全场
         if (theBuildPlantX == 9 && theBuildPlantY == 6) {
             for (int x = 0; x < colsCount; x += width) {
@@ -1267,7 +1267,7 @@ void Board::Update() {
 
 int Board::GetNumWavesPerFlag() {
     // 修改此函数，以做到在进度条上正常绘制旗帜波的旗帜。
-    if (LawnApp_IsFirstTimeAdventureMode(mApp) && mNumWaves < 10) {
+    if (mApp->IsFirstTimeAdventureMode() && mNumWaves < 10) {
         return mNumWaves;
     }
 
@@ -1288,7 +1288,7 @@ bool Board::IsFlagWave(int theWaveNumber) {
     if (mApp->mGameMode == GameMode::GAMEMODE_MP_VS)
         return true;
 
-    if (LawnApp_IsFirstTimeAdventureMode(mApp) && mLevel == 1)
+    if (mApp->IsFirstTimeAdventureMode() && mLevel == 1)
         return false;
 
     int aWavesPerFlag = GetNumWavesPerFlag();
@@ -1307,7 +1307,7 @@ void Board::SpawnZombieWave() {
 void Board::DrawProgressMeter(Sexy::Graphics *g, int theX, int theY) {
     // 修改此函数，以做到在进度条上正常绘制旗帜波的旗帜。
     if (normalLevel) {
-        if (LawnApp_IsAdventureMode(mApp) && ProgressMeterHasFlags()) {
+        if (mApp->IsAdventureMode() && ProgressMeterHasFlags()) {
             mApp->mGameMode = GameMode::GAMEMODE_CHALLENGE_HEAVY_WEAPON; // 修改关卡信息为非冒险模式
             old_Board_DrawProgressMeter(this, g, theX, theY);
             mApp->mGameMode = GameMode::GAMEMODE_ADVENTURE; // 再把关卡信息改回冒险模式
@@ -1329,7 +1329,7 @@ bool Board::IsLevelDataLoaded() {
 
 bool Board::NeedSaveGame() {
     // 可以让结盟关卡存档，但是好多BUG啊
-    //    if (LawnApp_IsCoopMode(*((int **) this + 69))) {
+    //    if (IsCoopMode(*((int **) this + 69))) {
     //        return true;
     //    }
     return old_Board_NeedSaveGame(this);
@@ -1352,11 +1352,11 @@ void Board_DrawHammerButton(Board *board, Sexy::Graphics *graphics, LawnApp *law
     graphics->mTransY = tmp;
 }
 
-void Board_DrawButterButton(Board *board, Sexy::Graphics *graphics, LawnApp *lawnApp) {
-    if (!LawnApp_IsCoopMode(lawnApp)) {
-        if (!LawnApp_IsAdventureMode(lawnApp))
+void Board_DrawButterButton(Board *board, Sexy::Graphics *graphics, LawnApp *theApp) {
+    if (!theApp->IsCoopMode()) {
+        if (!theApp->IsAdventureMode())
             return;
-        if (lawnApp->mTwoPlayerState == -1)
+        if (theApp->mTwoPlayerState == -1)
             return;
     }
     float tmp = graphics->mTransY;
@@ -1419,7 +1419,7 @@ void Board::DrawShovelButton(Sexy::Graphics *g, LawnApp *theApp) {
     }
 
     if (keyboardMode) {
-        if (LawnApp_IsCoopMode(theApp)) {
+        if (theApp->IsCoopMode()) {
             Sexy_Graphics_DrawImageCel2(g, *Sexy_IMAGE_HELP_BUTTONS_Addr, rect.mX + 40, rect.mY + 40, 1);
         } else {
             if (Sexy_GamepadApp_HasGamepad(theApp) || (theApp->mGamePad1IsOn && theApp->mGamePad2IsOn)) {
@@ -1532,7 +1532,7 @@ void Board::DoPlantingEffects(int theGridX, int theGridY, Plant *thePlant) {
 
     if (IsPoolSquare(theGridX, theGridY)) {
         mApp->PlayFoley(FoleyType::FOLEY_PLANT_WATER);
-        LawnApp_AddTodParticle(mApp, num, num2, 400000, ParticleEffect::PARTICLE_PLANTING_POOL);
+        mApp->AddTodParticle(num, num2, 400000, ParticleEffect::PARTICLE_PLANTING_POOL);
         return;
     }
 
@@ -1545,7 +1545,7 @@ void Board::DoPlantingEffects(int theGridX, int theGridY, Plant *thePlant) {
     //            PlayFoley(mApp, FoleyType::Plant);
     //            break;
     //    }
-    LawnApp_AddTodParticle(mApp, num, num2, 400000, ParticleEffect::PARTICLE_PLANTING);
+    mApp->AddTodParticle(num, num2, 400000, ParticleEffect::PARTICLE_PLANTING);
 }
 
 
@@ -1718,7 +1718,7 @@ bool Board::MouseHitTest(int x, int y, HitResult *theHitResult, bool thePlayerIn
         }
     }
 
-    if (LawnApp_IsCoopMode(mApp)) {
+    if (mApp->IsCoopMode()) {
         Rect butterButtonRect = GetButterButtonRect();
         if (mShowButter && TRect_Contains(&butterButtonRect, x, y)) {
             theHitResult->mObjectType = GameObjectType::OBJECT_TYPE_BUTTER;
@@ -1760,7 +1760,7 @@ bool Board::MouseHitTest(int x, int y, HitResult *theHitResult, bool thePlayerIn
         return false;
     }
 
-    if (mGameMode == GameMode::GAMEMODE_MP_VS || LawnApp_IsCoopMode(mApp)) {
+    if (mGameMode == GameMode::GAMEMODE_MP_VS || mApp->IsCoopMode()) {
         SeedBank *mSeedBank2 = GamepadControls_GetSeedBank(mGamepadControls2);
         if (SeedBank_ContainsPoint(mSeedBank2, x, y)) {
             if (mSeedBank2->SeedBank::MouseHitTest(x, y, theHitResult)) {
@@ -1821,7 +1821,7 @@ void Board::MouseDown(int x, int y, int theClickCount) {
     MouseHitTest(x, y, &hitResult, false);
     GameObjectType mObjectType = hitResult.mObjectType;
     GameMode mGameMode = mApp->mGameMode;
-    bool isTwoSeedBankMode = (mGameMode == GameMode::GAMEMODE_MP_VS || LawnApp_IsCoopMode(mApp));
+    bool isTwoSeedBankMode = (mGameMode == GameMode::GAMEMODE_MP_VS || mApp->IsCoopMode());
     GameScenes mGameScene = mApp->mGameScene;
 
     SeedChooserScreen *mSeedChooserScreen = mApp->mSeedChooserScreen;
@@ -2016,7 +2016,7 @@ void Board::MouseDown(int x, int y, int theClickCount) {
     }
 
     if (mChallenge->MouseDown(x, y, 0, &hitResult, 0)) {
-        if (LawnApp_IsScaryPotterLevel(mApp)) {
+        if (mApp->IsScaryPotterLevel()) {
             requestDrawShovelInCursor = false;
         }
         if (mGameMode == GameMode::GAMEMODE_CHALLENGE_BEGHOULED_TWIST) {
@@ -2026,7 +2026,7 @@ void Board::MouseDown(int x, int y, int theClickCount) {
             mGamepadControls1->mCursorPositionX = x;
             mGamepadControls1->mCursorPositionY = y;
         }
-        if (!LawnApp_IsWhackAZombieLevel(mApp) || mGameState != 7)
+        if (!mApp->IsWhackAZombieLevel() || mGameState != 7)
             return; // 这一行代码的意义：在锤僵尸关卡，手持植物时，允许拖动种植。
     }
     if (mObjectType == GameObjectType::OBJECT_TYPE_WATERING_CAN || mObjectType == GameObjectType::OBJECT_TYPE_FERTILIZER || mObjectType == GameObjectType::OBJECT_TYPE_BUG_SPRAY
@@ -2158,7 +2158,7 @@ void Board::MouseDrag(int x, int y) {
     int mGameState = mGamepadControls1->mGamepadState;
     GameMode mGameMode = mApp->mGameMode;
     bool isTwoSeedBankMode = (mGameMode == GameMode::GAMEMODE_MP_VS || (mGameMode >= GameMode::GAMEMODE_TWO_PLAYER_COOP_DAY && mGameMode <= GameMode::GAMEMODE_TWO_PLAYER_COOP_ENDLESS));
-    int seedBankHeight = LawnApp_IsChallengeWithoutSeedBank(mApp) ? 87 : seedBank->mY + seedBank->mHeight;
+    int seedBankHeight = mApp->IsChallengeWithoutSeedBank() ? 87 : seedBank->mY + seedBank->mHeight;
     if (mTouchState == TouchState::SeedBank && mTouchLastY < seedBankHeight && y >= seedBankHeight) {
         mTouchState = TouchState::BoardMovedFromSeedBank;
         if (gPlayerIndex == TouchPlayerIndex::Player1) {
@@ -2632,7 +2632,7 @@ void Board::MouseDownSecond(int x, int y, int theClickCount) {
     }
 
     if (mChallenge->MouseDown(x, y, 0, &hitResult, 0)) {
-        if (LawnApp_IsScaryPotterLevel(mApp)) {
+        if (mApp->IsScaryPotterLevel()) {
             requestDrawShovelInCursor = false;
         }
         if (mGameMode == GameMode::GAMEMODE_CHALLENGE_BEGHOULED_TWIST) {
@@ -2642,7 +2642,7 @@ void Board::MouseDownSecond(int x, int y, int theClickCount) {
             mGamepadControls1->mCursorPositionX = x;
             mGamepadControls1->mCursorPositionY = y;
         }
-        if (!LawnApp_IsWhackAZombieLevel(mApp) || mGameState != 7)
+        if (!mApp->IsWhackAZombieLevel() || mGameState != 7)
             return; // 这一行代码的意义：在锤僵尸关卡，手持植物时，允许拖动种植。
     }
 
@@ -2765,7 +2765,7 @@ void Board_MouseDragSecond(Board *board, int x, int y) {
     LawnApp *mApp = board->mApp;
     GameMode mGameMode = mApp->mGameMode;
     bool isTwoSeedBankMode = (mGameMode == GameMode::GAMEMODE_MP_VS || (mGameMode >= GameMode::GAMEMODE_TWO_PLAYER_COOP_DAY && mGameMode <= GameMode::GAMEMODE_TWO_PLAYER_COOP_ENDLESS));
-    int seedBankHeight = LawnApp_IsChallengeWithoutSeedBank(mApp) ? 87 : seedBank->mY + seedBank->mHeight;
+    int seedBankHeight = mApp->IsChallengeWithoutSeedBank() ? 87 : seedBank->mY + seedBank->mHeight;
     if (gTouchStateSecond == TouchState::SeedBank && gTouchLastYSecond < seedBankHeight && y >= seedBankHeight) {
         gTouchStateSecond = TouchState::BoardMovedFromSeedBank;
         if (gPlayerIndexSecond == TouchPlayerIndex::Player1) {
@@ -2823,7 +2823,7 @@ void Board_MouseDragSecond(Board *board, int x, int y) {
     if (gPlayerIndexSecond == TouchPlayerIndex::Player2 && isCobCannonSelected_2P && gTouchLastYSecond > seedBankHeight && y <= seedBankHeight) {
         GamepadControls_OnKeyDown(gamepadControls2, 27, 1096); // 退选加农炮
         if (gTouchStateSecond == TouchState::ValidCobCannonSecond) {
-            LawnApp_ClearSecondPlayer(mApp);
+            mApp->ClearSecondPlayer();
             gamepadControls2->mPlayerIndex2 = -1;
         }
         gTouchStateSecond = TouchState::None;
@@ -2961,7 +2961,7 @@ void Board::MouseUpSecond(int x, int y, int theClickCount) {
                     mGamepadControls2->mGamepadState = 1;
                 }
                 if (gTouchStateSecond == TouchState::ValidCobCannonSecond) {
-                    LawnApp_ClearSecondPlayer(mApp);
+                    mApp->ClearSecondPlayer();
                     mGamepadControls2->mPlayerIndex2 = -1;
                 }
             }
@@ -3012,11 +3012,11 @@ void Board::ButtonDepress(int theId) {
     if (theId == 1000) {
         LawnApp *lawnApp = (LawnApp *)*gLawnApp_Addr;
         if (lawnApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN || lawnApp->mGameMode == GameMode::GAMEMODE_TREE_OF_WISDOM) {
-            LawnApp_DoBackToMain(lawnApp);
+            lawnApp->DoBackToMain();
             return;
         }
         LawnApp_PlaySample(lawnApp, *Sexy_SOUND_PAUSE_Addr);
-        LawnApp_DoNewOptions(lawnApp, false, 0);
+        lawnApp->DoNewOptions(false, 0);
         return;
     } else if (theId == 1001) {
         LawnApp *lawnApp = (LawnApp *)*gLawnApp_Addr;
@@ -3037,7 +3037,7 @@ void Board::ButtonDepress(int theId) {
     old_Board_ButtonDepress(this, theId);
 }
 
-Sexy::Image *GetIconByAchievementId(AchievementId::AchievementId theAchievementId) {
+Image *GetIconByAchievementId(AchievementId theAchievementId) {
     switch (theAchievementId) {
         case AchievementId::ACHIEVEMENT_HOME_SECURITY:
             return addonImages.achievement_homeLawnsecurity;
@@ -3068,7 +3068,7 @@ Sexy::Image *GetIconByAchievementId(AchievementId::AchievementId theAchievementI
     }
 }
 
-const char *GetNameByAchievementId(AchievementId::AchievementId theAchievementId) {
+const char *GetNameByAchievementId(AchievementId theAchievementId) {
     switch (theAchievementId) {
         case AchievementId::ACHIEVEMENT_HOME_SECURITY:
             return "ACHIEVEMENT_HOME_SECURITY";
@@ -3099,7 +3099,7 @@ const char *GetNameByAchievementId(AchievementId::AchievementId theAchievementId
     }
 }
 
-bool Board::GrantAchievement(AchievementId::AchievementId theAchievementId, bool theIsShow) {
+bool Board::GrantAchievement(AchievementId theAchievementId, bool theIsShow) {
     LawnApp *lawnApp = mApp;
     PlayerInfo *playerInfo = lawnApp->mPlayerInfo;
     if (!playerInfo->mAchievements[theAchievementId]) {
@@ -3126,11 +3126,11 @@ bool Board::GrantAchievement(AchievementId::AchievementId theAchievementId, bool
 void Board::FadeOutLevel() {
     old_Board_FadeOutLevel(this);
 
-    if (LawnApp_IsSurvivalMode(mApp) && mChallenge->mSurvivalStage >= 19) {
+    if (mApp->IsSurvivalMode() && mChallenge->mSurvivalStage >= 19) {
         GrantAchievement(AchievementId::ACHIEVEMENT_IMMORTAL, true);
     }
 
-    if (!LawnApp_IsSurvivalMode(mApp)) {
+    if (!mApp->IsSurvivalMode()) {
         int theNumLawnMowers = 0;
         for (int i = 0; i < 6; ++i) {
             if (mPlantRow[i] != PlantRowType::PLANTROW_DIRT) {
@@ -3156,7 +3156,7 @@ void Board::FadeOutLevel() {
         }
     }
 
-    if (mNewWallNutAndSunFlowerAndChomperOnly && !LawnApp_IsSurvivalMode(mApp) && !HasConveyorBeltSeedBank(0)) {
+    if (mNewWallNutAndSunFlowerAndChomperOnly && !mApp->IsSurvivalMode() && !HasConveyorBeltSeedBank(0)) {
         int num = mSeedBank1->mNumPackets;
         for (int i = 0; i < num; ++i) {
             SeedType theType = mSeedBank1->mSeedPackets[i].mPacketType;
@@ -3181,7 +3181,7 @@ void Board::DoPlantingAchievementCheck(SeedType theSeedType) {
 }
 
 void Board::DrawUITop(Sexy::Graphics *g) {
-    if (seedBankPin && !LawnApp_IsSlotMachineLevel(mApp)) {
+    if (seedBankPin && !mApp->IsSlotMachineLevel()) {
         if (mApp->mGameScene != GameScenes::SCENE_LEADER_BOARD && mApp->mGameScene != GameScenes::SCENE_ZOMBIES_WON) {
             if (SeedBank_BeginDraw(mSeedBank1, g)) {
                 mSeedBank1->SeedBank::Draw(g);
@@ -3663,14 +3663,14 @@ void Board::FixReanimErrorAfterLoad() {
         } else if (aParticle->mEffectType == ParticleEffect::PARTICLE_POOL_SPARKLY) {
             // 直接删除泳池闪光特效
             TodParticleSystem_ParticleSystemDie(aParticle);
-            mPoolSparklyParticleID = 0;
+            mPoolSparklyParticleID = PARTICLESYSTEMID_NULL;
         }
     }
 
     if (mBackground == BackgroundType::BACKGROUND_3_POOL) {
         // 添加泳池闪光特效
-        TodParticleSystem *poolSparklyParticle = LawnApp_AddTodParticle(mApp, 450.0, 295.0, 220000, ParticleEffect::PARTICLE_POOL_SPARKLY);
-        mPoolSparklyParticleID = LawnApp_ParticleGetID(mApp, poolSparklyParticle);
+        TodParticleSystem *poolSparklyParticle = mApp->AddTodParticle(450.0, 295.0, 220000, ParticleEffect::PARTICLE_POOL_SPARKLY);
+        mPoolSparklyParticleID = mApp->ParticleGetID(poolSparklyParticle);
     }
 }
 

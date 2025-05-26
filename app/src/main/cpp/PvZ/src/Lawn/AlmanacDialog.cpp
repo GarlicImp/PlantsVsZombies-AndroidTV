@@ -161,7 +161,7 @@ void AlmanacDialog_ButtonDepress(AlmanacDialog *almanacDialog, int id) {
     } else if (id == theBackId) {
         AlmanacDialog_KeyDown(almanacDialog, 27);
     } else if (id == theCloseId) {
-        LawnApp_KillAlmanacDialog(almanacDialog->mApp);
+        almanacDialog->mApp->KillAlmanacDialog();
     }
 }
 

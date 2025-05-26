@@ -49,10 +49,10 @@ void SeedBank::Draw(Sexy::Graphics *g) {
     if (cutScene != nullptr && CutScene_IsBeforePreloading(cutScene)) {
         return;
     }
-    if (LawnApp_IsSlotMachineLevel(mApp)) {
+    if (mApp->IsSlotMachineLevel()) {
         Sexy_Graphics_DrawImage(g, *Sexy_IMAGE_SUNBANK_Addr, 0, 0);
     } else if (mBoard->HasConveyorBeltSeedBank(mIsZombie)) {
-        if (LawnApp_IsCoopMode(mApp)) {
+        if (mApp->IsCoopMode()) {
             Sexy_Graphics_DrawImage(g, *Sexy_IMAGE_CONVEYORBELT_BACKDROP_COOP_Addr, 0, 0);
             Sexy_Graphics_DrawImageCel(g, *Sexy_IMAGE_CONVEYORBELT_COOP_Addr, 7, 63, 0, mConveyorBeltCounter / 4 % 6);
             Sexy_Graphics_SetClipRect(g, 7, 0, 313, 600);
@@ -61,7 +61,7 @@ void SeedBank::Draw(Sexy::Graphics *g) {
             Sexy_Graphics_DrawImageCel(g, *Sexy_IMAGE_CONVEYORBELT_Addr, 90, 63, 0, mConveyorBeltCounter / 4 % 6);
             Sexy_Graphics_SetClipRect(g, 90, 0, 501, 600);
         }
-    } else if (LawnApp_IsCoopMode(mApp)) {
+    } else if (mApp->IsCoopMode()) {
         Sexy_Graphics_DrawImage(g, *Sexy_IMAGE_SEEDBANK_COOP_Addr, 0, 0);
     } else if (mApp->mGameMode == GameMode::GAMEMODE_MP_VS && mIsZombie) {
         int theSeedBankExtraWidth = mBoard->GetSeedBankExtraWidth();
@@ -85,8 +85,8 @@ void SeedBank::Draw(Sexy::Graphics *g) {
             if (seedPacket->mPacketType == SeedType::SEED_NONE) {
                 continue;
             }
-            if (!LawnApp_IsSlotMachineLevel(mApp)) {
-                if (LawnApp_IsCoopMode(mApp) || mApp->mGameMode == GameMode::GAMEMODE_MP_VS) {
+            if (!mApp->IsSlotMachineLevel()) {
+                if (mApp->IsCoopMode() || mApp->mGameMode == GameMode::GAMEMODE_MP_VS) {
                     bool mPlayerIndex = mBoard->mSeedBank2 == this;
                     GamepadControls *gamepadControls = mPlayerIndex ? mBoard->mGamepadControls2 : mBoard->mGamepadControls1;
                     if (gamepadControls->mPlayerIndex2 != -1 && i == gamepadControls->mSelectedSeedIndex) {
@@ -156,7 +156,7 @@ void SeedBank::Draw(Sexy::Graphics *g) {
         SeedPacket_EndDraw(seedPacket1, g);
     }
     Sexy_Graphics_ClearClipRect(g);
-    if (LawnApp_IsSlotMachineLevel(mApp)) {
+    if (mApp->IsSlotMachineLevel()) {
         if (mY > -(*(int (**)(Sexy::Image *))(*Sexy_IMAGE_SEEDBANK_Addr + 20))(*Sexy_IMAGE_SEEDBANK_Addr))
             Sexy_Graphics_DrawImage(g, *Sexy_IMAGE_SLOTMACHINE_OVERLAY_Addr, 189, -2);
     }
@@ -168,7 +168,7 @@ void SeedBank::Draw(Sexy::Graphics *g) {
             theMoney = mBoard->mSunMoney1 & ~mBoard->mSunMoney1 >> 31; // mSunMoney1
         }
 
-        if (LawnApp_IsCoopMode(mApp) && mBoard->mSeedBank2 == this) {
+        if (mApp->IsCoopMode() && mBoard->mSeedBank2 == this) {
             theMoney = mBoard->mSunMoney2 & ~mBoard->mSunMoney2 >> 31; // mSunMoney2
         }
         int holder[1];
@@ -184,7 +184,7 @@ void SeedBank::Draw(Sexy::Graphics *g) {
         TodDrawString(g, holder, mIsZombie ? (408 + mBoard->GetSeedBankExtraWidth()) : 38, 78, *Sexy_FONT_CONTINUUMBOLD14_Addr, theColor, DrawStringJustification::DS_ALIGN_CENTER);
         Sexy_String_Delete(holder);
 
-        if (LawnApp_IsTwinSunbankMode(mApp)) {
+        if (mApp->IsTwinSunbankMode()) {
             int holder1[1];
             Sexy_StrFormat(holder1, "%d", mBoard->mSunMoney2 & ~mBoard->mSunMoney2 >> 31);
             TodDrawString(g, holder1, 644, 49, *Sexy_FONT_CONTINUUMBOLD14_Addr, theColor, DrawStringJustification::DS_ALIGN_CENTER);

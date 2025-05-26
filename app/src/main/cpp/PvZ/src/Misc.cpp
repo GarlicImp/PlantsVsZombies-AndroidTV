@@ -1155,7 +1155,7 @@ void PoolEffect_PoolEffectDraw(PoolEffect *poolEffect, Sexy::Graphics *graphics,
                 Sexy_Graphics_DrawImage(graphics, *Sexy_IMAGE_POOL_Addr, 34, 278);
                 Sexy_Graphics_DrawTrianglesTex(graphics, *Sexy_IMAGE_POOL_BASE_Addr, v140[0], 150);
                 Sexy_Graphics_DrawTrianglesTex(graphics, *Sexy_IMAGE_POOL_SHADING_Addr, v140[1], 150);
-                TodParticleSystem *thePoolSparkle = LawnApp_ParticleTryToGet(poolEffect->mApp, poolEffect->mApp->mBoard->mPoolSparklyParticleID);
+                TodParticleSystem *thePoolSparkle = poolEffect->mApp->ParticleTryToGet(poolEffect->mApp->mBoard->mPoolSparklyParticleID);
                 if (thePoolSparkle != nullptr) {
                     TodParticleSystem_Draw(thePoolSparkle, graphics);
                 }
@@ -1256,7 +1256,8 @@ void LawnPlayerInfo_AddCoins(PlayerInfo *playerInfo, int theAmount) {
     if (theAmount < 0) {
         playerInfo->mUsedCoins -= theAmount;
         if (playerInfo->mUsedCoins >= 2500) {
-            LawnApp_GrantAchievement((LawnApp *)*gLawnApp_Addr, AchievementId::ACHIEVEMENT_SHOP);
+            LawnApp *gLawnApp = (LawnApp *)*gLawnApp_Addr;
+            gLawnApp->GrantAchievement(AchievementId::ACHIEVEMENT_SHOP);
         }
     }
 }

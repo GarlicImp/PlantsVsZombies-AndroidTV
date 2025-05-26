@@ -236,11 +236,11 @@ void Challenge::DrawArtChallenge(Sexy::Graphics* g) {
 PlantingReason Challenge::CanPlantAt(int theGridX, int theGridY, SeedType theSeedType) {
     // 修复IZ多个蹦极可放置在同一格子内
     GameMode aGameMode = mApp->mGameMode;
-    if (LawnApp_IsWallnutBowlingLevel(mApp)) {
+    if (mApp->IsWallnutBowlingLevel()) {
         if (theGridX > 2) {
             return PlantingReason::PLANTING_NOT_PASSED_LINE;
         }
-    } else if (LawnApp_IsIZombieLevel(mApp)) {
+    } else if (mApp->IsIZombieLevel()) {
         int num = 6;
         if (aGameMode == GameMode::GAMEMODE_PUZZLE_I_ZOMBIE_1 || aGameMode == GameMode::GAMEMODE_PUZZLE_I_ZOMBIE_2 || aGameMode == GameMode::GAMEMODE_PUZZLE_I_ZOMBIE_3
             || aGameMode == GameMode::GAMEMODE_PUZZLE_I_ZOMBIE_4 || aGameMode == GameMode::GAMEMODE_PUZZLE_I_ZOMBIE_5) {
@@ -270,7 +270,7 @@ PlantingReason Challenge::CanPlantAt(int theGridX, int theGridY, SeedType theSee
             }
             return PlantingReason::PLANTING_NOT_HERE;
         }
-    } else if (LawnApp_IsArtChallenge(mApp)) {
+    } else if (mApp->IsArtChallenge()) {
         SeedType artChallengeSeed = GetArtChallengeSeed(theGridX, theGridY);
         if (artChallengeSeed != SeedType::SEED_NONE && artChallengeSeed != theSeedType && theSeedType != SeedType::SEED_LILYPAD && theSeedType != SeedType::SEED_PUMPKINSHELL) {
             return PlantingReason::PLANTING_NOT_ON_ART;
@@ -283,7 +283,7 @@ PlantingReason Challenge::CanPlantAt(int theGridX, int theGridY, SeedType theSee
                 return PlantingReason::PLANTING_NOT_HERE;
             }
         }
-    } else if (LawnApp_IsFinalBossLevel(mApp) && theGridX >= 8) {
+    } else if (mApp->IsFinalBossLevel() && theGridX >= 8) {
         return PlantingReason::PLANTING_NOT_HERE;
     } else if (aGameMode == GameMode::GAMEMODE_MP_VS_HIDE || aGameMode == GameMode::GAMEMODE_MP_VS) {
         if (IsMPSeedType(theSeedType)) {

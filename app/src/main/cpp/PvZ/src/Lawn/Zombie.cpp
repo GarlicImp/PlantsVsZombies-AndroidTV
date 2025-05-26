@@ -340,7 +340,7 @@ void Zombie::BossDestroyIceballInRow(int theRow) {
 
     Reanimation *aFireBallReanim = mApp->ReanimationTryToGet(mBossFireBallReanimID);
     if (aFireBallReanim && !mIsFireBall) {
-        LawnApp_AddTodParticle(mApp, mPosX + 80.0, mAnimCounter + 80.0, 400000, ParticleEffect::PARTICLE_ICEBALL_DEATH);
+        mApp->AddTodParticle(mPosX + 80.0, mAnimCounter + 80.0, 400000, ParticleEffect::PARTICLE_ICEBALL_DEATH);
 
         Reanimation_ReanimationDie(aFireBallReanim);
         mBossFireBallReanimID = ReanimationID::REANIMATIONID_NULL;
@@ -679,7 +679,7 @@ void Zombie::CheckForBoardEdge() {
     }
     boardEdge -= boardEdgeAdjust; // 支持任意调整进家线
     if (mX <= boardEdge && mHasHead) {
-        if (LawnApp_IsIZombieLevel(mApp)) {
+        if (mApp->IsIZombieLevel()) {
             DieNoLoot();
         } else {
             mBoard->ZombiesWon(this);
@@ -917,7 +917,7 @@ void Zombie::SetZombatarReanim() {
     Reanimation *aBodyReanim = mApp->ReanimationGet(mBodyReanimID);
     ReanimatorTrackInstance *aHeadTrackInstance = Reanimation_GetTrackInstanceByName(aBodyReanim, "anim_head1");
     aHeadTrackInstance->mImageOverride = *Sexy_IMAGE_BLANK_Addr;
-    Reanimation *aZombatarHeadReanim = LawnApp_AddReanimation(mApp, 0, 0, 0, ReanimationType::REANIM_ZOMBATAR_HEAD);
+    Reanimation *aZombatarHeadReanim = mApp->AddReanimation(0, 0, 0, ReanimationType::REANIM_ZOMBATAR_HEAD);
     Reanimation_SetZombatarHats(aZombatarHeadReanim, aPlayerInfo->mZombatarHat, aPlayerInfo->mZombatarHatColor);
     Reanimation_SetZombatarHair(aZombatarHeadReanim, aPlayerInfo->mZombatarHair, aPlayerInfo->mZombatarHairColor);
     Reanimation_SetZombatarFHair(aZombatarHeadReanim, aPlayerInfo->mZombatarFacialHair, aPlayerInfo->mZombatarFacialHairColor);
@@ -926,7 +926,7 @@ void Zombie::SetZombatarReanim() {
     Reanimation_SetZombatarTidBits(aZombatarHeadReanim, aPlayerInfo->mZombatarTidBit, aPlayerInfo->mZombatarTidBitColor);
     Reanimation_PlayReanim(aZombatarHeadReanim, "anim_head_idle", ReanimLoopType::REANIM_LOOP, 0, 15.0);
     aZombatarHeadReanim->AssignRenderGroupToTrack("anim_hair", -1);
-    mBossFireBallReanimID = LawnApp_ReanimationGetID(mApp, aZombatarHeadReanim);
+    mBossFireBallReanimID = mApp->ReanimationGetID(aZombatarHeadReanim);
     AttachEffect *attachEffect = AttachReanim(&aHeadTrackInstance->mAttachmentID, aZombatarHeadReanim, 0.0f, 0.0f);
     TodScaleRotateTransformMatrix(&attachEffect->mOffset, -20.0, -1.0, 0.2, 1.0, 1.0);
     ReanimShowPrefix("anim_hair", -1);
@@ -947,7 +947,7 @@ void Zombie::DieNoLoot() {
 
     if (IsZombatarZombie(mZombieType)) {
         // 大头贴
-        LawnApp_RemoveReanimation(mApp, mBossFireBallReanimID);
+        mApp->RemoveReanimation(mBossFireBallReanimID);
     }
     old_Zombie_DieNoLoot(this);
 }
@@ -959,7 +959,7 @@ void Zombie::DrawBungeeCord(Sexy::Graphics *graphics, int theOffsetX, int theOff
     float aPosY = 0.0f;
     GetTrackPosition("Zombie_bungi_body", aPosX, aPosY);
     bool aSetClip = false;
-    if (IsOnBoard() && LawnApp_IsFinalBossLevel(mApp)) {
+    if (IsOnBoard() && mApp->IsFinalBossLevel()) {
         Zombie *aBossZombie = mBoard->GetBossZombie();
         int aClipAmount = 55;
         if (aBossZombie->mZombiePhase == ZombiePhase::PHASE_BOSS_BUNGEES_LEAVE) {
@@ -1247,11 +1247,11 @@ void Zombie::DropHead(unsigned int theDamageFlags) {
                 Reanimation_GetTrackMatrix(reanimation, index[i], &aSexyTransform2D);
                 float aPosX = mPosX + aSexyTransform2D.m[0][2];
                 float aPosY = mPosY + aSexyTransform2D.m[1][2];
-                TodParticleSystem *todParticleSystem = LawnApp_AddTodParticle(mApp, aPosX, aPosY, mRenderOrder + 1, ParticleEffect::PARTICLE_ZOMBIE_HEAD);
+                TodParticleSystem *todParticleSystem = mApp->AddTodParticle(aPosX, aPosY, mRenderOrder + 1, ParticleEffect::PARTICLE_ZOMBIE_HEAD);
                 TodParticleSystem_OverrideColor(todParticleSystem, nullptr, &reanimatorTrackInstance->mTrackColor);
                 TodParticleSystem_OverrideImage(todParticleSystem, nullptr, reanimatorTrack->mTransforms[0].mImage);
             }
-            LawnApp_RemoveReanimation(mApp, mBossFireBallReanimID);
+            mApp->RemoveReanimation(mBossFireBallReanimID);
             mBossFireBallReanimID = ReanimationID::REANIMATIONID_NULL;
         }
     }

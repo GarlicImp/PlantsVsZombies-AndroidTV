@@ -5,7 +5,7 @@
 
 class HouseChooserDialog : public LawnDialog {
 public:
-    HouseType::HouseType mSelectedHouseType; // 191
+    HouseType mSelectedHouseType;            // 191
     int unk[2];                              // 192 ~ 193
 }; // 115: 194, 111: 196
 
@@ -17,7 +17,7 @@ inline void (*old_HouseChooserDialog_MouseDown)(HouseChooserDialog *a, int x, in
 inline void (*old_HouseChooserDialog_KeyDown)(HouseChooserDialog *a, int x);
 
 
-bool HouseChooserDialog_IsHouseAvaliable(HouseType::HouseType houseType);
+bool HouseChooserDialog_IsHouseAvaliable(HouseType houseType);
 
 void HouseChooserDialog_MouseDown(HouseChooserDialog *a, int x, int y, int theCount);
 
