@@ -198,6 +198,7 @@ public:
     void SpikeRockTakeDamage();
     bool DrawMagnetItemsOnTop();
     void SetImitaterFilterEffect();
+    void BurnRow(int theRow);
 };
 
 class PlantDefinition {

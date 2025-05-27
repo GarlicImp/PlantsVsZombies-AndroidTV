@@ -27,5 +27,14 @@ public:
 
 }
 
+inline void Sexy_ButtonListener_ButtonMouseEnter(Sexy::ButtonListener *listener, int id) {}
+
+inline void Sexy_ButtonListener_ButtonMouseMove(Sexy::ButtonListener *listener, int id, int x, int y) {}
+
+inline void Sexy_ButtonListener_ButtonMouseLeave(Sexy::ButtonListener *listener, int id) {}
+
+inline void Sexy_ButtonListener_ButtonDownTick(Sexy::ButtonListener *listener, int id) {}
+
+
 
 #endif // PLANTSVSZOMBIES_ANDROIDTV_BUTTONLISTENER_H

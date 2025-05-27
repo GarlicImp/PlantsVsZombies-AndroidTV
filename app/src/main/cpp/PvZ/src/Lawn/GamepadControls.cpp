@@ -13,6 +13,7 @@
 #include "PvZ/Symbols.h"
 #include "PvZ/TodLib/Effect/Reanimator.h"
 #include "PvZ/Lawn/Board/CursorObject.h"
+#include "PvZ/TodLib/Effect/Attachment.h"
 
 void GamepadControls_pickUpCobCannon(int gamePad, int cobCannon) {
     // 用于拿起指定的加农炮
@@ -168,11 +169,11 @@ void GamepadControls_Update(GamepadControls *gamepadControls, float a2) {
     }
 
     if (positionAutoFix && !mApp->IsWhackAZombieLevel() && mApp->mGameMode != GameMode::GAMEMODE_CHALLENGE_ZOMBIQUARIUM) {
-        if (gamepadControls->mPlayerIndex2 == 0 && gPlayerIndex != TouchPlayerIndex::Player1 && gPlayerIndexSecond != TouchPlayerIndex::Player1) {
+        if (gamepadControls->mPlayerIndex2 == 0 && gPlayerIndex != TouchPlayerIndex::TOUCHPLAYER_PLAYER1 && gPlayerIndexSecond != TouchPlayerIndex::TOUCHPLAYER_PLAYER1) {
             gamepadControls->mCursorPositionX += (mGridCenterPositionX - gamepadControls->mCursorPositionX) / 10;
             gamepadControls->mCursorPositionY += (mGridCenterPositionY - gamepadControls->mCursorPositionY) / 10;
         }
-        if (gamepadControls->mPlayerIndex2 == 1 && gPlayerIndex != TouchPlayerIndex::Player2 && gPlayerIndexSecond != TouchPlayerIndex::Player2) {
+        if (gamepadControls->mPlayerIndex2 == 1 && gPlayerIndex != TouchPlayerIndex::TOUCHPLAYER_PLAYER2 && gPlayerIndexSecond != TouchPlayerIndex::TOUCHPLAYER_PLAYER2) {
             gamepadControls->mCursorPositionX += (mGridCenterPositionX - gamepadControls->mCursorPositionX) / 10;
             gamepadControls->mCursorPositionY += (mGridCenterPositionY - gamepadControls->mCursorPositionY) / 10;
         }
@@ -184,8 +185,8 @@ void GamepadControls_Update(GamepadControls *gamepadControls, float a2) {
     //    Reanimation *mCursorReanim = ReanimationTryToGet(gamepadControls->mGameObject.mApp, gamepadControls->mCursorReanimID);
     //    LOGD("%d",mCursorReanim);
     //    if (mCursorReanim != nullptr) {
-    //        if ((gamepadControls->mPlayerIndex2 == 0 &&(mIsZombie == TouchPlayerIndex::Player1 || gPlayerIndexSecond == TouchPlayerIndex::Player1)) || (gamepadControls->mPlayerIndex2 == 1
-    //        &&(mIsZombie == TouchPlayerIndex::Player2 || gPlayerIndexSecond == TouchPlayerIndex::Player2))) {
+    //        if ((gamepadControls->mPlayerIndex2 == 0 &&(mIsZombie == TouchPlayerIndex::TOUCHPLAYER_PLAYER1 || gPlayerIndexSecond == TouchPlayerIndex::TOUCHPLAYER_PLAYER1)) || (gamepadControls->mPlayerIndex2 == 1
+    //        &&(mIsZombie == TouchPlayerIndex::TOUCHPLAYER_PLAYER2 || gPlayerIndexSecond == TouchPlayerIndex::TOUCHPLAYER_PLAYER2))) {
     //            if (!Reanimation_IsAnimPlaying(mCursorReanim, "anim_depressed"))
     //                Reanimation_PlayReanim(mCursorReanim, "anim_depressed", a::REANIM_LOOP, 0,12.0);
     //            LOGD("456456");

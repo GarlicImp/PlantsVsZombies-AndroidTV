@@ -6,6 +6,8 @@
 #include <jni.h>
 #include <pthread.h>
 
+using namespace Native;
+
 namespace {
 
 // 同步机制变量

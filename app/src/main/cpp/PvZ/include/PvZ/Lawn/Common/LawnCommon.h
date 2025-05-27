@@ -5,6 +5,7 @@
 #ifndef PLANTSVSZOMBIES_ANDROIDTV_LAWNCOMMON_H
 #define PLANTSVSZOMBIES_ANDROIDTV_LAWNCOMMON_H
 
+#include "PvZ/Lawn/Common/ConstEnums.h"
 
 // ====================================================================================================
 // ★ 常用逻辑判断

@@ -4,6 +4,11 @@
 #include "PvZ/Lawn/Common/ConstEnums.h"
 #include "SeedPacket.h"
 
+struct ShopSeedPacket {
+    int unknown[21];
+}; // 大小21个整数
+
+
 class HitResult;
 class SeedBank : public GameObject {
 public:

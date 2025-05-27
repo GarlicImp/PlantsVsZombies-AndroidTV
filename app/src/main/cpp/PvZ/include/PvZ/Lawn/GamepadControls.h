@@ -1,8 +1,11 @@
 #ifndef PVZ_LAWN_GAMEPAD_CONTROLS_H
 #define PVZ_LAWN_GAMEPAD_CONTROLS_H
 
+#include "BaseGamepadControls.h"
 #include "PvZ/Lawn/Common/ConstEnums.h"
 #include "PvZ/Misc.h"
+
+class Zombie;
 
 class GamepadControls : public BaseGamepadControls {
 public:

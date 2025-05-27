@@ -182,7 +182,7 @@ void Challenge::IZombieDrawPlant(Sexy::Graphics* g, Plant* thePlant) {
         Reanimation_DrawRenderGroup(mBodyReanim, g, 0);
 
         IZombieSetPlantFilterEffect(thePlant, FilterEffect::FILTEREFFECT_NONE);
-        Sexy_Graphics_SetDrawMode(g, DrawMode::DRAWMODE_NORMAL);
+        Sexy_Graphics_SetDrawMode(g, Graphics::DRAWMODE_NORMAL);
         Sexy_Graphics_SetColorizeImages(g, false);
     }
 }

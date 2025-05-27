@@ -76,7 +76,11 @@ enum AdviceType {
     ADVICE_NEED_ACHIVEMENT_EARNED = 66,
     NUM_ADVICE_TYPES
 };
-enum AlmanacPage { ALMANAC_PAGE_INDEX, ALMANAC_PAGE_PLANTS, ALMANAC_PAGE_ZOMBIES };
+enum AlmanacPage {
+    ALMANAC_PAGE_INDEX,
+    ALMANAC_PAGE_PLANTS,
+    ALMANAC_PAGE_ZOMBIES
+};
 enum AwardType {
     AWARD_FORLEVEL,
     AWARD_CREDITS_ZOMBIENOTE,
@@ -107,7 +111,13 @@ enum BoardResult {
     BOARDRESULT_VS_PLANT_WON = 7,
     BOARDRESULT_VS_ZOMBIE_WON = 8
 };
-enum BossPart { BOSS_PART_BACK_LEG = 0, BOSS_PART_FRONT_LEG = 1, BOSS_PART_MAIN = 2, BOSS_PART_BACK_ARM = 3, BOSS_PART_FIREBALL = 4 };
+enum BossPart {
+    BOSS_PART_BACK_LEG = 0,
+    BOSS_PART_FRONT_LEG = 1,
+    BOSS_PART_MAIN = 2,
+    BOSS_PART_BACK_ARM = 3,
+    BOSS_PART_FIREBALL = 4
+};
 enum ChallengePage {
     CHALLENGE_PAGE_SURVIVAL = 0,
     CHALLENGE_PAGE_CHALLENGE = 1,
@@ -135,7 +145,13 @@ enum ChallengeState {
     STATECHALLENGE_TREE_BABBLING,
     STATECHALLENGE_SHOVEL_FLASHING = 15
 };
-enum ChosenSeedState { SEED_FLYING_TO_BANK = 0, SEED_IN_BANK = 1, SEED_FLYING_TO_CHOOSER = 2, SEED_IN_CHOOSER = 3, SEED_PACKET_HIDDEN = 4 };
+enum ChosenSeedState {
+    SEED_FLYING_TO_BANK = 0,
+    SEED_IN_BANK = 1,
+    SEED_FLYING_TO_CHOOSER = 2,
+    SEED_IN_CHOOSER = 3,
+    SEED_PACKET_HIDDEN = 4
+};
 enum CoinMotion {
     COIN_MOTION_FROM_SKY = 0,
     COIN_MOTION_FROM_SKY_SLOW = 1,
@@ -217,8 +233,24 @@ enum CursorType {
     CURSOR_TYPE_ZENGARDEN = 20,
     TreeOfWisdomGarden = 21
 };
-enum DamageFlags { DAMAGE_BYPASSES_SHIELD = 0, DAMAGE_HITS_SHIELD_AND_BODY = 1, DAMAGE_FREEZE = 2, DAMAGE_DOESNT_CAUSE_FLASH = 3, DAMAGE_DOESNT_LEAVE_BODY = 4, DAMAGE_SPIKE = 5 };
-enum DamageRangeFlags { DAMAGES_GROUND, DAMAGES_FLYING, DAMAGES_SUBMERGED, DAMAGES_DOG, DAMAGES_OFF_GROUND, DAMAGES_DYING, DAMAGES_UNDERGROUND, DAMAGES_ONLY_MINDCONTROLLED };
+enum DamageFlags {
+    DAMAGE_BYPASSES_SHIELD = 0,
+    DAMAGE_HITS_SHIELD_AND_BODY = 1,
+    DAMAGE_FREEZE = 2,
+    DAMAGE_DOESNT_CAUSE_FLASH = 3,
+    DAMAGE_DOESNT_LEAVE_BODY = 4,
+    DAMAGE_SPIKE = 5
+};
+enum DamageRangeFlags {
+    DAMAGES_GROUND,
+    DAMAGES_FLYING,
+    DAMAGES_SUBMERGED,
+    DAMAGES_DOG,
+    DAMAGES_OFF_GROUND,
+    DAMAGES_DYING,
+    DAMAGES_UNDERGROUND,
+    DAMAGES_ONLY_MINDCONTROLLED
+};
 enum Dialogs {
     DIALOG_NEW_GAME,
     DIALOG_OPTIONS,
@@ -296,8 +328,21 @@ enum Dialogs {
     DIALOG_LEADERBOARD,
     NUM_DIALOGS
 };
-enum DebugTextMode { DEBUG_TEXT_NONE = 0, DEBUG_TEXT_ZOMBIE_SPAWN = 1, DEBUG_TEXT_MUSIC = 2, DEBUG_TEXT_MEMORY = 3, DEBUG_TEXT_COLLISION = 4 };
-enum DrawStringJustification { DS_ALIGN_LEFT = 0, DS_ALIGN_RIGHT = 1, DS_ALIGN_CENTER = 2, DS_ALIGN_LEFT_VERTICAL_MIDDLE = 3, DS_ALIGN_RIGHT_VERTICAL_MIDDLE = 4, DS_ALIGN_CENTER_VERTICAL_MIDDLE = 5 };
+enum DebugTextMode {
+    DEBUG_TEXT_NONE = 0,
+    DEBUG_TEXT_ZOMBIE_SPAWN = 1,
+    DEBUG_TEXT_MUSIC = 2,
+    DEBUG_TEXT_MEMORY = 3,
+    DEBUG_TEXT_COLLISION = 4
+};
+enum DrawStringJustification {
+    DS_ALIGN_LEFT = 0,
+    DS_ALIGN_RIGHT = 1,
+    DS_ALIGN_CENTER = 2,
+    DS_ALIGN_LEFT_VERTICAL_MIDDLE = 3,
+    DS_ALIGN_RIGHT_VERTICAL_MIDDLE = 4,
+    DS_ALIGN_CENTER_VERTICAL_MIDDLE = 5
+};
 enum DrawVariation {
     VARIATION_NORMAL = 0,
     VARIATION_IMITATER = 1,
@@ -319,8 +364,20 @@ enum DrawVariation {
     VARIATION_AQUARIUM,
     VARIATION_BIG_IDLE
 };
-enum EffectType { EFFECT_PARTICLE = 0, EFFECT_TRAIL = 1, EFFECT_REANIM = 2, EFFECT_ATTACHMENT = 3, EFFECT_OTHER = 4 };
-enum EmitterType { EMITTER_CIRCLE = 0, EMITTER_BOX = 1, EMITTER_BOX_PATH = 2, EMITTER_CIRCLE_PATH = 3, EMITTER_CIRCLE_EVEN_SPACING = 4 };
+enum EffectType {
+    EFFECT_PARTICLE = 0,
+    EFFECT_TRAIL = 1,
+    EFFECT_REANIM = 2,
+    EFFECT_ATTACHMENT = 3,
+    EFFECT_OTHER = 4
+};
+enum EmitterType {
+    EMITTER_CIRCLE = 0,
+    EMITTER_BOX = 1,
+    EMITTER_BOX_PATH = 2,
+    EMITTER_CIRCLE_PATH = 3,
+    EMITTER_CIRCLE_EVEN_SPACING = 4
+};
 enum GameMode {
     GAMEMODE_ADVENTURE = 0,
     GAMEMODE_ADVENTURE_HIDE = 1,
@@ -446,8 +503,23 @@ enum GameObjectType {
     OBJECT_TYPE_SEED_BANK_BLANK = 49,
     OBJECT_TYPE_BUTTER = 50,
 };
-enum GameScenes { SCENE_LOADING = 0, SCENE_MENU = 1, SCENE_LEVEL_INTRO = 2, SCENE_PLAYING = 3, SCENE_ZOMBIES_WON = 4, SCENE_AWARD = 5, SCENE_CREDIT = 6, SCENE_CHALLENGE = 7, SCENE_LEADER_BOARD = 8 };
-enum GardenType { GARDEN_MAIN = 0, GARDEN_MUSHROOM = 1, GARDEN_WHEELBARROW = 2, GARDEN_AQUARIUM = 3 };
+enum GameScenes {
+    SCENE_LOADING = 0,
+    SCENE_MENU = 1,
+    SCENE_LEVEL_INTRO = 2,
+    SCENE_PLAYING = 3,
+    SCENE_ZOMBIES_WON = 4,
+    SCENE_AWARD = 5,
+    SCENE_CREDIT = 6,
+    SCENE_CHALLENGE = 7,
+    SCENE_LEADER_BOARD = 8
+};
+enum GardenType {
+    GARDEN_MAIN = 0,
+    GARDEN_MUSHROOM = 1,
+    GARDEN_WHEELBARROW = 2,
+    GARDEN_AQUARIUM = 3
+};
 enum GridItemType {
     GRIDITEM_NONE = 0,
     GRIDITEM_GRAVESTONE = 1,
@@ -496,7 +568,13 @@ enum GridItemState {
     GRIDITEM_STATE_RAKE_TRIGGERED = 28,
     GRIDITEM_STATE_BRAIN_SQUISHED = 29
 };
-enum GridSquareType { GRIDSQUARE_NONE = 0, GRIDSQUARE_GRASS = 1, GRIDSQUARE_DIRT, GRIDSQUARE_POOL, GRIDSQUARE_HIGH_GROUND };
+enum GridSquareType {
+    GRIDSQUARE_NONE = 0,
+    GRIDSQUARE_GRASS = 1,
+    GRIDSQUARE_DIRT,
+    GRIDSQUARE_POOL,
+    GRIDSQUARE_HIGH_GROUND
+};
 enum HelmType {
     HELMTYPE_NONE = 0,
     HELMTYPE_TRAFFIC_CONE = 1,
@@ -509,8 +587,19 @@ enum HelmType {
     HELMTYPE_WALLNUT = 8,
     HELMTYPE_TALLNUT = 9
 };
-enum LawnMowerState { MOWER_ROLLING_IN = 0, MOWER_READY = 1, MOWER_TRIGGERED = 2, MOWER_SQUISHED = 3 };
-enum LawnMowerType { LAWNMOWER_LAWN, LAWNMOWER_POOL, LAWNMOWER_ROOF, LAWNMOWER_SUPER_MOWER, NUM_MOWER_TYPES };
+enum LawnMowerState {
+    MOWER_ROLLING_IN = 0,
+    MOWER_READY = 1,
+    MOWER_TRIGGERED = 2,
+    MOWER_SQUISHED = 3
+};
+enum LawnMowerType {
+    LAWNMOWER_LAWN,
+    LAWNMOWER_POOL,
+    LAWNMOWER_ROOF,
+    LAWNMOWER_SUPER_MOWER,
+    NUM_MOWER_TYPES
+};
 enum MessageStyle {
     MESSAGE_STYLE_OFF = 0,
     MESSAGE_STYLE_TUTORIAL_LEVEL1 = 1,
@@ -532,7 +621,12 @@ enum MessageStyle {
     MESSAGE_STYLE_ZEN_GARDEN_LONG = 17,
     MESSAGE_STYLE_ACHIEVEMENT = 3
 };
-enum MowerHeight { MOWER_HEIGHT_LAND = 0, MOWER_HEIGHT_DOWN_TO_POOL = 1, MOWER_HEIGHT_IN_POOL = 2, MOWER_HEIGHT_UP_TO_LAND = 3 };
+enum MowerHeight {
+    MOWER_HEIGHT_LAND = 0,
+    MOWER_HEIGHT_DOWN_TO_POOL = 1,
+    MOWER_HEIGHT_IN_POOL = 2,
+    MOWER_HEIGHT_UP_TO_LAND = 3
+};
 enum NotRecommend {
     NOT_RECOMMENDED_NOCTURNAL,
     NOT_RECOMMENDED_NEEDS_POOL,
@@ -680,9 +774,25 @@ enum PlantingReason {
     PLANTING_NEEDS_SLEEPING = 13,
     PLANTING_NOT_PASSED_LINE_VS = 15,
 };
-enum PlantRowType { PLANTROW_DIRT = 0, PLANTROW_NORMAL = 1, PLANTROW_POOL = 2, PLANTROW_HIGH_GROUND = 3 };
-enum PottedPlantAge { PLANTAGE_SPROUT = 0, PLANTAGE_SMALL = 1, PLANTAGE_MEDIUM = 2, PLANTAGE_FULL = 3 };
-enum PottedPlantNeed { PLANTNEED_NONE = 0, PLANTNEED_WATER = 1, PLANTNEED_FERTILIZER = 2, PLANTNEED_BUGSPRAY = 3, PLANTNEED_PHONOGRAPH = 4 };
+enum PlantRowType {
+    PLANTROW_DIRT = 0,
+    PLANTROW_NORMAL = 1,
+    PLANTROW_POOL = 2,
+    PLANTROW_HIGH_GROUND = 3
+};
+enum PottedPlantAge {
+    PLANTAGE_SPROUT = 0,
+    PLANTAGE_SMALL = 1,
+    PLANTAGE_MEDIUM = 2,
+    PLANTAGE_FULL = 3
+};
+enum PottedPlantNeed {
+    PLANTNEED_NONE = 0,
+    PLANTNEED_WATER = 1,
+    PLANTNEED_FERTILIZER = 2,
+    PLANTNEED_BUGSPRAY = 3,
+    PLANTNEED_PHONOGRAPH = 4
+};
 enum ProjectileMotion {
     MOTION_STRAIGHT = 0,      // 水平向右
     MOTION_LOBBED = 1,        // 抛物线
@@ -906,8 +1016,15 @@ enum RenderObjectType {
     RENDER_ITEM_GRID_ITEM,
     RENDER_ITEM_GRID_ITEM_OVERLAY
 };
-enum ScaryPotType { SCARYPOT_NONE = 0, SCARYPOT_SEED = 1, SCARYPOT_ZOMBIE = 2, SCARYPOT_SUN = 3 };
-enum SeedChooserState { CHOOSE_NORMAL = 0, CHOOSE_VIEW_LAWN = 1 };
+enum ScaryPotType {
+    SCARYPOT_NONE = 0,
+    SCARYPOT_SEED = 1,
+    SCARYPOT_ZOMBIE = 2,
+    SCARYPOT_SUN = 3 };
+enum SeedChooserState {
+    CHOOSE_NORMAL = 0,
+    CHOOSE_VIEW_LAWN = 1
+};
 enum SeedType { // 直接从WP复制过来的，怀疑其中有错误，因为TV有重型武器关卡，多了三个种子
     SEED_PEASHOOTER = 0,
     SEED_SUNFLOWER = 1,
@@ -997,7 +1114,13 @@ enum SeedType { // 直接从WP复制过来的，怀疑其中有错误，因为TV
     SEED_ZOMBIE_BALLOON = 85,
     SEED_NONE = -1
 };
-enum ShieldType { SHIELDTYPE_NONE, SHIELDTYPE_DOOR, SHIELDTYPE_NEWSPAPER, SHIELDTYPE_LADDER, SHIELDTYPE_TRASH_BIN = 4 };
+enum ShieldType {
+    SHIELDTYPE_NONE,
+    SHIELDTYPE_DOOR,
+    SHIELDTYPE_NEWSPAPER,
+    SHIELDTYPE_LADDER,
+    SHIELDTYPE_TRASH_BIN = 4
+};
 enum StoreItem {
     STORE_ITEM_PLANT_GATLINGPEA = 0,
     STORE_ITEM_PLANT_TWINSUNFLOWER = 1,
@@ -1038,7 +1161,13 @@ enum StoreItem {
     STORE_ITEM_BLUEPRINT_CHANGE = 36,
     STORE_ITEM_INVALID = -1
 };
-enum StorePages { STORE_PAGE_SLOT_UPGRADES = 0, STORE_PAGE_PLANT_UPGRADES = 1, STORE_PAGE_ZEN1 = 2, STORE_PAGE_ZEN2 = 3, NUM_STORE_PAGES = 4 };
+enum StorePages {
+    STORE_PAGE_SLOT_UPGRADES = 0,
+    STORE_PAGE_PLANT_UPGRADES = 1,
+    STORE_PAGE_ZEN1 = 2,
+    STORE_PAGE_ZEN2 = 3,
+    NUM_STORE_PAGES = 4
+};
 enum TodCurves {
     CURVE_CONSTANT,           // 常函数曲线
     CURVE_LINEAR,             // 线性曲线
@@ -1055,7 +1184,10 @@ enum TodCurves {
     CURVE_SIN_WAVE,           // 正弦曲线
     CURVE_EASE_SIN_WAVE       // 缓入缓出的正弦曲线
 };
-enum TrialType { TRIALTYPE_NONE, TRIALTYPE_STAGELOCKED };
+enum TrialType {
+    TRIALTYPE_NONE,
+    TRIALTYPE_STAGELOCKED
+};
 enum TutorialState {
     TUTORIAL_OFF = 0,
     TUTORIAL_LEVEL_1_PICK_UP_PEASHOOTER = 1,
@@ -1089,7 +1221,11 @@ enum TutorialState {
     TUTORIAL_WHACK_A_ZOMBIE_PICK_SEED = 29,
     TUTORIAL_WHACK_A_ZOMBIE_COMPLETED = 30
 };
-enum UnlockingState { UNLOCK_OFF, UNLOCK_SHAKING, UNLOCK_FADING };
+enum UnlockingState {
+    UNLOCK_OFF,
+    UNLOCK_SHAKING,
+    UNLOCK_FADING
+};
 enum ZombieHeight {
     HEIGHT_ZOMBIE_NORMAL = 0,
     HEIGHT_IN_TO_POOL = 1,
@@ -1251,694 +1387,5 @@ enum ParticleSystemID { PARTICLESYSTEMID_NULL };
 enum PlantID { PLANTID_NULL };
 enum ReanimationID { REANIMATIONID_NULL };
 enum ZombieID { ZOMBIEID_NULL };
-
-
-namespace TouchState {
-enum TouchState {
-    None = 0,
-    SeedBank = 1,
-    ShovelRect = 2,
-    ButterRect = 3,
-    Board = 4,
-    BoardMovedFromSeedBank = 5,
-    BoardMovedFromShovelRect = 6,
-    BoardMovedFromButterRect = 7,
-    ValidCobCannon = 8,
-    UsefulSeedPacket = 9,
-    Unused = 10,
-    HeavyWeapon = 11,
-    PickingSomething = 12,
-    ZenGardenTools = 13,
-    BoardMovedFromZenGardenTools = 14,
-    ValidCobCannonSecond = 15,
-};
-}
-
-namespace TouchPlayerIndex {
-enum TouchPlayerIndex { None = -1, Player1 = 0, Player2 = 1 };
-}
-
-
-enum AchievementId {
-    ACHIEVEMENT_HOME_SECURITY = 0,    // 完成冒险模式
-    ACHIEVEMENT_MORTICULTURALIST = 1, // 收集全部49种植物
-    ACHIEVEMENT_IMMORTAL = 2,         // 生存泳池无尽达到40波
-    ACHIEVEMENT_SOILPLANTS = 3,       // 在一个关卡内种植10个豌豆射手
-    ACHIEVEMENT_CLOSESHAVE = 4,       // 用完全部小推车过一关
-    ACHIEVEMENT_CHOMP = 5,            // 只使用大嘴花、坚果墙、向日葵过一关
-    ACHIEVEMENT_VERSUS = 6,           // 对战模式获得5连胜
-    ACHIEVEMENT_GARG = 7,             // 打败巨人僵尸
-    ACHIEVEMENT_COOP = 8,             // 通关结盟坚果保龄球关卡
-    ACHIEVEMENT_SHOP = 9,             // 在戴夫商店消费25000元
-    ACHIEVEMENT_EXPLODONATOR = 10,    // 使用一个樱桃炸弹消灭10只僵尸
-    ACHIEVEMENT_TREE = 11,            // 让智慧树长到100英尺高
-    MAX_ACHIEVEMENTS
-};
-
-enum MainMenuButtonId {
-    START_ADVENTURE_BUTTON = 0,
-    ADVENTURE_BUTTON = 1,
-    MORE_WAYS_BUTTON = 2,
-    HOUSE_BUTTON = 3,
-    ACHIEVEMENTS_BUTTON = 4,
-    HELP_AND_OPTIONS_BUTTON = 5,
-    UNLOCK_BUTTON = 6,
-    RETURN_TO_ARCADE_BUTTON = 7,
-    MORE_BUTTON = 8,
-    BACK_STONE_BUTTON = 9,
-    VS_BUTTON = 10,
-    VS_COOP_BUTTON = 11,
-    MINI_GAMES_BUTTON = 12,
-    SURVIVAL_BUTTON = 13,
-    PUZZLE_BUTTON = 14,
-    BACK_POT_BUTTON = 15,
-    STORE_BUTTON = 16,
-    ZEN_BUTTON = 17,
-    ALMANAC_BUTTON = 18,
-    MAIL_BUTTON = 19,
-    HELP_BAR = 20,
-
-
-    ACHIEVEMENTS_BACK_BUTTON = 21
-};
-
-enum MainMenuScene { MENUSCENE_MORE_WAYS, MENUSCENE_MAIN, MENUSCENE_EXTRA };
-
-
-namespace SeedChooserTouchState {
-enum SeedChooserTouchState { ViewLawnButton, SeedChooser, StoreButton, StartButton, AlmanacButton, None };
-}
-
-namespace StoreScreenTouchState {
-enum StoreScreenTouchState { Prev, Next, Back, None };
-}
-
-
-enum FoleyType {
-    FOLEY_SUN,
-    FOLEY_SPLAT = 1,
-    FOLEY_LAWNMOWER,
-    FOLEY_THROW = 3,
-    FOLEY_SPAWN_SUN,
-    FOLEY_CHOMP,
-    FOLEY_CHOMP_SOFT,
-    FOLEY_PLANT = 7,
-    FOLEY_USE_SHOVEL = 8,
-    FOLEY_DROP,
-    FOLEY_BLEEP,
-    FOLEY_GROAN,
-    FOLEY_BRAINS = 12,
-    FOLEY_SUKHBIR = 13,
-    FOLEY_JACKINTHEBOX = 14,
-    FOLEY_ART_CHALLENGE = 15,
-    FOLEY_ZAMBONI = 16,
-    FOLEY_THUNDER = 17,
-    FOLEY_FROZEN = 18,
-    FOLEY_ZOMBIESPLASH = 19,
-    FOLEY_BOWLINGIMPACT = 20,
-    FOLEY_SQUISH = 21,
-    FOLEY_TIRE_POP = 22,
-    FOLEY_EXPLOSION = 23,
-    FOLEY_SLURP = 24,
-    FOLEY_LIMBS_POP = 25,
-    FOLEY_POGO_ZOMBIE = 26,
-    FOLEY_SNOW_PEA_SPARKLES = 27,
-    FOLEY_ZOMBIE_FALLING = 28,
-    FOLEY_PUFF = 29,
-    FOLEY_FUME = 30,
-    FOLEY_COIN = 31,
-    FOLEY_KERNEL_SPLAT = 32,
-    FOLEY_DIGGER = 33,
-    FOLEY_JACK_SURPRISE = 34,
-    FOLEY_VASE_BREAKING = 35,
-    FOLEY_POOL_CLEANER = 36,
-    FOLEY_BASKETBALL = 37,
-    FOLEY_IGNITE = 38,
-    FOLEY_FIREPEA = 39,
-    FOLEY_THUMP = 40,
-    FOLEY_SQUASH_HMM = 41,
-    FOLEY_MAGNETSHROOM = 42,
-    FOLEY_BUTTER = 43,
-    FOLEY_BUNGEE_SCREAM = 44,
-    FOLEY_BOSS_EXPLOSION_SMALL = 45,
-    FOLEY_SHIELD_HIT = 46,
-    FOLEY_SWING = 47,
-    FOLEY_BONK = 48,
-    FOLEY_RAIN = 49,
-    FOLEY_DOLPHIN_BEFORE_JUMPING = 50,
-    FOLEY_DOLPHIN_APPEARS = 51,
-    FOLEY_PLANT_WATER = 52,
-    FOLEY_ZOMBIE_ENTERING_WATER = 53,
-    FOLEY_GRAVEBUSTERCHOMP = 54,
-    FOLEY_CHERRYBOMB = 55,
-    FOLEY_JALAPENO_IGNITE = 56,
-    FOLEY_REVERSE_EXPLOSION = 57,
-    FOLEY_PLASTIC_HIT = 58,
-    FOLEY_WINMUSIC = 59,
-    FOLEY_BALLOONINFLATE = 60,
-    FOLEY_BIGCHOMP = 61,
-    FOLEY_MELONIMPACT = 62,
-    FOLEY_PLANTGROW = 63,
-    FOLEY_SHOOP = 64,
-    FOLEY_JUICY = 65,
-    FOLEY_NEWSPAPER_RARRGH = 66,
-    FOLEY_NEWSPAPER_RIP = 67,
-    FOLEY_FLOOP = 68,
-    FOLEY_COFFEE = 69,
-    FOLEY_LOW_GROAN = 70,
-    FOLEY_PRIZE = 71,
-    FOLEY_YUCK = 72,
-    FOLEY_UMBRELLA = 73,
-    FOLEY_GRASSSTEP = 74,
-    FOLEY_SHOVEL = 75,
-    FOLEY_COB_LAUNCH = 76,
-    FOLEY_WATERING = 77,
-    FOLEY_POLEVAULT = 78,
-    FOLEY_GRAVESTONE_RUMBLE = 79,
-    FOLEY_DIRT_RISE = 80,
-    FOLEY_FERTILIZER = 81,
-    FOLEY_PORTAL = 82,
-    FOLEY_WAKEUP = 83,
-    FOLEY_BUGSPRAY = 84,
-    FOLEY_SCREAM = 85,
-    FOLEY_PAPER = 86,
-    FOLEY_MONEYFALLS = 87,
-    FOLEY_IMP = 88,
-    FOLEY_HYDRAULIC_SHORT = 89,
-    FOLEY_HYDRAULIC = 90,
-    FOLEY_GARGANTUDEATH = 91,
-    FOLEY_CERAMIC = 92,
-    FOLEY_BOSS_BOULDER_ATTACK = 93,
-    FOLEY_CHIME = 94,
-    FOLEY_CRAZY_DAVE_SHORT = 95,
-    FOLEY_CRAZY_DAVE_LONG = 96,
-    FOLEY_CRAZY_DAVE_EXTRA_LONG = 97,
-    FOLEY_CRAZY_DAVE_CRAZY = 98,
-    FOLEY_PHONOGRAPH = 99,
-    FOLEY_DANCER = 100,
-    FOLEY_FINAL_FANFARE = 101,
-    FOLEY_CRAZY_DAVE_SCREAM = 102,
-    FOLEY_CRAZY_DAVE_SCREAM_2 = 103,
-    NUM_FOLEY = 104,
-    FOLEY_MENU_LEFT = 105,
-    FOLEY_MENU_CENTRE = 106,
-    FOLEY_MENU_RIGHT = 107
-};
-
-
-enum FilterEffect { FILTEREFFECT_NONE = -1, FILTEREFFECT_WASHED_OUT = 0, FILTEREFFECT_LESS_WASHED_OUT = 1, FILTEREFFECT_WHITE = 2, FILTEREFFECT_CUSTOM = 3, NUM_FILTEREFFECT };
-
-enum HouseType {
-    Invalid = -1,
-    BLUEPRINT_BLING = 0,
-    BLUEPRINT_SCARY = 1,
-    BLUEPRINT_TRAILER = 2,
-    BLUEPRINT_FUTURE = 3,
-    BLUEPRINT_CLOWN = 4,
-};
-
-namespace MusicTune {
-enum MusicTune {
-    None = -1,
-    DayGrasswalk = 1,
-    NightMoongrains = 2,
-    PoolWaterygraves = 3,
-    FogRigormormist = 4,
-    RoofGrazetheroof = 5,
-    ChooseYourSeeds = 6,
-    TitleCrazyDaveMainTheme = 7,
-    ZenGarden = 8,
-    PuzzleCerebrawl = 9,
-    MinigameLoonboon = 10,
-    Conveyer = 11,
-    FinalBossBrainiacManiac = 12,
-    ZombiesOnYourLawn = 13,
-    MusicTuneCount = 14
-};
-}
-
-namespace MusicFile {
-enum MusicFile {
-    MUSIC_FILE_NONE = -1,
-    MUSIC_FILE_MAIN_MUSIC = 1,
-    MUSIC_FILE_DRUMS = 2,
-    MUSIC_FILE_DRUMS_NIGHTMOONGRAINS = 3,
-    MUSIC_FILE_HIHATS = 4,
-    MUSIC_FILE_CREDITS_ZOMBIES_ON_YOUR_LAWN = 5,
-    NUM_MUSIC_FILES = 6,
-};
-}
-namespace MusicBurstState {
-enum MusicBurstState {
-    MUSIC_BURST_OFF = 0,
-    MUSIC_BURST_STARTING = 1,
-    MUSIC_BURST_ON = 2,
-    MUSIC_BURST_FINISHING = 3,
-};
-}
-namespace MusicDrumsState {
-enum MusicDrumsState {
-    MUSIC_DRUMS_OFF = 0,
-    MUSIC_DRUMS_ON_QUEUED = 1,
-    MUSIC_DRUMS_ON = 2,
-    MUSIC_DRUMS_OFF_QUEUED = 3,
-    MUSIC_DRUMS_FADING = 4,
-};
-}
-
-namespace ResType {
-enum ResType { ResType_Image, ResType_Sound, ResType_Font, ResType_Music, ResType_Reanim, ResType_Particle, ResType_Trail };
-}
-
-namespace DrawMode {
-enum DrawMode { DRAWMODE_NORMAL = 0, DRAWMODE_ADDITIVE = 1 };
-}
-
-
-#ifndef max
-#define max(a, b) (((a) > (b)) ? (a) : (b))
-#endif
-
-#ifndef min
-#define min(a, b) (((a) < (b)) ? (a) : (b))
-#endif
-
-struct MotionTrailFrame {
-    float mPosX;
-    float mPosY;
-    float mAnimTime;
-};
-
-
-struct ChosenSeed {
-    int mX;                     // 0
-    int mY;                     // 1
-    int mTimeStartMotion;       // 2
-    int mTimeEndMotion;         // 3
-    int mStartX;                // 4
-    int mStartY;                // 5
-    int mEndX;                  // 6
-    int mEndY;                  // 7
-    int mChosenPlayerIndex;     // 8
-    SeedType mSeedType;         // 9
-    ChosenSeedState mSeedState; // 10
-    int mSeedIndexInBank;       // 11
-    bool mRefreshing;           // 12
-    int mRefreshCounter;        // 13
-    SeedType mImitaterType;     // 14
-    bool mCrazyDavePicked;      // 60
-};
-
-class Board;
-class GamepadControls;
-class PlayerInfo;
-class PoolEffect;
-class Reanimation;
-class SeedChooserScreen;
-class Music;
-class Music2;
-
-class SexyAppBase {
-public:
-    int *vTable;                            // 0
-    int unkMem1[164];                       // 1 ~ 164
-    int *mWidgetManager;                    // 165
-    int unkMem2[70];                        // 166 ~ 235, musicinterface 193
-    bool mLawnMouseMode;                    // 944
-    int unkMem3[77];                        // 237 ~ 313
-    int *mSoundManager;                     // 314
-    int unkMem4[39];                        // 315 ~ 353
-    int mNumLoadingThreadTasks;             // 354
-    int mCompletedLoadingThreadTasks;       // 355
-    int unkMem5[30];                        // 356 ~ 385
-    bool mIs3DAcclerated;                   // 1544
-    int unkMem6[SexyAppBasePartSize - 387]; // 387 ~ 525
-    bool unkBool1;                          // 2104
-    bool mGamePad1IsOn;                     // 2105
-    int unkMem7[22];                        // 527 ~ 548
-    bool unkBool2;                          // 2196
-    bool mGamePad2IsOn;                     // 2197
-    int unkMem8[2];                         // 550 ~ 551
-}; // 115： 552 , 111： 553
-
-
-struct FoleyParams {
-    FoleyType mFoleyType;
-    float mPitchRange;
-    int *mSfxID[10];
-    uint mFoleyFlags;
-};
-
-struct FoleyInstance {
-    int *mInstance;
-    int mRefCount;
-    bool _paused;
-    int mStartTime;
-    int mPauseOffset;
-};
-
-struct FoleyTypeData {
-    FoleyInstance mFoleyInstances[8];
-    int mLastVariationPlayed;
-};
-
-class TodFoley {
-public:
-    FoleyTypeData mTypeData[110];
-};
-
-
-class ReanimatorCache;
-
-struct TodSmoothArray {
-    int mItem;
-    float mWeight;
-    float mLastPicked;
-    float mSecondLastPicked;
-};
-
-class LawnApp;
-
-class CreditScreen;
-
-class MainMenu;
-
-class ChallengeScreen;
-
-class TitleScreen;
-
-class EffectSystem;
-
-class ChallengeScreen;
-
-
-class ReanimatorTrackInstance;
-
-class ReanimatorTransform;
-
-class ReanimatorDefinition;
-
-
-class SeedPacket;
-class SeedBank;
-class Plant;
-class Zombie;
-class Coin;
-
-struct ShopSeedPacket {
-    int unknown[21];
-}; // 大小21个整数
-
-
-class MessageWidget;
-
-class Challenge;
-
-struct PlantRbTree {
-    int unk[6];
-};
-
-struct GameStats {
-
-    enum MiscStat { ZOMBIES_KILLED = 0, PLANTS_KILLED = 1, MONEY = 2, TREE_HEIGHT = 4, ENDLESS_FLAGS = 5, MOWED_ZOMBIES = 6, STINKY_CHOCOLATES = 7 };
-
-    HouseType mHouseType; // 0
-    int unk;                         // 1
-    int mMiscStats[9];               // 2 ~ 10
-    char mFavoritePlants[49];        // 44 ~ 92
-    char mFavoriteZombies[47];       // 93 ~ 139
-    float mSurvivalCompletion;       // 35
-    float mMiniGameCompletion;       // 36
-    float mPuzzleCompletion;         // 37
-}; // 大小38个整数
-
-struct PottedPlant {
-
-    enum PottedPlantAge // Prefix: PLANTAGE
-    {
-        Sprout,
-        Small,
-        Medium,
-        Full
-    };
-
-    enum GardenType // Prefix: GARDEN
-    {
-        Main,
-        Mushroom,
-        Wheelbarrow,
-        Aquarium
-    };
-
-    enum FacingDirection // Prefix: FACING
-    {
-        Right,
-        Left
-    };
-
-    enum PottedPlantNeed { None, Water, Fertilizer, Bugspray, Phonograph };
-
-    SeedType mSeedType : 7;
-    FacingDirection mFacing : 1;
-
-    GardenType mWhichZenGarden : 2;
-    int mY : 2;
-    DrawVariation mDrawVariation : 4;
-
-    int mX : 3;
-    PottedPlantNeed mPlantNeed : 3;
-    PottedPlantAge mPlantAge : 2;
-
-    int mTimesFed : 3;
-    int mFeedingsPerGrow : 3;
-    int : 2;
-
-    int mLastWateredTime;       // 1
-    int mLastNeedFulfilledTime; // 2
-    int mLastFertilizedTime;    // 3
-    int mLastChocolateTime;     // 4
-};
-
-class PlayerInfo {
-public:
-    int *vTable;                // 0
-    int unk1;                   // 1
-    int *mProFileMgr;           // 2
-    int unk2;                   // 3
-    char *mName;                // 4
-    int mUseSeq;                // 5
-    int mId;                    // 6
-    int mProfileId;             // 7
-    int mFlags;                 // 8
-    int mLevel;                 // 9
-    int mCoins;                 // 10
-    int mChallengeRecords[100]; // 11 ~ 110 ， 但末尾6个完全不会用到，可以成为我的自己存数据的空间。
-    int mPurchases[36];         // 111 ~ 146 ，本应该是mPurchases[80]，111 ~ 190，但仅用到了前36个。
-    bool mAchievements[12];     // 147 ~ 149, 从mPurchases[80]分出来的
-    bool mUnused[145];          // 150 ~
-    bool mIsVibrateClosed;
-    bool mZombatarEnabled;
-    unsigned char mZombatarHat;
-    unsigned char mZombatarHatColor;
-    unsigned char mZombatarHair;
-    unsigned char mZombatarHairColor;
-    unsigned char mZombatarFacialHair;
-    unsigned char mZombatarFacialHairColor;
-    unsigned char mZombatarAccessory;
-    unsigned char mZombatarAccessoryColor;
-    unsigned char mZombatarEyeWear;
-    unsigned char mZombatarEyeWearColor;
-    unsigned char mZombatarTidBit;
-    unsigned char mZombatarTidBitColor;
-    bool mIs3DAcceleratedClosed;   // ~ 189, 从mPurchases[80]分出来的
-    int mUsedCoins;                // 190, 从mPurchases[80]分出来的
-    int unkMem4[2];                // 191 ~ 192
-    int mLastStinkyChocolateTime;  // 193
-    int mStinkyPosX;               // 194
-    int mStinkyPosY;               // 195
-    int mNumPottedPlants;          // 196
-    int unk4;                      // 197
-    PottedPlant mPottedPlants[50]; // 198 ~ 447
-    double mMusicVolume;           // 448 ~ 449
-    double mSoundVolume;           // 450 ~ 451
-    int unkMems6[5];               // 452 ~ 456
-    bool mHelpTextSeen[6];         // 1828 ~ 1833
-    int unk5;                      // 459
-    bool unkBool1;                 // 1840
-    bool unkBool2;                 // 1841
-    bool mPassedShopSeedTutorial;  // 1842
-    bool mMailMessageRead[32];     // 1843 ~ 1874 ，紧密存放，可以存放32x8个bool
-    bool mMailMessageSeen[32];     // 1875 ~ 1906 ，紧密存放，可以存放32x8个bool
-    GameStats mGameStats;          // 477 ~ 514
-    int unk6;                      // 515
-}; // 大小516个整数
-
-struct CausticEffect {
-    bool mTextureAlpha[256][256];
-};
-
-
-struct SexyVertex2D {
-    float x;
-    float y;
-    int unk1;
-    int unk2;
-    unsigned int color;
-    int unk3;
-    float u;
-    float v;
-};
-
-struct TriVertex {
-    float x;
-    float y;
-    float u;
-    float v;
-    unsigned int color;
-};
-
-
-class ProfileMgr {
-public:
-    int *vTable;                // 0
-    int *mProfileEventListener; // 1
-};
-
-class DefaultProfileMgr : public ProfileMgr {
-public:
-    int *mProfileMap;    // 2
-    int *mProfileMapEnd; // 3
-
-    int mNumProfiles; // 7
-
-    int mNextProfileUseSeq; // 9
-};
-
-class BaseRes {
-public:
-    int *vTable;            // 0
-    ResType::ResType mType; // 1
-    int *mResourceRef;      // 2
-    int unk[8];             // 3 ~ 10
-    char *mPath;            // 11
-    int unk2[13];           // 12 ~ 24
-}; // 大小25个整数
-
-class SoundRes : public BaseRes {
-public:
-    int mSoundId;   // 25
-    double mVolume; // 26 ~ 27
-    int mPanning;   // 28
-    int unk3;       // 29
-}; // 大小30个整数
-
-struct Curve1DUtil {
-    int unk[16];
-};
-
-struct LeaderboardReanimations {
-    Reanimation *backgroundReanim[5];
-    Reanimation *achievementReanim[12];
-};
-
-struct ReanimatorTrack {
-    int unk;
-    char *mName;
-    ReanimatorTransform *mTransforms;
-    int mTransformCount;
-    bool IsAttacher;
-};
-
-struct ReanimatorFrameTime {
-    float mFraction;         // 0
-    int mAnimFrameBeforeInt; // 1
-    int mAnimFrameAfterInt;  // 2
-};
-
-class Attachment;
-
-class TodParticleSystem {
-public:
-    int *vTable;                // 0
-    int unk1[3];                // 1 ~ 3
-    ParticleEffect mEffectType; // 4
-    int *mParticleDef;          // 5
-    int *mParticleHolder;       // 6
-    int mEmitterList[4];        // 7 ~ 10
-    bool mDead;                 // 44
-    bool mIsAttachment;         // 45
-    int mRenderOrder;           // 12
-    bool mDontUpdate;           // 52
-    bool mActive;               // 53
-    int mParticleId;            // 14
-}; // 大小15个整数
-
-struct PerfTimer {
-    int unk[5];
-};
-
-namespace ImageLib {
-class Image {
-public:
-    int *vTable;         // 0
-    int mWidth;          // 1
-    int mHeight;         // 2
-    unsigned int *mBits; // 3
-    int *mText1;         // 4
-    int *mText2;         // 5
-    bool unkBool;        // 24
-    int unk1[256];       // 7 ~ 262
-    int unkInt;          // 263
-}; // 264个整数
-} // namespace ImageLib
-
-class TodParticleHolder {};
-class TrailHolder {};
-
-
-class AttachmentHolder {};
-
-class ReanimationHolder;
-
-class EffectSystem {
-public:
-    TodParticleHolder *mParticleHolder;
-    TrailHolder *mTrailHolder;
-    ReanimationHolder *mReanimationHolder;
-    AttachmentHolder *mAttachmentHolder;
-};
-
-
-namespace Native {
-class NativeApp;
-
-class BridgeApp {
-public:
-    int *mVtable;
-    NativeApp *mNativeApp;
-};
-
-class AudioOutput {
-public:
-    Native::NativeApp *mNativeApp;
-    JNIEnv *mEnv;
-    bool mUnkBool;
-};
-} // namespace Native
-
-struct TodWeightedGridArray {
-    int mX;
-    int mY;
-    int mWeight;
-};
-
-class TodTriVertex {
-public:
-    float x;
-    float y;
-    float u;
-    float v;
-    unsigned long color;
-};
 
 #endif // PVZ_ENUMS_H

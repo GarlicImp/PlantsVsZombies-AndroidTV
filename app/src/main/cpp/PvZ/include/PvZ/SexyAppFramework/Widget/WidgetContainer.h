@@ -10,6 +10,7 @@
 #include "PvZ/SexyAppFramework/Misc/Rect.h"
 
 namespace Sexy {
+
 class WidgetContainer {
 public:
     int *vTable;                  // 0
@@ -33,6 +34,7 @@ public:
     int unk[6];                   // 22 ~ 27
     int mWidgetId;                // 28
 }; // 大小未知，目前认为是29个整数。反正Widget是64个整数，足够了。
+
 }
 
 

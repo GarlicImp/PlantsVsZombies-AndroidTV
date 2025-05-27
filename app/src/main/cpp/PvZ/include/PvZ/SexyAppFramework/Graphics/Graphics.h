@@ -3,20 +3,27 @@
 
 #include "../Misc/Common.h"
 #include "../Misc/Rect.h"
+#include "../Misc/TriVertex.h"
+
 #include "Color.h"
 #include "Image.h"
-#include "PvZ/Lawn/Common/ConstEnums.h"
 
 namespace Sexy {
 
 class Font;
 class SexyMatrix3;
 class Transform;
+class SexyVertex2D;
 
 class Graphics {
 public:
+    enum DrawMode {
+        DRAWMODE_NORMAL = 0,
+        DRAWMODE_ADDITIVE = 1
+    };
+
     int *vTable;                  // 0
-    Sexy::Image *mDestImage;      // 1
+    Image *mDestImage;            // 1
     float mTransX;                // 2
     float mTransY;                // 3
     float mScaleX;                // 4
@@ -27,7 +34,7 @@ public:
     Color mColorUnknown;          // 15 ~ 18
     Color mColor;                 // 19 ~ 22
     int *mFont;                   // 23
-    DrawMode::DrawMode mDrawMode; // 24
+    DrawMode mDrawMode;           // 24
     bool mColorizeImages;         // 100
     bool mFastStretch;            // 101
     bool unkbool1;                // 102
@@ -114,7 +121,7 @@ inline Sexy::Color gZombatarAccessoryColor2[] = {
 };
 
 
-inline void (*Sexy_Graphics_SetDrawMode)(Sexy::Graphics *a, DrawMode::DrawMode a2);
+inline void (*Sexy_Graphics_SetDrawMode)(Sexy::Graphics *a, Sexy::Graphics::DrawMode a2);
 
 inline void (*Sexy_Graphics_SetColorizeImages)(Sexy::Graphics *a, bool a2);
 
@@ -164,7 +171,7 @@ inline void (*Sexy_Graphics_Translate)(Sexy::Graphics *, int, int);
 
 inline void (*Sexy_Graphics_SetColor)(Sexy::Graphics *a, Sexy::Color *a2);
 
-inline void (*Sexy_Graphics_DrawTrianglesTex)(Sexy::Graphics *graphics, Sexy::Image *theTexture, SexyVertex2D (*theVertices)[3], int theNumTriangles);
+inline void (*Sexy_Graphics_DrawTrianglesTex)(Sexy::Graphics *graphics, Sexy::Image *theTexture, Sexy::SexyVertex2D (*theVertices)[3], int theNumTriangles);
 
 inline int *(*Sexy_Graphics_GetColor)(Sexy::Graphics *);
 
@@ -184,7 +191,7 @@ void Sexy_Graphics_PushTransform(Sexy::Graphics *graphics, int *theTransform, bo
 
 void Sexy_Graphics_PopTransform(Sexy::Graphics *graphics);
 
-void Sexy_Graphics_DrawTrianglesTex2(Sexy::Graphics *graphics, Sexy::Image *theTexture, TriVertex (*theVertices)[3], int theNumTriangles);
+void Sexy_Graphics_DrawTrianglesTex2(Sexy::Graphics *graphics, Sexy::Image *theTexture, Sexy::TriVertex (*theVertices)[3], int theNumTriangles);
 
 void Sexy_Graphics_DrawImageColorized(Sexy::Graphics *graphics, Sexy::Image *image, Sexy::Color *color, int x, int y);
 

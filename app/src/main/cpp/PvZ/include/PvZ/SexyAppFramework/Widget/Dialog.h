@@ -5,8 +5,9 @@
 #ifndef PLANTSVSZOMBIES_ANDROIDTV_DIALOG_H
 #define PLANTSVSZOMBIES_ANDROIDTV_DIALOG_H
 
-#include "ButtonListener.h"
 #include "PvZ/SexyAppFramework/Misc/TextLayout.h"
+
+#include "ButtonListener.h"
 #include "Widget.h"
 
 namespace Sexy {
@@ -18,7 +19,7 @@ class Font;
 
 class Dialog : public Widget {
 public:
-    Sexy::ButtonListener mButtonListener; // 64
+    ButtonListener mButtonListener;       // 64
     int *mDialogListener;                 // 65
     Image *mComponentImage;               // 66
     DialogButton *mYesButton;             // 67

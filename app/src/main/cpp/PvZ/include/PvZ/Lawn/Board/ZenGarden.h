@@ -6,6 +6,7 @@
 
 class LawnApp;
 class Board;
+class PottedPlant;
 class SpecialGridPlacement {
 public:
     int mPixelX;

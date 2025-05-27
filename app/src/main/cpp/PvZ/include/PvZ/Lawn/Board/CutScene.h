@@ -3,6 +3,10 @@
 
 #include "PvZ/Lawn/Common/ConstEnums.h"
 
+class LawnApp;
+class Board;
+class ChallengeScreen;
+
 class CutScene {
 public:
     LawnApp *mApp;                           // 0
@@ -17,7 +21,7 @@ public:
     int mLawnMowerTime;                      // 9
     int mCrazyDaveDialogStart;               // 10
     bool mSeedChoosing;                      // 44
-    Reanimation *mZombiesWonReanimID;        // 12
+    ReanimationID mZombiesWonReanimID;        // 12
     bool mPreloaded;                         // 52
     bool mPlacedZombies;                     // 53
     bool mPlacedLawnItems;                   // 54

@@ -6,6 +6,10 @@
 #define PLANTSVSZOMBIES_ANDROIDTV_TRASHBIN_H
 
 #include "PvZ/SexyAppFramework/Widget/Widget.h"
+#include "PvZ/Symbols.h"
+
+constexpr int zombiePileHeight = 70;
+constexpr int plantPileHeight = 100;
 
 class TrashBin : public Sexy::Widget {
 public:
@@ -19,11 +23,15 @@ public:
     int mPileNum;                 // 85
     // 大小86个整数
 
+    void Delete() { reinterpret_cast<void (*)(TrashBin *)>(TrashBin_DeleteAddr)(this); }
+
     TrashBin(TrashPileType theTrashPileType, float theHeight);
     void Create(TrashPileType theTrashPileType, float theHeight);
     void Draw(Sexy::Graphics *g);
+    Sexy::Image *GetZombieTrashPiece(int theLevel);
+    Sexy::Image *GetPlantTrashPiece(int theLevel);
 };
 
-inline void (*TrashBin_Delete)(TrashBin *a1);
+inline void (*old_TrashBin_TrashBin)(TrashBin *trashBin, TrashBin::TrashPileType theTrashPileType, float height);
 
 #endif // PLANTSVSZOMBIES_ANDROIDTV_TRASHBIN_H

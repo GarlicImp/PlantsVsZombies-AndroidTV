@@ -21,7 +21,7 @@ bool muteMusic;
 int theCounter;
 } // namespace
 
-void Music_SetupMusicFileForTune1(Music *music, MusicFile::MusicFile theMusicFile, MusicTune::MusicTune tune) {
+void Music_SetupMusicFileForTune1(Music *music, MusicFile theMusicFile, MusicTune tune) {
     int v7;  // r7
     int v9;  // r9
     int v10; // r8
@@ -31,7 +31,7 @@ void Music_SetupMusicFileForTune1(Music *music, MusicFile::MusicFile theMusicFil
     bool v14;  // r2
     int v15;   // r2
 
-    if (tune == MusicTune::DayGrasswalk) {
+    if (tune == MusicTune::MUSIC_TUNE_DAY_GRASSWALK) {
         switch (theMusicFile) {
             case MusicFile::MUSIC_FILE_MAIN_MUSIC:
                 v8 = -1;
@@ -52,7 +52,7 @@ void Music_SetupMusicFileForTune1(Music *music, MusicFile::MusicFile theMusicFil
                 v10 = 29;
                 break;
         }
-    } else if (tune == MusicTune::PoolWaterygraves) {
+    } else if (tune == MusicTune::MUSIC_TUNE_POOL_WATERYGRAVES) {
         switch (theMusicFile) {
             case MusicFile::MUSIC_FILE_MAIN_MUSIC:
                 v8 = -1;
@@ -72,7 +72,7 @@ void Music_SetupMusicFileForTune1(Music *music, MusicFile::MusicFile theMusicFil
                 v9 = 18;
                 break;
         }
-    } else if (tune == MusicTune::FogRigormormist) {
+    } else if (tune == MusicTune::MUSIC_TUNE_FOG_RIGORMORMIST) {
         switch (theMusicFile) {
             case MusicFile::MUSIC_FILE_MAIN_MUSIC:
                 v9 = 0;
@@ -93,7 +93,7 @@ void Music_SetupMusicFileForTune1(Music *music, MusicFile::MusicFile theMusicFil
                 v10 = 29;
                 break;
         }
-    } else if (tune == MusicTune::RoofGrazetheroof) {
+    } else if (tune == MusicTune::MUSIC_TUNE_ROOF_GRAZETHEROOF) {
         switch (theMusicFile) {
             case MusicFile::MUSIC_FILE_MAIN_MUSIC:
                 v8 = -1;
@@ -142,7 +142,7 @@ void Music_SetupMusicFileForTune1(Music *music, MusicFile::MusicFile theMusicFil
     } while (v10 >= v11);
 }
 
-void Music_PlayFromOffset(Music *music, MusicFile::MusicFile theMusicFile, int theOffset, double theVolume) {
+void Music_PlayFromOffset(Music *music, MusicFile theMusicFile, int theOffset, double theVolume) {
     Sexy_AudiereMusicInterface_StopMusic(music->mMusicInterface, theMusicFile);
     Music_SetupMusicFileForTune(music, theMusicFile, music->mCurMusicTune);
     Sexy_AudiereMusicInterface_PlayMusic(music->mMusicInterface, theMusicFile, theOffset, theMusicFile == MusicFile::MUSIC_FILE_CREDITS_ZOMBIES_ON_YOUR_LAWN);
@@ -157,7 +157,7 @@ void Music_PlayFromOffset(Music *music, MusicFile::MusicFile theMusicFile, int t
     }
 }
 
-void Music::PlayMusic(MusicTune::MusicTune theMusicTune, int theOffset, int theDrumsOffset) {
+void Music::PlayMusic(MusicTune theMusicTune, int theOffset, int theDrumsOffset) {
     if (mMusicDisabled)
         return;
     mLastMusicTune = theMusicTune;
@@ -166,7 +166,7 @@ void Music::PlayMusic(MusicTune::MusicTune theMusicTune, int theOffset, int theD
     mCurMusicFileDrums = MusicFile::MUSIC_FILE_NONE;
     mCurMusicFileHihats = MusicFile::MUSIC_FILE_NONE;
     switch (theMusicTune) {
-        case MusicTune::DayGrasswalk:
+        case MusicTune::MUSIC_TUNE_DAY_GRASSWALK:
             if (theOffset == -1) {
                 theOffset = 0;
             }
@@ -177,7 +177,7 @@ void Music::PlayMusic(MusicTune::MusicTune theMusicTune, int theOffset, int theD
             Music_PlayFromOffset(this, mCurMusicFileDrums, theOffset, 0.0);
             Music_PlayFromOffset(this, mCurMusicFileHihats, theOffset, 0.0);
             break;
-        case MusicTune::NightMoongrains:
+        case MusicTune::MUSIC_TUNE_NIGHT_MOONGRAINS:
             if (theOffset == -1) {
                 theDrumsOffset = 0;
                 theOffset = 48;
@@ -187,7 +187,7 @@ void Music::PlayMusic(MusicTune::MusicTune theMusicTune, int theOffset, int theD
             Music_PlayFromOffset(this, mCurMusicFileMain, theOffset, 1.0);
             Music_PlayFromOffset(this, mCurMusicFileDrums, theDrumsOffset, 0.0);
             break;
-        case MusicTune::PoolWaterygraves:
+        case MusicTune::MUSIC_TUNE_POOL_WATERYGRAVES:
             if (theOffset == -1) {
                 theOffset = 94;
             }
@@ -198,7 +198,7 @@ void Music::PlayMusic(MusicTune::MusicTune theMusicTune, int theOffset, int theD
             Music_PlayFromOffset(this, mCurMusicFileDrums, theOffset, 0.0);
             Music_PlayFromOffset(this, mCurMusicFileHihats, theOffset, 0.0);
             break;
-        case MusicTune::FogRigormormist:
+        case MusicTune::MUSIC_TUNE_FOG_RIGORMORMIST:
             if (theOffset == -1) {
                 theOffset = 125;
             }
@@ -209,7 +209,7 @@ void Music::PlayMusic(MusicTune::MusicTune theMusicTune, int theOffset, int theD
             Music_PlayFromOffset(this, mCurMusicFileDrums, theOffset, 0.0);
             Music_PlayFromOffset(this, mCurMusicFileHihats, theOffset, 0.0);
             break;
-        case MusicTune::RoofGrazetheroof:
+        case MusicTune::MUSIC_TUNE_ROOF_GRAZETHEROOF:
             if (theOffset == -1) {
                 theOffset = 184;
             }
@@ -220,56 +220,56 @@ void Music::PlayMusic(MusicTune::MusicTune theMusicTune, int theOffset, int theD
             Music_PlayFromOffset(this, mCurMusicFileDrums, theOffset, 0.0);
             Music_PlayFromOffset(this, mCurMusicFileHihats, theOffset, 0.0);
             break;
-        case MusicTune::ChooseYourSeeds:
+        case MusicTune::MUSIC_TUNE_CHOOSE_YOUR_SEEDS:
             mCurMusicFileMain = MusicFile::MUSIC_FILE_MAIN_MUSIC;
             if (theOffset == -1) {
                 theOffset = 122;
             }
             Music_PlayFromOffset(this, mCurMusicFileMain, theOffset, 1.0);
             break;
-        case MusicTune::TitleCrazyDaveMainTheme:
+        case MusicTune::MUSIC_TUNE_TITLE_CRAZY_DAVE_MAIN_THEME:
             mCurMusicFileMain = MusicFile::MUSIC_FILE_MAIN_MUSIC;
             if (theOffset == -1) {
                 theOffset = 152;
             }
             Music_PlayFromOffset(this, mCurMusicFileMain, theOffset, 1.0);
             break;
-        case MusicTune::ZenGarden:
+        case MusicTune::MUSIC_TUNE_ZEN_GARDEN:
             mCurMusicFileMain = MusicFile::MUSIC_FILE_MAIN_MUSIC;
             if (theOffset == -1) {
                 theOffset = 221;
             }
             Music_PlayFromOffset(this, mCurMusicFileMain, theOffset, 1.0);
             break;
-        case MusicTune::PuzzleCerebrawl:
+        case MusicTune::MUSIC_TUNE_PUZZLE_CEREBRAWL:
             mCurMusicFileMain = MusicFile::MUSIC_FILE_MAIN_MUSIC;
             if (theOffset == -1) {
                 theOffset = 177;
             }
             Music_PlayFromOffset(this, mCurMusicFileMain, theOffset, 1.0);
             break;
-        case MusicTune::MinigameLoonboon:
+        case MusicTune::MUSIC_TUNE_MINIGAME_LOONBOON:
             mCurMusicFileMain = MusicFile::MUSIC_FILE_MAIN_MUSIC;
             if (theOffset == -1) {
                 theOffset = 166;
             }
             Music_PlayFromOffset(this, mCurMusicFileMain, theOffset, 1.0);
             break;
-        case MusicTune::Conveyer:
+        case MusicTune::MUSIC_TUNE_CONVEYER:
             mCurMusicFileMain = MusicFile::MUSIC_FILE_MAIN_MUSIC;
             if (theOffset == -1) {
                 theOffset = 212;
             }
             Music_PlayFromOffset(this, mCurMusicFileMain, theOffset, 1.0);
             break;
-        case MusicTune::FinalBossBrainiacManiac:
+        case MusicTune::MUSIC_TUNE_FINAL_BOSS_BRAINIAC_MANIAC:
             mCurMusicFileMain = MusicFile::MUSIC_FILE_MAIN_MUSIC;
             if (theOffset == -1) {
                 theOffset = 158;
             }
             Music_PlayFromOffset(this, mCurMusicFileMain, theOffset, 1.0);
             break;
-        case MusicTune::ZombiesOnYourLawn:
+        case MusicTune::MUSIC_TUNE_CREDITS_ZOMBIES_ON_YOUR_LAWN:
             mCurMusicFileMain = MusicFile::MUSIC_FILE_CREDITS_ZOMBIES_ON_YOUR_LAWN;
             if (theOffset == -1) {
                 theOffset = 0;
@@ -297,17 +297,17 @@ void Music::UpdateMusicBurst() {
 
 void Music_UpdateMusicBurst2(Music *music) {
     LawnApp *mApp;                                     // ecx
-    MusicTune::MusicTune mCurMusicTune;                // eax
+    MusicTune mCurMusicTune;                // eax
     int MusicOrder;                                    // ebx
     int mBurstStateCounter;                            // eax
     int mDrumsStateCounter;                            // eax
     double v7;                                         // st7
-    MusicBurstState::MusicBurstState mMusicBurstState; // eax
+    MusicBurstState mMusicBurstState;                  // eax
     double v9;                                         // st6
     int v11;                                           // eax
-    MusicDrumsState::MusicDrumsState mMusicDrumsState; // eax
+    MusicDrumsState mMusicDrumsState;                  // eax
     unsigned int v14;                                  // eax
-    MusicTune::MusicTune v15;                          // ebx
+    MusicTune v15;                                     // ebx
     int v16;                                           // edi
     int mQueuedDrumTrackPackedOrder_low;               // ecx
     int v18;                                           // eax
@@ -323,11 +323,11 @@ void Music_UpdateMusicBurst2(Music *music) {
     if (mApp->mBoard == nullptr || mApp->mGameMode == GameMode::GAMEMODE_INTRO) {
         return;
     }
-    if (music->mCurMusicTune > MusicTune::RoofGrazetheroof) {
+    if (music->mCurMusicTune > MusicTune::MUSIC_TUNE_ROOF_GRAZETHEROOF) {
         return;
     }
     mCurMusicTune = music->mCurMusicTune;
-    bool isNightMoonGrainsMode = mCurMusicTune == MusicTune::NightMoongrains;
+    bool isNightMoonGrainsMode = mCurMusicTune == MusicTune::MUSIC_TUNE_NIGHT_MOONGRAINS;
     MusicOrder = Music_GetMusicOrder(music, music->mCurMusicFileMain);
     mBurstStateCounter = music->mBurstStateCounter;
     v29 = MusicOrder;
@@ -504,7 +504,7 @@ void Music::MusicUpdate() {
     }
 }
 
-void Music_ResyncChannel(Music *music, MusicFile::MusicFile theFile1, MusicFile::MusicFile theFile2) {}
+void Music_ResyncChannel(Music *music, MusicFile theFile1, MusicFile theFile2) {}
 
 void Music2_Music2(Music2 *music) {
     // 选择使用哪一版本的音乐。xbox版是xm格式，有鼓点；TV版则是ogg格式，无鼓点。

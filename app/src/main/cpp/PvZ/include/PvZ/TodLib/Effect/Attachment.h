@@ -2,8 +2,8 @@
 // Created by 28636 on 2025/5/26.
 //
 
-#ifndef PLANTSVSZOMBIES_ANDROIDTV_ATTACHEFFECT_H
-#define PLANTSVSZOMBIES_ANDROIDTV_ATTACHEFFECT_H
+#ifndef PLANTSVSZOMBIES_ANDROIDTV_ATTACHMENT_H
+#define PLANTSVSZOMBIES_ANDROIDTV_ATTACHMENT_H
 
 #include "PvZ/Lawn/Common/ConstEnums.h"
 #include "PvZ/SexyAppFramework/Misc/SexyMatrix.h"
@@ -29,4 +29,6 @@ public:
     int mAttachmentID;
 }; // 大小199个整数
 
-#endif // PLANTSVSZOMBIES_ANDROIDTV_ATTACHEFFECT_H
+class AttachmentHolder {};
+
+#endif // PLANTSVSZOMBIES_ANDROIDTV_ATTACHMENT_H

@@ -94,14 +94,14 @@ void GridItem::DrawScaryPot(Sexy::Graphics* g) {
 
     Sexy_Graphics_DrawImageCel(g, *Sexy_IMAGE_SCARY_POT_Addr, aXPos, aYPos, aImageCol, 1);
     if (mHighlighted) {
-        Sexy_Graphics_SetDrawMode(g, DrawMode::DRAWMODE_ADDITIVE);
+        Sexy_Graphics_SetDrawMode(g, Graphics::DRAWMODE_ADDITIVE);
         Sexy_Graphics_SetColorizeImages(g, true);
         if (mTransparentCounter == 0) {
             Color aColor = {255, 255, 255, 196};
             Sexy_Graphics_SetColor(g, &aColor);
         }
         Sexy_Graphics_DrawImageCel(g, *Sexy_IMAGE_SCARY_POT_Addr, aXPos, aYPos, aImageCol, 1);
-        Sexy_Graphics_SetDrawMode(g, DrawMode::DRAWMODE_NORMAL);
+        Sexy_Graphics_SetDrawMode(g, Graphics::DRAWMODE_NORMAL);
     }
 
     return Sexy_Graphics_SetColorizeImages(g, false);

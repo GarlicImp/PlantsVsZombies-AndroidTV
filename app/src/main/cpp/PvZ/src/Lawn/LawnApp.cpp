@@ -123,7 +123,7 @@ void LawnApp::DoConfirmBackToMain(bool theIsSave) {
         DoBackToMain();
         return;
     }
-    if ((mGameMode == GameMode::GAMEMODE_MP_VS || mGameMode == GameMode::GAMEMODE_TREE_OF_WISDOM || enableNewOptionsDialog) && Sexy_SexyAppBase_GetDialog(this, Dialogs::DIALOG_NEWOPTIONS) == nullptr) {
+    if ((mGameMode == GameMode::GAMEMODE_MP_VS || mGameMode == GameMode::GAMEMODE_TREE_OF_WISDOM || enableNewOptionsDialog) && GetDialog(Dialogs::DIALOG_NEWOPTIONS) == nullptr) {
         DoNewOptions(false, 0);
         return;
     }
@@ -412,22 +412,10 @@ void LawnApp::SetFoleyVolume(FoleyType theFoleyType, double theVolume) {
     }
 }
 
-void Sexy_SexyAppBase_SexyAppBase(SexyAppBase *appBase) {
-    old_Sexy_SexyAppBase_SexyAppBase(appBase);
-    //    LOGD("%d",*((uint32_t *)appBase + 464));
-    //    *((uint32_t *)appBase + 464) = 0; ;
-    //    *((uint32_t *)appBase + 380) = 100;
-
-    //    Sexy_Ratio_Set((int *)appBase + 399, 16, 10);
-    //    Sexy_Ratio_Set((int *)appBase + 395, 4, 3);
-    //    Sexy_Ratio_Set((int *)appBase + 397, 4, 3);
-    //    *((uint32_t *)appBase + 403) = 600;
-    //    *((uint32_t *)appBase + 402) = 800;
-}
-
 void LawnApp::ShowLeaderboards() {
     gMainMenuLeaderboardsWidget = (LeaderboardsWidget *)operator new(sizeof(LeaderboardsWidget));
-    LeaderboardsWidget_LeaderboardsWidget(gMainMenuLeaderboardsWidget, this);
+    LeaderboardsWidget(this);
+//    gMainMenuLeaderboardsWidget = new LeaderboardsWidget(this);
     (*(void (**)(int *, Sexy::Widget *))(*mWidgetManager + 24))(mWidgetManager, gMainMenuLeaderboardsWidget); // AddWidget()
     (*(void (**)(int *, Sexy::Widget *))(*mWidgetManager + 48))(mWidgetManager, gMainMenuLeaderboardsWidget); // SetFocusedWidget()
 }

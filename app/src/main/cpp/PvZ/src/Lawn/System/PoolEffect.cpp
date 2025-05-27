@@ -6,6 +6,8 @@
 #include "PvZ/Misc.h"
 #include "PvZ/SexyAppFramework/Graphics/Graphics.h"
 #include "PvZ/Lawn/Board/Board.h"
+#include "PvZ/SexyAppFramework/Misc/SexyVertex2D.h"
+#include "PvZ/Lawn/LawnApp.h"
 
 using namespace Sexy;
 
@@ -87,7 +89,7 @@ void PoolEffect_PoolEffectDraw(PoolEffect *poolEffect, Sexy::Graphics *graphics,
     float v37;                    // st7
     float v40;                    // st5
     int v41;                      // eax
-    SexyVertex2D *v42;            // esi
+    Sexy::SexyVertex2D *v42;      // esi
     char *v43;                    // ecx
     int v44;                      // edi
     int v45;                      // ebx

@@ -1,11 +1,13 @@
 #ifndef PVZ_ANDROID_OPENSL_H
 #define PVZ_ANDROID_OPENSL_H
 
-#include "PvZ/Lawn/Common/ConstEnums.h"
+
+#include "PvZ/Android/Native/AudioOutput.h"
 
 #include <SLES/OpenSLES.h>
 #include <SLES/OpenSLES_Android.h>
 #include <jni.h>
+
 
 inline void (*old_Native_AudioOutput_initialize)(Native::AudioOutput *audioOutput);
 

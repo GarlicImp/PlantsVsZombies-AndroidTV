@@ -7,9 +7,10 @@
 
 #include "PvZ/SexyAppFramework/Misc/Common.h"
 #include "PvZ/SexyAppFramework/Graphics/Color.h"
-#include "Insets.h"
 #include "PvZ/SexyAppFramework/Graphics/Graphics.h"
-//#include "KeyCodes.h"
+#include "PvZ/SexyAppFramework/Misc/KeyCodes.h"
+
+#include "Insets.h"
 #include "WidgetContainer.h"
 
 namespace Sexy {

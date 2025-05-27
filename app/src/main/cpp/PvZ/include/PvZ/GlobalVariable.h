@@ -4,6 +4,8 @@
 #include "Lawn/Widget/LeaderboardsWidget.h"
 #include "Lawn/Widget/ZombatarWidget.h"
 #include "PvZ/Lawn/Common/ConstEnums.h"
+#include "PvZ/TodLib/Common/TodFoley.h"
+#include "PvZ/Lawn/Board/Board.h"
 
 inline bool isMainMenu = true;
 inline int mBackgroundType = -1; // 当前的场景，白天、黑夜、泳池、雾夜、屋顶、月夜、花园、蘑菇园、水族馆、智慧树
@@ -42,8 +44,8 @@ inline int GamepadVelocityYOfPlayer1;
 inline int GamepadVelocityXOfPlayer2;
 inline int GamepadVelocityYOfPlayer2;
 
-inline TouchPlayerIndex::TouchPlayerIndex gPlayerIndex = TouchPlayerIndex::None;
-inline TouchPlayerIndex::TouchPlayerIndex gPlayerIndexSecond = TouchPlayerIndex::None;
+inline TouchPlayerIndex gPlayerIndex = TouchPlayerIndex::TOUCHPLAYER_NONE;
+inline TouchPlayerIndex gPlayerIndexSecond = TouchPlayerIndex::TOUCHPLAYER_NONE;
 
 inline FoleyParams gMenuLeftFoley = {FoleyType::FOLEY_MENU_LEFT, 0.0f, {nullptr}, 1u};
 inline FoleyParams gMenuCenterFoley = {FoleyType::FOLEY_MENU_CENTRE, 0.0f, {nullptr}, 1u};
