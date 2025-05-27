@@ -5,6 +5,8 @@
 #include "PvZ/Lawn/Common/ConstEnums.h"
 #include "PvZ/SexyAppFramework/Widget/CustomScrollbarWidget.h"
 
+class Plant;
+class Zombie;
 
 class AlmanacDialog : public LawnDialog {
 public:

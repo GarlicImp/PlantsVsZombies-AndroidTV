@@ -5,6 +5,15 @@
 #include "PvZ/SexyAppFramework/Graphics/Graphics.h"
 #include "PvZ/Symbols.h"
 
+class Board;
+
+class MotionTrailFrame {
+public:
+    float mPosX;
+    float mPosY;
+    float mAnimTime;
+};
+
 class GridItem {
 public:
     int placeHolder[4];

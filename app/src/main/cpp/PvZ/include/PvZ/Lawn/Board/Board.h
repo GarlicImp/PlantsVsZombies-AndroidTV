@@ -2,16 +2,19 @@
 #define PVZ_LAWN_BOARD_H
 
 #include "PvZ/Lawn/Common/ConstEnums.h"
+#include "PvZ/TodLib/Common/DataArray.h"
 #include "PvZ/SexyAppFramework/Widget/ButtonListener.h"
 #include "PvZ/SexyAppFramework/Widget/Widget.h"
 #include "PvZ/Symbols.h"
+#include "PvZ/Lawn/GamepadControls.h"
+#include "PvZ/SexyAppFramework/Misc/KeyCodes.h"
+
 
 #include "Coin.h"
 #include "GridItem.h"
 #include "LawnMower.h"
 #include "Plant.h"
 #include "Projectile.h"
-#include "PvZ/SexyAppFramework/Misc/KeyCodes.h"
 #include "Zombie.h"
 
 #define MAX_GRID_SIZE_X 9
@@ -60,6 +63,35 @@ struct PlantsOnLawn {
 struct BungeeDropGrid {
     TodWeightedGridArray mGridArray[MAX_GRID_SIZE_X * MAX_GRID_SIZE_Y];
     int mGridArrayCount;
+};
+
+struct PlantRbTree {
+    int unk[6];
+};
+
+enum TouchState {
+    TOUCHSTATE_NONE = 0,
+    TOUCHSTATE_SEED_BANK = 1,
+    TOUCHSTATE_SHOVEL_RECT = 2,
+    TOUCHSTATE_BUTTER_RECT = 3,
+    TOUCHSTATE_BOARD = 4,
+    TOUCHSTATE_BOARD_MOVED_FROM_SEED_BANK = 5,
+    TOUCHSTATE_BOARD_MOVED_FROM_SHOVEL_RECT = 6,
+    TOUCHSTATE_BOARD_MOVED_FROM_BUTTER_RECT = 7,
+    TOUCHSTATE_VALID_COBCONON = 8,
+    TOUCHSTATE_USEFUL_SEED_PACKET = 9,
+    TOUCHSTATE_UNUSED = 10,
+    TOUCHSTATE_HEAVY_WEAPON = 11,
+    TOUCHSTATE_PICKING_SOMETHING = 12,
+    TOUCHSTATE_ZEN_GARDEN_TOOLS = 13,
+    TOUCHSTATE_BOARD_MOVED_FROM_ZEN_GARDEN_TOOLS = 14,
+    TOUCHSTATE_VALID_COBCONON_SECOND = 15,
+};
+
+enum TouchPlayerIndex {
+    TOUCHPLAYER_NONE = -1,
+    TOUCHPLAYER_PLAYER1 = 0,
+    TOUCHPLAYER_PLAYER2 = 1
 };
 
 class Board : public Sexy::Widget {

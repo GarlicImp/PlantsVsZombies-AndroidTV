@@ -4,6 +4,7 @@
 
 #include "PvZ/Lawn/Widget/CreditScreen.h"
 #include "PvZ/Misc.h"
+#include "PvZ/Lawn/LawnApp.h"
 
 void CreditScreen_CreditScreen(Sexy::Widget *creditScreen, LawnApp *a2, bool a3) {
     old_CreditScreen_CreditScreen(creditScreen, a2, a3);

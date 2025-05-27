@@ -8,8 +8,10 @@
 #include "../Misc/Common.h"
 #include "../Misc/Point.h"
 #include "../Misc/Rect.h"
+
 #include "Color.h"
-#include "PvZ/Lawn/LawnApp.h"
+
+class LawnApp;
 
 namespace Sexy {
 

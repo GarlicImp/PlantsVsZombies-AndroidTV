@@ -1,0 +1,10 @@
+//
+// Created by 28636 on 2025/5/27.
+//
+
+#ifndef PLANTSVSZOMBIES_ANDROIDTV_TRAIL_H
+#define PLANTSVSZOMBIES_ANDROIDTV_TRAIL_H
+
+class TrailHolder {};
+
+#endif // PLANTSVSZOMBIES_ANDROIDTV_TRAIL_H

@@ -1,7 +1,7 @@
 #ifndef PVZ_ANDROID_INTRO_VIDEO_H
 #define PVZ_ANDROID_INTRO_VIDEO_H
 
-#include "PvZ/Lawn/Common/ConstEnums.h"
+#include "PvZ/Android/Native/BridgeApp.h"
 
 #include <jni.h>
 

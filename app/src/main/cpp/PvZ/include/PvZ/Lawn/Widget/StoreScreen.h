@@ -5,6 +5,13 @@
 #include "PvZ/Symbols.h"
 #include "PvZ/SexyAppFramework/Widget/Widget.h"
 
+enum StoreScreenTouchState {
+    Prev,
+    Next,
+    Back,
+    None
+};
+
 class StoreScreen {
 public:
 //    int SetSelectedSlot(int theIndex) { return reinterpret_cast<int (*)(StoreScreen*, int)>(StoreScreen_SetSelectedSlotAddr)(this, theIndex);};

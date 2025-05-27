@@ -5,6 +5,7 @@
 #include "PvZ/Lawn/Common/ConstEnums.h"
 
 class HitResult;
+class SeedBank;
 class SeedPacket : public GameObject {
 public:
     int mRefreshCounter;             // 13

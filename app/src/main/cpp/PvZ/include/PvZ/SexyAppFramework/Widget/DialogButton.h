@@ -7,6 +7,8 @@
 
 #include "ButtonWidget.h"
 
+class LawnApp;
+
 namespace Sexy {
 
 class DialogButton : public ButtonWidget {

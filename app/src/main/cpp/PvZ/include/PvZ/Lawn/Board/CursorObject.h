@@ -7,6 +7,9 @@
 
 #include "GameObject.h"
 
+class Coin;
+class Plant;
+
 class CursorObject : public GameObject {
 public:
     int mSeedBankIndex;        // 13

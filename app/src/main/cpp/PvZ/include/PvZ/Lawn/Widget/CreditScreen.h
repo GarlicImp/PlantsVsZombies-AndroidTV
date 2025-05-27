@@ -8,6 +8,7 @@
 #include "PvZ/Lawn/Common/ConstEnums.h"
 #include "PvZ/SexyAppFramework/Widget/Widget.h"
 //#include "../../SexyAppFramework/PerfTimer.h"
+#include "PvZ/SexyAppFramework/Misc/PerfTimer.h"
 #include "PvZ/SexyAppFramework/Widget/ButtonListener.h"
 #include "PvZ/SexyAppFramework/Widget/GameButton.h"
 
@@ -35,7 +36,7 @@ public:
     int mUpdateCount;                     // 75
     int mDrawCount;                       // 76
     int unkInt1;                          // 77
-    PerfTimer mTimerSinceStart;           // 78 ~ 82
+    Sexy::PerfTimer mTimerSinceStart;     // 78 ~ 82
     int unkInt2;                          // 83
     bool mDontSync;                       // 336
     bool mCreditsPaused;                  // 337

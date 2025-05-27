@@ -1,8 +1,9 @@
 #ifndef PVZ_SYMBOLS_H
 #define PVZ_SYMBOLS_H
 
-#include "PvZ/Lawn/Common/ConstEnums.h"
+//#include "PvZ/Lawn/Common/ConstEnums.h"
 #include "PvZ/SexyAppFramework/Graphics/Font.h"
+#include "PvZ/TodLib/Effect/Reanimator.h"
 
 #include <dlfcn.h>
 

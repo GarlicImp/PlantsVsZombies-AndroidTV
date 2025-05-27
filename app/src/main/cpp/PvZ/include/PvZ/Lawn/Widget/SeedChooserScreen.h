@@ -1,8 +1,38 @@
 #ifndef PVZ_LAWN_SEED_CHOOSER_SCREEN_H
 #define PVZ_LAWN_SEED_CHOOSER_SCREEN_H
 
+#include "PvZ/Lawn/Board/SeedBank.h"
 #include "PvZ/Lawn/Common/ConstEnums.h"
 #include "PvZ/Lawn/GamepadControls.h"
+
+enum SeedChooserTouchState {
+    ViewLawnButton,
+    SeedChooser,
+    StoreButton,
+    StartButton,
+    AlmanacButton,
+    SEEDCHOOSER_TOUCHSTATE_NONE
+};
+
+class ChosenSeed {
+public:
+    int mX;                     // 0
+    int mY;                     // 1
+    int mTimeStartMotion;       // 2
+    int mTimeEndMotion;         // 3
+    int mStartX;                // 4
+    int mStartY;                // 5
+    int mEndX;                  // 6
+    int mEndY;                  // 7
+    int mChosenPlayerIndex;     // 8
+    SeedType mSeedType;         // 9
+    ChosenSeedState mSeedState; // 10
+    int mSeedIndexInBank;       // 11
+    bool mRefreshing;           // 12
+    int mRefreshCounter;        // 13
+    SeedType mImitaterType;     // 14
+    bool mCrazyDavePicked;      // 60
+};
 
 class SeedChooserScreen : public Sexy::Widget {
 private:

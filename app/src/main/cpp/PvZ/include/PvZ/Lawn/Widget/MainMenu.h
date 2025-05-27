@@ -9,7 +9,38 @@
 #include "PvZ/Symbols.h"
 #include "ZombatarWidget.h"
 
+enum MainMenuButtonId {
+    START_ADVENTURE_BUTTON = 0,
+    ADVENTURE_BUTTON = 1,
+    MORE_WAYS_BUTTON = 2,
+    HOUSE_BUTTON = 3,
+    ACHIEVEMENTS_BUTTON = 4,
+    HELP_AND_OPTIONS_BUTTON = 5,
+    UNLOCK_BUTTON = 6,
+    RETURN_TO_ARCADE_BUTTON = 7,
+    MORE_BUTTON = 8,
+    BACK_STONE_BUTTON = 9,
+    VS_BUTTON = 10,
+    VS_COOP_BUTTON = 11,
+    MINI_GAMES_BUTTON = 12,
+    SURVIVAL_BUTTON = 13,
+    PUZZLE_BUTTON = 14,
+    BACK_POT_BUTTON = 15,
+    STORE_BUTTON = 16,
+    ZEN_BUTTON = 17,
+    ALMANAC_BUTTON = 18,
+    MAIL_BUTTON = 19,
+    HELP_BAR = 20,
+    ACHIEVEMENTS_BACK_BUTTON = 21
+};
+
 class MainMenu : public Sexy::MenuWidget {
+    enum MainMenuScene {
+        MENUSCENE_MORE_WAYS,
+        MENUSCENE_MAIN,
+        MENUSCENE_EXTRA
+    };
+
 public:
     ReanimationID mMainMenuReanimID;      // 70 , PSV 59
     float mCameraPositionX;               // 71
@@ -75,10 +106,9 @@ public:
     void Delete2();
     void Draw(Sexy::Graphics *g);
     void ButtonPress(MainMenuButtonId theSelectedButton);
+    void UpdateHouseReanim();
+    void EnableButtons();
 };
-
-
-inline void (*DaveHelp_DaveHelp)(LeaderboardsWidget *leaderboardsWidget, LawnApp *lawnApp);
 
 
 inline void (*old_MainMenu_Update)(MainMenu *instance);
@@ -117,20 +147,12 @@ inline void (*old_MainMenu_DrawOverlay)(MainMenu *mainMenu, Sexy::Graphics *a2);
 
 inline void (*old_MainMenu_DrawFade)(MainMenu *mainMenu, Sexy::Graphics *a2);
 
-inline void (*old_TrashBin_TrashBin)(TrashBin *trashBin, TrashBin::TrashPileType theTrashPileType, float height);
-
-inline void (*old_DaveHelp_Delete2)(LeaderboardsWidget *leaderboardsWidget);
-
 inline void (*old_TestMenuWidget_RemovedFromManager)(ZombatarWidget *zombatarWidget, int *manager);
 
 inline void (*old_TestMenuWidget_Delete2)(ZombatarWidget *zombatarWidget);
 
 inline void (*old_TestMenuWidget_Delete)(ZombatarWidget *zombatarWidget);
 
-
-void LeaderboardsWidget_LeaderboardsWidget(LeaderboardsWidget *this_, LawnApp *lawnApp);
-
-void DaveHelp_Delete2(LeaderboardsWidget *leaderboardsWidget);
 
 void ZombatarWidget_ZombatarWidget(ZombatarWidget *zombatarWidget, LawnApp *lawnApp);
 
@@ -142,12 +164,6 @@ void MaskHelpWidget_Update(AchievementsWidget *achievementsWidget);
 
 void MaskHelpWidget_Draw(AchievementsWidget *achievementsWidget, Sexy::Graphics *graphics);
 
-void DaveHelp_Update(LeaderboardsWidget *leaderboardsWidget);
-
-void DaveHelp_Draw(LeaderboardsWidget *leaderboardsWidget, Sexy::Graphics *graphics);
-
-void DaveHelp_DealClick(LeaderboardsWidget *leaderboardsWidget, int id);
-
 void TestMenuWidget_Delete(ZombatarWidget *zombatarWidget);
 
 void TestMenuWidget_Delete2(ZombatarWidget *zombatarWidget);
@@ -157,14 +173,6 @@ void MaskHelpWidget_MouseDown(AchievementsWidget *achievementsWidget, int x, int
 void MaskHelpWidget_MouseUp(AchievementsWidget *achievementsWidget, int x, int y);
 
 void MaskHelpWidget_MouseDrag(AchievementsWidget *achievementsWidget, int x, int y);
-
-void DaveHelp_MouseDown(LeaderboardsWidget *leaderboardsWidget, int x, int y, int theClickCount);
-
-void DaveHelp_MouseUp(LeaderboardsWidget *leaderboardsWidget, int x, int y);
-
-void DaveHelp_MouseDrag(LeaderboardsWidget *leaderboardsWidget, int x, int y);
-
-void DaveHelp_KeyDown(LeaderboardsWidget *leaderboardsWidget, int keyCode);
 
 void TestMenuWidget_RemovedFromManager(ZombatarWidget *zombatarWidget, int *manager);
 

@@ -4,6 +4,15 @@
 #include "LawnDialog.h"
 #include "PvZ/Lawn/Common/ConstEnums.h"
 
+enum HouseType {
+    BLUEPRINT_INVALID = -1,
+    BLUEPRINT_BLING = 0,
+    BLUEPRINT_SCARY = 1,
+    BLUEPRINT_TRAILER = 2,
+    BLUEPRINT_FUTURE = 3,
+    BLUEPRINT_CLOWN = 4,
+};
+
 class HouseChooserDialog : public LawnDialog {
 public:
     HouseType mSelectedHouseType;            // 191

@@ -1,7 +1,50 @@
 #ifndef PVZ_LAWN_MUSIC_H
 #define PVZ_LAWN_MUSIC_H
 
-#include "PvZ/Lawn/Common/ConstEnums.h"
+class LawnApp;
+
+enum MusicTune {
+    MUSIC_TUNE_NONE = -1,
+    MUSIC_TUNE_DAY_GRASSWALK = 1,				// 白天草地关卡
+    MUSIC_TUNE_NIGHT_MOONGRAINS,				// 黑夜草地关卡
+    MUSIC_TUNE_POOL_WATERYGRAVES,				// 白天泳池关卡
+    MUSIC_TUNE_FOG_RIGORMORMIST,				// 黑夜泳池关卡
+    MUSIC_TUNE_ROOF_GRAZETHEROOF,				// 屋顶关卡
+    MUSIC_TUNE_CHOOSE_YOUR_SEEDS,				// 选卡界面/小游戏界面
+    MUSIC_TUNE_TITLE_CRAZY_DAVE_MAIN_THEME,		// 主菜单
+    MUSIC_TUNE_ZEN_GARDEN,						// 禅境花园
+    MUSIC_TUNE_PUZZLE_CEREBRAWL,				// 解谜模式
+    MUSIC_TUNE_MINIGAME_LOONBOON,				// 小游戏
+    MUSIC_TUNE_CONVEYER,						// 传送带关卡
+    MUSIC_TUNE_FINAL_BOSS_BRAINIAC_MANIAC,		// 僵王博士关卡
+    MUSIC_TUNE_CREDITS_ZOMBIES_ON_YOUR_LAWN,	// MV
+    NUM_MUSIC_TUNES
+};
+
+enum MusicFile {
+    MUSIC_FILE_NONE = -1,
+    MUSIC_FILE_MAIN_MUSIC = 1,
+    MUSIC_FILE_DRUMS = 2,
+    MUSIC_FILE_DRUMS_NIGHTMOONGRAINS = 3,
+    MUSIC_FILE_HIHATS = 4,
+    MUSIC_FILE_CREDITS_ZOMBIES_ON_YOUR_LAWN = 5,
+    NUM_MUSIC_FILES = 6,
+};
+
+enum MusicBurstState {
+    MUSIC_BURST_OFF = 0,
+    MUSIC_BURST_STARTING = 1,
+    MUSIC_BURST_ON = 2,
+    MUSIC_BURST_FINISHING = 3,
+};
+
+enum MusicDrumsState {
+    MUSIC_DRUMS_OFF = 0,
+    MUSIC_DRUMS_ON_QUEUED = 1,
+    MUSIC_DRUMS_ON = 2,
+    MUSIC_DRUMS_OFF_QUEUED = 3,
+    MUSIC_DRUMS_FADING = 4,
+};
 
 class Music { // 加载XBOX版xm格式音乐时用。优：音质好、有鼓点。缺：鼓点BUG多，xm格式难以修改
 public:
@@ -9,17 +52,17 @@ public:
     int unkMems[3];                                    // 1 ~ 3
     LawnApp* mApp;                                     // 4
     int* mMusicInterface;                              // 5
-    MusicTune::MusicTune mCurMusicTune;                // 6
-    MusicTune::MusicTune mLastMusicTune;               // 7
-    MusicFile::MusicFile mCurMusicFileMain;            // 8
-    MusicFile::MusicFile mCurMusicFileDrums;           // 9
-    MusicFile::MusicFile mCurMusicFileHihats;          // 10
+    MusicTune mCurMusicTune;                // 6
+    MusicTune mLastMusicTune;               // 7
+    MusicFile mCurMusicFileMain;            // 8
+    MusicFile mCurMusicFileDrums;           // 9
+    MusicFile mCurMusicFileHihats;          // 10
     int mBurstOverride;                                // 11
     int mBaseBPM;                                      // 12
     int mBaseModSpeed;                                 // 13
-    MusicBurstState::MusicBurstState mMusicBurstState; // 14
+    MusicBurstState mMusicBurstState;                  // 14
     int mBurstStateCounter;                            // 15
-    MusicDrumsState::MusicDrumsState mMusicDrumsState; // 16
+    MusicDrumsState mMusicDrumsState;                  // 16
     int mQueuedDrumTrackPackedOrder;                   // 17
     int mDrumsStateCounter;                            // 18
     int mPauseOffset;                                  // 19
@@ -32,7 +75,7 @@ public:
     float mNormalVolume;                               // 25
     // 大小26个整数
 public:
-    void PlayMusic(MusicTune::MusicTune theMusicTune, int theOffset, int theDrumsOffset);
+    void PlayMusic(MusicTune theMusicTune, int theOffset, int theDrumsOffset);
     void MusicUpdate();
     void UpdateMusicBurst();
 };
@@ -53,9 +96,9 @@ inline void (*Sexy_AudiereMusicInterface_PlayMusic)(int* interface, int, int, bo
 
 inline void (*Music_StopAllMusic)(Music*);
 
-inline int (*Music_GetMusicOrder)(Music*, MusicFile::MusicFile);
+inline int (*Music_GetMusicOrder)(Music*, MusicFile);
 
-inline void (*Music_SetupMusicFileForTune)(Music*, MusicFile::MusicFile, MusicTune::MusicTune);
+inline void (*Music_SetupMusicFileForTune)(Music*, MusicFile, MusicTune);
 
 inline void (*Sexy_AudiereMusicInterface_StopMusic)(int*, int);
 
@@ -91,7 +134,7 @@ void Music_MusicResync(Music*);
 
 void Music_StartBurst(Music* music);
 
-void Music_PlayFromOffset(Music*, MusicFile::MusicFile, int, double);
+void Music_PlayFromOffset(Music*, MusicFile, int, double);
 
 void Music_UpdateMusicBurst1(Music*);
 

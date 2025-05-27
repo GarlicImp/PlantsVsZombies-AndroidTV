@@ -1,11 +1,18 @@
 #ifndef PVZ_LAWN_REANIMATION_H
 #define PVZ_LAWN_REANIMATION_H
 
-#include "AttachEffect.h"
 #include "EffectSystem.h"
-#include "PvZ/Lawn/Common/ConstEnums.h"
+#include "FilterEffect.h"
 #include "PvZ/SexyAppFramework/Misc/SexyMatrix.h"
 
+class Reanimation;
+class ReanimAtlas;
+class AttacherInfo;
+class AttachEffect;
+class TodTriangleGroup;
+class TodParticleSystem;
+class ReanimatorTransform;
+class ReanimatorDefinition;
 namespace Sexy
 {
 class Font;
@@ -17,6 +24,15 @@ class MemoryImage;
 // ######################################################################################################################################################
 // ############################################################### 以下为动画定义相关内容 ###############################################################
 // ######################################################################################################################################################
+
+class ReanimatorTrack {
+public:
+    int unk;
+    char *mName;
+    ReanimatorTransform *mTransforms;
+    int mTransformCount;
+    bool IsAttacher;
+};
 
 // ====================================================================================================
 // ★ 【动画器定义】
@@ -133,6 +149,18 @@ public:
     int mReanimationNum;             // 2
     int unk2[3];                     // 3 ~ 5
     char *mName;                     // 6
+};
+
+// ====================================================================================================
+// ★ 【动画器时间】
+// ----------------------------------------------------------------------------------------------------
+// 用于描述动画当前正在播放的时间位置。
+// ====================================================================================================
+class ReanimatorFrameTime {
+public:
+    float mFraction;         // 0
+    int mAnimFrameBeforeInt; // 1
+    int mAnimFrameAfterInt;  // 2
 };
 /***************************************************************************************************************/
 inline void (*Reanimation_SetPosition)(Reanimation *a, float a2, float a3);

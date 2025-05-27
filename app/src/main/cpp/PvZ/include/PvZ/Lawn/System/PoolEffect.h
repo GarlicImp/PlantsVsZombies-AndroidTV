@@ -17,6 +17,10 @@ class MemoryImage;
 class Graphics;
 };
 
+struct CausticEffect {
+    bool mTextureAlpha[256][256];
+};
+
 class LawnApp;
 class PoolEffect {
 public:

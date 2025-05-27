@@ -45,7 +45,6 @@
 #include "PvZ/Lawn/System/PoolEffect.h"
 
 inline void InitInGameFunction() {
-    Sexy_SexyAppBase_GetDialog = (decltype(Sexy_SexyAppBase_GetDialog))Sexy_SexyAppBase_GetDialogAddr;
     Sexy_SexyAppBase_EraseFile = (decltype(Sexy_SexyAppBase_EraseFile))Sexy_SexyAppBase_EraseFileAddr;
     Sexy_Ratio_Set = (decltype(Sexy_Ratio_Set))Sexy_Ratio_SetAddr;
 
@@ -303,7 +302,7 @@ inline void InitInGameFunction() {
     Music_StopAllMusic = (decltype(Music_StopAllMusic))Music_StopAllMusicAddr;
     //    Music_MusicResync=(void (*)(Music*))Music_MusicResyncAddr;
     Music_GetMusicOrder = (decltype(Music_GetMusicOrder))Music_GetMusicOrderAddr;
-    // Music_PlayFromOffset=(void (*)(Music*,MusicFile::MusicFile,int,double))Music_PlayFromOffsetAddr;
+    // Music_PlayFromOffset=(void (*)(Music*,MusicFile,int,double))Music_PlayFromOffsetAddr;
     Music_SetupMusicFileForTune = (decltype(Music_SetupMusicFileForTune))Music_SetupMusicFileForTuneAddr;
     Sexy_AudiereMusicInterface_SetVolume = (decltype(Sexy_AudiereMusicInterface_SetVolume))Sexy_AudiereMusicInterface_SetVolumeAddr;
     Sexy_AudiereMusicInterface_SetSongVolume = (decltype(Sexy_AudiereMusicInterface_SetSongVolume))Sexy_AudiereMusicInterface_SetSongVolumeAddr;
@@ -324,7 +323,6 @@ inline void InitInGameFunction() {
     MaskHelpWidget_Delete = (decltype(MaskHelpWidget_Delete))MaskHelpWidget_DeleteAddr;
     DaveHelp_DaveHelp = (decltype(DaveHelp_DaveHelp))DaveHelp_DaveHelpAddr;
     //    TrashBin_TrashBin=(void (*)(ZOMBIE_TRASH_BIN *, int , float ))TrashBin_TrashBinAddr;
-    TrashBin_Delete = (decltype(TrashBin_Delete))TrashBin_DeleteAddr;
     ConfirmBackToMainDialog_ConfirmBackToMainDialog = (decltype(ConfirmBackToMainDialog_ConfirmBackToMainDialog))ConfirmBackToMainDialog_ConfirmBackToMainDialogAddr;
     Sexy_Widget_Move = (decltype(Sexy_Widget_Move))Sexy_Widget_MoveAddr;
     TodParticleSystem_OverrideColor = (decltype(TodParticleSystem_OverrideColor))TodParticleSystem_OverrideColorAddr;
@@ -726,7 +724,7 @@ inline void InitHookFunction() {
     homura::HookFunction(DaveHelp_DealClickAddr, &DaveHelp_DealClick, nullptr);
     homura::HookFunction(TrashBin_TrashBinAddr, &TrashBin::Create, &old_TrashBin_TrashBin);
     homura::HookFunction(Sexy_SexyAppBase_Is3DAcceleratedAddr, &Sexy_SexyAppBase_Is3DAccelerated, nullptr);
-    homura::HookFunction(Sexy_SexyAppBase_SexyAppBaseAddr, &Sexy_SexyAppBase_SexyAppBase, &old_Sexy_SexyAppBase_SexyAppBase);
+    homura::HookFunction(Sexy_SexyAppBase_SexyAppBaseAddr, &Sexy::SexyAppBase::Create, &old_Sexy_SexyAppBase_SexyAppBase);
     homura::HookFunction(SettingsDialog_AddedToManagerAddr, &SettingsDialog_AddedToManager, &old_SettingsDialog_AddedToManager);
     homura::HookFunction(SettingsDialog_RemovedFromManagerAddr, &SettingsDialog_RemovedFromManager, &old_SettingsDialog_RemovedFromManager);
     homura::HookFunction(SettingsDialog_DrawAddr, &SettingsDialog_Draw, &old_SettingsDialog_Draw);

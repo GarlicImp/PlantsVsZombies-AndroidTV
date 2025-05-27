@@ -4,47 +4,17 @@
 #include "PvZ/Lawn/Board/GameObject.h"
 #include "PvZ/Lawn/Board/MessageWidget.h"
 #include "PvZ/Lawn/Common/ConstEnums.h"
+#include "PvZ/Lawn/System/PlayerInfo.h"
+#include "PvZ/Lawn/System/ReanimationLawn.h"
 #include "PvZ/Lawn/Widget/AchievementsWidget.h"
 #include "PvZ/Lawn/Widget/ZombatarWidget.h"
 #include "PvZ/SexyAppFramework/Misc/SexyMatrix.h"
+#include "PvZ/SexyAppFramework/SexyAppBase.h"
 #include "PvZ/SexyAppFramework/Widget/Checkbox.h"
 #include "PvZ/SexyAppFramework/Widget/GameButton.h"
+#include "PvZ/TodLib/Common/TodFoley.h"
 #include "PvZ/TodLib/Common/TodList.h"
 #include "TodLib/Common/TodCommon.h"
-
-class BaseGamepadControls {
-public:
-    int *mVtable;                    // 0
-    GameObject mGameObject;          // 1 ~ 13
-    Board *mBoard;                   // 14
-    SeedBank *mSeedBank;             // 15
-    float mUnkFirstHighlightRelated; // 16
-    int mShovelRelated1;             // 17
-    float mGamepadAccLeftX;
-    float mGamepadAccLeftY;
-    float mGridCenterPositionX;    // 20
-    float mGridCenterPositionY;    // 21
-    float mRightPositionX;         // 22
-    float mRightPositionY;         // 23
-    int mGamepadState;             // 24
-    int unk1;                      // 25
-    float mDigIndicatorPercentage; // 26 , 每按下一次铲除键就加2.3
-    float mCursorPositionX;        // 27
-    float mCursorPositionY;        // 28
-    float mGamepadVelocityLeftX;   // 29
-    float mGamepadVelocityLeftY;   // 30
-    float mGamepadVelocityRightX;  // 31
-    float mGamepadVelocityRightY;  // 32
-    int unk2[4];                   // 33 ~ 36
-    int mPlayerIndex1;             // 37
-    int mPlayerIndex2;             // 38
-    float mCursorPositionYJitter;  // 39
-    float mUpdateAdd0Dot016;       // 40
-    int unkMems[2];                // 41 ~ 42
-    // 大小43个整数
-public:
-    void GetGamepadVelocity(float *horizontal, float *vertical);
-};
 
 
 inline int (*StoreScreen_SetSelectedSlot)(int a1, int a2);

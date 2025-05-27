@@ -8,6 +8,10 @@
 
 #define NUM_CHALLENGE_MODES ((int)GameMode::NUM_GAME_MODES - 1)
 
+struct Curve1DUtil {
+    int unk[16];
+};
+
 class ChallengeScreen : public Sexy::Widget {
 public:
     Sexy::ButtonListener mButtonListener; // 64

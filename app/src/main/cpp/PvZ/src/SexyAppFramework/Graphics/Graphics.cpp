@@ -1,6 +1,9 @@
 #include "PvZ/SexyAppFramework/Graphics/Graphics.h"
 #include "PvZ/Lawn/Common/ConstEnums.h"
 #include "PvZ/TodLib/Common/TodCommon.h"
+#include "PvZ/SexyAppFramework/Misc/SexyVertex2D.h"
+
+using namespace Sexy;
 
 void Sexy_Graphics_PushTransform(Sexy::Graphics *graphics, int *transform, bool concatenate) {
     old_Sexy_Graphics_PushTransform(graphics, transform, concatenate);

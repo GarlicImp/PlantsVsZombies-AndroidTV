@@ -8,6 +8,9 @@
 #include "PvZ/SexyAppFramework/Widget/GameButton.h"
 #include "PvZ/SexyAppFramework/Widget/MenuWidget.h"
 
+class Zombie;
+class Reanimation;
+
 class ZombatarWidget : public Sexy::MenuWidget {
 public:
     enum TabType { SKIN = 0, HAIR = 1, FHAIR = 2, TIDBIT = 3, EYEWEAR = 4, CLOTHES = 5, ACCESSORY = 6, HAT = 7, BACKGROUND = 8, MaxTabNum = 9 };

@@ -2,12 +2,27 @@
 #define PVZ_LAWN_LAWN_APP_H
 
 #include "PvZ/Lawn/Common/ConstEnums.h"
+#include "PvZ/Lawn/Widget/AchievementsWidget.h"
+#include "PvZ/SexyAppFramework/SexyAppBase.h"
 #include "PvZ/Symbols.h"
-#include "PvZ/SexyAppFramework/Graphics/Image.h"
+#include "PvZ/TodLib/Common/TodFoley.h"
+
 
 class ZenGarden;
+class Board;
+class TitleScreen;
+class MainMenu;
+class SeedChooserScreen;
+class CreditScreen;
+class ChallengeScreen;
+class PoolEffect;
+class ReanimatorCache;
+class Music2;
+class TodFoley;
+class PlayerInfo;
+class PottedPlant;
 
-class LawnApp : public SexyAppBase {
+class LawnApp : public Sexy::SexyAppBase {
 public:
     Board *mBoard;                           // 552
     TitleScreen *mTitleScreen;               // 553
@@ -212,9 +227,6 @@ inline bool doCheatDialog;     // 菜单DoCheatDialog
 inline bool doCheatCodeDialog; // 菜单DoCheatCodeDialog
 
 
-inline int *(*Sexy_SexyAppBase_GetDialog)(LawnApp *lawnApp, Dialogs dialogId);
-
-
 inline void (*old_LawnApp_DoBackToMain)(LawnApp *lawnApp);
 
 inline void (*old_LawnApp_ShowAwardScreen)(LawnApp *lawnApp, AwardType a2);
@@ -247,8 +259,6 @@ inline int (*old_LawnApp_GetNumPreloadingTasks)(LawnApp *lawnApp);
 
 inline bool (*old_LawnApp_IsNight)(LawnApp *lawnApp);
 
-inline void (*old_Sexy_SexyAppBase_SexyAppBase)(SexyAppBase *appBase);
-
 inline bool (*old_LawnApp_HasSeedType)(LawnApp *lawnApp, SeedType theSeedType, int playerIndex);
 
 inline void (*old_LawnApp_DoNewOptions)(LawnApp *lawnApp, bool a2, unsigned int a3);
@@ -258,5 +268,4 @@ void LawnApp_PlaySample(LawnApp *lawnApp, int soundId);
 
 bool LawnApp_HasSeedType(LawnApp *lawnApp, SeedType theSeedType, int playerIndex);
 
-void Sexy_SexyAppBase_SexyAppBase(SexyAppBase *appBase);
 #endif // PVZ_LAWN_LAWN_APP_H

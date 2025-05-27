@@ -12,6 +12,8 @@
 #include "PvZ/Symbols.h"
 #include "PvZ/TodLib/Common/TodCommon.h"
 #include "PvZ/TodLib/Effect/Reanimator.h"
+#include "PvZ/TodLib/Effect/Attachment.h"
+
 using namespace Sexy;
 
 ZombieDefinition gZombieDefs[NUM_ZOMBIE_TYPES] = {

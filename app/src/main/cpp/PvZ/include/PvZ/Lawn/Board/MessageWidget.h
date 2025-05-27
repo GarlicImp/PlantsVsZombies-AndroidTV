@@ -13,6 +13,7 @@
 #define MAX_REANIM_LINES 5
 
 class LawnApp;
+class Reanimation;
 namespace Sexy
 {
 class Font;

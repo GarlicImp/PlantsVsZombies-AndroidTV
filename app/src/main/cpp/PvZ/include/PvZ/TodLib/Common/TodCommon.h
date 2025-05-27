@@ -8,6 +8,38 @@
 #include <stdlib.h>
 #include "PvZ/Lawn/Common/LawnCommon.h"
 #include "PvZ/SexyAppFramework/Misc/Common.h"
+#include "PvZ/SexyAppFramework/Misc/ResourceManager.h"
+
+struct TodAllocator;
+namespace Sexy
+{
+class Graphics;
+class SexyMatrix;
+class SexyVector2;
+class Image;
+class Color;
+class Font;
+};
+
+struct TodWeightedArray
+{
+    int mItem;
+    int mWeight;
+};
+
+struct TodWeightedGridArray {
+    int mX;
+    int mY;
+    int mWeight;
+};
+
+class TodSmoothArray {
+public:
+    int mItem;
+    float mWeight;
+    float mLastPicked;
+    float mSecondLastPicked;
+};
 
 inline void (*TodDrawImageCelF)(Sexy::Graphics *, Sexy::Image *, float, float, int, int);
 
