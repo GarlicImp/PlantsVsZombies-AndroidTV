@@ -11,6 +11,8 @@
 #include "PvZ/SexyAppFramework/Widget/Widget.h"
 #include "TrashBin.h"
 
+class Reanimation;
+
 struct GameStats {
 
     enum MiscStat { ZOMBIES_KILLED = 0, PLANTS_KILLED = 1, MONEY = 2, TREE_HEIGHT = 4, ENDLESS_FLAGS = 5, MOWED_ZOMBIES = 6, STINKY_CHOCOLATES = 7 };
@@ -52,7 +54,7 @@ void DaveHelp_Delete2(LeaderboardsWidget *leaderboardsWidget);
 
 void DaveHelp_Update(LeaderboardsWidget *leaderboardsWidget);
 
-void DaveHelp_Draw(LeaderboardsWidget *leaderboardsWidget, Sexy::Graphics *graphics);
+void DaveHelp_Draw(LeaderboardsWidget *leaderboardsWidget, Sexy::Graphics *g);
 
 void DaveHelp_DealClick(LeaderboardsWidget *leaderboardsWidget, int id);
 

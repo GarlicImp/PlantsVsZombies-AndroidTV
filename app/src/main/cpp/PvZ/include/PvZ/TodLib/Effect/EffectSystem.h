@@ -12,7 +12,7 @@
 #include "Reanimator.h"
 #include "Trail.h"
 
-#define MAX_TRIANGLES 256
+constexpr int MAX_TRIANGLES = 256;
 
 class TodTriVertex {
 public:

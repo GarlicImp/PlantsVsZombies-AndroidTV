@@ -142,7 +142,7 @@ void Challenge::IZombieDrawPlant(Sexy::Graphics* g, Plant* thePlant) {
         float aOffsetX = g->mTransX;
         float aOffsetY = g->mTransY;
         Color theColor;
-        Sexy_Graphics_SetColorizeImages(g, true);
+        g->SetColorizeImages(true);
 
         g->mTransX = aOffsetX + 4.0;
         g->mTransY = aOffsetY + 4.0;
@@ -150,7 +150,7 @@ void Challenge::IZombieDrawPlant(Sexy::Graphics* g, Plant* thePlant) {
         theColor.mGreen = 86;
         theColor.mBlue = 58;
         theColor.mAlpha = 255;
-        Sexy_Graphics_SetColor(g, &theColor);
+        g->SetColor(theColor);
         Reanimation_DrawRenderGroup(mBodyReanim, g, 0);
 
         g->mTransX = aOffsetX + 2.0;
@@ -159,7 +159,7 @@ void Challenge::IZombieDrawPlant(Sexy::Graphics* g, Plant* thePlant) {
         theColor.mGreen = 135;
         theColor.mBlue = 107;
         theColor.mAlpha = 255;
-        Sexy_Graphics_SetColor(g, &theColor);
+        g->SetColor(theColor);
         Reanimation_DrawRenderGroup(mBodyReanim, g, 0);
 
         g->mTransX = aOffsetX - 2.0;
@@ -168,7 +168,7 @@ void Challenge::IZombieDrawPlant(Sexy::Graphics* g, Plant* thePlant) {
         theColor.mGreen = 135;
         theColor.mBlue = 107;
         theColor.mAlpha = 255;
-        Sexy_Graphics_SetColor(g, &theColor);
+        g->SetColor(theColor);
         Reanimation_DrawRenderGroup(mBodyReanim, g, 0);
 
         g->mTransX = aOffsetX;
@@ -177,13 +177,13 @@ void Challenge::IZombieDrawPlant(Sexy::Graphics* g, Plant* thePlant) {
         theColor.mGreen = 201;
         theColor.mBlue = 160;
         theColor.mAlpha = 255;
-        Sexy_Graphics_SetColor(g, &theColor);
+        g->SetColor(theColor);
         IZombieSetPlantFilterEffect(thePlant, FilterEffect::FILTEREFFECT_NONE);
         Reanimation_DrawRenderGroup(mBodyReanim, g, 0);
 
         IZombieSetPlantFilterEffect(thePlant, FilterEffect::FILTEREFFECT_NONE);
-        Sexy_Graphics_SetDrawMode(g, Graphics::DRAWMODE_NORMAL);
-        Sexy_Graphics_SetColorizeImages(g, false);
+        g->SetDrawMode(Graphics::DRAWMODE_NORMAL);
+        g->SetColorizeImages(false);
     }
 }
 
@@ -207,9 +207,9 @@ bool Challenge::IZombieEatBrain(Zombie* theZombie) {
 
 void Challenge::DrawArtChallenge(Sexy::Graphics* g) {
     // 绘制坚果的两只大眼睛
-    Sexy_Graphics_SetColorizeImages(g, true);
+    g->SetColorizeImages(true);
     Color theColor = {255, 255, 255, 100};
-    Sexy_Graphics_SetColor(g, &theColor);
+    g->SetColor(theColor);
 
     for (int theGridY = 0; theGridY < 6; theGridY++) {
         for (int theGridX = 0; theGridX < 9; theGridX++) {
@@ -224,16 +224,16 @@ void Challenge::DrawArtChallenge(Sexy::Graphics* g) {
 
     if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_ART_CHALLENGE_WALLNUT) {
         Color theColor = {255, 255, 255, 255};
-        Sexy_Graphics_SetColor(g, &theColor);
+        g->SetColor(theColor);
         int x1 = mBoard->GridToPixelX(4, 1);
         int y1 = mBoard->GridToPixelY(4, 1);
-        Sexy_Graphics_DrawImage(g, addonImages.googlyeye, x1, y1);
+        g->DrawImage(addonImages.googlyeye, x1, y1);
         int x2 = mBoard->GridToPixelX(6, 1);
         int y2 = mBoard->GridToPixelY(6, 1);
-        Sexy_Graphics_DrawImage(g, addonImages.googlyeye, x2, y2);
+        g->DrawImage(addonImages.googlyeye, x2, y2);
     }
 
-    Sexy_Graphics_SetColorizeImages(g, false);
+    g->SetColorizeImages(false);
 }
 
 PlantingReason Challenge::CanPlantAt(int theGridX, int theGridY, SeedType theSeedType) {
@@ -462,7 +462,7 @@ void Challenge::IZombiePlaceZombie(ZombieType theZombieType, int theGridX, int t
 
 void Challenge::DrawHeavyWeapon(Sexy::Graphics* g) {
     // 修复僵尸进家后重型武器关卡长草露馅
-    Sexy_Graphics_DrawImage(g, *Sexy_IMAGE_HEAVY_WEAPON_OVERLAY_Addr, -73, 559);
+    g->DrawImage(*Sexy_IMAGE_HEAVY_WEAPON_OVERLAY_Addr, -73, 559);
 }
 
 bool Challenge::UpdateZombieSpawning() {

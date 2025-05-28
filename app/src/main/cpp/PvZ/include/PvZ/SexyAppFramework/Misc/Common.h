@@ -13,7 +13,7 @@
 #include <algorithm>
 #include <cstdlib>
 
-typedef std::string SexyString;
+typedef std::string SexyString; // 不确定，猜测是std::string
 #define _S(x) x
 
 typedef SexyString::value_type SexyChar;
@@ -41,5 +41,17 @@ enum PixelFormat {
     kPixelFormat_RGBA_PVRTC2,
     kPixelFormat_RGBA_PVRTC4
 };
+
+namespace Sexy {
+
+//extern std::string StrFormat(const char *fmt...) {
+//    return reinterpret_cast<std::string (*)(const char *, ...)>(Sexy_StrFormatAddr)(fmt);
+//}
+
+//extern std::string	vformat(const char* fmt, va_list argPtr);
+//extern std::string StrFormat(const char* fmt...);
+//extern void StrDelete(const SexyString &fmt);
+
+}
 
 #endif // PLANTSVSZOMBIES_ANDROIDTV_COMMON_H

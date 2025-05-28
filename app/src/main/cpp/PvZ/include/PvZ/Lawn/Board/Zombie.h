@@ -6,10 +6,10 @@
 #include "PvZ/Lawn/Common/GameConstants.h"
 #include "PvZ/Symbols.h"
 
-#define MAX_ZOMBIE_FOLLOWERS 4
-#define NUM_BOBSLED_FOLLOWERS 3
-#define NUM_BACKUP_DANCERS 4
-#define NUM_BOSS_BUNGEES 3
+constexpr int MAX_ZOMBIE_FOLLOWERS = 4;
+constexpr int NUM_BOBSLED_FOLLOWERS = 3;
+constexpr int NUM_BACKUP_DANCERS = 4;
+constexpr int NUM_BOSS_BUNGEES = 3;
 
 constexpr const int ZOMBIE_START_RANDOM_OFFSET = 40;
 constexpr const int BUNGEE_ZOMBIE_HEIGHT = 3000;
@@ -194,7 +194,7 @@ public:
     void EatPlant(Plant *thePlant);
     void DetachShield();
     void CheckForBoardEdge();
-    void DrawBossPart(Sexy::Graphics *graphics, int theBossPart);
+    void DrawBossPart(Sexy::Graphics *g, int theBossPart);
     static bool ZombieTypeCanGoInPool(ZombieType theZombieType);
     void BossSpawnAttack();
     void DrawBungeeCord(Sexy::Graphics *graphics, int theOffsetX, int theOffsetY);

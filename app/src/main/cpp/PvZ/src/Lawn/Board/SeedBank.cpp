@@ -28,7 +28,7 @@ void SeedBank::Draw(Sexy::Graphics *g) {
     if (mApp->mGameMode != GameMode::GAMEMODE_MP_VS) {
         return old_SeedBank_Draw(this, g);
     }
-    Sexy_Graphics_PushState(g);
+    g->PushState();
     //    if (mApp->mGameMode == GameMode::GAMEMODE_MP_VS) {
     //        g->mTransX = 0;
     //        g->mTransY = 0;
@@ -52,22 +52,22 @@ void SeedBank::Draw(Sexy::Graphics *g) {
         return;
     }
     if (mApp->IsSlotMachineLevel()) {
-        Sexy_Graphics_DrawImage(g, *Sexy_IMAGE_SUNBANK_Addr, 0, 0);
+        g->DrawImage(*Sexy_IMAGE_SUNBANK_Addr, 0, 0);
     } else if (mBoard->HasConveyorBeltSeedBank(mIsZombie)) {
         if (mApp->IsCoopMode()) {
-            Sexy_Graphics_DrawImage(g, *Sexy_IMAGE_CONVEYORBELT_BACKDROP_COOP_Addr, 0, 0);
-            Sexy_Graphics_DrawImageCel(g, *Sexy_IMAGE_CONVEYORBELT_COOP_Addr, 7, 63, 0, mConveyorBeltCounter / 4 % 6);
-            Sexy_Graphics_SetClipRect(g, 7, 0, 313, 600);
+            g->DrawImage(*Sexy_IMAGE_CONVEYORBELT_BACKDROP_COOP_Addr, 0, 0);
+            g->DrawImageCel(*Sexy_IMAGE_CONVEYORBELT_COOP_Addr, 7, 63, 0, mConveyorBeltCounter / 4 % 6);
+            g->SetClipRect(7, 0, 313, 600);
         } else {
-            Sexy_Graphics_DrawImage(g, *Sexy_IMAGE_CONVEYORBELT_BACKDROP_Addr, 83, 0);
-            Sexy_Graphics_DrawImageCel(g, *Sexy_IMAGE_CONVEYORBELT_Addr, 90, 63, 0, mConveyorBeltCounter / 4 % 6);
-            Sexy_Graphics_SetClipRect(g, 90, 0, 501, 600);
+            g->DrawImage(*Sexy_IMAGE_CONVEYORBELT_BACKDROP_Addr, 83, 0);
+            g->DrawImageCel(*Sexy_IMAGE_CONVEYORBELT_Addr, 90, 63, 0, mConveyorBeltCounter / 4 % 6);
+            g->SetClipRect(90, 0, 501, 600);
         }
     } else if (mApp->IsCoopMode()) {
-        Sexy_Graphics_DrawImage(g, *Sexy_IMAGE_SEEDBANK_COOP_Addr, 0, 0);
+        g->DrawImage(*Sexy_IMAGE_SEEDBANK_COOP_Addr, 0, 0);
     } else if (mApp->mGameMode == GameMode::GAMEMODE_MP_VS && mIsZombie) {
         int theSeedBankExtraWidth = mBoard->GetSeedBankExtraWidth();
-        Sexy_Graphics_DrawImage(g, *Sexy_IMAGE_ZOMBIE_SEEDBANK_Addr, theSeedBankExtraWidth, 0);
+        g->DrawImage(*Sexy_IMAGE_ZOMBIE_SEEDBANK_Addr, theSeedBankExtraWidth, 0);
     } else {
         Sexy::Image *seedBankImage = *Sexy_IMAGE_SEEDBANK_Addr;
         int theSeedBankExtraWidth = mBoard->GetSeedBankExtraWidth();
@@ -76,8 +76,8 @@ void SeedBank::Draw(Sexy::Graphics *g) {
         theRect[1] = 0;
         theRect[2] = theSeedBankExtraWidth + 12;
         theRect[3] = seedBankImage->mHeight;
-        Sexy_Graphics_DrawImage(g, seedBankImage, 0, 0);
-        Sexy_Graphics_DrawImage2(g, seedBankImage, seedBankImage->mWidth - 12, 0, theRect);
+        g->DrawImage(seedBankImage, 0, 0);
+        g->DrawImage(seedBankImage, seedBankImage->mWidth - 12, 0, (Rect &)theRect);
     }
     SeedPacket *seedPacket1 = nullptr;
     SeedPacket *seedPacket2 = nullptr;
@@ -157,10 +157,10 @@ void SeedBank::Draw(Sexy::Graphics *g) {
         seedPacket1->Draw(g);
         SeedPacket_EndDraw(seedPacket1, g);
     }
-    Sexy_Graphics_ClearClipRect(g);
+    g->ClearClipRect();
     if (mApp->IsSlotMachineLevel()) {
         if (mY > -(*(int (**)(Sexy::Image *))(*Sexy_IMAGE_SEEDBANK_Addr + 20))(*Sexy_IMAGE_SEEDBANK_Addr))
-            Sexy_Graphics_DrawImage(g, *Sexy_IMAGE_SLOTMACHINE_OVERLAY_Addr, 189, -2);
+            g->DrawImage(*Sexy_IMAGE_SLOTMACHINE_OVERLAY_Addr, 189, -2);
     }
     if (!mBoard->HasConveyorBeltSeedBank(0)) {
         int theMoney;
@@ -202,7 +202,7 @@ void SeedBank::Draw(Sexy::Graphics *g) {
     ////        Sexy_Image_PopTransform(g->mDestImage);
     //        (*(void (**)(uint32_t))(**((uint32_t **)g + 1) + 144))(*((uint32_t *)g + 1));
     //    }
-    Sexy_Graphics_PopState(g);
+    g->PopState();
 }
 
 bool SeedBank::MouseHitTest(int x, int y, HitResult *theHitResult) {

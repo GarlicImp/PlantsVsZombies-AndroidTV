@@ -50,8 +50,15 @@ public:
     bool mVolatile;                   // 148
     int unk2[20];                     // 38 ~ 57
     // 大小58个整数
+
     int GetWidth() { return mWidth; };
     int GetHeight() { return mHeight; };
+
+//    virtual void FillRect(const Rect &theRect, const Color &theColor, int theDrawMode);
+//    virtual void DrawRect(const Rect &theRect, const Color &theColor, int theDrawMode);
+//    virtual void ClearRect(const Rect &theRect);
+//    virtual void Blt(Image *theImage, int theX, int theY, const Rect &theSrcRect, const Color &theColor, int theDrawMode);
+//    virtual void StretchBlt(Image *theImage, const Rect &theDestRect, const Rect &theSrcRect, const Rect &theClipRect, const Color &theColor, int theDrawMode, bool fastStretch);
 };
 
 }

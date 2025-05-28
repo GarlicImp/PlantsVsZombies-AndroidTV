@@ -15,7 +15,9 @@
 #include "PvZ/TodLib/Effect/Reanimator.h"
 
 #include <algorithm>
+
 using namespace Sexy;
+using namespace std;
 
 PlantDefinition gPlantDefs[SeedType::NUM_SEED_TYPES] = {
     {SeedType::SEED_PEASHOOTER, nullptr, ReanimationType::REANIM_PEASHOOTER, 0, 100, 750, PlantSubClass::SUBCLASS_SHOOTER, 150, _S("PEASHOOTER")},
@@ -255,7 +257,7 @@ bool Plant::NotOnGround() {
 void Plant::Draw(Sexy::Graphics *g) {
     // 根据玩家的“植物显血”功能是否开启，决定是否在游戏的原始old_Plant_Draw函数执行完后额外绘制血量文本。
 
-    Sexy_Graphics_SetDrawMode(g, Graphics::DRAWMODE_NORMAL);
+    g->SetDrawMode(Graphics::DRAWMODE_NORMAL);
     int theCelRow = 0;
     float num = 0.0f;
     float num2 = PlantDrawHeightOffset(mBoard, 0, mSeedType, mPlantCol, mRow);
@@ -272,13 +274,13 @@ void Plant::Draw(Sexy::Graphics *g) {
             num2 -= 20.0f;
         }
         float ratioSquished = 0.5f;
-        Sexy_Graphics_SetScale(g, 1.0f, ratioSquished, 0.0f, 0.0f);
-        Sexy_Graphics_SetColorizeImages(g, true);
+        g->SetScale(1.0f, ratioSquished, 0.0f, 0.0f);
+        g->SetColorizeImages(true);
         Color color = {255, 255, 255, (int)(255.0f * min(1.0f, mDisappearCountdown / 100.0f))};
-        Sexy_Graphics_SetColor(g, &color);
+        g->SetColor(color);
         Plant::DrawSeedType(g, mSeedType, mImitaterType, DrawVariation::VARIATION_NORMAL, num, num2 + 85.0f * (1 - ratioSquished));
-        Sexy_Graphics_SetScale(g, 1.0f, 1.0f, 0.0f, 0.0f);
-        Sexy_Graphics_SetColorizeImages(g, false);
+        g->SetScale(1.0f, 1.0f, 0.0f, 0.0f);
+        g->SetColorizeImages(false);
         return;
     }
     bool flag = false;
@@ -323,12 +325,11 @@ void Plant::Draw(Sexy::Graphics *g) {
     }
     if (flag) {
         Reanimation *reanimation = mApp->ReanimationGet(thePlant->mBodyReanimID);
-        Sexy::Graphics newGraphics;
-        Sexy_Graphics_Graphics(&newGraphics, g);
-        newGraphics.mTransX += thePlant->mX - mX;
-        newGraphics.mTransY += thePlant->mY - mY;
-        Reanimation_DrawRenderGroup(reanimation, &newGraphics, 1);
-        Sexy_Graphics_Delete2(&newGraphics);
+        Graphics *newGraphics = new Graphics(*g);
+        newGraphics->mTransX += thePlant->mX - mX;
+        newGraphics->mTransY += thePlant->mY - mY;
+        Reanimation_DrawRenderGroup(reanimation, newGraphics, 1);
+        newGraphics->~Graphics();
     }
     num += mShakeOffsetX;
     num2 += mShakeOffsetY;
@@ -339,14 +340,14 @@ void Plant::Draw(Sexy::Graphics *g) {
         if (reanimation2 != nullptr) {
             //            if (plant->mGloveGrabbed)
             //            {
-            //                Sexy_Graphics_SetColorizeImages(g,true);
+            //                SetColorizeImages(g,true);
             //                Color color = {150, 255, 150, 255};
-            //                Sexy_Graphics_SetColor(g,&color);
+            //                SetColor(g,&color);
             //            }
             Reanimation_DrawRenderGroup(reanimation2, g, 0);
             //            if (plant->mGloveGrabbed)
             //            {
-            //                Sexy_Graphics_SetColorizeImages(g,false);
+            //                SetColorizeImages(g,false);
             //            }
         }
     } else {
@@ -358,21 +359,21 @@ void Plant::Draw(Sexy::Graphics *g) {
         }
         if ((IsPartOfUpgradableTo(seedType) && mBoard->CanPlantAt(mPlantCol, mRow, seedType) == PlantingReason::PLANTING_OK)
             || (IsPartOfUpgradableTo(seedType2) && mBoard->CanPlantAt(mPlantCol, mRow, seedType2) == PlantingReason::PLANTING_OK)) {
-            Sexy_Graphics_SetColorizeImages(g, true);
+            g->SetColorizeImages(true);
             Color color;
             GetFlashingColor(&color, mBoard->mMainCounter, 90);
-            Sexy_Graphics_SetColor(g, &color);
+            g->SetColor(color);
         } else if ((seedType == SeedType::SEED_COBCANNON && mBoard->CanPlantAt(mPlantCol - 1, mRow, seedType) == PlantingReason::PLANTING_OK)
                    || (seedType2 == SeedType::SEED_COBCANNON && mBoard->CanPlantAt(mPlantCol - 1, mRow, seedType2) == PlantingReason::PLANTING_OK)) {
-            Sexy_Graphics_SetColorizeImages(g, true);
+            g->SetColorizeImages(true);
             Color color;
             GetFlashingColor(&color, mBoard->mMainCounter, 90);
-            Sexy_Graphics_SetColor(g, &color);
+            g->SetColor(color);
         } else if (mBoard != nullptr && mBoard->mTutorialState == TutorialState::TUTORIAL_SHOVEL_DIG) {
-            Sexy_Graphics_SetColorizeImages(g, true);
+            g->SetColorizeImages(true);
             Color color;
             GetFlashingColor(&color, mBoard->mMainCounter, 90);
-            Sexy_Graphics_SetColor(g, &color);
+            g->SetColor(color);
         }
         if (aImage != nullptr) {
             TodDrawImageCelF(g, aImage, num, num2, theCelCol, theCelRow);
@@ -381,38 +382,38 @@ void Plant::Draw(Sexy::Graphics *g) {
         //        {
         //            if (plant->mGloveGrabbed)
         //            {
-        //                Sexy_Graphics_SetColorizeImages(g,true);
+        //                SetColorizeImages(g,true);
         //                Color color ={150, 255, 150, 255};
-        //                Sexy_Graphics_SetColor(g, &color);
+        //                SetColor(g, &color);
         //            }
         //            TodDrawImageCelF(g, AtlasResources.IMAGE_CACHED_MARIGOLD, Constants.ZenGarden_Marigold_Sprout_Offset.X, Constants.ZenGarden_Marigold_Sprout_Offset.Y, 0, 0);
         //            if (plant->mGloveGrabbed)
         //            {
-        //                Sexy_Graphics_SetColorizeImages(g,false);
+        //                SetColorizeImages(g,false);
         //            }
         //        }
-        Sexy_Graphics_SetColorizeImages(g, false);
+        g->SetColorizeImages(false);
         if (mHighlighted) {
-            Sexy_Graphics_SetDrawMode(g, Graphics::DRAWMODE_ADDITIVE);
-            Sexy_Graphics_SetColorizeImages(g, true);
+            g->SetDrawMode(Graphics::DRAWMODE_ADDITIVE);
+            g->SetColorizeImages(true);
             Color color = {255, 255, 255, 196};
-            Sexy_Graphics_SetColor(g, &color);
+            g->SetColor(color);
             if (aImage != nullptr) {
                 TodDrawImageCelF(g, aImage, num, num2, theCelCol, theCelRow);
             }
-            Sexy_Graphics_SetDrawMode(g, Graphics::DRAWMODE_NORMAL);
-            Sexy_Graphics_SetColorizeImages(g, false);
+            g->SetDrawMode(Graphics::DRAWMODE_NORMAL);
+            g->SetColorizeImages(false);
         } else if (mEatenFlashCountdown > 0) {
-            Sexy_Graphics_SetDrawMode(g, Graphics::DRAWMODE_ADDITIVE);
-            Sexy_Graphics_SetColorizeImages(g, true);
+            g->SetDrawMode(Graphics::DRAWMODE_ADDITIVE);
+            g->SetColorizeImages(true);
             int theAlpha = std::clamp(mEatenFlashCountdown * 3, 0, 255);
             Color color = {255, 255, 255, theAlpha};
-            Sexy_Graphics_SetColor(g, &color);
+            g->SetColor(color);
             if (aImage != nullptr) {
                 TodDrawImageCelF(g, aImage, num, num2, theCelCol, theCelRow);
             }
-            Sexy_Graphics_SetDrawMode(g, Graphics::DRAWMODE_NORMAL);
-            Sexy_Graphics_SetColorizeImages(g, false);
+            g->SetDrawMode(Graphics::DRAWMODE_NORMAL);
+            g->SetColorizeImages(false);
         }
     }
     if (mSeedType == SeedType::SEED_MAGNETSHROOM && !DrawMagnetItemsOnTop()) {
@@ -426,25 +427,25 @@ void Plant::Draw(Sexy::Graphics *g) {
                 || mSeedType == SeedType::SEED_SPIKEROCK))) { // 如果玩家开了 植物显血
         int holder[1];
         Sexy_StrFormat(holder, "%d/%d", mPlantHealth, mPlantMaxHealth);
-        Sexy_Graphics_SetFont(g, *Sexy_FONT_DWARVENTODCRAFT12_Addr);
+        g->SetFont(*Sexy_FONT_DWARVENTODCRAFT12_Addr);
         if (mSeedType == SeedType::SEED_PUMPKINSHELL) {
-            Sexy_Graphics_SetColor(g, &yellow);
-            Sexy_Graphics_DrawString(g, holder, 0, 52);
+            g->SetColor(yellow);
+            g->DrawString((SexyString&)holder, 0, 52);
         } else if (mSeedType == SeedType::SEED_FLOWERPOT) {
-            Sexy_Graphics_SetColor(g, &brown);
-            Sexy_Graphics_DrawString(g, holder, 0, 93);
+            g->SetColor(brown);
+            g->DrawString((SexyString&)holder, 0, 93);
         } else if (mSeedType == SeedType::SEED_LILYPAD) {
-            Sexy_Graphics_SetColor(g, &green);
-            Sexy_Graphics_DrawString(g, holder, 0, 100);
+            g->SetColor(green);
+            g->DrawString((SexyString&)holder, 0, 100);
         } else if (mSeedType == SeedType::SEED_COBCANNON) {
-            Sexy_Graphics_SetColor(g, &white);
-            Sexy_Graphics_DrawString(g, holder, 40, 34);
+            g->SetColor(white);
+            g->DrawString((SexyString&)holder, 40, 34);
         } else {
-            Sexy_Graphics_SetColor(g, &white);
-            Sexy_Graphics_DrawString(g, holder, 0, 34);
+            g->SetColor(white);
+            g->DrawString((SexyString&)holder, 0, 34);
         }
         Sexy_String_Delete(holder);
-        Sexy_Graphics_SetFont(g, nullptr);
+        g->SetFont(nullptr);
     }
 }
 
@@ -460,16 +461,16 @@ void Plant::DrawSeedType(Sexy::Graphics *g, SeedType theSeedType, SeedType theIm
     int v14 = ((int *)g)[7];
     int v15 = ((int *)g)[2];
     int v16 = ((int *)g)[3];
-    int *theColor = Sexy_Graphics_GetColor(g);
+    Color theColor = g->GetColor();
     int v18 = theColor[1];
     int v19 = theColor[2];
     int v20 = theColor[3];
     Color color;
-    color.mRed = *theColor;
+    color.mRed = theColor.mRed;
     color.mGreen = v18;
     color.mBlue = v19;
     color.mAlpha = v20;
-    bool ColorizeImages = Sexy_Graphics_GetColorizeImages(g);
+    bool ColorizeImages = g->GetColorizeImages();
     SeedType theSeedType2 = theSeedType;
 
     if ((theSeedType == theImitaterType && theImitaterType != SeedType::SEED_NONE) ||         // seedPacket中的灰色模仿者卡片在冷却完成后
@@ -547,8 +548,8 @@ void Plant::DrawSeedType(Sexy::Graphics *g, SeedType theSeedType, SeedType theIm
     ((int *)g)[2] = v15;
     ((int *)g)[11] = v40;
     ((int *)g)[3] = v16;
-    Sexy_Graphics_SetColor(g, &color);
-    Sexy_Graphics_SetColorizeImages(g, ColorizeImages);
+    g->SetColor(color);
+    g->SetColorizeImages(ColorizeImages);
 }
 
 void Plant::DoSpecial() {

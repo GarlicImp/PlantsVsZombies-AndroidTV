@@ -75,7 +75,7 @@ void GamepadControls_pickUpCobCannon(int gamePad, int cobCannon) {
     }
 }
 
-void GamepadControls_Draw(GamepadControls *gamepadControls, Sexy::Graphics *graphics) {
+void GamepadControls_Draw(GamepadControls *gamepadControls, Sexy::Graphics *g) {
     // 实现在光标内绘制铲子和黄油手套(黄油手套其实就是花园的手套),并在锤僵尸关卡绘制种植预览
 
     if (gamepadControls->mPlayerIndex2 != -1) {
@@ -87,7 +87,7 @@ void GamepadControls_Draw(GamepadControls *gamepadControls, Sexy::Graphics *grap
             if (requestDrawButterInCursor) {
                 if (!mApp->IsCoopMode())
                     requestDrawButterInCursor = false;
-                Sexy_Graphics_DrawImage(graphics, addonImages.butter_glove, gamepadControls->mCursorPositionX, gamepadControls->mCursorPositionY);
+                g->DrawImage(addonImages.butter_glove, gamepadControls->mCursorPositionX, gamepadControls->mCursorPositionY);
             }
         } else {
             if (requestDrawShovelInCursor) {
@@ -109,9 +109,9 @@ void GamepadControls_Draw(GamepadControls *gamepadControls, Sexy::Graphics *grap
                     cursorObject->mY = gamepadControls->mCursorPositionY - 20;
                 }
 
-                if (CursorObject_BeginDraw(cursorObject, graphics)) {
-                    CursorObject_Draw(cursorObject, graphics);
-                    CursorObject_EndDraw(cursorObject, graphics);
+                if (CursorObject_BeginDraw(cursorObject, g)) {
+                    CursorObject_Draw(cursorObject, g);
+                    CursorObject_EndDraw(cursorObject, g);
                 }
             }
         }
@@ -120,22 +120,22 @@ void GamepadControls_Draw(GamepadControls *gamepadControls, Sexy::Graphics *grap
             int theGridY = board->PixelToGridYKeepOnBoard(gamepadControls->mCursorPositionX, gamepadControls->mCursorPositionY);
             int thePixelX = gamepadControls->mBoard->GridToPixelX(theGridX, theGridY);
             int thePixelY = gamepadControls->mBoard->GridToPixelY(theGridX, theGridY);
-            graphics->mTransX += thePixelX;
-            graphics->mTransY += thePixelY;
-            GamepadControls_DrawPreview(gamepadControls, graphics);
-            graphics->mTransX -= thePixelX;
-            graphics->mTransY -= thePixelY;
+            g->mTransX += thePixelX;
+            g->mTransY += thePixelY;
+            GamepadControls_DrawPreview(gamepadControls, g);
+            g->mTransX -= thePixelX;
+            g->mTransY -= thePixelY;
         }
     }
     if (gamepadControls->mIsCobCannonSelected && useNewCobCannon && !keyboardMode) {
         Sexy::Image *cobcannon_1 = *Sexy_IMAGE_COBCANNON_TARGET_1_Addr;
         *Sexy_IMAGE_COBCANNON_TARGET_1_Addr = addonImages.custom_cobcannon;
-        old_GamepadControls_Draw(gamepadControls, graphics);
+        old_GamepadControls_Draw(gamepadControls, g);
         *Sexy_IMAGE_COBCANNON_TARGET_1_Addr = cobcannon_1;
         return;
     }
 
-    return old_GamepadControls_Draw(gamepadControls, graphics);
+    return old_GamepadControls_Draw(gamepadControls, g);
 }
 
 void GamepadControls_Update(GamepadControls *gamepadControls, float a2) {
@@ -528,24 +528,23 @@ void GamepadControls_UpdatePreviewReanim(GamepadControls *gamepadControls) {
         }
     }
 
-    Sexy::Graphics newGraphics;
-    Sexy_Graphics_Graphics2(&newGraphics, gamepadControls->mPreviewImage);
-    Sexy_Graphics_ClearRect(&newGraphics, 0, 0, gamepadControls->mPreviewImage->mWidth, gamepadControls->mPreviewImage->mHeight);
-    Sexy_Graphics_Translate(&newGraphics, 256, 256);
+    Graphics *newGraphics = new Graphics(gamepadControls->mPreviewImage);
+    newGraphics->ClearRect(0, 0, gamepadControls->mPreviewImage->mWidth, gamepadControls->mPreviewImage->mHeight);
+    newGraphics->Translate(256, 256);
     if (flagUpdateCanPlant || flagUpdateChangeType)
         Reanimation_Update(mPreviewReanim4);
     if (flagDrawGray) {
-        Sexy_Graphics_SetColorizeImages(&newGraphics, true);
-        Sexy_Graphics_SetColor(&newGraphics, &gray);
+        newGraphics->SetColorizeImages(true);
+        (newGraphics)->SetColor(gray);
     }
-    Reanimation_Draw(mPreviewReanim4, &newGraphics);
-    Reanimation_DrawRenderGroup(mPreviewReanim4, &newGraphics, 2);
-    Reanimation_DrawRenderGroup(mPreviewReanim4, &newGraphics, 1);
-    Reanimation_DrawRenderGroup(mPreviewReanim4, &newGraphics, 3);
-    Sexy_Graphics_Delete2(&newGraphics);
+    Reanimation_Draw(mPreviewReanim4, newGraphics);
+    Reanimation_DrawRenderGroup(mPreviewReanim4, newGraphics, 2);
+    Reanimation_DrawRenderGroup(mPreviewReanim4, newGraphics, 1);
+    Reanimation_DrawRenderGroup(mPreviewReanim4, newGraphics, 3);
+    newGraphics->~Graphics();
 }
 
-void GamepadControls_DrawPreview(GamepadControls *gamepadControls, Sexy::Graphics *graphics) {
+void GamepadControls_DrawPreview(GamepadControls *gamepadControls, Sexy::Graphics *g) {
     // 修复排山倒海、砸罐子无尽、锤僵尸、种子雨不显示植物预览的问题。
     LawnApp *mApp = gamepadControls->mGameObject.mApp;
     Board *board = gamepadControls->mBoard;
@@ -554,7 +553,7 @@ void GamepadControls_DrawPreview(GamepadControls *gamepadControls, Sexy::Graphic
         CursorObject *cursorObject = gamepadControls->mPlayerIndex1 ? gamepadControls->mBoard->mCursorObject2 : gamepadControls->mBoard->mCursorObject1;
         if (cursorObject->mCursorType == CursorType::CURSOR_TYPE_PLANT_FROM_USABLE_COIN) {
             gamepadControls->mGamepadState = 7;
-            old_GamepadControls_DrawPreview(gamepadControls, graphics);
+            old_GamepadControls_DrawPreview(gamepadControls, g);
             gamepadControls->mGamepadState = 1;
             return;
         }
@@ -565,7 +564,7 @@ void GamepadControls_DrawPreview(GamepadControls *gamepadControls, Sexy::Graphic
             SeedBank *seedBank = GamepadControls_GetSeedBank(gamepadControls);
             SeedPacket *seedPacket = &seedBank->mSeedPackets[gamepadControls->mSelectedSeedIndex];
             gamepadControls->mSelectedSeedType = seedPacket->mPacketType == SeedType::SEED_IMITATER ? seedPacket->mImitaterType : seedPacket->mPacketType;
-            old_GamepadControls_DrawPreview(gamepadControls, graphics);
+            old_GamepadControls_DrawPreview(gamepadControls, g);
             return;
         }
     }
@@ -574,33 +573,33 @@ void GamepadControls_DrawPreview(GamepadControls *gamepadControls, Sexy::Graphic
         int mGridY = board->PixelToGridYKeepOnBoard(gamepadControls->mCursorPositionX, gamepadControls->mCursorPositionY);
         SeedType mSelectedSeedType = gamepadControls->mSelectedSeedType;
         if (mSelectedSeedType != SeedType::SEED_NONE) {
-            Sexy_Graphics_SetColorizeImages(graphics, true);
+            g->SetColorizeImages(true);
             Sexy::Color theColor = {255, 255, 255, 125};
-            Sexy_Graphics_SetColor(graphics, &theColor);
-            Sexy_Graphics_Translate(graphics, -256, -256);
+            g->SetColor(theColor);
+            g->Translate(-256, -256);
             if (dynamicPreview) { // 修复动态预览时植物错位
                 int thePixelY = gamepadControls->mBoard->GridToPixelY(mGridX, mGridY);
                 for (int i = 0; i != 6; ++i) {
                     if (board->CanPlantAt(mGridX, i, mSelectedSeedType) == PlantingReason::PLANTING_OK) {
                         int theGridPixelY = gamepadControls->mBoard->GridToPixelY(mGridX, i);
-                        Sexy_Graphics_DrawImage(graphics, gamepadControls->mPreviewImage, 0, theGridPixelY - thePixelY);
+                        g->DrawImage(gamepadControls->mPreviewImage, 0, theGridPixelY - thePixelY);
                     }
                 }
             } else {
                 for (int i = 0; i != 6; ++i) {
                     if (board->CanPlantAt(mGridX, i, mSelectedSeedType) == PlantingReason::PLANTING_OK) {
                         float offset = PlantDrawHeightOffset(board, 0, mSelectedSeedType, mGridX, i);
-                        Sexy_Graphics_DrawImage(graphics, gamepadControls->mPreviewImage, 0, offset + (i - mGridY) * 85);
+                        g->DrawImage(gamepadControls->mPreviewImage, 0, offset + (i - mGridY) * 85);
                     }
                 }
             }
-            Sexy_Graphics_Translate(graphics, 256, 256);
-            Sexy_Graphics_SetColorizeImages(graphics, false);
+            g->Translate(256, 256);
+            g->SetColorizeImages(false);
         }
         return;
     }
 
-    return old_GamepadControls_DrawPreview(gamepadControls, graphics);
+    return old_GamepadControls_DrawPreview(gamepadControls, g);
 }
 
 void ZenGardenControls_Update(ZenGardenControls *a1, float a2) {

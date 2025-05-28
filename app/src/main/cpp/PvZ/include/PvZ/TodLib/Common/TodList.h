@@ -5,7 +5,7 @@
 #ifndef PLANTSVSZOMBIES_ANDROIDTV_TODLIST_H
 #define PLANTSVSZOMBIES_ANDROIDTV_TODLIST_H
 
-#define MAX_GLOBAL_ALLOCATORS 128
+constexpr int MAX_GLOBAL_ALLOCATORS = 128;
 
 struct TodAllocator {
     void* mFreeList;

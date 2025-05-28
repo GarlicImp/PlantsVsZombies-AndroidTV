@@ -1,15 +1,16 @@
 #ifndef PVZ_SYMBOLS_H
 #define PVZ_SYMBOLS_H
 
-//#include "PvZ/Lawn/Common/ConstEnums.h"
+#include "PvZ/Lawn/Common/ConstEnums.h"
 #include "PvZ/SexyAppFramework/Graphics/Font.h"
-#include "PvZ/TodLib/Effect/Reanimator.h"
 
 #include <dlfcn.h>
 
 namespace Sexy {
 class Image;
 }
+
+class ReanimatorDefinition;
 
 inline void *Board_UpdateAddr;
 inline void *Board_BoardAddr;
@@ -1734,8 +1735,8 @@ inline bool GetFunctionAddr() {
     Sexy_Graphics_SetFontAddr = dlsym(handle, "_ZN4Sexy8Graphics7SetFontEPNS_4FontE");
     Sexy_Graphics_SetColorizeImagesAddr = dlsym(handle, "_ZN4Sexy8Graphics17SetColorizeImagesEb");
     Sexy_Graphics_GetColorizeImagesAddr = dlsym(handle, "_ZN4Sexy8Graphics17GetColorizeImagesEv");
-    Sexy_Graphics_DrawImageCelAddr = dlsym(handle, "_ZN4Sexy8Graphics12DrawImageCelEPNS_5ImageEiiii");
-    Sexy_Graphics_DrawImageCel2Addr = dlsym(handle, "_ZN4Sexy8Graphics12DrawImageCelEPNS_5ImageEiii");
+    Sexy_Graphics_DrawImageCelAddr = dlsym(handle, "_ZN4Sexy8Graphics12DrawImageCelEPNS_5ImageEiii");
+    Sexy_Graphics_DrawImageCel2Addr = dlsym(handle, "_ZN4Sexy8Graphics12DrawImageCelEPNS_5ImageEiiii");
     Sexy_Graphics_DrawImageMatrixAddr = dlsym(handle, "_ZN4Sexy8Graphics15DrawImageMatrixEPNS_5ImageERKNS_11SexyMatrix3ERKNS_5TRectIiEEffb");
     Sexy_GLGraphics_SetWrapModeAddr = dlsym(handle, "_ZN4Sexy10GLGraphics11SetWrapModeENS_8WrapModeES1_");
     Sexy_Graphics_Delete2Addr = dlsym(handle, "_ZN4Sexy8GraphicsD2Ev");

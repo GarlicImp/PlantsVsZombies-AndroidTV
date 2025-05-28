@@ -6,6 +6,7 @@
 #include "PvZ/Symbols.h"
 
 class Board;
+class Reanimation;
 
 class MotionTrailFrame {
 public:

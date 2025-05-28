@@ -5,6 +5,12 @@
 #ifndef PLANTSVSZOMBIES_ANDROIDTV_FILTEREFFECT_H
 #define PLANTSVSZOMBIES_ANDROIDTV_FILTEREFFECT_H
 
+namespace Sexy
+{
+class Image;
+class MemoryImage;
+}
+
 enum FilterEffect {
     FILTEREFFECT_NONE = -1,
     FILTEREFFECT_WASHED_OUT = 0,
@@ -13,5 +19,9 @@ enum FilterEffect {
     FILTEREFFECT_CUSTOM = 3,
     NUM_FILTEREFFECT
 };
+
+Sexy::Image *FilterEffectCreateImage(Sexy::Image *image, FilterEffect);
+
+Sexy::Image *FilterEffectGetImage(Sexy::Image *image, FilterEffect);
 
 #endif // PLANTSVSZOMBIES_ANDROIDTV_FILTEREFFECT_H

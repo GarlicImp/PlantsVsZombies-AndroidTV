@@ -45,40 +45,6 @@
 #include "PvZ/Lawn/System/PoolEffect.h"
 
 inline void InitInGameFunction() {
-    Sexy_SexyAppBase_EraseFile = (decltype(Sexy_SexyAppBase_EraseFile))Sexy_SexyAppBase_EraseFileAddr;
-    Sexy_Ratio_Set = (decltype(Sexy_Ratio_Set))Sexy_Ratio_SetAddr;
-
-
-    Sexy_Graphics_SetDrawMode = (decltype(Sexy_Graphics_SetDrawMode))Sexy_Graphics_SetDrawModeAddr;
-    Sexy_Graphics_SetColorizeImages = (decltype(Sexy_Graphics_SetColorizeImages))Sexy_Graphics_SetColorizeImagesAddr;
-    Sexy_Graphics_GetColorizeImages = (decltype(Sexy_Graphics_GetColorizeImages))Sexy_Graphics_GetColorizeImagesAddr;
-    Sexy_Graphics_SetFont = (decltype(Sexy_Graphics_SetFont))Sexy_Graphics_SetFontAddr;
-    Sexy_Graphics_FillRect = (decltype(Sexy_Graphics_FillRect))Sexy_Graphics_FillRectAddr;
-    Sexy_Graphics_DrawRect = (decltype(Sexy_Graphics_DrawRect))Sexy_Graphics_DrawRectAddr;
-    Sexy_Graphics_ClipRect = (decltype(Sexy_Graphics_ClipRect))Sexy_Graphics_ClipRectAddr;
-    Sexy_Graphics_SetClipRect = (decltype(Sexy_Graphics_SetClipRect))Sexy_Graphics_SetClipRectAddr;
-    Sexy_Graphics_ClearClipRect = (decltype(Sexy_Graphics_ClearClipRect))Sexy_Graphics_ClearClipRectAddr;
-    Sexy_Graphics_SetLinearBlend = (decltype(Sexy_Graphics_SetLinearBlend))Sexy_Graphics_SetLinearBlendAddr;
-    Sexy_Graphics_PushState = (decltype(Sexy_Graphics_PushState))Sexy_Graphics_PushStateAddr;
-    Sexy_Graphics_PopState = (decltype(Sexy_Graphics_PopState))Sexy_Graphics_PopStateAddr;
-    Sexy_Graphics_DrawString = (decltype(Sexy_Graphics_DrawString))Sexy_Graphics_DrawStringAddr;
-    Sexy_Graphics_DrawImageCel = (decltype(Sexy_Graphics_DrawImageCel))Sexy_Graphics_DrawImageCelAddr;
-    Sexy_Graphics_Graphics = (decltype(Sexy_Graphics_Graphics))Sexy_Graphics_GraphicsAddr;
-    Sexy_Graphics_Graphics2 = (decltype(Sexy_Graphics_Graphics2))Sexy_Graphics_Graphics2Addr;
-    Sexy_Graphics_Delete2 = (decltype(Sexy_Graphics_Delete2))Sexy_Graphics_Delete2Addr;
-    Sexy_Graphics_Translate = (decltype(Sexy_Graphics_Translate))Sexy_Graphics_TranslateAddr;
-    Sexy_Graphics_ClearRect = (decltype(Sexy_Graphics_ClearRect))Sexy_Graphics_ClearRectAddr;
-    Sexy_Graphics_SetColor = (decltype(Sexy_Graphics_SetColor))Sexy_Graphics_SetColorAddr;
-    Sexy_Graphics_DrawTrianglesTex = (decltype(Sexy_Graphics_DrawTrianglesTex))Sexy_Graphics_DrawTrianglesTexAddr;
-    Sexy_Graphics_GetColor = (decltype(Sexy_Graphics_GetColor))Sexy_Graphics_GetColorAddr;
-    Sexy_Graphics_SetScale = (decltype(Sexy_Graphics_SetScale))Sexy_Graphics_SetScaleAddr;
-    Sexy_Graphics_DrawImage = (decltype(Sexy_Graphics_DrawImage))Sexy_Graphics_DrawImageAddr;
-    Sexy_Graphics_DrawImageF = (decltype(Sexy_Graphics_DrawImageF))Sexy_Graphics_DrawImageFAddr;
-    Sexy_Graphics_DrawImageMirror = (decltype(Sexy_Graphics_DrawImageMirror))Sexy_Graphics_DrawImageMirrorAddr;
-    Sexy_Graphics_DrawImage2 = (decltype(Sexy_Graphics_DrawImage2))Sexy_Graphics_DrawImage2Addr;
-    Sexy_Graphics_DrawImageCel2 = (decltype(Sexy_Graphics_DrawImageCel2))Sexy_Graphics_DrawImageCel2Addr;
-    Sexy_Graphics_DrawImageMatrix = (decltype(Sexy_Graphics_DrawImageMatrix))Sexy_Graphics_DrawImageMatrixAddr;
-    Sexy_GLGraphics_SetWrapMode = (decltype(Sexy_GLGraphics_SetWrapMode))Sexy_GLGraphics_SetWrapModeAddr;
     TodDrawImageCelF = (decltype(TodDrawImageCelF))TodDrawImageCelFAddr;
 
 
@@ -796,8 +762,8 @@ inline void InitVTableHookFunction() {
     homura::HookVirtualFunc(vTableForSeedBankAddr, 4, &SeedBank_BeginDraw, &old_SeedBank_BeginDraw);
     homura::HookVirtualFunc(vTableForSeedBankAddr, 5, &SeedBank_EndDraw, &old_SeedBank_EndDraw);
 
-    homura::HookVirtualFunc(vTableForGraphicsAddr, 4, &Sexy_Graphics_PushTransform, &old_Sexy_Graphics_PushTransform);
-    homura::HookVirtualFunc(vTableForGraphicsAddr, 5, &Sexy_Graphics_PopTransform, &old_Sexy_Graphics_PopTransform);
+    homura::HookVirtualFunc(vTableForGraphicsAddr, 4, &Sexy::Graphics::PushTransform, &old_Sexy_Graphics_PushTransform);
+    homura::HookVirtualFunc(vTableForGraphicsAddr, 5, &Sexy::Graphics::PopTransform, &old_Sexy_Graphics_PopTransform);
 
 
     homura::HookVirtualFunc(vTableForImageAddr, 37, &Sexy_Image_PushTransform, &old_Sexy_Image_PushTransform);

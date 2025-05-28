@@ -58,11 +58,11 @@ void SeedPacket::DrawOverlay(Sexy::Graphics *g) {
         int holder[1];
         int coolDownRemaining = mRefreshTime - mRefreshCounter;
         Sexy_StrFormat(holder, "%1.1f", coolDownRemaining / 100.0f);
-        Sexy_Graphics_SetColor(g, SeedPacket_GetPlayerIndex(this) ? &yellow : &blue);
-        Sexy_Graphics_SetFont(g, *Sexy_FONT_DWARVENTODCRAFT18_Addr);
-        Sexy_Graphics_DrawString(g, holder, coolDownRemaining < 1000 ? 10 : 0, 39);
+        g->SetColor(SeedPacket_GetPlayerIndex(this) ? yellow : blue);
+        g->SetFont(*Sexy_FONT_DWARVENTODCRAFT18_Addr);
+        g->DrawString((SexyString&)holder, coolDownRemaining < 1000 ? 10 : 0, 39);
         Sexy_String_Delete(holder);
-        Sexy_Graphics_SetFont(g, nullptr);
+        g->SetFont(nullptr);
     }
 }
 

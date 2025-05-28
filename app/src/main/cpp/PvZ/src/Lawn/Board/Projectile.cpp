@@ -10,6 +10,7 @@
 #include "PvZ/TodLib/Common/TodCommon.h"
 #include "PvZ/TodLib/Effect/Reanimator.h"
 using namespace Sexy;
+using namespace std;
 
 ProjectileDefinition gProjectileDefinition[] = {{ProjectileType::PROJECTILE_PEA, 0, 20},
                                                 {ProjectileType::PROJECTILE_SNOWPEA, 0, 20},

@@ -67,7 +67,7 @@ void ReanimatorCache::DrawCachedPlant(Graphics *graphics, float thePosX, float t
         TodDrawImageScaledF(graphics, image, thePosX + xScaled * a, thePosY + yScaled * b, xScaled, yScaled);
         //        } else {
         //            if (xScaled == 1.0 && yScaled == 1.0) {
-        //                Sexy_Graphics_DrawImage(graphics, image, thePosX + a, thePosY + b);
+        //                DrawImage(graphics, image, thePosX + a, thePosY + b);
         //                return;
         //            }
         //        }
@@ -87,9 +87,8 @@ Sexy::MemoryImage *ReanimatorCache::MakeCachedZombieFrame(ZombieType theZombieTy
     mZombieImages[theZombieType] = nullptr;
 
     Sexy::MemoryImage *BlankCanvasImage = ReanimatorCache_MakeBlankCanvasImage(this, (theZombieType == ZombieType::ZOMBIE_ZAMBONI ? 512 : 256), 256);
-    Sexy::Graphics graphics;
-    Sexy_Graphics_Graphics2(&graphics, (Image *)BlankCanvasImage);
-    Sexy_Graphics_SetLinearBlend(&graphics, 1);
+    Graphics *graphics = new Graphics((Image *)BlankCanvasImage);
+    graphics->SetLinearBlend(true);
     ZombieType zombieType_reanim = theZombieType != ZombieType::ZOMBIE_CACHED_POLEVAULTER_WITH_POLE ? theZombieType : ZombieType::ZOMBIE_POLEVAULTER;
     ReanimationType reanimationType = GetZombieDefinition(zombieType_reanim).mReanimationType;
     float x = 40;
@@ -101,9 +100,9 @@ Sexy::MemoryImage *ReanimatorCache::MakeCachedZombieFrame(ZombieType theZombieTy
     Zombie::SetupReanimLayers(&reanimation, zombieType_reanim);
     Reanimation_SetImageOverride(&reanimation, "anim_head1", *Sexy_IMAGE_REANIM_ZOMBIE_GARGANTUAR_HEAD_REDEYE_Addr);
     Reanimation_Update(&reanimation);
-    Reanimation_Draw(&reanimation, &graphics);
+    Reanimation_Draw(&reanimation, graphics);
     Reanimation_Delete2(&reanimation);
     mZombieImages[theZombieType] = BlankCanvasImage;
-    Sexy_Graphics_Delete2(&graphics);
+    graphics->~Graphics();
     return BlankCanvasImage;
 }

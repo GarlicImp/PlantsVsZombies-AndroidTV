@@ -15,6 +15,7 @@
 #include "PvZ/TodLib/Effect/Attachment.h"
 
 using namespace Sexy;
+using namespace std;
 
 ZombieDefinition gZombieDefs[NUM_ZOMBIE_TYPES] = {
     {ZOMBIE_NORMAL, REANIM_ZOMBIE, 1, 1, 1, 4000, _S("ZOMBIE")},
@@ -529,61 +530,61 @@ void Zombie::Draw(Sexy::Graphics *g) {
     int drawHeightOffset = 0;
     int holder[1];
     if (showZombieBodyHealth || (showGargantuarHealth && (mZombieType == ZombieType::ZOMBIE_GARGANTUAR || mZombieType == ZombieType::ZOMBIE_REDEYE_GARGANTUAR))) { // 如果玩家开了"僵尸显血"
-        Sexy_StrFormat(holder, "%d/%d", mBodyHealth, mBodyMaxHealth);
-        Sexy_Graphics_SetColor(g, &white);
-        Sexy_Graphics_SetFont(g, *Sexy_FONT_DWARVENTODCRAFT18_Addr);
+        Sexy_StrFormat((int*)holder, "%d/%d", mBodyHealth, mBodyMaxHealth);
+        g->SetColor(white);
+        g->SetFont(*Sexy_FONT_DWARVENTODCRAFT18_Addr);
         if (mZombieType == ZombieType::ZOMBIE_BOSS) {
             // 如果是僵王,将血量绘制到僵王头顶。从而修复图鉴中僵王血量绘制位置不正确。
             // 此处仅在图鉴中生效,实战中僵王绘制不走Zombie_Draw()，走Zombie_DrawBossPart()
             g->mTransX = 780.0f;
             g->mTransY = 240.0f;
         }
-        Sexy_Graphics_DrawString(g, holder, 0, drawHeightOffset);
+        g->DrawString((SexyString&)holder, 0, drawHeightOffset);
         Sexy_String_Delete(holder);
-        Sexy_Graphics_SetFont(g, nullptr);
+        g->SetFont(nullptr);
         drawHeightOffset += 20;
     }
     if (showHelmAndShieldHealth) {
         if (mHelmHealth > 0) { // 如果有头盔，绘制头盔血量
             Sexy_StrFormat(holder, "%d/%d", mHelmHealth, mHelmMaxHealth);
-            Sexy_Graphics_SetColor(g, &yellow);
-            Sexy_Graphics_SetFont(g, *Sexy_FONT_DWARVENTODCRAFT18_Addr);
-            Sexy_Graphics_DrawString(g, holder, 0, drawHeightOffset);
+            g->SetColor(yellow);
+            g->SetFont(*Sexy_FONT_DWARVENTODCRAFT18_Addr);
+            g->DrawString((SexyString&)holder, 0, drawHeightOffset);
             Sexy_String_Delete(holder);
-            Sexy_Graphics_SetFont(g, nullptr);
+            g->SetFont(nullptr);
             drawHeightOffset += 20;
         }
         if (mShieldHealth > 0) { // 如果有盾牌，绘制盾牌血量
-            Sexy_StrFormat(holder, "%d/%d", mShieldHealth, mShieldMaxHealth);
-            Sexy_Graphics_SetColor(g, &blue);
-            Sexy_Graphics_SetFont(g, *Sexy_FONT_DWARVENTODCRAFT18_Addr);
-            Sexy_Graphics_DrawString(g, holder, 0, drawHeightOffset);
-            Sexy_String_Delete(holder);
-            Sexy_Graphics_SetFont(g, nullptr);
+            Sexy_StrFormat((int*)holder, "%d/%d", mShieldHealth, mShieldMaxHealth);
+            g->SetColor(blue);
+            g->SetFont(*Sexy_FONT_DWARVENTODCRAFT18_Addr);
+            g->DrawString((SexyString&)holder, 0, drawHeightOffset);
+            Sexy_String_Delete((int*)holder);
+            g->SetFont(nullptr);
         }
     }
 }
 
-void Zombie::DrawBossPart(Sexy::Graphics *graphics, int theBossPart) {
+void Zombie::DrawBossPart(Sexy::Graphics *g, int theBossPart) {
     // 根据玩家的“僵尸显血”功能是否开启，决定是否在游戏的原始old_Zombie_DrawBossPart函数执行完后额外绘制血量文本。
-    old_Zombie_DrawBossPart(this, graphics, theBossPart);
+    old_Zombie_DrawBossPart(this, g, theBossPart);
     if (theBossPart == 3) {
         // 每次绘制Boss都会调用四次本函数，且theBossPart从0到3依次增加，代表绘制Boss的不同Part。
         // 我们只在theBossPart==3时(绘制最后一个部分时)绘制一次血量，免去每次都绘制。
         if (showZombieBodyHealth) { // 如果玩家开了"僵尸显血"
             int holder[1];
-            Sexy_StrFormat(holder, "%d/%d", mBodyHealth, mBodyMaxHealth);
-            Sexy_Graphics_SetColor(graphics, &white);
-            Sexy_Graphics_SetFont(graphics, *Sexy_FONT_DWARVENTODCRAFT18_Addr);
-            float tmpTransX = graphics->mTransX;
-            float tmpTransY = graphics->mTransY;
-            graphics->mTransX = 800.0f;
-            graphics->mTransY = 200.0f;
-            Sexy_Graphics_DrawString(graphics, holder, 0, 0);
-            Sexy_String_Delete(holder);
-            graphics->mTransX = tmpTransX;
-            graphics->mTransY = tmpTransY;
-            Sexy_Graphics_SetFont(graphics, nullptr);
+            Sexy_StrFormat((int*)holder, "%d/%d", mBodyHealth, mBodyMaxHealth);
+            g->SetColor(white);
+            g->SetFont(*Sexy_FONT_DWARVENTODCRAFT18_Addr);
+            float tmpTransX = g->mTransX;
+            float tmpTransY = g->mTransY;
+            g->mTransX = 800.0f;
+            g->mTransY = 200.0f;
+            g->DrawString((SexyString&)holder, 0, 0);
+            Sexy_String_Delete((int*)holder);
+            g->mTransX = tmpTransX;
+            g->mTransY = tmpTransY;
+            g->SetFont(nullptr);
         }
     }
 }
@@ -954,7 +955,7 @@ void Zombie::DieNoLoot() {
     old_Zombie_DieNoLoot(this);
 }
 
-void Zombie::DrawBungeeCord(Sexy::Graphics *graphics, int theOffsetX, int theOffsetY) {
+void Zombie::DrawBungeeCord(Sexy::Graphics *g, int theOffsetX, int theOffsetY) {
     // 修复在Boss关的蹦极绳子不绑在Boss手上
     int aCordCelHeight = Sexy_Image_GetCelHeight(*Sexy_IMAGE_BUNGEECORD_Addr) * mScaleZombie;
     float aPosX = 0.0f;
@@ -972,7 +973,7 @@ void Zombie::DrawBungeeCord(Sexy::Graphics *graphics, int theOffsetX, int theOff
             if (mTargetCol > aBossZombie->mTargetCol) {
                 aClipAmount += 60; // 55 ---- > 115，修复第2、3根手指蹦极不绑在手上
             }
-            Sexy_Graphics_SetClipRect(graphics, -graphics->mTransX, aClipAmount - graphics->mTransY, 800, 600);
+            g->SetClipRect(-g->mTransX, aClipAmount - g->mTransY, 800, 600);
             aSetClip = true;
         }
     }
@@ -980,10 +981,10 @@ void Zombie::DrawBungeeCord(Sexy::Graphics *graphics, int theOffsetX, int theOff
     for (float y = aPosY - aCordCelHeight; y > -60 - aCordCelHeight; y -= aCordCelHeight) {
         float thePosX = theOffsetX + 61.0f - 4.0f / mScaleZombie;
         float thePosY = y - mPosY;
-        TodDrawImageScaledF(graphics, *Sexy_IMAGE_BUNGEECORD_Addr, thePosX, thePosY, mScaleZombie, mScaleZombie);
+        TodDrawImageScaledF(g, *Sexy_IMAGE_BUNGEECORD_Addr, thePosX, thePosY, mScaleZombie, mScaleZombie);
     }
     if (aSetClip) {
-        Sexy_Graphics_ClearClipRect(graphics);
+        g->ClearClipRect();
     }
 }
 
@@ -1089,7 +1090,7 @@ void Zombie::GetDrawPos(ZombieDrawPosition &theDrawPos) {
         if (mInPool) {
             theDrawPos.mClipHeight = theDrawPos.mBodyY;
         } else {
-            float aHeightLimit = min(mPhaseCounter, 40.0f);
+            float aHeightLimit = min(mPhaseCounter, 40);
             theDrawPos.mClipHeight = theDrawPos.mBodyY + aHeightLimit;
         }
 

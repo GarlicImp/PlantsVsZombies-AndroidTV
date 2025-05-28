@@ -162,7 +162,7 @@ bool ZombatarWidget_AccessoryIsColorized(int tab, int accessory);
 
 void MaskHelpWidget_Update(AchievementsWidget *achievementsWidget);
 
-void MaskHelpWidget_Draw(AchievementsWidget *achievementsWidget, Sexy::Graphics *graphics);
+void MaskHelpWidget_Draw(AchievementsWidget *achievementsWidget, Sexy::Graphics *g);
 
 void TestMenuWidget_Delete(ZombatarWidget *zombatarWidget);
 

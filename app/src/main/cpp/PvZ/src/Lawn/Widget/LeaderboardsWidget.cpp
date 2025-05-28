@@ -244,13 +244,13 @@ void DaveHelp_Update(LeaderboardsWidget *leaderboardsWidget) {
     Sexy_Widget_MarkDirty(leaderboardsWidget);
 }
 
-void DaveHelp_Draw(LeaderboardsWidget *leaderboardsWidget, Sexy::Graphics *graphics) {
+void DaveHelp_Draw(LeaderboardsWidget *leaderboardsWidget, Sexy::Graphics *g) {
     for (int i = 4; i >= 0; i--) {
-        Reanimation_DrawRenderGroup(leaderboardsWidget->mLeaderboardReanimations->backgroundReanim[i], graphics, 0);
+        Reanimation_DrawRenderGroup(leaderboardsWidget->mLeaderboardReanimations->backgroundReanim[i], g, 0);
     }
 
-    leaderboardsWidget->mPlantTrashBin->TrashBin::Draw(graphics);
-    leaderboardsWidget->mZombieTrashBin->TrashBin::Draw(graphics);
+    leaderboardsWidget->mPlantTrashBin->TrashBin::Draw(g);
+    leaderboardsWidget->mZombieTrashBin->TrashBin::Draw(g);
 
     for (int i = 0; i < AchievementId::MAX_ACHIEVEMENTS; ++i) {
         int num = LeaderboardsWidget_GetAchievementIdByDrawOrder(i);
@@ -262,38 +262,38 @@ void DaveHelp_Draw(LeaderboardsWidget *leaderboardsWidget, Sexy::Graphics *graph
             Sexy::Image *image = GetIconByAchievementId(id);
             Color color;
             GetFlashingColor(&color, leaderboardsWidget->mApp->mAppCounter, 120);
-            Sexy_Graphics_SetColorizeImages(graphics, true);
-            Sexy_Graphics_SetColor(graphics, &color);
-            Reanimation_Draw(leaderboardsWidget->mLeaderboardReanimations->achievementReanim[num], graphics);
-            Sexy_Graphics_SetColorizeImages(graphics, false);
+            g->SetColorizeImages(true);
+            g->SetColor(color);
+            Reanimation_Draw(leaderboardsWidget->mLeaderboardReanimations->achievementReanim[num], g);
+            g->SetColorizeImages(false);
             int offsetX = gLeaderboardAchievementsPosition[num][0] + 20;
             int offsetY = gLeaderboardAchievementsPosition[num][1] - 200;
-            Sexy_Graphics_DrawImage(graphics, image, offsetX, offsetY);
+            g->DrawImage(image, offsetX, offsetY);
             int holder[1];
             Sexy_StrFormat(holder, "[%s]", GetNameByAchievementId(id));
             Sexy::Rect rect = {offsetX - 42, offsetY + 125, 200, 200};
             Color theColor = {0, 255, 0, 255};
-            TodDrawStringWrapped(graphics, holder, &rect, *Sexy_FONT_HOUSEOFTERROR28_Addr, &theColor, DrawStringJustification::DS_ALIGN_CENTER, false);
+            TodDrawStringWrapped(g, holder, &rect, *Sexy_FONT_HOUSEOFTERROR28_Addr, &theColor, DrawStringJustification::DS_ALIGN_CENTER, false);
             Sexy_String_Delete(holder);
         } else {
-            Reanimation_Draw(leaderboardsWidget->mLeaderboardReanimations->achievementReanim[num], graphics);
+            Reanimation_Draw(leaderboardsWidget->mLeaderboardReanimations->achievementReanim[num], g);
         }
     }
 
     if (leaderboardsWidget->mApp->HasFinishedAdventure()) {
-        Reanimation_DrawRenderGroup(leaderboardsWidget->mLeaderboardReanimations->backgroundReanim[1], graphics, 1);
+        Reanimation_DrawRenderGroup(leaderboardsWidget->mLeaderboardReanimations->backgroundReanim[1], g, 1);
         int holder[1];
         int holder1[1];
         TodStringTranslate(holder, "[LEADERBOARD_STREAK]");
         TodReplaceNumberString(holder1, holder, "{STREAK}", leaderboardsWidget->mLongestRecordPool);
         Sexy::Rect theRect = {317, 658, 120, 50};
         Sexy::Font *theFont = *Sexy_FONT_CONTINUUMBOLD14_Addr;
-        TodDrawStringWrapped(graphics, holder1, &theRect, theFont, &yellow, DrawStringJustification::DS_ALIGN_CENTER, false);
+        TodDrawStringWrapped(g, holder1, &theRect, theFont, &yellow, DrawStringJustification::DS_ALIGN_CENTER, false);
         Sexy_String_Delete(holder);
         Sexy_String_Delete(holder1);
     }
 
-    //    Sexy_Graphics_DrawImage(graphics, addonImages.survival_button, 270, 579);
+    //    DrawImage(g, addonImages.survival_button, 270, 579);
 
     int holder2[1];
     int holder3[1];
@@ -303,7 +303,7 @@ void DaveHelp_Draw(LeaderboardsWidget *leaderboardsWidget, Sexy::Graphics *graph
     Sexy_StrFormat(holder3, "%s", leaderboardsWidget->mApp->mPlayerInfo->mName);
     TodReplaceString(holder4, holder2, "{PLAYER}", holder3);
     Sexy::Font *theFont1 = *Sexy_FONT_HOUSEOFTERROR28_Addr;
-    TodDrawStringWrapped(graphics, holder4, &theRect1, theFont1, &white, DrawStringJustification::DS_ALIGN_CENTER, false);
+    TodDrawStringWrapped(g, holder4, &theRect1, theFont1, &white, DrawStringJustification::DS_ALIGN_CENTER, false);
     Sexy_String_Delete(holder2);
     Sexy_String_Delete(holder3);
     Sexy_String_Delete(holder4);
@@ -314,24 +314,24 @@ void DaveHelp_Draw(LeaderboardsWidget *leaderboardsWidget, Sexy::Graphics *graph
     //    plantHeight}; Rect zombieTrashBinRect = {leaderboardsWidget->mZombieTrashBin->mX,leaderboardsWidget->mZombieTrashBin->mY -
     //    zombieHeight,addonImages.zombie_can->mWidth,addonImages.zombie_can->mHeight + zombieHeight};
     //
-    //    Sexy_Graphics_SetColor(graphics, &yellow);
-    //    Sexy_Graphics_DrawRect(graphics, &plantTrashBinRect);
+    //    SetColor(g, &yellow);
+    //    DrawRect(g, &plantTrashBinRect);
     //
-    //    Sexy_Graphics_SetColor(graphics, &green);
-    //    Sexy_Graphics_DrawRect(graphics, &zombieTrashBinRect);
+    //    SetColor(g, &green);
+    //    DrawRect(g, &zombieTrashBinRect);
 
 
-    //    Sexy_Graphics_SetColor(graphics, &yellow);
+    //    SetColor(g, &yellow);
     //    Rect rect = {xx,yy,xw,yh};
-    //    Sexy_Graphics_DrawRect(graphics, &rect);
+    //    DrawRect(g, &rect);
     //
-    //    Sexy_Graphics_SetColor(graphics, &green);
+    //    SetColor(g, &green);
     //    Rect rect2 = {xx1,yy1,xw1,yh1};
-    //    Sexy_Graphics_DrawRect(graphics, &rect2);
+    //    DrawRect(g, &rect2);
     //    if (LawnApp_EarnedGoldTrophy(leaderboardsWidget->mApp)) {
-    //        Sexy_Graphics_DrawImageCel(graphics, *Sexy_IMAGE_SUNFLOWER_TROPHY_Addr, 1110, 290, 1, 0);
+    //        DrawImageCeliiii(g, *Sexy_IMAGE_SUNFLOWER_TROPHY_Addr, 1110, 290, 1, 0);
     //    } else if (LawnApp_HasFinishedAdventure(leaderboardsWidget->mApp)) {
-    //        Sexy_Graphics_DrawImageCel(graphics, *Sexy_IMAGE_SUNFLOWER_TROPHY_Addr, 1110, 290, 0, 0);
+    //        DrawImageCeliiii(g, *Sexy_IMAGE_SUNFLOWER_TROPHY_Addr, 1110, 290, 0, 0);
     //    }
 }
 

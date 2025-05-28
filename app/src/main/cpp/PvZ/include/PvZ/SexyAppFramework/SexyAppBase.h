@@ -41,6 +41,7 @@ public:
     // 115： 552 , 111： 553
 
     Dialog *GetDialog(Dialogs theDialogId) { return reinterpret_cast<Dialog *(*)(SexyAppBase *, Dialogs)>(Sexy_SexyAppBase_GetDialogAddr)(this, theDialogId); }
+    void EraseFile(const std::string& theFileName) { reinterpret_cast<void (*)(SexyAppBase *, const std::string&)>(Sexy_SexyAppBase_EraseFileAddr)(this, theFileName); }
 
     SexyAppBase() { Create(); }
     void Create();

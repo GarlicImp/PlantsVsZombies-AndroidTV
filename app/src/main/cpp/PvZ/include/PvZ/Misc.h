@@ -16,6 +16,7 @@
 #include "PvZ/TodLib/Common/TodList.h"
 #include "TodLib/Common/TodCommon.h"
 
+class TodParticleSystem;
 
 inline int (*StoreScreen_SetSelectedSlot)(int a1, int a2);
 
@@ -209,12 +210,7 @@ inline void (*ToolTipWidget_SetWarningText)(int *, int *);
 
 inline void (*TestMenuWidget_TestMenuWidget)(ZombatarWidget *);
 
-inline void (*Sexy_SexyAppBase_EraseFile)(SexyAppBase *, int *);
-
 inline void (*SaveGameContext_SyncInt)(int *, int *);
-
-inline void (*Sexy_Ratio_Set)(int *, int, int);
-
 
 inline void (*old_WaitForSecondPlayerDialog_WaitForSecondPlayerDialog)(int *a, int *a2);
 
@@ -254,9 +250,9 @@ inline void (*old_MessageWidget_Update)(CustomMessageWidget *messageWidget);
 int randomInt(int a, int b);
 
 void DrawSeedPacket(
-    Sexy::Graphics *graphics, float x, float y, SeedType seedType, SeedType imitaterType, float coolDownPercent, int grayness, bool drawCostText, bool isInGame, bool isZombieSeed, bool a11);
+    Sexy::Graphics *g, float x, float y, SeedType seedType, SeedType imitaterType, float coolDownPercent, int grayness, bool drawCostText, bool isInGame, bool isZombieSeed, bool a11);
 
-void DrawSeedType(Sexy::Graphics *graphics, float x, float y, SeedType theSeedType, SeedType theImitaterType, float xOffset, float yOffset, float scale);
+void DrawSeedType(Sexy::Graphics *g, float x, float y, SeedType theSeedType, SeedType theImitaterType, float xOffset, float yOffset, float scale);
 
 void LawnMower_Update(int *lawnMover);
 
@@ -283,10 +279,6 @@ void Sexy_MemoryImage_PushTransform(Sexy::Image *image, int *transform, bool con
 void Sexy_MemoryImage_PopTransform(Sexy::Image *image);
 
 void Sexy_MemoryImage_ClearRect(Sexy::Image *a1, Sexy::Rect *a2);
-
-Sexy::Image *FilterEffectCreateImage(Sexy::Image *image, FilterEffect);
-
-Sexy::Image *FilterEffectGetImage(Sexy::Image *image, FilterEffect);
 
 bool Sexy_SexyAppBase_Is3DAccelerated(LawnApp *);
 
