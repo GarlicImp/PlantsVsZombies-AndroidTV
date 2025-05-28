@@ -31,7 +31,7 @@ void SettingsDialog_RemovedFromManager(SettingsDialog *settingsDialog, int *mana
 
 void SettingsDialog_Delete2(SettingsDialog *settingsDialog);
 
-void SettingsDialog_Draw(SettingsDialog *settingsDialog, Sexy::Graphics *graphics);
+void SettingsDialog_Draw(SettingsDialog *settingsDialog, Sexy::Graphics *g);
 
 void SettingsDialog_CheckboxChecked(SettingsDialog *settingsDialog, int id, bool isChecked);
 

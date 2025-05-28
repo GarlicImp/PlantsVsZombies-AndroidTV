@@ -4,6 +4,7 @@
 #include "BaseGamepadControls.h"
 #include "PvZ/Lawn/Common/ConstEnums.h"
 #include "PvZ/Misc.h"
+#include "PvZ/TodLib/Effect/FilterEffect.h"
 
 class Zombie;
 
@@ -125,7 +126,7 @@ FilterEffect GetFilterEffectTypeBySeedType(SeedType mSeedType);
 
 void GamepadControls_pickUpCobCannon(int, int);
 
-void GamepadControls_DrawPreview(GamepadControls *gamepadControls, Sexy::Graphics *graphics);
+void GamepadControls_DrawPreview(GamepadControls *gamepadControls, Sexy::Graphics *g);
 
 void ZenGardenControls_Update(ZenGardenControls *a1, float a2);
 

@@ -83,9 +83,9 @@ void AlmanacDialog_Delete2(AlmanacDialog *almanacDialog);
 
 void AlmanacDialog_ButtonDepress(AlmanacDialog *almanacDialog, int id);
 
-void AlmanacDialog_DrawPlants_Unmodified(AlmanacDialog *almanacDialog, Sexy::Graphics *graphics);
+void AlmanacDialog_DrawPlants_Unmodified(AlmanacDialog *almanacDialog, Sexy::Graphics *g);
 
-void AlmanacDialog_DrawPlants(AlmanacDialog *almanacDialog, Sexy::Graphics *graphics);
+void AlmanacDialog_DrawPlants(AlmanacDialog *almanacDialog, Sexy::Graphics *g);
 
 void AlmanacDialog_SetupLayoutPlants(AlmanacDialog *almanacDialog, Sexy::Graphics *graphics);
 

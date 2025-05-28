@@ -54,7 +54,7 @@ void PoolEffect_UpdateWaterEffect(PoolEffect *poolEffect) {
     Sexy_MemoryImage_BitsChanged((Image*)poolEffect->mCausticImage);
 }
 
-void PoolEffect_PoolEffectDraw(PoolEffect *poolEffect, Sexy::Graphics *graphics, bool theIsNight) {
+void PoolEffect_PoolEffectDraw(PoolEffect *poolEffect, Sexy::Graphics *g, bool theIsNight) {
     float v6;                     // st7
     float v7;                     // st6
     float v8;                     // st5
@@ -348,10 +348,10 @@ void PoolEffect_PoolEffectDraw(PoolEffect *poolEffect, Sexy::Graphics *graphics,
                         v42->u = v139[4 * v52 + 2 * v45] + v46 * v37;
                         v42->v = v139[4 * v52 + 1 + 2 * v45] + v104 * v26;
                         theTriangleCelWidth = (int)theTriangleCelWidthc;
-                        mX = graphics->mClipRect.mX;
+                        mX = g->mClipRect.mX;
                         if ((int)v53 < mX)
                             goto LABEL_37;
-                        if ((int)v53 < mX + graphics->mClipRect.mWidth && (mY = graphics->mClipRect.mY, theTriangleCelWidth >= mY) && theTriangleCelWidth < mY + graphics->mClipRect.mHeight) {
+                        if ((int)v53 < mX + g->mClipRect.mWidth && (mY = g->mClipRect.mY, theTriangleCelWidth >= mY) && theTriangleCelWidth < mY + g->mClipRect.mHeight) {
                             if (v44 && v44 != 15 && v45)
                                 v42->color = theIsNight ? 0x30FFFFFF : v44 <= 7 ? 0xC0FFFFFF : 0x80FFFFFF;
                             else
@@ -372,8 +372,8 @@ void PoolEffect_PoolEffectDraw(PoolEffect *poolEffect, Sexy::Graphics *graphics,
                         v42->u = v139[v47] + v46 * v37;
                         v42->v = v139[v47 + 1] + v104 * v26;
                         v49 = (int)theTriangleCelWidth;
-                        v50 = graphics->mClipRect.mX;
-                        if ((int)v48 < v50 || (int)v48 >= v50 + graphics->mClipRect.mWidth || (v51 = graphics->mClipRect.mY, v49 < v51) || v49 >= v51 + graphics->mClipRect.mHeight) {
+                        v50 = g->mClipRect.mX;
+                        if ((int)v48 < v50 || (int)v48 >= v50 + g->mClipRect.mWidth || (v51 = g->mClipRect.mY, v49 < v51) || v49 >= v51 + g->mClipRect.mHeight) {
                             v42->color = 0xFFFFFF;
                         }
                     }
@@ -389,45 +389,43 @@ void PoolEffect_PoolEffectDraw(PoolEffect *poolEffect, Sexy::Graphics *graphics,
         }
     }
     if (theIsNight) {
-        Sexy_Graphics_DrawTrianglesTex(graphics, *Sexy_IMAGE_POOL_BASE_NIGHT_Addr, v140[0], 150);
-        Sexy_Graphics_DrawTrianglesTex(graphics, *Sexy_IMAGE_POOL_SHADING_NIGHT_Addr, v140[1], 150);
+        g->DrawTrianglesTex(*Sexy_IMAGE_POOL_BASE_NIGHT_Addr, v140[0], 150);
+        g->DrawTrianglesTex(*Sexy_IMAGE_POOL_SHADING_NIGHT_Addr, v140[1], 150);
     } else {
-        Sexy_Graphics_DrawTrianglesTex(graphics, *Sexy_IMAGE_POOL_BASE_Addr, v140[0], 150);
-        Sexy_Graphics_DrawTrianglesTex(graphics, *Sexy_IMAGE_POOL_SHADING_Addr, v140[1], 150);
+        g->DrawTrianglesTex(*Sexy_IMAGE_POOL_BASE_Addr, v140[0], 150);
+        g->DrawTrianglesTex(*Sexy_IMAGE_POOL_SHADING_Addr, v140[1], 150);
     }
     PoolEffect_UpdateWaterEffect(poolEffect);
-    Sexy::Graphics newGraphics;
-    Sexy_Graphics_Graphics(&newGraphics, graphics);
-    Sexy_GLGraphics_SetWrapMode(&newGraphics, 0, 0);
-    Sexy_Graphics_DrawTrianglesTex(&newGraphics, (Image*)poolEffect->mCausticImage, v140[2], 150);
-    Sexy_GLGraphics_SetWrapMode(&newGraphics, 1, 1);
-    Sexy_Graphics_Delete2(&newGraphics);
+    Graphics *newGraphics = new Graphics(*g);
+    newGraphics->SetWrapMode(0, 0);
+    newGraphics->DrawTrianglesTex((Image*)poolEffect->mCausticImage, v140[2], 150);
+    newGraphics->SetWrapMode(1, 1);
+    newGraphics->~Graphics();
 
     if (poolEffect->mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_POOL_PARTY && poolEffect->mApp->mBoard != nullptr) {
-        float theTmpTransY = graphics->mTransY;
+        float theTmpTransY = g->mTransY;
         int thePoolOffsetY[2] = {164, -175};
         for (int i = 0; i < 2; ++i) {
-            graphics->mTransY += thePoolOffsetY[i];
+            g->mTransY += thePoolOffsetY[i];
             if (theIsNight) {
-                Sexy_Graphics_DrawImage(graphics, *Sexy_IMAGE_POOL_NIGHT_Addr, 34, 278);
-                Sexy_Graphics_DrawTrianglesTex(graphics, *Sexy_IMAGE_POOL_BASE_NIGHT_Addr, v140[0], 150);
-                Sexy_Graphics_DrawTrianglesTex(graphics, *Sexy_IMAGE_POOL_SHADING_NIGHT_Addr, v140[1], 150);
+                g->DrawImage(*Sexy_IMAGE_POOL_NIGHT_Addr, 34, 278);
+                g->DrawTrianglesTex(*Sexy_IMAGE_POOL_BASE_NIGHT_Addr, v140[0], 150);
+                g->DrawTrianglesTex(*Sexy_IMAGE_POOL_SHADING_NIGHT_Addr, v140[1], 150);
             } else {
-                Sexy_Graphics_DrawImage(graphics, *Sexy_IMAGE_POOL_Addr, 34, 278);
-                Sexy_Graphics_DrawTrianglesTex(graphics, *Sexy_IMAGE_POOL_BASE_Addr, v140[0], 150);
-                Sexy_Graphics_DrawTrianglesTex(graphics, *Sexy_IMAGE_POOL_SHADING_Addr, v140[1], 150);
+                g->DrawImage(*Sexy_IMAGE_POOL_Addr, 34, 278);
+                g->DrawTrianglesTex(*Sexy_IMAGE_POOL_BASE_Addr, v140[0], 150);
+                g->DrawTrianglesTex(*Sexy_IMAGE_POOL_SHADING_Addr, v140[1], 150);
                 TodParticleSystem *thePoolSparkle = poolEffect->mApp->ParticleTryToGet(poolEffect->mApp->mBoard->mPoolSparklyParticleID);
                 if (thePoolSparkle != nullptr) {
-                    TodParticleSystem_Draw(thePoolSparkle, graphics);
+                    TodParticleSystem_Draw(thePoolSparkle, g);
                 }
             }
-            Sexy::Graphics newGraphics;
-            Sexy_Graphics_Graphics(&newGraphics, graphics);
-            Sexy_GLGraphics_SetWrapMode(&newGraphics, 0, 0);
-            Sexy_Graphics_DrawTrianglesTex(&newGraphics, (Image*)poolEffect->mCausticImage, v140[2], 150);
-            Sexy_GLGraphics_SetWrapMode(&newGraphics, 1, 1);
-            Sexy_Graphics_Delete2(&newGraphics);
-            graphics->mTransY = theTmpTransY;
+            Graphics *newGraphics = new Graphics(*g);
+            newGraphics->SetWrapMode(0, 0);
+            newGraphics->DrawTrianglesTex((Image*)poolEffect->mCausticImage, v140[2], 150);
+            newGraphics->SetWrapMode(1, 1);
+            newGraphics->~Graphics();
+            g->mTransY = theTmpTransY;
         }
     }
 }

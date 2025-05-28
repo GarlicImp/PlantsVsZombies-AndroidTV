@@ -32,6 +32,6 @@ public:
 
 inline unsigned int (*PoolEffect_BilinearLookupFixedPoint)(PoolEffect *, unsigned int, unsigned int);
 
-void PoolEffect_PoolEffectDraw(PoolEffect *poolEffect, Sexy::Graphics *graphics, bool theIsNight);
+void PoolEffect_PoolEffectDraw(PoolEffect *poolEffect, Sexy::Graphics *g, bool theIsNight);
 
 #endif // PLANTSVSZOMBIES_ANDROIDTV_POOLEFFECT_H

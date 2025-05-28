@@ -99,7 +99,7 @@ void Sexy_String_Delete(int *holder) {
     }
 }
 
-void DrawSeedPacket(Sexy::Graphics *graphics,
+void DrawSeedPacket(Sexy::Graphics *g,
                     float x,
                     float y,
                     SeedType seedType,
@@ -115,12 +115,12 @@ void DrawSeedPacket(Sexy::Graphics *graphics,
     SeedType realSeedType = imitaterType != SeedType::SEED_NONE && seedType == SeedType::SEED_IMITATER ? imitaterType : seedType;
     if (grayness != 255) {
         Color theColor = {grayness, grayness, grayness, 255};
-        Sexy_Graphics_SetColor(graphics, &theColor);
-        Sexy_Graphics_SetColorizeImages(graphics, true);
+        g->SetColor(theColor);
+        g->SetColorizeImages(true);
     } else if (coolDownPercent > 0.0f) {
         Color theColor = {128, 128, 128, 255};
-        Sexy_Graphics_SetColor(graphics, &theColor);
-        Sexy_Graphics_SetColorizeImages(graphics, true);
+        g->SetColor(theColor);
+        g->SetColorizeImages(true);
     }
     int celToDraw;
     if (seedType == SeedType::SEED_IMITATER) {
@@ -144,18 +144,18 @@ void DrawSeedPacket(Sexy::Graphics *graphics,
     }
 
     if (isSeedPacketSelected) {
-        if (graphics->mScaleX > 1.0f && seedType <= SeedType::SEED_LEFTPEATER) {
+        if (g->mScaleX > 1.0f && seedType <= SeedType::SEED_LEFTPEATER) {
             // 紫卡背景BUG就是在这里修复的
             if (celToDraw == 2) {
-                TodDrawImageCelScaledF(graphics, *Sexy_IMAGE_SEEDPACKET_LARGER_Addr, x, y, 0, 0, graphics->mScaleX * 0.5f, graphics->mScaleY * 0.5f);
+                TodDrawImageCelScaledF(g, *Sexy_IMAGE_SEEDPACKET_LARGER_Addr, x, y, 0, 0, g->mScaleX * 0.5f, g->mScaleY * 0.5f);
             } else {
-                TodDrawImageCelScaledF(graphics, *Sexy_IMAGE_SEEDS_Addr, x, y, celToDraw, 0, graphics->mScaleX, graphics->mScaleY);
+                TodDrawImageCelScaledF(g, *Sexy_IMAGE_SEEDS_Addr, x, y, celToDraw, 0, g->mScaleX, g->mScaleY);
             }
         } else if (isZombieSeed) {
-            float heightOffset = graphics->mScaleX > 1.2 ? -1.5f : 0.0f;
-            TodDrawImageScaledF(graphics, *Sexy_IMAGE_ZOMBIE_SEEDPACKET_Addr, x, y + heightOffset, graphics->mScaleX, graphics->mScaleY);
+            float heightOffset = g->mScaleX > 1.2 ? -1.5f : 0.0f;
+            TodDrawImageScaledF(g, *Sexy_IMAGE_ZOMBIE_SEEDPACKET_Addr, x, y + heightOffset, g->mScaleX, g->mScaleY);
         } else {
-            TodDrawImageCelScaledF(graphics, *Sexy_IMAGE_SEEDS_Addr, x, y, celToDraw, 0, graphics->mScaleX, graphics->mScaleY);
+            TodDrawImageCelScaledF(g, *Sexy_IMAGE_SEEDS_Addr, x, y, celToDraw, 0, g->mScaleX, g->mScaleY);
         }
     }
     bool isPlant = seedType < SeedType::SEED_BEGHOULED_BUTTON_SHUFFLE || seedType > SeedType::SEED_ZOMBIQUARIUM_TROPHY;
@@ -350,8 +350,8 @@ void DrawSeedPacket(Sexy::Graphics *graphics,
             offsetX = 16.0;
         }
     }
-    v28 = offsetX * graphics->mScaleX;
-    v29 = (offsetY + 1.0f) * graphics->mScaleY;
+    v28 = offsetX * g->mScaleX;
+    v29 = (offsetY + 1.0f) * g->mScaleY;
     if (realSeedType == SeedType::SEED_GIANT_WALLNUT) {
         v29 = 59.0;
         theDrawScale = theDrawScale * 0.75;
@@ -359,26 +359,25 @@ void DrawSeedPacket(Sexy::Graphics *graphics,
     }
 
     if (isPlant && isSeedPacketSelected)
-        DrawSeedType(graphics, x, y, realSeedType, imitaterType, v28, v29, theDrawScale);
+        DrawSeedType(g, x, y, realSeedType, imitaterType, v28, v29, theDrawScale);
 
     if (coolDownPercent > 0.0) {
         float coolDownHeight = coolDownPercent * 68.0 + 2.5;
-        Sexy::Graphics newGraphics;
-        Sexy_Graphics_Graphics(&newGraphics, graphics);
+        Graphics *newGraphics = new Graphics(*g);
         Color theColor = {64, 64, 64, 255};
-        Sexy_Graphics_SetColor(&newGraphics, &theColor);
-        Sexy_Graphics_SetColorizeImages(&newGraphics, true);
-        Sexy_Graphics_ClipRect(&newGraphics, x, y, graphics->mScaleX * 50.0f, coolDownHeight * graphics->mScaleY);
+        newGraphics->SetColor(theColor);
+        newGraphics->SetColorizeImages(true);
+        newGraphics->ClipRect(x, y, g->mScaleX * 50.0f, coolDownHeight * g->mScaleY);
         if (isSeedPacketSelected) {
             if (Challenge::IsMPSeedType(seedType)) {
-                TodDrawImageScaledF(&newGraphics, *Sexy_IMAGE_ZOMBIE_SEEDPACKET_Addr, x, y, graphics->mScaleX, graphics->mScaleY);
+                TodDrawImageScaledF(newGraphics, *Sexy_IMAGE_ZOMBIE_SEEDPACKET_Addr, x, y, g->mScaleX, g->mScaleY);
             } else {
-                TodDrawImageCelScaledF(&newGraphics, *Sexy_IMAGE_SEEDS_Addr, x, y, celToDraw, 0, graphics->mScaleX, graphics->mScaleY);
+                TodDrawImageCelScaledF(newGraphics, *Sexy_IMAGE_SEEDS_Addr, x, y, celToDraw, 0, g->mScaleX, g->mScaleY);
             }
         }
         if (isPlant && isSeedPacketSelected)
-            DrawSeedType(&newGraphics, x, y, seedType, imitaterType, v28, v29, theDrawScale);
-        Sexy_Graphics_Delete2(&newGraphics);
+            DrawSeedType(newGraphics, x, y, seedType, imitaterType, v28, v29, theDrawScale);
+        newGraphics->~Graphics();
     }
     if (drawCostText) {
         int tmpHolder[1];
@@ -400,23 +399,23 @@ void DrawSeedPacket(Sexy::Graphics *graphics,
         ;                                                                      // 33  ----- >  31，微调一下文字位置，左移2个像素点
         int height = 48 + (*((int (**)(Sexy::Font *))font->vTable + 2))(font); // 50  ---- >  48, 微调一下文字位置，上移2个像素点
         Color theColor = {0, 0, 0, 255};
-        Sexy_Graphics_PushState(graphics);
-        if (graphics->mScaleX == 1.0 && graphics->mScaleY == 1.0) {
-            TodDrawString(graphics, tmpHolder, width + x, height + y, font, theColor, DrawStringJustification::DS_ALIGN_LEFT);
+        g->PushState();;
+        if (g->mScaleX == 1.0 && g->mScaleY == 1.0) {
+            TodDrawString(g, tmpHolder, width + x, height + y, font, theColor, DrawStringJustification::DS_ALIGN_LEFT);
         } else {
             int matrix[25];
             Sexy_SexyMatrix3_SexyMatrix3(matrix);
-            TodScaleTransformMatrix(matrix, x + graphics->mTransX + width * graphics->mScaleX, y + graphics->mTransY + height * graphics->mScaleY - 1.0, graphics->mScaleX, graphics->mScaleY);
-            if (graphics->mScaleX > 1.8) {
-                Sexy_Graphics_SetLinearBlend(graphics, false);
+            TodScaleTransformMatrix(matrix, x + g->mTransX + width * g->mScaleX, y + g->mTransY + height * g->mScaleY - 1.0, g->mScaleX, g->mScaleY);
+            if (g->mScaleX > 1.8) {
+                g->SetLinearBlend(false);
             }
-            TodDrawStringMatrix(graphics, font, matrix, tmpHolder, &theColor);
-            Sexy_Graphics_SetLinearBlend(graphics, true);
+            TodDrawStringMatrix(g, font, matrix, tmpHolder, &theColor);
+            g->SetLinearBlend(true);
         }
-        Sexy_Graphics_PopState(graphics);
+        g->PopState();
         Sexy_String_Delete(tmpHolder);
     }
-    Sexy_Graphics_SetColorizeImages(graphics, false);
+    g->SetColorizeImages(false);
 }
 
 unsigned int AverageNearByPixels(Sexy::Image *theImage, unsigned int *aPixel, int y, int x) {
@@ -636,22 +635,22 @@ Image *FilterEffectGetImage(Image *image, FilterEffect mFilterEffect) {
 
 void FilterEffectDisposeForApp() {}
 
-void DrawSeedType(Sexy::Graphics *graphics, float x, float y, SeedType theSeedType, SeedType theImitaterType, float xOffset, float yOffset, float scale) {
+void DrawSeedType(Sexy::Graphics *g, float x, float y, SeedType theSeedType, SeedType theImitaterType, float xOffset, float yOffset, float scale) {
     // 和Plant_DrawSeedType配合使用，用于绘制卡槽内的模仿者SeedPacket变白效果。
-    Sexy_Graphics_PushState(graphics);
-    graphics->mScaleX = graphics->mScaleX * scale;
-    graphics->mScaleY = graphics->mScaleY * scale;
+    g->PushState();
+    g->mScaleX = g->mScaleX * scale;
+    g->mScaleY = g->mScaleY * scale;
     if (theSeedType == SeedType::SEED_ZOMBIE_TOMBSTONE) {
-        TodDrawImageCelScaledF(graphics, *Sexy_IMAGE_MP_TOMBSTONE_Addr, x + xOffset, y + yOffset, 0, 0, graphics->mScaleX, graphics->mScaleY);
+        TodDrawImageCelScaledF(g, *Sexy_IMAGE_MP_TOMBSTONE_Addr, x + xOffset, y + yOffset, 0, 0, g->mScaleX, g->mScaleY);
     } else {
         if (theSeedType == SeedType::SEED_IMITATER && theImitaterType != SeedType::SEED_NONE) {
             // 卡槽内的模仿者SeedPacket卡且为冷却状态，此时需要交换theImitaterType和theSeedType。
-            Plant::DrawSeedType(graphics, theImitaterType, theSeedType, DrawVariation::VARIATION_NORMAL, x + xOffset, y + yOffset);
+            Plant::DrawSeedType(g, theImitaterType, theSeedType, DrawVariation::VARIATION_NORMAL, x + xOffset, y + yOffset);
         } else {
-            Plant::DrawSeedType(graphics, theSeedType, theImitaterType, DrawVariation::VARIATION_NORMAL, x + xOffset, y + yOffset);
+            Plant::DrawSeedType(g, theSeedType, theImitaterType, DrawVariation::VARIATION_NORMAL, x + xOffset, y + yOffset);
         }
     }
-    return Sexy_Graphics_PopState(graphics);
+    return g->PopState();
 }
 
 void HelpBarWidget_HelpBarWidget(Sexy::Widget *a) {

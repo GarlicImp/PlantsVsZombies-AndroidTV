@@ -4,6 +4,7 @@
 #include "../Misc/Common.h"
 #include "../Misc/Rect.h"
 #include "../Misc/TriVertex.h"
+#include "PvZ/Symbols.h"
 
 #include "Color.h"
 #include "Image.h"
@@ -15,11 +16,17 @@ class SexyMatrix3;
 class Transform;
 class SexyVertex2D;
 
+class GLGraphics {
+public:
+    int mHorizonWrapMode;             // 5
+    int mVertWrapMode;                // 6
+};
+
 class Graphics {
 public:
     enum DrawMode {
         DRAWMODE_NORMAL = 0,
-        DRAWMODE_ADDITIVE = 1
+        DRAWMODE_ADDITIVE = 1,
     };
 
     int *vTable;                  // 0
@@ -28,12 +35,13 @@ public:
     float mTransY;                // 3
     float mScaleX;                // 4
     float mScaleY;                // 5
-    float unk1[2];                // 6 ~ 7
+    float mScaleOrigX;            // 6
+    float mScaleOrigY;            // 7
     Rect mClipRect;               // 8 ~ 11
     int unk2[3];                  // 12 ~ 14
     Color mColorUnknown;          // 15 ~ 18
     Color mColor;                 // 19 ~ 22
-    int *mFont;                   // 23
+    Font *mFont;                  // 23
     DrawMode mDrawMode;           // 24
     bool mColorizeImages;         // 100
     bool mFastStretch;            // 101
@@ -46,152 +54,68 @@ public:
     int unkInt;                   // 28
     int m3D;                      // 29
     int unk3[6];                  // 30 ~ 35
-}; // 大小36个整数
+    // 大小36个整数
+
+    Graphics(const Graphics& theGraphics) { CreateGraphics(theGraphics); }
+    Graphics(Image* theDestImage = NULL) { CreateImage(theDestImage); }
+    void CreateGraphics(const Graphics& theGraphics) { reinterpret_cast<void (*)(Graphics *, const Graphics&)>(Sexy_Graphics_GraphicsAddr)(this, theGraphics); }
+    void CreateImage(Image* theDestImage = NULL) { reinterpret_cast<void (*)(Graphics *, Image*)>(Sexy_Graphics_Graphics2Addr)(this, theDestImage); }
+    ~Graphics() { reinterpret_cast<void (*)(Graphics *)>(Sexy_Graphics_Delete2Addr)(this); }
+    void PushState() { reinterpret_cast<void (*)(Graphics *)>(Sexy_Graphics_PushStateAddr)(this); }
+    void PopState() { reinterpret_cast<void (*)(Graphics *)>(Sexy_Graphics_PopStateAddr)(this); }
+    void ClipRect(int theX, int theY, int theWidth, int theHeight) { reinterpret_cast<void (*)(Graphics *, int, int, int, int)>(Sexy_Graphics_ClipRectAddr)(this, theX, theY, theWidth, theHeight); }
+    void SetClipRect(int theX, int theY, int theWidth, int theHeight) { reinterpret_cast<void (*)(Graphics *, int, int, int, int)>(Sexy_Graphics_SetClipRectAddr)(this, theX, theY, theWidth, theHeight); }
+    void ClearClipRect() { reinterpret_cast<void (*)(Graphics *)>(Sexy_Graphics_ClearClipRectAddr)(this); }
+    void FillRect(const Rect &theRect) { reinterpret_cast<void (*)(Graphics *, const Rect &)>(Sexy_Graphics_FillRectAddr)(this, theRect); }
+    void DrawRect(const Rect &theRect) { reinterpret_cast<void (*)(Graphics *, const Rect &)>(Sexy_Graphics_DrawRectAddr)(this, theRect); }
+    void ClearRect(int theX, int theY, int theWidth, int theHeight) { reinterpret_cast<void (*)(Graphics *, int, int, int, int)>(Sexy_Graphics_ClearRectAddr)(this, theX, theY, theWidth, theHeight); }
+    void DrawString(const SexyString &theString, int theX, int theY) { // SexyString类型尚不明确
+        reinterpret_cast<void (*)(Graphics *, const SexyString &, int, int)>(Sexy_Graphics_DrawStringAddr)(this, theString, theX, theY);
+    }
+    void DrawImage(Image *theImage, int theX, int theY) { reinterpret_cast<void (*)(Graphics *, Image *, int, int)>(Sexy_Graphics_DrawImageAddr)(this, theImage, theX, theY); }
+    void DrawImage(Image *theImage, int theX, int theY, const Rect &theSrcRect) {
+        reinterpret_cast<void (*)(Graphics *, Image *, int, int, const Rect &)>(Sexy_Graphics_DrawImage2Addr)(this, theImage, theX, theY, theSrcRect);
+    }
+    void DrawImageF(Image *theImage, float theX, float theY) { reinterpret_cast<void (*)(Graphics *, Image *, float, float)>(Sexy_Graphics_DrawImageFAddr)(this, theImage, theX, theY); }
+    void DrawImageCel(Image *theImageStrip, int theX, int theY, int theCel) {
+        reinterpret_cast<void (*)(Graphics *, Image *, int, int, int)>(Sexy_Graphics_DrawImageCelAddr)(this, theImageStrip, theX, theY, theCel);
+    }
+    void DrawImageCel(Image *theImageStrip, int theX, int theY, int theCelCol, int theCelRow) {
+        reinterpret_cast<void (*)(Graphics *, Image *, int, int, int, int)>(Sexy_Graphics_DrawImageCel2Addr)(this, theImageStrip, theX, theY, theCelCol, theCelRow);
+    }
+    void DrawImageMirror(Image* theImage, int theX, int theY, bool mirror) { reinterpret_cast<void (*)(Graphics *, int, int, bool)>(Sexy_Graphics_DrawImageMirrorAddr)(this, theX, theY, mirror); }
+    void DrawTrianglesTex(Image *theTexture, const SexyVertex2D theVertices[][3], int theNumTriangles) {
+        reinterpret_cast<void (*)(Graphics *, Image *, const SexyVertex2D[][3], int)>(Sexy_Graphics_DrawTrianglesTexAddr)(this, theTexture, theVertices, theNumTriangles);
+    }
+    void DrawImageMatrix(Image *theImage, const SexyMatrix3 &theMatrix, const Rect &theSrcRect, float x, float y, bool theBool) {
+        reinterpret_cast<void (*)(Graphics *, Image *, const SexyMatrix3 &, const Rect &, float, float, bool)>(Sexy_Graphics_DrawImageMatrixAddr)(this, theImage, theMatrix, theSrcRect, x, y, theBool);
+    }
+    void SetWrapMode(int theHorizonWrapMode, int theVertWrapMode) { reinterpret_cast<void (*)(int, int)>(Sexy_GLGraphics_SetWrapModeAddr)(theHorizonWrapMode, theVertWrapMode); }
+
+    void SetFont(Font *theFont);
+    Font *GetFont();
+    void SetColor(const Color &theColor);
+    const Color &GetColor();
+    void SetDrawMode(DrawMode theDrawMode);
+    int GetDrawMode();
+    void SetColorizeImages(bool colorizeImages);
+    bool GetColorizeImages();
+    void SetLinearBlend(bool linear); // for DrawImageMatrix, DrawImageTransform, etc...
+    bool GetLinearBlend();
+    void Translate(int theTransX, int theTransY);
+    void SetScale(float theScaleX, float theScaleY, float theOrigX, float theOrigY);
+    void PushTransform(int *theTransform, bool concatenate);
+    void PopTransform();
+    void DrawTrianglesTex2(Image *theTexture, TriVertex theVertices[][3], int theNumTriangles);
+
+};
+
 } // namespace Sexy
-
-inline Sexy::Color black = {0, 0, 0, 255};
-
-inline Sexy::Color gray = {80, 80, 80, 255};
-
-inline Sexy::Color white = {255, 255, 255, 255};
-
-inline Sexy::Color blue = {0, 255, 255, 255};
-
-inline Sexy::Color yellow = {255, 255, 0, 255};
-
-inline Sexy::Color brown = {205, 133, 63, 255};
-
-inline Sexy::Color green = {0, 250, 154, 255};
-
-inline Sexy::Color gZombatarSkinColor[] = {
-    {134, 147, 122, 255},
-    {79, 135, 94, 255},
-    {127, 135, 94, 255},
-    {120, 130, 50, 255},
-    {156, 163, 105, 255},
-    {96, 151, 11, 255},
-    {147, 184, 77, 255},
-    {82, 143, 54, 255},
-    {121, 168, 99, 255},
-    {65, 156, 74, 255},
-    {107, 178, 114, 255},
-    {104, 121, 90, 255},
-};
-
-inline Sexy::Color gZombatarAccessoryColor[] = {
-    {151, 33, 33, 255},
-    {199, 53, 53, 255},
-    {220, 112, 47, 255},
-    {251, 251, 172, 255},
-    {240, 210, 87, 255},
-    {165, 126, 65, 255},
-    {106, 72, 32, 255},
-    {72, 35, 5, 255},
-    {50, 56, 61, 255},
-    {0, 0, 10, 255},
-    {197, 239, 239, 255},
-    {63, 109, 242, 255},
-    {14, 201, 151, 255},
-    {158, 183, 19, 255},
-    {30, 210, 64, 255},
-    {225, 65, 230, 255},
-    {128, 47, 204, 255},
-    {255, 255, 255, 255},
-};
-
-inline Sexy::Color gZombatarAccessoryColor2[] = {
-    {238, 19, 24, 255},
-    {247, 89, 215, 255},
-    {239, 198, 253, 255},
-    {160, 56, 241, 255},
-    {86, 74, 241, 255},
-    {74, 160, 241, 255},
-    {199, 244, 251, 255},
-    {49, 238, 237, 255},
-    {16, 194, 66, 255},
-    {112, 192, 33, 255},
-    {16, 145, 52, 255},
-    {248, 247, 41, 255},
-    {227, 180, 20, 255},
-    {241, 115, 25, 255},
-    {248, 247, 175, 255},
-    {103, 85, 54, 255},
-    {159, 17, 20, 255},
-    {255, 255, 255, 255},
-};
-
-
-inline void (*Sexy_Graphics_SetDrawMode)(Sexy::Graphics *a, Sexy::Graphics::DrawMode a2);
-
-inline void (*Sexy_Graphics_SetColorizeImages)(Sexy::Graphics *a, bool a2);
-
-inline bool (*Sexy_Graphics_GetColorizeImages)(Sexy::Graphics *);
-
-inline void (*Sexy_Graphics_SetFont)(Sexy::Graphics *a, Sexy::Font *a2);
-
-inline void (*Sexy_Graphics_PushState)(Sexy::Graphics *);
-
-inline void (*Sexy_Graphics_PopState)(Sexy::Graphics *);
-
-inline void (*Sexy_Graphics_SetLinearBlend)(Sexy::Graphics *, int);
-
-inline void (*Sexy_Graphics_ClipRect)(Sexy::Graphics *, int, int, int, int);
-
-inline void (*Sexy_Graphics_FillRect)(Sexy::Graphics *graphics, Sexy::Rect *rect);
-
-inline void (*Sexy_Graphics_DrawRect)(Sexy::Graphics *graphics, Sexy::Rect *rect);
-
-inline void (*Sexy_Graphics_DrawString)(Sexy::Graphics *a1, int *a2, int a3, int a4);
-
-inline void (*Sexy_Graphics_DrawImage)(Sexy::Graphics *a1, Sexy::Image *a2, int a3, int a4);
-
-inline void (*Sexy_Graphics_DrawImage2)(Sexy::Graphics *a1, Sexy::Image *a2, int a3, int a4, int *a5);
-
-inline void (*Sexy_Graphics_DrawImageF)(Sexy::Graphics *a1, Sexy::Image *a2, float a3, float a4);
-
-inline void (*Sexy_Graphics_DrawImageCel)(Sexy::Graphics *a1, Sexy::Image *a2, int a3, int a4, int a5, int a6);
-
-inline void (*Sexy_Graphics_SetClipRect)(Sexy::Graphics *, int, int, int, int);
-
-inline void (*Sexy_Graphics_ClearClipRect)(Sexy::Graphics *);
-
-inline void (*Sexy_Graphics_DrawImageCel2)(Sexy::Graphics *a1, Sexy::Image *a2, int a3, int a4, int a5);
-
-inline void (*Sexy_Graphics_DrawImageMirror)(Sexy::Graphics *, Sexy::Image *, int, int, bool);
-
-inline void *(*Sexy_Graphics_Graphics)(Sexy::Graphics *newGraphics, const Sexy::Graphics *graphics);
-
-inline void (*Sexy_Graphics_Graphics2)(Sexy::Graphics *newGraphics, Sexy::Image *image);
-
-inline void (*Sexy_Graphics_Delete2)(Sexy::Graphics *a);
-
-inline void (*Sexy_Graphics_ClearRect)(Sexy::Graphics *a, int, int, int, int);
-
-inline void (*Sexy_Graphics_Translate)(Sexy::Graphics *, int, int);
-
-inline void (*Sexy_Graphics_SetColor)(Sexy::Graphics *a, Sexy::Color *a2);
-
-inline void (*Sexy_Graphics_DrawTrianglesTex)(Sexy::Graphics *graphics, Sexy::Image *theTexture, Sexy::SexyVertex2D (*theVertices)[3], int theNumTriangles);
-
-inline int *(*Sexy_Graphics_GetColor)(Sexy::Graphics *);
-
-inline void (*Sexy_Graphics_SetScale)(Sexy::Graphics *, float, float, float, float);
-
-inline void (*Sexy_GLGraphics_SetWrapMode)(Sexy::Graphics *graphics, int a2, int a3);
-
-inline void (*Sexy_Graphics_DrawImageMatrix)(Sexy::Graphics *graphics, Sexy::Image *, Sexy::SexyMatrix3 *, Sexy::Rect *, float, float, bool);
 
 
 inline void (*old_Sexy_Graphics_PushTransform)(Sexy::Graphics *, int *, bool);
 
 inline void (*old_Sexy_Graphics_PopTransform)(Sexy::Graphics *graphics);
-
-
-void Sexy_Graphics_PushTransform(Sexy::Graphics *graphics, int *theTransform, bool concatenate);
-
-void Sexy_Graphics_PopTransform(Sexy::Graphics *graphics);
-
-void Sexy_Graphics_DrawTrianglesTex2(Sexy::Graphics *graphics, Sexy::Image *theTexture, Sexy::TriVertex (*theVertices)[3], int theNumTriangles);
 
 void Sexy_Graphics_DrawImageColorized(Sexy::Graphics *graphics, Sexy::Image *image, Sexy::Color *color, int x, int y);
 

@@ -32,6 +32,7 @@
 #include <cstdio>
 
 using namespace Sexy;
+using namespace std;
 
 Board::Board(LawnApp *theApp) {
     Create(theApp);
@@ -242,16 +243,16 @@ void Board::DrawFadeOut(Sexy::Graphics *g) {
     int theAlpha = TodAnimateCurve(200, 0, mBoardFadeOutCounter, 0, 255, TodCurves::CURVE_LINEAR);
     if (mLevel == 9 || mLevel == 19 || mLevel == 29 || mLevel == 39 || mLevel == 49) {
         Color theColor = {0, 0, 0, theAlpha};
-        Sexy_Graphics_SetColor(g, &theColor);
+        g->SetColor(theColor);
     } else {
         Color theColor = {255, 255, 255, theAlpha};
-        Sexy_Graphics_SetColor(g, &theColor);
+        g->SetColor(theColor);
     }
 
-    Sexy_Graphics_SetColorizeImages(g, true);
+    g->SetColorizeImages(true);
     Rect fullScreenRect = {-240, -60, 1280, 720};
     // 修复BUG的核心原理，就是不要在此处PushState和PopState，而是直接FillRect。这将保留graphics的trans属性。
-    Sexy_Graphics_FillRect(g, &fullScreenRect);
+    g->FillRect(fullScreenRect);
 }
 
 int Board::GetCurrentPlantCost(SeedType theSeedType, SeedType theImitaterType) {
@@ -596,27 +597,27 @@ void Board::DrawCoverLayer(Sexy::Graphics *g, int theRow) {
                     // 在重型武器关卡中不绘制栏杆。
                     return;
                 }
-                Sexy_Graphics_DrawImage(g, *Sexy_IMAGE_BACKGROUND1_COVER_Addr, 684, 557);
+                g->DrawImage(*Sexy_IMAGE_BACKGROUND1_COVER_Addr, 684, 557);
                 break;
             case BackgroundType::BACKGROUND_2_NIGHT: // 前院夜晚
-                Sexy_Graphics_DrawImage(g, *Sexy_IMAGE_BACKGROUND2_COVER_Addr, 684, 557);
+                g->DrawImage(*Sexy_IMAGE_BACKGROUND2_COVER_Addr, 684, 557);
                 break;
             case BackgroundType::BACKGROUND_3_POOL: // 泳池白天
-                Sexy_Graphics_DrawImage(g, *Sexy_IMAGE_BACKGROUND3_COVER_Addr, 671, 613);
+                g->DrawImage(*Sexy_IMAGE_BACKGROUND3_COVER_Addr, 671, 613);
                 break;
             case BackgroundType::BACKGROUND_4_FOG: // 泳池夜晚
-                Sexy_Graphics_DrawImage(g, *Sexy_IMAGE_BACKGROUND4_COVER_Addr, 672, 613);
+                g->DrawImage(*Sexy_IMAGE_BACKGROUND4_COVER_Addr, 672, 613);
                 break;
             case BackgroundType::BACKGROUND_5_ROOF: // 屋顶白天
-                Sexy_Graphics_DrawImage(g, *Sexy_IMAGE_ROOF_TREE_Addr, mOffsetMoved * 1.5f + 628, -60);
-                Sexy_Graphics_DrawImage(g, *Sexy_IMAGE_ROOF_POLE_Addr, mOffsetMoved * 2.0f + 628, -60);
+                g->DrawImage(*Sexy_IMAGE_ROOF_TREE_Addr, mOffsetMoved * 1.5f + 628, -60);
+                g->DrawImage(*Sexy_IMAGE_ROOF_POLE_Addr, mOffsetMoved * 2.0f + 628, -60);
                 break;
             case BackgroundType::BACKGROUND_6_BOSS:
                 // 可在此处添加代码绘制月夜电线杆喔
                 //                if(LawnApp_IsFinalBossLevel(mApp))  return;
 
-                Sexy_Graphics_DrawImage(g, addonImages.trees_night, mOffsetMoved * 1.5f + 628, -60);
-                Sexy_Graphics_DrawImage(g, addonImages.pole_night, mOffsetMoved * 2.0f + 628, -60);
+                g->DrawImage(addonImages.trees_night, mOffsetMoved * 1.5f + 628, -60);
+                g->DrawImage(addonImages.pole_night, mOffsetMoved * 2.0f + 628, -60);
                 break;
             default:
                 return;
@@ -1341,48 +1342,48 @@ bool Board::NeedSaveGame() {
     return old_Board_NeedSaveGame(this);
 }
 
-void Board_DrawHammerButton(Board *board, Sexy::Graphics *graphics, LawnApp *lawnApp) {
+void Board_DrawHammerButton(Board *board, Sexy::Graphics *g, LawnApp *lawnApp) {
     if (!keyboardMode)
         return;
-    float tmp = graphics->mTransY;
+    float tmp = g->mTransY;
     Rect rect = board->GetButterButtonRect();
-    Sexy_Graphics_DrawImage(graphics, *Sexy_IMAGE_SHOVELBANK_Addr, rect.mX, rect.mY);
-    Sexy_Graphics_DrawImage(graphics, *Sexy_IMAGE_HAMMER_ICON_Addr, rect.mX - 7, rect.mY - 3);
+    g->DrawImage(*Sexy_IMAGE_SHOVELBANK_Addr, rect.mX, rect.mY);
+    g->DrawImage(*Sexy_IMAGE_HAMMER_ICON_Addr, rect.mX - 7, rect.mY - 3);
 
     if (Sexy_GamepadApp_HasGamepad(lawnApp) || (lawnApp->mGamePad1IsOn && lawnApp->mGamePad2IsOn)) {
-        Sexy_Graphics_DrawImageCel2(graphics, *Sexy_IMAGE_HELP_BUTTONS_Addr, rect.mX + 36, rect.mY + 40, 2);
+        g->DrawImageCel(*Sexy_IMAGE_HELP_BUTTONS_Addr, rect.mX + 36, rect.mY + 40, 2);
     } else {
-        Sexy_Graphics_DrawImageCel2(graphics, *Sexy_IMAGE_HELP_BUTTONS2_Addr, rect.mX + 36, rect.mY + 40, 2);
+        g->DrawImageCel(*Sexy_IMAGE_HELP_BUTTONS2_Addr, rect.mX + 36, rect.mY + 40, 2);
     }
-    Sexy_Graphics_SetColorizeImages(graphics, false);
-    graphics->mTransY = tmp;
+    g->SetColorizeImages(false);
+    g->mTransY = tmp;
 }
 
-void Board_DrawButterButton(Board *board, Sexy::Graphics *graphics, LawnApp *theApp) {
+void Board_DrawButterButton(Board *board, Sexy::Graphics *g, LawnApp *theApp) {
     if (!theApp->IsCoopMode()) {
         if (!theApp->IsAdventureMode())
             return;
         if (theApp->mTwoPlayerState == -1)
             return;
     }
-    float tmp = graphics->mTransY;
+    float tmp = g->mTransY;
     Rect rect = board->GetButterButtonRect();
-    Sexy_Graphics_DrawImage(graphics, *Sexy_IMAGE_SHOVELBANK_Addr, rect.mX, rect.mY);
+    g->DrawImage(*Sexy_IMAGE_SHOVELBANK_Addr, rect.mX, rect.mY);
     if (board->mChallenge->mChallengeState == ChallengeState::STATECHALLENGE_SHOVEL_FLASHING) {
         Color color;
         GetFlashingColor(&color, board->mMainCounter, 75);
-        Sexy_Graphics_SetColorizeImages(graphics, true);
-        Sexy_Graphics_SetColor(graphics, &color);
+        g->SetColorizeImages(true);
+        g->SetColor(color);
     }
     // 实现拿着黄油的时候不在栏内绘制黄油
     if (!requestDrawButterInCursor) {
-        Sexy_Graphics_DrawImage(graphics, *Sexy_IMAGE_BUTTER_ICON_Addr, rect.mX - 7, rect.mY - 3);
+        g->DrawImage(*Sexy_IMAGE_BUTTER_ICON_Addr, rect.mX - 7, rect.mY - 3);
     }
     if (keyboardMode) {
-        Sexy_Graphics_DrawImageCel2(graphics, *Sexy_IMAGE_HELP_BUTTONS_Addr, rect.mX + 36, rect.mY + 40, 2);
+        g->DrawImageCel(*Sexy_IMAGE_HELP_BUTTONS_Addr, rect.mX + 36, rect.mY + 40, 2);
     }
-    Sexy_Graphics_SetColorizeImages(graphics, false);
-    graphics->mTransY = tmp;
+    g->SetColorizeImages(false);
+    g->mTransY = tmp;
 }
 
 void Board::DrawShovelButton(Sexy::Graphics *g, LawnApp *theApp) {
@@ -1401,13 +1402,13 @@ void Board::DrawShovelButton(Sexy::Graphics *g, LawnApp *theApp) {
 
     float tmp = g->mTransY;
     Rect rect = GetShovelButtonRect();
-    Sexy_Graphics_DrawImage(g, *Sexy_IMAGE_SHOVELBANK_Addr, rect.mX, rect.mY);
+    g->DrawImage(*Sexy_IMAGE_SHOVELBANK_Addr, rect.mX, rect.mY);
 
     if (mChallenge->mChallengeState == ChallengeState::STATECHALLENGE_SHOVEL_FLASHING) {
         Color color;
         GetFlashingColor(&color, mMainCounter, 75);
-        Sexy_Graphics_SetColorizeImages(g, true);
-        Sexy_Graphics_SetColor(g, &color);
+        g->SetColorizeImages(true);
+        g->SetColor(color);
     }
 
     // 实现拿着铲子的时候不在栏内绘制铲子
@@ -1415,28 +1416,28 @@ void Board::DrawShovelButton(Sexy::Graphics *g, LawnApp *theApp) {
         if (theApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_LAST_STAND) {
             Challenge *challenge = mChallenge;
             if (challenge->mChallengeState == ChallengeState::STATECHALLENGE_NORMAL && theApp->mGameScene == GameScenes::SCENE_PLAYING) {
-                Sexy_Graphics_DrawImage(g, *Sexy_IMAGE_ZEN_MONEYSIGN_Addr, rect.mX - 7, rect.mY - 3);
+                g->DrawImage(*Sexy_IMAGE_ZEN_MONEYSIGN_Addr, rect.mX - 7, rect.mY - 3);
             } else {
-                Sexy_Graphics_DrawImage(g, *Sexy_IMAGE_SHOVEL_Addr, rect.mX - 7, rect.mY - 3);
+                g->DrawImage(*Sexy_IMAGE_SHOVEL_Addr, rect.mX - 7, rect.mY - 3);
             }
         } else {
-            Sexy_Graphics_DrawImage(g, *Sexy_IMAGE_SHOVEL_Addr, rect.mX - 7, rect.mY - 3);
+            g->DrawImage(*Sexy_IMAGE_SHOVEL_Addr, rect.mX - 7, rect.mY - 3);
         }
     }
 
     if (keyboardMode) {
         if (theApp->IsCoopMode()) {
-            Sexy_Graphics_DrawImageCel2(g, *Sexy_IMAGE_HELP_BUTTONS_Addr, rect.mX + 40, rect.mY + 40, 1);
+            g->DrawImageCel(*Sexy_IMAGE_HELP_BUTTONS_Addr, rect.mX + 40, rect.mY + 40, 1);
         } else {
             if (Sexy_GamepadApp_HasGamepad(theApp) || (theApp->mGamePad1IsOn && theApp->mGamePad2IsOn)) {
-                Sexy_Graphics_DrawImageCel2(g, *Sexy_IMAGE_HELP_BUTTONS_Addr, rect.mX + 50, rect.mY + 40, 1);
+                g->DrawImageCel(*Sexy_IMAGE_HELP_BUTTONS_Addr, rect.mX + 50, rect.mY + 40, 1);
             } else {
-                Sexy_Graphics_DrawImageCel2(g, *Sexy_IMAGE_HELP_BUTTONS2_Addr, rect.mX + 50, rect.mY + 40, 1);
+                g->DrawImageCel(*Sexy_IMAGE_HELP_BUTTONS2_Addr, rect.mX + 50, rect.mY + 40, 1);
             }
         }
     }
 
-    Sexy_Graphics_SetColorizeImages(g, false);
+    g->SetColorizeImages(false);
     g->mTransY = tmp;
 }
 
@@ -3235,22 +3236,22 @@ void Board::DrawBackdrop(Sexy::Graphics *g) {
     if (mGameMode == GameMode::GAMEMODE_MP_VS) {
         switch (mBackground) {
             case BackgroundType::BACKGROUND_1_DAY:
-                Sexy_Graphics_DrawImage(g, *Sexy_IMAGE_WALLNUT_BOWLINGSTRIPE_Addr, 512, 73);
+                g->DrawImage(*Sexy_IMAGE_WALLNUT_BOWLINGSTRIPE_Addr, 512, 73);
                 break;
             case BackgroundType::BACKGROUND_2_NIGHT:
-                Sexy_Graphics_DrawImage(g, *Sexy_IMAGE_WALLNUT_BOWLINGSTRIPE_Addr, 512, 73);
+                g->DrawImage(*Sexy_IMAGE_WALLNUT_BOWLINGSTRIPE_Addr, 512, 73);
                 break;
             case BackgroundType::BACKGROUND_3_POOL:
-                Sexy_Graphics_DrawImage(g, *Sexy_IMAGE_WALLNUT_BOWLINGSTRIPE_Addr, 512, 73);
+                g->DrawImage(*Sexy_IMAGE_WALLNUT_BOWLINGSTRIPE_Addr, 512, 73);
                 break;
             case BackgroundType::BACKGROUND_4_FOG:
-                Sexy_Graphics_DrawImage(g, *Sexy_IMAGE_WALLNUT_BOWLINGSTRIPE_Addr, 512, 73);
+                g->DrawImage(*Sexy_IMAGE_WALLNUT_BOWLINGSTRIPE_Addr, 512, 73);
                 break;
             case BackgroundType::BACKGROUND_5_ROOF:
-                Sexy_Graphics_DrawImage(g, *Sexy_IMAGE_WALLNUT_BOWLINGSTRIPE_Addr, 512, 73);
+                g->DrawImage(*Sexy_IMAGE_WALLNUT_BOWLINGSTRIPE_Addr, 512, 73);
                 break;
             case BackgroundType::BACKGROUND_6_BOSS:
-                Sexy_Graphics_DrawImage(g, *Sexy_IMAGE_WALLNUT_BOWLINGSTRIPE_Addr, 512, 73);
+                g->DrawImage(*Sexy_IMAGE_WALLNUT_BOWLINGSTRIPE_Addr, 512, 73);
                 break;
             default:
                 break;
@@ -3260,22 +3261,22 @@ void Board::DrawBackdrop(Sexy::Graphics *g) {
     if (mGameMode >= GameMode::GAMEMODE_TWO_PLAYER_COOP_DAY && mGameMode <= GameMode::GAMEMODE_TWO_PLAYER_COOP_ENDLESS && mGameMode != GameMode::GAMEMODE_TWO_PLAYER_COOP_BOWLING) {
         switch (mBackground) {
             case BackgroundType::BACKGROUND_1_DAY:
-                Sexy_Graphics_DrawImage(g, addonImages.stripe_day_coop, 384, 69);
+                g->DrawImage(addonImages.stripe_day_coop, 384, 69);
                 break;
             case BackgroundType::BACKGROUND_2_NIGHT:
-                Sexy_Graphics_DrawImage(g, addonImages.stripe_day_coop, 384, 69);
+                g->DrawImage(addonImages.stripe_day_coop, 384, 69);
                 break;
             case BackgroundType::BACKGROUND_3_POOL:
-                Sexy_Graphics_DrawImage(g, addonImages.stripe_pool_coop, 348, 72);
+                g->DrawImage(addonImages.stripe_pool_coop, 348, 72);
                 break;
             case BackgroundType::BACKGROUND_4_FOG:
-                Sexy_Graphics_DrawImage(g, addonImages.stripe_pool_coop, 348, 72);
+                g->DrawImage(addonImages.stripe_pool_coop, 348, 72);
                 break;
             case BackgroundType::BACKGROUND_5_ROOF:
-                Sexy_Graphics_DrawImage(g, addonImages.stripe_roof_left, 365, 82);
+                g->DrawImage(addonImages.stripe_roof_left, 365, 82);
                 break;
             case BackgroundType::BACKGROUND_6_BOSS:
-                Sexy_Graphics_DrawImage(g, addonImages.stripe_roof_left, 365, 82);
+                g->DrawImage(addonImages.stripe_roof_left, 365, 82);
                 break;
             default:
                 break;

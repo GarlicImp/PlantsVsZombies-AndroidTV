@@ -7,7 +7,8 @@
 
 namespace Sexy {
 
-struct SexyVertex2D {
+class SexyVertex2D {
+public:
     float x;
     float y;
     int unk1;

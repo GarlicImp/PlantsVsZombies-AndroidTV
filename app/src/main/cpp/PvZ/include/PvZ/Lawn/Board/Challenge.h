@@ -4,11 +4,12 @@
 #include "PvZ/Lawn/Common/ConstEnums.h"
 #include "PvZ/SexyAppFramework/Graphics/Graphics.h"
 #include "PvZ/Symbols.h"
+#include "PvZ/TodLib/Effect/FilterEffect.h"
 
-#define BEGHOULED_MAX_GRIDSIZEX 8
-#define BEGHOULED_MAX_GRIDSIZEY 5
-#define ART_CHALLEGE_SIZE_X 8
-#define MAX_PICK_GRID_SIZE 50
+constexpr int BEGHOULED_MAX_GRIDSIZEX = 8;
+constexpr int BEGHOULED_MAX_GRIDSIZEY = 5;
+constexpr int ART_CHALLEGE_SIZE_X = 8;
+constexpr int MAX_PICK_GRID_SIZE = 50;
 
 constexpr const int BEGHOULED_WINNING_SCORE = 75;
 constexpr const int SLOT_MACHINE_WINNING_SCORE = 2000;

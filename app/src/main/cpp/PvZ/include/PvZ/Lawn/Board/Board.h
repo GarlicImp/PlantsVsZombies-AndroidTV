@@ -9,7 +9,6 @@
 #include "PvZ/Lawn/GamepadControls.h"
 #include "PvZ/SexyAppFramework/Misc/KeyCodes.h"
 
-
 #include "Coin.h"
 #include "GridItem.h"
 #include "LawnMower.h"
@@ -17,14 +16,14 @@
 #include "Projectile.h"
 #include "Zombie.h"
 
-#define MAX_GRID_SIZE_X 9
-#define MAX_GRID_SIZE_Y 6
-#define MAX_ZOMBIES_IN_WAVE 50
-#define MAX_ZOMBIE_WAVES 100
-#define MAX_GRAVE_STONES MAX_GRID_SIZE_X *MAX_GRID_SIZE_Y
-#define MAX_POOL_GRID_SIZE 10
-#define MAX_RENDER_ITEMS 2048
-#define PROGRESS_METER_COUNTER 150
+constexpr int MAX_GRID_SIZE_X = 9;
+constexpr int MAX_GRID_SIZE_Y = 6;
+constexpr int MAX_ZOMBIES_IN_WAVE = 50;
+constexpr int MAX_ZOMBIE_WAVES = 100;
+constexpr int MAX_GRAVE_STONES = MAX_GRID_SIZE_X * MAX_GRID_SIZE_Y;
+constexpr int MAX_POOL_GRID_SIZE = 10;
+constexpr int MAX_RENDER_ITEMS = 2048;
+constexpr int PROGRESS_METER_COUNTER = 150;
 
 class LawnApp;
 class CursorObject;
@@ -655,9 +654,9 @@ bool Board_StageHasRoof(Board *board);
 
 bool Board_StageHas6Rows(Board *board);
 
-void Board_DrawHammerButton(Board *board, Sexy::Graphics *graphics, LawnApp *lawnApp);
+void Board_DrawHammerButton(Board *board, Sexy::Graphics *g, LawnApp *lawnApp);
 
-void Board_DrawButterButton(Board *board, Sexy::Graphics *graphics, LawnApp *theApp);
+void Board_DrawButterButton(Board *board, Sexy::Graphics *g, LawnApp *theApp);
 
 void Board_DrawStartButton(Board *board, Sexy::Graphics *graphics, LawnApp *lawnApp);
 

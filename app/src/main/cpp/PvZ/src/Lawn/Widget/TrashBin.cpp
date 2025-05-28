@@ -144,18 +144,18 @@ void TrashBin::Draw(Sexy::Graphics *g) {
     if (thePileNum >= 10)
         thePileNum = 10;
     if (mTrashPileType == TrashBin::PLANT_PILE) {
-        Sexy_Graphics_DrawImageF(g, addonImages.plant_can, mX - 22, mY + 15);
+        g->DrawImageF(addonImages.plant_can, mX - 22, mY + 15);
     } else {
-        Sexy_Graphics_DrawImageF(g, addonImages.zombie_can, mX, mY);
+        g->DrawImageF(addonImages.zombie_can, mX, mY);
     }
 
     if (thePileNum != 10) {
-        Sexy_Graphics_DrawImageMirror(g, mPileImage[thePileNum], mX, mHeight % thePileHeight - thePileHeight + mY - thePileHeight * thePileNum, mMirrorPile[thePileNum]);
+        g->DrawImageMirror(mPileImage[thePileNum], mX, mHeight % thePileHeight - thePileHeight + mY - thePileHeight * thePileNum, mMirrorPile[thePileNum]);
     }
     if (thePileNum <= 0)
         return;
     for (int i = 0; i < thePileNum; ++i) {
-        Sexy_Graphics_DrawImageMirror(g, mPileImage[i], mX, mHeight % thePileHeight - thePileHeight + mY - thePileHeight * i, mMirrorPile[i]);
+        g->DrawImageMirror(mPileImage[i], mX, mHeight % thePileHeight - thePileHeight + mY - thePileHeight * i, mMirrorPile[i]);
     }
 
     //    int holder[1];

@@ -3,3 +3,8 @@
 //
 
 #include "PvZ/SexyAppFramework/Graphics/Font.h"
+#include "PvZ/SexyAppFramework/Graphics/Image.h"
+
+using namespace Sexy;
+
+//void Font::DrawString(Graphics* g, int theX, int theY, const SexyString& theString, const Color& theColor, const Rect& theClipRect) {}

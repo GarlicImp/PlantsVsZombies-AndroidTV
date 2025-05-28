@@ -26,17 +26,16 @@ void GridItem::DrawScaryPot(Sexy::Graphics* g) {
     TodDrawImageCelCenterScaledF(g, *Sexy_IMAGE_PLANTSHADOW2_Addr, aXPos - 5.0, aYPos + 72.0, 0, 1.3, 1.3);
 
     if (mTransparentCounter > 0) { // 如果罐子要被照透(透明度不为0)
-        Sexy_Graphics_DrawImageCel(g, *Sexy_IMAGE_SCARY_POT_Addr, aXPos, aYPos, aImageCol, 0);
+        g->DrawImageCel(*Sexy_IMAGE_SCARY_POT_Addr, aXPos, aYPos, aImageCol, 0);
 
-        Sexy::Graphics aInsideGraphics;
-        Sexy_Graphics_Graphics(&aInsideGraphics, g);
+        Graphics *aInsideGraphics = new Graphics(*g);
         if (mScaryPotType == ScaryPotType::SCARYPOT_SEED) {
-            aInsideGraphics.mScaleX = 0.7f;
-            aInsideGraphics.mScaleY = 0.7f;
-            DrawSeedPacket(&aInsideGraphics, aXPos + 23, aYPos + 33, mSeedType, SeedType::SEED_NONE, 0.0, 255, false, false, false, true);
+            aInsideGraphics->mScaleX = 0.7f;
+            aInsideGraphics->mScaleY = 0.7f;
+            DrawSeedPacket(aInsideGraphics, aXPos + 23, aYPos + 33, mSeedType, SeedType::SEED_NONE, 0.0, 255, false, false, false, true);
         } else if (mScaryPotType == ScaryPotType::SCARYPOT_ZOMBIE) {
-            aInsideGraphics.mScaleX = 0.4f;
-            aInsideGraphics.mScaleY = 0.4f;
+            aInsideGraphics->mScaleX = 0.4f;
+            aInsideGraphics->mScaleY = 0.4f;
             float theOffsetX = 6.0;
             float theOffsetY = 19.0;
             if (mZombieType == ZombieType::ZOMBIE_FOOTBALL) {
@@ -45,10 +44,10 @@ void GridItem::DrawScaryPot(Sexy::Graphics* g) {
             } else if (mZombieType == ZombieType::ZOMBIE_GARGANTUAR) {
                 theOffsetX = 15.0;
                 theOffsetY = 26.0;
-                aInsideGraphics.mScaleX = 0.3f;
-                aInsideGraphics.mScaleY = 0.3f;
+                aInsideGraphics->mScaleX = 0.3f;
+                aInsideGraphics->mScaleY = 0.3f;
             }
-            ReanimatorCache_DrawCachedZombie(mApp->mReanimatorCache, &aInsideGraphics, theOffsetX + aXPos, theOffsetY + aYPos, mZombieType);
+            ReanimatorCache_DrawCachedZombie(mApp->mReanimatorCache, aInsideGraphics, theOffsetX + aXPos, theOffsetY + aYPos, mZombieType);
         } else if (mScaryPotType == ScaryPotType::SCARYPOT_SUN) {
             int aSuns = mBoard->mChallenge->ScaryPotterCountSunInPot(this);
 
@@ -86,25 +85,25 @@ void GridItem::DrawScaryPot(Sexy::Graphics* g) {
         }
 
         int aAlpha = TodAnimateCurve(0, 50, mTransparentCounter, 255, 58, TodCurves::CURVE_LINEAR);
-        Sexy_Graphics_SetColorizeImages(g, true);
+        g->SetColorizeImages(true);
         Color aColor = {255, 255, 255, aAlpha};
-        Sexy_Graphics_SetColor(g, &aColor);
-        Sexy_Graphics_Delete2(&aInsideGraphics);
+        g->SetColor(aColor);
+        aInsideGraphics->~Graphics();
     }
 
-    Sexy_Graphics_DrawImageCel(g, *Sexy_IMAGE_SCARY_POT_Addr, aXPos, aYPos, aImageCol, 1);
+    g->DrawImageCel(*Sexy_IMAGE_SCARY_POT_Addr, aXPos, aYPos, aImageCol, 1);
     if (mHighlighted) {
-        Sexy_Graphics_SetDrawMode(g, Graphics::DRAWMODE_ADDITIVE);
-        Sexy_Graphics_SetColorizeImages(g, true);
+        g->SetDrawMode(Graphics::DRAWMODE_ADDITIVE);
+        g->SetColorizeImages(true);
         if (mTransparentCounter == 0) {
             Color aColor = {255, 255, 255, 196};
-            Sexy_Graphics_SetColor(g, &aColor);
+            g->SetColor(aColor);
         }
-        Sexy_Graphics_DrawImageCel(g, *Sexy_IMAGE_SCARY_POT_Addr, aXPos, aYPos, aImageCol, 1);
-        Sexy_Graphics_SetDrawMode(g, Graphics::DRAWMODE_NORMAL);
+        g->DrawImageCel(*Sexy_IMAGE_SCARY_POT_Addr, aXPos, aYPos, aImageCol, 1);
+        g->SetDrawMode(Graphics::DRAWMODE_NORMAL);
     }
 
-    return Sexy_Graphics_SetColorizeImages(g, false);
+    return  g->SetColorizeImages(false);
 }
 
 void GridItem::Update() {
@@ -176,7 +175,7 @@ void GridItem::DrawSquirrel(Sexy::Graphics* g) {
             break;
     }
 
-    Sexy_Graphics_DrawImage(g, addonImages.squirrel, aXPos, aYPos);
+    g->DrawImage(addonImages.squirrel, aXPos, aYPos);
 }
 
 void GridItem::DrawCrater(Sexy::Graphics* g) {
@@ -186,8 +185,8 @@ void GridItem::DrawCrater(Sexy::Graphics* g) {
     if (mGridItemCounter < 25) {
         int aAlpha = TodAnimateCurve(25, 0, mGridItemCounter, 255, 0, TodCurves::CURVE_LINEAR);
         Color color = {255, 255, 255, aAlpha};
-        Sexy_Graphics_SetColor(g, &color);
-        Sexy_Graphics_SetColorizeImages(g, true);
+        g->SetColor(color);
+        g->SetColorizeImages(true);
     }
 
     bool fading = mGridItemCounter < 9000;
@@ -237,5 +236,5 @@ void GridItem::DrawCrater(Sexy::Graphics* g) {
     }
 
     TodDrawImageCelF(g, aImage, aXPos, aYPos, theCelCol, 0);
-    Sexy_Graphics_SetColorizeImages(g, false);
+    g->SetColorizeImages(false);
 }
