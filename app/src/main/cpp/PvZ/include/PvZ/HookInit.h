@@ -193,7 +193,6 @@ inline void InitInGameFunction() {
     Sexy_StrFormat = (decltype(Sexy_StrFormat))Sexy_StrFormatAddr;
     TodStringTranslate = (decltype(TodStringTranslate))TodStringTranslateAddr;
     //    DrawSeedPacket = (void (*)(Sexy::Graphics *, int, int, int, int, float, int, bool, bool, bool,bool)) DrawSeedPacketAddr;
-    VSSetupMenu_GameButtonDown = (decltype(VSSetupMenu_GameButtonDown))VSSetupMenu_GameButtonDownAddr;
     WaitForSecondPlayerDialog_GameButtonDown = (decltype(WaitForSecondPlayerDialog_GameButtonDown))WaitForSecondPlayerDialog_GameButtonDownAddr;
     HelpTextScreen_KeyDown = (decltype(HelpTextScreen_KeyDown))HelpTextScreen_KeyDownAddr;
     Attachment_AttachmentDie = (decltype(Attachment_AttachmentDie))AttachmentDieAddr;
@@ -600,8 +599,8 @@ inline void InitHookFunction() {
     homura::HookFunction(AwardScreen_MouseUpAddr, &AwardScreen_MouseUp, &old_AwardScreen_MouseUp);
 
 
-    homura::HookFunction(VSSetupMenu_UpdateAddr, &VSSetupMenu_Update, &old_VSSetupMenu_Update);
-    homura::HookFunction(VSSetupMenu_KeyDownAddr, &VSSetupMenu_KeyDown, &old_VSSetupMenu_KeyDown);
+    homura::HookFunction(VSSetupMenu_UpdateAddr, &VSSetupMenu::Update, &old_VSSetupMenu_Update);
+    homura::HookFunction(VSSetupMenu_KeyDownAddr, &VSSetupMenu::KeyDown, &old_VSSetupMenu_KeyDown);
 
 
     homura::HookFunction(VSResultsMenu_UpdateAddr, &VSResultsMenu_Update, &old_VSResultsMenu_Update);

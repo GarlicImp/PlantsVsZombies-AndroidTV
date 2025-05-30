@@ -879,7 +879,7 @@ extern "C" JNIEXPORT jboolean JNICALL Java_com_transmension_mobile_EnhanceActivi
         return true;
     }
 
-    if (lawnApp->mGameMode == GameMode::GAMEMODE_MP_VS && lawnApp->mVSSetupScreen != nullptr && lawnApp->mVSSetupScreen[74] == 3) {
+    if (lawnApp->mGameMode == GameMode::GAMEMODE_MP_VS && lawnApp->mVSSetupScreen != nullptr && lawnApp->mVSSetupScreen->mState == 3) {
         return true;
     }
     return false;
@@ -984,9 +984,9 @@ extern "C" JNIEXPORT void JNICALL Java_com_transmension_mobile_EnhanceActivity_n
         return;
     }
 
-    int *theVSSetupScreen = lawnApp->mVSSetupScreen;
-    if (is_key_down && lawnApp->mGameMode == GameMode::GAMEMODE_MP_VS && theVSSetupScreen != nullptr && theVSSetupScreen[74] == 3) {
-        VSSetupMenu_GameButtonDown(theVSSetupScreen, buttonCode, playerIndex, 0);
+    VSSetupMenu *theVSSetupScreen = lawnApp->mVSSetupScreen;
+    if (is_key_down && lawnApp->mGameMode == GameMode::GAMEMODE_MP_VS && theVSSetupScreen != nullptr && theVSSetupScreen->mState == 3) {
+        theVSSetupScreen->GameButtonDown(buttonCode, playerIndex, 0);
         return;
     }
 }

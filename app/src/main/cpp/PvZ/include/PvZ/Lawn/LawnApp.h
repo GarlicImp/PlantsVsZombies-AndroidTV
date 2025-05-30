@@ -21,6 +21,7 @@ class Music2;
 class TodFoley;
 class PlayerInfo;
 class PottedPlant;
+class VSSetupMenu;
 
 class LawnApp : public Sexy::SexyAppBase {
 public:
@@ -30,7 +31,7 @@ public:
     int unk1[2];                             // 555 ~ 556
     int *mHelpTextScreen;                    // 557
     int unkUnk;                              // 558
-    int *mVSSetupScreen;                     // 559
+    VSSetupMenu *mVSSetupScreen;             // 559
     int *mVSResultsScreen;                   // 560
     SeedChooserScreen *mSeedChooserScreen;   // 561
     SeedChooserScreen *mZombieChooserScreen; // 562
