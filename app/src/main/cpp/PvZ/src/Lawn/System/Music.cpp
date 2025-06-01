@@ -6,6 +6,7 @@
 #include "PvZ/SexyAppFramework/Graphics/Graphics.h"
 #include "PvZ/Symbols.h"
 #include "PvZ/TodLib/Common/TodCommon.h"
+#include "PvZ/Lawn/System/PlayerInfo.h"
 
 #define HIWORD(a) ((a) >> 16)
 #define LOWORD(a) ((a) & 0xFFFF)

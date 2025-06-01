@@ -586,7 +586,7 @@ void Board::DrawCoverLayer(Sexy::Graphics *g, int theRow) {
         // 如果是前院(0 1)或者泳池(2 3)，则绘制草丛。整个草丛都是动画而非贴图，没有僵尸来的时候草丛会保持在动画第一帧。
         Reanimation *aReanim = mApp->ReanimationTryToGet(mCoverLayerAnimIDs[theRow]);
         if (aReanim != nullptr) {
-            Reanimation_Draw(aReanim, g);
+            (aReanim)->Draw(g);
         }
     }
     if (theRow == 6) {
@@ -3466,7 +3466,7 @@ void Board::FixReanimErrorAfterLoad() {
         }
         // 修复读档后豌豆、机枪、倭瓜僵尸头部变为普通僵尸
         if (zombieType == ZombieType::ZOMBIE_PEA_HEAD || zombieType == ZombieType::ZOMBIE_GATLING_HEAD || zombieType == ZombieType::ZOMBIE_SQUASH_HEAD) {
-            Reanimation_SetImageOverride(mBodyReanim, "anim_head1", *Sexy_IMAGE_BLANK_Addr);
+            mBodyReanim->SetImageOverride("anim_head1", *Sexy_IMAGE_BLANK_Addr);
         }
 
         // 修复读档后盾牌贴图变为满血盾牌贴图、垃圾桶变为铁门
@@ -3476,43 +3476,43 @@ void Board::FixReanimErrorAfterLoad() {
                 case ShieldType::SHIELDTYPE_DOOR:
                     switch (shieldDamageIndex) {
                         case 1:
-                            Reanimation_SetImageOverride(mBodyReanim, "anim_screendoor", *Sexy_IMAGE_REANIM_ZOMBIE_SCREENDOOR2_Addr);
+                            mBodyReanim->SetImageOverride("anim_screendoor", *Sexy_IMAGE_REANIM_ZOMBIE_SCREENDOOR2_Addr);
                             break;
                         case 2:
-                            Reanimation_SetImageOverride(mBodyReanim, "anim_screendoor", *Sexy_IMAGE_REANIM_ZOMBIE_SCREENDOOR3_Addr);
+                            mBodyReanim->SetImageOverride("anim_screendoor", *Sexy_IMAGE_REANIM_ZOMBIE_SCREENDOOR3_Addr);
                             break;
                     }
                     break;
                 case ShieldType::SHIELDTYPE_NEWSPAPER:
                     switch (shieldDamageIndex) {
                         case 1:
-                            Reanimation_SetImageOverride(mBodyReanim, "Zombie_paper_paper", *Sexy_IMAGE_REANIM_ZOMBIE_PAPER_PAPER2_Addr);
+                            mBodyReanim->SetImageOverride("Zombie_paper_paper", *Sexy_IMAGE_REANIM_ZOMBIE_PAPER_PAPER2_Addr);
                             break;
                         case 2:
-                            Reanimation_SetImageOverride(mBodyReanim, "Zombie_paper_paper", *Sexy_IMAGE_REANIM_ZOMBIE_PAPER_PAPER3_Addr);
+                            mBodyReanim->SetImageOverride("Zombie_paper_paper", *Sexy_IMAGE_REANIM_ZOMBIE_PAPER_PAPER3_Addr);
                             break;
                     }
                     break;
                 case ShieldType::SHIELDTYPE_LADDER:
                     switch (shieldDamageIndex) {
                         case 1:
-                            Reanimation_SetImageOverride(mBodyReanim, "Zombie_ladder_1", *Sexy_IMAGE_REANIM_ZOMBIE_LADDER_1_DAMAGE1_Addr);
+                            mBodyReanim->SetImageOverride("Zombie_ladder_1", *Sexy_IMAGE_REANIM_ZOMBIE_LADDER_1_DAMAGE1_Addr);
                             break;
                         case 2:
-                            Reanimation_SetImageOverride(mBodyReanim, "Zombie_ladder_1", *Sexy_IMAGE_REANIM_ZOMBIE_LADDER_1_DAMAGE2_Addr);
+                            mBodyReanim->SetImageOverride("Zombie_ladder_1", *Sexy_IMAGE_REANIM_ZOMBIE_LADDER_1_DAMAGE2_Addr);
                             break;
                     }
                     break;
                 case ShieldType::SHIELDTYPE_TRASH_BIN:
                     switch (shieldDamageIndex) {
                         case 0:
-                            Reanimation_SetImageOverride(mBodyReanim, "anim_screendoor", *Sexy_IMAGE_REANIM_ZOMBIE_TRASHCAN1_Addr);
+                            mBodyReanim->SetImageOverride("anim_screendoor", *Sexy_IMAGE_REANIM_ZOMBIE_TRASHCAN1_Addr);
                             break;
                         case 1:
-                            Reanimation_SetImageOverride(mBodyReanim, "anim_screendoor", *Sexy_IMAGE_REANIM_ZOMBIE_TRASHCAN2_Addr);
+                            mBodyReanim->SetImageOverride("anim_screendoor", *Sexy_IMAGE_REANIM_ZOMBIE_TRASHCAN2_Addr);
                             break;
                         case 2:
-                            Reanimation_SetImageOverride(mBodyReanim, "anim_screendoor", *Sexy_IMAGE_REANIM_ZOMBIE_TRASHCAN3_Addr);
+                            mBodyReanim->SetImageOverride("anim_screendoor", *Sexy_IMAGE_REANIM_ZOMBIE_TRASHCAN3_Addr);
                             break;
                     }
                     break;
@@ -3526,40 +3526,40 @@ void Board::FixReanimErrorAfterLoad() {
                 case HelmType::HELMTYPE_TRAFFIC_CONE:
                     switch (helmDamageIndex) {
                         case 1:
-                            Reanimation_SetImageOverride(mBodyReanim, "anim_cone", *Sexy_IMAGE_REANIM_ZOMBIE_CONE2_Addr);
+                            mBodyReanim->SetImageOverride("anim_cone", *Sexy_IMAGE_REANIM_ZOMBIE_CONE2_Addr);
                             break;
                         case 2:
-                            Reanimation_SetImageOverride(mBodyReanim, "anim_cone", *Sexy_IMAGE_REANIM_ZOMBIE_CONE3_Addr);
+                            mBodyReanim->SetImageOverride("anim_cone", *Sexy_IMAGE_REANIM_ZOMBIE_CONE3_Addr);
                             break;
                     }
                     break;
                 case HelmType::HELMTYPE_PAIL:
                     switch (helmDamageIndex) {
                         case 1:
-                            Reanimation_SetImageOverride(mBodyReanim, "anim_bucket", *Sexy_IMAGE_REANIM_ZOMBIE_BUCKET2_Addr);
+                            mBodyReanim->SetImageOverride("anim_bucket", *Sexy_IMAGE_REANIM_ZOMBIE_BUCKET2_Addr);
                             break;
                         case 2:
-                            Reanimation_SetImageOverride(mBodyReanim, "anim_bucket", *Sexy_IMAGE_REANIM_ZOMBIE_BUCKET3_Addr);
+                            mBodyReanim->SetImageOverride("anim_bucket", *Sexy_IMAGE_REANIM_ZOMBIE_BUCKET3_Addr);
                             break;
                     }
                     break;
                 case HelmType::HELMTYPE_FOOTBALL:
                     switch (helmDamageIndex) {
                         case 1:
-                            Reanimation_SetImageOverride(mBodyReanim, "zombie_football_helmet", *Sexy_IMAGE_REANIM_ZOMBIE_FOOTBALL_HELMET2_Addr);
+                            mBodyReanim->SetImageOverride("zombie_football_helmet", *Sexy_IMAGE_REANIM_ZOMBIE_FOOTBALL_HELMET2_Addr);
                             break;
                         case 2:
-                            Reanimation_SetImageOverride(mBodyReanim, "zombie_football_helmet", *Sexy_IMAGE_REANIM_ZOMBIE_FOOTBALL_HELMET3_Addr);
+                            mBodyReanim->SetImageOverride("zombie_football_helmet", *Sexy_IMAGE_REANIM_ZOMBIE_FOOTBALL_HELMET3_Addr);
                             break;
                     }
                     break;
                 case HelmType::HELMTYPE_DIGGER:
                     switch (helmDamageIndex) {
                         case 1:
-                            Reanimation_SetImageOverride(mBodyReanim, "Zombie_digger_hardhat", *Sexy_IMAGE_REANIM_ZOMBIE_DIGGER_HARDHAT2_Addr);
+                            mBodyReanim->SetImageOverride("Zombie_digger_hardhat", *Sexy_IMAGE_REANIM_ZOMBIE_DIGGER_HARDHAT2_Addr);
                             break;
                         case 2:
-                            Reanimation_SetImageOverride(mBodyReanim, "Zombie_digger_hardhat", *Sexy_IMAGE_REANIM_ZOMBIE_DIGGER_HARDHAT3_Addr);
+                            mBodyReanim->SetImageOverride("Zombie_digger_hardhat", *Sexy_IMAGE_REANIM_ZOMBIE_DIGGER_HARDHAT3_Addr);
                             break;
                     }
                     break;
@@ -3567,10 +3567,10 @@ void Board::FixReanimErrorAfterLoad() {
                     Reanimation *mSpecialHeadReanim = mApp->ReanimationGet(aZombie->mSpecialHeadReanimID);
                     switch (helmDamageIndex) {
                         case 1:
-                            Reanimation_SetImageOverride(mSpecialHeadReanim, "anim_face", *Sexy_IMAGE_REANIM_WALLNUT_CRACKED1_Addr);
+                            mSpecialHeadReanim->SetImageOverride("anim_face", *Sexy_IMAGE_REANIM_WALLNUT_CRACKED1_Addr);
                             break;
                         case 2:
-                            Reanimation_SetImageOverride(mSpecialHeadReanim, "anim_face", *Sexy_IMAGE_REANIM_WALLNUT_CRACKED2_Addr);
+                            mSpecialHeadReanim->SetImageOverride("anim_face", *Sexy_IMAGE_REANIM_WALLNUT_CRACKED2_Addr);
                             break;
                     }
                 } break;
@@ -3578,10 +3578,10 @@ void Board::FixReanimErrorAfterLoad() {
                     Reanimation *mSpecialHeadReanim = mApp->ReanimationGet(aZombie->mSpecialHeadReanimID);
                     switch (helmDamageIndex) {
                         case 1:
-                            Reanimation_SetImageOverride(mSpecialHeadReanim, "anim_face", *Sexy_IMAGE_REANIM_TALLNUT_CRACKED1_Addr);
+                            mSpecialHeadReanim->SetImageOverride("anim_face", *Sexy_IMAGE_REANIM_TALLNUT_CRACKED1_Addr);
                             break;
                         case 2:
-                            Reanimation_SetImageOverride(mSpecialHeadReanim, "anim_face", *Sexy_IMAGE_REANIM_TALLNUT_CRACKED2_Addr);
+                            mSpecialHeadReanim->SetImageOverride("anim_face", *Sexy_IMAGE_REANIM_TALLNUT_CRACKED2_Addr);
                             break;
                     }
                 } break;
@@ -3594,22 +3594,20 @@ void Board::FixReanimErrorAfterLoad() {
             switch (bodyDamageIndex) {
                 case 0:
                     if (zombieType == ZombieType::ZOMBIE_REDEYE_GARGANTUAR)
-                        Reanimation_SetImageOverride(mBodyReanim, "anim_head1", *Sexy_IMAGE_REANIM_ZOMBIE_GARGANTUAR_HEAD_REDEYE_Addr);
+                        mBodyReanim->SetImageOverride("anim_head1", *Sexy_IMAGE_REANIM_ZOMBIE_GARGANTUAR_HEAD_REDEYE_Addr);
                     break;
                 case 1:
                     if (zombieType == ZombieType::ZOMBIE_REDEYE_GARGANTUAR)
-                        Reanimation_SetImageOverride(mBodyReanim, "anim_head1", *Sexy_IMAGE_REANIM_ZOMBIE_GARGANTUAR_HEAD_REDEYE_Addr);
-                    Reanimation_SetImageOverride(mBodyReanim, "Zombie_gargantua_body1", *Sexy_IMAGE_REANIM_ZOMBIE_GARGANTUAR_BODY1_2_Addr);
-                    Reanimation_SetImageOverride(mBodyReanim, "Zombie_gargantuar_outerarm_lower", *Sexy_IMAGE_REANIM_ZOMBIE_GARGANTUAR_OUTERARM_LOWER2_Addr);
+                        mBodyReanim->SetImageOverride("anim_head1", *Sexy_IMAGE_REANIM_ZOMBIE_GARGANTUAR_HEAD_REDEYE_Addr);
+                    mBodyReanim->SetImageOverride("Zombie_gargantua_body1", *Sexy_IMAGE_REANIM_ZOMBIE_GARGANTUAR_BODY1_2_Addr);
+                    mBodyReanim->SetImageOverride("Zombie_gargantuar_outerarm_lower", *Sexy_IMAGE_REANIM_ZOMBIE_GARGANTUAR_OUTERARM_LOWER2_Addr);
                     break;
                 case 2:
-                    Reanimation_SetImageOverride(mBodyReanim, "Zombie_gargantua_body1", *Sexy_IMAGE_REANIM_ZOMBIE_GARGANTUAR_BODY1_3_Addr);
-                    Reanimation_SetImageOverride(mBodyReanim, "Zombie_gargantuar_outerleg_foot", *Sexy_IMAGE_REANIM_ZOMBIE_GARGANTUAR_FOOT2_Addr);
-                    Reanimation_SetImageOverride(mBodyReanim, "Zombie_gargantuar_outerarm_lower", *Sexy_IMAGE_REANIM_ZOMBIE_GARGANTUAR_OUTERARM_LOWER2_Addr);
-                    Reanimation_SetImageOverride(mBodyReanim,
-                                                 "anim_head1",
-                                                 zombieType == ZombieType::ZOMBIE_REDEYE_GARGANTUAR ? *Sexy_IMAGE_REANIM_ZOMBIE_GARGANTUAR_HEAD2_REDEYE_Addr
-                                                                                                    : *Sexy_IMAGE_REANIM_ZOMBIE_GARGANTUAR_HEAD2_Addr);
+                    mBodyReanim->SetImageOverride("Zombie_gargantua_body1", *Sexy_IMAGE_REANIM_ZOMBIE_GARGANTUAR_BODY1_3_Addr);
+                    mBodyReanim->SetImageOverride("Zombie_gargantuar_outerleg_foot", *Sexy_IMAGE_REANIM_ZOMBIE_GARGANTUAR_FOOT2_Addr);
+                    mBodyReanim->SetImageOverride("Zombie_gargantuar_outerarm_lower", *Sexy_IMAGE_REANIM_ZOMBIE_GARGANTUAR_OUTERARM_LOWER2_Addr);
+                    mBodyReanim->SetImageOverride(
+                        "anim_head1", zombieType == ZombieType::ZOMBIE_REDEYE_GARGANTUAR ? *Sexy_IMAGE_REANIM_ZOMBIE_GARGANTUAR_HEAD2_REDEYE_Addr : *Sexy_IMAGE_REANIM_ZOMBIE_GARGANTUAR_HEAD2_Addr);
             }
         }
 
@@ -3618,18 +3616,18 @@ void Board::FixReanimErrorAfterLoad() {
             int bodyDamageIndex = aZombie->GetBodyDamageIndex();
             switch (bodyDamageIndex) {
                 case 1:
-                    Reanimation_SetImageOverride(mBodyReanim, "Boss_head", *Sexy_IMAGE_REANIM_ZOMBIE_BOSS_HEAD_DAMAGE1_Addr);
-                    Reanimation_SetImageOverride(mBodyReanim, "Boss_jaw", *Sexy_IMAGE_REANIM_ZOMBIE_BOSS_JAW_DAMAGE1_Addr);
-                    Reanimation_SetImageOverride(mBodyReanim, "Boss_outerarm_hand", *Sexy_IMAGE_REANIM_ZOMBIE_BOSS_OUTERARM_HAND_DAMAGE1_Addr);
-                    Reanimation_SetImageOverride(mBodyReanim, "Boss_outerarm_thumb2", *Sexy_IMAGE_REANIM_ZOMBIE_BOSS_OUTERARM_THUMB_DAMAGE1_Addr);
-                    Reanimation_SetImageOverride(mBodyReanim, "Boss_innerleg_foot", *Sexy_IMAGE_REANIM_ZOMBIE_BOSS_FOOT_DAMAGE1_Addr);
+                    mBodyReanim->SetImageOverride("Boss_head", *Sexy_IMAGE_REANIM_ZOMBIE_BOSS_HEAD_DAMAGE1_Addr);
+                    mBodyReanim->SetImageOverride("Boss_jaw", *Sexy_IMAGE_REANIM_ZOMBIE_BOSS_JAW_DAMAGE1_Addr);
+                    mBodyReanim->SetImageOverride("Boss_outerarm_hand", *Sexy_IMAGE_REANIM_ZOMBIE_BOSS_OUTERARM_HAND_DAMAGE1_Addr);
+                    mBodyReanim->SetImageOverride("Boss_outerarm_thumb2", *Sexy_IMAGE_REANIM_ZOMBIE_BOSS_OUTERARM_THUMB_DAMAGE1_Addr);
+                    mBodyReanim->SetImageOverride("Boss_innerleg_foot", *Sexy_IMAGE_REANIM_ZOMBIE_BOSS_FOOT_DAMAGE1_Addr);
                     break;
                 case 2:
-                    Reanimation_SetImageOverride(mBodyReanim, "Boss_head", *Sexy_IMAGE_REANIM_ZOMBIE_BOSS_HEAD_DAMAGE2_Addr);
-                    Reanimation_SetImageOverride(mBodyReanim, "Boss_jaw", *Sexy_IMAGE_REANIM_ZOMBIE_BOSS_JAW_DAMAGE2_Addr);
-                    Reanimation_SetImageOverride(mBodyReanim, "Boss_outerarm_hand", *Sexy_IMAGE_REANIM_ZOMBIE_BOSS_OUTERARM_HAND_DAMAGE2_Addr);
-                    Reanimation_SetImageOverride(mBodyReanim, "Boss_outerarm_thumb2", *Sexy_IMAGE_REANIM_ZOMBIE_BOSS_OUTERARM_THUMB_DAMAGE2_Addr);
-                    Reanimation_SetImageOverride(mBodyReanim, "Boss_outerleg_foot", *Sexy_IMAGE_REANIM_ZOMBIE_BOSS_FOOT_DAMAGE2_Addr);
+                    mBodyReanim->SetImageOverride("Boss_head", *Sexy_IMAGE_REANIM_ZOMBIE_BOSS_HEAD_DAMAGE2_Addr);
+                    mBodyReanim->SetImageOverride("Boss_jaw", *Sexy_IMAGE_REANIM_ZOMBIE_BOSS_JAW_DAMAGE2_Addr);
+                    mBodyReanim->SetImageOverride("Boss_outerarm_hand", *Sexy_IMAGE_REANIM_ZOMBIE_BOSS_OUTERARM_HAND_DAMAGE2_Addr);
+                    mBodyReanim->SetImageOverride("Boss_outerarm_thumb2", *Sexy_IMAGE_REANIM_ZOMBIE_BOSS_OUTERARM_THUMB_DAMAGE2_Addr);
+                    mBodyReanim->SetImageOverride("Boss_outerleg_foot", *Sexy_IMAGE_REANIM_ZOMBIE_BOSS_FOOT_DAMAGE2_Addr);
                     break;
             }
         }
@@ -3639,12 +3637,12 @@ void Board::FixReanimErrorAfterLoad() {
             int bodyDamageIndex = aZombie->GetBodyDamageIndex();
             switch (bodyDamageIndex) {
                 case 1:
-                    Reanimation_SetImageOverride(mBodyReanim, "Zombie_zamboni_1", *Sexy_IMAGE_REANIM_ZOMBIE_ZAMBONI_1_DAMAGE1_Addr);
-                    Reanimation_SetImageOverride(mBodyReanim, "Zombie_zamboni_2", *Sexy_IMAGE_REANIM_ZOMBIE_ZAMBONI_2_DAMAGE1_Addr);
+                    mBodyReanim->SetImageOverride("Zombie_zamboni_1", *Sexy_IMAGE_REANIM_ZOMBIE_ZAMBONI_1_DAMAGE1_Addr);
+                    mBodyReanim->SetImageOverride("Zombie_zamboni_2", *Sexy_IMAGE_REANIM_ZOMBIE_ZAMBONI_2_DAMAGE1_Addr);
                     break;
                 case 2:
-                    Reanimation_SetImageOverride(mBodyReanim, "Zombie_zamboni_1", *Sexy_IMAGE_REANIM_ZOMBIE_ZAMBONI_1_DAMAGE2_Addr);
-                    Reanimation_SetImageOverride(mBodyReanim, "Zombie_zamboni_2", *Sexy_IMAGE_REANIM_ZOMBIE_ZAMBONI_2_DAMAGE2_Addr);
+                    mBodyReanim->SetImageOverride("Zombie_zamboni_1", *Sexy_IMAGE_REANIM_ZOMBIE_ZAMBONI_1_DAMAGE2_Addr);
+                    mBodyReanim->SetImageOverride("Zombie_zamboni_2", *Sexy_IMAGE_REANIM_ZOMBIE_ZAMBONI_2_DAMAGE2_Addr);
                     break;
             }
         }
@@ -3655,7 +3653,7 @@ void Board::FixReanimErrorAfterLoad() {
             switch (bodyDamageIndex) {
                 case 1:
                 case 2:
-                    Reanimation_SetImageOverride(mBodyReanim, "Zombie_catapult_siding", *Sexy_IMAGE_REANIM_ZOMBIE_CATAPULT_SIDING_DAMAGE_Addr);
+                    mBodyReanim->SetImageOverride("Zombie_catapult_siding", *Sexy_IMAGE_REANIM_ZOMBIE_CATAPULT_SIDING_DAMAGE_Addr);
                     break;
             }
         }

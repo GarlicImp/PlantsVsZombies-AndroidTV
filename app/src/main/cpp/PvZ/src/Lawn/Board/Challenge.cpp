@@ -151,7 +151,7 @@ void Challenge::IZombieDrawPlant(Sexy::Graphics* g, Plant* thePlant) {
         theColor.mBlue = 58;
         theColor.mAlpha = 255;
         g->SetColor(theColor);
-        Reanimation_DrawRenderGroup(mBodyReanim, g, 0);
+        mBodyReanim->DrawRenderGroup(g, 0);
 
         g->mTransX = aOffsetX + 2.0;
         g->mTransY = aOffsetY + 2.0;
@@ -160,7 +160,7 @@ void Challenge::IZombieDrawPlant(Sexy::Graphics* g, Plant* thePlant) {
         theColor.mBlue = 107;
         theColor.mAlpha = 255;
         g->SetColor(theColor);
-        Reanimation_DrawRenderGroup(mBodyReanim, g, 0);
+        mBodyReanim->DrawRenderGroup(g, 0);
 
         g->mTransX = aOffsetX - 2.0;
         g->mTransY = aOffsetY - 2.0;
@@ -169,7 +169,7 @@ void Challenge::IZombieDrawPlant(Sexy::Graphics* g, Plant* thePlant) {
         theColor.mBlue = 107;
         theColor.mAlpha = 255;
         g->SetColor(theColor);
-        Reanimation_DrawRenderGroup(mBodyReanim, g, 0);
+        mBodyReanim->DrawRenderGroup(g, 0);
 
         g->mTransX = aOffsetX;
         g->mTransY = aOffsetY;
@@ -179,7 +179,7 @@ void Challenge::IZombieDrawPlant(Sexy::Graphics* g, Plant* thePlant) {
         theColor.mAlpha = 255;
         g->SetColor(theColor);
         IZombieSetPlantFilterEffect(thePlant, FilterEffect::FILTEREFFECT_NONE);
-        Reanimation_DrawRenderGroup(mBodyReanim, g, 0);
+        mBodyReanim->DrawRenderGroup(g, 0);
 
         IZombieSetPlantFilterEffect(thePlant, FilterEffect::FILTEREFFECT_NONE);
         g->SetDrawMode(Graphics::DRAWMODE_NORMAL);

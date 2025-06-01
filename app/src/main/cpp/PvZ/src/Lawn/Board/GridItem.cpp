@@ -1,16 +1,16 @@
-#include "PvZ/Lawn/Board/GridItem.h"
-#include "PvZ/GlobalVariable.h"
 #include "PvZ/Lawn/Board/Board.h"
+#include "PvZ/Lawn/Board/GridItem.h"
 #include "PvZ/Lawn/Board/Challenge.h"
 #include "PvZ/Lawn/Board/ZenGarden.h"
-#include "PvZ/Lawn/GamepadControls.h"
 #include "PvZ/Lawn/LawnApp.h"
+#include "PvZ/Lawn/Board/CursorObject.h"
+#include "PvZ/TodLib/Effect/Reanimator.h"
+#include "PvZ/Lawn/GamepadControls.h"
+#include "PvZ/SexyAppFramework/Graphics/Graphics.h"
 #include "PvZ/MagicAddr.h"
 #include "PvZ/Misc.h"
-#include "PvZ/SexyAppFramework/Graphics/Graphics.h"
+#include "PvZ/GlobalVariable.h"
 #include "PvZ/Symbols.h"
-#include "PvZ/TodLib/Effect/Reanimator.h"
-#include "PvZ/Lawn/Board/CursorObject.h"
 
 #include <numbers>
 
@@ -47,15 +47,14 @@ void GridItem::DrawScaryPot(Sexy::Graphics* g) {
                 aInsideGraphics->mScaleX = 0.3f;
                 aInsideGraphics->mScaleY = 0.3f;
             }
-            ReanimatorCache_DrawCachedZombie(mApp->mReanimatorCache, aInsideGraphics, theOffsetX + aXPos, theOffsetY + aYPos, mZombieType);
+            mApp->mReanimatorCache->DrawCachedZombie(aInsideGraphics, theOffsetX + aXPos, theOffsetY + aYPos, mZombieType);
         } else if (mScaryPotType == ScaryPotType::SCARYPOT_SUN) {
             int aSuns = mBoard->mChallenge->ScaryPotterCountSunInPot(this);
 
-            Reanimation aReanim;
-            Reanimation_Reanimation(&aReanim);
-            Reanimation_ReanimationInitializeType(&aReanim, 0.0, 0.0, ReanimationType::REANIM_SUN);
-            Reanimation_OverrideScale(&aReanim, 0.5f, 0.5f);
-            Reanimation_Update(&aReanim);                                                  // 一次Update是必要的，否则绘制出来是Empty
+            Reanimation aReanim = Reanimation();
+            (&aReanim)->ReanimationInitializeType(0.0, 0.0, ReanimationType::REANIM_SUN);
+            (&aReanim)->OverrideScale(0.5f, 0.5f);
+            (&aReanim)->Update();                                                  // 一次Update是必要的，否则绘制出来是Empty
             aReanim.mFrameStart = (mBoard->mMainCounter / 10) % (aReanim.mFrameCount - 1); // 这行代码可让阳光动起来
 
             for (int i = 0; i < aSuns; i++) {
@@ -78,10 +77,10 @@ void GridItem::DrawScaryPot(Sexy::Graphics* g) {
                         aOffsetX += 5.0f; // aOffsetY -= 15.0f;          break;
                 }
 
-                Reanimation_SetPosition(&aReanim, aXPos + aOffsetX, aYPos + aOffsetY);
-                Reanimation_Draw(&aReanim, g);
+                (&aReanim)->SetPosition(aXPos + aOffsetX, aYPos + aOffsetY);
+                (&aReanim)->Draw(g);
             }
-            Reanimation_Delete2(&aReanim);
+            (&aReanim)->Delete();
         }
 
         int aAlpha = TodAnimateCurve(0, 50, mTransparentCounter, 255, 58, TodCurves::CURVE_LINEAR);

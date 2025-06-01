@@ -6,8 +6,8 @@
 #include "PvZ/SexyAppFramework/Widget/ButtonListener.h"
 #include "PvZ/SexyAppFramework/Widget/Widget.h"
 #include "PvZ/Symbols.h"
-#include "PvZ/Lawn/GamepadControls.h"
 #include "PvZ/SexyAppFramework/Misc/KeyCodes.h"
+#include "PvZ/Lawn/Widget/AchievementsWidget.h"
 
 #include "Coin.h"
 #include "GridItem.h"
@@ -35,6 +35,7 @@ class CutScene;
 class Challenge;
 class Reanimation;
 class TodParticleSystem;
+class GamepadControls;
 
 class HitResult {
 public:

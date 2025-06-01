@@ -6,6 +6,7 @@
 #define PLANTSVSZOMBIES_ANDROIDTV_TODCOMMON_H
 
 #include <stdlib.h>
+
 #include "PvZ/Lawn/Common/LawnCommon.h"
 #include "PvZ/SexyAppFramework/Misc/Common.h"
 #include "PvZ/SexyAppFramework/Misc/ResourceManager.h"
@@ -14,7 +15,7 @@ struct TodAllocator;
 namespace Sexy
 {
 class Graphics;
-class SexyMatrix;
+class SexyMatrix3;
 class SexyVector2;
 class Image;
 class Color;
@@ -41,7 +42,27 @@ public:
     float mSecondLastPicked;
 };
 
-inline void (*TodDrawImageCelF)(Sexy::Graphics *, Sexy::Image *, float, float, int, int);
+inline int RandRangeInt(int theMin, int theMax) {
+    return reinterpret_cast<int (*)(int, int)>(RandRangeIntAddr)(theMin, theMax);
+}
+
+inline float RandRangeFloat(float theMin, float theMax) {
+    return reinterpret_cast<float (*)(float, float)>(RandRangeFloatAddr)(theMin, theMax);
+}
+
+inline void TodDrawImageCelF(Sexy::Graphics *g, Sexy::Image *theImageStrip, float thePosX, float thePosY, int theCelCol, int theCelRow) {
+    reinterpret_cast<void (*)(Sexy::Graphics *, Sexy::Image *, float, float, int, int)>(RandRangeFloatAddr)(g, theImageStrip, thePosX, thePosY, theCelCol, theCelRow);
+}
+
+inline void TodScaleRotateTransformMatrix(Sexy::SexyMatrix3 &m, float x, float y, float rad, float theScaleX, float theScaleY) {
+    reinterpret_cast<void (*)(Sexy::SexyMatrix3 &, float, float, float, float, float)>(TodScaleRotateTransformMatrixAddr)(m, x, y, rad, theScaleX, theScaleY);
+}
+
+//inline int RandRangeInt(int theMin, int theMax);
+
+//inline float RandRangeFloat(float theMin, float theMax);
+
+//inline void TodDrawImageCelF(Sexy::Graphics *g, Sexy::Image *theImageStrip, float thePosX, float thePosY, int theCelCol, int theCelRow);
 
 inline int (*TodDrawImageCelCenterScaledF)(Sexy::Graphics *a1, Sexy::Image *a2, float a3, float a4, int a5, float a6, float a7);
 

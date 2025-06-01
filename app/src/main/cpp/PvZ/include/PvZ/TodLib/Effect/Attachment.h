@@ -5,12 +5,13 @@
 #ifndef PLANTSVSZOMBIES_ANDROIDTV_ATTACHMENT_H
 #define PLANTSVSZOMBIES_ANDROIDTV_ATTACHMENT_H
 
+#include "PvZ/TodLib/Common/DataArray.h"
 #include "PvZ/Lawn/Common/ConstEnums.h"
 #include "PvZ/SexyAppFramework/Misc/SexyMatrix.h"
+#include "PvZ/Symbols.h"
 
 class AttachEffect {
 public:
-    enum EffectType { Particle, Trail, Reanim, Attachment, Other };
     ReanimationID mEffectID;      // 0
     EffectType mEffectType;       // 1
     Sexy::SexyTransform2D mOffset;// 2 ~ 10
@@ -28,6 +29,10 @@ public:
     bool mUsesClipping;
     int mAttachmentID;
 }; // 大小199个整数
+
+inline AttachEffect *AttachReanim(AttachmentID &theAttachmentID, Reanimation *theReanimation, float theOffsetX, float theOffsetY) {
+    return reinterpret_cast<AttachEffect *(*)(AttachmentID &, Reanimation *, float, float)>(AttachReanimAddr)(theAttachmentID, theReanimation, theOffsetX, theOffsetY);
+}
 
 class AttachmentHolder {};
 

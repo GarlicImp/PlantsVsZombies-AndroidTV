@@ -13,6 +13,8 @@
 #include <algorithm>
 #include <cstdlib>
 
+#include "PvZ/Symbols.h"
+
 typedef std::string SexyString; // 不确定，猜测是std::string
 #define _S(x) x
 
@@ -44,13 +46,8 @@ enum PixelFormat {
 
 namespace Sexy {
 
-//extern std::string StrFormat(const char *fmt...) {
-//    return reinterpret_cast<std::string (*)(const char *, ...)>(Sexy_StrFormatAddr)(fmt);
-//}
-
-//extern std::string	vformat(const char* fmt, va_list argPtr);
-//extern std::string StrFormat(const char* fmt...);
-//extern void StrDelete(const SexyString &fmt);
+inline int Rand(int range) { return reinterpret_cast<int (*)(int)>(Sexy_RandIntAddr)(range); }
+inline float Rand(float range) { return reinterpret_cast<float (*)(float)>(Sexy_RandFloatAddr)(range); }
 
 }
 

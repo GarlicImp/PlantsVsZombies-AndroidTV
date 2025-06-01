@@ -77,6 +77,9 @@ public:
         reinterpret_cast<void (*)(Graphics *, Image *, int, int, const Rect &)>(Sexy_Graphics_DrawImage2Addr)(this, theImage, theX, theY, theSrcRect);
     }
     void DrawImageF(Image *theImage, float theX, float theY) { reinterpret_cast<void (*)(Graphics *, Image *, float, float)>(Sexy_Graphics_DrawImageFAddr)(this, theImage, theX, theY); }
+    void DrawImageF(Image *theImage, float theX, float theY, const Rect &theSrcRect) {
+        reinterpret_cast<void (*)(Graphics *, Image *, float, float)>(Sexy_Graphics_DrawImageF2Addr)(this, theImage, theX, theY);
+    }
     void DrawImageCel(Image *theImageStrip, int theX, int theY, int theCel) {
         reinterpret_cast<void (*)(Graphics *, Image *, int, int, int)>(Sexy_Graphics_DrawImageCelAddr)(this, theImageStrip, theX, theY, theCel);
     }

@@ -5,6 +5,8 @@
 #ifndef PLANTSVSZOMBIES_ANDROIDTV_FILTEREFFECT_H
 #define PLANTSVSZOMBIES_ANDROIDTV_FILTEREFFECT_H
 
+#include "PvZ/Lawn/Common/ConstEnums.h"
+
 namespace Sexy
 {
 class Image;
@@ -23,5 +25,7 @@ enum FilterEffect {
 Sexy::Image *FilterEffectCreateImage(Sexy::Image *image, FilterEffect);
 
 Sexy::Image *FilterEffectGetImage(Sexy::Image *image, FilterEffect);
+
+FilterEffect GetFilterEffectTypeBySeedType(SeedType mSeedType);
 
 #endif // PLANTSVSZOMBIES_ANDROIDTV_FILTEREFFECT_H

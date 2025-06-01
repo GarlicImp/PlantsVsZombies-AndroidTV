@@ -8,7 +8,11 @@
 #include "Image.h"
 
 namespace Sexy {
-class MemoryImage : public Image {}; // 大小58个整数
+
+class MemoryImage : public Image {
+
+}; // 大小58个整数
+
 }
 
 

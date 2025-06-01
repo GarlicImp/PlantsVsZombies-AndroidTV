@@ -51,10 +51,12 @@ public:
     int unk2[20];                     // 38 ~ 57
     // 大小58个整数
 
-    int GetWidth() { return mWidth; };
-    int GetHeight() { return mHeight; };
+    int GetWidth();
+    int GetHeight();
+    int GetCelWidth();  // returns the width of just 1 cel in a strip of images
+    int GetCelHeight(); // like above but for vertical strips
 
-//    virtual void FillRect(const Rect &theRect, const Color &theColor, int theDrawMode);
+    //    virtual void FillRect(const Rect &theRect, const Color &theColor, int theDrawMode);
 //    virtual void DrawRect(const Rect &theRect, const Color &theColor, int theDrawMode);
 //    virtual void ClearRect(const Rect &theRect);
 //    virtual void Blt(Image *theImage, int theX, int theY, const Rect &theSrcRect, const Color &theColor, int theDrawMode);

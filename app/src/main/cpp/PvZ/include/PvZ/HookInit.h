@@ -45,39 +45,6 @@
 #include "PvZ/Lawn/System/PoolEffect.h"
 
 inline void InitInGameFunction() {
-    TodDrawImageCelF = (decltype(TodDrawImageCelF))TodDrawImageCelFAddr;
-
-
-    Reanimation_OverrideScale = (decltype(Reanimation_OverrideScale))Reanimation_OverrideScaleAddr;
-    Reanimation_SetPosition = (decltype(Reanimation_SetPosition))Reanimation_SetPositionAddr;
-    Reanimation_Reanimation = (decltype(Reanimation_Reanimation))Reanimation_ReanimationAddr;
-    Reanimation_ReanimationInitializeType = (decltype(Reanimation_ReanimationInitializeType))Reanimation_ReanimationInitializeTypeAddr;
-    Reanimation_Draw = (decltype(Reanimation_Draw))Reanimation_DrawAddr;
-    Reanimation_Delete2 = (decltype(Reanimation_Delete2))Reanimation_Delete2Addr;
-    Reanimation_PlayReanim = (decltype(Reanimation_PlayReanim))Reanimation_PlayReanimAddr;
-    Reanimation_FindTrackIndexById = (decltype(Reanimation_FindTrackIndexById))Reanimation_FindTrackIndexByIdAddr;
-    Reanimation_GetCurrentTransform = (decltype(Reanimation_GetCurrentTransform))Reanimation_GetCurrentTransformAddr;
-    Reanimation_SetAnimRate = (decltype(Reanimation_SetAnimRate))Reanimation_SetAnimRateAddr;
-    Reanimation_IsAnimPlaying = (decltype(Reanimation_IsAnimPlaying))Reanimation_IsAnimPlayingAddr;
-    Reanimation_DrawRenderGroup = (decltype(Reanimation_DrawRenderGroup))Reanimation_DrawRenderGroupAddr;
-    Reanimation_SetImageOverride = (decltype(Reanimation_SetImageOverride))Reanimation_SetImageOverrideAddr;
-    Reanimation_FindTrackIndex = (decltype(Reanimation_FindTrackIndex))Reanimation_FindTrackIndexAddr;
-    Reanimation_ReanimationDie = (decltype(Reanimation_ReanimationDie))Reanimation_ReanimationDieAddr;
-    Reanimation_GetTrackInstanceByName = (decltype(Reanimation_GetTrackInstanceByName))Reanimation_GetTrackInstanceByNameAddr;
-    Reanimation_SetFramesForLayer = (decltype(Reanimation_SetFramesForLayer))Reanimation_SetFramesForLayerAddr;
-    Reanimation_TrackExists = (decltype(Reanimation_TrackExists))Reanimation_TrackExistsAddr;
-    Reanimation_AttachToAnotherReanimation = (decltype(Reanimation_AttachToAnotherReanimation))Reanimation_AttachToAnotherReanimationAddr;
-    Reanimation_Update = (decltype(Reanimation_Update))Reanimation_UpdateAddr;
-    Reanimation_MatrixFromTransform = (decltype(Reanimation_MatrixFromTransform))Reanimation_MatrixFromTransformAddr;
-    Reanimation_GetFrameTime = (decltype(Reanimation_GetFrameTime))Reanimation_GetFrameTimeAddr;
-    Reanimation_ShowOnlyTrack = (decltype(Reanimation_ShowOnlyTrack))Reanimation_ShowOnlyTrackAddr;
-    ReanimatorCache_DrawCachedZombie = (decltype(ReanimatorCache_DrawCachedZombie))ReanimatorCache_DrawCachedZombieAddr;
-    ReanimatorTransform_ReanimatorTransform = (decltype(ReanimatorTransform_ReanimatorTransform))ReanimatorTransform_ReanimatorTransformAddr;
-    AttachReanim = (decltype(AttachReanim))AttachReanimAddr;
-    TodScaleRotateTransformMatrix = (decltype(TodScaleRotateTransformMatrix))TodScaleRotateTransformMatrixAddr;
-    Reanimation_GetTrackMatrix = (decltype(Reanimation_GetTrackMatrix))Reanimation_GetTrackMatrixAddr;
-
-
     StoreScreen_SetSelectedSlot = (decltype(StoreScreen_SetSelectedSlot))StoreScreen_SetSelectedSlotAddr;
     StoreScreen_AdvanceCrazyDaveDialog = (decltype(StoreScreen_AdvanceCrazyDaveDialog))StoreScreen_AdvanceCrazyDaveDialogAddr;
     StoreScreen_CanInteractWithButtons = (decltype(StoreScreen_CanInteractWithButtons))StoreScreen_CanInteractWithButtonsAddr;
@@ -195,11 +162,9 @@ inline void InitInGameFunction() {
     ShopSeedPacket_Update = (decltype(ShopSeedPacket_Update))ShopSeedPacket_UpdateAddr;
     GetFlashingColor = (decltype(GetFlashingColor))GetFlashingColorAddr;
     LawnPlayerInfo_GetFlag = (decltype(LawnPlayerInfo_GetFlag))LawnPlayerInfo_GetFlagAddr;
-    RandRangeInt = (decltype(RandRangeInt))RandRangeIntAddr;
     //    DrawSeedType = (void (*)(float *, float, float, int, int, float, float,float)) DrawSeedTypeAddr;
     //    MailScreen_KeyDown = (decltype(MailScreen_KeyDown))MailScreen_KeyDownAddr;
     Sexy_GamepadApp_HasGamepad = (decltype(Sexy_GamepadApp_HasGamepad))Sexy_GamepadApp_HasGamepadAddr;
-    Sexy_RandInt = (decltype(Sexy_RandInt))Sexy_RandIntAddr;
     Sexy_SexyMatrix3_SexyMatrix3 = (decltype(Sexy_SexyMatrix3_SexyMatrix3))Sexy_SexyMatrix3_SexyMatrix3Addr;
     Sexy_SexyAppBase_GetImage = (decltype(Sexy_SexyAppBase_GetImage))Sexy_SexyAppBase_GetImageAddr;
     Sexy_Widget_Resize = (decltype(Sexy_Widget_Resize))Sexy_Widget_ResizeAddr;
@@ -237,9 +202,6 @@ inline void InitInGameFunction() {
     HouseChooserDialog_GameButtonDown = (decltype(HouseChooserDialog_GameButtonDown))HouseChooserDialog_GameButtonDownAddr;
     ReanimAtlas_GetEncodedReanimAtlas = (decltype(ReanimAtlas_GetEncodedReanimAtlas))ReanimAtlas_GetEncodedReanimAtlasAddr;
     ReanimatorEnsureDefinitionLoaded = (decltype(ReanimatorEnsureDefinitionLoaded))ReanimatorEnsureDefinitionLoadedAddr;
-    ReanimatorCache_MakeCachedPlantFrame = (decltype(ReanimatorCache_MakeCachedPlantFrame))ReanimatorCache_MakeCachedPlantFrameAddr;
-    ReanimatorCache_MakeBlankCanvasImage = (decltype(ReanimatorCache_MakeBlankCanvasImage))ReanimatorCache_MakeBlankCanvasImageAddr;
-    ReanimatorCache_DrawReanimatorFrame = (decltype(ReanimatorCache_DrawReanimatorFrame))ReanimatorCache_DrawReanimatorFrameAddr;
     FindGlobalAllocator = (decltype(FindGlobalAllocator))FindGlobalAllocatorAddr;
     AttachParticle = (decltype(AttachParticle))AttachParticleAddr;
     TodLoadResources = (decltype(TodLoadResources))TodLoadResourcesAddr;
@@ -249,7 +211,6 @@ inline void InitInGameFunction() {
     Sexy_ResourceManager_GetSoundThrow = (decltype(Sexy_ResourceManager_GetSoundThrow))Sexy_ResourceManager_GetSoundThrowAddr;
     ToolTipWidget_SetWarningText = (decltype(ToolTipWidget_SetWarningText))ToolTipWidget_SetWarningTextAddr;
     TestMenuWidget_TestMenuWidget = (decltype(TestMenuWidget_TestMenuWidget))TestMenuWidget_TestMenuWidgetAddr;
-    RandRangeFloat = (decltype(RandRangeFloat))RandRangeFloatAddr;
     PoolEffect_BilinearLookupFixedPoint = (decltype(PoolEffect_BilinearLookupFixedPoint))PoolEffect_BilinearLookupFixedPointAddr;
     Sexy_DefaultProfileMgr_GetAnyProfile = (decltype(Sexy_DefaultProfileMgr_GetAnyProfile))Sexy_DefaultProfileMgr_GetAnyProfileAddr;
     // Sexy_WidgetManager_MouseDown=(int (*)(int *manager, int x, int y, int theClickCount))Sexy_WidgetManager_MouseDownAddr;

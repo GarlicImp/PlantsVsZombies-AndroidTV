@@ -4,6 +4,12 @@
 #include "PvZ/Lawn/Board/SeedBank.h"
 #include "PvZ/Lawn/Common/ConstEnums.h"
 #include "PvZ/Lawn/GamepadControls.h"
+#include "PvZ/SexyAppFramework/Widget/Widget.h"
+#include "PvZ/SexyAppFramework/Widget/ButtonListener.h"
+
+namespace Sexy {
+class GameButton;
+}
 
 enum SeedChooserTouchState {
     ViewLawnButton,

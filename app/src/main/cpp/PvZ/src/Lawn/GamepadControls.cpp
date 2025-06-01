@@ -225,7 +225,7 @@ void GamepadControls::ButtonDownFireCobcannonTest() {
 void GamepadControls_InvalidatePreviewReanim(GamepadControls *gamepadControls) {
     Reanimation *mPreviewReanim4 = gamepadControls->mGameObject.mApp->ReanimationTryToGet(gamepadControls->mPreviewReanimID4);
     if (mPreviewReanim4 != nullptr) {
-        Reanimation_ReanimationDie(mPreviewReanim4);
+        mPreviewReanim4->ReanimationDie();
         gamepadControls->mPreviewReanimID4 = ReanimationID::REANIMATIONID_NULL;
     }
     ReanimationID mPreviewReanim3 = gamepadControls->mPreviewReanimID3;
@@ -316,91 +316,91 @@ void GamepadControls::UpdatePreviewReanim() {
             }
             zombieReanim->mIsAttachment = true;
             if (theZombieType == ZombieType::ZOMBIE_POGO) {
-                Reanimation_PlayReanim(zombieReanim, "anim_pogo", ReanimLoopType::REANIM_LOOP, 0, 12.0);
+                zombieReanim->PlayReanim("anim_pogo", ReanimLoopType::REANIM_LOOP, 0, 12.0);
             } else if (theZombieType == ZombieType::ZOMBIE_DANCER) {
-                Reanimation_PlayReanim(zombieReanim, "anim_armraise", ReanimLoopType::REANIM_LOOP, 0, 12.0);
+                zombieReanim->PlayReanim("anim_armraise", ReanimLoopType::REANIM_LOOP, 0, 12.0);
             } else if (theZombieType == ZombieType::ZOMBIE_ZAMBONI) {
-                Reanimation_PlayReanim(zombieReanim, "anim_drive", ReanimLoopType::REANIM_LOOP, 0, 12.0);
+                zombieReanim->PlayReanim("anim_drive", ReanimLoopType::REANIM_LOOP, 0, 12.0);
             } else if (theZombieType == ZombieType::ZOMBIE_IMP) {
-                Reanimation_PlayReanim(zombieReanim, "anim_walk", ReanimLoopType::REANIM_LOOP, 0, 12.0);
+                zombieReanim->PlayReanim("anim_walk", ReanimLoopType::REANIM_LOOP, 0, 12.0);
             } else {
                 if (theZombieType == ZombieType::ZOMBIE_FLAG) {
                     Reanimation *zombieReanimAttachment = aApp->AddReanimation(0, 0, 0, ReanimationType::REANIM_ZOMBIE_FLAGPOLE);
-                    Reanimation_PlayReanim(zombieReanimAttachment, "Zombie_flag", ReanimLoopType::REANIM_LOOP, 0, 15.0);
+                    zombieReanimAttachment->PlayReanim("Zombie_flag", ReanimLoopType::REANIM_LOOP, 0, 15.0);
                     mPreviewReanimID3 = aApp->ReanimationGetID(zombieReanimAttachment);
-                    ReanimatorTrackInstance *TrackInstanceByName = Reanimation_GetTrackInstanceByName(zombieReanim, "Zombie_flaghand");
-                    AttachReanim(&TrackInstanceByName->mAttachmentID, zombieReanimAttachment, 0.0, 0.0);
+                    ReanimatorTrackInstance *TrackInstanceByName = zombieReanim->GetTrackInstanceByName("Zombie_flaghand");
+                    AttachReanim(TrackInstanceByName->mAttachmentID, zombieReanimAttachment, 0.0, 0.0);
                     zombieReanim->mFrameBasePose = 0;
                 } else if (theZombieType == ZombieType::ZOMBIE_REDEYE_GARGANTUAR) {
-                    Reanimation_SetImageOverride(zombieReanim, "anim_head1", *Sexy_IMAGE_REANIM_ZOMBIE_GARGANTUAR_HEAD_REDEYE_Addr);
+                    zombieReanim->SetImageOverride("anim_head1", *Sexy_IMAGE_REANIM_ZOMBIE_GARGANTUAR_HEAD_REDEYE_Addr);
                 } else if (theZombieType == ZombieType::ZOMBIE_PEA_HEAD) {
                     Reanimation_HideTrackByPrefix(zombieReanim, "anim_hair", true);
                     Reanimation_HideTrackByPrefix(zombieReanim, "anim_head2", true);
-                    Reanimation_SetFramesForLayer(zombieReanim, "anim_walk2");
-                    ReanimatorTrackInstance *aTrackInstance = Reanimation_GetTrackInstanceByName(zombieReanim, "anim_head1");
+                    zombieReanim->SetFramesForLayer("anim_walk2");
+                    ReanimatorTrackInstance *aTrackInstance = zombieReanim->GetTrackInstanceByName("anim_head1");
                     aTrackInstance->mImageOverride = *Sexy_IMAGE_BLANK_Addr;
                     Reanimation *aPeaHeadReanim = aApp->AddReanimation(0.0f, 0.0f, 0, ReanimationType::REANIM_PEASHOOTER);
-                    Reanimation_PlayReanim(aPeaHeadReanim, "anim_head_idle", ReanimLoopType::REANIM_LOOP, 0, 15.0f);
-                    AttachEffect *aAttachEffect = AttachReanim(&aTrackInstance->mAttachmentID, aPeaHeadReanim, 0.0f, 0.0f);
+                    aPeaHeadReanim->PlayReanim("anim_head_idle", ReanimLoopType::REANIM_LOOP, 0, 15.0f);
+                    AttachEffect *aAttachEffect = AttachReanim(aTrackInstance->mAttachmentID, aPeaHeadReanim, 0.0f, 0.0f);
                     zombieReanim->mFrameBasePose = 0;
-                    TodScaleRotateTransformMatrix(&aAttachEffect->mOffset, 65.0f, -8.0f, 0.2f, -1.0f, 1.0f);
+                    TodScaleRotateTransformMatrix(aAttachEffect->mOffset, 65.0f, -8.0f, 0.2f, -1.0f, 1.0f);
                 } else if (theZombieType == ZombieType::ZOMBIE_WALLNUT_HEAD) {
                     Reanimation_HideTrackByPrefix(zombieReanim, "anim_hair", true);
                     Reanimation_HideTrackByPrefix(zombieReanim, "anim_head", true);
                     Reanimation_HideTrackByPrefix(zombieReanim, "Zombie_tie", true);
-                    Reanimation_SetFramesForLayer(zombieReanim, "anim_walk2");
-                    ReanimatorTrackInstance *aTrackInstance = Reanimation_GetTrackInstanceByName(zombieReanim, "zombie_body");
+                    zombieReanim->SetFramesForLayer("anim_walk2");
+                    ReanimatorTrackInstance *aTrackInstance = zombieReanim->GetTrackInstanceByName("zombie_body");
                     Reanimation *aWallnutHeadReanim = aApp->AddReanimation(0.0f, 0.0f, 0, ReanimationType::REANIM_WALLNUT);
-                    Reanimation_PlayReanim(aWallnutHeadReanim, "anim_idle", ReanimLoopType::REANIM_LOOP, 0, 15.0f);
-                    AttachEffect *aAttachEffect = AttachReanim(&aTrackInstance->mAttachmentID, aWallnutHeadReanim, 0.0f, 0.0f);
+                    aWallnutHeadReanim->PlayReanim("anim_idle", ReanimLoopType::REANIM_LOOP, 0, 15.0f);
+                    AttachEffect *aAttachEffect = AttachReanim(aTrackInstance->mAttachmentID, aWallnutHeadReanim, 0.0f, 0.0f);
                     zombieReanim->mFrameBasePose = 0;
-                    TodScaleRotateTransformMatrix(&aAttachEffect->mOffset, 50.0f, 0.0f, 0.2f, -0.8f, 0.8f);
+                    TodScaleRotateTransformMatrix(aAttachEffect->mOffset, 50.0f, 0.0f, 0.2f, -0.8f, 0.8f);
                 } else if (theZombieType == ZombieType::ZOMBIE_TALLNUT_HEAD) {
                     Reanimation_HideTrackByPrefix(zombieReanim, "anim_hair", true);
                     Reanimation_HideTrackByPrefix(zombieReanim, "anim_head", true);
                     Reanimation_HideTrackByPrefix(zombieReanim, "Zombie_tie", true);
-                    Reanimation_SetFramesForLayer(zombieReanim, "anim_walk2");
-                    ReanimatorTrackInstance *aTrackInstance = Reanimation_GetTrackInstanceByName(zombieReanim, "zombie_body");
+                    zombieReanim->SetFramesForLayer("anim_walk2");
+                    ReanimatorTrackInstance *aTrackInstance = zombieReanim->GetTrackInstanceByName("zombie_body");
                     Reanimation *aTallnutHeadReanim = aApp->AddReanimation(0.0f, 0.0f, 0, ReanimationType::REANIM_TALLNUT);
-                    Reanimation_PlayReanim(aTallnutHeadReanim, "anim_idle", ReanimLoopType::REANIM_LOOP, 0, 15.0f);
-                    AttachEffect *aAttachEffect = AttachReanim(&aTrackInstance->mAttachmentID, aTallnutHeadReanim, 0.0f, 0.0f);
+                    aTallnutHeadReanim->PlayReanim("anim_idle", ReanimLoopType::REANIM_LOOP, 0, 15.0f);
+                    AttachEffect *aAttachEffect = AttachReanim(aTrackInstance->mAttachmentID, aTallnutHeadReanim, 0.0f, 0.0f);
                     zombieReanim->mFrameBasePose = 0;
-                    TodScaleRotateTransformMatrix(&aAttachEffect->mOffset, 37.0f, 0.0f, 0.2f, -0.8f, 0.8f);
+                    TodScaleRotateTransformMatrix(aAttachEffect->mOffset, 37.0f, 0.0f, 0.2f, -0.8f, 0.8f);
                 } else if (theZombieType == ZombieType::ZOMBIE_JALAPENO_HEAD) {
                     Reanimation_HideTrackByPrefix(zombieReanim, "anim_hair", true);
                     Reanimation_HideTrackByPrefix(zombieReanim, "anim_head", true);
                     Reanimation_HideTrackByPrefix(zombieReanim, "Zombie_tie", true);
-                    Reanimation_SetFramesForLayer(zombieReanim, "anim_walk2");
-                    ReanimatorTrackInstance *aTrackInstance = Reanimation_GetTrackInstanceByName(zombieReanim, "zombie_body");
+                    zombieReanim->SetFramesForLayer("anim_walk2");
+                    ReanimatorTrackInstance *aTrackInstance = zombieReanim->GetTrackInstanceByName("zombie_body");
                     Reanimation *aJalapenoHeadReanim = aApp->AddReanimation(0.0f, 0.0f, 0, ReanimationType::REANIM_JALAPENO);
-                    Reanimation_PlayReanim(aJalapenoHeadReanim, "anim_idle", ReanimLoopType::REANIM_LOOP, 0, 15.0f);
-                    AttachEffect *aAttachEffect = AttachReanim(&aTrackInstance->mAttachmentID, aJalapenoHeadReanim, 0.0f, 0.0f);
+                    aJalapenoHeadReanim->PlayReanim("anim_idle", ReanimLoopType::REANIM_LOOP, 0, 15.0f);
+                    AttachEffect *aAttachEffect = AttachReanim(aTrackInstance->mAttachmentID, aJalapenoHeadReanim, 0.0f, 0.0f);
                     zombieReanim->mFrameBasePose = 0;
-                    TodScaleRotateTransformMatrix(&aAttachEffect->mOffset, 55.0f, -5.0f, 0.2f, -1.0f, 1.0f);
+                    TodScaleRotateTransformMatrix(aAttachEffect->mOffset, 55.0f, -5.0f, 0.2f, -1.0f, 1.0f);
                 } else if (theZombieType == ZombieType::ZOMBIE_GATLING_HEAD) {
                     Reanimation_HideTrackByPrefix(zombieReanim, "anim_hair", true);
                     Reanimation_HideTrackByPrefix(zombieReanim, "anim_head2", true);
-                    Reanimation_SetFramesForLayer(zombieReanim, "anim_walk2");
-                    ReanimatorTrackInstance *aTrackInstance = Reanimation_GetTrackInstanceByName(zombieReanim, "anim_head1");
+                    zombieReanim->SetFramesForLayer("anim_walk2");
+                    ReanimatorTrackInstance *aTrackInstance = zombieReanim->GetTrackInstanceByName("anim_head1");
                     aTrackInstance->mImageOverride = *Sexy_IMAGE_BLANK_Addr;
                     Reanimation *aGatlingHeadReanim = aApp->AddReanimation(0.0f, 0.0f, 0, ReanimationType::REANIM_GATLINGPEA);
-                    Reanimation_PlayReanim(aGatlingHeadReanim, "anim_head_idle", ReanimLoopType::REANIM_LOOP, 0, 15.0f);
-                    AttachEffect *aAttachEffect = AttachReanim(&aTrackInstance->mAttachmentID, aGatlingHeadReanim, 0.0f, 0.0f);
+                    aGatlingHeadReanim->PlayReanim("anim_head_idle", ReanimLoopType::REANIM_LOOP, 0, 15.0f);
+                    AttachEffect *aAttachEffect = AttachReanim(aTrackInstance->mAttachmentID, aGatlingHeadReanim, 0.0f, 0.0f);
                     zombieReanim->mFrameBasePose = 0;
-                    TodScaleRotateTransformMatrix(&aAttachEffect->mOffset, 65.0f, -5.0f, 0.2f, -1.0f, 1.0f);
+                    TodScaleRotateTransformMatrix(aAttachEffect->mOffset, 65.0f, -5.0f, 0.2f, -1.0f, 1.0f);
                 } else if (theZombieType == ZombieType::ZOMBIE_SQUASH_HEAD) {
                     Reanimation_HideTrackByPrefix(zombieReanim, "anim_hair", true);
                     Reanimation_HideTrackByPrefix(zombieReanim, "anim_head2", true);
-                    Reanimation_SetFramesForLayer(zombieReanim, "anim_walk2");
-                    ReanimatorTrackInstance *aTrackInstance = Reanimation_GetTrackInstanceByName(zombieReanim, "anim_head1");
+                    zombieReanim->SetFramesForLayer("anim_walk2");
+                    ReanimatorTrackInstance *aTrackInstance = zombieReanim->GetTrackInstanceByName("anim_head1");
                     aTrackInstance->mImageOverride = *Sexy_IMAGE_BLANK_Addr;
                     Reanimation *aSquashHeadReanim = aApp->AddReanimation(0.0f, 0.0f, 0, ReanimationType::REANIM_SQUASH);
-                    Reanimation_PlayReanim(aSquashHeadReanim, "anim_idle", ReanimLoopType::REANIM_LOOP, 0, 15.0f);
-                    AttachEffect *aAttachEffect = AttachReanim(&aTrackInstance->mAttachmentID, aSquashHeadReanim, 0.0f, 0.0f);
+                    aSquashHeadReanim->PlayReanim("anim_idle", ReanimLoopType::REANIM_LOOP, 0, 15.0f);
+                    AttachEffect *aAttachEffect = AttachReanim(aTrackInstance->mAttachmentID, aSquashHeadReanim, 0.0f, 0.0f);
                     zombieReanim->mFrameBasePose = 0;
-                    TodScaleRotateTransformMatrix(&aAttachEffect->mOffset, 55.0f, -15.0f, 0.2f, -0.75f, 0.75f);
+                    TodScaleRotateTransformMatrix(aAttachEffect->mOffset, 55.0f, -15.0f, 0.2f, -0.75f, 0.75f);
                 }
-                Reanimation_PlayReanim(zombieReanim, "anim_idle", ReanimLoopType::REANIM_LOOP, 0, 12.0);
+                zombieReanim->PlayReanim("anim_idle", ReanimLoopType::REANIM_LOOP, 0, 12.0);
             }
             theNewPreviewingReanim = zombieReanim;
         } else {
@@ -410,7 +410,7 @@ void GamepadControls::UpdatePreviewReanim() {
             plantReanim->mIsAttachment = true;
             if (isImitater)
                 plantReanim->mFilterEffect = GetFilterEffectTypeBySeedType(mSeedType);
-            Reanimation_PlayReanim(plantReanim, "anim_idle", ReanimLoopType::REANIM_LOOP, 0, 12.0);
+            plantReanim->PlayReanim("anim_idle", ReanimLoopType::REANIM_LOOP, 0, 12.0);
 
             // 为豌豆家族加入其stem动画
             if (mSeedType == SeedType::SEED_PEASHOOTER || mSeedType == SeedType::SEED_SNOWPEA || mSeedType == SeedType::SEED_REPEATER || mSeedType == SeedType::SEED_GATLINGPEA
@@ -419,10 +419,10 @@ void GamepadControls::UpdatePreviewReanim() {
                 plantReanimAttachment->mLoopType = ReanimLoopType::REANIM_LOOP;
                 if (isImitater)
                     plantReanimAttachment->mFilterEffect = GetFilterEffectTypeBySeedType(mSeedType);
-                Reanimation_SetFramesForLayer(plantReanimAttachment, "anim_head_idle");
+                plantReanimAttachment->SetFramesForLayer("anim_head_idle");
                 const char *trackName = "anim_stem";
-                if (Reanimation_TrackExists(plantReanim, trackName) || (trackName = "anim_idle", Reanimation_TrackExists(plantReanim, trackName))) {
-                    Reanimation_AttachToAnotherReanimation(plantReanimAttachment, plantReanim, trackName);
+                if (plantReanim->TrackExists(trackName) || (trackName = "anim_idle", plantReanim->TrackExists(trackName))) {
+                    plantReanimAttachment->AttachToAnotherReanimation(plantReanim, trackName);
                 }
             }
             // 为反向射手的两个头、三发射手的三个头加入动画
@@ -432,15 +432,15 @@ void GamepadControls::UpdatePreviewReanim() {
                 plantReanimAttachment1->mLoopType = ReanimLoopType::REANIM_LOOP;
                 if (isImitater)
                     plantReanimAttachment1->mFilterEffect = GetFilterEffectTypeBySeedType(mSeedType);
-                Reanimation_SetFramesForLayer(plantReanimAttachment1, "anim_head_idle");
-                Reanimation_AttachToAnotherReanimation(plantReanimAttachment1, plantReanim, "anim_idle");
+                plantReanimAttachment1->SetFramesForLayer("anim_head_idle");
+                plantReanimAttachment1->AttachToAnotherReanimation(plantReanim, "anim_idle");
                 Reanimation *plantReanimAttachment2 = aApp->AddReanimation(0.0, 0.0, aRenderOrder + 3, GetPlantDefinition(mSeedType).mReanimationType);
                 plantReanimAttachment2->mAnimRate = plantReanim->mAnimRate;
                 plantReanimAttachment2->mLoopType = ReanimLoopType::REANIM_LOOP;
                 if (isImitater)
                     plantReanimAttachment2->mFilterEffect = GetFilterEffectTypeBySeedType(mSeedType);
-                Reanimation_SetFramesForLayer(plantReanimAttachment2, "anim_splitpea_idle");
-                Reanimation_AttachToAnotherReanimation(plantReanimAttachment2, plantReanim, "anim_idle");
+                plantReanimAttachment2->SetFramesForLayer("anim_splitpea_idle");
+                plantReanimAttachment2->AttachToAnotherReanimation(plantReanim, "anim_idle");
             } else if (mSeedType == SeedType::SEED_THREEPEATER) {
                 plantReanim->mAnimRate = RandRangeFloat(15.0, 20.0);
                 Reanimation *plantReanimAttachment1 = aApp->AddReanimation(0.0, 0.0, aRenderOrder + 3, GetPlantDefinition(mSeedType).mReanimationType);
@@ -448,22 +448,22 @@ void GamepadControls::UpdatePreviewReanim() {
                 plantReanimAttachment1->mLoopType = ReanimLoopType::REANIM_LOOP;
                 if (isImitater)
                     plantReanimAttachment1->mFilterEffect = GetFilterEffectTypeBySeedType(mSeedType);
-                Reanimation_SetFramesForLayer(plantReanimAttachment1, "anim_head_idle1");
-                Reanimation_AttachToAnotherReanimation(plantReanimAttachment1, plantReanim, "anim_head1");
+                plantReanimAttachment1->SetFramesForLayer("anim_head_idle1");
+                plantReanimAttachment1->AttachToAnotherReanimation(plantReanim, "anim_head1");
                 Reanimation *plantReanimAttachment2 = aApp->AddReanimation(0.0, 0.0, aRenderOrder + 3, GetPlantDefinition(mSeedType).mReanimationType);
                 plantReanimAttachment2->mAnimRate = plantReanim->mAnimRate;
                 plantReanimAttachment2->mLoopType = ReanimLoopType::REANIM_LOOP;
                 if (isImitater)
                     plantReanimAttachment2->mFilterEffect = GetFilterEffectTypeBySeedType(mSeedType);
-                Reanimation_SetFramesForLayer(plantReanimAttachment2, "anim_head_idle2");
-                Reanimation_AttachToAnotherReanimation(plantReanimAttachment2, plantReanim, "anim_head2");
+                plantReanimAttachment2->SetFramesForLayer("anim_head_idle2");
+                plantReanimAttachment2->AttachToAnotherReanimation(plantReanim, "anim_head2");
                 Reanimation *plantReanimAttachment3 = aApp->AddReanimation(0.0, 0.0, aRenderOrder + 3, GetPlantDefinition(mSeedType).mReanimationType);
                 plantReanimAttachment3->mAnimRate = plantReanim->mAnimRate;
                 plantReanimAttachment3->mLoopType = ReanimLoopType::REANIM_LOOP;
                 if (isImitater)
                     plantReanimAttachment3->mFilterEffect = GetFilterEffectTypeBySeedType(mSeedType);
-                Reanimation_SetFramesForLayer(plantReanimAttachment3, "anim_head_idle3");
-                Reanimation_AttachToAnotherReanimation(plantReanimAttachment3, plantReanim, "anim_head3");
+                plantReanimAttachment3->SetFramesForLayer("anim_head_idle3");
+                plantReanimAttachment3->AttachToAnotherReanimation(plantReanim, "anim_head3");
             }
             theNewPreviewingReanim = plantReanim;
         }
@@ -488,7 +488,7 @@ void GamepadControls::UpdatePreviewReanim() {
                     Attachment *attachment = &(*attachmentSystem)[mAttachmentID];
                     int mNumEffects = attachment->mNumEffects;
                     for (int j = 0; j < mNumEffects; ++j) {
-                        if (attachment->mEffectArray[j].mEffectType == AttachEffect::Reanim) {
+                        if (attachment->mEffectArray[j].mEffectType == EffectType::EFFECT_REANIM) {
                             Reanimation *attachReanim = aApp->ReanimationTryToGet(attachment->mEffectArray[j].mEffectID);
                             if (attachReanim != nullptr) {
                                 attachReanim->mFilterEffect = aFilterEffect;
@@ -536,15 +536,15 @@ void GamepadControls::UpdatePreviewReanim() {
     newGraphics->ClearRect(0, 0, mPreviewImage->mWidth, mPreviewImage->mHeight);
     newGraphics->Translate(256, 256);
     if (flagUpdateCanPlant || flagUpdateChangeType)
-        Reanimation_Update(mPreviewReanim4);
+        mPreviewReanim4->Update();
     if (flagDrawGray) {
         newGraphics->SetColorizeImages(true);
         (newGraphics)->SetColor(gray);
     }
-    Reanimation_Draw(mPreviewReanim4, newGraphics);
-    Reanimation_DrawRenderGroup(mPreviewReanim4, newGraphics, 2);
-    Reanimation_DrawRenderGroup(mPreviewReanim4, newGraphics, 1);
-    Reanimation_DrawRenderGroup(mPreviewReanim4, newGraphics, 3);
+    mPreviewReanim4->Draw(newGraphics);
+    mPreviewReanim4->DrawRenderGroup(newGraphics, 2);
+    mPreviewReanim4->DrawRenderGroup(newGraphics, 1);
+    mPreviewReanim4->DrawRenderGroup(newGraphics, 3);
     newGraphics->~Graphics();
 }
 
@@ -604,3 +604,6 @@ void GamepadControls::DrawPreview(Sexy::Graphics *g) {
     return old_GamepadControls_DrawPreview(this, g);
 }
 
+void ZenGardenControls::Update(float a2) {
+    old_ZenGardenControls_Update(this, a2);
+}
