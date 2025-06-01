@@ -448,6 +448,7 @@ public:
     void MouseUp(int x, int y, int theClickCount);
     void MouseUpSecond(int x, int y, int theClickCount);
     void MouseDrag(int x, int y);
+    void MouseDragSecond(int x, int y);
     void ButtonDepress(int theId);
     void KeyDown(Sexy::KeyCode theKey);
 };
@@ -635,10 +636,6 @@ Sexy::Image *GetIconByAchievementId(AchievementId theAchievementId);
 void Board_FixReanimErrorAfterLoad(Board *board);
 
 bool TRect_Contains(Sexy::Rect *rect, int x, int y);
-
-void Board_MouseDragSecond(Board *board, int x, int y);
-
-void Board_MouseUpSecond(Board *board, int x, int y, int theClickCount);
 
 void Board_DoPlantingAchievementCheck(Board *board, SeedType theType);
 

@@ -20,7 +20,7 @@ void ImitaterDialog_ShowToolTip(LawnDialog *instance) {
 
 bool ImitaterDialog_KeyDown(LawnDialog *a, int a2) {
     // 修复不选择模仿者卡片并退出时的闪退
-    if (a2 == Sexy::Back || a2 == Sexy::Back2) {
+    if (a2 == Sexy::KEYCODE_ESCAPE || a2 == Sexy::KEYCODE_ESCAPE2) {
         LawnApp *lawnApp = a->mApp;
         SeedChooserScreen *seedChooserScreen = lawnApp->mSeedChooserScreen;
         Sexy_Widget_RemoveWidget(seedChooserScreen, a);

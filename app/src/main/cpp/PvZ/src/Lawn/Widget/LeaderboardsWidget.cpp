@@ -440,7 +440,7 @@ void DaveHelp_MouseUp(LeaderboardsWidget *leaderboardsWidget, int x, int y) {}
 void DaveHelp_DealClick(LeaderboardsWidget *leaderboardsWidget, int id) {}
 
 void DaveHelp_KeyDown(LeaderboardsWidget *leaderboardsWidget, int keyCode) {
-    if (keyCode == Sexy::Back || keyCode == Sexy::Back2) {
+    if (keyCode == Sexy::KEYCODE_ESCAPE || keyCode == Sexy::KEYCODE_ESCAPE2) {
         if (leaderboardsWidget->mHighLightAchievement) {
             leaderboardsWidget->mHighLightAchievement = false;
             return;
@@ -449,7 +449,7 @@ void DaveHelp_KeyDown(LeaderboardsWidget *leaderboardsWidget, int keyCode) {
         leaderboardsWidget->mApp->ShowMainMenuScreen();
         return;
     }
-    if (keyCode == Sexy::Up || keyCode == Sexy::Down || keyCode == Sexy::Left || keyCode == Sexy::Right) {
+    if (keyCode == Sexy::KEYCODE_UP || keyCode == Sexy::KEYCODE_DOWN || keyCode == Sexy::KEYCODE_LEFT || keyCode == Sexy::KEYCODE_RIGHT) {
         bool flag = false;
         for (bool mAchievement : leaderboardsWidget->mAchievements) {
             if (mAchievement) {
@@ -463,7 +463,7 @@ void DaveHelp_KeyDown(LeaderboardsWidget *leaderboardsWidget, int keyCode) {
 
         leaderboardsWidget->mHighLightAchievement = true;
         int mFocusedIndex = leaderboardsWidget->mFocusedAchievementIndex;
-        if (keyCode == Sexy::Up || keyCode == Sexy::Left) {
+        if (keyCode == Sexy::KEYCODE_UP || keyCode == Sexy::KEYCODE_LEFT) {
             do {
                 mFocusedIndex++;
                 if (mFocusedIndex > 11) {
@@ -481,7 +481,7 @@ void DaveHelp_KeyDown(LeaderboardsWidget *leaderboardsWidget, int keyCode) {
         leaderboardsWidget->mFocusedAchievementIndex = mFocusedIndex;
         return;
     }
-    if (keyCode == Sexy::Shovel) {
+    if (keyCode == Sexy::KEYCODE_SHOVEL) {
         LawnApp_PlaySample(leaderboardsWidget->mApp, *Sexy_SOUND_GRAVEBUTTON_Addr);
         int holder1[1];
         int holder2[1];
@@ -492,7 +492,7 @@ void DaveHelp_KeyDown(LeaderboardsWidget *leaderboardsWidget, int keyCode) {
         Sexy_String_Delete(holder2);
         return;
     }
-    if (keyCode == Sexy::Hammer) {
+    if (keyCode == Sexy::KEYCODE_HAMMER) {
         LawnApp_PlaySample(leaderboardsWidget->mApp, *Sexy_SOUND_GRAVEBUTTON_Addr);
         int holder1[1];
         int holder2[1];
