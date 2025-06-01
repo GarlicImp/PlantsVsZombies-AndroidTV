@@ -145,61 +145,63 @@ LeaderboardsWidget::LeaderboardsWidget(LawnApp *theApp) {
     mLeaderboardReanimations = (LeaderboardReanimations *)operator new(sizeof(LeaderboardReanimations));
     LOG_DEBUG("mLeaderboardReanimations {} ", (void*)mLeaderboardReanimations);
     for (int i = 0; i < 5; ++i) {
-        Reanimation *reanim = (Reanimation *)operator new(sizeof(Reanimation));
-        Reanimation_Reanimation(reanim);
-        Reanimation_ReanimationInitializeType(reanim, 0.0, 0.0, (ReanimationType)(ReanimationType::REANIM_LEADERBOARDS_HOUSE + i));
-        Reanimation_SetAnimRate(reanim, 0.0f);
+//        Reanimation *reanim = (Reanimation *)operator new(sizeof(Reanimation));
+//        Reanimation_Reanimation(reanim);
+        Reanimation *reanim = new Reanimation;
+        reanim->ReanimationInitializeType(0.0, 0.0, (ReanimationType)(ReanimationType::REANIM_LEADERBOARDS_HOUSE + i));
+        reanim->SetAnimRate(0.0f);
         reanim->mLoopType = ReanimLoopType::REANIM_LOOP;
         if (i == 0) {
             mApp->SetHouseReanim(reanim);
-            Reanimation_SetPosition(reanim, 456.9f, 129.3f);
+            reanim->SetPosition(456.9f, 129.3f);
         }
         if (i == 1 || i == 2 || i == 3) {
-            Reanimation_PlayReanim(reanim, "anim_idle", ReanimLoopType::REANIM_LOOP, 0, 12.0f);
+            reanim->PlayReanim("anim_idle", ReanimLoopType::REANIM_LOOP, 0, 12.0f);
         }
         if (i == 4) {
-            Reanimation_PlayReanim(reanim, "anim_float", ReanimLoopType::REANIM_LOOP, 0, 2.0f); // 云儿飘得慢一些
+            reanim->PlayReanim("anim_float", ReanimLoopType::REANIM_LOOP, 0, 2.0f); // 云儿飘得慢一些
         }
-        Reanimation_Update(reanim); // 一次Update是必要的，否则绘制出来是Empty
+        reanim->Update(); // 一次Update是必要的，否则绘制出来是Empty
         mLeaderboardReanimations->backgroundReanim[i] = reanim;
         LOG_DEBUG("reanim {} ", (void*)reanim);
     }
     mLeaderboardReanimations->backgroundReanim[1]->AssignRenderGroupToTrack("survival button 1", 1);                               // 设置无尽模式按钮
-    Reanimation_SetImageOverride(mLeaderboardReanimations->backgroundReanim[1], "survival button 1", addonImages.survival_button); // 设置无尽模式按钮
+    mLeaderboardReanimations->backgroundReanim[1]->SetImageOverride("survival button 1", addonImages.survival_button); // 设置无尽模式按钮
     Reanimation_HideTrack(mLeaderboardReanimations->backgroundReanim[1], "house 1", true);                                         // 隐藏默认房屋
     Reanimation_HideTrack(mLeaderboardReanimations->backgroundReanim[1], "house achievements 1", true);                            // 隐藏默认房屋
     //    Reanimation_HideTrack(this_->mLeaderboardReanimations->backgroundReanim[1],"house 2",true); // 隐藏默认房屋
     //    Reanimation_HideTrack(this_->mLeaderboardReanimations->backgroundReanim[1],"house achievements 2",true); // 隐藏默认房屋
 
-    int zombieTrackIndex = Reanimation_FindTrackIndex(mLeaderboardReanimations->backgroundReanim[0], "PvZ/zombie_tra.h");
+    int zombieTrackIndex = mLeaderboardReanimations->backgroundReanim[0]->FindTrackIndex("PvZ/zombie_tra.h");
     LOG_DEBUG("zombieTrackIndex {} ", zombieTrackIndex);
     SexyTransform2D zombieSexyTransform2D;
     Sexy_SexyTransform2D_SexyTransform2D(&zombieSexyTransform2D);
     LOG_DEBUG("zombieSexyTransform2D {} ", (void*)&zombieSexyTransform2D);
     LOG_DEBUG("backgroundReanim {} ", (void*)mLeaderboardReanimations->backgroundReanim[0]);
-    Reanimation_GetTrackMatrix(mLeaderboardReanimations->backgroundReanim[0], zombieTrackIndex, &zombieSexyTransform2D);
+    mLeaderboardReanimations->backgroundReanim[0]->GetTrackMatrix(zombieTrackIndex, zombieSexyTransform2D);
     LOG_DEBUG("zombieSexyTransform2D_2 {} ", (void*)&zombieSexyTransform2D);
     mZombieTrashBin = (TrashBin *)operator new(sizeof(TrashBin));
     LOG_DEBUG("mZombieTrashBin {} ", (void*)mZombieTrashBin);
     mZombieTrashBin->Create(TrashBin::ZOMBIE_PILE, theApp->mPlayerInfo->mGameStats.mMiscStats[GameStats::ZOMBIES_KILLED] / 125.0f);
     Sexy_Widget_Move(mZombieTrashBin, zombieSexyTransform2D.m[0][2], zombieSexyTransform2D.m[1][2]);
 
-    int plantTrackIndex = Reanimation_FindTrackIndex(mLeaderboardReanimations->backgroundReanim[0], "PvZ/plant_tra.h");
+    int plantTrackIndex = mLeaderboardReanimations->backgroundReanim[0]->FindTrackIndex("PvZ/plant_tra.h");
     SexyTransform2D plantSexyTransform2D;
     Sexy_SexyTransform2D_SexyTransform2D(&plantSexyTransform2D);
-    Reanimation_GetTrackMatrix(mLeaderboardReanimations->backgroundReanim[0], plantTrackIndex, &plantSexyTransform2D);
+    mLeaderboardReanimations->backgroundReanim[0]->GetTrackMatrix(plantTrackIndex, plantSexyTransform2D);
     mPlantTrashBin = (TrashBin *)operator new(sizeof(TrashBin));
     mPlantTrashBin->Create(TrashBin::PLANT_PILE, theApp->mPlayerInfo->mGameStats.mMiscStats[GameStats::PLANTS_KILLED] / 125.0f);
     Sexy_Widget_Move(mPlantTrashBin, plantSexyTransform2D.m[0][2], plantSexyTransform2D.m[1][2]);
 
     for (int i = 0; i < AchievementId::MAX_ACHIEVEMENTS; ++i) {
         mAchievements[i] = theApp->mPlayerInfo->mAchievements[LeaderboardsWidget_GetAchievementIdByReanimationType((ReanimationType)(ReanimationType::REANIM_ACHIEVEMENT_HOME_SECURITY + i))];
-        Reanimation *reanim = (Reanimation *)operator new(sizeof(Reanimation));
-        Reanimation_Reanimation(reanim);
-        Reanimation_ReanimationInitializeType(reanim, 0.0, 0.0, (ReanimationType)(ReanimationType::REANIM_ACHIEVEMENT_HOME_SECURITY + i));
-        Reanimation_SetPosition(reanim, gLeaderboardAchievementsPosition[i][0], gLeaderboardAchievementsPosition[i][1]);
+//        Reanimation *reanim = (Reanimation *)operator new(sizeof(Reanimation));
+//        Reanimation_Reanimation(reanim);
+        Reanimation *reanim = new Reanimation;
+        reanim->ReanimationInitializeType(0.0, 0.0, (ReanimationType)(ReanimationType::REANIM_ACHIEVEMENT_HOME_SECURITY + i));
+        reanim->SetPosition(gLeaderboardAchievementsPosition[i][0], gLeaderboardAchievementsPosition[i][1]);
         reanim->mLoopType = ReanimLoopType::REANIM_LOOP;
-        Reanimation_Update(reanim); // 一次Update是必要的，否则绘制出来是Empty
+        reanim->Update(); // 一次Update是必要的，否则绘制出来是Empty
         mLeaderboardReanimations->achievementReanim[i] = reanim;
     }
 
@@ -233,20 +235,20 @@ LeaderboardsWidget::LeaderboardsWidget(LawnApp *theApp) {
 
 void DaveHelp_Update(LeaderboardsWidget *leaderboardsWidget) {
     for (Reanimation *&i : leaderboardsWidget->mLeaderboardReanimations->backgroundReanim) {
-        Reanimation_Update(i);
+        i->Update();
     }
 
     for (int i = 0; i < AchievementId::MAX_ACHIEVEMENTS; ++i) {
         if (!leaderboardsWidget->mAchievements[i])
             continue;
-        Reanimation_Update(leaderboardsWidget->mLeaderboardReanimations->achievementReanim[i]);
+        leaderboardsWidget->mLeaderboardReanimations->achievementReanim[i]->Update();
     }
     Sexy_Widget_MarkDirty(leaderboardsWidget);
 }
 
 void DaveHelp_Draw(LeaderboardsWidget *leaderboardsWidget, Sexy::Graphics *g) {
     for (int i = 4; i >= 0; i--) {
-        Reanimation_DrawRenderGroup(leaderboardsWidget->mLeaderboardReanimations->backgroundReanim[i], g, 0);
+        leaderboardsWidget->mLeaderboardReanimations->backgroundReanim[i]->DrawRenderGroup(g, 0);
     }
 
     leaderboardsWidget->mPlantTrashBin->TrashBin::Draw(g);
@@ -264,7 +266,7 @@ void DaveHelp_Draw(LeaderboardsWidget *leaderboardsWidget, Sexy::Graphics *g) {
             GetFlashingColor(&color, leaderboardsWidget->mApp->mAppCounter, 120);
             g->SetColorizeImages(true);
             g->SetColor(color);
-            Reanimation_Draw(leaderboardsWidget->mLeaderboardReanimations->achievementReanim[num], g);
+            leaderboardsWidget->mLeaderboardReanimations->achievementReanim[num]->Draw(g);
             g->SetColorizeImages(false);
             int offsetX = gLeaderboardAchievementsPosition[num][0] + 20;
             int offsetY = gLeaderboardAchievementsPosition[num][1] - 200;
@@ -276,12 +278,12 @@ void DaveHelp_Draw(LeaderboardsWidget *leaderboardsWidget, Sexy::Graphics *g) {
             TodDrawStringWrapped(g, holder, &rect, *Sexy_FONT_HOUSEOFTERROR28_Addr, &theColor, DrawStringJustification::DS_ALIGN_CENTER, false);
             Sexy_String_Delete(holder);
         } else {
-            Reanimation_Draw(leaderboardsWidget->mLeaderboardReanimations->achievementReanim[num], g);
+            leaderboardsWidget->mLeaderboardReanimations->achievementReanim[num]->Draw(g);
         }
     }
 
     if (leaderboardsWidget->mApp->HasFinishedAdventure()) {
-        Reanimation_DrawRenderGroup(leaderboardsWidget->mLeaderboardReanimations->backgroundReanim[1], g, 1);
+        leaderboardsWidget->mLeaderboardReanimations->backgroundReanim[1]->DrawRenderGroup(g, 1);
         int holder[1];
         int holder1[1];
         TodStringTranslate(holder, "[LEADERBOARD_STREAK]");
@@ -339,11 +341,11 @@ void DaveHelp_Delete2(LeaderboardsWidget *leaderboardsWidget) {
     leaderboardsWidget->mZombieTrashBin->Delete();
     leaderboardsWidget->mPlantTrashBin->Delete();
     for (int i = 0; i < 5; ++i) {
-        Reanimation_Delete2(leaderboardsWidget->mLeaderboardReanimations->backgroundReanim[i]);
+        leaderboardsWidget->mLeaderboardReanimations->backgroundReanim[i]->Delete();
         operator delete(leaderboardsWidget->mLeaderboardReanimations->backgroundReanim[i]);
     }
     for (int i = 0; i < AchievementId::MAX_ACHIEVEMENTS; ++i) {
-        Reanimation_Delete2(leaderboardsWidget->mLeaderboardReanimations->achievementReanim[i]);
+        leaderboardsWidget->mLeaderboardReanimations->achievementReanim[i]->Delete();
         operator delete(leaderboardsWidget->mLeaderboardReanimations->achievementReanim[i]);
     }
     GameButton_Delete(leaderboardsWidget->mBackButton);

@@ -3,7 +3,9 @@
 
 #include "EffectSystem.h"
 #include "FilterEffect.h"
+
 #include "PvZ/SexyAppFramework/Misc/SexyMatrix.h"
+#include "PvZ/Symbols.h"
 
 class Reanimation;
 class ReanimAtlas;
@@ -13,6 +15,7 @@ class TodTriangleGroup;
 class TodParticleSystem;
 class ReanimatorTransform;
 class ReanimatorDefinition;
+class ReanimatorFrameTime;
 namespace Sexy
 {
 class Font;
@@ -73,7 +76,10 @@ public:
     Sexy::Image *mImage2; // 9
     int *mFont;           // 10
     char *mName;          // 11
-}; // 大小12个整数
+    // 大小12个整数
+
+    ReanimatorTransform() { reinterpret_cast<void (*)(ReanimatorTransform *)>(ReanimatorTransform_ReanimatorTransformAddr)(this); }
+};
 
 class ReanimatorTrackInstance {
 public:
@@ -83,7 +89,7 @@ public:
     float mShakeOverride;                // 14
     float mShakeX;                       // 15
     float mShakeY;                       // 16
-    unsigned short mAttachmentID;        // 17
+    AttachmentID mAttachmentID;          // 17
     Sexy::Image *mImageOverride;         // 18
     int mRenderGroup;                    // 19
     Sexy::Color mTrackColor;             // 20 ~ 23
@@ -97,7 +103,10 @@ public:
 // ############################################################## 以下正式开始动画相关声明 ##############################################################
 // ######################################################################################################################################################
 
-enum { RENDER_GROUP_HIDDEN = -1, RENDER_GROUP_NORMAL = 0 };
+enum {
+    RENDER_GROUP_HIDDEN = -1,
+    RENDER_GROUP_NORMAL = 0,
+};
 
 class Reanimation {
 public:
@@ -132,9 +141,48 @@ public:
     int mReanimationID;                         // 54
     // 大小55个整数
 
+    Reanimation() { reinterpret_cast<void (*)(Reanimation *)>(Reanimation_ReanimationAddr)(this); }
+    void SetPosition(float theX, float theY) { reinterpret_cast<void (*)(Reanimation *, float, float)>(Reanimation_SetPositionAddr)(this, theX, theY); }
+    void OverrideScale(float theScaleX, float theScaleY) { reinterpret_cast<void (*)(Reanimation *, float theX, float theY)>(Reanimation_OverrideScaleAddr)(this, theScaleX, theScaleY); }
+    void DrawRenderGroup(Sexy::Graphics *g, int theRenderGroup) { reinterpret_cast<void (*)(Reanimation *, Sexy::Graphics *, int)>(Reanimation_DrawRenderGroupAddr)(this, g, theRenderGroup); }
+    void ReanimationInitializeType(float theX, float theY, ReanimationType theReanimType) {
+        reinterpret_cast<void (*)(Reanimation *, float, float, ReanimationType)>(Reanimation_ReanimationInitializeTypeAddr)(this, theX, theY, theReanimType);
+    }
+    void Delete() { reinterpret_cast<void (*)(Reanimation *)>(Reanimation_Delete2Addr)(this); }
+    int FindTrackIndexById(const char *theTrackName) { return reinterpret_cast<int (*)(Reanimation *, const char *)>(Reanimation_FindTrackIndexByIdAddr)(this, theTrackName); };
+    void GetCurrentTransform(int theTrackIndex, ReanimatorTransform *theTransformCurrent) {
+        reinterpret_cast<void (*)(Reanimation *, int, ReanimatorTransform *)>(Reanimation_GetCurrentTransformAddr)(this, theTrackIndex, theTransformCurrent);
+    }
+    void PlayReanim(const char *theTrackName, ReanimLoopType theLoopType, int theBlendTime, float theAnimRate) {
+        reinterpret_cast<void (*)(Reanimation *, const char *, ReanimLoopType, int, float)>(Reanimation_PlayReanimAddr)(this, theTrackName, theLoopType, theBlendTime, theAnimRate);
+    }
+    void SetAnimRate(float theAnimRate) { reinterpret_cast<void (*)(Reanimation *, float)>(Reanimation_SetAnimRateAddr)(this, theAnimRate); }
+    bool IsAnimPlaying(const char* theTrackName) { return reinterpret_cast<bool (*)(Reanimation *, const char *)>(Reanimation_IsAnimPlayingAddr)(this, theTrackName); }
+    void SetImageOverride(const char *theTrackName, Sexy::Image *theImage) {
+        reinterpret_cast<void (*)(Reanimation *, const char *theTrackName, Sexy::Image *)>(Reanimation_SetImageOverrideAddr)(this, theTrackName, theImage);
+    }
+    int FindTrackIndex(const char *theTrackName) { return reinterpret_cast<int (*)(Reanimation *, const char *)>(Reanimation_FindTrackIndexAddr)(this, theTrackName); }
+    void ShowOnlyTrack(const char* theTrackName) { reinterpret_cast<void (*)(Reanimation *, const char *)>(Reanimation_ShowOnlyTrackAddr)(this, theTrackName); }
+    void ReanimationDie() { reinterpret_cast<void (*)(Reanimation *)>(Reanimation_ReanimationDieAddr)(this); }
+    void SetFramesForLayer(const char* theTrackName) { reinterpret_cast<void (*)(Reanimation *, const char *)>(Reanimation_SetFramesForLayerAddr)(this, theTrackName); }
+    bool TrackExists(const char* theTrackName) { return reinterpret_cast<bool (*)(Reanimation *, const char *)>(Reanimation_TrackExistsAddr)(this, theTrackName); }
+    void AttachToAnotherReanimation(Reanimation *theAttachReanim, const char *theTrackName) {
+        reinterpret_cast<bool (*)(Reanimation *, Reanimation *, const char *)>(Reanimation_AttachToAnotherReanimationAddr)(this, theAttachReanim, theTrackName);
+    }
+    void Update() { reinterpret_cast<void (*)(Reanimation *)>(Reanimation_UpdateAddr)(this); }
+    static void MatrixFromTransform(const ReanimatorTransform& theTransform, Sexy::SexyMatrix3& theMatrix) {
+        reinterpret_cast<void (*)(const ReanimatorTransform&, Sexy::SexyMatrix3&)>(Reanimation_MatrixFromTransformAddr)(theTransform, theMatrix);
+    }
+    void GetFrameTime(ReanimatorFrameTime *theFrameTime) { reinterpret_cast<void (*)(Reanimation *, ReanimatorFrameTime *)>(Reanimation_GetFrameTimeAddr)(this, theFrameTime); }
+    void GetTrackMatrix(int theTrackIndex, Sexy::SexyTransform2D& theMatrix) {
+        reinterpret_cast<void (*)(Reanimation *, int, Sexy::SexyTransform2D&)>(Reanimation_GetTrackMatrixAddr)(this, theTrackIndex, theMatrix);
+    }
+
+    void Draw(Sexy::Graphics *g);
     bool DrawTrack(Sexy::Graphics *g, int theTrackIndex, int theRenderGroup, TodTriangleGroup *theTriangleGroup);
     bool ShouldTriggerTimedEvent(float theEventTime);
     void AssignRenderGroupToTrack(const char *theTrackName, int theRenderGroup);
+    ReanimatorTrackInstance* GetTrackInstanceByName(const char* theTrackName);
 };
 
 class ReanimationHolder {
@@ -163,59 +211,6 @@ public:
     int mAnimFrameAfterInt;  // 2
 };
 /***************************************************************************************************************/
-inline void (*Reanimation_SetPosition)(Reanimation *a, float a2, float a3);
-
-inline void (*Reanimation_OverrideScale)(Reanimation *ream, float a2, float a3);
-
-inline void (*Reanimation_DrawRenderGroup)(Reanimation *a, Sexy::Graphics *graphics, int a3);
-
-inline void (*Reanimation_Reanimation)(Reanimation *a);
-
-inline void (*Reanimation_ReanimationInitializeType)(Reanimation *a1, float a2, float a3, ReanimationType a4);
-
-inline bool *(*Reanimation_Draw)(Reanimation *a, Sexy::Graphics *a2);
-
-inline void (*Reanimation_Delete2)(Reanimation *a);
-
-inline int (*Reanimation_FindTrackIndexById)(Reanimation *a, char *a2);
-
-inline void (*Reanimation_GetCurrentTransform)(Reanimation *, int, ReanimatorTransform *);
-
-inline void (*ReanimatorTransform_ReanimatorTransform)(ReanimatorTransform *a);
-
-inline void (*Reanimation_PlayReanim)(Reanimation *a1, const char *a2, ReanimLoopType a3, int a4, float a5);
-
-inline void (*Reanimation_SetAnimRate)(Reanimation *a, float a2);
-
-inline bool (*Reanimation_IsAnimPlaying)(Reanimation *a, char *a2);
-
-inline void (*Reanimation_SetImageOverride)(Reanimation *, const char *, Sexy::Image *);
-
-inline int (*Reanimation_FindTrackIndex)(Reanimation *, const char *);
-
-inline void (*Reanimation_ShowOnlyTrack)(Reanimation *, const char *);
-
-inline void (*Reanimation_ReanimationDie)(Reanimation *reanim);
-
-inline ReanimatorTrackInstance *(*Reanimation_GetTrackInstanceByName)(Reanimation *reanim, const char *);
-
-inline AttachEffect *(*AttachReanim)(unsigned short *, Reanimation *, float, float);
-
-inline void (*Reanimation_SetFramesForLayer)(Reanimation *, const char *);
-
-inline bool (*Reanimation_TrackExists)(Reanimation *, const char *);
-
-inline void (*Reanimation_AttachToAnotherReanimation)(Reanimation *, Reanimation *reanim, const char *trackName);
-
-inline void (*Reanimation_Update)(Reanimation *);
-
-inline void (*Reanimation_MatrixFromTransform)(ReanimatorTransform *, Sexy::SexyMatrix3 *);
-
-inline void (*Reanimation_GetFrameTime)(Reanimation *, ReanimatorFrameTime *pTime);
-
-inline void (*TodScaleRotateTransformMatrix)(Sexy::SexyMatrix3 *, float, float, float, float, float);
-
-inline void (*Reanimation_GetTrackMatrix)(Reanimation *pInstance, int i, Sexy::SexyTransform2D *pD);
 
 
 inline bool (*old_Reanimation_DrawTrack)(Reanimation *reanim, Sexy::Graphics *g, int theTrackIndex, int theRenderGroup, TodTriangleGroup *theTriangleGroup);

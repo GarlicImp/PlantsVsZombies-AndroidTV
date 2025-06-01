@@ -3,8 +3,8 @@
 
 #include "BaseGamepadControls.h"
 #include "PvZ/Lawn/Common/ConstEnums.h"
-#include "PvZ/Misc.h"
-#include "PvZ/TodLib/Effect/FilterEffect.h"
+//#include "PvZ/TodLib/Effect/FilterEffect.h"
+#include "PvZ/SexyAppFramework/Misc/KeyCodes.h"
 
 // buttonCode 是按键键值，对应关系如下：
 enum ButtonCode {
@@ -86,6 +86,15 @@ public:
     void DrawPreview(Sexy::Graphics *g);
     void UpdatePreviewReanim();
 };
+
+class ZenGardenControls : public GamepadControls {
+public:
+    GameObjectType mObjectType; // 66
+    // 大小67个整数
+
+    void Update(float a2);
+};
+
 /***************************************************************************************************************/
 
 
@@ -101,8 +110,9 @@ inline void (*old_GamepadControls_UpdatePreviewReanim)(GamepadControls *gamePad)
 
 inline void (*old_GamepadControls_DrawPreview)(GamepadControls *gamePad, Sexy::Graphics *graphics);
 
+inline void (*old_ZenGardenControls_Update)(ZenGardenControls *a1, float a2);
 
-FilterEffect GetFilterEffectTypeBySeedType(SeedType mSeedType);
+//FilterEffect GetFilterEffectTypeBySeedType(SeedType mSeedType);
 
 void GamepadControls_pickUpCobCannon(int, int);
 

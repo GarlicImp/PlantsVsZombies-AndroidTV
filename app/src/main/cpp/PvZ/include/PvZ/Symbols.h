@@ -2,12 +2,12 @@
 #define PVZ_SYMBOLS_H
 
 #include "PvZ/Lawn/Common/ConstEnums.h"
-#include "PvZ/SexyAppFramework/Graphics/Font.h"
 
 #include <dlfcn.h>
 
 namespace Sexy {
 class Image;
+class Font;
 }
 
 class ReanimatorDefinition;
@@ -617,6 +617,7 @@ inline void *Sexy_Graphics_FillRectAddr;
 inline void *Sexy_Graphics_DrawRectAddr;
 inline void *Sexy_Graphics_DrawImageAddr;
 inline void *Sexy_Graphics_DrawImageFAddr;
+inline void *Sexy_Graphics_DrawImageF2Addr;
 inline void *Sexy_Graphics_DrawImage2Addr;
 inline void *Sexy_Graphics_DrawImageMirrorAddr;
 inline void *Sexy_Graphics_SetLinearBlendAddr;
@@ -655,6 +656,7 @@ inline void *Reanimation_GetTrackMatrixAddr;
 inline void *Sexy_GamepadApp_CheckGamepadAddr;
 inline void *Sexy_GamepadApp_HasGamepadAddr;
 inline void *Sexy_RandIntAddr;
+inline void *Sexy_RandFloatAddr;
 inline void *Sexy_Level_isCardNotAllowedToPickAddr;
 inline void *Sexy_ScrollbarWidget_MouseDownAddr;
 inline void *CustomScrollbarWidget_RemoveScrollButtonsAddr;
@@ -1755,6 +1757,7 @@ inline bool GetFunctionAddr() {
     Sexy_Graphics_DrawRectAddr = dlsym(handle, "_ZN4Sexy8Graphics8DrawRectERKNS_5TRectIiEE");
     Sexy_Graphics_DrawImageAddr = dlsym(handle, "_ZN4Sexy8Graphics9DrawImageEPNS_5ImageEii");
     Sexy_Graphics_DrawImageFAddr = dlsym(handle, "_ZN4Sexy8Graphics10DrawImageFEPNS_5ImageEff");
+    Sexy_Graphics_DrawImageF2Addr = dlsym(handle, "_ZN4Sexy8Graphics10DrawImageFEPNS_5ImageEffRKNS_5TRectIiEE");
     Sexy_Graphics_DrawImageMirrorAddr = dlsym(handle, "_ZN4Sexy8Graphics15DrawImageMirrorEPNS_5ImageEiib");
     Sexy_Graphics_DrawImage2Addr = dlsym(handle, "_ZN4Sexy8Graphics9DrawImageEPNS_5ImageEiiRKNS_5TRectIiEE");
     Sexy_Graphics_SetLinearBlendAddr = dlsym(handle, "_ZN4Sexy8Graphics14SetLinearBlendEb");
@@ -1817,6 +1820,7 @@ inline bool GetFunctionAddr() {
     Sexy_GamepadApp_CheckGamepadAddr = dlsym(handle, "_ZN4Sexy10GamepadApp12CheckGamepadEv");
     Sexy_GamepadApp_HasGamepadAddr = dlsym(handle, "_ZN4Sexy10GamepadApp10HasGamepadEv");
     Sexy_RandIntAddr = dlsym(handle, "_ZN4Sexy4RandEi");
+    Sexy_RandFloatAddr = dlsym(handle, "_ZN4Sexy4RandEf");
     Sexy_Level_isCardNotAllowedToPickAddr = dlsym(handle, "_ZN4Sexy5Level22isCardNotAllowedToPickEi");
     Sexy_ScrollbarWidget_MouseDownAddr = dlsym(handle, "_ZN4Sexy15ScrollbarWidget9MouseDownEiiii");
     Sexy_ScrollbarWidget_ScrollbarWidgetAddr = dlsym(handle, "_ZN4Sexy15ScrollbarWidgetC2EiPNS_14ScrollListenerE");

@@ -112,7 +112,7 @@ void Zombie::Update() {
     if (mZombieType == ZombieType::ZOMBIE_FLAG && mBossFireBallReanimID != 0) {
         Reanimation *reanimation = mApp->ReanimationTryToGet(mBossFireBallReanimID);
         if (reanimation != nullptr)
-            Reanimation_Update(reanimation);
+            reanimation->Update();
     }
     return old_Zombie_Update(this);
 }
@@ -270,17 +270,16 @@ void Zombie::UpdateZombiePeaHead() {
 
     if (mPhaseCounter == 35) {
         Reanimation *mSpecialHeadReanim = mApp->ReanimationGet(mSpecialHeadReanimID);
-        Reanimation_PlayReanim(mSpecialHeadReanim, "anim_shooting", ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD, 20, 35.0f);
+        mSpecialHeadReanim->PlayReanim("anim_shooting", ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD, 20, 35.0f);
     } else if (mPhaseCounter <= 0) {
         Reanimation *mSpecialHeadReanim = mApp->ReanimationGet(mSpecialHeadReanimID);
-        Reanimation_PlayReanim(mSpecialHeadReanim, "anim_head_idle", ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD, 20, 15.0f);
+        mSpecialHeadReanim->PlayReanim("anim_head_idle", ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD, 20, 15.0f);
         mApp->PlayFoley(FoleyType::FOLEY_THROW);
 
         Reanimation *mBodyReanim = mApp->ReanimationGet(mBodyReanimID);
-        int index = Reanimation_FindTrackIndexById(mBodyReanim, *ReanimTrackId_anim_head1_Addr);
-        ReanimatorTransform aTransForm;
-        ReanimatorTransform_ReanimatorTransform(&aTransForm);
-        Reanimation_GetCurrentTransform(mBodyReanim, index, &aTransForm);
+        int index = mBodyReanim->FindTrackIndexById(*ReanimTrackId_anim_head1_Addr);
+        ReanimatorTransform aTransForm = ReanimatorTransform();
+        mBodyReanim->GetCurrentTransform(index, &aTransForm);
 
         float aOriginX = mPosX + aTransForm.mTransX - 9.0f;
         float aOriginY = mPosY + aTransForm.mTransY + 6.0f - mAltitude;
@@ -308,15 +307,14 @@ void Zombie::UpdateZombieGatlingHead() {
 
     if (mPhaseCounter == 100) {
         Reanimation *mSpecialHeadReanim = mApp->ReanimationGet(mSpecialHeadReanimID);
-        Reanimation_PlayReanim(mSpecialHeadReanim, "anim_shooting", ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD, 20, 35.0f);
+        mSpecialHeadReanim->PlayReanim("anim_shooting", ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD, 20, 35.0f);
     } else if (mPhaseCounter == 18 || mPhaseCounter == 35 || mPhaseCounter == 51 || mPhaseCounter == 68) {
         mApp->PlayFoley(FoleyType::FOLEY_THROW);
 
         Reanimation *mBodyReanim = mApp->ReanimationGet(mBodyReanimID);
-        int index = Reanimation_FindTrackIndexById(mBodyReanim, *ReanimTrackId_anim_head1_Addr);
-        ReanimatorTransform aTransForm;
-        ReanimatorTransform_ReanimatorTransform(&aTransForm);
-        Reanimation_GetCurrentTransform(mBodyReanim, index, &aTransForm);
+        int index = mBodyReanim->FindTrackIndexById(*ReanimTrackId_anim_head1_Addr);
+        ReanimatorTransform aTransForm = ReanimatorTransform();
+        mBodyReanim->GetCurrentTransform(index, &aTransForm);
 
         float aOriginX = mPosX + aTransForm.mTransX - 9.0f;
         float aOriginY = mPosY + aTransForm.mTransY + 6.0f - mAltitude;
@@ -332,7 +330,7 @@ void Zombie::UpdateZombieGatlingHead() {
         }
     } else if (mPhaseCounter <= 0) {
         Reanimation *aHeadReanim = mApp->ReanimationGet(mSpecialHeadReanimID);
-        Reanimation_PlayReanim(aHeadReanim, "anim_head_idle", ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD, 20, 15.0f);
+        aHeadReanim->PlayReanim("anim_head_idle", ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD, 20, 15.0f);
         mPhaseCounter = 150;
     }
 }
@@ -345,7 +343,7 @@ void Zombie::BossDestroyIceballInRow(int theRow) {
     if (aFireBallReanim && !mIsFireBall) {
         mApp->AddTodParticle(mPosX + 80.0, mAnimCounter + 80.0, 400000, ParticleEffect::PARTICLE_ICEBALL_DEATH);
 
-        Reanimation_ReanimationDie(aFireBallReanim);
+        aFireBallReanim->ReanimationDie();
         mBossFireBallReanimID = ReanimationID::REANIMATIONID_NULL;
         mBoard->RemoveParticleByType(ParticleEffect::PARTICLE_ICEBALL_TRAIL);
     }
@@ -918,7 +916,7 @@ void Zombie::SetZombatarReanim() {
     if (!aPlayerInfo->mZombatarEnabled)
         return;
     Reanimation *aBodyReanim = mApp->ReanimationGet(mBodyReanimID);
-    ReanimatorTrackInstance *aHeadTrackInstance = Reanimation_GetTrackInstanceByName(aBodyReanim, "anim_head1");
+    ReanimatorTrackInstance *aHeadTrackInstance = aBodyReanim->GetTrackInstanceByName("anim_head1");
     aHeadTrackInstance->mImageOverride = *Sexy_IMAGE_BLANK_Addr;
     Reanimation *aZombatarHeadReanim = mApp->AddReanimation(0, 0, 0, ReanimationType::REANIM_ZOMBATAR_HEAD);
     Reanimation_SetZombatarHats(aZombatarHeadReanim, aPlayerInfo->mZombatarHat, aPlayerInfo->mZombatarHatColor);
@@ -927,11 +925,11 @@ void Zombie::SetZombatarReanim() {
     Reanimation_SetZombatarAccessories(aZombatarHeadReanim, aPlayerInfo->mZombatarAccessory, aPlayerInfo->mZombatarAccessoryColor);
     Reanimation_SetZombatarEyeWear(aZombatarHeadReanim, aPlayerInfo->mZombatarEyeWear, aPlayerInfo->mZombatarEyeWearColor);
     Reanimation_SetZombatarTidBits(aZombatarHeadReanim, aPlayerInfo->mZombatarTidBit, aPlayerInfo->mZombatarTidBitColor);
-    Reanimation_PlayReanim(aZombatarHeadReanim, "anim_head_idle", ReanimLoopType::REANIM_LOOP, 0, 15.0);
+    aZombatarHeadReanim->PlayReanim("anim_head_idle", ReanimLoopType::REANIM_LOOP, 0, 15.0);
     aZombatarHeadReanim->AssignRenderGroupToTrack("anim_hair", -1);
     mBossFireBallReanimID = mApp->ReanimationGetID(aZombatarHeadReanim);
-    AttachEffect *attachEffect = AttachReanim(&aHeadTrackInstance->mAttachmentID, aZombatarHeadReanim, 0.0f, 0.0f);
-    TodScaleRotateTransformMatrix(&attachEffect->mOffset, -20.0, -1.0, 0.2, 1.0, 1.0);
+    AttachEffect *attachEffect = AttachReanim(aHeadTrackInstance->mAttachmentID, aZombatarHeadReanim, 0.0f, 0.0f);
+    TodScaleRotateTransformMatrix(attachEffect->mOffset, -20.0, -1.0, 0.2, 1.0, 1.0);
     ReanimShowPrefix("anim_hair", -1);
     ReanimShowPrefix("anim_head2", -1);
 }
@@ -1227,7 +1225,7 @@ void Zombie::DrawReanim(Sexy::Graphics *graphics, ZombieDrawPosition *theZombieD
     if (IsZombatarZombie(mZombieType)) {
         Reanimation *reanimation = mApp->ReanimationTryToGet(mBossFireBallReanimID);
         if (reanimation != nullptr) {
-            Reanimation_Draw(reanimation, graphics);
+            reanimation->Draw(graphics);
         }
     }
 }
@@ -1247,7 +1245,7 @@ void Zombie::DropHead(unsigned int theDamageFlags) {
                 ReanimatorTrackInstance *reanimatorTrackInstance = reanimation->mTrackInstances + index[i];
                 ReanimatorTrack *reanimatorTrack = reanimation->mDefinition->mTracks + index[i];
                 SexyTransform2D aSexyTransform2D;
-                Reanimation_GetTrackMatrix(reanimation, index[i], &aSexyTransform2D);
+                reanimation->GetTrackMatrix(index[i], aSexyTransform2D);
                 float aPosX = mPosX + aSexyTransform2D.m[0][2];
                 float aPosY = mPosY + aSexyTransform2D.m[1][2];
                 TodParticleSystem *todParticleSystem = mApp->AddTodParticle(aPosX, aPosY, mRenderOrder + 1, ParticleEffect::PARTICLE_ZOMBIE_HEAD);
@@ -1394,63 +1392,63 @@ void Zombie::SetupLostArmReanim() {
     if (reanimation != nullptr) {
         switch (mZombieType) {
             case ZombieType::ZOMBIE_FOOTBALL:
-                Reanimation_SetImageOverride(reanimation, "zombie_football_leftarm_hand", *Sexy_IMAGE_REANIM_ZOMBIE_FOOTBALL_LEFTARM_UPPER2_Addr);
+                reanimation->SetImageOverride("zombie_football_leftarm_hand", *Sexy_IMAGE_REANIM_ZOMBIE_FOOTBALL_LEFTARM_UPPER2_Addr);
                 break;
             case ZombieType::ZOMBIE_NEWSPAPER:
-                Reanimation_SetImageOverride(reanimation, "Zombie_paper_leftarm_lower", *Sexy_IMAGE_REANIM_ZOMBIE_PAPER_LEFTARM_UPPER2_Addr);
+                reanimation->SetImageOverride("Zombie_paper_leftarm_lower", *Sexy_IMAGE_REANIM_ZOMBIE_PAPER_LEFTARM_UPPER2_Addr);
                 break;
             case ZombieType::ZOMBIE_POLEVAULTER:
-                Reanimation_SetImageOverride(reanimation, "Zombie_polevaulter_outerarm_lower", *Sexy_IMAGE_REANIM_ZOMBIE_POLEVAULTER_OUTERARM_UPPER2_Addr);
+                reanimation->SetImageOverride("Zombie_polevaulter_outerarm_lower", *Sexy_IMAGE_REANIM_ZOMBIE_POLEVAULTER_OUTERARM_UPPER2_Addr);
                 break;
             case ZombieType::ZOMBIE_BALLOON:
-                Reanimation_SetImageOverride(reanimation, "zombie_outerarm_lower", *Sexy_IMAGE_REANIM_ZOMBIE_BALLOON_OUTERARM_UPPER2_Addr);
+                reanimation->SetImageOverride("zombie_outerarm_lower", *Sexy_IMAGE_REANIM_ZOMBIE_BALLOON_OUTERARM_UPPER2_Addr);
                 break;
             case ZombieType::ZOMBIE_IMP:
-                Reanimation_SetImageOverride(reanimation, "Zombie_imp_outerarm_upper", *Sexy_IMAGE_REANIM_ZOMBIE_IMP_ARM1_BONE_Addr);
+                reanimation->SetImageOverride("Zombie_imp_outerarm_upper", *Sexy_IMAGE_REANIM_ZOMBIE_IMP_ARM1_BONE_Addr);
                 break;
             case ZombieType::ZOMBIE_DIGGER:
-                Reanimation_SetImageOverride(reanimation, "Zombie_digger_outerarm_upper", *Sexy_IMAGE_REANIM_ZOMBIE_DIGGER_OUTERARM_UPPER2_Addr);
+                reanimation->SetImageOverride("Zombie_digger_outerarm_upper", *Sexy_IMAGE_REANIM_ZOMBIE_DIGGER_OUTERARM_UPPER2_Addr);
                 break;
             case ZombieType::ZOMBIE_BOBSLED:
-                Reanimation_SetImageOverride(reanimation, "Zombie_dolphinrider_outerarm_upper", *Sexy_IMAGE_REANIM_ZOMBIE_BOBSLED_OUTERARM_UPPER2_Addr);
+                reanimation->SetImageOverride("Zombie_dolphinrider_outerarm_upper", *Sexy_IMAGE_REANIM_ZOMBIE_BOBSLED_OUTERARM_UPPER2_Addr);
                 break;
             case ZombieType::ZOMBIE_JACK_IN_THE_BOX:
-                Reanimation_SetImageOverride(reanimation, "Zombie_jackbox_outerarm_lower", *Sexy_IMAGE_REANIM_ZOMBIE_JACKBOX_OUTERARM_LOWER2_Addr);
+                reanimation->SetImageOverride("Zombie_jackbox_outerarm_lower", *Sexy_IMAGE_REANIM_ZOMBIE_JACKBOX_OUTERARM_LOWER2_Addr);
                 break;
             case ZombieType::ZOMBIE_SNORKEL:
-                Reanimation_SetImageOverride(reanimation, "Zombie_snorkle_outerarm_upper", *Sexy_IMAGE_REANIM_ZOMBIE_SNORKLE_OUTERARM_UPPER2_Addr);
+                reanimation->SetImageOverride("Zombie_snorkle_outerarm_upper", *Sexy_IMAGE_REANIM_ZOMBIE_SNORKLE_OUTERARM_UPPER2_Addr);
                 break;
             case ZombieType::ZOMBIE_DOLPHIN_RIDER:
-                Reanimation_SetImageOverride(reanimation, "Zombie_dolphinrider_outerarm_upper", *Sexy_IMAGE_REANIM_ZOMBIE_DOLPHINRIDER_OUTERARM_UPPER2_Addr);
+                reanimation->SetImageOverride("Zombie_dolphinrider_outerarm_upper", *Sexy_IMAGE_REANIM_ZOMBIE_DOLPHINRIDER_OUTERARM_UPPER2_Addr);
                 break;
             case ZombieType::ZOMBIE_POGO:
-                Reanimation_SetImageOverride(reanimation, "Zombie_outerarm_upper", *Sexy_IMAGE_REANIM_ZOMBIE_POGO_OUTERARM_UPPER2_Addr);
-                Reanimation_SetImageOverride(reanimation, "Zombie_pogo_stickhands", *Sexy_IMAGE_REANIM_ZOMBIE_POGO_STICKHANDS2_Addr);
-                Reanimation_SetImageOverride(reanimation, "Zombie_pogo_stick", *Sexy_IMAGE_REANIM_ZOMBIE_POGO_STICKDAMAGE2_Addr);
-                Reanimation_SetImageOverride(reanimation, "Zombie_pogo_stick2", *Sexy_IMAGE_REANIM_ZOMBIE_POGO_STICK2DAMAGE2_Addr);
+                reanimation->SetImageOverride("Zombie_outerarm_upper", *Sexy_IMAGE_REANIM_ZOMBIE_POGO_OUTERARM_UPPER2_Addr);
+                reanimation->SetImageOverride("Zombie_pogo_stickhands", *Sexy_IMAGE_REANIM_ZOMBIE_POGO_STICKHANDS2_Addr);
+                reanimation->SetImageOverride("Zombie_pogo_stick", *Sexy_IMAGE_REANIM_ZOMBIE_POGO_STICKDAMAGE2_Addr);
+                reanimation->SetImageOverride("Zombie_pogo_stick2", *Sexy_IMAGE_REANIM_ZOMBIE_POGO_STICK2DAMAGE2_Addr);
                 break;
             case ZombieType::ZOMBIE_FLAG: {
-                Reanimation_SetImageOverride(reanimation, "Zombie_outerarm_upper", *Sexy_IMAGE_REANIM_ZOMBIE_OUTERARM_UPPER2_Addr);
+                reanimation->SetImageOverride("Zombie_outerarm_upper", *Sexy_IMAGE_REANIM_ZOMBIE_OUTERARM_UPPER2_Addr);
                 Reanimation *reanimation2 = mApp->ReanimationTryToGet(mSpecialHeadReanimID);
                 if (reanimation2 != nullptr) {
-                    Reanimation_SetImageOverride(reanimation2, "Zombie_flag", *Sexy_IMAGE_REANIM_ZOMBIE_FLAG3_Addr);
+                    reanimation2->SetImageOverride("Zombie_flag", *Sexy_IMAGE_REANIM_ZOMBIE_FLAG3_Addr);
                 }
                 break;
             }
             case ZombieType::ZOMBIE_DANCER:
-                Reanimation_SetImageOverride(reanimation, "Zombie_disco_outerarm_upper", *Sexy_IMAGE_REANIM_ZOMBIE_DISCO_OUTERARM_UPPER2_Addr);
+                reanimation->SetImageOverride("Zombie_disco_outerarm_upper", *Sexy_IMAGE_REANIM_ZOMBIE_DISCO_OUTERARM_UPPER2_Addr);
                 break;
             case ZombieType::ZOMBIE_BACKUP_DANCER:
-                Reanimation_SetImageOverride(reanimation, "Zombie_disco_outerarm_upper", *Sexy_IMAGE_REANIM_ZOMBIE_BACKUP_OUTERARM_UPPER2_Addr);
+                reanimation->SetImageOverride( "Zombie_disco_outerarm_upper", *Sexy_IMAGE_REANIM_ZOMBIE_BACKUP_OUTERARM_UPPER2_Addr);
                 break;
             case ZombieType::ZOMBIE_LADDER:
-                Reanimation_SetImageOverride(reanimation, "Zombie_ladder_outerarm_upper", *Sexy_IMAGE_REANIM_ZOMBIE_LADDER_OUTERARM_UPPER2_Addr);
+                reanimation->SetImageOverride("Zombie_ladder_outerarm_upper", *Sexy_IMAGE_REANIM_ZOMBIE_LADDER_OUTERARM_UPPER2_Addr);
                 break;
             case ZombieType::ZOMBIE_YETI:
-                Reanimation_SetImageOverride(reanimation, "Zombie_yeti_outerarm_upper", *Sexy_IMAGE_REANIM_ZOMBIE_YETI_OUTERARM_UPPER2_Addr);
+                reanimation->SetImageOverride("Zombie_yeti_outerarm_upper", *Sexy_IMAGE_REANIM_ZOMBIE_YETI_OUTERARM_UPPER2_Addr);
                 break;
             default:
-                Reanimation_SetImageOverride(reanimation, "Zombie_outerarm_upper", *Sexy_IMAGE_REANIM_ZOMBIE_OUTERARM_UPPER2_Addr);
+                reanimation->SetImageOverride("Zombie_outerarm_upper", *Sexy_IMAGE_REANIM_ZOMBIE_OUTERARM_UPPER2_Addr);
                 break;
         }
     }

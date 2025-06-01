@@ -7,6 +7,7 @@
 
 #include "PvZ/Lawn/Common/ConstEnums.h"
 #include "PvZ/TodLib/Common/TodList.h"
+#include "PvZ/Symbols.h"
 
 namespace Sexy
 {
@@ -34,11 +35,23 @@ public:
     LawnApp *mApp;                                                         // 98
     // 大小99个整数
 
+    Sexy::MemoryImage *MakeCachedPlantFrame(SeedType theSeedType, DrawVariation theDrawVariation) {
+        return reinterpret_cast<Sexy::MemoryImage *(*)(ReanimatorCache *, SeedType, DrawVariation)>(ReanimatorCache_MakeCachedPlantFrameAddr)(this, theSeedType, theDrawVariation);
+    }
+    Sexy::MemoryImage *MakeBlankCanvasImage(int x, int y) {
+        return reinterpret_cast<Sexy::MemoryImage *(*)(ReanimatorCache *, int, int)>(ReanimatorCache_MakeBlankCanvasImageAddr)(this, x, y);
+    }
+    void DrawReanimatorFrame(Sexy::Graphics *g, float thePosX, float thePosY, ReanimationType theReanimationType, const char *theTrackName, DrawVariation theDrawVariation) {
+        reinterpret_cast<Sexy::MemoryImage *(*)(ReanimatorCache *, Sexy::Graphics *, float, float, ReanimationType, const char *, DrawVariation)>(ReanimatorCache_DrawReanimatorFrameAddr)(
+            this, g, thePosX, thePosY, theReanimationType, theTrackName, theDrawVariation);
+    }
+
     void GetPlantImageSize(SeedType theSeedType, int& theOffsetX, int& theOffsetY, int& theWidth, int& theHeight);
     void UpdateReanimationForVariation(Reanimation *theReanim, DrawVariation theDrawVariation);
     void LoadCachedImages();
     Sexy::MemoryImage *MakeCachedZombieFrame(ZombieType theZombieType);
     void DrawCachedPlant(Sexy::Graphics* g, float thePosX, float thePosY, SeedType theSeedType, DrawVariation theDrawVariation);
+    void DrawCachedZombie(Sexy::Graphics* g, float thePosX, float thePosY, ZombieType theZombieType);
 };
 
 inline void (*old_ReanimatorCache_LoadCachedImages)(ReanimatorCache *a1);
@@ -48,7 +61,5 @@ inline void (*old_ReanimatorCache_UpdateReanimationForVariation)(ReanimatorCache
 inline void (*old_ReanimatorCache_DrawCachedPlant)(ReanimatorCache *a1, Sexy::Graphics *graphics, float thePosX, float thePosY, SeedType theSeedType, DrawVariation drawVariation);
 
 inline Sexy::MemoryImage *(*old_ReanimatorCache_MakeCachedZombieFrame)(ReanimatorCache *reanimatorCache, ZombieType zombieType);
-
-inline Sexy::MemoryImage *(*ReanimatorCache_MakeBlankCanvasImage)(ReanimatorCache *, int, int);
 
 #endif // PLANTSVSZOMBIES_ANDROIDTV_REANIMATONLAWN_H

@@ -328,7 +328,7 @@ void Plant::Draw(Sexy::Graphics *g) {
         Graphics *newGraphics = new Graphics(*g);
         newGraphics->mTransX += thePlant->mX - mX;
         newGraphics->mTransY += thePlant->mY - mY;
-        Reanimation_DrawRenderGroup(reanimation, newGraphics, 1);
+        reanimation->DrawRenderGroup(newGraphics, 1);
         newGraphics->~Graphics();
     }
     num += mShakeOffsetX;
@@ -344,7 +344,7 @@ void Plant::Draw(Sexy::Graphics *g) {
             //                Color color = {150, 255, 150, 255};
             //                SetColor(g,&color);
             //            }
-            Reanimation_DrawRenderGroup(reanimation2, g, 0);
+            reanimation2->DrawRenderGroup(g, 0);
             //            if (plant->mGloveGrabbed)
             //            {
             //                SetColorizeImages(g,false);
@@ -510,7 +510,7 @@ void Plant::DrawSeedType(Sexy::Graphics *g, SeedType theSeedType, SeedType theIm
     if (Challenge::IsZombieSeedType(theSeedType2)) {
         ZombieType theZombieType = Challenge::IZombieSeedTypeToZombieType(theSeedType2);
         if (theZombieType != ZombieType::ZOMBIE_INVALID) {
-            ReanimatorCache_DrawCachedZombie(lawnApp->mReanimatorCache, g, thePosX, thePosY, theZombieType);
+            lawnApp->mReanimatorCache->DrawCachedZombie(g, thePosX, thePosY, theZombieType);
         }
         return;
     } else {

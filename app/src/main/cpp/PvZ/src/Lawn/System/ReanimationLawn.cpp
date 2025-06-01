@@ -17,11 +17,11 @@ void ReanimatorCache::LoadCachedImages() {
 }
 
 void ReanimatorCache::UpdateReanimationForVariation(Reanimation *theReanim, DrawVariation theDrawVariation) {
-    // 修复商店花盆不显示、修复花园花盆不显示、修复花园手套和推车预览不显示。原理就是Reanimation_Update。
+    // 修复商店花盆不显示、修复花园花盆不显示、修复花园手套和推车预览不显示。原理就是Reanimation::Update。
     old_ReanimatorCache_UpdateReanimationForVariation(this, theReanim, theDrawVariation);
     float tmp = theReanim->mAnimRate;
     //    Reanimation_SetAnimRate(theReanim, 0.0f);
-    Reanimation_Update(theReanim);
+    theReanim->Update();
     //    Reanimation_SetAnimRate(theReanim, tmp);
 }
 
@@ -76,6 +76,13 @@ void ReanimatorCache::DrawCachedPlant(Graphics *graphics, float thePosX, float t
     }
 }
 
+void ReanimatorCache::DrawCachedZombie(Graphics* g, float thePosX, float thePosY, ZombieType theZombieType)
+{
+    if (mZombieImages[(int)theZombieType] == nullptr)
+        mZombieImages[(int)theZombieType] = MakeCachedZombieFrame(theZombieType);
+    TodDrawImageScaledF(g, (Image *)mZombieImages[(int)theZombieType], thePosX, thePosY, g->mScaleX, g->mScaleY);
+}
+
 // 为红眼巨人增加SeedPacket图标
 Sexy::MemoryImage *ReanimatorCache::MakeCachedZombieFrame(ZombieType theZombieType) {
 
@@ -86,22 +93,21 @@ Sexy::MemoryImage *ReanimatorCache::MakeCachedZombieFrame(ZombieType theZombieTy
     Sexy_MemoryImage_Delete((Image *)mZombieImages[theZombieType]);
     mZombieImages[theZombieType] = nullptr;
 
-    Sexy::MemoryImage *BlankCanvasImage = ReanimatorCache_MakeBlankCanvasImage(this, (theZombieType == ZombieType::ZOMBIE_ZAMBONI ? 512 : 256), 256);
+    Sexy::MemoryImage *BlankCanvasImage = MakeBlankCanvasImage((theZombieType == ZombieType::ZOMBIE_ZAMBONI ? 512 : 256), 256);
     Graphics *graphics = new Graphics((Image *)BlankCanvasImage);
     graphics->SetLinearBlend(true);
     ZombieType zombieType_reanim = theZombieType != ZombieType::ZOMBIE_CACHED_POLEVAULTER_WITH_POLE ? theZombieType : ZombieType::ZOMBIE_POLEVAULTER;
     ReanimationType reanimationType = GetZombieDefinition(zombieType_reanim).mReanimationType;
     float x = 40;
     float y = 60;
-    Reanimation reanimation;
-    Reanimation_Reanimation(&reanimation);
-    Reanimation_ReanimationInitializeType(&reanimation, x, y, reanimationType);
-    Reanimation_SetFramesForLayer(&reanimation, "anim_idle");
+    Reanimation reanimation = Reanimation();
+    (&reanimation)->ReanimationInitializeType(x, y, reanimationType);
+    (&reanimation)->SetFramesForLayer("anim_idle");
     Zombie::SetupReanimLayers(&reanimation, zombieType_reanim);
-    Reanimation_SetImageOverride(&reanimation, "anim_head1", *Sexy_IMAGE_REANIM_ZOMBIE_GARGANTUAR_HEAD_REDEYE_Addr);
-    Reanimation_Update(&reanimation);
-    Reanimation_Draw(&reanimation, graphics);
-    Reanimation_Delete2(&reanimation);
+    (&reanimation)->SetImageOverride("anim_head1", *Sexy_IMAGE_REANIM_ZOMBIE_GARGANTUAR_HEAD_REDEYE_Addr);
+    (&reanimation)->Update();
+    (&reanimation)->Draw(graphics);
+    (&reanimation)->Delete();
     mZombieImages[theZombieType] = BlankCanvasImage;
     graphics->~Graphics();
     return BlankCanvasImage;

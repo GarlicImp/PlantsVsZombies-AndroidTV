@@ -10,6 +10,7 @@
 #include "PvZ/SexyAppFramework/Widget/CustomScrollbarWidget.h"
 #include "PvZ/Symbols.h"
 #include "PvZ/TodLib/Effect/Reanimator.h"
+#include "PvZ/SexyAppFramework/Graphics/Font.h"
 
 #include <cassert>
 
@@ -661,13 +662,6 @@ void HelpBarWidget_HelpBarWidget(Sexy::Widget *a) {
 
 void Sexy_ExtractLoadingSoundsResources(int *a, int *theManager) {
     old_Sexy_ExtractLoadingSoundsResources(a, theManager);
-}
-
-void BaseGamepadControls::GetGamepadVelocity(float *horizontal, float *vertical) {
-    // 如果horizontal或vertical不为零，则会在重型武器中播放小推车移动动画。
-    // 所以这里将vertical设置为非零，以播放动画；同时horizontal设置为0，以免小推车移动。
-    *horizontal = 0.0f;
-    *vertical = gPlayerIndex == TouchPlayerIndex::TOUCHPLAYER_NONE ? 0.0f : 100.0f;
 }
 
 bool Sexy_SexyAppBase_Is3DAccelerated(LawnApp *lawnApp) {

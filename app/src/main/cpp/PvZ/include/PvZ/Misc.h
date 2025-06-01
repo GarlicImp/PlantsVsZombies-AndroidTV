@@ -24,8 +24,6 @@ inline int (*Attachment_AttachmentDie)(int *);
 
 inline int (*WaitForSecondPlayerDialog_GameButtonDown)(int *a1, int a2, int a3);
 
-inline int (*ReanimatorCache_DrawCachedZombie)(ReanimatorCache *a1, Sexy::Graphics *a2, float a3, float a4, int a5);
-
 inline void (*Sexy_StrFormat)(int *holder, const char *theFormat, ...);
 
 inline void (*TodStringTranslate)(int *holder, const char *theText);
@@ -59,8 +57,6 @@ inline void (*GameButton_OnPressed)(Sexy::GameButton *a);
 inline void (*GameButton_Delete)(Sexy::GameButton *a);
 
 inline void (*Sexy_SexyMatrix3_SexyMatrix3)(int *);
-
-inline int (*RandRangeInt)(int, int);
 
 inline void (*Sexy_SexyTransform2D_SexyTransform2D)(Sexy::SexyTransform2D *);
 
@@ -138,8 +134,6 @@ inline int **(*ReanimAtlas_GetEncodedReanimAtlas)(int *, int *);
 
 inline int *(*Sexy_ResourceManager_GetSoundThrow)(int *, int *);
 
-inline float (*RandRangeFloat)(float, float);
-
 inline bool (*TodFoley_IsFoleyPlaying)(TodFoley *soundSystem, FoleyType theFoleyType);
 
 inline void (*TodFoley_StopFoley)(TodFoley *soundSystem, FoleyType theFoleyType);
@@ -182,8 +176,6 @@ inline void (*Sexy_Checkbox_Delete)(Sexy::Checkbox *);
 
 inline void (*CreditScreen_PauseCredits)(Sexy::Widget *);
 
-inline int (*Sexy_RandInt)(int);
-
 inline void (*Sexy_Image_SetWrapMode)(Sexy::Image *, int, int);
 
 inline void (*Sexy_WidgetContainer_MarkDirty)(Sexy::WidgetContainer *);
@@ -193,10 +185,6 @@ inline void (*ReanimatorEnsureDefinitionLoaded)(ReanimationType type, bool b);
 inline void (*Sexy_Widget_DeferOverlay)(Sexy::Widget *, int);
 
 inline int (*Mailbox_GetNumUnseenMessages)(int *);
-
-inline Sexy::Image *(*ReanimatorCache_MakeCachedPlantFrame)(ReanimatorCache *, SeedType, DrawVariation);
-
-inline void (*ReanimatorCache_DrawReanimatorFrame)(ReanimatorCache *, Sexy::Graphics *g, float x, float y, ReanimationType reanimType, char *trackName, DrawVariation variation);
 
 inline TodAllocator *(*FindGlobalAllocator)(int aSize);
 

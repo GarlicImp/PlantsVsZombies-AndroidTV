@@ -267,7 +267,7 @@ void Projectile::DoImpact(Zombie* theZombie) {
             Reanimation* aFireReanim = mApp->AddReanimation(mPosX + 38.0f, mPosY - 20.0f, mRenderOrder + 1, ReanimationType::REANIM_JALAPENO_FIRE);
             aFireReanim->mAnimTime = 0.25f;
             aFireReanim->mAnimRate = 24.0f;
-            Reanimation_OverrideScale(aFireReanim, 0.7f, 0.4f);
+            aFireReanim->OverrideScale(0.7f, 0.4f);
         }
     } else if (mProjectileType == ProjectileType::PROJECTILE_STAR) {
         aEffect = ParticleEffect::PARTICLE_STAR_SPLAT;
