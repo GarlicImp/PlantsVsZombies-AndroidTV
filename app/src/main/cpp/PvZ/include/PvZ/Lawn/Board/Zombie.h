@@ -37,7 +37,12 @@ constexpr const float CLIP_HEIGHT_LIMIT = -100.0f;
 constexpr const float CLIP_HEIGHT_OFF = -200.0f;
 // const Color ZOMBIE_MINDCONTROLLED_COLOR = Color(128, 0, 192, 255);
 
-enum ZombieAttackType { ATTACKTYPE_CHEW, ATTACKTYPE_DRIVE_OVER, ATTACKTYPE_VAULT, ATTACKTYPE_LADDER };
+enum ZombieAttackType {
+    ATTACKTYPE_CHEW,
+    ATTACKTYPE_DRIVE_OVER,
+    ATTACKTYPE_VAULT,
+    ATTACKTYPE_LADDER,
+};
 
 enum ZombieParts {
     PART_BODY,
@@ -71,7 +76,12 @@ class Reanimation;
 class TodParticleSystem;
 class Zombie : public GameObject {
 public:
-    enum { ZOMBIE_WAVE_DEBUG = -1, ZOMBIE_WAVE_CUTSCENE = -2, ZOMBIE_WAVE_UI = -3, ZOMBIE_WAVE_WINNER = -4 };
+    enum {
+        ZOMBIE_WAVE_DEBUG = -1,
+        ZOMBIE_WAVE_CUTSCENE = -2,
+        ZOMBIE_WAVE_UI = -3,
+        ZOMBIE_WAVE_WINNER = -4,
+    };
 
     ZombieType mZombieType;                          // 13
     ZombiePhase mZombiePhase;                        // 14

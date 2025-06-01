@@ -7,7 +7,18 @@
 
 namespace Sexy {
 
-enum KeyCode { Invalid = -1, Ok = 13, Back = 27, Back2 = 305, Left = 37, Up = 38, Right = 39, Down = 40, Shovel = 49, Hammer = 50 };
+enum KeyCode {
+    KEYCODE_INVALID = -1,
+    KEYCODE_ACCEPT = 13,
+    KEYCODE_ESCAPE = 27,
+    KEYCODE_ESCAPE2 = 305,
+    KEYCODE_LEFT = 37,
+    KEYCODE_UP = 38,
+    KEYCODE_RIGHT = 39,
+    KEYCODE_DOWN = 40,
+    KEYCODE_SHOVEL = 49,
+    KEYCODE_HAMMER = 50,
+};
 
 }
 

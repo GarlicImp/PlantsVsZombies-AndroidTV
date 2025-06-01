@@ -311,9 +311,9 @@ void MainMenu::KeyDown(Sexy::KeyCode theKeyCode) {
     if (gMainMenuAchievementsWidget != nullptr) {
         if (gAchievementState != SHOWING)
             return;
-        if (theKeyCode == Sexy::Back || theKeyCode == Sexy::Back2) {
+        if (theKeyCode == Sexy::KEYCODE_ESCAPE || theKeyCode == Sexy::KEYCODE_ESCAPE2) {
             MainMenu::ButtonDepress(ACHIEVEMENTS_BUTTON);
-        } else if (theKeyCode == Sexy::Up || theKeyCode == Sexy::Down) {
+        } else if (theKeyCode == Sexy::KEYCODE_UP || theKeyCode == Sexy::KEYCODE_DOWN) {
             if (gMainMenuAchievementKeyboardScrollCounter != 0) {
                 return;
                 //                int theNewY = gMainMenuAchievementsKeyboardScrollWidgetY -(gMainMenuAchievementKeyboardScrollDirection ? 192 : -192);
@@ -323,13 +323,13 @@ void MainMenu::KeyDown(Sexy::KeyCode theKeyCode) {
             }
             gMainMenuAchievementKeyboardScrollCounter = gKeyboardScrollTime;
             gMainMenuAchievementsKeyboardScrollWidgetY = gMainMenuAchievementsWidget->mY;
-            gMainMenuAchievementKeyboardScrollDirection = theKeyCode == Sexy::Down;
+            gMainMenuAchievementKeyboardScrollDirection = theKeyCode == Sexy::KEYCODE_DOWN;
         }
         return;
     }
 
     MainMenuButtonId mSelectedButton = (MainMenuButtonId)mFocusedChildWidget->mWidgetId;
-    if ((mSelectedButton == ADVENTURE_BUTTON || mSelectedButton == MORE_WAYS_BUTTON || mSelectedButton == START_ADVENTURE_BUTTON) && theKeyCode == Sexy::Left) {
+    if ((mSelectedButton == ADVENTURE_BUTTON || mSelectedButton == MORE_WAYS_BUTTON || mSelectedButton == START_ADVENTURE_BUTTON) && theKeyCode == Sexy::KEYCODE_LEFT) {
         // 如果当前选中的按钮为"冒险模式"或者为"更多游戏方式"，同时玩家又按下了左方向键
         SetScene(MENUSCENE_MORE_WAYS);
         return;
@@ -3519,29 +3519,29 @@ void TestMenuWidget_MouseDrag(ZombatarWidget *zombatarWidget, int x, int y) {
 void TestMenuWidget_MouseUp(ZombatarWidget *zombatarWidget, int x, int y) {}
 
 void TestMenuWidget_KeyDown(ZombatarWidget *zombatarWidget, int keyCode) {
-    if (keyCode == Sexy::Back || keyCode == Sexy::Back2) {
+    if (keyCode == Sexy::KEYCODE_ESCAPE || keyCode == Sexy::KEYCODE_ESCAPE2) {
         LawnApp *lawnApp = (LawnApp *)*gLawnApp_Addr;
         lawnApp->KillZombatarScreen();
         lawnApp->ShowMainMenuScreen();
         return;
     }
-    if (keyCode == Sexy::Up) {
+    if (keyCode == Sexy::KEYCODE_UP) {
         yy--;
         LOG_DEBUG("{} {}", xx, yy);
     }
-    if (keyCode == Sexy::Down) {
+    if (keyCode == Sexy::KEYCODE_DOWN) {
         yy++;
         LOG_DEBUG("{} {}", xx, yy);
     }
-    if (keyCode == Sexy::Left) {
+    if (keyCode == Sexy::KEYCODE_LEFT) {
         xx--;
         LOG_DEBUG("{} {}", xx, yy);
     }
-    if (keyCode == Sexy::Right) {
+    if (keyCode == Sexy::KEYCODE_RIGHT) {
         xx++;
         LOG_DEBUG("{} {}", xx, yy);
     }
-    if (keyCode == Sexy::Up || keyCode == Sexy::Down || keyCode == Sexy::Left || keyCode == Sexy::Right) {
+    if (keyCode == Sexy::KEYCODE_UP || keyCode == Sexy::KEYCODE_DOWN || keyCode == Sexy::KEYCODE_LEFT || keyCode == Sexy::KEYCODE_RIGHT) {
         return;
     }
 }

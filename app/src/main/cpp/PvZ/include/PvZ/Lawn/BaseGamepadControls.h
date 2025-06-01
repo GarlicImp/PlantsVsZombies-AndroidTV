@@ -39,7 +39,7 @@ public:
     float mUpdateAdd0Dot016;       // 40
     int unkMems[2];                // 41 ~ 42
     // 大小43个整数
-public:
+
     void GetGamepadVelocity(float *horizontal, float *vertical);
 };
 

@@ -33,7 +33,7 @@ void SeedChooserScreen::Create(bool theIsZombieChooser) {
     GameMode mGameMode = mApp->mGameMode;
     if (CutScene_IsSurvivalRepick(mBoard->mCutScene) && !mApp->IsCoopMode()) {
         GamepadControls *gamePad = mBoard->mGamepadControls1;
-        SeedBank *mSeedBank = GamepadControls_GetSeedBank(gamePad);
+        SeedBank *mSeedBank = gamePad->GetSeedBank();
         int mNumPackets = mSeedBank->mNumPackets;
         std::vector<SeedType> aSeedArray(mNumPackets);
         SeedType aImitaterType = SeedType::SEED_NONE;

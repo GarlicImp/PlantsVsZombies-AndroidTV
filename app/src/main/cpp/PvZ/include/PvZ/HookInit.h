@@ -102,12 +102,6 @@ inline void InitInGameFunction() {
     //    ChallengeScreen_UpdateButtons=(void (*)(ChallengeScreen *))ChallengeScreen_UpdateButtonsAddr;
 
 
-    GamepadControls_OnButtonUp = (decltype(GamepadControls_OnButtonUp))GamepadControls_OnButtonUpAddr;
-    GamepadControls_OnButtonDown = (decltype(GamepadControls_OnButtonDown))GamepadControls_OnButtonDownAddr;
-    GamepadControls_OnKeyDown = (decltype(GamepadControls_OnKeyDown))GamepadControls_OnKeyDownAddr;
-    GamepadControls_GetSeedBank = (decltype(GamepadControls_GetSeedBank))GamepadControls_GetSeedBankAddr;
-
-
     TodDrawImageCelCenterScaledF = (decltype(TodDrawImageCelCenterScaledF))TodDrawImageCelCenterScaledFAddr;
     TodDrawImageScaledF = (decltype(TodDrawImageScaledF))TodDrawImageScaledFAddr;
     TodDrawImageCelScaledF = (decltype(TodDrawImageCelScaledF))TodDrawImageCelScaledFAddr;
@@ -436,12 +430,12 @@ inline void InitHookFunction() {
     homura::HookFunction(Coin_UpdateFallAddr, &Coin::UpdateFall, &old_Coin_UpdateFall);
 
 
-    homura::HookFunction(GamepadControls_ButtonDownFireCobcannonTestAddr, &GamepadControls_ButtonDownFireCobcannonTest, &old_GamepadControls_ButtonDownFireCobcannonTest);
-    homura::HookFunction(GamepadControls_DrawAddr, &GamepadControls_Draw, &old_GamepadControls_Draw);
-    homura::HookFunction(GamepadControls_GamepadControlsAddr, &GamepadControls_GamepadControls, &old_GamepadControls_GamepadControls);
-    homura::HookFunction(GamepadControls_UpdateAddr, &GamepadControls_Update, &old_GamepadControls_Update);
-    homura::HookFunction(GamepadControls_DrawPreviewAddr, &GamepadControls_DrawPreview, &old_GamepadControls_DrawPreview);
-    homura::HookFunction(GamepadControls_UpdatePreviewReanimAddr, &GamepadControls_UpdatePreviewReanim, &old_GamepadControls_UpdatePreviewReanim);
+    homura::HookFunction(GamepadControls_ButtonDownFireCobcannonTestAddr, &GamepadControls::ButtonDownFireCobcannonTest, &old_GamepadControls_ButtonDownFireCobcannonTest);
+    homura::HookFunction(GamepadControls_DrawAddr, &GamepadControls::Draw, &old_GamepadControls_Draw);
+    homura::HookFunction(GamepadControls_GamepadControlsAddr, &GamepadControls::Create, &old_GamepadControls_GamepadControls);
+    homura::HookFunction(GamepadControls_UpdateAddr, &GamepadControls::Update, &old_GamepadControls_Update);
+    homura::HookFunction(GamepadControls_DrawPreviewAddr, &GamepadControls::DrawPreview, &old_GamepadControls_DrawPreview);
+    homura::HookFunction(GamepadControls_UpdatePreviewReanimAddr, &GamepadControls::UpdatePreviewReanim, &old_GamepadControls_UpdatePreviewReanim);
 
 
     homura::HookFunction(GridItem_UpdateAddr, &GridItem::Update, &old_GridItem_Update);
@@ -622,7 +616,7 @@ inline void InitHookFunction() {
     homura::HookFunction(MailScreen_Delete2Addr, &MailScreen::Delete2, &old_MailScreen_Delete2);
 
 
-    homura::HookFunction(ZenGardenControls_UpdateAddr, &ZenGardenControls_Update, &old_ZenGardenControls_Update);
+    homura::HookFunction(ZenGardenControls_UpdateAddr, &ZenGardenControls::Update, &old_ZenGardenControls_Update);
     homura::HookFunction(ZenGarden_DrawBackdropAddr, &ZenGarden_DrawBackdrop, &old_ZenGarden_DrawBackdrop);
     //    MSHookFunction(ZenGarden_MouseDownWithFeedingToolAddr, (void *) ZenGarden_MouseDownWithFeedingTool, (void **) &old_ZenGarden_MouseDownWithFeedingTool);
     // MSHookFunction(ZenGarden_DrawPottedPlantAddr, (void *) ZenGarden_DrawPottedPlant, nullptr);

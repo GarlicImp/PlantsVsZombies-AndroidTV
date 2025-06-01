@@ -78,7 +78,7 @@ void MailScreen::ButtonDepress(int theId) {
     mApp = (LawnApp *)*gLawnApp_Addr;
     MailScreen *aRealMailScreen = (MailScreen *)mApp->GetDialog(Dialogs::DIALOG_MAIL);
     if (theId == 1002) {
-        aRealMailScreen->KeyDown(Sexy::Ok, 0, 0);
+        aRealMailScreen->KeyDown(Sexy::KEYCODE_ACCEPT, 0, 0);
     } else if (theId == 1001) {
         aRealMailScreen->KeyDown(307, 0, 0);
         bool isAtInBox = aRealMailScreen->mPage == 0;

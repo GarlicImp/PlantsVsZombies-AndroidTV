@@ -72,7 +72,7 @@ extern "C" JNIEXPORT void JNICALL Java_com_transmension_mobile_EnhanceActivity_n
         return;
     }
     GamepadControls *gamePad = board->mGamepadControls1;
-    GamepadControls_OnButtonDown(gamePad, code, 0, 0);
+    gamePad->OnButtonDown((ButtonCode)code, 0, 0);
 }
 
 extern "C" JNIEXPORT void JNICALL Java_com_transmension_mobile_EnhanceActivity_native2PButtonDown(JNIEnv *env, jclass clazz, jint code) {
@@ -82,7 +82,7 @@ extern "C" JNIEXPORT void JNICALL Java_com_transmension_mobile_EnhanceActivity_n
         return;
     }
     GamepadControls *gamePad_2P = board->mGamepadControls2;
-    GamepadControls_OnButtonDown(gamePad_2P, code, 1, 0);
+    gamePad_2P->OnButtonDown((ButtonCode)code, 0, 0);
 }
 
 extern "C" JNIEXPORT void JNICALL Java_com_transmension_mobile_EnhanceActivity_nativeEnableNewOptionsDialog(JNIEnv *env, jclass clazz) {
@@ -139,7 +139,7 @@ extern "C" JNIEXPORT void JNICALL Java_com_transmension_mobile_EnhanceActivity_n
             board->MouseDownSecond(x, y, 0);
             break;
         case 1:
-            Board_MouseDragSecond(board, x, y);
+            board->MouseDragSecond(x, y);
             break;
         case 2:
             board->MouseUpSecond(x, y, 0);
@@ -888,7 +888,7 @@ extern "C" JNIEXPORT jboolean JNICALL Java_com_transmension_mobile_EnhanceActivi
 
 extern "C" JNIEXPORT void JNICALL Java_com_transmension_mobile_EnhanceActivity_nativeSendButtonEvent(JNIEnv *env, jclass clazz, jboolean is_key_down, jint button_code) {
     bool playerIndex = button_code >= 256;
-    int buttonCode = playerIndex ? button_code - 256 : button_code;
+    ButtonCode buttonCode = (ButtonCode)(playerIndex ? button_code - 256 : button_code);
     LawnApp *lawnApp = (LawnApp *)*gLawnApp_Addr;
 
 
@@ -901,7 +901,7 @@ extern "C" JNIEXPORT void JNICALL Java_com_transmension_mobile_EnhanceActivity_n
             if (is_key_down) {
                 switch (buttonCode) {
                     case 7:
-                        GamepadControls_OnKeyDown(gamepadControls, 49, 1112);
+                        gamepadControls->OnKeyDown(KeyCode::KEYCODE_SHOVEL, 1112);
                         gamepadControls->mGamepadState = 7;
                         break;
                     case 16:
@@ -917,7 +917,7 @@ extern "C" JNIEXPORT void JNICALL Java_com_transmension_mobile_EnhanceActivity_n
                         GamepadVelocityXOfPlayer1 = 400;
                         break;
                     default:
-                        GamepadControls_OnButtonDown(gamepadControls, buttonCode, playerIndex, 0);
+                        gamepadControls->OnButtonDown(buttonCode, playerIndex, 0);
                         break;
                 }
             } else {
@@ -940,7 +940,7 @@ extern "C" JNIEXPORT void JNICALL Java_com_transmension_mobile_EnhanceActivity_n
             if (is_key_down) {
                 switch (buttonCode) {
                     case 7:
-                        GamepadControls_OnKeyDown(gamepadControls, 49, 1112);
+                        gamepadControls->OnKeyDown(KeyCode::KEYCODE_SHOVEL, 1112);
                         gamepadControls->mGamepadState = 7;
                         break;
                     case 16:
@@ -956,7 +956,7 @@ extern "C" JNIEXPORT void JNICALL Java_com_transmension_mobile_EnhanceActivity_n
                         GamepadVelocityXOfPlayer2 = 400;
                         break;
                     default:
-                        GamepadControls_OnButtonDown(gamepadControls, buttonCode, playerIndex, 0);
+                        gamepadControls->OnButtonDown(buttonCode, playerIndex, 0);
                         break;
                 }
             } else {

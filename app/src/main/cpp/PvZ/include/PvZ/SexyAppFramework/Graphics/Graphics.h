@@ -90,7 +90,7 @@ public:
     void DrawImageMatrix(Image *theImage, const SexyMatrix3 &theMatrix, const Rect &theSrcRect, float x, float y, bool theBool) {
         reinterpret_cast<void (*)(Graphics *, Image *, const SexyMatrix3 &, const Rect &, float, float, bool)>(Sexy_Graphics_DrawImageMatrixAddr)(this, theImage, theMatrix, theSrcRect, x, y, theBool);
     }
-    void SetWrapMode(int theHorizonWrapMode, int theVertWrapMode) { reinterpret_cast<void (*)(int, int)>(Sexy_GLGraphics_SetWrapModeAddr)(theHorizonWrapMode, theVertWrapMode); }
+    void SetWrapMode(int theHorizonWrapMode, int theVertWrapMode) { reinterpret_cast<void (*)(Graphics *, int, int)>(Sexy_GLGraphics_SetWrapModeAddr)(this, theHorizonWrapMode, theVertWrapMode); }
 
     void SetFont(Font *theFont);
     Font *GetFont();

@@ -15,7 +15,15 @@ class Reanimation;
 
 struct GameStats {
 
-    enum MiscStat { ZOMBIES_KILLED = 0, PLANTS_KILLED = 1, MONEY = 2, TREE_HEIGHT = 4, ENDLESS_FLAGS = 5, MOWED_ZOMBIES = 6, STINKY_CHOCOLATES = 7 };
+    enum MiscStat {
+        ZOMBIES_KILLED = 0,
+        PLANTS_KILLED = 1,
+        MONEY = 2,
+        TREE_HEIGHT = 4,
+        ENDLESS_FLAGS = 5,
+        MOWED_ZOMBIES = 6,
+        STINKY_CHOCOLATES = 7,
+    };
 
     HouseType mHouseType;            // 0
     int unk;                         // 1
@@ -67,5 +75,4 @@ void DaveHelp_MouseDrag(LeaderboardsWidget *leaderboardsWidget, int x, int y);
 void DaveHelp_KeyDown(LeaderboardsWidget *leaderboardsWidget, int keyCode);
 
 inline void (*DaveHelp_DaveHelp)(LeaderboardsWidget *leaderboardsWidget, LawnApp *lawnApp);
-
 #endif // PLANTSVSZOMBIES_ANDROIDTV_LEADERBOARDSWIDGET_H
