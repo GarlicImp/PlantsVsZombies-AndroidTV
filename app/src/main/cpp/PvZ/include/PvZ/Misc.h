@@ -18,8 +18,6 @@
 
 class TodParticleSystem;
 
-inline int (*StoreScreen_SetSelectedSlot)(int a1, int a2);
-
 inline int (*Attachment_AttachmentDie)(int *);
 
 inline int (*WaitForSecondPlayerDialog_GameButtonDown)(int *a1, int a2, int a3);

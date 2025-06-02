@@ -45,28 +45,11 @@
 #include "PvZ/Lawn/System/PoolEffect.h"
 
 inline void InitInGameFunction() {
-    StoreScreen_SetSelectedSlot = (decltype(StoreScreen_SetSelectedSlot))StoreScreen_SetSelectedSlotAddr;
-    StoreScreen_AdvanceCrazyDaveDialog = (decltype(StoreScreen_AdvanceCrazyDaveDialog))StoreScreen_AdvanceCrazyDaveDialogAddr;
-    StoreScreen_CanInteractWithButtons = (decltype(StoreScreen_CanInteractWithButtons))StoreScreen_CanInteractWithButtonsAddr;
-    StoreScreen_GetStoreItemType = (decltype(StoreScreen_GetStoreItemType))StoreScreen_GetStoreItemTypeAddr;
-    StoreScreen_GetStoreItemInfo = (decltype(StoreScreen_GetStoreItemInfo))StoreScreen_GetStoreItemInfoAddr;
-    StoreScreen_IsItemSoldOut = (decltype(StoreScreen_IsItemSoldOut))StoreScreen_IsItemSoldOutAddr;
-    StoreScreen_IsItemUnavailable = (decltype(StoreScreen_IsItemUnavailable))StoreScreen_IsItemUnavailableAddr;
-    StoreScreen_IsComingSoon = (decltype(StoreScreen_IsComingSoon))StoreScreen_IsComingSoonAddr;
-    StoreScreen_IsPottedPlant = (decltype(StoreScreen_IsPottedPlant))StoreScreen_IsPottedPlantAddr;
-    //    StoreScreen_PurchaseItem = (void (*)(int *, a::a)) StoreScreen_PurchaseItemAddr;
-    StoreScreen_IsPageShown = (decltype(StoreScreen_IsPageShown))StoreScreen_IsPageShownAddr;
-    StoreScreen_EnableButtons = (decltype(StoreScreen_EnableButtons))StoreScreen_EnableButtonsAddr;
-
-
     CutScene_IsSurvivalRepick = (decltype(CutScene_IsSurvivalRepick))CutScene_IsSurvivalRepickAddr;
     CutScene_ShouldRunUpsellBoard = (decltype(CutScene_ShouldRunUpsellBoard))CutScene_ShouldRunUpsellBoardAddr;
     CutScene_OnKeyDown = (decltype(CutScene_OnKeyDown))CutScene_OnKeyDownAddr;
     CutScene_MouseDown = (decltype(CutScene_MouseDown))CutScene_MouseDownAddr;
     CutScene_IsBeforePreloading = (decltype(CutScene_IsBeforePreloading))CutScene_IsBeforePreloadingAddr;
-
-
-    //    ChallengeScreen_UpdateButtons=(void (*)(ChallengeScreen *))ChallengeScreen_UpdateButtonsAddr;
 
 
     TodDrawImageCelCenterScaledF = (decltype(TodDrawImageCelCenterScaledF))TodDrawImageCelCenterScaledFAddr;
@@ -457,14 +440,14 @@ inline void InitHookFunction() {
     homura::HookFunction(MainMenu_DrawAddr, &MainMenu::Draw, &old_MainMenu_Draw);
 
 
-    homura::HookFunction(StoreScreen_UpdateAddr, &StoreScreen_Update, &old_StoreScreen_Update);
-    homura::HookFunction(StoreScreen_SetupPageAddr, &StoreScreen_SetupPage, &old_StoreScreen_SetupPage);
-    homura::HookFunction(StoreScreen_ButtonDepressAddr, &StoreScreen_ButtonDepress, &old_StoreScreen_ButtonDepress);
-    homura::HookFunction(StoreScreen_AddedToManagerAddr, &StoreScreen_AddedToManager, &old_StoreScreen_AddedToManager);
-    homura::HookFunction(StoreScreen_RemovedFromManagerAddr, &StoreScreen_RemovedFromManager, &old_StoreScreen_RemovedFromManager);
-    homura::HookFunction(StoreScreen_PurchaseItemAddr, &StoreScreen_PurchaseItem, &old_StoreScreen_PurchaseItem);
-    homura::HookFunction(StoreScreen_DrawAddr, &StoreScreen_Draw, &old_StoreScreen_Draw);
-    homura::HookFunction(StoreScreen_DrawItemAddr, &StoreScreen_DrawItem, &old_StoreScreen_DrawItem);
+    homura::HookFunction(StoreScreen_UpdateAddr, &StoreScreen::Update, &old_StoreScreen_Update);
+    homura::HookFunction(StoreScreen_SetupPageAddr, &StoreScreen::SetupPage, &old_StoreScreen_SetupPage);
+    homura::HookFunction(StoreScreen_ButtonDepressAddr, &StoreScreen::ButtonDepress, &old_StoreScreen_ButtonDepress);
+    homura::HookFunction(StoreScreen_AddedToManagerAddr, &StoreScreen::AddedToManager, &old_StoreScreen_AddedToManager);
+    homura::HookFunction(StoreScreen_RemovedFromManagerAddr, &StoreScreen::RemovedFromManager, &old_StoreScreen_RemovedFromManager);
+    homura::HookFunction(StoreScreen_PurchaseItemAddr, &StoreScreen::PurchaseItem, &old_StoreScreen_PurchaseItem);
+    homura::HookFunction(StoreScreen_DrawAddr, &StoreScreen::Draw, &old_StoreScreen_Draw);
+    homura::HookFunction(StoreScreen_DrawItemAddr, &StoreScreen::DrawItem, &old_StoreScreen_DrawItem);
 
 
     homura::HookFunction(Plant_UpdateAddr, &Plant::Update, &old_Plant_Update);
@@ -673,8 +656,8 @@ inline void InitVTableHookFunction() {
     homura::HookVirtualFunc(vTableForBoardAddr, 83, &Board::MouseDrag, &old_Board_MouseDrag);
     homura::HookVirtualFunc(vTableForBoardAddr, 133, &Board::ButtonDepress, &old_Board_ButtonDepress);
 
-    homura::HookVirtualFunc(vTableForStoreScreenAddr, 78, &StoreScreen_MouseDown, &old_StoreScreen_MouseDown);
-    homura::HookVirtualFunc(vTableForStoreScreenAddr, 81, &StoreScreen_MouseUp, &old_StoreScreen_MouseUp);
+    homura::HookVirtualFunc(vTableForStoreScreenAddr, 78, &StoreScreen::MouseDown, &old_StoreScreen_MouseDown);
+    homura::HookVirtualFunc(vTableForStoreScreenAddr, 81, &StoreScreen::MouseUp, &old_StoreScreen_MouseUp);
     //    VTableHookFunction(vTableForStoreScreenAddr, 83, (void *) StoreScreen_MouseDrag,(void **) &old_StoreScreen_MouseDrag);
 
     homura::HookVirtualFunc(vTableForMailScreenAddr, 78, &MailScreen::MouseDown, &old_MailScreen_MouseDown);

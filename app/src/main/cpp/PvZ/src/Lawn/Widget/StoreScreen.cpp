@@ -8,21 +8,20 @@
 
 using namespace Sexy;
 
-void StoreScreen_AddedToManager(int *a, int a2) {
-
-    return old_StoreScreen_AddedToManager(a, a2);
+void StoreScreen::AddedToManager(int a2) {
+    return old_StoreScreen_AddedToManager(this, a2);
 }
 
-void StoreScreen_RemovedFromManager(int *a, int a2) {
-    return old_StoreScreen_RemovedFromManager(a, a2);
+void StoreScreen::RemovedFromManager(int a2) {
+    return old_StoreScreen_RemovedFromManager(this, a2);
 }
 
-void StoreScreen_Update(int a) {
-    return old_StoreScreen_Update(a);
+void StoreScreen::Update() {
+    return old_StoreScreen_Update(this);
 }
 
-void StoreScreen_SetupPage(int *a) {
-    old_StoreScreen_SetupPage(a);
+void StoreScreen::SetupPage() {
+    old_StoreScreen_SetupPage(this);
     //    for (int i = 0; i < 8; ++i) {
     //        a::a StoreItemType = StoreScreen_GetStoreItemType(a, i);
     //        if (StoreScreen_IsPottedPlant(a, StoreItemType)) {
@@ -37,7 +36,7 @@ void StoreScreen_SetupPage(int *a) {
     //    }
 }
 
-void StoreScreen_DrawItem(int *a1, Sexy::Graphics *a2, int a3, StoreItem item) {
+void StoreScreen::DrawItem(Sexy::Graphics *g, int a3, StoreItem theStoreItem) {
     //    if (StoreScreen_IsItemUnavailable(a1, item)) return;
     //    if (StoreScreen_IsPottedPlant(a1, item)){
     //        int theX = 0;
@@ -47,84 +46,83 @@ void StoreScreen_DrawItem(int *a1, Sexy::Graphics *a2, int a3, StoreItem item) {
     //        StoreScreen_GetStoreItemInfo(a1, 0, item, &theImage, &theX, &theY, &theCount);
     //        DrawImage(thePlayerIndex,addonImages.seed_cached_52,theX,theY);
     //    }
-    old_StoreScreen_DrawItem(a1, a2, a3, item);
+    old_StoreScreen_DrawItem(this, g, a3, theStoreItem);
 }
 
-void StoreScreen_ButtonDepress(int *storeScreen, int buttonId) {
+void StoreScreen::ButtonDepress(int theId) {
     //    if (!showHouse) return old_StoreScreen_ButtonDepress(storeScreen, buttonId);
-    LawnApp *lawnApp = (LawnApp *)storeScreen[184];
-    int newPageIndex;
-    switch (buttonId) {
-        case 100:
-            storeScreen[181] = 1000;
+    StorePages newPageIndex;
+    switch (theId) {
+        case StoreScreen::StoreScreen_Back:
+            mResult = 1000;
             break;
-        case 101:
-            storeScreen[195] = 50;
-            storeScreen[197] = 1;
-            LawnApp_PlaySample(lawnApp, *Sexy_SOUND_HATCHBACK_CLOSE_Addr);
-            storeScreen[188] = 0;
-            lawnApp->CrazyDaveStopTalking();
-            StoreScreen_EnableButtons(storeScreen, false);
+        case StoreScreen::StoreScreen_Prev:
+            mHatchTimer = 50;
+            unk197 = 1;
+            LawnApp_PlaySample(mApp, *Sexy_SOUND_HATCHBACK_CLOSE_Addr);
+            mBubbleCountDown = 0;
+            mApp->CrazyDaveStopTalking();
+            EnableButtons(false);
             do {
-                newPageIndex = storeScreen[192] - 1;
-                if (newPageIndex < 0) {
-                    newPageIndex = 5;
-                    storeScreen[192] = 5;
-                } else if (newPageIndex == 4) {
-                    newPageIndex = 3;
-                    storeScreen[192] = 3;
+                newPageIndex = (StorePages)(mPage - 1);
+                if (newPageIndex < StorePages::STORE_PAGE_SLOT_UPGRADES) {
+                    newPageIndex = StorePages::NUM_STORE_PAGES;
+                    mPage = StorePages::NUM_STORE_PAGES;
+                } else if (newPageIndex == StorePages::STORE_PAGE_HOUSE) {
+                    newPageIndex = StorePages::STORE_PAGE_ZEN2;
+                    mPage = StorePages::STORE_PAGE_ZEN2;
                 } else {
-                    storeScreen[192] = newPageIndex;
+                    mPage = newPageIndex;
                 }
-            } while (!StoreScreen_IsPageShown(storeScreen, newPageIndex));
+            } while (!IsPageShown(newPageIndex));
             break;
-        case 102:
-            storeScreen[195] = 50;
-            storeScreen[197] = 2;
-            LawnApp_PlaySample(lawnApp, *Sexy_SOUND_HATCHBACK_CLOSE_Addr);
-            storeScreen[188] = 0;
-            lawnApp->CrazyDaveStopTalking();
-            StoreScreen_EnableButtons(storeScreen, false);
+        case StoreScreen::StoreScreen_Next:
+            mHatchTimer = 50;
+            unk197 = 2;
+            LawnApp_PlaySample(mApp, *Sexy_SOUND_HATCHBACK_CLOSE_Addr);
+            mBubbleCountDown = 0;
+            mApp->CrazyDaveStopTalking();
+            EnableButtons(false);
             do {
-                newPageIndex = storeScreen[192] + 1;
+                newPageIndex = (StorePages)(mPage + 1);
                 if (newPageIndex == 4) {
-                    newPageIndex = 5;
-                    storeScreen[192] = 5;
+                    newPageIndex = StorePages::NUM_STORE_PAGES;
+                    mPage = StorePages::NUM_STORE_PAGES;
                 } else if (newPageIndex > 4) {
-                    newPageIndex = 0;
-                    storeScreen[192] = 0;
+                    newPageIndex = StorePages::STORE_PAGE_SLOT_UPGRADES;
+                    mPage = StorePages::STORE_PAGE_SLOT_UPGRADES;
                 } else {
-                    storeScreen[192] = newPageIndex;
+                    mPage = newPageIndex;
                 }
-            } while (!StoreScreen_IsPageShown(storeScreen, newPageIndex));
+            } while (!IsPageShown(newPageIndex));
             break;
     }
 }
 
-void StoreScreen_PurchaseItem(int *storeScreen, StoreItem item) {
-    old_StoreScreen_PurchaseItem(storeScreen, item);
-    LawnApp *lawnApp = (LawnApp *)storeScreen[184];
-    PlayerInfo *mPlayerInfo = lawnApp->mPlayerInfo;
+void StoreScreen::PurchaseItem(StoreItem item) {
+    old_StoreScreen_PurchaseItem(this, item);
+
+    PlayerInfo *aPlayerInfo = mApp->mPlayerInfo;
 
     // 检查植物全收集成就
     for (int i = StoreItem::STORE_ITEM_PLANT_GATLINGPEA; i <= StoreItem::STORE_ITEM_PLANT_IMITATER; ++i) {
-        if (mPlayerInfo->mPurchases[i] == 0) {
+        if (aPlayerInfo->mPurchases[i] == 0) {
             return;
         }
     }
-    lawnApp->GrantAchievement(AchievementId::ACHIEVEMENT_SHOP);
+    mApp->GrantAchievement(AchievementId::ACHIEVEMENT_SHOP);
 }
 
-void StoreScreen_Draw(int *storeScreen, Sexy::Graphics *a2) {
+void StoreScreen::Draw(Sexy::Graphics *a2) {
     // 绘制商店页数字符串
-    old_StoreScreen_Draw(storeScreen, a2);
+    old_StoreScreen_Draw(this, a2);
+
     int theTotalPages = 0;
-    LawnApp *aApp = (LawnApp *)storeScreen[184];
-    if (aApp->HasFinishedAdventure() && showHouse) {
+    if (mApp->HasFinishedAdventure() && showHouse) {
         theTotalPages = 5;
     } else {
         for (int i = 0; i < 4; ++i) {
-            if (StoreScreen_IsPageShown(storeScreen, i)) {
+            if (IsPageShown((StorePages)i)) {
                 theTotalPages++;
             }
         }
@@ -132,7 +130,8 @@ void StoreScreen_Draw(int *storeScreen, Sexy::Graphics *a2) {
 
     if (theTotalPages <= 1)
         return;
-    int mPage = storeScreen[192] == 5 ? 5 : storeScreen[192] + 1;
+
+    mPage == 5 ? 5 : mPage + 1;
     int holder[1];
     Sexy_StrFormat(holder, "%d/%d", mPage, theTotalPages);
     Color theColor = {200, 200, 200, 255};
@@ -140,18 +139,20 @@ void StoreScreen_Draw(int *storeScreen, Sexy::Graphics *a2) {
     Sexy_String_Delete(holder);
 }
 
+bool StoreScreen::IsPottedPlant(StoreItem theStoreItem) {
+    return theStoreItem == STORE_ITEM_POTTED_MARIGOLD_1 || theStoreItem == STORE_ITEM_POTTED_MARIGOLD_2 || theStoreItem == STORE_ITEM_POTTED_MARIGOLD_3;
+}
+
 
 static StoreScreenTouchState gStoreScreenTouchState = StoreScreenTouchState::None;
 
-void StoreScreen_MouseDown(int *storeScreen, int x, int y, int theClickCount) {
-    bool mBubbleClickToContinue = *((uint8_t *)storeScreen + 756);
-    StoreItem mSelectedStoreItemType = *((StoreItem *)storeScreen + 194);
+void StoreScreen::MouseDown(int x, int y, int theClickCount) {
     if (mBubbleClickToContinue) {
         // 初次捡到戴夫车钥匙时会进入商店并且有一段戴夫对话，这里用于识别戴夫对话
-        StoreScreen_AdvanceCrazyDaveDialog(storeScreen);
+        AdvanceCrazyDaveDialog();
         return;
     }
-    if (!StoreScreen_CanInteractWithButtons(storeScreen)) {
+    if (!CanInteractWithButtons()) {
         // 翻页过程中无法触控
         return;
     }
@@ -161,16 +162,16 @@ void StoreScreen_MouseDown(int *storeScreen, int x, int y, int theClickCount) {
     int mNextButtonHeight = Sexy_Image_GetHeight(*Sexy_IMAGE_STORE_NEXTBUTTON_Addr);
     int mBackButtonWidth = Sexy_Image_GetWidth(*Sexy_IMAGE_STORE_MAINMENUBUTTON_Addr);
     int mBackButtonHeight = Sexy_Image_GetHeight(*Sexy_IMAGE_STORE_MAINMENUBUTTON_Addr);
-    Sexy::Rect mPrevButtonRect = {storeScreen[198] + 172, storeScreen[199] + 375, mPrevButtonWidth, mPrevButtonHeight};
-    Sexy::Rect mNextButtonRect = {storeScreen[198] + 573, storeScreen[199] + 373, mNextButtonWidth, mNextButtonHeight};
-    Sexy::Rect mBackButtonRect = {storeScreen[198] + 305, storeScreen[199] + 510, mBackButtonWidth, mBackButtonHeight};
+    Sexy::Rect mPrevButtonRect = {mShakeX + 172, mShakeY + 375, mPrevButtonWidth, mPrevButtonHeight};
+    Sexy::Rect mNextButtonRect = {mShakeX + 573, mShakeY + 373, mNextButtonWidth, mNextButtonHeight};
+    Sexy::Rect mBackButtonRect = {mShakeX + 305, mShakeY + 510, mBackButtonWidth, mBackButtonHeight};
 
     if (TRect_Contains(&mBackButtonRect, x, y)) {
         gStoreScreenTouchState = StoreScreenTouchState::Back;
         return;
     }
 
-    bool isPageShown = StoreScreen_IsPageShown(storeScreen, 1);
+    bool isPageShown = IsPageShown(StorePages::STORE_PAGE_PLANT_UPGRADES);
     if (isPageShown) {
 
         if (TRect_Contains(&mPrevButtonRect, x, y)) {
@@ -187,18 +188,18 @@ void StoreScreen_MouseDown(int *storeScreen, int x, int y, int theClickCount) {
     //    StoreScreen_PurchaseItem(storeScreen, a::STORE_ITEM_BLUEPRINT_CHANGE);
 
     for (int i = 0; i < 8; i++) {
-        StoreItem storeItemType = StoreScreen_GetStoreItemType(storeScreen, i);
+        StoreItem storeItemType = GetStoreItemType(i);
         if (storeItemType != StoreItem::STORE_ITEM_INVALID) {
             int theX = 0;
             int theY = 0;
             int theCount = 0;
             Sexy::Image *theImage = nullptr;
-            StoreScreen_GetStoreItemInfo(storeScreen, i, storeItemType, &theImage, &theX, &theY, &theCount);
+            GetStoreItemInfo(i, storeItemType, theImage, theX, theY, theCount);
             int theImageWidth = 80;
             int theImageHeight = 80;
             if (theImage != nullptr) {
-                theImageWidth = Sexy_Image_GetWidth(theImage);
-                theImageHeight = Sexy_Image_GetHeight(theImage);
+                theImageWidth = theImage->GetWidth();
+                theImageHeight = theImage->GetHeight();
             }
 
             //            LOGD("i:%d storeItemType:%d theX:%d theY:%d x:%d y:%d theImageWidth:%d theImageHeight:%d", i, storeItemType, theX, theY, x, y, theImageWidth,
@@ -208,28 +209,28 @@ void StoreScreen_MouseDown(int *storeScreen, int x, int y, int theClickCount) {
             Sexy::Rect itemRect = {theX - theImageWidth / 2, theY - theImageHeight, theImageWidth, theImageHeight};
             if (TRect_Contains(&itemRect, x, y)) {
                 if (mSelectedStoreItemType != storeItemType) {
-                    StoreScreen_SetSelectedSlot((int)storeScreen, i);
+                    SetSelectedSlot(i);
                 } else {
-                    if (StoreScreen_IsItemSoldOut(storeScreen, storeItemType) || StoreScreen_IsItemUnavailable(storeScreen, storeItemType) || StoreScreen_IsComingSoon(storeScreen, storeItemType)) {
+                    if (IsItemSoldOut(storeItemType) || IsItemUnavailable(storeItemType) || IsComingSoon(storeItemType)) {
                         return;
                     }
-                    StoreScreen_PurchaseItem(storeScreen, storeItemType);
+                    PurchaseItem(storeItemType);
                 }
             }
         }
     }
 }
 
-void StoreScreen_MouseUp(int *storeScreen, int x, int y, int theClickCount) {
+void StoreScreen::MouseUp(int x, int y, int theClickCount) {
     switch (gStoreScreenTouchState) {
         case StoreScreenTouchState::Back:
-            (*(void (**)(int *, int))(*storeScreen + 516))(storeScreen, 100); // StoreScreen_ButtonDepress(storeScreen,100)
+            ButtonDepress(StoreScreen::StoreScreen_Back);
             break;
         case StoreScreenTouchState::Prev:
-            (*(void (**)(int *, int))(*storeScreen + 516))(storeScreen, 101); // StoreScreen_ButtonDepress(storeScreen,101)
+            ButtonDepress(StoreScreen::StoreScreen_Prev);
             break;
         case StoreScreenTouchState::Next:
-            (*(void (**)(int *, int))(*storeScreen + 516))(storeScreen, 102); // StoreScreen_ButtonDepress(storeScreen,102)
+            ButtonDepress(StoreScreen::StoreScreen_Next);
             break;
         default:
             break;
