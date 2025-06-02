@@ -4,10 +4,10 @@
 
 #include "PvZ/Lawn/Board/CursorObject.h"
 
-bool CursorObject_BeginDraw(CursorObject *cursorObject, Sexy::Graphics *graphics) {
-    return old_CursorObject_BeginDraw(cursorObject, graphics);
+bool CursorObject::BeginDraw(Sexy::Graphics *g) {
+    return old_CursorObject_BeginDraw(this, g);
 }
 
-void CursorObject_EndDraw(CursorObject *cursorObject, Sexy::Graphics *graphics) {
-    return old_CursorObject_EndDraw(cursorObject, graphics);
+void CursorObject::EndDraw(Sexy::Graphics *g) {
+    return old_CursorObject_EndDraw(this, g);
 }
