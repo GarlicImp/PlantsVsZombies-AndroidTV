@@ -2,6 +2,8 @@
 #define PVZ_LAWN_CUT_SCENE_H
 
 #include "PvZ/Lawn/Common/ConstEnums.h"
+#include "PvZ/SexyAppFramework/Misc/KeyCodes.h"
+#include "PvZ/Symbols.h"
 
 class LawnApp;
 class Board;
@@ -25,32 +27,27 @@ public:
     bool mPreloaded;                         // 52
     bool mPlacedZombies;                     // 53
     bool mPlacedLawnItems;                   // 54
-    int mCrazyDaveCountDown;                 // 14
-    int mCrazyDaveLastTalkIndex;             // 15
-    bool mUpsellHideBoard;                   // 64
-    ChallengeScreen *mUpsellChallengeScreen; // 17
-    bool mPreUpdatingBoard;                  // 72
+    int mCrazyDaveCountDown;                 // 14【推销戴夫倒计时】
+    int mCrazyDaveLastTalkIndex;             // 15【戴夫推销的话的编号】
+    bool mUpsellHideBoard;                   // 64【推销隐藏关卡界面】
+    ChallengeScreen *mUpsellChallengeScreen; // 17【推销插入的小游戏界面】
+    bool mPreUpdatingBoard;                  // 72【场景布置阶段的关卡预更新】
     int unk[11];                             // 19 ~ 29
-}; // 大小30个整数
+    // 大小30个整数
 
-inline bool (*CutScene_IsSurvivalRepick)(CutScene *instance);
+    void ShowShovel();
+    void Update();
+    bool IsSurvivalRepick() { return reinterpret_cast<bool (*)(CutScene *)>(CutScene_IsSurvivalRepickAddr)(this); }
+    void OnKeyDown(Sexy::KeyCode theKey, unsigned int a3) { reinterpret_cast<bool (*)(CutScene *, Sexy::KeyCode, unsigned int)>(CutScene_OnKeyDownAddr)(this, theKey, a3); }
+    bool IsBeforePreloading() { return reinterpret_cast<bool (*)(CutScene *)>(CutScene_IsBeforePreloadingAddr)(this); }
+    bool ShouldRunUpsellBoard() { return reinterpret_cast<bool (*)(CutScene *)>(CutScene_ShouldRunUpsellBoardAddr)(this); }
 
-inline bool (*CutScene_OnKeyDown)(CutScene *, int, int);
-
-inline void (*CutScene_MouseDown)(CutScene *, int, int);
-
-inline bool (*CutScene_IsBeforePreloading)(CutScene *);
-
-inline bool (*CutScene_ShouldRunUpsellBoard)(CutScene *);
+    void MouseDown(int x, int y) { reinterpret_cast<bool (*)(CutScene *)>(CutScene_MouseDownAddr)(this); }
+};
 
 
 inline void (*old_CutScene_ShowShovel)(CutScene *cutScene);
 
 inline void (*old_CutScene_Update)(CutScene *instance);
-
-
-void CutScene_ShowShovel(CutScene *cutScene);
-
-void CutScene_Update(CutScene *cutScene);
 
 #endif // PVZ_LAWN_CUT_SCENE_H

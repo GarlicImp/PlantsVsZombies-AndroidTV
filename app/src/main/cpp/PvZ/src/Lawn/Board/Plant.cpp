@@ -222,7 +222,7 @@ void Plant::Update() {
     GameScenes mGameScene = mApp->mGameScene;
 
     if ((!IsOnBoard() || mGameScene != GameScenes::SCENE_LEVEL_INTRO || !mApp->IsWallnutBowlingLevel()) && (!IsOnBoard() || mApp->mGameMode != GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN)
-        && (!IsOnBoard() || !CutScene_ShouldRunUpsellBoard(mBoard->mCutScene)) && IsOnBoard() && mGameScene != GameScenes::SCENE_PLAYING) {
+        && (!IsOnBoard() || !mBoard->mCutScene->ShouldRunUpsellBoard()) && IsOnBoard() && mGameScene != GameScenes::SCENE_PLAYING) {
         return;
     }
 

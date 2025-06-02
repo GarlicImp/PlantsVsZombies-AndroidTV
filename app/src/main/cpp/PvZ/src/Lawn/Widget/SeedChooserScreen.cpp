@@ -31,7 +31,7 @@ void SeedChooserScreen::Create(bool theIsZombieChooser) {
     mApp = (LawnApp *)*Sexy_gSexyAppBase_Addr;
     mBoard = mApp->mBoard;
     GameMode mGameMode = mApp->mGameMode;
-    if (CutScene_IsSurvivalRepick(mBoard->mCutScene) && !mApp->IsCoopMode()) {
+    if (mBoard->mCutScene->IsSurvivalRepick() && !mApp->IsCoopMode()) {
         GamepadControls *gamePad = mBoard->mGamepadControls1;
         SeedBank *mSeedBank = gamePad->GetSeedBank();
         int mNumPackets = mSeedBank->mNumPackets;
@@ -369,7 +369,7 @@ void SeedChooserScreen::MouseDown(int x, int y, int theClickCount) {
 
     m1PChoosingSeeds = !mApp->IsCoopMode() || mSeedsIn1PBank < 4;
 
-    bool mViewLawnButtonDisabled = mViewLawnButton == nullptr || !CutScene_IsSurvivalRepick(mBoard->mCutScene);
+    bool mViewLawnButtonDisabled = mViewLawnButton == nullptr || !mBoard->mCutScene->IsSurvivalRepick();
     bool mStoreButtonDisabled = mStoreButton == nullptr || mStoreButton->mDisabled;
     bool mStartButtonDisabled = mStartButton == nullptr || mStartButton->mDisabled;
     bool mAlmanacButtonDisabled = mAlmanacButton == nullptr || mAlmanacButton->mDisabled;

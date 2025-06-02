@@ -48,7 +48,7 @@ void SeedBank::Draw(Sexy::Graphics *g) {
         g->mTransY = g->mTransY - mBoard->mY;
     }
     CutScene *cutScene = mBoard->mCutScene;
-    if (cutScene != nullptr && CutScene_IsBeforePreloading(cutScene)) {
+    if (cutScene != nullptr && cutScene->IsBeforePreloading()) {
         return;
     }
     if (mApp->IsSlotMachineLevel()) {
