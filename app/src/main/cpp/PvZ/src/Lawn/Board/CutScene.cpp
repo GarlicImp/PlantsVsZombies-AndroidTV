@@ -3,20 +3,19 @@
 #include "PvZ/Lawn/Common/ConstEnums.h"
 #include "PvZ/Lawn/LawnApp.h"
 
-void CutScene_ShowShovel(CutScene *cutScene) {
-    LawnApp *lawnApp = cutScene->mApp;
-    if (lawnApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_BUTTERED_POPCORN) {
+void CutScene::ShowShovel() {
+    if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_BUTTERED_POPCORN) {
         // 不绘制锤子铲子黄油按钮
-        Board *board = cutScene->mBoard;
-        board->mShowShovel = false;
-        board->mShowButter = false;
-        board->mShowHammer = false;
+        mBoard->mShowShovel = false;
+        mBoard->mShowButter = false;
+        mBoard->mShowHammer = false;
         return;
     }
-    return old_CutScene_ShowShovel(cutScene);
+
+    return old_CutScene_ShowShovel(this);
 }
 
 
-void CutScene_Update(CutScene *cutScene) {
-    return old_CutScene_Update(cutScene);
+void CutScene::Update() {
+    return old_CutScene_Update(this);
 }

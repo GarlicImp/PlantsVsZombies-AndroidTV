@@ -45,13 +45,6 @@
 #include "PvZ/Lawn/System/PoolEffect.h"
 
 inline void InitInGameFunction() {
-    CutScene_IsSurvivalRepick = (decltype(CutScene_IsSurvivalRepick))CutScene_IsSurvivalRepickAddr;
-    CutScene_ShouldRunUpsellBoard = (decltype(CutScene_ShouldRunUpsellBoard))CutScene_ShouldRunUpsellBoardAddr;
-    CutScene_OnKeyDown = (decltype(CutScene_OnKeyDown))CutScene_OnKeyDownAddr;
-    CutScene_MouseDown = (decltype(CutScene_MouseDown))CutScene_MouseDownAddr;
-    CutScene_IsBeforePreloading = (decltype(CutScene_IsBeforePreloading))CutScene_IsBeforePreloadingAddr;
-
-
     TodDrawImageCelCenterScaledF = (decltype(TodDrawImageCelCenterScaledF))TodDrawImageCelCenterScaledFAddr;
     TodDrawImageScaledF = (decltype(TodDrawImageScaledF))TodDrawImageScaledFAddr;
     TodDrawImageCelScaledF = (decltype(TodDrawImageCelScaledF))TodDrawImageCelScaledFAddr;
@@ -569,7 +562,10 @@ inline void InitHookFunction() {
     //    MSHookFunction( Sexy_GamepadApp_HasGamepadAddr,(void *) Sexy_GamepadApp_HasGamepad,nullptr);
 
 
-    homura::HookFunction(CutScene_ShowShovelAddr, &CutScene_ShowShovel, &old_CutScene_ShowShovel);
+    homura::HookFunction(CutScene_ShowShovelAddr, &CutScene::ShowShovel, &old_CutScene_ShowShovel);
+    homura::HookFunction(CutScene_UpdateAddr, &CutScene::Update, &old_CutScene_Update);
+
+
     homura::HookFunction(BaseGamepadControls_GetGamepadVelocityAddr, &BaseGamepadControls::GetGamepadVelocity, nullptr);
     homura::HookFunction(LookupFoleyAddr, &LookupFoley, &old_LookupFoley);
     //    MSHookFunction(TodDrawStringWrappedHelperAddr, (void *) TodDrawStringWrappedHelper, (void **) &old_TodDrawStringWrappedHelper);
@@ -578,7 +574,6 @@ inline void InitHookFunction() {
     homura::HookFunction(MessageWidget_UpdateAddr, &MessageWidget_Update, &old_MessageWidget_Update);
     homura::HookFunction(MessageWidget_DrawAddr, &MessageWidget_Draw, &old_MessageWidget_Draw);
     homura::HookFunction(Sexy_ExtractLoadingSoundsResourcesAddr, &Sexy_ExtractLoadingSoundsResources, &old_Sexy_ExtractLoadingSoundsResources);
-    homura::HookFunction(CutScene_UpdateAddr, &CutScene_Update, &old_CutScene_Update);
     //    MSHookFunction(Sexy_ScrollbarWidget_MouseDownAddr, (void *) Sexy_ScrollbarWidget_MouseDown,nullptr);
     homura::HookFunction(CustomScrollbarWidget_RemoveScrollButtonsAddr, &CustomScrollbarWidget_RemoveScrollButtons, nullptr);
     homura::HookFunction(CreditScreen_CreditScreenAddr, &CreditScreen_CreditScreen, &old_CreditScreen_CreditScreen);

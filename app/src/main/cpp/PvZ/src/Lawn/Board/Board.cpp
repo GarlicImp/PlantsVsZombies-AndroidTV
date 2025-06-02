@@ -1837,7 +1837,7 @@ void Board::MouseDown(int x, int y, int theClickCount) {
         return;
     }
     if (mGameScene == GameScenes::SCENE_LEVEL_INTRO) {
-        CutScene_MouseDown(mCutScene, x, y);
+        mCutScene->MouseDown(x, y);
     }
 
 
@@ -2427,7 +2427,7 @@ void Board::MouseDownSecond(int x, int y, int theClickCount) {
         return;
     }
     if (mGameScene == GameScenes::SCENE_LEVEL_INTRO) {
-        CutScene_MouseDown(mCutScene, x, y);
+        mCutScene->MouseDown(x, y);
     }
 
     if (mObjectType == GameObjectType::OBJECT_TYPE_SEEDPACKET) {
