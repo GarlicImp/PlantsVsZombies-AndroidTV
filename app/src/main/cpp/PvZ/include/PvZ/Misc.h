@@ -64,14 +64,6 @@ inline void (*Sexy_SexyTransform2D_Translate)(Sexy::SexyTransform2D *, float, fl
 
 inline void (*Sexy_SexyTransform2D_RotateRad)(Sexy::SexyTransform2D *, float);
 
-inline bool (*GameObject_BeginDraw)(int *, float *);
-
-inline void (*GameObject_EndDraw)(int *, float *);
-
-inline void (*CursorPreview_Update)(int *);
-
-inline void (*CursorObject_Update)(int *);
-
 inline void (*ShopSeedPacket_Update)(int *seedPacket);
 
 inline Sexy::Image *(*Sexy_SexyAppBase_GetImage)(LawnApp *, int *, int);

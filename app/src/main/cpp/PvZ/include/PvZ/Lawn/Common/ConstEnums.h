@@ -79,7 +79,7 @@ enum AdviceType {
 enum AlmanacPage {
     ALMANAC_PAGE_INDEX,
     ALMANAC_PAGE_PLANTS,
-    ALMANAC_PAGE_ZOMBIES
+    ALMANAC_PAGE_ZOMBIES,
 };
 enum AwardType {
     AWARD_FORLEVEL,
@@ -150,7 +150,7 @@ enum ChosenSeedState {
     SEED_IN_BANK = 1,
     SEED_FLYING_TO_CHOOSER = 2,
     SEED_IN_CHOOSER = 3,
-    SEED_PACKET_HIDDEN = 4
+    SEED_PACKET_HIDDEN = 4,
 };
 enum CoinMotion {
     COIN_MOTION_FROM_SKY = 0,
@@ -207,7 +207,7 @@ enum CrazyDaveState {
     CRAZY_DAVE_IDLING = 3,
     CRAZY_DAVE_TALKING = 4,
     CRAZY_DAVE_HANDING_TALKING = 5,
-    CRAZY_DAVE_HANDING_IDLING = 6
+    CRAZY_DAVE_HANDING_IDLING = 6,
 };
 enum CursorType {
     CURSOR_TYPE_NORMAL,
@@ -239,7 +239,7 @@ enum DamageFlags {
     DAMAGE_FREEZE = 2,
     DAMAGE_DOESNT_CAUSE_FLASH = 3,
     DAMAGE_DOESNT_LEAVE_BODY = 4,
-    DAMAGE_SPIKE = 5
+    DAMAGE_SPIKE = 5,
 };
 enum DamageRangeFlags {
     DAMAGES_GROUND,
@@ -249,7 +249,7 @@ enum DamageRangeFlags {
     DAMAGES_OFF_GROUND,
     DAMAGES_DYING,
     DAMAGES_UNDERGROUND,
-    DAMAGES_ONLY_MINDCONTROLLED
+    DAMAGES_ONLY_MINDCONTROLLED,
 };
 enum Dialogs {
     DIALOG_NEW_GAME,
@@ -333,7 +333,7 @@ enum DebugTextMode {
     DEBUG_TEXT_ZOMBIE_SPAWN = 1,
     DEBUG_TEXT_MUSIC = 2,
     DEBUG_TEXT_MEMORY = 3,
-    DEBUG_TEXT_COLLISION = 4
+    DEBUG_TEXT_COLLISION = 4,
 };
 enum DrawStringJustification {
     DS_ALIGN_LEFT = 0,
@@ -341,7 +341,7 @@ enum DrawStringJustification {
     DS_ALIGN_CENTER = 2,
     DS_ALIGN_LEFT_VERTICAL_MIDDLE = 3,
     DS_ALIGN_RIGHT_VERTICAL_MIDDLE = 4,
-    DS_ALIGN_CENTER_VERTICAL_MIDDLE = 5
+    DS_ALIGN_CENTER_VERTICAL_MIDDLE = 5,
 };
 enum DrawVariation {
     VARIATION_NORMAL = 0,
@@ -369,14 +369,14 @@ enum EffectType {
     EFFECT_TRAIL = 1,
     EFFECT_REANIM = 2,
     EFFECT_ATTACHMENT = 3,
-    EFFECT_OTHER = 4
+    EFFECT_OTHER = 4,
 };
 enum EmitterType {
     EMITTER_CIRCLE = 0,
     EMITTER_BOX = 1,
     EMITTER_BOX_PATH = 2,
     EMITTER_CIRCLE_PATH = 3,
-    EMITTER_CIRCLE_EVEN_SPACING = 4
+    EMITTER_CIRCLE_EVEN_SPACING = 4,
 };
 enum GameMode {
     GAMEMODE_ADVENTURE = 0,
@@ -518,7 +518,7 @@ enum GardenType {
     GARDEN_MAIN = 0,
     GARDEN_MUSHROOM = 1,
     GARDEN_WHEELBARROW = 2,
-    GARDEN_AQUARIUM = 3
+    GARDEN_AQUARIUM = 3,
 };
 enum GridItemType {
     GRIDITEM_NONE = 0,
@@ -573,7 +573,7 @@ enum GridSquareType {
     GRIDSQUARE_GRASS = 1,
     GRIDSQUARE_DIRT,
     GRIDSQUARE_POOL,
-    GRIDSQUARE_HIGH_GROUND
+    GRIDSQUARE_HIGH_GROUND,
 };
 enum HelmType {
     HELMTYPE_NONE = 0,
@@ -591,14 +591,14 @@ enum LawnMowerState {
     MOWER_ROLLING_IN = 0,
     MOWER_READY = 1,
     MOWER_TRIGGERED = 2,
-    MOWER_SQUISHED = 3
+    MOWER_SQUISHED = 3,
 };
 enum LawnMowerType {
     LAWNMOWER_LAWN,
     LAWNMOWER_POOL,
     LAWNMOWER_ROOF,
     LAWNMOWER_SUPER_MOWER,
-    NUM_MOWER_TYPES
+    NUM_MOWER_TYPES,
 };
 enum MessageStyle {
     MESSAGE_STYLE_OFF = 0,
@@ -625,7 +625,7 @@ enum MowerHeight {
     MOWER_HEIGHT_LAND = 0,
     MOWER_HEIGHT_DOWN_TO_POOL = 1,
     MOWER_HEIGHT_IN_POOL = 2,
-    MOWER_HEIGHT_UP_TO_LAND = 3
+    MOWER_HEIGHT_UP_TO_LAND = 3,
 };
 enum NotRecommend {
     NOT_RECOMMENDED_NOCTURNAL,
@@ -778,20 +778,20 @@ enum PlantRowType {
     PLANTROW_DIRT = 0,
     PLANTROW_NORMAL = 1,
     PLANTROW_POOL = 2,
-    PLANTROW_HIGH_GROUND = 3
+    PLANTROW_HIGH_GROUND = 3,
 };
 enum PottedPlantAge {
     PLANTAGE_SPROUT = 0,
     PLANTAGE_SMALL = 1,
     PLANTAGE_MEDIUM = 2,
-    PLANTAGE_FULL = 3
+    PLANTAGE_FULL = 3,
 };
 enum PottedPlantNeed {
     PLANTNEED_NONE = 0,
     PLANTNEED_WATER = 1,
     PLANTNEED_FERTILIZER = 2,
     PLANTNEED_BUGSPRAY = 3,
-    PLANTNEED_PHONOGRAPH = 4
+    PLANTNEED_PHONOGRAPH = 4,
 };
 enum ProjectileMotion {
     MOTION_STRAIGHT = 0,      // 水平向右
@@ -1020,10 +1020,11 @@ enum ScaryPotType {
     SCARYPOT_NONE = 0,
     SCARYPOT_SEED = 1,
     SCARYPOT_ZOMBIE = 2,
-    SCARYPOT_SUN = 3 };
+    SCARYPOT_SUN = 3,
+};
 enum SeedChooserState {
     CHOOSE_NORMAL = 0,
-    CHOOSE_VIEW_LAWN = 1
+    CHOOSE_VIEW_LAWN = 1,
 };
 enum SeedType { // 直接从WP复制过来的，怀疑其中有错误，因为TV有重型武器关卡，多了三个种子
     SEED_PEASHOOTER = 0,
@@ -1119,7 +1120,7 @@ enum ShieldType {
     SHIELDTYPE_DOOR,
     SHIELDTYPE_NEWSPAPER,
     SHIELDTYPE_LADDER,
-    SHIELDTYPE_TRASH_BIN = 4
+    SHIELDTYPE_TRASH_BIN = 4,
 };
 enum StoreItem {
     STORE_ITEM_PLANT_GATLINGPEA = 0,
@@ -1187,7 +1188,7 @@ enum TodCurves {
 };
 enum TrialType {
     TRIALTYPE_NONE,
-    TRIALTYPE_STAGELOCKED
+    TRIALTYPE_STAGELOCKED,
 };
 enum TutorialState {
     TUTORIAL_OFF = 0,
@@ -1225,7 +1226,7 @@ enum TutorialState {
 enum UnlockingState {
     UNLOCK_OFF,
     UNLOCK_SHAKING,
-    UNLOCK_FADING
+    UNLOCK_FADING,
 };
 enum ZombieHeight {
     HEIGHT_ZOMBIE_NORMAL = 0,

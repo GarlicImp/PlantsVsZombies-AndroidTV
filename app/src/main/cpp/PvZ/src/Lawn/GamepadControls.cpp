@@ -125,9 +125,9 @@ void GamepadControls::Draw(Sexy::Graphics *g) {
                     aCursorObject->mY = mCursorPositionY - 20;
                 }
 
-                if (CursorObject_BeginDraw(aCursorObject, g)) {
-                    CursorObject_Draw(aCursorObject, g);
-                    CursorObject_EndDraw(aCursorObject, g);
+                if (aCursorObject->BeginDraw(g)) {
+                    aCursorObject->Draw(g);
+                    aCursorObject->EndDraw(g);
                 }
             }
         }

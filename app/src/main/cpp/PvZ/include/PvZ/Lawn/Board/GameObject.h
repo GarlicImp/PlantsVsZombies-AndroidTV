@@ -7,6 +7,7 @@
 
 #include "PvZ/Lawn/Common/ConstEnums.h"
 #include "PvZ/SexyAppFramework/Graphics/Graphics.h"
+#include "PvZ/Symbols.h"
 
 class LawnApp;
 class Board;
@@ -24,7 +25,11 @@ public:
     bool mVisible;      // 40
     int mRow;           // 11
     int mRenderOrder;   // 12
-}; // 大小13个整数
+    // 大小13个整数
+
+    bool BeginDraw(Sexy::Graphics *g) { return reinterpret_cast<bool (*)(GameObject *, Sexy::Graphics *)>(GameObject_BeginDrawAddr)(this, g); }
+    void EndDraw(Sexy::Graphics *g) { reinterpret_cast<void (*)(GameObject *, Sexy::Graphics *)>(GameObject_EndDrawAddr)(this, g); }
+};
 
 
 #endif // PLANTSVSZOMBIES_ANDROIDTV_GAMEOBJECT_H

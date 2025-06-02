@@ -59,10 +59,6 @@ inline void InitInGameFunction() {
     TodAnimateCurveFloatTime = (decltype(TodAnimateCurveFloatTime))TodAnimateCurveFloatTimeAddr;
 
 
-    CursorObject_Draw = (decltype(CursorObject_Draw))CursorObject_DrawAddr;
-    CursorObject_Update = (decltype(CursorObject_Update))CursorObject_UpdateAddr;
-
-
     ZenGarden_GetStinky = (decltype(ZenGarden_GetStinky))ZenGarden_GetStinkyAddr;
     ZenGarden_IsStinkyHighOnChocolate = (decltype(ZenGarden_IsStinkyHighOnChocolate))ZenGarden_IsStinkyHighOnChocolateAddr;
     ZenGarden_OpenStore = (decltype(ZenGarden_OpenStore))ZenGarden_OpenStoreAddr;
@@ -123,10 +119,6 @@ inline void InitInGameFunction() {
     SeedPacket_DrawMiddle = (decltype(SeedPacket_DrawMiddle))SeedPacket_DrawMiddleAddr;
 
 
-    GameObject_BeginDraw = (decltype(GameObject_BeginDraw))GameObject_BeginDrawAddr;
-    GameObject_EndDraw = (decltype(GameObject_EndDraw))GameObject_EndDrawAddr;
-
-
     Sexy_StrFormat = (decltype(Sexy_StrFormat))Sexy_StrFormatAddr;
     TodStringTranslate = (decltype(TodStringTranslate))TodStringTranslateAddr;
     //    DrawSeedPacket = (void (*)(Sexy::Graphics *, int, int, int, int, float, int, bool, bool, bool,bool)) DrawSeedPacketAddr;
@@ -134,7 +126,6 @@ inline void InitInGameFunction() {
     HelpTextScreen_KeyDown = (decltype(HelpTextScreen_KeyDown))HelpTextScreen_KeyDownAddr;
     Attachment_AttachmentDie = (decltype(Attachment_AttachmentDie))AttachmentDieAddr;
     AwardScreen_StartButtonPressed = (decltype(AwardScreen_StartButtonPressed))AwardScreen_StartButtonPressedAddr;
-    CursorPreview_Update = (decltype(CursorPreview_Update))CursorPreview_UpdateAddr;
     ShopSeedPacket_Update = (decltype(ShopSeedPacket_Update))ShopSeedPacket_UpdateAddr;
     GetFlashingColor = (decltype(GetFlashingColor))GetFlashingColorAddr;
     LawnPlayerInfo_GetFlag = (decltype(LawnPlayerInfo_GetFlag))LawnPlayerInfo_GetFlagAddr;
@@ -642,8 +633,8 @@ inline void InitHookFunction() {
 }
 
 inline void InitVTableHookFunction() {
-    homura::HookVirtualFunc(vTableForCursorObjectAddr, 4, &CursorObject_BeginDraw, &old_CursorObject_BeginDraw);
-    homura::HookVirtualFunc(vTableForCursorObjectAddr, 5, &CursorObject_EndDraw, &old_CursorObject_EndDraw);
+    homura::HookVirtualFunc(vTableForCursorObjectAddr, 4, &CursorObject::BeginDraw, &old_CursorObject_BeginDraw);
+    homura::HookVirtualFunc(vTableForCursorObjectAddr, 5, &CursorObject::EndDraw, &old_CursorObject_EndDraw);
 
     homura::HookVirtualFunc(vTableForBoardAddr, 77, &Board::MouseMove, &old_Board_MouseMove);
     homura::HookVirtualFunc(vTableForBoardAddr, 78, &Board::MouseDown, &old_Board_MouseDown);
