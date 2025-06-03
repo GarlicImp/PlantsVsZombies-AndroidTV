@@ -608,7 +608,7 @@ extern "C" JNIEXPORT jobjectArray JNICALL Java_com_android_support_CkHomuraMenu_
         "104_CollapseAdd_Spinner_<font "
         "color='green'>僵尸类型：_未选择,普通僵尸,旗帜僵尸,路障僵尸,撑杆僵尸,铁桶僵尸,报纸僵尸,铁网门僵尸,橄榄球僵尸,舞者僵尸,伴舞僵尸,鸭子救生圈僵尸,潜水僵尸,雪橇车僵尸,雪橇车僵尸小队,海豚骑士僵尸,"
         "玩偶匣僵尸,气球僵尸,矿工僵尸,蹦蹦僵尸,僵尸雪人,蹦极僵尸,梯子僵尸,投石车僵尸,白眼巨人僵尸,小鬼僵尸,僵王博士,垃圾桶僵尸,豌豆射手僵尸,坚果僵尸,火爆辣椒僵尸,机枪射手僵尸,窝瓜僵尸,高坚果僵尸,"
-        "红眼巨人僵尸",
+        "红眼巨人僵尸,火焰机枪僵尸",
         "109_CollapseAdd_OnceCheckBox_放置僵尸",
         "CollapseAdd_RichTextView_<font color='green'>其他类型:",
         "114_CollapseAdd_OnceCheckBox_放置墓碑",

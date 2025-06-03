@@ -820,7 +820,8 @@ enum ProjectileType {
     PROJECTILE_COBBIG = 11,     // 玉米加农炮
     PROJECTILE_BUTTER = 12,     // 黄油
     PROJECTILE_ZOMBIE_PEA = 13, // 僵尸豌豆
-    NUM_PROJECTILES = 14
+    NUM_PROJECTILES = 14,
+    PROJECTILE_ZOMBIE_FIREBALL,
 };
 enum ReanimationType {
     REANIM_NONE = -1,
@@ -1377,7 +1378,8 @@ enum ZombieType {
     ZOMBIE_REDEYE_GARGANTUAR = 33,
     NUM_ZOMBIE_TYPES = 34,
     ZOMBIE_CACHED_POLEVAULTER_WITH_POLE = 35,
-    NUM_CACHED_ZOMBIE_TYPES = 36
+    NUM_CACHED_ZOMBIE_TYPES = 36,
+    ZOMBIE_FIRE_GATLING_HEAD
 };
 
 //////////////////////////////

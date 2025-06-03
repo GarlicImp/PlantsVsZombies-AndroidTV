@@ -121,7 +121,6 @@ inline int targetWavesToJump = 1;
 inline bool requestJumpSurvivalStage;
 inline bool stopSpawning; // 暂停刷怪
 
-
 inline void (*old_Challenge_Update)(Challenge *a);
 
 inline void (*old_Challenge_Challenge)(Challenge *a);

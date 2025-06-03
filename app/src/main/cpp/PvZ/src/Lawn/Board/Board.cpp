@@ -1126,6 +1126,7 @@ void Board::Update() {
     }
 
     // 僵尸放置
+    theBuildZombieType = theBuildZombieType < NUM_ZOMBIE_TYPES ? theBuildZombieType : ZombieType::ZOMBIE_FIRE_GATLING_HEAD;
     if (zombieBuild && theBuildZombieType != ZombieType::ZOMBIE_INVALID) {
         if (theBuildZombieType == ZombieType::ZOMBIE_BOSS)
             AddZombieInRow(theBuildZombieType, 0, 0, true);
@@ -3466,7 +3467,7 @@ void Board::FixReanimErrorAfterLoad() {
         }
         // 修复读档后豌豆、机枪、倭瓜僵尸头部变为普通僵尸
         if (zombieType == ZombieType::ZOMBIE_PEA_HEAD || zombieType == ZombieType::ZOMBIE_GATLING_HEAD || zombieType == ZombieType::ZOMBIE_SQUASH_HEAD) {
-            mBodyReanim->SetImageOverride("anim_head1", *Sexy_IMAGE_BLANK_Addr);
+            mBodyReanim->SetImageOverride("anim_head1", *IMAGE_BLANK);
         }
 
         // 修复读档后盾牌贴图变为满血盾牌贴图、垃圾桶变为铁门

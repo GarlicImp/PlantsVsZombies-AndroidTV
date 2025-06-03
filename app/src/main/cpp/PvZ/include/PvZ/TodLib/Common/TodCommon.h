@@ -58,6 +58,12 @@ inline void TodScaleRotateTransformMatrix(Sexy::SexyMatrix3 &m, float x, float y
     reinterpret_cast<void (*)(Sexy::SexyMatrix3 &, float, float, float, float, float)>(TodScaleRotateTransformMatrixAddr)(m, x, y, rad, theScaleX, theScaleY);
 }
 
+inline void TodBltMatrix(
+    Sexy::Graphics *g, Sexy::Image *theImage, const Sexy::SexyMatrix3 &theTransform, const Sexy::Rect &theClipRect, const Sexy::Color &theColor, int theDrawMode, const Sexy::Rect &theSrcRect) {
+    reinterpret_cast<void (*)(Sexy::Graphics *, Sexy::Image *, const Sexy::SexyMatrix3 &, const Sexy::Rect &, const Sexy::Color &, int, const Sexy::Rect &)>(TodBltMatrixAddr)(
+        g, theImage, theTransform, theClipRect, theColor, theDrawMode, theSrcRect);
+}
+
 //inline int RandRangeInt(int theMin, int theMax);
 
 //inline float RandRangeFloat(float theMin, float theMax);
@@ -97,6 +103,9 @@ inline void SetBit(uint& theNum, int theIdx, bool theValue = true) {
 }
 inline bool TestBit(uint theNum, int theIdx) {
     return theNum & (1 << theIdx);
+}
+inline bool FloatApproxEqual(float theFloatVal1, float theFloatVal2) {
+    return fabs(theFloatVal1 - theFloatVal2) < FLT_EPSILON;
 }
 
 #endif // PLANTSVSZOMBIES_ANDROIDTV_TODCOMMON_H
