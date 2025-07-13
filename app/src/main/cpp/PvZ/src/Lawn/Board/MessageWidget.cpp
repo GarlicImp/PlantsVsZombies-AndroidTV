@@ -28,6 +28,7 @@ void CustomMessageWidget::Draw(Graphics *g) {
         int num2 = 530; // 原版为550，此处改为530！
         Color theColor = {255, 255, 255, std::clamp(mDuration * 15, 0, 255)};
         pvzstl::string str{mLabel};
+        char *strData = str.data();
         Rect theRect;
         theRect.mY = num2 - theFont->mAscent;
         theRect.mHeight = 600;
