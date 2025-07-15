@@ -3,10 +3,11 @@
 //
 
 #include "PvZ/Lawn/Board/MessageWidget.h"
-#include "PvZ/SexyAppFramework/Graphics/Graphics.h"
-#include "PvZ/SexyAppFramework/Graphics/Font.h"
-#include "PvZ/Lawn/LawnApp.h"
 #include "PvZ/Lawn/Board/Board.h"
+#include "PvZ/Lawn/LawnApp.h"
+#include "PvZ/STL/pvzstl_string.h"
+#include "PvZ/SexyAppFramework/Graphics/Font.h"
+#include "PvZ/SexyAppFramework/Graphics/Graphics.h"
 #include "PvZ/SexyAppFramework/Misc/Common.h"
 #include "PvZ/TodLib/Common/TodStringFile.h"
 
@@ -28,7 +29,6 @@ void CustomMessageWidget::Draw(Graphics *g) {
         int num2 = 530; // 原版为550，此处改为530！
         Color theColor = {255, 255, 255, std::clamp(mDuration * 15, 0, 255)};
         pvzstl::string str{mLabel};
-        char *strData = str.data();
         Rect theRect;
         theRect.mY = num2 - theFont->mAscent;
         theRect.mHeight = 600;
