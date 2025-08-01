@@ -272,9 +272,9 @@ void __Music::UpdateMusicBurst2() {
             aMainTrackVolume = 1.0;
             if (isNightMoonGrainsMode)
                 aDrumsJumpOrder = 0.0;
-            if (mBurstStateCounter)
+            if (mBurstStateCounter != 0)
                 break;
-            if (mApp->mBoard->CountZombiesOnScreen() < 4 && mBurstOverride == -1 || mBurstOverride == 2) {
+            if ((mApp->mBoard->CountZombiesOnScreen() < 4 && mBurstOverride == -1) || mBurstOverride == 2) {
                 if (!isNightMoonGrainsMode) {
                     mMusicBurstState = MusicBurstState::MUSIC_BURST_FINISHING;
                     mBurstStateCounter = 800;
