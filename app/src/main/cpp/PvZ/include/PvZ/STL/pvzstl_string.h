@@ -533,7 +533,9 @@ protected:
     mutable CharT *__data_;
 
     struct __rep {
-        static constexpr size_type __max_size = 0x3FFF'FFFC;
+        // npos = sizeof(__rep) + (sizeof(CharT) * (m + 1))
+        // __max_size = m / 4
+        static constexpr size_type __max_size = (((npos - sizeof(__rep)) / sizeof(CharT)) - 1) / 4;
 
         size_type __size;                // 字符数
         size_type __capacity;            // 已分配存储空间中可以容纳的字符数
