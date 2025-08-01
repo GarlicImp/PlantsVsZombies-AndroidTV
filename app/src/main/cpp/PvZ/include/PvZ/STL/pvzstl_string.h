@@ -560,7 +560,7 @@ protected:
                 cap = 2 * old_cap;
             }
             const size_type alloc_sz = sizeof(__rep) + sizeof(CharT) * (cap + 1);
-            // NB: here pass align
+            // NB: Here pass align.
             return ::new (::operator new(alloc_sz)) __rep{.__capacity = cap, .__ref_count = 0};
         }
 
@@ -627,6 +627,14 @@ protected:
     }
 
     void __init(const CharT *s, size_type sz) {
+        if (sz == 0) {
+            __data_ = __rep::__empty_rep().__data;
+            return;
+        }
+        // NB: Not required, but considered best practice.
+        if (s == nullptr) {
+            throw std::logic_error{"basic_string::__init null not valid"};
+        }
         __data_ = __rep::__create(sz, 0)->__data;
         traits_type::copy(__data_, s, sz);
         __get_rep()->__set_size(sz);
