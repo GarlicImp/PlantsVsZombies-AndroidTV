@@ -10,8 +10,11 @@ string(APPEND CMAKE_CXX_FLAGS
         " -Werror=unused-result"
 )
 
-set(CMAKE_CXX_VISIBILITY_PRESET hidden) # 隐藏非 inline 符号
-set(CMAKE_VISIBILITY_INLINES_HIDDEN ON) # 隐藏 inline 符号
+if (CMAKE_BUILD_TYPE STREQUAL "Release")
+    set(CMAKE_C_VISIBILITY_PRESET hidden)
+    set(CMAKE_CXX_VISIBILITY_PRESET hidden) # 隐藏非 inline 符号
+    set(CMAKE_VISIBILITY_INLINES_HIDDEN ON) # 隐藏 inline 符号
+endif ()
 
 add_subdirectory(ThirdParty)
 
