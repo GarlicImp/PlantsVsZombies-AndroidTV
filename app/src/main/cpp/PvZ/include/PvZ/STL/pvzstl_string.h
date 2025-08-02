@@ -546,8 +546,7 @@ protected:
 #ifdef PVZ_VERSION
             assert(::gLibBaseOffset != 0);
             static constexpr uintptr_t offset = (sizeof(CharT) == sizeof(int8_t)) ? /* string */ 0x71BB54 : /* wstring */ 0x69E45C;
-            static uintptr_t __empty_rep_storage_addr = ::gLibBaseOffset + offset;
-            return *reinterpret_cast<__rep *>(__empty_rep_storage_addr);
+            return *reinterpret_cast<__rep *>(::gLibBaseOffset + offset);
 #else
             alignas(__rep) static std::byte __empty_rep_storage[sizeof(__rep) + sizeof(CharT)] = {};
             return *reinterpret_cast<__rep *>(__empty_rep_storage);
@@ -618,8 +617,8 @@ protected:
         return pos;
     }
 
-    void __check_length(size_type n1, size_type n2, const char *msg) const {
-        if (max_size() - (size() - n1) < n2) {
+    void __check_length(size_type pos, size_type n, const char *msg) const {
+        if (max_size() - (size() - pos) < n) {
             throw std::length_error{msg};
         }
     }
