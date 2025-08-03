@@ -159,7 +159,7 @@ void AlmanacDialog::MouseDrag(int x, int y) {
     // 滚动图鉴文字
 
     if (isTouchDownInTextRect && mAlmanacDialogTouchDownY != y) {
-        (*(void (**)(Sexy::Widget *, uint32_t, double))(*(uint32_t *)mScrollTextView + 500))(
+        (*(void (**)(Sexy::__Widget *, uint32_t, double))(*(uint32_t *)mScrollTextView + 500))(
             (Widget *)mScrollTextView, *(uint32_t *)(*(uint32_t *)mScrollTextView + 500), *((double *)mScrollTextView + 35) + 0.6 * (mAlmanacDialogTouchDownY - y));
         mAlmanacDialogTouchDownY = y;
     }

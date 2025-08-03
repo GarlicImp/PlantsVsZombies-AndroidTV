@@ -27,7 +27,7 @@ namespace Sexy {
 class GameButton;
 }
 
-class AwardScreen : public Sexy::Widget {
+class AwardScreen : public Sexy::__Widget {
 public:
     int unkInt64;                   // 64
     Sexy::GameButton *mStartButton; // 65

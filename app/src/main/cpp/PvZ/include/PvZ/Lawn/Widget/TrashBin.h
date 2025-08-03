@@ -26,7 +26,7 @@
 constexpr int zombiePileHeight = 70;
 constexpr int plantPileHeight = 100;
 
-class TrashBin : public Sexy::Widget {
+class TrashBin : public Sexy::__Widget {
 public:
     enum TrashPileType { PLANT_PILE = 0, ZOMBIE_PILE = 1 };
 

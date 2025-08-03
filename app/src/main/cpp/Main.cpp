@@ -889,7 +889,7 @@ extern "C" JNIEXPORT jboolean JNICALL Java_com_transmension_mobile_EnhanceActivi
     LawnApp *lawnApp = (LawnApp *)*gLawnApp_Addr;
     Board *board = lawnApp->mBoard;
     int *mWidgetManager = lawnApp->mWidgetManager;
-    Sexy::Widget *mFocusWidget = (Sexy::Widget *)mWidgetManager[40];
+    auto *mFocusWidget = (Sexy::__Widget *)mWidgetManager[40];
     if (board != nullptr && mFocusWidget == board) {
         return true;
     }
@@ -913,7 +913,7 @@ extern "C" JNIEXPORT void JNICALL Java_com_transmension_mobile_EnhanceActivity_n
 
     Board *board = lawnApp->mBoard;
     int *mWidgetManager = lawnApp->mWidgetManager;
-    Sexy::Widget *mFocusWidget = (Sexy::Widget *)mWidgetManager[40];
+    auto *mFocusWidget = (Sexy::__Widget *)mWidgetManager[40];
     if (board != nullptr && mFocusWidget == board) {
         GamepadControls *gamepadControls = playerIndex ? board->mGamepadControls2 : board->mGamepadControls1;
         if (!playerIndex) {

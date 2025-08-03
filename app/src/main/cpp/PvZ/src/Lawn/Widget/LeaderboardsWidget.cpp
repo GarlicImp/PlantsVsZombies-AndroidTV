@@ -206,7 +206,7 @@ LeaderboardsWidget::LeaderboardsWidget(LawnApp *theApp) {
     pvzstl::string str = TodStringTranslate("[CLOSE]");
     Sexy::GameButton *aBackButton = MakeButton(1000, mButtonListener, this, str);
     aBackButton->Resize(1040, 590, 120, 50);
-    AddWidget((Sexy::Widget *)aBackButton);
+    AddWidget(aBackButton);
     mBackButton = aBackButton;
     mFocusedAchievementIndex = 0;
     mHighLightAchievement = false;

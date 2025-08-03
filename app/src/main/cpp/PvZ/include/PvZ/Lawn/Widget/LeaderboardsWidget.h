@@ -55,7 +55,7 @@ struct LeaderboardReanimations {
     Reanimation *achievementReanim[12];
 };
 
-class LeaderboardsWidget : public Sexy::Widget {
+class LeaderboardsWidget : public Sexy::__Widget {
 public:
     LeaderboardsWidget(LawnApp *theApp);
 

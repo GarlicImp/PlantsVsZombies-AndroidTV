@@ -23,7 +23,7 @@
 #include "PvZ/Lawn/LawnApp.h"
 #include "PvZ/SexyAppFramework/Misc/WidgetAnimator.h"
 
-class ReanimTrackWidgetAnimator : public Sexy::WidgetAnimator {
+class ReanimTrackWidgetAnimator : public Sexy::__WidgetAnimator {
 public:
     LawnApp *mApp;                 // 6
     Sexy::Widget *mLawnMenuWidget; // 7

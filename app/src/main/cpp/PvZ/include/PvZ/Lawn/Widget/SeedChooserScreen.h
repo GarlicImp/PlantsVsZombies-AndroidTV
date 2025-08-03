@@ -57,7 +57,7 @@ public:
     bool mCrazyDavePicked;      // 60
 };
 
-class SeedChooserScreen : public Sexy::Widget {
+class SeedChooserScreen : public Sexy::__Widget {
 private:
     enum {
         SeedChooserScreen_Start = 100,

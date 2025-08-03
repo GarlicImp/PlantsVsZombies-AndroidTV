@@ -41,7 +41,7 @@ void HelpTextScreen_Update(HelpTextScreen *helpTextScreen) {
     if (gHelpTextScreenCloseButton == nullptr) {
         pvzstl::string str = TodStringTranslate("[CLOSE]");
         gHelpTextScreenCloseButton = MakeButton(1000, (Sexy::ButtonListener *)helpTextScreen + 64, helpTextScreen, str);
-        helpTextScreen->AddWidget((Sexy::Widget *)gHelpTextScreenCloseButton);
+        helpTextScreen->AddWidget(gHelpTextScreenCloseButton);
     }
     gHelpTextScreenCloseButton->Resize(650 - helpTextScreen->mX, 540 - helpTextScreen->mY, 170, 50);
     old_HelpTextScreen_Update(helpTextScreen);
@@ -89,7 +89,7 @@ void HelpTextScreen::MouseDown(int x, int y, int theClickCount) {
 void HelpTextScreen_RemovedFromManager(HelpTextScreen *helpTextScreen, int *widgetManager) {
     // 修复MailScreen的可触控区域不为全屏
     if (gHelpTextScreenCloseButton != nullptr) {
-        helpTextScreen->RemoveWidget((Sexy::Widget *)gHelpTextScreenCloseButton);
+        helpTextScreen->RemoveWidget(gHelpTextScreenCloseButton);
     }
     old_HelpTextScreen_RemovedFromManager(helpTextScreen, widgetManager);
 }

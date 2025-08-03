@@ -129,7 +129,7 @@ enum TouchState {
 
 enum TouchPlayerIndex { TOUCHPLAYER_NONE = -1, TOUCHPLAYER_PLAYER1 = 0, TOUCHPLAYER_PLAYER2 = 1 };
 
-class Board : public Sexy::Widget {
+class Board : public Sexy::__Widget {
 public:
     Sexy::ButtonListener mButtonListener;       // 64
     int unknownMembers1[4];                     // 65 ~ 68

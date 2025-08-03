@@ -3010,11 +3010,11 @@ void TestMenuWidget_Draw(ZombatarWidget *zombatarWidget, Sexy::Graphics *g) {
 
 void TestMenuWidget_RemovedFromManager(ZombatarWidget *zombatarWidget, int *manager) {
     old_TestMenuWidget_RemovedFromManager(zombatarWidget, manager);
-    zombatarWidget->RemoveWidget((Sexy::Widget *)zombatarWidget->mBackButton);
-    zombatarWidget->RemoveWidget((Sexy::Widget *)zombatarWidget->mFinishButton);
-    zombatarWidget->RemoveWidget((Sexy::Widget *)zombatarWidget->mViewPortraitButton);
-    zombatarWidget->RemoveWidget((Sexy::Widget *)zombatarWidget->mNewButton);
-    zombatarWidget->RemoveWidget((Sexy::Widget *)zombatarWidget->mDeleteButton);
+    zombatarWidget->RemoveWidget(zombatarWidget->mBackButton);
+    zombatarWidget->RemoveWidget(zombatarWidget->mFinishButton);
+    zombatarWidget->RemoveWidget(zombatarWidget->mViewPortraitButton);
+    zombatarWidget->RemoveWidget(zombatarWidget->mNewButton);
+    zombatarWidget->RemoveWidget(zombatarWidget->mDeleteButton);
 }
 
 void TestMenuWidget_Delete2(ZombatarWidget *zombatarWidget) {

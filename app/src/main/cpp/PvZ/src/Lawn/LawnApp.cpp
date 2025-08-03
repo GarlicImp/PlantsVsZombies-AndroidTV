@@ -425,16 +425,16 @@ void LawnApp::SetFoleyVolume(FoleyType theFoleyType, double theVolume) {
 
 void LawnApp::ShowLeaderboards() {
     gMainMenuLeaderboardsWidget = new LeaderboardsWidget(this);
-    (*(void (**)(int *, Sexy::Widget *))(*mWidgetManager + 24))(mWidgetManager, gMainMenuLeaderboardsWidget); // AddWidget()
-    (*(void (**)(int *, Sexy::Widget *))(*mWidgetManager + 48))(mWidgetManager, gMainMenuLeaderboardsWidget); // SetFocusedWidget()
+    (*(void (**)(int *, Sexy::__Widget *))(*mWidgetManager + 24))(mWidgetManager, gMainMenuLeaderboardsWidget); // AddWidget()
+    (*(void (**)(int *, Sexy::__Widget *))(*mWidgetManager + 48))(mWidgetManager, gMainMenuLeaderboardsWidget); // SetFocusedWidget()
 }
 
 void LawnApp::KillLeaderboards() {
     if (gMainMenuLeaderboardsWidget == nullptr)
         return;
 
-    (*(void (**)(int *, Sexy::Widget *))(*mWidgetManager + 28))(mWidgetManager, gMainMenuLeaderboardsWidget); // RemoveWidget()
-    (*((void (**)(LawnApp *, Sexy::Widget *))vTable + 47))(this, gMainMenuLeaderboardsWidget);                // MSGBOX()
+    (*(void (**)(int *, Sexy::__Widget *))(*mWidgetManager + 28))(mWidgetManager, gMainMenuLeaderboardsWidget); // RemoveWidget()
+    (*((void (**)(LawnApp *, Sexy::__Widget *))vTable + 47))(this, gMainMenuLeaderboardsWidget);                // MSGBOX()
     gMainMenuLeaderboardsWidget = nullptr;
 }
 

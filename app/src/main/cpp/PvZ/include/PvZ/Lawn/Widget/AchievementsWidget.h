@@ -39,7 +39,7 @@ enum AchievementId {
     MAX_ACHIEVEMENTS
 };
 
-class AchievementsWidget : public Sexy::Widget {
+class AchievementsWidget : public Sexy::__Widget {
 public:
     Sexy::ButtonListener mButtonListener; // 64
     LawnApp *mApp;                        // 65
@@ -53,7 +53,7 @@ public:
     bool mIsScrolling;
 }; // 我想用AchievementsWidget取代MaskHelpWidget。MaskHelpWidget的大小是66个整数。
 
-class MaskHelpWidget : public Sexy::Widget {
+class MaskHelpWidget : public Sexy::__Widget {
 public:
     MaskHelpWidget(LawnApp *theApp) {
         __Constructor(theApp);
