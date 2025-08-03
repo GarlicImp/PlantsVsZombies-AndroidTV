@@ -54,7 +54,11 @@ enum MainMenuButtonId {
 };
 
 class MainMenu : public Sexy::MenuWidget {
-    enum MainMenuScene { MENUSCENE_MORE_WAYS, MENUSCENE_MAIN, MENUSCENE_EXTRA };
+    enum MainMenuScene {
+        MENUSCENE_MORE_WAYS,
+        MENUSCENE_MAIN,
+        MENUSCENE_EXTRA,
+    };
 
 public:
     ReanimationID mMainMenuReanimID;      // 70 , PSV 59
@@ -96,7 +100,7 @@ public:
     bool unkMems4[16];                    // 103 ~ 106
     Sexy::Image *m2DMarkImage;            // 107
     // 大小108个整数
-public:
+
     bool InTransition() {
         return reinterpret_cast<bool (*)(MainMenu *)>(MainMenu_InTransitionAddr)(this);
     };

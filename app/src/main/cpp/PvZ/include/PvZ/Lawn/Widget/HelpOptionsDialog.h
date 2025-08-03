@@ -23,7 +23,7 @@
 #include "LawnDialog.h"
 #include "PvZ/Lawn/Common/ConstEnums.h"
 
-class HelpOptionsDialog : public LawnDialog {
+class HelpOptionsDialog : public __LawnDialog {
 public:
     LawnApp *mApp;                       // 191
     Sexy::GameButton *mHowToPlayButton;  // 192

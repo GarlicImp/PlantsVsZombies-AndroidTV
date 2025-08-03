@@ -33,7 +33,7 @@ class WidgetManager;
 class Plant;
 class Zombie;
 
-class AlmanacDialog : public LawnDialog {
+class AlmanacDialog : public __LawnDialog {
 public:
     int *mScrollListener;                           // 191
     LawnApp *mApp;                                  // 192

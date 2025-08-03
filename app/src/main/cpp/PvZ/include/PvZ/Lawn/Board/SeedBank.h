@@ -48,6 +48,9 @@ public:
     }
 
     SeedBank(bool thePlayerIndex);
+    ~SeedBank() {
+        __Destructor();
+    }
     void Draw(Sexy::Graphics *g);
     bool MouseHitTest(int x, int y, HitResult *theHitResult);
     void UpdateWidth();
@@ -58,6 +61,9 @@ public:
 
 protected:
     void __Constructor(bool thePlayerIndex);
+    void __Destructor() {
+        reinterpret_cast<void (*)(SeedBank *)>(SeedBank_DeleteAddr)(this);
+    }
 };
 
 /***************************************************************************************************************/

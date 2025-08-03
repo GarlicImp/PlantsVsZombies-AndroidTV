@@ -34,6 +34,7 @@ void InitHookFunction();
 namespace Sexy {
 
 class Dialog;
+class __Dialog;
 
 class __SexyAppBase {
 public:
@@ -75,6 +76,9 @@ public:
     }
     Image *CopyImage(Image *theImage, const Rect &theRect) {
         return reinterpret_cast<Image *(*)(__SexyAppBase *, Image *, const Rect &)>(Sexy_SexyAppBase_CopyImage2Addr)(this, theImage, theRect);
+    }
+    void AddDialog(__Dialog *theDialog) {
+        reinterpret_cast<void (*)(__SexyAppBase *, __Dialog *)>(Sexy_SexyAppBase_AddDialogAddr)(this, theDialog);
     }
 
 protected:

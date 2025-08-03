@@ -246,6 +246,15 @@ public:
     void NextTestDialog() {
         reinterpret_cast<void (*)(LawnApp *)>(LawnApp_NextTestDialogAddr)(this);
     }
+    void KillBoard() {
+        reinterpret_cast<void (*)(LawnApp *)>(LawnApp_KillBoardAddr)(this);
+    }
+    void ShowGameSelector() {
+        reinterpret_cast<void (*)(LawnApp *)>(LawnApp_ShowGameSelectorAddr)(this);
+    }
+    void SetSecondPlayer(int thePlayerIndex) {
+        reinterpret_cast<void (*)(LawnApp *, int)>(LawnApp_SetSecondPlayerAddr)(this, thePlayerIndex);
+    }
 
     LawnApp() {
         __Constructor();

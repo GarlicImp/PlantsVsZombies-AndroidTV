@@ -32,7 +32,7 @@ class DialogButton;
 class Font;
 class Image;
 
-class Dialog : public Sexy::__Widget {
+class __Dialog : public Sexy::__Widget {
 public:
     ButtonListener mButtonListener; // 64
     int *mDialogListener;           // 65
@@ -63,7 +63,18 @@ public:
     int mResult;                    // 181
     int mButtonHorzSpacing;         // 182
     int mButtonSidePadding;         // 183
-}; // 大小184个整数
+    // 大小184个整数
+
+protected:
+    __Dialog() = default;
+    ~__Dialog() = default;
+};
+
+class Dialog : public __Dialog {
+public:
+    Dialog() = delete;
+    ~Dialog() = delete;
+};
 
 } // namespace Sexy
 

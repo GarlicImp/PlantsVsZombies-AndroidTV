@@ -27,10 +27,7 @@
 
 namespace Sexy {
 
-template <bool>
-class __Widget;
-
-using Widget = __Widget<false>;
+class Widget;
 
 class WidgetManager {
 public:
@@ -40,8 +37,17 @@ public:
     Widget* GetWidgetAt(int x, int y, int* theWidgetX, int* theWidgetY) {
         return reinterpret_cast<Widget* (*)(WidgetManager*, int, int, int*, int*)>(Sexy_WidgetManager_GetWidgetAtAddr)(this, x, y, theWidgetX, theWidgetY);
     }
+
+    void MouseDown(int x, int y, int theClickCount);
+    void MouseDrag(int x, int y);
+    void MouseUp(int x, int y, int theClickCount);
 };
 
 } // namespace Sexy
+
+inline void (*old_Sexy_WidgetManager_MouseDown)(Sexy::WidgetManager *, int x, int y, int theClickCount);
+inline void (*old_Sexy_WidgetManager_MouseDrag)(Sexy::WidgetManager *, int x, int y);
+inline void (*old_Sexy_WidgetManager_MouseUp)(Sexy::WidgetManager *, int x, int y, int theClickCount);
+
 
 #endif // PVZ_SEXYAPPFRAMEWORK_WIDGET_WIDGET_MANAGER_H

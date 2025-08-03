@@ -295,6 +295,9 @@ inline void *LawnApp_ShowMainMenuScreenAddr;
 inline void *LawnApp_ParticleTryToGetAddr;
 inline void *LawnApp_DoRetryAchievementsDialogAddr;
 inline void *LawnApp_HasSeedTypeAddr;
+inline void *LawnApp_KillBoardAddr;
+inline void *LawnApp_ShowGameSelectorAddr;
+inline void *LawnApp_SetSecondPlayerAddr;
 
 
 inline void *ChallengeScreen_UpdateAddr;
@@ -469,6 +472,7 @@ inline void *StoreScreen_RemovedFromManagerAddr;
 inline void *SeedBank_DrawAddr;
 inline void *SeedBank_MouseHitTestAddr;
 inline void *SeedBank_SeedBankAddr;
+inline void *SeedBank_DeleteAddr;
 inline void *SeedBank_UpdateWidthAddr;
 inline void *SeedBank_MoveAddr;
 inline void *SeedBank_GetNumSeedsOnConveyorBeltAddr;
@@ -587,9 +591,15 @@ inline void *SeedPacket_FlashIfReadyAddr;
 inline void *SeedPacket_DrawAddr;
 
 
+inline void *VSSetupMenu_VSSetupMenuAddr;
+inline void *VSSetupMenu_DrawAddr;
 inline void *VSSetupMenu_UpdateAddr;
 inline void *VSSetupMenu_KeyDownAddr;
 inline void *VSSetupMenu_GameButtonDownAddr;
+inline void *VSSetupMenu_OnStateEnterAddr;
+inline void *VSSetupMenu_SetSecondPlayerIndexAddr;
+inline void *VSSetupMenu_GoToStateAddr;
+inline void *VSSetupMenu_CloseVSSetupAddr;
 
 
 inline void *VSResultsMenu_UpdateAddr;
@@ -601,6 +611,7 @@ inline void *VSResultsMenu_ButtonDepressAddr;
 inline void *WaitForSecondPlayerDialog_WaitForSecondPlayerDialogAddr;
 inline void *WaitForSecondPlayerDialog_GameButtonDownAddr;
 inline void *WaitForSecondPlayerDialog_KeyDownAddr;
+inline void *WaitForSecondPlayerDialog_DeleteAddr;
 
 
 inline void *Sexy_Dialog_AddedToManagerWidgetManagerAddr;
@@ -742,6 +753,7 @@ inline void *ImitaterDialog_KeyDownAddr;
 inline void *ImitaterDialog_ShowToolTipAddr;
 inline void *ImitaterDialog_OnKeyDownAddr;
 
+
 inline void *ZenGarden_RebuildHelpbarAddr;
 inline void *ZenGarden_DrawBackdropAddr;
 inline void *ZenGarden_MouseDownWithFeedingToolAddr;
@@ -751,6 +763,7 @@ inline void *ZenGarden_OpenStoreAddr;
 inline void *ZenGarden_GetPottedPlantInWheelbarrowAddr;
 inline void *ZenGarden_DrawPottedPlantAddr;
 inline void *PlantFlowerPotHeightOffsetAddr;
+
 
 inline void *TitleScreen_DrawAddr;
 inline void *TitleScreen_UpdateAddr;
@@ -769,6 +782,8 @@ inline void *CursorPreview_UpdateAddr;
 inline void *HelpOptionsDialog_ButtonDepressAddr;
 inline void *HelpOptionsDialog_HelpOptionsDialogAddr;
 inline void *HelpOptionsDialog_ResizeAddr;
+
+
 inline void *Music2_DeleteAddr;
 inline void *Music_MusicAddr;
 inline void *Music_PlayMusicAddr;
@@ -786,14 +801,17 @@ inline void *Sexy_AudiereMusicInterface_PlayMusicAddr;
 inline void *Sexy_AudiereMusicInterface_StopMusicAddr;
 inline void *Sexy_AudiereMusicInterface_SetChannelVolumeAddr;
 
+
 inline void *AttachmentDrawAddr;
 inline void *AttachmentDieAddr;
 inline void *AttachReanimAddr;
 
+
 inline void *TodScaleRotateTransformMatrixAddr;
 inline void *TodBltMatrixAddr;
-
 inline void *ReanimatorTransform_ReanimatorTransformAddr;
+
+
 inline void *GameObject_BeginDrawAddr;
 inline void *GameObject_EndDrawAddr;
 inline void *GameObject_MakeParentGraphicsFrameAddr;
@@ -817,6 +835,7 @@ inline void *Sexy_SexyAppBase_CopyImageAddr;
 inline void *Sexy_SexyAppBase_CopyImage2Addr;
 inline void *Sexy_SexyAppBase_GetDialogAddr;
 inline void *Sexy_SexyAppBase_EraseFileAddr;
+inline void *Sexy_SexyAppBase_AddDialogAddr;
 inline void *Sexy_Ratio_SetAddr;
 inline void *Sexy_MemoryImage_MemoryImageAddr;
 inline void *Sexy_MemoryImage_ClearRectAddr;
@@ -827,6 +846,8 @@ inline void *Sexy_MemoryImage_DeleteAddr;
 inline void *Sexy_MemoryImage_WriteToPngAddr;
 inline void *Sexy_MemoryImage_WriteToJPEGAddr;
 inline void *Sexy_MemoryImage_BitsChangedAddr;
+inline void *LawnDialog_LawnDialogAddr;
+inline void *LawnDialog_Delete2Addr;
 inline void *Sexy_Widget_ResizeAddr;
 inline void *Sexy_Widget___ConstructorAddr;
 inline void *Sexy_Widget___DestructorAddr;
@@ -836,6 +857,8 @@ inline void *Sexy_WidgetContainer_SetFocusAddr;
 inline void *Sexy_WidgetManager_GetWidgetAtAddr;
 inline void *Sexy_WidgetManager_SetFocusAddr;
 inline void *Sexy_WidgetManager_MouseDownAddr;
+inline void *Sexy_WidgetManager_MouseDragAddr;
+inline void *Sexy_WidgetManager_MouseUpAddr;
 inline void *Sexy_WidgetManager_AxisMovedAddr;
 inline void *Sexy_Image_GetWidthAddr;
 inline void *Sexy_Image_GetHeightAddr;
@@ -857,6 +880,7 @@ inline void *TodParticleSystem_OverrideImageAddr;
 inline void *TodParticleSystem_Delete2Addr;
 inline void *TodParticleSystem_ParticleSystemDieAddr;
 inline void *DrawCheckboxTextAddr;
+inline void *Sexy_Checkbox_CheckBoxAddr;
 inline void *Sexy_Checkbox_DeleteAddr;
 inline void *PlantDrawHeightOffsetAddr;
 inline void *FilterEffectCreateImageAddr;
@@ -1173,6 +1197,8 @@ inline void *vTableForConfirmBackToMainDialogAddr;
 inline void *vTableForSettingsDialogAddr;
 inline void *vTableForCreditScreenAddr;
 inline void *vTableForMainMenuAddr;
+inline void *vTableForWaitForSecondPlayerDialogAddr;
+inline void *vTableForSexy_SexyAppBaseAddr;
 
 
 inline void *Native_AudioOutput_setupAddr;
@@ -1459,6 +1485,9 @@ inline bool GetFunctionAddr() {
     LawnApp_ParticleTryToGetAddr = dlsym(handle, "_ZN7LawnApp16ParticleTryToGetE16ParticleSystemID");
     LawnApp_DoRetryAchievementsDialogAddr = dlsym(handle, "_ZN7LawnApp25DoRetryAchievementsDialogEv");
     LawnApp_HasSeedTypeAddr = dlsym(handle, "_ZN7LawnApp11HasSeedTypeE8SeedTypeb");
+    LawnApp_KillBoardAddr = dlsym(handle, "_ZN7LawnApp9KillBoardEv");
+    LawnApp_ShowGameSelectorAddr = dlsym(handle, "_ZN7LawnApp16ShowGameSelectorEv");
+    LawnApp_SetSecondPlayerAddr = dlsym(handle, "_ZN7LawnApp15SetSecondPlayerEi");
 
 
     ChallengeScreen_UpdateAddr = dlsym(handle, "_ZN15ChallengeScreen6UpdateEv");
@@ -1633,6 +1662,7 @@ inline bool GetFunctionAddr() {
 
     SeedBank_DrawAddr = dlsym(handle, "_ZN8SeedBank4DrawEPN4Sexy8GraphicsE");
     SeedBank_SeedBankAddr = dlsym(handle, "_ZN8SeedBankC2Eb");
+    SeedBank_DeleteAddr = dlsym(handle, "_ZN8SeedBankD0Ev");
     SeedBank_UpdateWidthAddr = dlsym(handle, "_ZN8SeedBank11UpdateWidthEv");
     SeedBank_MoveAddr = dlsym(handle, "_ZN8SeedBank4MoveEii");
     SeedBank_MouseHitTestAddr = dlsym(handle, "_ZN8SeedBank12MouseHitTestEiiP9HitResult");
@@ -1752,9 +1782,15 @@ inline bool GetFunctionAddr() {
     SeedPacket_DrawAddr = dlsym(handle, "_ZN10SeedPacket4DrawEPN4Sexy8GraphicsE");
 
 
+    VSSetupMenu_VSSetupMenuAddr = dlsym(handle, "_ZN11VSSetupMenuC2Ev");
+    VSSetupMenu_DrawAddr = dlsym(handle, "_ZN11VSSetupMenu4DrawEPN4Sexy8GraphicsE");
     VSSetupMenu_UpdateAddr = dlsym(handle, "_ZN11VSSetupMenu6UpdateEv");
     VSSetupMenu_GameButtonDownAddr = dlsym(handle, "_ZN11VSSetupMenu14GameButtonDownEN4Sexy13GamepadButtonEij");
     VSSetupMenu_KeyDownAddr = dlsym(handle, "_ZN11VSSetupMenu7KeyDownEN4Sexy7KeyCodeE");
+    VSSetupMenu_OnStateEnterAddr = dlsym(handle, "_ZN11VSSetupMenu12OnStateEnterENS_12VSSetupStateES0_");
+    VSSetupMenu_SetSecondPlayerIndexAddr = dlsym(handle, "_ZN11VSSetupMenu20SetSecondPlayerIndexEi");
+    VSSetupMenu_GoToStateAddr = dlsym(handle, "_ZN11VSSetupMenu9GoToStateENS_12VSSetupStateE");
+    VSSetupMenu_CloseVSSetupAddr = dlsym(handle, "_ZN11VSSetupMenu12CloseVSSetupEb");
 
 
     VSResultsMenu_UpdateAddr = dlsym(handle, "_ZN13VSResultsMenu6UpdateEv");
@@ -1765,6 +1801,7 @@ inline bool GetFunctionAddr() {
     WaitForSecondPlayerDialog_WaitForSecondPlayerDialogAddr = dlsym(handle, "_ZN25WaitForSecondPlayerDialogC2EP7LawnApp");
     WaitForSecondPlayerDialog_GameButtonDownAddr = dlsym(handle, "_ZN25WaitForSecondPlayerDialog14GameButtonDownEN4Sexy13GamepadButtonEij");
     WaitForSecondPlayerDialog_KeyDownAddr = dlsym(handle, "_ZN25WaitForSecondPlayerDialog7KeyDownEN4Sexy7KeyCodeE");
+    WaitForSecondPlayerDialog_DeleteAddr = dlsym(handle, "_ZN25WaitForSecondPlayerDialogD0Ev");
 
 
     Sexy_Dialog_AddedToManagerWidgetManagerAddr = dlsym(handle, "_ZN4Sexy6Dialog14AddedToManagerEPNS_13WidgetManagerE");
@@ -1972,6 +2009,7 @@ inline bool GetFunctionAddr() {
     Sexy_SexyAppBase_CopyImage2Addr = dlsym(handle, "_ZN4Sexy11SexyAppBase9CopyImageEPNS_5ImageERKNS_5TRectIiEE");
     Sexy_SexyAppBase_GetDialogAddr = dlsym(handle, "_ZN4Sexy11SexyAppBase9GetDialogEi");
     Sexy_SexyAppBase_EraseFileAddr = dlsym(handle, "_ZN4Sexy11SexyAppBase9EraseFileERKSs");
+    Sexy_SexyAppBase_AddDialogAddr = dlsym(handle, "_ZN4Sexy11SexyAppBase9AddDialogEPNS_6DialogE");
     Sexy_Ratio_SetAddr = dlsym(handle, "_ZN4Sexy5Ratio3SetEii");
     Sexy_MemoryImage_MemoryImageAddr = dlsym(handle, "_ZN4Sexy11MemoryImageC2Ev");
     Sexy_MemoryImage_ClearRectAddr = dlsym(handle, "_ZN4Sexy11MemoryImage9ClearRectERKNS_5TRectIiEE");
@@ -1982,6 +2020,8 @@ inline bool GetFunctionAddr() {
     Sexy_MemoryImage_WriteToPngAddr = dlsym(handle, "_ZN4Sexy11MemoryImage10WriteToPngESs");
     Sexy_MemoryImage_WriteToJPEGAddr = dlsym(handle, "_ZN4Sexy11MemoryImage11WriteToJPEGESs");
     Sexy_MemoryImage_BitsChangedAddr = dlsym(handle, "_ZN4Sexy11MemoryImage11BitsChangedEv");
+    LawnDialog_LawnDialogAddr = dlsym(handle, "_ZN10LawnDialogC2EP7LawnAppPN4Sexy5ImageEibRKSsS6_S6_i");
+    LawnDialog_Delete2Addr = dlsym(handle, "_ZN10LawnDialogD2Ev");
     Sexy_Widget_ResizeAddr = dlsym(handle, "_ZN4Sexy6Widget6ResizeEiiii");
     Sexy_Widget___ConstructorAddr = dlsym(handle, "_ZN4Sexy6WidgetC2Ev");
     Sexy_Widget___DestructorAddr = dlsym(handle, "_ZN4Sexy6WidgetD2Ev");
@@ -1991,6 +2031,8 @@ inline bool GetFunctionAddr() {
     Sexy_WidgetManager_SetFocusAddr = dlsym(handle, "_ZN4Sexy13WidgetManager11GetWidgetAtEiiPiS1_");
     Sexy_WidgetContainer_SetFocusAddr = dlsym(handle, "_ZN4Sexy15WidgetContainer8SetFocusEPNS_6WidgetE");
     Sexy_WidgetManager_MouseDownAddr = dlsym(handle, "_ZN4Sexy13WidgetManager8SetFocusEPNS_6WidgetE");
+    Sexy_WidgetManager_MouseDragAddr = dlsym(handle, "_ZN4Sexy13WidgetManager9MouseDragEii");
+    Sexy_WidgetManager_MouseUpAddr = dlsym(handle, "_ZN4Sexy13WidgetManager7MouseUpEiii");
     Sexy_WidgetManager_AxisMovedAddr = dlsym(handle, "_ZN4Sexy13WidgetManager9AxisMovedERKNS_5EventE");
     Sexy_Image_GetWidthAddr = dlsym(handle, "_ZN4Sexy5Image8GetWidthEv");
     Sexy_Image_GetHeightAddr = dlsym(handle, "_ZN4Sexy5Image9GetHeightEv");
@@ -2012,6 +2054,7 @@ inline bool GetFunctionAddr() {
     TodParticleSystem_Delete2Addr = dlsym(handle, "_ZN17TodParticleSystemD2Ev");
     TodParticleSystem_ParticleSystemDieAddr = dlsym(handle, "_ZN17TodParticleSystem17ParticleSystemDieEv");
     DrawCheckboxTextAddr = dlsym(handle, "_Z16DrawCheckboxTextPN4Sexy8GraphicsERKSsPNS_6WidgetEPKc");
+    Sexy_Checkbox_CheckBoxAddr = dlsym(handle, "_ZN4Sexy8CheckboxC2EPNS_5ImageES2_iPNS_16CheckboxListenerE");
     Sexy_Checkbox_DeleteAddr = dlsym(handle, "_ZN4Sexy8CheckboxD0Ev");
     PlantDrawHeightOffsetAddr = dlsym(handle, "_Z21PlantDrawHeightOffsetP5BoardP5Plant8SeedTypeii");
     FilterEffectCreateImageAddr = dlsym(handle, "_Z23FilterEffectCreateImagePN4Sexy5ImageE12FilterEffect");
@@ -2323,6 +2366,8 @@ inline bool GetFunctionAddr() {
     vTableForSettingsDialogAddr = dlsym(handle, "_ZTV14SettingsDialog");
     vTableForCreditScreenAddr = dlsym(handle, "_ZTV12CreditScreen");
     vTableForMainMenuAddr = dlsym(handle, "_ZTV8MainMenu");
+    vTableForWaitForSecondPlayerDialogAddr = dlsym(handle, "_ZTV25WaitForSecondPlayerDialog");
+    vTableForSexy_SexyAppBaseAddr = dlsym(handle, "_ZTI7LawnApp");
 
 
     void *handle1 = dlopen("libnative_code.so", RTLD_NOLOAD);

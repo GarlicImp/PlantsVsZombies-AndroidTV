@@ -27,7 +27,7 @@ namespace Sexy {
 class CheckboxListener;
 }
 
-class SettingsDialog : public LawnDialog {
+class SettingsDialog : public __LawnDialog {
 public:
     int *mSliderListener;                      // 191
     Sexy::CheckboxListener *mCheckboxListener; // 192

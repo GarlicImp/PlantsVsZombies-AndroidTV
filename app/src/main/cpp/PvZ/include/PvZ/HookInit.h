@@ -62,6 +62,7 @@
 #include "PvZ/Lawn/Widget/WaitForSecondPlayerDialog.h"
 #include "PvZ/SexyAppFramework/Graphics/Graphics.h"
 #include "PvZ/SexyAppFramework/Widget/ButtonWidget.h"
+#include "PvZ/SexyAppFramework/Widget/WidgetManager.h"
 #include "PvZ/TodLib/Effect/Reanimator.h"
 #include "Symbols.h"
 
@@ -362,8 +363,11 @@ inline void InitHookFunction() {
     homura::HookFunction(AwardScreen_MouseUpAddr, &AwardScreen::MouseUp, &old_AwardScreen_MouseUp);
 
 
+    homura::HookFunction(VSSetupMenu_VSSetupMenuAddr, &VSSetupMenu::__Constructor, &old_VSSetupMenu_VSSetupMenu);
+    homura::HookFunction(VSSetupMenu_DrawAddr, &VSSetupMenu::Draw, &old_VSSetupMenu_Draw);
     homura::HookFunction(VSSetupMenu_UpdateAddr, &VSSetupMenu::Update, &old_VSSetupMenu_Update);
     homura::HookFunction(VSSetupMenu_KeyDownAddr, &VSSetupMenu::KeyDown, &old_VSSetupMenu_KeyDown);
+    homura::HookFunction(VSSetupMenu_OnStateEnterAddr, &VSSetupMenu::OnStateEnter, &old_VSSetupMenu_OnStateEnter);
 
 
     homura::HookFunction(VSResultsMenu_UpdateAddr, &VSResultsMenu_Update, &old_VSResultsMenu_Update);
@@ -427,8 +431,15 @@ inline void InitHookFunction() {
     homura::HookFunction(HelpOptionsDialog_ResizeAddr, &HelpOptionsDialog_Resize, &old_HelpOptionsDialog_Resize);
 
     homura::HookFunction(WaitForSecondPlayerDialog_WaitForSecondPlayerDialogAddr, &WaitForSecondPlayerDialog::__Constructor, &old_WaitForSecondPlayerDialog_WaitForSecondPlayerDialog);
-    //    MSHookFunction(Sexy_WidgetManager_MouseDownAddr, (void *) Sexy_WidgetManager_MouseDown,(void **) &old_Sexy_WidgetManager_MouseDown);
+    homura::HookFunction(WaitForSecondPlayerDialog_DeleteAddr, &WaitForSecondPlayerDialog::__Destructor, &old_WaitForSecondPlayerDialog_Delete);
+
+
+    homura::HookFunction(Sexy_WidgetManager_MouseDownAddr, &Sexy::WidgetManager::MouseDown, &old_Sexy_WidgetManager_MouseDown);
+    homura::HookFunction(Sexy_WidgetManager_MouseDragAddr, &Sexy::WidgetManager::MouseDrag, &old_Sexy_WidgetManager_MouseDrag);
+    homura::HookFunction(Sexy_WidgetManager_MouseUpAddr, &Sexy::WidgetManager::MouseUp, &old_Sexy_WidgetManager_MouseUp);
     //    MSHookFunction(Sexy_WidgetManager_AxisMovedAddr, (void *) Sexy_WidgetManager_AxisMoved, nullptr);
+
+
     homura::HookFunction(LawnMower_UpdateAddr, &LawnMower::Update, &old_LawnMower_Update);
     homura::HookFunction(ConfirmBackToMainDialog_ButtonDepressAddr, &ConfirmBackToMainDialog_ButtonDepress, &old_ConfirmBackToMainDialog_ButtonDepress);
     homura::HookFunction(ConfirmBackToMainDialog_AddedToManagerAddr, &ConfirmBackToMainDialog_AddedToManager, &old_ConfirmBackToMainDialog_AddedToManager);
@@ -584,6 +595,12 @@ inline void InitVTableHookFunction() {
     homura::HookVirtualFunc(vTableForCreditScreenAddr, 133, &CreditScreen::ButtonDepress, nullptr);
 
     homura::HookVirtualFunc(vTableForMainMenuAddr, 139, &MainMenu::ButtonPress, nullptr);
+
+
+    homura::HookVirtualFunc(vTableForWaitForSecondPlayerDialogAddr, 142, &WaitForSecondPlayerDialog_ButtonDepress, &old_WaitForSecondPlayerDialog_ButtonDepress);
+//    homura::HookVirtualFunc(vTableForWaitForSecondPlayerDialogAddr, 33, &WaitForSecondPlayerDialog::Update, nullptr);
+    homura::HookVirtualFunc(vTableForWaitForSecondPlayerDialogAddr, 38, &WaitForSecondPlayerDialog::Draw, &old_WaitForSecondPlayerDialog_Draw);
+//    homura::HookVirtualFunc(vTableForWaitForSecondPlayerDialogAddr, 52, &WaitForSecondPlayerDialog::Resize, nullptr);
 }
 
 inline void InitOpenSL() {

@@ -25,16 +25,16 @@
 
 class LawnApp;
 
-class VSSetupMenu : public Sexy::Widget {
+class VSSetupMenu : public Sexy::__Widget {
 public:
     int unkInt[6];      // 64 ~ 69
     int mInt70;         // 70
     int mInt71;         // 71
     int mInt72;         // 72
-    LawnApp *mAppBase;  // 73
+    LawnApp *mApp;      // 73
     int mState;         // 74
     int mInt75;         // 75
-    LawnApp *mApp;      // 76
+    int mInt76;         // 76
     int mInt77;         // 77
     int mInt78;         // 78
     int unkInt79;       // 79
@@ -71,15 +71,39 @@ public:
     void GameButtonDown(int theButton, unsigned int thePlayerIndex, int a4) {
         reinterpret_cast<void (*)(VSSetupMenu *, int, unsigned int, int)>(VSSetupMenu_GameButtonDownAddr)(this, theButton, thePlayerIndex, a4);
     }
+    void SetSecondPlayerIndex(int thePlayerIndex) {
+        reinterpret_cast<void (*)(VSSetupMenu *, int)>(VSSetupMenu_SetSecondPlayerIndexAddr)(this, thePlayerIndex);
+    }
+    void GoToState(int theState) {
+        reinterpret_cast<void (*)(VSSetupMenu *, int)>(VSSetupMenu_GoToStateAddr)(this, theState);
+    }
+    void CloseVSSetup(bool close) {
+        reinterpret_cast<void (*)(VSSetupMenu *, bool)>(VSSetupMenu_CloseVSSetupAddr)(this, close);
+    }
 
+    VSSetupMenu() {
+        __Constructor();
+    }
+    void Draw(Sexy::Graphics *g);
     void Update();
     void KeyDown(Sexy::KeyCode theKey);
+    void OnStateEnter(int theState);
+
+protected:
+    friend void InitHookFunction();
+    void __Constructor();
 };
 
+inline void (*old_VSSetupMenu_VSSetupMenu)(VSSetupMenu *);
+
+inline void (*old_VSSetupMenu_Draw)(VSSetupMenu *, Sexy::Graphics *g);
 
 inline void (*old_VSSetupMenu_Update)(VSSetupMenu *a);
 
 inline void (*old_VSSetupMenu_KeyDown)(VSSetupMenu *a, Sexy::KeyCode a2);
+
+inline void (*old_VSSetupMenu_OnStateEnter)(VSSetupMenu *menu, int theState);
+
 
 
 #endif // PVZ_LAWN_WIDGET_VS_SETUP_MENU_H

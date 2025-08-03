@@ -19,8 +19,10 @@
 
 #include "PvZ/Lawn/Board/CutScene.h"
 #include "PvZ/Lawn/Board/Board.h"
+#include "PvZ/Lawn/Board/SeedBank.h"
 #include "PvZ/Lawn/Common/ConstEnums.h"
 #include "PvZ/Lawn/LawnApp.h"
+#include "PvZ/Lawn/Widget/WaitForSecondPlayerDialog.h"
 
 void CutScene::ShowShovel() {
     if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_BUTTERED_POPCORN) {
@@ -31,10 +33,56 @@ void CutScene::ShowShovel() {
         return;
     }
 
-    return old_CutScene_ShowShovel(this);
+    old_CutScene_ShowShovel(this);
 }
 
 
 void CutScene::Update() {
-    return old_CutScene_Update(this);
+    if ( mPreUpdatingBoard )
+        return;
+    if ( mApp->mGameMode == GameMode::GAMEMODE_ADVENTURE_TWO_PLAYER || mApp->IsCoopMode() )
+    {
+        if ( mApp->mTwoPlayerState == -1
+            && !(*((int (__fastcall **)(LawnApp *, int))mApp->vTable + 103))(mApp, 39)
+            && !(*((int (__fastcall **)(LawnApp *, int))mApp->vTable + 103))(mApp, 73) )
+        {
+
+            auto *aWaitDialog = new WaitForSecondPlayerDialog(mApp);
+            mApp->AddDialog(aWaitDialog);
+            (*(void (__fastcall **)(int *, WaitForSecondPlayerDialog *)) (*mApp->mWidgetManager + 48))(mApp->mWidgetManager, aWaitDialog);
+
+            int buttonId = ((int (*)(WaitForSecondPlayerDialog *, bool))aWaitDialog->vTable[127])(aWaitDialog, true);
+            if (buttonId == 1001) {
+                mBoard->unknownBool = 1;
+            } else {
+
+
+                SeedBank *seedBank2 = mApp->mBoard->mSeedBank2;
+                if (seedBank2){
+                    SeedBank *seedBank = (SeedBank *) operator new(sizeof(SeedBank));
+                    seedBank->mNumPackets = seedBank2->mNumPackets;
+                    for (int i = 0; i < seedBank2->mNumPackets; ++i) {
+                        seedBank->mSeedPackets[i] = seedBank2->mSeedPackets[i];
+                    }
+
+                    for (int i = 0; i < 7; ++i) {
+                        seedBank->mShopSeedPackets[i] = seedBank2->mShopSeedPackets[i];
+                    }
+
+                    mApp->mBoard->mSeedBank2 = nullptr;
+                    mApp->SetSecondPlayer(1);
+                    mApp->mBoard->mGamepadControls2->mPlayerIndex2 = 1;
+                    for (int i = 0; i < seedBank->mNumPackets; ++i) {
+                        seedBank->mSeedPackets[i].mSeedBank = seedBank;
+                    }
+                    mApp->mBoard->mSeedBank2 = seedBank;
+                }
+
+            }
+            return;
+        }
+
+    }
+
+    old_CutScene_Update(this);
 }
