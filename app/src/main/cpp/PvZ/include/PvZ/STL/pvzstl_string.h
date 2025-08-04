@@ -268,8 +268,7 @@ public:
         if ((new_cap <= old_cap) && !__get_rep()->__is_shared()) {
             return;
         }
-        const size_type sz = size();
-        CharT *tmp = __get_rep()->__clone(std::max(new_cap, sz) - sz);
+        CharT *tmp = __get_rep()->__clone(std::max(new_cap, old_cap) - size());
         __get_rep()->__dispose();
         __data_ = tmp;
     }
@@ -446,7 +445,7 @@ public:
     template <__convertible_to_string_view<CharT> StringViewLike>
     [[nodiscard]] size_type find(const StringViewLike &t, size_type pos = 0) const noexcept(std::is_nothrow_convertible_v<const StringViewLike &, __self_view>) {
         const auto xpos = __self_view{c_str(), size()}.find(__self_view{t}, pos);
-        if constexpr (std::is_same_v<size_type, typename __self_view::size_type>) {
+        if constexpr (__self_view::npos == npos) {
             return xpos;
         } else {
             return (xpos != __self_view::npos) ? static_cast<size_type>(xpos) : npos;
@@ -545,11 +544,11 @@ protected:
         [[nodiscard]] static __rep &__empty_rep() noexcept {
 #ifdef PVZ_VERSION
             assert(::gLibBaseOffset != 0);
-            static constexpr uintptr_t offset = (sizeof(CharT) == sizeof(int8_t)) ? /* string */ 0x71BB54 : /* wstring */ 0x69E45C;
+            constexpr uintptr_t offset = (sizeof(CharT) == sizeof(int8_t)) ? /* string */ 0x71BB54 : /* wstring */ 0x69E45C;
             return *reinterpret_cast<__rep *>(::gLibBaseOffset + offset);
 #else
-            alignas(__rep) static std::byte __empty_rep_storage[sizeof(__rep) + sizeof(CharT)] = {};
-            return *reinterpret_cast<__rep *>(__empty_rep_storage);
+            alignas(__rep) static std::byte empty_rep_storage[sizeof(__rep) + sizeof(CharT)] = {};
+            return *reinterpret_cast<__rep *>(&empty_rep_storage);
 #endif
         }
 
@@ -557,12 +556,22 @@ protected:
             if (cap > __max_size) {
                 throw std::length_error{"basic_string::__rep::__create"};
             }
+            constexpr size_type pagesize = 0x1000;
+            constexpr size_type malloc_header_size = 4 * sizeof(void *);
             if ((cap > old_cap) && (cap < 2 * old_cap)) {
                 cap = 2 * old_cap;
             }
-            const size_type alloc_sz = sizeof(__rep) + sizeof(CharT) * (cap + 1);
-            // NB: Here pass align.
-            return ::new (::operator new(alloc_sz)) __rep{.__capacity = cap, .__ref_count = 0};
+            size_type size = (cap + 1) * sizeof(CharT) + sizeof(__rep);
+            const size_type adj_size = size + malloc_header_size;
+            if (adj_size > pagesize && cap > old_cap) {
+                const size_type extra = pagesize - adj_size % pagesize;
+                cap += extra / sizeof(CharT);
+                if (cap > __max_size) {
+                    cap = __max_size;
+                }
+                size = (cap + 1) * sizeof(CharT) + sizeof(__rep);
+            }
+            return ::new (::operator new(size)) __rep{.__capacity = cap, .__ref_count = 0};
         }
 
         [[nodiscard]] CharT *__ref_copy() noexcept {
