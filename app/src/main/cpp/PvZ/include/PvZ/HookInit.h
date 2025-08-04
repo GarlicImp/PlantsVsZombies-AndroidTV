@@ -598,9 +598,9 @@ inline void InitVTableHookFunction() {
 
 
     homura::HookVirtualFunc(vTableForWaitForSecondPlayerDialogAddr, 142, &WaitForSecondPlayerDialog_ButtonDepress, &old_WaitForSecondPlayerDialog_ButtonDepress);
-//    homura::HookVirtualFunc(vTableForWaitForSecondPlayerDialogAddr, 33, &WaitForSecondPlayerDialog::Update, nullptr);
+    //    homura::HookVirtualFunc(vTableForWaitForSecondPlayerDialogAddr, 33, &WaitForSecondPlayerDialog::Update, nullptr);
     homura::HookVirtualFunc(vTableForWaitForSecondPlayerDialogAddr, 38, &WaitForSecondPlayerDialog::Draw, &old_WaitForSecondPlayerDialog_Draw);
-//    homura::HookVirtualFunc(vTableForWaitForSecondPlayerDialogAddr, 52, &WaitForSecondPlayerDialog::Resize, nullptr);
+    //    homura::HookVirtualFunc(vTableForWaitForSecondPlayerDialogAddr, 52, &WaitForSecondPlayerDialog::Resize, nullptr);
 }
 
 inline void InitOpenSL() {

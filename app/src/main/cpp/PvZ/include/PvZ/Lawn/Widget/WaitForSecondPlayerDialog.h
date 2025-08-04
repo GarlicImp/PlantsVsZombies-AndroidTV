@@ -20,8 +20,8 @@
 #ifndef PVZ_LAWN_WIDGET_WAIT_FOR_SECOND_PLAYER_DIALOG_H
 #define PVZ_LAWN_WIDGET_WAIT_FOR_SECOND_PLAYER_DIALOG_H
 
-#include "PvZ/Lawn/Widget/LawnDialog.h"
 #include "PvZ/Lawn/GamepadControls.h"
+#include "PvZ/Lawn/Widget/LawnDialog.h"
 #include "PvZ/SexyAppFramework/Widget/GameButton.h"
 #include "PvZ/Symbols.h"
 
@@ -29,15 +29,15 @@ class WaitForSecondPlayerDialog : public __LawnDialog {
 public:
     bool m2PJoined;
 
-    int* roomName1;
-    int* roomName2;
-    int* roomName3;
-    int* roomName4;
-    int* roomName5;
-    int* roomName6;
+    int *roomName1;
+    int *roomName2;
+    int *roomName3;
+    int *roomName4;
+    int *roomName5;
+    int *roomName6;
 
-    Sexy::GameButton* mJoinButton;
-    Sexy::GameButton* mCreateButton;
+    Sexy::GameButton *mJoinButton;
+    Sexy::GameButton *mCreateButton;
     bool mIsCreatingRoom;
     // 115：192，111：194。自roomName1起的成员为我新增的成员，我Hook了构造函数调用方，为构造时分配了更多内存，因此可以为WaitForSecondPlayerDialog任意地新增成员。
 
@@ -53,7 +53,7 @@ public:
     }
     void Update();
     void Draw(Sexy::Graphics *g);
-    void Resize(int theX,int theY,int theWidth,int theHeight);
+    void Resize(int theX, int theY, int theWidth, int theHeight);
 
 protected:
     friend void InitHookFunction();
@@ -66,7 +66,7 @@ void WaitForSecondPlayerDialog_ButtonDepress(Sexy::ButtonListener *listener, int
 
 inline void (*old_WaitForSecondPlayerDialog_WaitForSecondPlayerDialog)(WaitForSecondPlayerDialog *a, LawnApp *theApp);
 
-inline void (*old_WaitForSecondPlayerDialog_Draw)(WaitForSecondPlayerDialog *dialog, Sexy::Graphics* graphics);
+inline void (*old_WaitForSecondPlayerDialog_Draw)(WaitForSecondPlayerDialog *dialog, Sexy::Graphics *graphics);
 
 inline void (*old_WaitForSecondPlayerDialog_ButtonDepress)(Sexy::ButtonListener *listener, int id);
 

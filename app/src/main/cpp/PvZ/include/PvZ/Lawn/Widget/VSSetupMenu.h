@@ -105,5 +105,4 @@ inline void (*old_VSSetupMenu_KeyDown)(VSSetupMenu *a, Sexy::KeyCode a2);
 inline void (*old_VSSetupMenu_OnStateEnter)(VSSetupMenu *menu, int theState);
 
 
-
 #endif // PVZ_LAWN_WIDGET_VS_SETUP_MENU_H

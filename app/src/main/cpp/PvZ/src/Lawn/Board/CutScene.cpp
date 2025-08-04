@@ -38,18 +38,14 @@ void CutScene::ShowShovel() {
 
 
 void CutScene::Update() {
-    if ( mPreUpdatingBoard )
+    if (mPreUpdatingBoard)
         return;
-    if ( mApp->mGameMode == GameMode::GAMEMODE_ADVENTURE_TWO_PLAYER || mApp->IsCoopMode() )
-    {
-        if ( mApp->mTwoPlayerState == -1
-            && !(*((int (__fastcall **)(LawnApp *, int))mApp->vTable + 103))(mApp, 39)
-            && !(*((int (__fastcall **)(LawnApp *, int))mApp->vTable + 103))(mApp, 73) )
-        {
+    if (mApp->mGameMode == GameMode::GAMEMODE_ADVENTURE_TWO_PLAYER || mApp->IsCoopMode()) {
+        if (mApp->mTwoPlayerState == -1 && !(*((int (**)(LawnApp *, int))mApp->vTable + 103))(mApp, 39) && !(*((int (**)(LawnApp *, int))mApp->vTable + 103))(mApp, 73)) {
 
             auto *aWaitDialog = new WaitForSecondPlayerDialog(mApp);
             mApp->AddDialog(aWaitDialog);
-            (*(void (__fastcall **)(int *, WaitForSecondPlayerDialog *)) (*mApp->mWidgetManager + 48))(mApp->mWidgetManager, aWaitDialog);
+            (*(void (**)(int *, WaitForSecondPlayerDialog *))(*mApp->mWidgetManager + 48))(mApp->mWidgetManager, aWaitDialog);
 
             int buttonId = ((int (*)(WaitForSecondPlayerDialog *, bool))aWaitDialog->vTable[127])(aWaitDialog, true);
             if (buttonId == 1001) {
@@ -58,8 +54,8 @@ void CutScene::Update() {
 
 
                 SeedBank *seedBank2 = mApp->mBoard->mSeedBank2;
-                if (seedBank2){
-                    SeedBank *seedBank = (SeedBank *) operator new(sizeof(SeedBank));
+                if (seedBank2) {
+                    SeedBank *seedBank = (SeedBank *)operator new(sizeof(SeedBank));
                     seedBank->mNumPackets = seedBank2->mNumPackets;
                     for (int i = 0; i < seedBank2->mNumPackets; ++i) {
                         seedBank->mSeedPackets[i] = seedBank2->mSeedPackets[i];
@@ -77,11 +73,9 @@ void CutScene::Update() {
                     }
                     mApp->mBoard->mSeedBank2 = seedBank;
                 }
-
             }
             return;
         }
-
     }
 
     old_CutScene_Update(this);

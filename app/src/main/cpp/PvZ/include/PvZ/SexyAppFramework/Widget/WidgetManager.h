@@ -45,9 +45,9 @@ public:
 
 } // namespace Sexy
 
-inline void (*old_Sexy_WidgetManager_MouseDown)(Sexy::WidgetManager *, int x, int y, int theClickCount);
-inline void (*old_Sexy_WidgetManager_MouseDrag)(Sexy::WidgetManager *, int x, int y);
-inline void (*old_Sexy_WidgetManager_MouseUp)(Sexy::WidgetManager *, int x, int y, int theClickCount);
+inline void (*old_Sexy_WidgetManager_MouseDown)(Sexy::WidgetManager*, int x, int y, int theClickCount);
+inline void (*old_Sexy_WidgetManager_MouseDrag)(Sexy::WidgetManager*, int x, int y);
+inline void (*old_Sexy_WidgetManager_MouseUp)(Sexy::WidgetManager*, int x, int y, int theClickCount);
 
 
 #endif // PVZ_SEXYAPPFRAMEWORK_WIDGET_WIDGET_MANAGER_H

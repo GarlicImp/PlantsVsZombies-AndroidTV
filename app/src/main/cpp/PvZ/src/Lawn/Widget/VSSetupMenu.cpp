@@ -69,7 +69,7 @@ void VSSetupMenu::OnStateEnter(int theState) {
         mInt76 = -1;
         // TODO:修复 WaitForSecondPlayerDialog重复构造
         auto *aWaitDialog = new WaitForSecondPlayerDialog(mApp);
-//        mApp->AddDialog(aWaitDialog); // 生成了两份mLawnNoButton
+        //        mApp->AddDialog(aWaitDialog); // 生成了两份mLawnNoButton
 
         int buttonId = ((int (*)(WaitForSecondPlayerDialog *, bool))aWaitDialog->vTable[127])(aWaitDialog, true);
         if (buttonId == 1000) {

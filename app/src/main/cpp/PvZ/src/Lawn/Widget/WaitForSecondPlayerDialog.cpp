@@ -18,8 +18,8 @@
  */
 
 #include "PvZ/Lawn/Widget/WaitForSecondPlayerDialog.h"
-#include "PvZ/Lawn/LawnApp.h"
 #include "PvZ/Lawn/Board/Board.h"
+#include "PvZ/Lawn/LawnApp.h"
 
 using namespace Sexy;
 
@@ -81,37 +81,36 @@ void WaitForSecondPlayerDialog::__Destructor() {
 }
 
 void WaitForSecondPlayerDialog::Update() {
-//    mJoinButton->mDisabled = server_count == 0;
+    //    mJoinButton->mDisabled = server_count == 0;
 }
 
-void WaitForSecondPlayerDialog::Draw(Graphics* g) {
+void WaitForSecondPlayerDialog::Draw(Graphics *g) {
     old_WaitForSecondPlayerDialog_Draw(this, g);
 
-    //TODO:将设备信息文字绘制出来
+    // TODO:将设备信息文字绘制出来
 
     if (mIsCreatingRoom) {
         pvzstl::string str = StrFormat("您创建的房间名称:%s的房间", mApp->mPlayerInfo->mName);
         g->DrawString(str, 200, 150);
     } else {
-//        int yPos = 200;
-//        for (int i = 0; i < server_count; i++) {
-//            pvzstl::string str = StrFormat("%s的房间 %s", servers[i].name, servers[i].ip);
-//            g->DrawString(str, 280, yPos);
-//            yPos += 30;
-//        }
+        //        int yPos = 200;
+        //        for (int i = 0; i < server_count; i++) {
+        //            pvzstl::string str = StrFormat("%s的房间 %s", servers[i].name, servers[i].ip);
+        //            g->DrawString(str, 280, yPos);
+        //            yPos += 30;
+        //        }
     }
 }
 
 void WaitForSecondPlayerDialog_ButtonDepress(Sexy::ButtonListener *listener, int id) {
-    auto *dialog = (WaitForSecondPlayerDialog *) ((uint32_t) listener - offsetof(WaitForSecondPlayerDialog, mButtonListener));
+    auto *dialog = reinterpret_cast<WaitForSecondPlayerDialog *>((uint32_t(listener) - offsetof(WaitForSecondPlayerDialog, mButtonListener)));
     if (id == 1000) {
-        //2P手柄按两下A
+        // 2P手柄按两下A
         dialog->GameButtonDown(ButtonCode::BUTTONCODE_A, 1);
         dialog->GameButtonDown(ButtonCode::BUTTONCODE_A, 1);
     }
 
-    old_WaitForSecondPlayerDialog_ButtonDepress(listener,id);
+    old_WaitForSecondPlayerDialog_ButtonDepress(listener, id);
 }
 
-void WaitForSecondPlayerDialog::Resize(int theX,int theY,int theWidth,int theHeight) {
-}
+void WaitForSecondPlayerDialog::Resize(int theX, int theY, int theWidth, int theHeight) {}
