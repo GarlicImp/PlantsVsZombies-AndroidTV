@@ -92,8 +92,8 @@ public:
     basic_string() noexcept
         : __data_{__rep::__empty_rep().__data} {}
 
-    basic_string(const basic_string &other) noexcept
-        : __data_{other.__get_rep()->__ref_copy()} {}
+    basic_string(const basic_string &other)
+        : __data_{other.__get_rep()->__grab()} {}
 
     basic_string(basic_string &&other) noexcept
         : __data_{other.__data_} {
@@ -136,10 +136,10 @@ public:
         return __self_view{c_str(), size()};
     }
 
-    basic_string &operator=(const basic_string &other) noexcept {
+    basic_string &operator=(const basic_string &other) {
         if (__get_rep() != other.__get_rep()) {
             __get_rep()->__dispose();
-            __data_ = other.__get_rep()->__ref_copy();
+            __data_ = other.__get_rep()->__grab();
         }
         return *this;
     }
@@ -180,7 +180,7 @@ public:
         } else if (pos > 0) {
             traits_type::move(__data_, s, n);
         }
-        __get_rep()->__set_size(n);
+        __get_rep()->__set_size_and_sharable(n);
         return *this;
     }
 
@@ -282,7 +282,7 @@ public:
             __get_rep()->__dispose();
             __data_ = __rep::__empty_rep().__data;
         } else {
-            __get_rep()->__set_size(0);
+            __get_rep()->__set_size_and_sharable(0);
         }
     }
 
@@ -332,7 +332,7 @@ public:
         const size_type len = size() + 1;
         reserve(len);
         __data_[size()] = c;
-        __get_rep()->__set_size(len);
+        __get_rep()->__set_size_and_sharable(len);
     }
 
     void pop_back() {
@@ -366,7 +366,7 @@ public:
             }
         }
         traits_type::copy(__data_ + size(), s, n);
-        __get_rep()->__set_size(len);
+        __get_rep()->__set_size_and_sharable(len);
         return *this;
     }
 
@@ -435,6 +435,12 @@ public:
     }
 
     void swap(basic_string &other) noexcept {
+        if (__get_rep()->__is_leaked()) {
+            __get_rep()->__set_sharable();
+        }
+        if (other.__get_rep()->__is_leaked()) {
+            other.__get_rep()->__set_sharable();
+        }
         std::swap(__data_, other.__data_);
     }
 
@@ -586,8 +592,12 @@ protected:
             if (__size > 0) {
                 traits_type::copy(r->__data, __data, __size);
             }
-            r->__set_size(__size);
+            r->__set_size_and_sharable(__size);
             return r->__data;
+        }
+
+        [[nodiscard]] CharT *__grab() {
+            return !__is_leaked() ? __ref_copy() : __clone();
         }
 
         void __dispose() noexcept {
@@ -596,12 +606,23 @@ protected:
             }
         }
 
+        // 调用非 const 限定的 operator[]/at/begin 等不明确是否修改的函数后,
+        // 底层数据会变为不可共享状态.
+        [[nodiscard]] bool __is_leaked() const noexcept {
+            return __ref_count < 0;
+        }
+
         [[nodiscard]] bool __is_shared() const noexcept {
             return __ref_count > 0;
         }
 
-        void __set_size(size_type sz) noexcept {
+        void __set_sharable() noexcept {
+            __ref_count = 0;
+        }
+
+        void __set_size_and_sharable(size_type sz) noexcept {
             if (this != &__empty_rep()) {
+                __set_sharable();
                 __size = sz;
                 __data[sz] = CharT{0};
             }
@@ -647,7 +668,7 @@ protected:
         }
         __data_ = __rep::__create(sz, 0)->__data;
         traits_type::copy(__data_, s, sz);
-        __get_rep()->__set_size(sz);
+        __get_rep()->__set_size_and_sharable(sz);
     }
 
     // 清空范围 [ `begin() + pos`, `begin() + pos + len1` ) 中的字符,
@@ -669,7 +690,7 @@ protected:
         } else if ((how_much > 0) && (len1 != len2)) {
             traits_type::move((__data_ + pos + len2), (c_str() + pos + len1), how_much);
         }
-        __get_rep()->__set_size(new_sz);
+        __get_rep()->__set_size_and_sharable(new_sz);
     }
 
     basic_string &__replace_safe(size_type pos, size_type n1, const CharT *s, size_type n2) {
