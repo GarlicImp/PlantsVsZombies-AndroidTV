@@ -164,7 +164,7 @@ public:
         return *this = str;
     }
 
-    basic_string &assign(basic_string &&str) {
+    basic_string &assign(basic_string &&str) noexcept {
         return *this = std::move(str);
     }
 
