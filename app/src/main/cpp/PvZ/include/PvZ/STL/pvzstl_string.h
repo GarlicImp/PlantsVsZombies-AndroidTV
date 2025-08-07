@@ -530,7 +530,7 @@ public:
      */
     template <typename... Args>
         requires std::constructible_from<basic_string, Args &&...>
-    basic_string &emplace(Args &&...args) {
+    basic_string &emplace(Args &&...args) noexcept(std::is_nothrow_constructible_v<basic_string, Args &&...>) {
         return *::new (this) basic_string{std::forward<Args>(args)...};
     }
 
