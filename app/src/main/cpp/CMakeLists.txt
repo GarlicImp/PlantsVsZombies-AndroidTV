@@ -34,12 +34,12 @@ find_library(android-lib android)
 find_library(EGL-lib EGL)
 find_library(GLESv2-lib GLESv2)
 find_library(log-lib log)
-find_library(opensles-lib OpenSLES)
+find_library(OpenSLES-lib OpenSLES)
 target_link_libraries(Homura PRIVATE
         Substrate
         ${android-lib}
         ${EGL-lib}
         ${GLESv2-lib}
         ${log-lib}
-        ${opensles-lib}
+        ${OpenSLES-lib}
 )
