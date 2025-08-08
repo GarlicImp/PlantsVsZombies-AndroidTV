@@ -155,6 +155,10 @@ public:
 
     basic_string &operator=(std::nullptr_t) = delete;
 
+    basic_string &operator=(CharT c) {
+        return assign(1, c);
+    }
+
     basic_string &assign(const basic_string &str, size_type pos, size_type n = npos) {
         str.__check_range(pos, "basic_string::assign");
         return assign(str.c_str() + pos, std::min(n, str.size() - pos));
@@ -187,6 +191,10 @@ public:
     basic_string &assign(const CharT *s) {
         assert((s != nullptr) && "basic_string::assign received nullptr");
         return assign(s, traits_type::length(s));
+    }
+
+    basic_string &assign(size_type n, CharT c) {
+        return __replace_aux(0, size(), n, c);
     }
 
     [[nodiscard]] const CharT &at(size_type pos) const {
@@ -323,6 +331,10 @@ public:
         return insert(pos, s, traits_type::length(s));
     }
 
+    basic_string &insert(size_type pos, size_type n, CharT c) {
+        return __replace_aux(__check_range(pos, "basic_string::insert"), 0, n, c);
+    }
+
     basic_string &erase(size_type pos = 0, size_type n = npos) {
         __mutate(__check_range(pos, "basic_string::erase"), std::min(n, size() - pos), 0);
         return *this;
@@ -375,6 +387,17 @@ public:
         return append(s, traits_type::length(s));
     }
 
+    basic_string &append(size_type n, CharT c) {
+        if (n > 0) {
+            __check_length(0, n, "basic_string::append");
+            const size_type len = n + size();
+            reserve(len);
+            traits_type::assign(__data_ + size(), n, c);
+            __get_rep()->__set_size_and_sharable(len);
+        }
+        return *this;
+    }
+
     basic_string &operator+=(const basic_string &str) {
         return append(str);
     }
@@ -422,6 +445,10 @@ public:
     basic_string &replace(size_type pos, size_type n, const CharT *s) {
         assert((s != nullptr) && "basic_string::replace received nullptr");
         return replace(pos, n, s, traits_type::length(s));
+    }
+
+    basic_string &replace(size_type pos, size_type n1, size_type n2, CharT c) {
+        return __replace_aux(__check_range(pos, "basic_string::replace"), std::min(n1, size() - pos), n2, c);
     }
 
     size_type copy(CharT *dest, size_type n, size_type pos = 0) const {
@@ -482,21 +509,17 @@ public:
         return __self_view{c_str(), size()}.starts_with(sv);
     }
 
-    [[nodiscard]] bool starts_with(CharT c) const noexcept {
-        return !empty() && (front() == c);
-    }
-
     [[nodiscard]] bool starts_with(const CharT *s) const {
         assert((s != nullptr) && "basic_string::starts_with received nullptr");
         return starts_with(__self_view{s});
     }
 
-    [[nodiscard]] bool ends_with(__self_view sv) const noexcept {
-        return __self_view{c_str(), size()}.ends_with(sv);
+    [[nodiscard]] bool starts_with(CharT c) const noexcept {
+        return !empty() && (front() == c);
     }
 
-    [[nodiscard]] bool ends_with(CharT c) const noexcept {
-        return !empty() && (back() == c);
+    [[nodiscard]] bool ends_with(__self_view sv) const noexcept {
+        return __self_view{c_str(), size()}.ends_with(sv);
     }
 
     [[nodiscard]] bool ends_with(const CharT *s) const {
@@ -504,17 +527,21 @@ public:
         return ends_with(__self_view{s});
     }
 
-    [[nodiscard]] bool contains(__self_view sv) const noexcept {
-        return __self_view{c_str(), size()}.contains(sv);
+    [[nodiscard]] bool ends_with(CharT c) const noexcept {
+        return !empty() && (back() == c);
     }
 
-    [[nodiscard]] bool contains(CharT c) const noexcept {
-        return __self_view{c_str(), size()}.contains(c);
+    [[nodiscard]] bool contains(__self_view sv) const noexcept {
+        return __self_view{c_str(), size()}.contains(sv);
     }
 
     [[nodiscard]] bool contains(const CharT *s) const {
         assert((s != nullptr) && "basic_string::contains received nullptr");
         return __self_view{c_str(), size()}.contains(s);
+    }
+
+    [[nodiscard]] bool contains(CharT c) const noexcept {
+        return __self_view{c_str(), size()}.contains(c);
     }
 
     [[nodiscard]] basic_string substr(size_type pos = 0, size_type n = npos) const & {
@@ -529,8 +556,8 @@ public:
      * @brief 就地构造 pvzstl::basic_string 对象.
      */
     template <typename... Args>
-        requires std::constructible_from<basic_string, Args &&...>
-    basic_string &emplace(Args &&...args) noexcept(std::is_nothrow_constructible_v<basic_string, Args &&...>) {
+        requires std::is_constructible_v<basic_string, Args &&...>
+    basic_string &__emplace(Args &&...args) noexcept(std::is_nothrow_constructible_v<basic_string, Args &&...>) {
         return *::new (this) basic_string{std::forward<Args>(args)...};
     }
 
@@ -553,7 +580,7 @@ protected:
             constexpr uintptr_t offset = (sizeof(CharT) == sizeof(int8_t)) ? /* string */ 0x71BB54 : /* wstring */ 0x69E45C;
             return *reinterpret_cast<__rep *>(::gLibBaseOffset + offset);
 #else
-            alignas(__rep) static std::byte empty_rep_storage[sizeof(__rep) + sizeof(CharT)] = {};
+            alignas(__rep) static constinit std::byte empty_rep_storage[sizeof(__rep) + sizeof(CharT)] = {};
             return *reinterpret_cast<__rep *>(&empty_rep_storage);
 #endif
         }
@@ -647,8 +674,8 @@ protected:
         return pos;
     }
 
-    void __check_length(size_type pos, size_type n, const char *msg) const {
-        if (max_size() - (size() - pos) < n) {
+    void __check_length(size_type n1, size_type n2, const char *msg) const {
+        if (max_size() - (size() - n1) < n2) {
             throw std::length_error{msg};
         }
     }
@@ -691,6 +718,15 @@ protected:
             traits_type::move((__data_ + pos + len2), (c_str() + pos + len1), how_much);
         }
         __get_rep()->__set_size_and_sharable(new_sz);
+    }
+
+    basic_string &__replace_aux(size_type pos, size_type n1, size_type n2, CharT c) {
+        __check_length(n1, n2, "basic_string::__replace_aux");
+        __mutate(pos, n1, n2);
+        if (n2 > 0) {
+            traits_type::assign(__data_ + pos, n2, c);
+        }
+        return *this;
     }
 
     basic_string &__replace_safe(size_type pos, size_type n1, const CharT *s, size_type n2) {
@@ -812,6 +848,11 @@ template <typename CharT>
 [[nodiscard]] basic_string<CharT> operator+(const CharT *lhs, basic_string<CharT> &&rhs) {
     assert((lhs != nullptr) && "operator+(const CharT *, basic_string &&) received nullptr");
     return std::move(rhs.insert(0, lhs));
+}
+
+template <typename CharT>
+[[nodiscard]] basic_string<CharT> operator+(CharT lhs, basic_string<CharT> &&rhs) {
+    return std::move(rhs.insert(0, 1, lhs));
 }
 
 template <typename CharT>
