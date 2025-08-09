@@ -3342,7 +3342,7 @@ int Board::GetSeedPacketPositionX(int thePacketIndex, int theSeedBankIndex, bool
         if (aNumPackets == 6) {
             return thePlayerIndex ? 59 * thePacketIndex + 15 : 59 * thePacketIndex + 85;
         } else if (aNumPackets == 7) {
-            return thePlayerIndex ? 51 * thePacketIndex + 11 : 51 * thePacketIndex + 80;
+            return thePlayerIndex ? 51 * thePacketIndex + 11 : 51 * thePacketIndex + 79;
         }
     }
 

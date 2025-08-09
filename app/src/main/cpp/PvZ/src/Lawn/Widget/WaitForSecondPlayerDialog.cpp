@@ -103,7 +103,6 @@ void WaitForSecondPlayerDialog::Draw(Graphics *g) {
 }
 
 void WaitForSecondPlayerDialog_ButtonDepress(Sexy::ButtonListener *listener, int id) {
-    auto *dialog = (WaitForSecondPlayerDialog *)((uint32_t)listener - offsetof(WaitForSecondPlayerDialog, mButtonListener));
     auto *dialog = reinterpret_cast<WaitForSecondPlayerDialog *>((uint32_t(listener) - offsetof(WaitForSecondPlayerDialog, mButtonListener)));
     if (id == 1000) {
         // 2P手柄按两下A
@@ -114,4 +113,5 @@ void WaitForSecondPlayerDialog_ButtonDepress(Sexy::ButtonListener *listener, int
     old_WaitForSecondPlayerDialog_ButtonDepress(listener, id);
 }
 
-void WaitForSecondPlayerDialog::Resize(int theX, int theY, int theWidth, int theHeight) {}
+void WaitForSecondPlayerDialog::Resize(int theX, int theY, int theWidth, int theHeight) {
+}

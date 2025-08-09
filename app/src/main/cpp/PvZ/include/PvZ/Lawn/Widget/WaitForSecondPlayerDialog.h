@@ -22,7 +22,7 @@
 
 #include "PvZ/Lawn/GamepadControls.h"
 #include "PvZ/Lawn/Widget/LawnDialog.h"
-#include "PvZ/SexyAppFramework/Widget/GameButton.h"
+#include "PvZ/Lawn/Widget/GameButton.h"
 #include "PvZ/Symbols.h"
 
 class WaitForSecondPlayerDialog : public __LawnDialog {
