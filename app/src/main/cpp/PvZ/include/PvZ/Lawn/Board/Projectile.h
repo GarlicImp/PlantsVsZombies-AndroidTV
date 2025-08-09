@@ -36,7 +36,7 @@ public:
 };
 extern ProjectileDefinition gProjectileDefinition[NUM_PROJECTILES];
 
-class Projectile : public GameObject {
+class Projectile : public __GameObject {
 public:
     int mFrame;                     // 13
     int mNumFrames;                 // 14

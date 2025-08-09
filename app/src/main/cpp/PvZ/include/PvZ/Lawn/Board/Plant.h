@@ -150,7 +150,7 @@ public:
 
 class GridItem;
 
-class Plant : public GameObject {
+class Plant : public __GameObject {
 public:
     SeedType mSeedType;                        // 13
     int mPlantCol;                             // 14

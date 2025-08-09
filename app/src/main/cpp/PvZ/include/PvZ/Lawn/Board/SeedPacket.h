@@ -27,7 +27,7 @@
 
 class HitResult;
 class SeedBank;
-class SeedPacket : public GameObject {
+class SeedPacket : public __GameObject {
 public:
     int mRefreshCounter;             // 13
     int mRefreshTime;                // 14

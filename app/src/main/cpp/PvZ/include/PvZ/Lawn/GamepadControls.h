@@ -51,7 +51,7 @@ enum ButtonCode {
 
 class Zombie;
 
-class GamepadControls : public BaseGamepadControls {
+class GamepadControls : public __BaseGamepadControls {
 public:
     float mRangeFrom0to30UpdateFresh;  // 43
     int *mSelectorParticle;            // 44
@@ -98,14 +98,18 @@ public:
     // 铲子 49 1112
     // 锤子 50 1112
 
-    GamepadControls(Board *theBoard, int thePlayerIndex1, int thePlayerIndex2);
-    void __Constructor(Board *theBoard, int thePlayerIndex1, int thePlayerIndex2);
+//    GamepadControls(Board *theBoard, int thePlayerIndex1, int thePlayerIndex2);
     void ButtonDownFireCobcannonTest();
     void Draw(Sexy::Graphics *g);
     void Update(float a2);
     void DrawPreview(Sexy::Graphics *g);
     void UpdatePreviewReanim();
     void OnButtonDown(ButtonCode theButton, int theIsZombieControl, unsigned int thePlayerIndex);
+
+protected:
+    friend void InitHookFunction();
+
+    void __Constructor(Board *theBoard, int thePlayerIndex1, int thePlayerIndex2);
 };
 
 class ZenGardenControls : public GamepadControls {

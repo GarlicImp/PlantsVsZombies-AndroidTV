@@ -54,8 +54,6 @@ public:
     int unk[11];                             // 19 ~ 29
     // 大小30个整数
 
-    void ShowShovel();
-    void Update();
     bool IsSurvivalRepick() {
         return reinterpret_cast<bool (*)(CutScene *)>(CutScene_IsSurvivalRepickAddr)(this);
     }
@@ -72,6 +70,9 @@ public:
     void MouseDown(int x, int y) {
         reinterpret_cast<bool (*)(CutScene *)>(CutScene_MouseDownAddr)(this);
     }
+
+    void ShowShovel();
+    void Update();
 };
 
 

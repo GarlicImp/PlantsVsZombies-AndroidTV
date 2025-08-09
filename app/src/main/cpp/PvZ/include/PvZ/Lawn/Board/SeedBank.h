@@ -31,7 +31,7 @@ struct ShopSeedPacket {
 
 
 class HitResult;
-class SeedBank : public GameObject {
+class SeedBank : public __GameObject {
 public:
     int mNumPackets;                    // 13
     int mCutSceneDarken;                // 14
@@ -60,6 +60,8 @@ public:
     void EndDraw(Sexy::Graphics *g);
 
 protected:
+    friend void InitHookFunction();
+
     void __Constructor(bool thePlayerIndex);
     void __Destructor() {
         reinterpret_cast<void (*)(SeedBank *)>(SeedBank_DeleteAddr)(this);

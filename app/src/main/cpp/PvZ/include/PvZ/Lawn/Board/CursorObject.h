@@ -27,7 +27,7 @@
 class Coin;
 class Plant;
 
-class CursorObject : public GameObject {
+class CursorObject : public __GameObject {
 public:
     int mSeedBankIndex;        // 13
     SeedType mType;            // 14
@@ -52,7 +52,7 @@ public:
     void EndDraw(Sexy::Graphics *g);
 };
 
-class CursorPreview : public GameObject {
+class CursorPreview : public __GameObject {
 public:
     int mGridX;      // 13
     int mGridY;      // 14

@@ -93,7 +93,7 @@ public:
 class Plant;
 class Reanimation;
 class TodParticleSystem;
-class Zombie : public GameObject {
+class Zombie : public __GameObject {
 public:
     enum {
         ZOMBIE_WAVE_DEBUG = -1,

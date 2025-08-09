@@ -36,9 +36,9 @@
 
 using namespace Sexy;
 
-GamepadControls::GamepadControls(Board *theBoard, int thePlayerIndex1, int thePlayerIndex2) {
-    __Constructor(theBoard, thePlayerIndex1, thePlayerIndex2);
-}
+//GamepadControls::GamepadControls(Board *theBoard, int thePlayerIndex1, int thePlayerIndex2) {
+//    __Constructor(theBoard, thePlayerIndex1, thePlayerIndex2);
+//}
 
 void GamepadControls::__Constructor(Board *theBoard, int thePlayerIndex1, int thePlayerIndex2) {
     old_GamepadControls_GamepadControls(this, theBoard, thePlayerIndex1, thePlayerIndex2);

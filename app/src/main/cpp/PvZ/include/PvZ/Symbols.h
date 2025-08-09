@@ -821,6 +821,9 @@ inline void *ReanimatorTransform_ReanimatorTransformAddr;
 inline void *GameObject_BeginDrawAddr;
 inline void *GameObject_EndDrawAddr;
 inline void *GameObject_MakeParentGraphicsFrameAddr;
+inline void *GameObject_Delete2Addr;
+
+
 inline void *GameButton_IsMouseOverAddr;
 inline void *GameButton_OnPressedAddr;
 inline void *GameButton_DeleteAddr;
@@ -2159,6 +2162,9 @@ inline bool GetFunctionAddr() {
     GameObject_BeginDrawAddr = dlsym(handle, "_ZN10GameObject9BeginDrawEPN4Sexy8GraphicsE");
     GameObject_EndDrawAddr = dlsym(handle, "_ZN10GameObject7EndDrawEPN4Sexy8GraphicsE");
     GameObject_MakeParentGraphicsFrameAddr = dlsym(handle, "_ZN10GameObject23MakeParentGraphicsFrameEPN4Sexy8GraphicsE");
+    GameObject_Delete2Addr = dlsym(handle, "_ZN10GameObjectD2Ev");
+
+
     GameButton_IsMouseOverAddr = dlsym(handle, "_ZN10GameButton11IsMouseOverEv");
     GameButton_OnPressedAddr = dlsym(handle, "_ZN10GameButton9OnPressedEv");
     GameButton_DeleteAddr = dlsym(handle, "_ZN10GameButtonD0Ev");
