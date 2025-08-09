@@ -20,7 +20,7 @@
 #ifndef PVZ_LAWN_WIDGET_ZOMBATAR_WIDGET_H
 #define PVZ_LAWN_WIDGET_ZOMBATAR_WIDGET_H
 
-#include "PvZ/SexyAppFramework/Widget/GameButton.h"
+#include "GameButton.h"
 #include "PvZ/SexyAppFramework/Widget/MenuWidget.h"
 
 class Zombie;
@@ -55,11 +55,11 @@ public:
     Sexy::ButtonListener *mButtonListener = &sButtonListener;
     LawnApp *mApp;
     Zombie *mPreviewZombie;
-    Sexy::GameButton *mBackButton;
-    Sexy::GameButton *mFinishButton;
-    Sexy::GameButton *mViewPortraitButton;
-    Sexy::GameButton *mNewButton;
-    Sexy::GameButton *mDeleteButton;
+    GameButton *mBackButton;
+    GameButton *mFinishButton;
+    GameButton *mViewPortraitButton;
+    GameButton *mNewButton;
+    GameButton *mDeleteButton;
     Reanimation *mZombatarReanim;
     bool mShowExistingZombatarPortrait;
     bool mShowZombieTypeSelection;

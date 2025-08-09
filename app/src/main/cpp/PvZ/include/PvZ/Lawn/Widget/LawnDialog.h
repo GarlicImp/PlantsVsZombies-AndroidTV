@@ -23,9 +23,7 @@
 #include "PvZ/SexyAppFramework/Widget/Dialog.h"
 // #include "PvZ/SexyAppFramework/Widget/GameButton.h"
 
-namespace Sexy {
 class GameButton;
-}
 
 class __LawnDialog : public Sexy::__Dialog {
 public:
@@ -36,8 +34,8 @@ public:
     int mButtonDelay;                 // 185
     Sexy::Widget *mReanimationWidget; // 186
     bool mDrawStandardBack;           // 748
-    Sexy::GameButton *mLawnYesButton; // 188
-    Sexy::GameButton *mLawnNoButton;  // 189
+    GameButton *mLawnYesButton;       // 188
+    GameButton *mLawnNoButton;        // 189
     bool mTallBottom;                 // 760
     bool mVerticalCenterText;         // 761
     bool unkBool;                     // 762

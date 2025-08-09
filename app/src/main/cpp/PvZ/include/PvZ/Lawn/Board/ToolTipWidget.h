@@ -28,6 +28,12 @@ public:
     void SetWarningText(const pvzstl::string &theWarningText) {
         reinterpret_cast<void (*)(ToolTipWidget *, const pvzstl::string &)>(ToolTipWidget_SetWarningTextAddr)(this, theWarningText);
     }
+    void SetTitle(const pvzstl::string &theTitle) {
+        reinterpret_cast<void (*)(ToolTipWidget *, const pvzstl::string &)>(ToolTipWidget_SetTitleAddr)(this, theTitle);
+    }
+    void SetLabel(const pvzstl::string &theLabel) {
+        reinterpret_cast<void (*)(ToolTipWidget *, const pvzstl::string &)>(ToolTipWidget_SetLabelAddr)(this, theLabel);
+    }
 };
 
 #endif // PVZ_LAWN_BOARD_TOOL_TIP_WIDGET_H

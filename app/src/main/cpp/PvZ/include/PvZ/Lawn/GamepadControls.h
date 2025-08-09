@@ -81,9 +81,6 @@ public:
     SeedBank *GetSeedBank() {
         return reinterpret_cast<SeedBank *(*)(GamepadControls *)>(GamepadControls_GetSeedBankAddr)(this);
     }
-    void OnButtonDown(ButtonCode theButton, int theGamepadIndex, unsigned int a4) {
-        reinterpret_cast<void (*)(GamepadControls *, ButtonCode, int, unsigned int)>(GamepadControls_OnButtonDownAddr)(this, theButton, theGamepadIndex, a4);
-    }
     void OnButtonUp(ButtonCode theButton, int theGamepadIndex, unsigned int a4) {
         reinterpret_cast<void (*)(GamepadControls *, ButtonCode, int, unsigned int)>(GamepadControls_OnButtonUpAddr)(this, theButton, theGamepadIndex, a4);
     }
@@ -108,6 +105,7 @@ public:
     void Update(float a2);
     void DrawPreview(Sexy::Graphics *g);
     void UpdatePreviewReanim();
+    void OnButtonDown(ButtonCode theButton, int theIsZombieControl, unsigned int thePlayerIndex);
 };
 
 class ZenGardenControls : public GamepadControls {
@@ -132,6 +130,8 @@ inline void (*old_GamepadControls_ButtonDownFireCobcannonTest)(GamepadControls *
 inline void (*old_GamepadControls_UpdatePreviewReanim)(GamepadControls *gamePad);
 
 inline void (*old_GamepadControls_DrawPreview)(GamepadControls *gamePad, Sexy::Graphics *graphics);
+
+inline void (*old_GamepadControls_OnButtonDown)(GamepadControls *, ButtonCode theButton, int theIsZombieControl, unsigned int thePlayerIndex);
 
 inline void (*old_ZenGardenControls_Update)(ZenGardenControls *a1, float a2);
 

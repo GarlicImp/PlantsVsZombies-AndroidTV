@@ -51,6 +51,7 @@ inline void *Board_MouseHitTestAddr;
 inline void *Board_ToolHitTestAddr;
 inline void *Board_RefreshSeedPacketFromCursorAddr;
 inline void *Board_CanUseGameObjectAddr;
+inline void *Board_DrawAddr;
 inline void *Board_DrawZenButtonsAddr;
 inline void *Board_DrawShovelAddr;
 inline void *Board_DrawGameObjectsAddr;
@@ -589,9 +590,12 @@ inline void *SeedPacket_DrawMiddleAddr;
 inline void *SeedPacket_MouseDownAddr;
 inline void *SeedPacket_FlashIfReadyAddr;
 inline void *SeedPacket_DrawAddr;
+inline void *SeedPacket_DeactivateAddr;
+inline void *SeedPacket_WasPlantedAddr;
 
 
 inline void *VSSetupMenu_VSSetupMenuAddr;
+inline void *VSSetupMenu_Delete2Addr;
 inline void *VSSetupMenu_DrawAddr;
 inline void *VSSetupMenu_UpdateAddr;
 inline void *VSSetupMenu_KeyDownAddr;
@@ -600,6 +604,8 @@ inline void *VSSetupMenu_OnStateEnterAddr;
 inline void *VSSetupMenu_SetSecondPlayerIndexAddr;
 inline void *VSSetupMenu_GoToStateAddr;
 inline void *VSSetupMenu_CloseVSSetupAddr;
+inline void *VSSetupMenu_ButtonPressAddr;
+inline void *VSSetupMenu_ButtonDepressAddr;
 
 
 inline void *VSResultsMenu_UpdateAddr;
@@ -825,6 +831,7 @@ inline void *GameButton_SetDisabledAddr;
 inline void *GameButton_UpdateAddr;
 inline void *GameButton_DrawAddr;
 inline void *MakeButtonAddr;
+inline void *MakeNewButtonAddr;
 inline void *MakeNewCheckboxAddr;
 inline void *Sexy_ButtonWidget_ButtonWidgetAddr;
 inline void *ZombieTypeCanGoInPoolAddr;
@@ -913,6 +920,8 @@ inline void *Sexy_SexyAppBase_Set3DAcceleratedAddr;
 inline void *Sexy_SexyAppBase_SexyAppBaseAddr;
 inline void *Sexy_ResourceManager_GetSoundThrowAddr;
 inline void *ToolTipWidget_SetWarningTextAddr;
+inline void *ToolTipWidget_SetTitleAddr;
+inline void *ToolTipWidget_SetLabelAddr;
 
 
 inline void *GridItem_UpdateAddr;
@@ -1085,6 +1094,8 @@ inline Sexy::Image **Sexy_IMAGE_REANIM_ZOMBIE_GARGANTUAR_BODY1_2_Addr;
 inline Sexy::Image **Sexy_IMAGE_REANIM_ZOMBIE_GARGANTUAR_BODY1_3_Addr;
 inline Sexy::Image **Sexy_IMAGE_REANIM_ZOMBIE_GARGANTUAR_OUTERARM_LOWER2_Addr;
 inline Sexy::Image **Sexy_IMAGE_REANIM_ZOMBIE_GARGANTUAR_FOOT2_Addr;
+inline Sexy::Image **Sexy_IMAGE_OPTIONS_CHECKBOX0_Addr;
+inline Sexy::Image **Sexy_IMAGE_OPTIONS_CHECKBOX1_Addr;
 // inline Sexy::Image **Sexy_IMAGE_BLANK_Addr;
 namespace Sexy {
 inline Image **IMAGE_BLANK;
@@ -1232,6 +1243,7 @@ inline bool GetFunctionAddr() {
     Board_FadeOutLevelAddr = dlsym(handle, "_ZN5Board12FadeOutLevelEv");
     Board_MouseHitTestAddr = dlsym(handle, "_ZN5Board12MouseHitTestEiiP9HitResulti");
     Board_CanUseGameObjectAddr = dlsym(handle, "_ZN5Board16CanUseGameObjectE14GameObjectType");
+    Board_DrawAddr = dlsym(handle, "_ZN5Board4DrawEPN4Sexy8GraphicsE");
     Board_DrawZenButtonsAddr = dlsym(handle, "_ZN5Board14DrawZenButtonsEPN4Sexy8GraphicsE");
     Board_DrawShovelAddr = dlsym(handle, "_ZN5Board10DrawShovelEPN4Sexy8GraphicsE");
     Board_DrawGameObjectsAddr = dlsym(handle, "_ZN5Board15DrawGameObjectsEPN4Sexy8GraphicsE");
@@ -1780,9 +1792,12 @@ inline bool GetFunctionAddr() {
     SeedPacket_MouseDownAddr = dlsym(handle, "_ZN10SeedPacket9MouseDownEiiii");
     SeedPacket_FlashIfReadyAddr = dlsym(handle, "_ZN10SeedPacket12FlashIfReadyEv");
     SeedPacket_DrawAddr = dlsym(handle, "_ZN10SeedPacket4DrawEPN4Sexy8GraphicsE");
+    SeedPacket_DeactivateAddr = dlsym(handle, "_ZN10SeedPacket10DeactivateEv");
+    SeedPacket_WasPlantedAddr = dlsym(handle, "_ZN10SeedPacket10WasPlantedEi");
 
 
     VSSetupMenu_VSSetupMenuAddr = dlsym(handle, "_ZN11VSSetupMenuC2Ev");
+    VSSetupMenu_Delete2Addr = dlsym(handle, "_ZN11VSSetupMenuD2Ev");
     VSSetupMenu_DrawAddr = dlsym(handle, "_ZN11VSSetupMenu4DrawEPN4Sexy8GraphicsE");
     VSSetupMenu_UpdateAddr = dlsym(handle, "_ZN11VSSetupMenu6UpdateEv");
     VSSetupMenu_GameButtonDownAddr = dlsym(handle, "_ZN11VSSetupMenu14GameButtonDownEN4Sexy13GamepadButtonEij");
@@ -1791,6 +1806,8 @@ inline bool GetFunctionAddr() {
     VSSetupMenu_SetSecondPlayerIndexAddr = dlsym(handle, "_ZN11VSSetupMenu20SetSecondPlayerIndexEi");
     VSSetupMenu_GoToStateAddr = dlsym(handle, "_ZN11VSSetupMenu9GoToStateENS_12VSSetupStateE");
     VSSetupMenu_CloseVSSetupAddr = dlsym(handle, "_ZN11VSSetupMenu12CloseVSSetupEb");
+    VSSetupMenu_ButtonPressAddr = dlsym(handle, "_ZN11VSSetupMenu11ButtonPressEi");
+    VSSetupMenu_ButtonDepressAddr = dlsym(handle, "_ZN11VSSetupMenu13ButtonDepressEi");
 
 
     VSResultsMenu_UpdateAddr = dlsym(handle, "_ZN13VSResultsMenu6UpdateEv");
@@ -2087,6 +2104,8 @@ inline bool GetFunctionAddr() {
     ReanimatorCache_UpdateReanimationForVariationAddr = dlsym(handle, "_ZN15ReanimatorCache29UpdateReanimationForVariationEP11Reanimation13DrawVariation");
     HelpBarWidget_HelpBarWidgetAddr = dlsym(handle, "_ZN13HelpBarWidgetC2Ev");
     ToolTipWidget_SetWarningTextAddr = dlsym(handle, "_ZN13ToolTipWidget14SetWarningTextERKSs");
+    ToolTipWidget_SetTitleAddr = dlsym(handle, "_ZN13ToolTipWidget8SetTitleERKSs");
+    ToolTipWidget_SetLabelAddr = dlsym(handle, "_ZN13ToolTipWidget8SetLabelERKSs");
 
 
     TodDrawImageCelCenterScaledFAddr = dlsym(handle, "_Z28TodDrawImageCelCenterScaledFPN4Sexy8GraphicsEPNS_5ImageEffiff");
@@ -2150,6 +2169,7 @@ inline bool GetFunctionAddr() {
     GameButton_UpdateAddr = dlsym(handle, "_ZN10GameButton6UpdateEv");
     GameButton_DrawAddr = dlsym(handle, "_ZN10GameButton4DrawEPN4Sexy8GraphicsE");
     MakeButtonAddr = dlsym(handle, "_Z10MakeButtoniPN4Sexy14ButtonListenerEPNS_6WidgetERKSs");
+    MakeNewButtonAddr = dlsym(handle, "_Z13MakeNewButtoniPN4Sexy14ButtonListenerEPNS_6WidgetERKSsPNS_4FontEPNS_5ImageES9_S9_");
     MakeNewCheckboxAddr = dlsym(handle, "_Z15MakeNewCheckboxiPN4Sexy16CheckboxListenerEPNS_6WidgetEb");
     Sexy_ButtonWidget_ButtonWidgetAddr = dlsym(handle, "_ZN4Sexy12ButtonWidgetC2EiPNS_14ButtonListenerE");
     SaveGameContext_SyncIntAddr = dlsym(handle, "_ZN15SaveGameContext7SyncIntERi");
@@ -2257,6 +2277,8 @@ inline bool GetFunctionAddr() {
     Sexy_IMAGE_REANIM_ZOMBIE_GARGANTUAR_BODY1_3_Addr = (Sexy::Image **)dlsym(handle, "_ZN4Sexy38IMAGE_REANIM_ZOMBIE_GARGANTUAR_BODY1_3E");
     Sexy_IMAGE_REANIM_ZOMBIE_GARGANTUAR_OUTERARM_LOWER2_Addr = (Sexy::Image **)dlsym(handle, "_ZN4Sexy46IMAGE_REANIM_ZOMBIE_GARGANTUAR_OUTERARM_LOWER2E");
     Sexy_IMAGE_REANIM_ZOMBIE_GARGANTUAR_FOOT2_Addr = (Sexy::Image **)dlsym(handle, "_ZN4Sexy36IMAGE_REANIM_ZOMBIE_GARGANTUAR_FOOT2E");
+    Sexy_IMAGE_OPTIONS_CHECKBOX0_Addr = (Sexy::Image **)dlsym(handle, "_ZN4Sexy23IMAGE_OPTIONS_CHECKBOX0E");
+    Sexy_IMAGE_OPTIONS_CHECKBOX1_Addr = (Sexy::Image **)dlsym(handle, "_ZN4Sexy23IMAGE_OPTIONS_CHECKBOX1E");
     //    Sexy_IMAGE_BLANK_Addr = (Sexy::Image **)dlsym(handle, "_ZN4Sexy11IMAGE_BLANKE");
     Sexy::IMAGE_BLANK = reinterpret_cast<Sexy::Image **>(dlsym(handle, "_ZN4Sexy11IMAGE_BLANKE"));
     Sexy_IMAGE_SEEDPACKETFLASH_Addr = (Sexy::Image **)dlsym(handle, "_ZN4Sexy21IMAGE_SEEDPACKETFLASHE");

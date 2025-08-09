@@ -25,13 +25,13 @@
 
 class HelpOptionsDialog : public __LawnDialog {
 public:
-    LawnApp *mApp;                       // 191
-    Sexy::GameButton *mHowToPlayButton;  // 192
-    Sexy::GameButton *mSwitchUserButton; // 193
-    Sexy::GameButton *mSettingsButton;   // 194
-    Sexy::GameButton *mCreditsButton;    // 195
-    Sexy::GameButton *mBackButton;       // 196
-    Sexy::GameButton *mUnkButton;        // 197
+    LawnApp *mApp;                 // 191
+    GameButton *mHowToPlayButton;  // 192
+    GameButton *mSwitchUserButton; // 193
+    GameButton *mSettingsButton;   // 194
+    GameButton *mCreditsButton;    // 195
+    GameButton *mBackButton;       // 196
+    GameButton *mUnkButton;        // 197
 }; // 115: 198, 111: 200
 
 inline void (*old_HelpOptionsDialog_ButtonDepress)(HelpOptionsDialog *a, int a2);

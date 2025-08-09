@@ -22,18 +22,16 @@
 
 #include "PvZ/Symbols.h"
 
-#include "DialogButton.h"
+#include "PvZ/SexyAppFramework/Widget/DialogButton.h"
 
-namespace Sexy {
-
-class GameButton : public DialogButton {
+class GameButton : public Sexy::DialogButton {
 public:
-    int unkMems4[2];          // 210  ~ 211
-    bool unkBool5;            // 848
-    int unkMems5[2];          // 213 ~ 214
-    Image *mOverOverlayImage; // 215
-    bool mDrawStoneButton;    // 864
-    int unkMems6[13];         // 217 ~ 229
+    int unkMems4[2];                // 210  ~ 211
+    bool unkBool5;                  // 848
+    int unkMems5[2];                // 213 ~ 214
+    Sexy::Image *mOverOverlayImage; // 215
+    bool mDrawStoneButton;          // 864
+    int unkMems6[13];               // 217 ~ 229
     // 大小230个整数
 
     //    GameButton(int theId, ButtonListener *theListener) { Create(); }
@@ -55,28 +53,38 @@ public:
     void SetDisabled(bool theDisabled) {
         reinterpret_cast<void (*)(GameButton *, bool)>(GameButton_SetDisabledAddr)(this, theDisabled);
     }
-    void Draw(Graphics *g) {
-        reinterpret_cast<void (*)(GameButton *, Graphics *)>(GameButton_DrawAddr)(this, g);
+    void Draw(Sexy::Graphics *g) {
+        reinterpret_cast<void (*)(GameButton *, Sexy::Graphics *)>(GameButton_DrawAddr)(this, g);
     }
     void OnPressed() {
         reinterpret_cast<void (*)(GameButton *)>(GameButton_OnPressedAddr)(this);
     }
 
 protected:
-    void __Constructor(int theId, ButtonListener *theListener) {
-        reinterpret_cast<void (*)(GameButton *, int, ButtonListener *)>(GameButton_GameButtonAddr)(this, theId, theListener);
+    void __Constructor(int theId, Sexy::ButtonListener *theListener) {
+        reinterpret_cast<void (*)(GameButton *, int, Sexy::ButtonListener *)>(GameButton_GameButtonAddr)(this, theId, theListener);
     }
     void __Destructor() {
         reinterpret_cast<void (*)(GameButton *)>(GameButton_DeleteAddr)(this);
     }
 };
 
-inline GameButton *MakeButton(int theId, ButtonListener *theListener, __Widget *theParent, const pvzstl::string &theText) {
-    return reinterpret_cast<GameButton *(*)(int, ButtonListener *, __Widget *, const pvzstl::string &)>(MakeButtonAddr)(theId, theListener, theParent, theText);
+class NewLawnButton : public Sexy::DialogButton {};
+
+inline GameButton *MakeButton(int theId, Sexy::ButtonListener *theListener, Sexy::__Widget *theParent, const pvzstl::string &theText) {
+    return reinterpret_cast<GameButton *(*)(int, Sexy::ButtonListener *, Sexy::__Widget *, const pvzstl::string &)>(MakeButtonAddr)(theId, theListener, theParent, theText);
 }
-
-
-} // namespace Sexy
+inline NewLawnButton *MakeNewButton(int theId,
+                                    Sexy::ButtonListener *theListener,
+                                    Sexy::__Widget *theWidget,
+                                    const pvzstl::string &theText,
+                                    Sexy::Font *theFont,
+                                    Sexy::Image *theImageNormal,
+                                    Sexy::Image *theImageOver,
+                                    Sexy::Image *theImageDown) {
+    return reinterpret_cast<NewLawnButton *(*)(int, Sexy::ButtonListener *, Sexy::__Widget *, const pvzstl::string &, Sexy::Font *, Sexy::Image *, Sexy::Image *, Sexy::Image *)>(MakeNewButtonAddr)(
+        theId, theListener, theWidget, theText, theFont, theImageNormal, theImageOver, theImageDown);
+}
 
 
 #endif // PVZ_SEXYAPPFRAMEWORK_WIDGET_GAME_BUTTON_H

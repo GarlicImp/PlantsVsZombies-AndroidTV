@@ -40,11 +40,12 @@
 #include "PvZ/Lawn/LawnApp.h"
 #include "PvZ/Lawn/System/Music.h"
 #include "PvZ/Lawn/Widget/ChallengeScreen.h"
+#include "PvZ/Lawn/Widget/GameButton.h"
 #include "PvZ/Lawn/Widget/SeedChooserScreen.h"
+#include "PvZ/Lawn/Widget/VSSetupMenu.h"
 #include "PvZ/Misc.h"
 #include "PvZ/SexyAppFramework/GamepadApp.h"
 #include "PvZ/SexyAppFramework/Graphics/Graphics.h"
-#include "PvZ/SexyAppFramework/Widget/GameButton.h"
 #include "PvZ/Symbols.h"
 #include "PvZ/TodLib/Common/TodStringFile.h"
 #include "PvZ/TodLib/Effect/Reanimator.h"
@@ -1040,7 +1041,7 @@ void Board::Update() {
             if (choiceSeedType < SeedType::NUM_SEED_TYPES && !mGamepadControls1->mIsZombie) {
                 mSeedBank1->mSeedPackets[choiceSeedPacketIndex].mPacketType = isImitaterSeed ? SeedType::SEED_IMITATER : choiceSeedType;
                 mSeedBank1->mSeedPackets[choiceSeedPacketIndex].mImitaterType = isImitaterSeed ? choiceSeedType : SeedType::SEED_NONE;
-            } else if (choiceSeedType > SeedType::SEED_ZOMBIE_TOMBSTONE && mGamepadControls1->mIsZombie) // IZ模式里用不了墓碑
+            } else if (choiceSeedType > SeedType::SEED_ZOMBIE_GRAVESTONE && mGamepadControls1->mIsZombie) // IZ模式里用不了墓碑
                 mSeedBank1->mSeedPackets[choiceSeedPacketIndex].mPacketType = choiceSeedType;
         } else if (targetSeedBank == 2 && mSeedBank2 != nullptr) {
             if (choiceSeedType < SeedType::NUM_SEED_TYPES && !mGamepadControls2->mIsZombie) {
@@ -1471,6 +1472,25 @@ void Board::DrawShovel(Sexy::Graphics *g) {
 
     if (mShowShovel) { // 绘制铲子按钮
         DrawShovelButton(g, mApp);
+    }
+}
+
+void Board::Draw(Sexy::Graphics *g) {
+    old_Board_Draw(this, g);
+
+    if (gVSMoreSeedsButton == nullptr)
+        return;
+
+    if (gVSMoreSeedsButton->mDrawString == true) {
+        Color aColor = Color(0, 205, 0, 255);
+        g->SetColor(aColor);
+        g->SetFont(*Sexy_FONT_DWARVENTODCRAFT18_Addr);
+
+        pvzstl::string moreSeeds = StrFormat("拓展僵尸选卡");
+        g->DrawString(moreSeeds, MORE_SEEDS_BUTTON_X + 40, MORE_SEEDS_BUTTON_Y + 25);
+
+        pvzstl::string morePackets = StrFormat("额外卡槽");
+        g->DrawString(morePackets, MORE_PACKETS_BUTTON_X + 40, MORE_PACKETS_BUTTON_Y + 25);
     }
 }
 
@@ -3201,6 +3221,11 @@ void Board::DrawUITop(Sexy::Graphics *g) {
 }
 
 int Board::GetSeedBankExtraWidth() {
+    // 去除对战7Packets时Banks的额外宽度
+    if (mApp->mGameMode == GameMode::GAMEMODE_MP_VS) {
+        return 0;
+    }
+
     int aNumPackets = mSeedBank1->mNumPackets;
     return aNumPackets <= 6 ? 0 : aNumPackets == 7 ? 60 : aNumPackets == 8 ? 76 : aNumPackets == 9 ? 112 : 153;
 }
@@ -3303,7 +3328,63 @@ void Board::ShakeBoard(int theShakeAmountX, int theShakeAmountY) {
 }
 
 int Board::GetNumSeedsInBank(bool thePlayerIndex) {
+    // 对战额外卡槽
+    if (mApp->mGameMode == GameMode::GAMEMODE_MP_VS && mApp->mPlayerInfo->mIsVSMorePackets) {
+        return 7;
+    }
+
     return old_Board_GetNumSeedsInBank(this, thePlayerIndex);
+}
+
+int Board::GetSeedPacketPositionX(int thePacketIndex, int theSeedBankIndex, bool thePlayerIndex) {
+    int aNumPackets = mSeedBank1->mNumPackets;
+    if (mApp->mGameMode == GameMode::GAMEMODE_MP_VS) {
+        if (aNumPackets == 6) {
+            return thePlayerIndex ? 59 * thePacketIndex + 15 : 59 * thePacketIndex + 85;
+        } else if (aNumPackets == 7) {
+            return thePlayerIndex ? 51 * thePacketIndex + 11 : 51 * thePacketIndex + 80;
+        }
+    }
+
+    int **v4;                     // r2
+    int aOffsetX;                 // r7
+    int aSeedBank;                // r6
+    int aHasConveyorBeltSeedBank; // r0
+
+    v4 = &vTable + theSeedBankIndex;
+    if (thePlayerIndex)
+        aOffsetX = -70;
+    else
+        aOffsetX = 0;
+    aSeedBank = v4[131][13];
+    if (mApp->IsSlotMachineLevel())
+        return 59 * thePacketIndex + 247;
+    aHasConveyorBeltSeedBank = HasConveyorBeltSeedBank(0);
+    if (aHasConveyorBeltSeedBank) {
+        if (mApp->IsCoopMode())
+            return 50 * thePacketIndex + 10;
+        else
+            return 50 * thePacketIndex + 91;
+    } else if (aSeedBank <= 6) {
+        return 59 * thePacketIndex + 85 + aOffsetX;
+    } else if (aSeedBank == 7) {
+        return 59 * thePacketIndex + 85;
+    } else if (aSeedBank == 8) {
+        return 54 * thePacketIndex + 81;
+    } else {
+        if (aSeedBank == 9)
+            aHasConveyorBeltSeedBank = 52;
+        else
+            thePacketIndex *= 3;
+        if (aSeedBank == 9)
+            aHasConveyorBeltSeedBank *= thePacketIndex;
+        else
+            thePacketIndex *= 17;
+        if (aSeedBank == 9)
+            return aHasConveyorBeltSeedBank + 80;
+        else
+            return thePacketIndex + 79;
+    }
 }
 
 void Board::RemoveParticleByType(ParticleEffect theEffectType) {

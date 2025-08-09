@@ -20,9 +20,9 @@
 #ifndef PVZ_LAWN_WIDGET_LEADERBOARDS_WIDGET_H
 #define PVZ_LAWN_WIDGET_LEADERBOARDS_WIDGET_H
 
+#include "GameButton.h"
 #include "HouseChooserDialog.h"
 #include "PvZ/SexyAppFramework/Widget/ButtonListener.h"
-#include "PvZ/SexyAppFramework/Widget/GameButton.h"
 #include "PvZ/SexyAppFramework/Widget/Widget.h"
 #include "TrashBin.h"
 
@@ -69,7 +69,7 @@ public:
     bool mAchievements[12];                            // 67 ~ 69
     LeaderboardReanimations *mLeaderboardReanimations; // 70
     int mLongestRecordPool;                            // 71
-    Sexy::GameButton *mBackButton;
+    GameButton *mBackButton;
     Sexy::ButtonListener *mButtonListener = &sButtonListener;
     int mFocusedAchievementIndex;
     bool mHighLightAchievement;

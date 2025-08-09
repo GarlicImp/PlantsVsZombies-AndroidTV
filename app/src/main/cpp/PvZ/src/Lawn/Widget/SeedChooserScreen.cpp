@@ -24,8 +24,8 @@
 #include "PvZ/Lawn/Board/SeedBank.h"
 #include "PvZ/Lawn/GamepadControls.h"
 #include "PvZ/Lawn/LawnApp.h"
+#include "PvZ/Lawn/Widget/GameButton.h"
 #include "PvZ/Misc.h"
-#include "PvZ/SexyAppFramework/Widget/GameButton.h"
 #include "PvZ/Symbols.h"
 #include "PvZ/TodLib/Common/TodStringFile.h"
 
@@ -35,7 +35,7 @@ namespace {
 constexpr int mSeedPacketWidth = 53;
 constexpr int mSeedPacketHeight = 70;
 
-Sexy::GameButton *gSeedChooserScreenMainMenuButton;
+GameButton *gSeedChooserScreenMainMenuButton;
 SeedChooserTouchState gSeedChooserTouchState = SeedChooserTouchState::SEEDCHOOSER_TOUCHSTATE_NONE;
 } // namespace
 
@@ -82,7 +82,7 @@ void SeedChooserScreen::__Constructor(bool theIsZombieChooser) {
             if (theChosenSeed->mSeedState == ChosenSeedState::SEED_IN_BANK)
                 continue;
 
-            GetSeedPositionInBank(theValidChosenSeedNum, &theChosenSeed->mX, &theChosenSeed->mY, 0);
+            GetSeedPositionInBank(theValidChosenSeedNum, theChosenSeed->mX, theChosenSeed->mY, 0);
             theChosenSeed->mEndX = theChosenSeed->mX;
             theChosenSeed->mEndY = theChosenSeed->mY;
             theChosenSeed->mStartX = theChosenSeed->mX;
@@ -118,7 +118,7 @@ void SeedChooserScreen::__Constructor(bool theIsZombieChooser) {
         SeedType types[] = {SeedType::SEED_WALLNUT, SeedType::SEED_STARFRUIT, SeedType::SEED_UMBRELLA};
         for (int i = 0; i < std::size(types); ++i) {
             ChosenSeed *theChosenSeed = &(mChosenSeeds[types[i]]);
-            GetSeedPositionInBank(i, &theChosenSeed->mX, &theChosenSeed->mY, 0);
+            GetSeedPositionInBank(i, theChosenSeed->mX, theChosenSeed->mY, 0);
             theChosenSeed->mEndX = theChosenSeed->mX;
             theChosenSeed->mEndY = theChosenSeed->mY;
             theChosenSeed->mStartX = theChosenSeed->mX;
@@ -200,7 +200,7 @@ void SeedChooserScreen::Update() {
         m1PChoosingSeeds = mSeedsIn1PBank < 4;
     }
 
-    return old_SeedChooserScreen_Update(this);
+    old_SeedChooserScreen_Update(this);
 }
 
 void SeedChooserScreen::EnableStartButton(int theIsEnabled) {
@@ -234,13 +234,29 @@ bool SeedChooserScreen::SeedNotAllowedToPick(SeedType theSeedType) {
     // 此处添加一些逻辑，就可以自定义Ban卡
     // 此处Ban卡仅对植物方生效，theSeedType取值范围是0~39。
 
+    if (mApp->mPlayerInfo->mIsVSMoreSeeds) {
+        if (theSeedType == SeedType::SEED_BLOVER) {
+            return false;
+        }
+    }
+
+    if (!mBoard->StageHasPool()) {
+        if (theSeedType == SeedType::SEED_ZOMBIE_DUCKY_TUBE || theSeedType == SeedType::SEED_ZOMBIE_SNORKEL || theSeedType == SeedType::SEED_ZOMBIE_DOLPHIN_RIDER)
+            return true;
+    }
+
     return old_SeedChooserScreen_SeedNotAllowedToPick(this, theSeedType);
 }
 
 SeedType SeedChooserScreen::GetZombieSeedType(SeedType theSeedType) {
-    int aSeedType = theSeedType + SEED_ZOMBIE_TOMBSTONE;
-    return aSeedType > SEED_ZOMBIE_BALLOON ? SEED_NONE : (SeedType)aSeedType;
-    // 解锁更多对战僵尸   return aSeedType > 90 ? -1 : aSeedType;
+    int aSeedType = theSeedType + SEED_ZOMBIE_GRAVESTONE;
+    if (mApp->mPlayerInfo->mIsVSMoreSeeds) { // 解锁更多对战僵尸
+        game_patches::numDrawZombieSeedChooser.Modify();
+        game_patches::allowZombieSeedHitIndex.Modify();
+        return aSeedType > SEED_ZOMBIE_SQUASH_HEAD ? SEED_NONE : (SeedType)aSeedType;
+    } else {
+        return aSeedType > SEED_ZOMBIE_GARGANTUAR ? SEED_NONE : (SeedType)aSeedType;
+    }
 }
 
 ZombieType SeedChooserScreen::GetZombieType(ZombieType theZombieType) {
@@ -260,7 +276,7 @@ void SeedChooserScreen::CrazyDavePickSeeds() {
         return;
     }
 
-    return old_SeedChooserScreen_CrazyDavePickSeeds(this);
+    old_SeedChooserScreen_CrazyDavePickSeeds(this);
 }
 
 void SeedChooserScreen::ClickedSeedInBank(ChosenSeed *theChosenSeed, unsigned int thePlayerIndex) {
@@ -297,7 +313,7 @@ void SeedChooserScreen::GameButtonDown(ButtonCode theButton, unsigned int thePla
         }
     }
 
-    return old_SeedChooserScreen_GameButtonDown(this, theButton, thePlayerIndex);
+    old_SeedChooserScreen_GameButtonDown(this, theButton, thePlayerIndex);
 }
 
 void SeedChooserScreen::DrawPacket(
@@ -309,6 +325,10 @@ void SeedChooserScreen::DrawPacket(
     // 此算法用于在对战模式将非选卡的一方的卡片整体变暗。但这种算法下，55亮度会变成155亮度，115亮度会变成185亮度，严重影响非对战模式的选卡体验。所以需要修复。
 
     int theConvertedGrayness = (mApp->mGameMode == GameMode::GAMEMODE_MP_VS) ? ((theColor->mRed + theColor->mGreen + theColor->mBlue) / 3 + theGrayness) / 2 : theGrayness;
+    if (mApp->mGameMode == GameMode::GAMEMODE_MP_VS && !mBoard->StageHasPool()) {
+        if (theSeedType == SeedType::SEED_ZOMBIE_DUCKY_TUBE || theSeedType == SeedType::SEED_ZOMBIE_SNORKEL || theSeedType == SeedType::SEED_ZOMBIE_DOLPHIN_RIDER)
+            theConvertedGrayness = 115;
+    }
     DrawSeedPacket(g, x, y, theSeedType, theImitaterType, thePercentDark, theConvertedGrayness, theDrawCost, false, mIsZombieChooser, theUseCurrentCost);
 }
 
@@ -329,19 +349,56 @@ void SeedChooserScreen::ButtonDepress(int theId) {
         return;
     }
 
-    return old_SeedChooserScreen_ButtonDepress(this, theId);
+    old_SeedChooserScreen_ButtonDepress(this, theId);
 }
 
-void SeedChooserScreen::GetSeedPositionInBank(int theIndex, int *x, int *y, int thePlayerIndex) {
+void SeedChooserScreen::GetSeedPositionInBank(int theIndex, int &x, int &y, int thePlayerIndex) {
     // 修复对战选卡时的错位
     if (mApp->mGameMode == GameMode::GAMEMODE_MP_VS) {
-        int SeedPacketPositionX = mBoard->GetSeedPacketPositionX(theIndex, 0, mIsZombieChooser);
-        *x = mSeedBank1->mX + SeedPacketPositionX - mX;
-        *y = mSeedBank1->mY + 8 - mY;
+        if (!mIsZombieChooser) {
+            x = mBoard->mSeedBank1->mX - mX + mBoard->GetSeedPacketPositionX(theIndex, 0, mIsZombieChooser);
+            y = mBoard->mSeedBank1->mY - mY + 8;
+        } else {
+            x = mBoard->mSeedBank2->mX - mX + mBoard->GetSeedPacketPositionX(theIndex, 0, mIsZombieChooser);
+            y = mBoard->mSeedBank2->mY - mY + 8;
+        }
         return;
     }
 
-    return old_SeedChooserScreen_GetSeedPositionInBank(this, theIndex, x, y, thePlayerIndex);
+    old_SeedChooserScreen_GetSeedPositionInBank(this, theIndex, x, y, thePlayerIndex);
+}
+
+void SeedChooserScreen::GetSeedPositionInChooser(int theIndex, int &x, int &y) {
+    if (!mIsZombieChooser && theIndex == SeedType::SEED_IMITATER) {
+        x = mImitaterButton->mX;
+        y = mImitaterButton->mY;
+        return;
+    }
+    int aRow = theIndex / NumColumns();
+    int aCol = theIndex % NumColumns();
+    x = 53 * aCol + 22;
+    if (mIsZombieChooser) {
+        if (aRow == 3 && !mApp->mPlayerInfo->mIsVSMoreSeeds) {
+            x = 53 * aCol + 48;
+        }
+    }
+
+    if (Has7Rows()) {
+        y = 70 * aRow + 123;
+    } else {
+        y = 73 * aRow + 128;
+    }
+
+    if (mIsZombieChooser) {
+        y = y = 70 * aRow + 123;
+    }
+}
+
+int SeedChooserScreen::NumColumns() {
+    if (mIsZombieChooser)
+        return 5;
+    else
+        return 8;
 }
 
 void SeedChooserScreen::ShowToolTip(unsigned int thePlayerIndex) {
@@ -349,15 +406,53 @@ void SeedChooserScreen::ShowToolTip(unsigned int thePlayerIndex) {
 
     if (mApp->mGameMode == GameMode::GAMEMODE_MP_VS && mIsZombieChooser) {
         SeedType aSeedType = SeedHitTest(mCursorPositionX2, mCursorPositionY2);
-        if (mChosenSeeds[aSeedType - SeedType::SEED_ZOMBIE_TOMBSTONE].mSeedState == ChosenSeedState::SEED_IN_BANK && mChosenSeeds[aSeedType - SeedType::SEED_ZOMBIE_TOMBSTONE].mCrazyDavePicked) {
+        if (mChosenSeeds[aSeedType - SeedType::SEED_ZOMBIE_GRAVESTONE].mSeedState == ChosenSeedState::SEED_IN_BANK && mChosenSeeds[aSeedType - SeedType::SEED_ZOMBIE_GRAVESTONE].mCrazyDavePicked) {
             pvzstl::string str = TodStringTranslate("[ZOMBIE_BOSS_WANTS]");
             mToolTip2->SetWarningText(str);
+        }
+        // 对战显示隐藏僵尸卡信息
+        if (aSeedType >= SeedType::SEED_ZOMBIE_UNKNOWN && aSeedType <= SeedType::SEED_ZOMBIE_TALLNUT_HEAD) {
+            pvzstl::string aTitle, aLabel;
+            switch (aSeedType) {
+                case SeedType::SEED_ZOMBIE_UNKNOWN: // 红眼巨人僵尸
+                    aTitle = TodStringTranslate("[REDEYE_GARGANTUAR_ZOMBIE]");
+                    aLabel = TodStringTranslate("[REDEYE_GARGANTUAR_ZOMBIE_DESCRIPTION_HEADER]");
+                    break;
+                case SeedType::SEED_ZOMBIE_PEA_HEAD: // 豌豆射手僵尸
+                    aTitle = TodStringTranslate("[PEA_HEAD_ZOMBIE]");
+                    aLabel = TodStringTranslate("[PEA_HEAD_ZOMBIE_DESCRIPTION_HEADER]");
+                    break;
+                case SeedType::SEED_ZOMBIE_WALLNUT_HEAD: // 坚果僵尸
+                    aTitle = TodStringTranslate("[WALLNUT_HEAD_ZOMBIE]");
+                    aLabel = TodStringTranslate("[WALLNUT_HEAD_ZOMBIE_DESCRIPTION_HEADER]");
+                    break;
+                case SeedType::SEED_ZOMBIE_JALAPENO_HEAD: // 火爆辣椒僵尸
+                    aTitle = TodStringTranslate("[JALAPENO_HEAD_ZOMBIE]");
+                    aLabel = TodStringTranslate("[JALAPENO_HEAD_ZOMBIE_DESCRIPTION_HEADER]");
+                    break;
+                case SeedType::SEED_ZOMBIE_GATLINGPEA_HEAD: // 机枪射手僵尸
+                    aTitle = TodStringTranslate("[GATLING_HEAD_ZOMBIE]");
+                    aLabel = TodStringTranslate("[GATLING_HEAD_ZOMBIE_DESCRIPTION_HEADER]");
+                    break;
+                case SeedType::SEED_ZOMBIE_SQUASH_HEAD: // 窝瓜僵尸
+                    aTitle = TodStringTranslate("[SQUASH_HEAD_ZOMBIE]");
+                    aLabel = TodStringTranslate("[SQUASH_HEAD_ZOMBIE_DESCRIPTION_HEADER]");
+                    break;
+                case SeedType::SEED_ZOMBIE_TALLNUT_HEAD: // 高坚果僵尸
+                    aTitle = TodStringTranslate("[TALLNUT_HEAD_ZOMBIE]");
+                    aLabel = TodStringTranslate("[TALLNUT_HEAD_ZOMBIE_DESCRIPTION_HEADER]");
+                    break;
+                default:
+                    return;
+            }
+            mToolTip2->SetTitle(aTitle);
+            mToolTip2->SetLabel(aLabel);
         }
     }
 }
 
 SeedType SeedChooserScreen::GetZombieIndexBySeedType(SeedType theSeedType) {
-    return theSeedType - SEED_ZOMBIE_TOMBSTONE < 0 ? SeedType::SEED_NONE : (SeedType)(theSeedType - SEED_ZOMBIE_TOMBSTONE);
+    return theSeedType - SEED_ZOMBIE_GRAVESTONE < 0 ? SeedType::SEED_NONE : (SeedType)(theSeedType - SEED_ZOMBIE_GRAVESTONE);
 }
 
 void SeedChooserScreen::MouseMove(int x, int y) {

@@ -25,7 +25,7 @@
 
 class ConfirmBackToMainDialog : public __LawnDialog {
 public:
-    Sexy::GameButton *mRestartButton; // 191
+    GameButton *mRestartButton; // 191
     // 115: 192, 111: 194
 
     ConfirmBackToMainDialog(bool theBool) {

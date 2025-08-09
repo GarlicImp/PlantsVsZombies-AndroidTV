@@ -23,11 +23,11 @@
 #include "PvZ/Lawn/Board/Board.h"
 #include "PvZ/Lawn/Board/Zombie.h"
 #include "PvZ/Lawn/LawnApp.h"
+#include "PvZ/Lawn/Widget/GameButton.h"
 #include "PvZ/Lawn/Widget/MailScreen.h"
 #include "PvZ/Misc.h"
 #include "PvZ/SexyAppFramework/Graphics/Graphics.h"
 #include "PvZ/SexyAppFramework/Graphics/MemoryImage.h"
-#include "PvZ/SexyAppFramework/Widget/GameButton.h"
 #include "PvZ/Symbols.h"
 #include "PvZ/TodLib/Common/TodFoley.h"
 #include "PvZ/TodLib/Common/TodStringFile.h"
@@ -71,7 +71,7 @@ bool gMainMenuAchievementKeyboardScrollDirection;
 
 AchievementWidgetState gAchievementState = NOT_SHOWING;
 AchievementsWidget *gMainMenuAchievementsWidget;
-Sexy::GameButton *gMainMenuAchievementsBack;
+GameButton *gMainMenuAchievementsBack;
 int gFoleyVolumeCounter;
 
 } // namespace
@@ -389,7 +389,7 @@ constexpr int mZombatarButtonY = -20;
 
 void MainMenu::EnableButtons() {
     Sexy::Widget *achievementsButton = FindWidget(ACHIEVEMENTS_BUTTON);
-    ((Sexy::GameButton *)achievementsButton)->SetDisabled(false);
+    ((GameButton *)achievementsButton)->SetDisabled(false);
     Sexy::Widget *leaderboardsButton = FindWidget(HOUSE_BUTTON);
     leaderboardsButton->SetVisible(true);
     Sexy::Widget *helpButton = FindWidget(HELP_AND_OPTIONS_BUTTON);
@@ -397,10 +397,10 @@ void MainMenu::EnableButtons() {
     helpButton->mFocusLinks[3] = backButton;
     backButton->mFocusLinks[2] = helpButton;
     Sexy::Widget *zombatarButton = FindWidget(UNLOCK_BUTTON);
-    ((Sexy::GameButton *)zombatarButton)->SetDisabled(false);
-    ((Sexy::GameButton *)zombatarButton)->mButtonImage = addonImages.SelectorScreen_WoodSign3;
-    ((Sexy::GameButton *)zombatarButton)->mDownImage = addonImages.SelectorScreen_WoodSign3_press;
-    ((Sexy::GameButton *)zombatarButton)->mOverImage = addonImages.SelectorScreen_WoodSign3_press;
+    ((GameButton *)zombatarButton)->SetDisabled(false);
+    ((GameButton *)zombatarButton)->mButtonImage = addonImages.SelectorScreen_WoodSign3;
+    ((GameButton *)zombatarButton)->mDownImage = addonImages.SelectorScreen_WoodSign3_press;
+    ((GameButton *)zombatarButton)->mOverImage = addonImages.SelectorScreen_WoodSign3_press;
     zombatarButton->mFocusLinks[0] = FindWidget(BACK_POT_BUTTON);
     zombatarButton->mFocusLinks[1] = zombatarButton->mFocusLinks[0];
     zombatarButton->mFocusLinks[2] = zombatarButton->mFocusLinks[0];
@@ -2186,7 +2186,7 @@ ZombatarWidget::ZombatarWidget(LawnApp *theApp) {
     theApp->Load("DelayLoad_Almanac");
     mApp = theApp;
     pvzstl::string str{"[CLOSE]"};
-    Sexy::GameButton *backButton = MakeButton(1000, mButtonListener, this, str);
+    GameButton *backButton = MakeButton(1000, mButtonListener, this, str);
     backButton->Resize(471, 628, addonZombatarImages.zombatar_mainmenuback_highlight->mWidth, addonZombatarImages.zombatar_mainmenuback_highlight->mHeight);
     AddWidget(backButton);
     backButton->mDrawStoneButton = false;
@@ -2196,7 +2196,7 @@ ZombatarWidget::ZombatarWidget(LawnApp *theApp) {
     mBackButton = backButton;
 
     pvzstl::string str1{"[OK]"};
-    Sexy::GameButton *finishButton = MakeButton(1001, mButtonListener, nullptr, str1);
+    GameButton *finishButton = MakeButton(1001, mButtonListener, nullptr, str1);
     finishButton->Resize(160 + 523, 565, addonZombatarImages.zombatar_finished_button->mWidth, addonZombatarImages.zombatar_finished_button->mHeight);
     AddWidget(finishButton);
     finishButton->mDrawStoneButton = false;
@@ -2206,7 +2206,7 @@ ZombatarWidget::ZombatarWidget(LawnApp *theApp) {
     mFinishButton = finishButton;
 
     pvzstl::string str2{"[OK]"};
-    Sexy::GameButton *viewPortraitButton = MakeButton(1002, mButtonListener, nullptr, str2);
+    GameButton *viewPortraitButton = MakeButton(1002, mButtonListener, nullptr, str2);
     viewPortraitButton->Resize(160 + 75, 565, addonZombatarImages.zombatar_view_button->mWidth, addonZombatarImages.zombatar_view_button->mHeight);
     AddWidget((Widget *)viewPortraitButton);
     viewPortraitButton->mDrawStoneButton = false;
@@ -2216,13 +2216,13 @@ ZombatarWidget::ZombatarWidget(LawnApp *theApp) {
     mViewPortraitButton = viewPortraitButton;
 
     pvzstl::string str3{"[ZOMBATAR_NEW_BUTTON]"};
-    Sexy::GameButton *newButton = MakeButton(1003, mButtonListener, nullptr, str3);
+    GameButton *newButton = MakeButton(1003, mButtonListener, nullptr, str3);
     newButton->Resize(578, 490, 170, 50);
     AddWidget((Widget *)newButton);
     mNewButton = newButton;
 
     pvzstl::string str4{"[ZOMBATAR_DELETE_BUTTON]"};
-    Sexy::GameButton *deleteButton = MakeButton(1004, mButtonListener, nullptr, str4);
+    GameButton *deleteButton = MakeButton(1004, mButtonListener, nullptr, str4);
     deleteButton->Resize(314, 490, 170, 50);
     AddWidget((Widget *)deleteButton);
     mDeleteButton = deleteButton;

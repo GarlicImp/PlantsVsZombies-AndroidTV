@@ -19,15 +19,15 @@
 
 #include "PvZ/Lawn/Widget/ChallengeScreen.h"
 #include "PvZ/Lawn/LawnApp.h"
+#include "PvZ/Lawn/Widget/GameButton.h"
 #include "PvZ/Misc.h"
 #include "PvZ/SexyAppFramework/Graphics/Graphics.h"
-#include "PvZ/SexyAppFramework/Widget/GameButton.h"
 #include "PvZ/Symbols.h"
 #include "PvZ/TodLib/Common/TodStringFile.h"
 
 using namespace Sexy;
 
-static Sexy::GameButton *gChallengeScreenCloseButton;
+static GameButton *gChallengeScreenCloseButton;
 
 ChallengeScreen::ChallengeScreen(LawnApp *theApp, ChallengePage thePage) {
     __Constructor(theApp, thePage);

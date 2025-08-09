@@ -204,7 +204,7 @@ LeaderboardsWidget::LeaderboardsWidget(LawnApp *theApp) {
     //    this_->mLongestRecordPool = theApp->mPlayerInfo->mGameStats.mMiscStats[GameStats::ENDLESS_FLAGS];
 
     pvzstl::string str = TodStringTranslate("[CLOSE]");
-    Sexy::GameButton *aBackButton = MakeButton(1000, mButtonListener, this, str);
+    GameButton *aBackButton = MakeButton(1000, mButtonListener, this, str);
     aBackButton->Resize(1040, 590, 120, 50);
     AddWidget(aBackButton);
     mBackButton = aBackButton;

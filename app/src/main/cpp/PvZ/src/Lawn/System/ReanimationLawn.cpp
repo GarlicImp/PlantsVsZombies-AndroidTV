@@ -18,6 +18,7 @@
  */
 
 #include "PvZ/Lawn/System/ReanimationLawn.h"
+#include "PvZ/GlobalVariable.h"
 #include "PvZ/Lawn/Board/Zombie.h"
 #include "PvZ/Misc.h"
 #include "PvZ/SexyAppFramework/Graphics/Graphics.h"
@@ -93,29 +94,35 @@ void ReanimatorCache::DrawCachedZombie(Graphics *g, float thePosX, float thePosY
 
 // 为红眼巨人增加SeedPacket图标
 Sexy::MemoryImage *ReanimatorCache::MakeCachedZombieFrame(ZombieType theZombieType) {
+    switch (theZombieType) {
+        case ZOMBIE_REDEYE_GARGANTUAR: {
+            mZombieImages[theZombieType]->~MemoryImage();
+            mZombieImages[theZombieType] = nullptr;
 
-    if (theZombieType != ZombieType::ZOMBIE_REDEYE_GARGANTUAR) {
-        return old_ReanimatorCache_MakeCachedZombieFrame(this, theZombieType);
+            Sexy::MemoryImage *BlankCanvasImage = MakeBlankCanvasImage((theZombieType == ZombieType::ZOMBIE_ZAMBONI ? 512 : 256), 256);
+            Graphics *graphics = new Graphics((Image *)BlankCanvasImage);
+            graphics->SetLinearBlend(true);
+            ZombieType zombieType_reanim = theZombieType != ZombieType::ZOMBIE_CACHED_POLEVAULTER_WITH_POLE ? theZombieType : ZombieType::ZOMBIE_POLEVAULTER;
+            ReanimationType reanimationType = GetZombieDefinition(zombieType_reanim).mReanimationType;
+            float x = 40;
+            float y = 60;
+            Reanimation reanimation;
+            reanimation.ReanimationInitializeType(x, y, reanimationType);
+            reanimation.SetFramesForLayer("anim_idle");
+            Zombie::SetupReanimLayers(&reanimation, zombieType_reanim);
+            reanimation.SetImageOverride("anim_head1", *Sexy_IMAGE_REANIM_ZOMBIE_GARGANTUAR_HEAD_REDEYE_Addr);
+            reanimation.Update();
+            reanimation.Draw(graphics);
+            mZombieImages[theZombieType] = BlankCanvasImage;
+            delete graphics;
+            return BlankCanvasImage;
+        }
+            // TODO:植物僵尸缓存动画
+            // 暂时用P的图代替
+            //        case ZOMBIE_PEA_HEAD: {
+            //
+            //        }
+        default:
+            return old_ReanimatorCache_MakeCachedZombieFrame(this, theZombieType);
     }
-
-    mZombieImages[theZombieType]->~MemoryImage();
-    mZombieImages[theZombieType] = nullptr;
-
-    Sexy::MemoryImage *BlankCanvasImage = MakeBlankCanvasImage((theZombieType == ZombieType::ZOMBIE_ZAMBONI ? 512 : 256), 256);
-    Graphics *graphics = new Graphics((Image *)BlankCanvasImage);
-    graphics->SetLinearBlend(true);
-    ZombieType zombieType_reanim = theZombieType != ZombieType::ZOMBIE_CACHED_POLEVAULTER_WITH_POLE ? theZombieType : ZombieType::ZOMBIE_POLEVAULTER;
-    ReanimationType reanimationType = GetZombieDefinition(zombieType_reanim).mReanimationType;
-    float x = 40;
-    float y = 60;
-    Reanimation reanimation;
-    reanimation.ReanimationInitializeType(x, y, reanimationType);
-    reanimation.SetFramesForLayer("anim_idle");
-    Zombie::SetupReanimLayers(&reanimation, zombieType_reanim);
-    reanimation.SetImageOverride("anim_head1", *Sexy_IMAGE_REANIM_ZOMBIE_GARGANTUAR_HEAD_REDEYE_Addr);
-    reanimation.Update();
-    reanimation.Draw(graphics);
-    mZombieImages[theZombieType] = BlankCanvasImage;
-    delete graphics;
-    return BlankCanvasImage;
 }

@@ -20,9 +20,9 @@
 #include "PvZ/Lawn/Widget/SettingsDialog.h"
 #include "PvZ/Lawn/Common/ConstEnums.h"
 #include "PvZ/Lawn/LawnApp.h"
+#include "PvZ/Lawn/Widget/GameButton.h"
 #include "PvZ/Misc.h"
 #include "PvZ/SexyAppFramework/Graphics/Graphics.h"
-#include "PvZ/SexyAppFramework/Widget/GameButton.h"
 #include "PvZ/Symbols.h"
 #include "PvZ/TodLib/Common/TodStringFile.h"
 
@@ -41,8 +41,8 @@ void SettingsDialog_AddedToManager(SettingsDialog *settingsDialog, int *manager)
     Sexy::__Widget *mBackButton = settingsDialog->mBackButton;
 
 
-    g3DAccleratedCheckbox = MakeNewCheckbox(1024, settingsDialog->mCheckboxListener, settingsDialog, lawnApp->Is3DAccelerated());
-    gVibrateCheckbox = MakeNewCheckbox(1025, settingsDialog->mCheckboxListener, settingsDialog, !lawnApp->mPlayerInfo->mIsVibrateClosed);
+    g3DAccleratedCheckbox = MakeNewCheckbox(1024, &settingsDialog->mCheckboxListener, settingsDialog, lawnApp->Is3DAccelerated());
+    gVibrateCheckbox = MakeNewCheckbox(1025, &settingsDialog->mCheckboxListener, settingsDialog, !lawnApp->mPlayerInfo->mIsVibrateClosed);
 
     g3DAccleratedCheckbox->Resize(80, 260, 300, 50);
     gVibrateCheckbox->Resize(80, 320, 300, 50);

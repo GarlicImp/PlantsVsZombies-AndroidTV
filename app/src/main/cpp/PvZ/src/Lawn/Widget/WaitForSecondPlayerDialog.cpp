@@ -35,21 +35,21 @@ void WaitForSecondPlayerDialog::__Constructor(LawnApp *theApp) {
     }
 
     pvzstl::string str = StrFormat("[PLAY_OFFLINE]");
-    Sexy::GameButton *playOfflineButton = MakeButton(1000, &mButtonListener, this, str);
+    GameButton *playOfflineButton = MakeButton(1000, &mButtonListener, this, str);
     mLawnYesButton = playOfflineButton;
 
     pvzstl::string str2 = StrFormat("[BACK]");
-    Sexy::GameButton *backButton = MakeButton(1001, &mButtonListener, this, str2);
+    GameButton *backButton = MakeButton(1001, &mButtonListener, this, str2);
     mLawnNoButton = backButton;
 
     pvzstl::string str4 = StrFormat("[JOIN_ROOM_BUTTON]");
-    Sexy::GameButton *joinButton = MakeButton(1002, &mButtonListener, this, str4);
+    GameButton *joinButton = MakeButton(1002, &mButtonListener, this, str4);
     joinButton->mDisabled = true;
     mJoinButton = joinButton;
     AddWidget(joinButton);
 
     pvzstl::string str3 = StrFormat("[CREATE_ROOM_BUTTON]");
-    Sexy::GameButton *createButton = MakeButton(1003, &mButtonListener, this, str3);
+    GameButton *createButton = MakeButton(1003, &mButtonListener, this, str3);
     mCreateButton = createButton;
     AddWidget(createButton);
 
@@ -103,6 +103,7 @@ void WaitForSecondPlayerDialog::Draw(Graphics *g) {
 }
 
 void WaitForSecondPlayerDialog_ButtonDepress(Sexy::ButtonListener *listener, int id) {
+    auto *dialog = (WaitForSecondPlayerDialog *)((uint32_t)listener - offsetof(WaitForSecondPlayerDialog, mButtonListener));
     auto *dialog = reinterpret_cast<WaitForSecondPlayerDialog *>((uint32_t(listener) - offsetof(WaitForSecondPlayerDialog, mButtonListener)));
     if (id == 1000) {
         // 2P手柄按两下A

@@ -20,9 +20,9 @@
 #include "PvZ/Lawn/Widget/HelpOptionsDialog.h"
 #include "PvZ/GlobalVariable.h"
 #include "PvZ/Lawn/LawnApp.h"
+#include "PvZ/Lawn/Widget/GameButton.h"
 #include "PvZ/MagicAddr.h"
 #include "PvZ/Misc.h"
-#include "PvZ/SexyAppFramework/Widget/GameButton.h"
 
 void HelpOptionsDialog_ButtonDepress(HelpOptionsDialog *a, int a2) {
     // 修复在游戏战斗中打开新版暂停菜单时可以切换用户
@@ -50,8 +50,8 @@ void HelpOptionsDialog_HelpOptionsDialog(HelpOptionsDialog *a, LawnApp *a2) {
     // 在战斗界面去除“切换用户”按钮
     old_HelpOptionsDialog_HelpOptionsDialog(a, a2);
     if (!isMainMenu) {
-        Sexy::GameButton *switchUserButton = a->mSwitchUserButton;
-        Sexy::GameButton *settingsButton = a->mSettingsButton;
+        GameButton *switchUserButton = a->mSwitchUserButton;
+        GameButton *settingsButton = a->mSettingsButton;
         int theX = switchUserButton->mX;
         int theY = switchUserButton->mY;
         int theWidth = switchUserButton->mWidth;
@@ -67,8 +67,8 @@ void HelpOptionsDialog_Resize(HelpOptionsDialog *a, int a2, int a3, int a4, int 
     // 在战斗界面去除“切换用户”按钮
     old_HelpOptionsDialog_Resize(a, a2, a3, a4, a5);
     if (!isMainMenu) {
-        Sexy::GameButton *switchUserButton = a->mSwitchUserButton;
-        Sexy::GameButton *settingsButton = a->mSettingsButton;
+        GameButton *switchUserButton = a->mSwitchUserButton;
+        GameButton *settingsButton = a->mSettingsButton;
         int theX = switchUserButton->mX;
         int theY = switchUserButton->mY;
         int theWidth = switchUserButton->mWidth;

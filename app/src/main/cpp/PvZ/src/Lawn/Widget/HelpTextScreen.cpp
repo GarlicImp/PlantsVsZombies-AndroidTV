@@ -33,7 +33,7 @@ constexpr int nextPageButtonY = 318;
 constexpr int prevPageButtonX = 2540;
 constexpr int prevPageButtonY = 318;
 
-Sexy::GameButton *gHelpTextScreenCloseButton;
+GameButton *gHelpTextScreenCloseButton;
 } // namespace
 
 

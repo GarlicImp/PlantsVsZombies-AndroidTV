@@ -681,6 +681,7 @@ int Plant::GetCost(SeedType theSeedType, SeedType theImitaterType) {
             case SeedType::SEED_ZOMBIE_DANCER:
             case SeedType::SEED_ZOMBIE_DIGGER:
             case SeedType::SEED_ZOMBIE_LADDER:
+            case SeedType::SEED_ZOMBIE_TALLNUT_HEAD:
                 return 150;
             case SeedType::SEED_SQUASH:
             case SeedType::SEED_GARLIC:
@@ -693,6 +694,8 @@ int Plant::GetCost(SeedType theSeedType, SeedType theImitaterType) {
             case SeedType::SEED_TORCHWOOD:
             case SeedType::SEED_ZOMBIE_BUNGEE:
             case SeedType::SEED_ZOMBIE_SNORKEL:
+            case SeedType::SEED_ZOMBIE_DOLPHIN_RIDER:
+            case SeedType::SEED_ZOMBIE_JALAPENO_HEAD:
                 return 125;
             case SeedType::SEED_CACTUS:
             case SeedType::SEED_CABBAGEPULT:
@@ -701,28 +704,31 @@ int Plant::GetCost(SeedType theSeedType, SeedType theImitaterType) {
             case SeedType::SEED_ZOMBIE_PAIL:
             case SeedType::SEED_ZOMBIE_SCREEN_DOOR:
             case SeedType::SEED_ZOMBIE_JACK_IN_THE_BOX:
-            case SeedType::SEED_ZOMBIE_DUCKY_TUBE:
+            case SeedType::SEED_ZOMBIE_WALLNUT_HEAD:
                 return 100;
             case SeedType::SEED_STARFRUIT:
             case SeedType::SEED_ZOMBONI:
+            case SeedType::SEED_ZOMBIE_GATLINGPEA_HEAD:
                 return 175;
             case SeedType::SEED_INSTANT_COFFEE:
             case SeedType::SEED_ZOMBIE_NORMAL:
+            case SeedType::SEED_ZOMBIE_DUCKY_TUBE:
                 return 25;
             case SeedType::SEED_MELONPULT:
             case SeedType::SEED_ZOMBIE_FLAG:
             case SeedType::SEED_ZOMBIE_UNKNOWN:
-            case SeedType::SEED_ZOMBIE_BALLOON:
                 return 300;
-            case SeedType::SEED_ZOMBIE_TOMBSTONE:
+            case SeedType::SEED_ZOMBIE_GRAVESTONE:
             case SeedType::SEED_ZOMBIE_TRASH_BIN:
             case SeedType::SEED_ZOMBIE_NEWSPAPER:
             case SeedType::SEED_ZOMBIE_IMP:
+            case SeedType::SEED_ZOMBIE_PEA_HEAD:
+            case SeedType::SEED_ZOMBIE_SQUASH_HEAD:
                 return 50;
             case SeedType::SEED_ZOMBIE_POGO:
+            case SeedType::SEED_ZOMBIE_BALLOON:
                 return 225;
             case SeedType::SEED_ZOMBIE_GARGANTUAR:
-            case SeedType::SEED_ZOMBIE_DOLPHIN_RIDER:
                 return 250;
             default:
                 return GetPlantDefinition(theSeedType).mSeedCost;
@@ -754,7 +760,12 @@ int Plant::GetRefreshTime(SeedType theSeedType, SeedType theImitaterType) {
                 case SeedType::SEED_ZOMBIE_DIGGER:
                 case SeedType::SEED_ZOMBIE_BUNGEE:
                 case SeedType::SEED_ZOMBIE_LADDER:
+                case SeedType::SEED_ZOMBIE_IMP:
                 case SeedType::SEED_ZOMBIE_BALLOON:
+                case SeedType::SEED_ZOMBIE_WALLNUT_HEAD:
+                case SeedType::SEED_ZOMBIE_GATLINGPEA_HEAD:
+                case SeedType::SEED_ZOMBIE_SQUASH_HEAD:
+                case SeedType::SEED_ZOMBIE_TALLNUT_HEAD:
                     refreshTime = 3000;
                     break;
                 case SeedType::SEED_ZOMBIE_NEWSPAPER:
@@ -766,6 +777,7 @@ int Plant::GetRefreshTime(SeedType theSeedType, SeedType theImitaterType) {
                 case SeedType::SEED_ZOMBIE_CATAPULT:
                 case SeedType::SEED_ZOMBIE_GARGANTUAR:
                 case SeedType::SEED_ZOMBIE_UNKNOWN:
+                case SeedType::SEED_ZOMBIE_JALAPENO_HEAD:
                     refreshTime = 6000;
                     break;
                 default:
@@ -795,7 +807,7 @@ int Plant::GetRefreshTime(SeedType theSeedType, SeedType theImitaterType) {
             }
         }
         if (lawnApp->mBoard->mChallenge->IsMPSuddenDeath() && *Challenge_gVSSuddenDeathMode_Addr == 1) {
-            if (theSeedType == SeedType::SEED_ZOMBIE_TOMBSTONE || theSeedType == SeedType::SEED_SUNFLOWER || theSeedType == SeedType::SEED_TALLNUT || theSeedType == SeedType::SEED_WALLNUT
+            if (theSeedType == SeedType::SEED_ZOMBIE_GRAVESTONE || theSeedType == SeedType::SEED_SUNFLOWER || theSeedType == SeedType::SEED_TALLNUT || theSeedType == SeedType::SEED_WALLNUT
                 || theSeedType == SeedType::SEED_ZOMBIE_SCREEN_DOOR || theSeedType == SeedType::SEED_PUMPKINSHELL || theSeedType == SeedType::SEED_ZOMBIE_TRASH_BIN) {
                 return refreshTime;
             }

@@ -24,9 +24,9 @@
 #include "PvZ/Lawn/Common/ConstEnums.h"
 #include "PvZ/Lawn/LawnApp.h"
 #include "PvZ/Lawn/System/PoolEffect.h"
+#include "PvZ/Lawn/Widget/GameButton.h"
 #include "PvZ/Misc.h"
 #include "PvZ/SexyAppFramework/Graphics/Graphics.h"
-#include "PvZ/SexyAppFramework/Widget/GameButton.h"
 #include "PvZ/Symbols.h"
 #include "PvZ/TodLib/Common/TodStringFile.h"
 
@@ -54,8 +54,8 @@ constexpr int mAlmanacButtonHeight = 50;
 constexpr int mAlmanacPlantRectX = 521 - 8;
 constexpr int mAlmanacPlantRectY = 107 + 20;
 
-Sexy::GameButton *gAlmanacBackButton;
-Sexy::GameButton *gAlmanacCloseButton;
+GameButton *gAlmanacBackButton;
+GameButton *gAlmanacCloseButton;
 
 } // namespace
 

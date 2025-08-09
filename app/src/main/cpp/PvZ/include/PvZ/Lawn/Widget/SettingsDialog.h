@@ -22,21 +22,18 @@
 
 #include "LawnDialog.h"
 #include "PvZ/Lawn/Common/ConstEnums.h"
-
-namespace Sexy {
-class CheckboxListener;
-}
+#include "PvZ/SexyAppFramework/Widget/CheckboxListener.h"
 
 class SettingsDialog : public __LawnDialog {
 public:
-    int *mSliderListener;                      // 191
-    Sexy::CheckboxListener *mCheckboxListener; // 192
-    LawnApp *mApp;                             // 193
-    Sexy::Widget *mMusicSlider;                // 194
-    Sexy::Widget *mSoundSlider;                // 195
-    Sexy::GameButton *mBackButton;             // 196
-    Sexy::GameButton *mSelectDeviceButton;     // 197
-    int unk[5];                                // 198 ~ 202
+    int *mSliderListener;                     // 191
+    Sexy::CheckboxListener mCheckboxListener; // 192
+    LawnApp *mApp;                            // 193
+    Sexy::Widget *mMusicSlider;               // 194
+    Sexy::Widget *mSoundSlider;               // 195
+    GameButton *mBackButton;                  // 196
+    GameButton *mSelectDeviceButton;          // 197
+    int unk[5];                               // 198 ~ 202
 }; // 115: 203, 111: 205
 
 inline void (*old_SettingsDialog_AddedToManager)(SettingsDialog *settingsDialog, int *manager);

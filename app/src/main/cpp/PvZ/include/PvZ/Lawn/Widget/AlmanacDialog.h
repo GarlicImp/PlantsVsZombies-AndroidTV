@@ -37,8 +37,8 @@ class AlmanacDialog : public __LawnDialog {
 public:
     int *mScrollListener;                           // 191
     LawnApp *mApp;                                  // 192
-    Sexy::GameButton *mPlantButton;                 // 193
-    Sexy::GameButton *mZombieButton;                // 194
+    GameButton *mPlantButton;                       // 193
+    GameButton *mZombieButton;                      // 194
     Sexy::CustomScrollbarWidget *mScrollTextView;   // 195
     AlmanacPage mOpenPage;                          // 196
     SeedType mSelectedSeed;                         // 197

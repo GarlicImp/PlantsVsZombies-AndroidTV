@@ -23,18 +23,16 @@
 #include "PvZ/SexyAppFramework/Widget/Widget.h"
 #include "PvZ/Symbols.h"
 
-namespace Sexy {
 class GameButton;
-}
 
 class AwardScreen : public Sexy::__Widget {
 public:
-    int unkInt64;                   // 64
-    Sexy::GameButton *mStartButton; // 65
-    Sexy::GameButton *mMenuButton;  // 66
-    LawnApp *mApp;                  // 67
-    int mFadeInCounter;             // 68
-    AwardType mAwardType;           // 69
+    int unkInt64;             // 64
+    GameButton *mStartButton; // 65
+    GameButton *mMenuButton;  // 66
+    LawnApp *mApp;            // 67
+    int mFadeInCounter;       // 68
+    AwardType mAwardType;     // 69
 
     void StartButtonPressed() {
         reinterpret_cast<void (*)(AwardScreen *)>(AwardScreen_StartButtonPressedAddr)(this);

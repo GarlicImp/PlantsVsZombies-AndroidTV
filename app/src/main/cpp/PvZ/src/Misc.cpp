@@ -67,7 +67,7 @@ void DrawSeedType(Sexy::Graphics *g, float x, float y, SeedType theSeedType, See
     g->PushState();
     g->mScaleX = g->mScaleX * scale;
     g->mScaleY = g->mScaleY * scale;
-    if (theSeedType == SeedType::SEED_ZOMBIE_TOMBSTONE) {
+    if (theSeedType == SeedType::SEED_ZOMBIE_GRAVESTONE) {
         TodDrawImageCelScaledF(g, *Sexy_IMAGE_MP_TOMBSTONE_Addr, x + xOffset, y + yOffset, 0, 0, g->mScaleX, g->mScaleY);
     } else {
         if (theSeedType == SeedType::SEED_IMITATER && theImitaterType != SeedType::SEED_NONE) {

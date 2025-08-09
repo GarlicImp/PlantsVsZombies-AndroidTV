@@ -23,9 +23,9 @@
 #include "PvZ/Lawn/Common/ConstEnums.h"
 #include "PvZ/SexyAppFramework/Widget/Widget.h"
 // #include "../../SexyAppFramework/PerfTimer.h"
+#include "GameButton.h"
 #include "PvZ/SexyAppFramework/Misc/PerfTimer.h"
 #include "PvZ/SexyAppFramework/Widget/ButtonListener.h"
-#include "PvZ/SexyAppFramework/Widget/GameButton.h"
 
 class CreditScreen : public Sexy::__Widget {
 public:
@@ -70,7 +70,7 @@ public:
     void ButtonDepress(int theId);
 };
 
-static Sexy::GameButton *gCreditScreenBackButton;
+static GameButton *gCreditScreenBackButton;
 
 inline void (*old_CreditScreen_CreditScreen)(Sexy::__Widget *a, LawnApp *a2, bool a3);
 

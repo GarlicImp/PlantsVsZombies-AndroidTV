@@ -20,7 +20,7 @@
 #include "PvZ/Lawn/Widget/AwardScreen.h"
 #include "PvZ/Lawn/Board/Board.h"
 #include "PvZ/Lawn/LawnApp.h"
-#include "PvZ/SexyAppFramework/Widget/GameButton.h"
+#include "PvZ/Lawn/Widget/GameButton.h"
 #include "PvZ/Symbols.h"
 
 void AwardScreen::MouseDown(int x, int y, int theClickCount) {

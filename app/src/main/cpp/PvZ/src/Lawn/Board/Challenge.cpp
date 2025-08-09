@@ -27,9 +27,9 @@
 #include "PvZ/Lawn/Board/SeedPacket.h"
 #include "PvZ/Lawn/Board/Zombie.h"
 #include "PvZ/Lawn/LawnApp.h"
+#include "PvZ/Lawn/Widget/GameButton.h"
 #include "PvZ/Misc.h"
 #include "PvZ/SexyAppFramework/Graphics/Graphics.h"
-#include "PvZ/SexyAppFramework/Widget/GameButton.h"
 #include "PvZ/Symbols.h"
 #include "PvZ/TodLib/Common/TodStringFile.h"
 #include "PvZ/TodLib/Effect/Reanimator.h"
@@ -409,11 +409,11 @@ void Challenge::LastStandUpdate() {
 }
 
 int Challenge::IsMPSeedType(SeedType theSeedType) {
-    return theSeedType >= SEED_ZOMBIE_TOMBSTONE && theSeedType <= SEED_ZOMBIE_BALLOON;
+    return theSeedType >= SEED_ZOMBIE_GRAVESTONE && theSeedType < NUM_ZOMBIE_SEED_TYPES;
 }
 
 int Challenge::IsZombieSeedType(SeedType theSeedType) {
-    return theSeedType >= SEED_ZOMBIE_TOMBSTONE && theSeedType <= SEED_ZOMBIE_BALLOON;
+    return theSeedType >= SEED_ZOMBIE_GRAVESTONE && theSeedType < NUM_ZOMBIE_SEED_TYPES;
 }
 
 void Challenge::IZombieSetPlantFilterEffect(Plant* thePlant, FilterEffect theFilterEffect) {
@@ -482,6 +482,20 @@ ZombieType Challenge::IZombieSeedTypeToZombieType(SeedType theSeedType) {
             return ZOMBIE_IMP;
         case SEED_ZOMBIE_BALLOON:
             return ZOMBIE_BALLOON;
+        case SEED_ZOMBIE_PEA_HEAD:
+            return ZOMBIE_PEA_HEAD; // 豌豆射手僵尸
+        case SEED_ZOMBIE_WALLNUT_HEAD:
+            return ZOMBIE_WALLNUT_HEAD; // 坚果僵尸
+        case SEED_ZOMBIE_JALAPENO_HEAD:
+            return ZOMBIE_JALAPENO_HEAD; // 火爆辣椒僵尸
+        case SEED_ZOMBIE_GATLINGPEA_HEAD:
+            return ZOMBIE_GATLING_HEAD; // 机枪射手僵尸
+        case SEED_ZOMBIE_SQUASH_HEAD:
+            return ZOMBIE_SQUASH_HEAD; // 窝瓜僵尸
+        case SEED_ZOMBIE_TALLNUT_HEAD:
+            return ZOMBIE_TALLNUT_HEAD; // 高坚果僵尸
+        case SEED_ZOMBIE_BOBSLED:
+            return ZOMBIE_BOBSLED; // 雪橇车小队
         default:
             return ZOMBIE_INVALID;
     }

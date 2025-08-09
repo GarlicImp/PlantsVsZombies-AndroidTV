@@ -30,10 +30,7 @@
 class Board;
 class LawnApp;
 class SeedBank;
-
-namespace Sexy {
 class GameButton;
-}
 
 enum SeedChooserTouchState { ViewLawnButton, SeedChooser, StoreButton, StartButton, AlmanacButton, SEEDCHOOSER_TOUCHSTATE_NONE };
 
@@ -72,7 +69,7 @@ private:
 public:
     Sexy::ButtonListener mButtonListener; // 64
     int unkMem1;                          // 65
-    Sexy::GameButton *mImitaterButton;    // 66
+    GameButton *mImitaterButton;          // 66
     ChosenSeed mChosenSeeds[54];          // 67 ~ 930
     LawnApp *mApp;                        // 931
     Board *mBoard;                        // 932
@@ -101,10 +98,10 @@ public:
     SeedBank *mSeedBank2;                 // 955
     int unkCounter;                       // 956
     int mImitaterDialogOpened;            // 957
-    Sexy::GameButton *mViewLawnButton;    // 958
-    Sexy::GameButton *mStoreButton;       // 959
-    Sexy::GameButton *mStartButton;       // 960
-    Sexy::GameButton *mAlmanacButton;     // 961
+    GameButton *mViewLawnButton;          // 958
+    GameButton *mStoreButton;             // 959
+    GameButton *mStartButton;             // 960
+    GameButton *mAlmanacButton;           // 961
     int unkMems3[4];                      // 962 ~ 965
     // 大小966个整数
 
@@ -125,9 +122,6 @@ public:
     }
     void GetNextSeedInDir(int theNumSeed, int thePlayerIndex) {
         reinterpret_cast<void (*)(SeedChooserScreen *, int, int)>(SeedChooserScreen_GetNextSeedInDirAddr)(this, theNumSeed, thePlayerIndex);
-    }
-    void GetSeedPositionInChooser(SeedType theSeedType, int &x, int &y) {
-        reinterpret_cast<void (*)(SeedChooserScreen *, SeedType, int &, int &)>(SeedChooserScreen_GetSeedPositionInChooserAddr)(this, theSeedType, x, y);
     }
     void UpdateImitaterButton() {
         reinterpret_cast<void (*)(SeedChooserScreen *)>(SeedChooserScreen_UpdateImitaterButtonAddr)(this);
@@ -154,7 +148,9 @@ public:
     void
     DrawPacket(Sexy::Graphics *g, int x, int y, SeedType theSeedType, SeedType theImitaterType, float thePercentDark, int theGrayness, Sexy::Color *theColor, bool theDrawCost, bool theUseCurrentCost);
     void ButtonDepress(int theId);
-    void GetSeedPositionInBank(int theIndex, int *x, int *y, int thePlayerIndex);
+    void GetSeedPositionInBank(int theIndex, int &x, int &y, int thePlayerIndex);
+    void GetSeedPositionInChooser(int theIndex, int &x, int &y);
+    int NumColumns();
     void ShowToolTip(unsigned int thePlayerIndex);
     static SeedType GetZombieIndexBySeedType(SeedType theSeedType);
 
@@ -198,7 +194,7 @@ inline void (*old_SeedChooserScreen_GameButtonDown)(SeedChooserScreen *a1, Butto
 
 inline void (*old_SeedChooserScreen_ButtonDepress)(SeedChooserScreen *seedChooserScreen, int id);
 
-inline void (*old_SeedChooserScreen_GetSeedPositionInBank)(SeedChooserScreen *seedChooserScreen, int theIndex, int *x, int *y, int playerIndex);
+inline void (*old_SeedChooserScreen_GetSeedPositionInBank)(SeedChooserScreen *seedChooserScreen, int theIndex, int &x, int &y, int playerIndex);
 
 inline void (*old_SeedChooserScreen_ShowToolTip)(SeedChooserScreen *seedChooserScreen, unsigned int playerIndex);
 

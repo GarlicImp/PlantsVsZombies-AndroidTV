@@ -419,9 +419,6 @@ public:
     bool CanInteractWithBoardButtons() {
         return reinterpret_cast<bool (*)(Board *)>(Board_CanInteractWithBoardButtonsAddr)(this);
     }
-    int GetSeedPacketPositionX(int theIndex, int theUnkInt, bool theUnkBool) {
-        return reinterpret_cast<int (*)(Board *, int, int, bool)>(Board_GetSeedPacketPositionXAddr)(this, theIndex, theUnkInt, theUnkBool);
-    }
     Coin *AddCoin(int theX, int theY, CoinType theCoinType, CoinMotion theCoinMotion) {
         return reinterpret_cast<Coin *(*)(Board *, int, int, CoinType, CoinMotion)>(Board_AddCoinAddr)(this, theX, theY, theCoinType, theCoinMotion);
     }
@@ -466,6 +463,9 @@ public:
     }
     bool CanTakeDeathMoney(int theAmount) {
         return reinterpret_cast<bool (*)(Board *, int)>(Board_CanTakeDeathMoneyAddr)(this, theAmount);
+    }
+    int TakeDeathMoney(int theAmount) {
+        return reinterpret_cast<int (*)(Board *, int)>(Board_TakeDeathMoneyAddr)(this, theAmount);
     }
     void RemoveAllMowers() {
         reinterpret_cast<void (*)(Board *)>(Board_RemoveAllMowersAddr)(this);
@@ -565,6 +565,8 @@ public:
     GamepadControls *GetGamepadControlsByPlayerIndex(int thePlayerIndex);
     void DrawHammerButton(Sexy::Graphics *g, LawnApp *theApp);
     void DrawButterButton(Sexy::Graphics *g, LawnApp *theApp);
+    void Draw(Sexy::Graphics *g);
+    int GetSeedPacketPositionX(int thePacketIndex, int theSeedBankIndex, bool thePlayerIndex);
 
     void MouseMove(int x, int y);
     void MouseDown(int x, int y, int theClickCount);
@@ -752,6 +754,8 @@ inline void (*old_Board_DrawZenButtons)(Board *board, Sexy::Graphics *a2);
 inline void (*old_Board_DrawGameObjects)(Board *, Sexy::Graphics *);
 
 inline int (*old_Board_GetNumSeedsInBank)(Board *, bool);
+
+inline void (*old_Board_Draw)(Board *, Sexy::Graphics *g);
 
 
 void FixBoardAfterLoad(Board *board);

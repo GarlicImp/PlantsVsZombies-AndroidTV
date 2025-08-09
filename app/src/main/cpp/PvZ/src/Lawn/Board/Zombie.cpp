@@ -101,6 +101,17 @@ void Zombie::ZombieInitialize(int theRow, ZombieType theType, bool theVariant, Z
     if (IsZombatarZombie(theType) && theFromWave != -3) {
         SetZombatarReanim();
     }
+
+    if (mApp->mGameMode == GameMode::GAMEMODE_MP_VS) {
+        switch (theType) {
+            case ZombieType::ZOMBIE_IMP:
+                //                mBodyHealth = 70;
+                break;
+            default:
+                break;
+        }
+        mBodyMaxHealth = mBodyHealth;
+    }
 }
 
 bool Zombie::IsOnBoard() {
@@ -417,6 +428,7 @@ void Zombie::UpdateZombieJalapenoHead() {
                     aPlant->Die();
                 }
             }
+            DieNoLoot(); // 修复辣椒爆炸后不死亡，原因不明
         }
     }
 }
@@ -966,6 +978,7 @@ void Zombie::DieNoLoot() {
         // 大头贴
         mApp->RemoveReanimation(mBossFireBallReanimID);
     }
+
     old_Zombie_DieNoLoot(this);
 }
 
@@ -1483,7 +1496,7 @@ void Zombie::PickRandomSpeed() {
         } else {
             mVelX = 0.12f; // 一般模式
         }
-    } else if (mZombieType == ZombieType::ZOMBIE_IMP && mApp->IsIZombieLevel()) // IZ小鬼
+    } else if (mZombieType == ZombieType::ZOMBIE_IMP && (mApp->IsIZombieLevel() || mApp->mGameMode == GameMode::GAMEMODE_MP_VS)) // IZ，VS小鬼
     {
         mVelX = 0.9f;
     } else if (mZombiePhase == ZombiePhase::PHASE_YETI_RUNNING) {
@@ -1500,7 +1513,7 @@ void Zombie::PickRandomSpeed() {
     } else if (mZombiePhase == ZombiePhase::PHASE_NEWSPAPER_MAD || mZombiePhase == ZombiePhase::PHASE_DOLPHIN_WALKING || mZombiePhase == ZombiePhase::PHASE_DOLPHIN_WALKING_WITHOUT_DOLPHIN) {
         mVelX = RandRangeFloat(0.89f, 0.91f);
     } else {
-        mVelX = RandRangeFloat(0.23f, 0.32f); // 普僵
+        mVelX = RandRangeFloat(0.23f, 0.37f); // 普僵
         if (mVelX < 0.3f) {
             mAnimTicksPerFrame = 12;
         } else {

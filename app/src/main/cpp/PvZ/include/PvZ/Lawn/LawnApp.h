@@ -28,6 +28,8 @@
 #include "PvZ/TodLib/Common/TodFoley.h"
 #include "PvZ/TodLib/Effect/EffectSystem.h"
 
+inline LawnApp *gLawnApp = reinterpret_cast<LawnApp *>(*gLawnApp_Addr);
+
 class ZenGarden;
 class Board;
 class TitleScreen;

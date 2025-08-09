@@ -64,6 +64,12 @@ public:
     void DrawMiddle(Sexy::Graphics *g) {
         reinterpret_cast<void (*)(SeedPacket *, Sexy::Graphics *)>(SeedPacket_DrawMiddleAddr)(this, g);
     }
+    void Deactivate() {
+        reinterpret_cast<void (*)(SeedPacket *)>(SeedPacket_DeactivateAddr)(this);
+    }
+    void WasPlanted(int thePlayerIndex) {
+        reinterpret_cast<void (*)(SeedPacket *, int)>(SeedPacket_WasPlantedAddr)(this, thePlayerIndex);
+    }
 
     void Update();
     void UpdateSelected();

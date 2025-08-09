@@ -258,6 +258,7 @@ void LawnApp_PlaySample(LawnApp *lawnApp, int soundAddr) {
 
 void LawnApp::__Constructor() {
     old_LawnApp_LawnApp(this);
+
     mLawnMouseMode = true; // 开启触控
 }
 
