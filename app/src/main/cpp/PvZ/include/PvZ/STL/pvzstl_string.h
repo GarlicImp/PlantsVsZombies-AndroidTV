@@ -89,7 +89,7 @@ public:
 
     static constexpr size_type npos = static_cast<size_type>(-1);
 
-    basic_string() noexcept
+    basic_string() noexcept // strengthened
         : __data_{__rep::__empty_rep().__data} {}
 
     basic_string(const basic_string &other)
@@ -128,7 +128,7 @@ public:
 
     basic_string(std::nullptr_t) = delete;
 
-    ~basic_string() noexcept {
+    ~basic_string() {
         __get_rep()->__dispose();
     }
 
@@ -300,7 +300,7 @@ public:
     }
 
     basic_string &insert(size_type pos, const basic_string &str) {
-        return insert(pos, str, 0, str.size());
+        return insert(pos, str.c_str(), str.size());
     }
 
     basic_string &insert(size_type pos, const CharT *s, size_type n) {
@@ -477,7 +477,8 @@ public:
 
     template <__convertible_to_string_view<CharT> StringViewLike>
     [[nodiscard]] size_type find(const StringViewLike &t, size_type pos = 0) const noexcept(std::is_nothrow_convertible_v<const StringViewLike &, __self_view>) {
-        const auto xpos = __self_view{c_str(), size()}.find(__self_view{t}, pos);
+        const __self_view sv = t;
+        const auto xpos = __self_view{*this}.find(sv, pos);
         if constexpr (__self_view::npos == npos) {
             return xpos;
         } else {
@@ -497,16 +498,17 @@ public:
 
     [[nodiscard]] size_type find(CharT c, size_type pos = 0) const noexcept {
         const size_type sz = size();
-        if (pos >= sz) {
-            return npos;
+        if (pos < sz) {
+            const CharT *p = traits_type::find(c_str() + pos, sz - pos, c);
+            if (p != nullptr) {
+                return p - c_str();
+            }
         }
-        const size_type n = sz - pos;
-        const CharT *p = traits_type::find(c_str() + pos, n, c);
-        return (p != nullptr) ? (p - c_str()) : npos;
+        return npos;
     }
 
     [[nodiscard]] bool starts_with(__self_view sv) const noexcept {
-        return __self_view{c_str(), size()}.starts_with(sv);
+        return __self_view{*this}.starts_with(sv);
     }
 
     [[nodiscard]] bool starts_with(const CharT *s) const {
@@ -519,7 +521,7 @@ public:
     }
 
     [[nodiscard]] bool ends_with(__self_view sv) const noexcept {
-        return __self_view{c_str(), size()}.ends_with(sv);
+        return __self_view{*this}.ends_with(sv);
     }
 
     [[nodiscard]] bool ends_with(const CharT *s) const {
@@ -532,16 +534,16 @@ public:
     }
 
     [[nodiscard]] bool contains(__self_view sv) const noexcept {
-        return __self_view{c_str(), size()}.contains(sv);
+        return __self_view{*this}.contains(sv);
     }
 
     [[nodiscard]] bool contains(const CharT *s) const {
         assert((s != nullptr) && "basic_string::contains received nullptr");
-        return __self_view{c_str(), size()}.contains(s);
+        return __self_view{*this}.contains(s);
     }
 
     [[nodiscard]] bool contains(CharT c) const noexcept {
-        return __self_view{c_str(), size()}.contains(c);
+        return __self_view{*this}.contains(c);
     }
 
     [[nodiscard]] basic_string substr(size_type pos = 0, size_type n = npos) const & {
@@ -558,7 +560,7 @@ public:
     template <typename... Args>
         requires std::is_constructible_v<basic_string, Args &&...>
     basic_string &__emplace(Args &&...args) noexcept(std::is_nothrow_constructible_v<basic_string, Args &&...>) {
-        return *::new (this) basic_string{std::forward<Args>(args)...};
+        return *::new (this) basic_string(std::forward<Args>(args)...);
     }
 
 protected:
@@ -701,11 +703,12 @@ protected:
     // 清空范围 [ `begin() + pos`, `begin() + pos + len1` ) 中的字符,
     // 并在原位置预留大小为 `len2` 的空间.
     void __mutate(size_type pos, size_type len1, size_type len2) {
+        const size_type cap = capacity();
         const size_type old_sz = size();
         const size_type new_sz = old_sz + len2 - len1;
         const size_type how_much = old_sz - pos - len1;
-        if (new_sz > capacity() || __get_rep()->__is_shared()) {
-            __rep *r = __rep::__create(new_sz, capacity());
+        if (new_sz > cap || __get_rep()->__is_shared()) {
+            __rep *r = __rep::__create(new_sz, cap);
             if (pos > 0) {
                 traits_type::copy(r->__data, c_str(), pos);
             }
