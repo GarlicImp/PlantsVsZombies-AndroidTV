@@ -28,20 +28,31 @@ using namespace Sexy;
 VSSetupWidget::VSSetupWidget() {
     mApp = reinterpret_cast<LawnApp *>(*gLawnApp_Addr);
     mBoard = mApp->mBoard;
-    mPlayerInfo = mApp->mPlayerInfo;
     mMoreSeedsButton = nullptr;
     mMorePacketsButton = nullptr;
     mCheckboxImage = nullptr;
     mCheckboxImagePress = nullptr;
+    mIsMoreSeeds = false;
+    mIsMorePackets = false;
     mDrawString = false;
 }
 
 VSSetupWidget::~VSSetupWidget() {
-    //    gVSMoreSeedsButton->mMoreSeedsButton->__Destructor(); // 析构Button导致崩溃故采用禁用按钮
     gVSMoreSeedsButton->mMoreSeedsButton->mBtnNoDraw = true;
     gVSMoreSeedsButton->mMoreSeedsButton->mDisabled = true;
     gVSMoreSeedsButton->mDrawString = false;
-    //    gVSMoreSeedsButton = nullptr;
+    gVSMoreSeedsButton = nullptr;
+
+    gVSMorePacketsButton->mMorePacketsButton->mBtnNoDraw = true;
+    gVSMorePacketsButton->mMorePacketsButton->mDisabled = true;
+    gVSMorePacketsButton->mDrawString = false;
+    gVSMorePacketsButton = nullptr;
+}
+
+void VSSetupWidget::SetDisable() {
+    gVSMoreSeedsButton->mMoreSeedsButton->mBtnNoDraw = true;
+    gVSMoreSeedsButton->mMoreSeedsButton->mDisabled = true;
+    gVSMoreSeedsButton->mDrawString = false;
 
     gVSMorePacketsButton->mMorePacketsButton->mBtnNoDraw = true;
     gVSMorePacketsButton->mMorePacketsButton->mDisabled = true;
@@ -50,14 +61,14 @@ VSSetupWidget::~VSSetupWidget() {
 
 void VSSetupWidget::ButtonDepress(this VSSetupWidget &self, int theId) {
     if (theId == 1145) {
-        self.CheckboxChecked(1145, self.mPlayerInfo->mIsVSMoreSeeds);
+        self.CheckboxChecked(1145, self.mIsMoreSeeds);
         std::swap(gVSMoreSeedsButton->mCheckboxImage, gVSMoreSeedsButton->mCheckboxImagePress);
         ButtonWidget *aButton = gVSMoreSeedsButton->mMoreSeedsButton;
         aButton->mButtonImage = gVSMoreSeedsButton->mCheckboxImage;
         aButton->mOverImage = gVSMoreSeedsButton->mCheckboxImage;
         aButton->mDownImage = gVSMoreSeedsButton->mCheckboxImage;
     } else if (theId == 1146) {
-        self.CheckboxChecked(1146, self.mPlayerInfo->mIsVSMorePackets);
+        self.CheckboxChecked(1146, self.mIsMorePackets);
         std::swap(gVSMorePacketsButton->mCheckboxImage, gVSMorePacketsButton->mCheckboxImagePress);
         ButtonWidget *aButton = gVSMorePacketsButton->mMorePacketsButton;
         aButton->mButtonImage = gVSMorePacketsButton->mCheckboxImage;
@@ -69,10 +80,10 @@ void VSSetupWidget::ButtonDepress(this VSSetupWidget &self, int theId) {
 void VSSetupWidget::CheckboxChecked(int theId, bool checked) {
     switch (theId) {
         case 1145:
-            mPlayerInfo->mIsVSMoreSeeds = !checked;
+            mIsMoreSeeds = !checked;
             break;
         case 1146:
-            mPlayerInfo->mIsVSMorePackets = !checked;
+            mIsMorePackets = !checked;
             break;
         default:
             break;
@@ -82,27 +93,23 @@ void VSSetupWidget::CheckboxChecked(int theId, bool checked) {
 void VSSetupMenu::__Constructor() {
     old_VSSetupMenu_Constructor(this);
 
-    bool aIsMoreSeeds = mApp->mPlayerInfo->mIsVSMoreSeeds;
-    bool aIsMorePackets = mApp->mPlayerInfo->mIsVSMorePackets;
     Image *aCheckbox = *Sexy_IMAGE_OPTIONS_CHECKBOX0_Addr;
     Image *aCheckboxPressed = *Sexy_IMAGE_OPTIONS_CHECKBOX1_Addr;
     pvzstl::string str = StrFormat("");
     // 拓展僵尸选卡
     gVSMoreSeedsButton = new VSSetupWidget;
-    Image *aMoreSeedsCheckbox = (aIsMoreSeeds == false) ? aCheckbox : aCheckboxPressed;
-    ButtonWidget *aMoreSeedsButton = MakeNewButton(1145, &mButtonListener, this, str, nullptr, aMoreSeedsCheckbox, aMoreSeedsCheckbox, aMoreSeedsCheckbox);
+    ButtonWidget *aMoreSeedsButton = MakeNewButton(1145, &mButtonListener, this, str, nullptr, aCheckbox, aCheckbox, aCheckbox);
     gVSMoreSeedsButton->mMoreSeedsButton = aMoreSeedsButton;
-    gVSMoreSeedsButton->mCheckboxImage = aMoreSeedsCheckbox;
-    gVSMoreSeedsButton->mCheckboxImagePress = (aIsMoreSeeds == true) ? aCheckbox : aCheckboxPressed;
+    gVSMoreSeedsButton->mCheckboxImage = aCheckbox;
+    gVSMoreSeedsButton->mCheckboxImagePress = aCheckboxPressed;
     aMoreSeedsButton->Resize(MORE_SEEDS_BUTTON_X, MORE_SEEDS_BUTTON_Y, 175, 50);
     mApp->mBoard->AddWidget(aMoreSeedsButton);
     // 拓展卡槽
     gVSMorePacketsButton = new VSSetupWidget;
-    Image *aMorePacketsCheckbox = (aIsMorePackets == false) ? aCheckbox : aCheckboxPressed;
-    ButtonWidget *aMorePacketsButton = MakeNewButton(1146, &mButtonListener, this, str, nullptr, aMorePacketsCheckbox, aMorePacketsCheckbox, aMorePacketsCheckbox);
+    ButtonWidget *aMorePacketsButton = MakeNewButton(1146, &mButtonListener, this, str, nullptr, aCheckbox, aCheckbox, aCheckbox);
     gVSMorePacketsButton->mMorePacketsButton = aMorePacketsButton;
-    gVSMorePacketsButton->mCheckboxImage = aMorePacketsCheckbox;
-    gVSMorePacketsButton->mCheckboxImagePress = (aIsMorePackets == true) ? aCheckbox : aCheckboxPressed;
+    gVSMorePacketsButton->mCheckboxImage = aCheckbox;
+    gVSMorePacketsButton->mCheckboxImagePress = aCheckboxPressed;
     aMorePacketsButton->Resize(MORE_PACKETS_BUTTON_X, MORE_PACKETS_BUTTON_Y, 175, 50);
     mApp->mBoard->AddWidget(aMorePacketsButton);
 
@@ -112,7 +119,8 @@ void VSSetupMenu::__Constructor() {
 void VSSetupMenu::__Destructor() {
     old_VSSetupMenu_Destructor(this);
 
-    gVSMoreSeedsButton->~VSSetupWidget();
+    if (gVSMoreSeedsButton != nullptr)
+        gVSMoreSeedsButton->~VSSetupWidget();
 }
 
 void VSSetupMenu::Draw(Graphics *g) {
@@ -180,20 +188,60 @@ void VSSetupMenu::ButtonPress(int theId) {
 void VSSetupMenu::ButtonDepress(int theId) {
     old_VSSetupMenu_ButtonDepress(this, theId);
 
+    mApp->mBoard->PickBackground(); // 修改器修改场地后开局立即更换
+
     // 对战额外卡槽
     int aNumPackets = mApp->mBoard->GetNumSeedsInBank(false);
-    mApp->mBoard->mSeedBank1->mNumPackets = aNumPackets;
-    mApp->mBoard->mSeedBank2->mNumPackets = aNumPackets;
 
-    mApp->mBoard->PickBackground(); // 修改器修改场地后开局立即更换
+    SeedBank *aSeedBank1 = mApp->mBoard->mSeedBank1;
+    SeedBank *aSeedBank2 = mApp->mBoard->mSeedBank2;
+
+    aSeedBank1->mNumPackets = aNumPackets;
+    aSeedBank2->mNumPackets = aNumPackets;
 
     switch (theId) {
         case 9: // 快速游戏
+            if (aNumPackets == 7) {
+                aSeedBank1->mSeedPackets[3].SetPacketType(SeedType::SEED_TORCHWOOD, SeedType::SEED_NONE);
+                aSeedBank1->mSeedPackets[4].SetPacketType(SeedType::SEED_POTATOMINE, SeedType::SEED_NONE);
+                aSeedBank1->mSeedPackets[5].SetPacketType(SeedType::SEED_SQUASH, SeedType::SEED_NONE);
+                aSeedBank1->mSeedPackets[6].SetPacketType(SeedType::SEED_JALAPENO, SeedType::SEED_NONE);
+                aSeedBank2->mSeedPackets[4].SetPacketType(SeedType::SEED_ZOMBIE_PAIL, SeedType::SEED_NONE);
+                aSeedBank2->mSeedPackets[5].SetPacketType(SeedType::SEED_ZOMBIE_FOOTBALL, SeedType::SEED_NONE);
+                aSeedBank2->mSeedPackets[6].SetPacketType(SeedType::SEED_ZOMBIE_FLAG, SeedType::SEED_NONE);
+            }
             break;
         case 10: // 自定义战场
-            gVSMoreSeedsButton->~VSSetupWidget();
+            gVSMoreSeedsButton->SetDisable();
             break;
         case 11: // 随机战场
+            if (aNumPackets == 7) {
+                mApp->mBoard->mSeedBank1->mNumPackets = 6;
+                mApp->mBoard->mSeedBank2->mNumPackets = 6;
+                // 开启“额外开槽”后随机选卡会导致界面卡死
+                //                std::vector<SeedType> aZombieSeeds, aPlantSeeds, tmpZombieSeeds, tmpPlantSeeds;
+                //
+                //                PickRandomZombies(aZombieSeeds);
+                //                do {
+                //                    PickRandomZombies(tmpZombieSeeds);
+                //                } while (tmpZombieSeeds[4] == aZombieSeeds[4]);
+                //                aZombieSeeds.push_back(tmpZombieSeeds[4]);
+                //
+                //                PickRandomPlants(aPlantSeeds, aZombieSeeds);
+                //                do {
+                //                    PickRandomPlants(tmpPlantSeeds, aZombieSeeds);
+                //                } while (tmpPlantSeeds[4] == aPlantSeeds[4]);
+                //                aPlantSeeds.push_back(tmpPlantSeeds[4]);
+                //
+                //                aSeedBank2->mSeedPackets[0].SetPacketType(SeedType::SEED_ZOMBIE_GRAVESTONE, SeedType::SEED_NONE);
+                //                aSeedBank1->mSeedPackets[0].SetPacketType(SeedType::SEED_SUNFLOWER, SeedType::SEED_NONE);
+                //                for (int i = 0; i < aZombieSeeds.size(); ++i) {
+                //                    aSeedBank2->mSeedPackets[i + 1].SetPacketType(aZombieSeeds[i], SeedType::SEED_NONE);
+                //                }
+                //                for (int i = 0; i < aPlantSeeds.size(); ++i) {
+                //                    aSeedBank2->mSeedPackets[i + 1].SetPacketType(aPlantSeeds[i], SeedType::SEED_NONE);
+                //                }
+            }
             break;
         case 1145: // 拓展僵尸选卡
             gVSMoreSeedsButton->ButtonDepress(1145);
@@ -203,5 +251,14 @@ void VSSetupMenu::ButtonDepress(int theId) {
             break;
         default:
             break;
+    }
+
+    // 修复“额外卡槽”开启后卡槽位置不正确
+    for (int i = 0; i < SEEDBANK_MAX; i++) {
+        SeedPacket *aPacket = &aSeedBank1->mSeedPackets[i];
+        SeedPacket *aPacket2 = &aSeedBank2->mSeedPackets[i];
+        aPacket->mIndex = i;
+        aPacket->mX = mApp->mBoard->GetSeedPacketPositionX(i, 0, false);
+        aPacket2->mX = mApp->mBoard->GetSeedPacketPositionX(i, 1, true);
     }
 }

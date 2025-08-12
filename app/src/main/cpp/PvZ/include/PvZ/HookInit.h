@@ -310,6 +310,7 @@ inline void InitHookFunction() {
     homura::HookFunction(SeedPacket_DrawOverlayAddr, &SeedPacket::DrawOverlay, &old_SeedPacket_DrawOverlay);
     homura::HookFunction(SeedPacket_DrawAddr, &SeedPacket::Draw, &old_SeedPacket_Draw);
     homura::HookFunction(SeedPacket_FlashIfReadyAddr, &SeedPacket::FlashIfReady, &old_SeedPacket_FlashIfReady);
+    homura::HookFunction(SeedPacket_SetPacketTypeAddr, &SeedPacket::SetPacketType, &old_SeedPacket_SetPacketType);
     //    MSHookFunction(SeedPacket_MouseDownAddr, (void *) SeedPacket_MouseDown, (void **) &old_SeedPacket_MouseDown);
 
 

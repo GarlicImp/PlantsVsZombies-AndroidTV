@@ -78,6 +78,7 @@ public:
     void FlashIfReady();
     bool BeginDraw(Sexy::Graphics *g);
     void EndDraw(Sexy::Graphics *g);
+    void SetPacketType(SeedType theSeedType, SeedType theImitaterType);
 };
 
 void DrawSeedPacket(Sexy::Graphics *g,
@@ -112,5 +113,6 @@ inline void (*old_SeedPacket_EndDraw)(SeedPacket *, Sexy::Graphics *);
 
 inline void (*old_SeedPacket_FlashIfReady)(SeedPacket *seedPacket);
 
+inline void (*old_SeedPacket_SetPacketType)(SeedPacket *, SeedType theSeedType, SeedType theImitaterType);
 
 #endif // PVZ_LAWN_BOARD_SEED_PACKET_H

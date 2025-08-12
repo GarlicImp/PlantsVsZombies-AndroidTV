@@ -592,6 +592,7 @@ inline void *SeedPacket_FlashIfReadyAddr;
 inline void *SeedPacket_DrawAddr;
 inline void *SeedPacket_DeactivateAddr;
 inline void *SeedPacket_WasPlantedAddr;
+inline void *SeedPacket_SetPacketTypeAddr;
 
 
 inline void *VSSetupMenu_VSSetupMenuAddr;
@@ -606,6 +607,8 @@ inline void *VSSetupMenu_GoToStateAddr;
 inline void *VSSetupMenu_CloseVSSetupAddr;
 inline void *VSSetupMenu_ButtonPressAddr;
 inline void *VSSetupMenu_ButtonDepressAddr;
+inline void *VSSetupMenu_PickRandomZombiesAddr;
+inline void *VSSetupMenu_PickRandomPlantsAddr;
 
 
 inline void *VSResultsMenu_UpdateAddr;
@@ -1797,6 +1800,7 @@ inline bool GetFunctionAddr() {
     SeedPacket_DrawAddr = dlsym(handle, "_ZN10SeedPacket4DrawEPN4Sexy8GraphicsE");
     SeedPacket_DeactivateAddr = dlsym(handle, "_ZN10SeedPacket10DeactivateEv");
     SeedPacket_WasPlantedAddr = dlsym(handle, "_ZN10SeedPacket10WasPlantedEi");
+    SeedPacket_SetPacketTypeAddr = dlsym(handle, "_ZN10SeedPacket13SetPacketTypeE8SeedTypeS0_");
 
 
     VSSetupMenu_VSSetupMenuAddr = dlsym(handle, "_ZN11VSSetupMenuC2Ev");
@@ -1811,12 +1815,15 @@ inline bool GetFunctionAddr() {
     VSSetupMenu_CloseVSSetupAddr = dlsym(handle, "_ZN11VSSetupMenu12CloseVSSetupEb");
     VSSetupMenu_ButtonPressAddr = dlsym(handle, "_ZN11VSSetupMenu11ButtonPressEi");
     VSSetupMenu_ButtonDepressAddr = dlsym(handle, "_ZN11VSSetupMenu13ButtonDepressEi");
+    VSSetupMenu_PickRandomZombiesAddr = dlsym(handle, "_ZN11VSSetupMenu17PickRandomZombiesERSt6vectorI8SeedTypeSaIS1_EE");
+    VSSetupMenu_PickRandomPlantsAddr = dlsym(handle, "_ZN11VSSetupMenu16PickRandomPlantsERSt6vectorI8SeedTypeSaIS1_EERKS3_");
 
 
     VSResultsMenu_UpdateAddr = dlsym(handle, "_ZN13VSResultsMenu6UpdateEv");
     VSResultsMenu_OnExitAddr = dlsym(handle, "_ZN13VSResultsMenu6OnExitEv");
     VSResultsMenu_DrawInfoBoxAddr = dlsym(handle, "_ZN13VSResultsMenu11DrawInfoBoxEPN4Sexy8GraphicsEi");
     VSResultsMenu_ButtonDepressAddr = dlsym(handle, "_ZN13VSResultsMenu13ButtonDepressEi");
+
 
     WaitForSecondPlayerDialog_WaitForSecondPlayerDialogAddr = dlsym(handle, "_ZN25WaitForSecondPlayerDialogC2EP7LawnApp");
     WaitForSecondPlayerDialog_GameButtonDownAddr = dlsym(handle, "_ZN25WaitForSecondPlayerDialog14GameButtonDownEN4Sexy13GamepadButtonEij");

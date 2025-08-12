@@ -3329,8 +3329,9 @@ void Board::ShakeBoard(int theShakeAmountX, int theShakeAmountY) {
 
 int Board::GetNumSeedsInBank(bool thePlayerIndex) {
     // 对战额外卡槽
-    if (mApp->mGameMode == GameMode::GAMEMODE_MP_VS && mApp->mPlayerInfo->mIsVSMorePackets) {
-        return 7;
+    if (mApp->mGameMode == GameMode::GAMEMODE_MP_VS) {
+        if (gVSMorePacketsButton != nullptr && gVSMorePacketsButton->mIsMorePackets)
+            return 7;
     }
 
     return old_Board_GetNumSeedsInBank(this, thePlayerIndex);

@@ -36,15 +36,17 @@ class VSSetupWidget {
 public:
     LawnApp *mApp;
     Board *mBoard;
-    DefaultPlayerInfo *mPlayerInfo;
     Sexy::ButtonWidget *mMoreSeedsButton;
     Sexy::ButtonWidget *mMorePacketsButton;
     Sexy::Image *mCheckboxImage;
     Sexy::Image *mCheckboxImagePress;
+    bool mIsMoreSeeds;
+    bool mIsMorePackets;
     bool mDrawString;
 
     VSSetupWidget();
     ~VSSetupWidget();
+    void SetDisable();
     void ButtonDepress(this VSSetupWidget &self, int theId);
     void CheckboxChecked(int theId, bool checked);
 
@@ -119,6 +121,12 @@ public:
     }
     void CloseVSSetup(bool close) {
         reinterpret_cast<void (*)(VSSetupMenu *, bool)>(VSSetupMenu_CloseVSSetupAddr)(this, close);
+    }
+    void PickRandomZombies(std::vector<SeedType> &theZombieSeeds) {
+        reinterpret_cast<void (*)(VSSetupMenu *, std::vector<SeedType> &)>(VSSetupMenu_PickRandomZombiesAddr)(this, theZombieSeeds);
+    }
+    void PickRandomPlants(std::vector<SeedType> &thePlantSeeds, std::vector<SeedType> const &theZombieSeeds) {
+        reinterpret_cast<void (*)(VSSetupMenu *, std::vector<SeedType> &, std::vector<SeedType> const &)>(VSSetupMenu_PickRandomPlantsAddr)(this, thePlantSeeds, theZombieSeeds);
     }
 
     VSSetupMenu() {
