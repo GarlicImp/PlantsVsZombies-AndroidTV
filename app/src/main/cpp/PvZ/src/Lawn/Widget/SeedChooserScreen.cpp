@@ -252,8 +252,6 @@ bool SeedChooserScreen::SeedNotAllowedToPick(SeedType theSeedType) {
 SeedType SeedChooserScreen::GetZombieSeedType(SeedType theSeedType) {
     int aSeedType = theSeedType + SEED_ZOMBIE_GRAVESTONE;
     if (gVSMoreSeedsButton != nullptr && gVSMoreSeedsButton->mIsMoreSeeds) { // 解锁更多对战僵尸
-        game_patches::numDrawZombieSeedChooser.Modify();
-        game_patches::allowZombieSeedHitIndex.Modify();
         return aSeedType > SEED_ZOMBIE_SQUASH_HEAD ? SEED_NONE : (SeedType)aSeedType;
     } else {
         return aSeedType > SEED_ZOMBIE_GARGANTUAR ? SEED_NONE : (SeedType)aSeedType;
@@ -328,7 +326,7 @@ void SeedChooserScreen::DrawPacket(
     int theConvertedGrayness = (mApp->mGameMode == GameMode::GAMEMODE_MP_VS) ? ((theColor->mRed + theColor->mGreen + theColor->mBlue) / 3 + theGrayness) / 2 : theGrayness;
     if (mApp->mGameMode == GameMode::GAMEMODE_MP_VS && !mBoard->StageHasPool()) {
         if (theSeedType == SeedType::SEED_ZOMBIE_DUCKY_TUBE || theSeedType == SeedType::SEED_ZOMBIE_SNORKEL || theSeedType == SeedType::SEED_ZOMBIE_DOLPHIN_RIDER)
-            theConvertedGrayness = 115;
+            theConvertedGrayness = 155;
     }
     DrawSeedPacket(g, x, y, theSeedType, theImitaterType, thePercentDark, theConvertedGrayness, theDrawCost, false, mIsZombieChooser, theUseCurrentCost);
 }

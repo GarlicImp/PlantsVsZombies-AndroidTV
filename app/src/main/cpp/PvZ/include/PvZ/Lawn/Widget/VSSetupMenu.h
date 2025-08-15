@@ -49,6 +49,7 @@ public:
     void SetDisable();
     void ButtonDepress(this VSSetupWidget &self, int theId);
     void CheckboxChecked(int theId, bool checked);
+    void GetZombieSeedType();
 
 private:
     static constexpr Sexy::ButtonListener::VTable sButtonListenerVtable{

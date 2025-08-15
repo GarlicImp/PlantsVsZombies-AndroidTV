@@ -67,6 +67,8 @@ void VSSetupWidget::ButtonDepress(this VSSetupWidget &self, int theId) {
         aButton->mButtonImage = gVSMoreSeedsButton->mCheckboxImage;
         aButton->mOverImage = gVSMoreSeedsButton->mCheckboxImage;
         aButton->mDownImage = gVSMoreSeedsButton->mCheckboxImage;
+        // 绘制更多僵尸并允许点选
+        self.GetZombieSeedType();
     } else if (theId == 1146) {
         self.CheckboxChecked(1146, self.mIsMorePackets);
         std::swap(gVSMorePacketsButton->mCheckboxImage, gVSMorePacketsButton->mCheckboxImagePress);
@@ -87,6 +89,16 @@ void VSSetupWidget::CheckboxChecked(int theId, bool checked) {
             break;
         default:
             break;
+    }
+}
+
+void VSSetupWidget::GetZombieSeedType() {
+    if (mIsMoreSeeds) {
+        game_patches::numDrawZombieSeedChooser.Modify();
+        game_patches::allowZombieSeedHitIndex.Modify();
+    } else {
+        game_patches::numDrawZombieSeedChooser.Restore();
+        game_patches::allowZombieSeedHitIndex.Restore();
     }
 }
 
