@@ -46,7 +46,7 @@ void VSSetupWidget::SetDisable() {
 
 void VSSetupWidget::ButtonDepress(this VSSetupWidget &self, int theId) {
     if (theId == 1145) {
-        self.CheckboxChecked(1145, moreZombieSeeds);
+        self.CheckboxChecked(1145, self.mIsMorePackets);
         std::swap(gVSMorePacketsButton->mCheckboxImage, gVSMorePacketsButton->mCheckboxImagePress);
         ButtonWidget *aButton = gVSMorePacketsButton->mMorePacketsButton;
         aButton->mButtonImage = gVSMorePacketsButton->mCheckboxImage;
