@@ -120,9 +120,6 @@ public:
     bool CancelLawnView() {
         return reinterpret_cast<bool (*)(SeedChooserScreen *)>(SeedChooserScreen_CancelLawnViewAddr)(this);
     }
-    void GetNextSeedInDir(int theNumSeed, int thePlayerIndex) {
-        reinterpret_cast<void (*)(SeedChooserScreen *, int, int)>(SeedChooserScreen_GetNextSeedInDirAddr)(this, theNumSeed, thePlayerIndex);
-    }
     void UpdateImitaterButton() {
         reinterpret_cast<void (*)(SeedChooserScreen *)>(SeedChooserScreen_UpdateImitaterButtonAddr)(this);
     }
@@ -153,6 +150,7 @@ public:
     int NumColumns();
     void ShowToolTip(unsigned int thePlayerIndex);
     static SeedType GetZombieIndexBySeedType(SeedType theSeedType);
+    int GetNextSeedInDir(int theNumSeed, int thePlayerIndex);
 
     void MouseMove(int x, int y);
     void MouseDown(int x, int y, int theClickCount);

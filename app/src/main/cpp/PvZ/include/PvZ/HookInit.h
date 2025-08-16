@@ -245,6 +245,7 @@ inline void InitHookFunction() {
     homura::HookFunction(SeedChooserScreen_GetSeedPositionInBankAddr, &SeedChooserScreen::GetSeedPositionInBank, &old_SeedChooserScreen_GetSeedPositionInBank);
     homura::HookFunction(SeedChooserScreen_GetSeedPositionInChooserAddr, &SeedChooserScreen::GetSeedPositionInChooser, nullptr);
     homura::HookFunction(SeedChooserScreen_ShowToolTipAddr, &SeedChooserScreen::ShowToolTip, &old_SeedChooserScreen_ShowToolTip);
+    homura::HookFunction(SeedChooserScreen_GetNextSeedInDirAddr, &SeedChooserScreen::GetNextSeedInDir, nullptr);
 
 
     homura::HookFunction(MainMenu_KeyDownAddr, &MainMenu::KeyDown, &old_MainMenu_KeyDown);

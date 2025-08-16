@@ -626,3 +626,73 @@ void SeedChooserScreen::MouseUp(int x, int y) {
     }
     gSeedChooserTouchState = SeedChooserTouchState::SEEDCHOOSER_TOUCHSTATE_NONE;
 }
+
+int SeedChooserScreen::GetNextSeedInDir(int theNumSeed, int thePlayerIndex) {
+    int numCol1;                           // r7
+    int numCol2;                           // r9
+    int aNumRow;                           // r8
+    int aNumCol;                           // r7
+    int aNumRow2;                          // r0
+    bool isZombieChooser;                  // zf
+    int result;                            // r0
+    bool numZombieSeed;                    // zf
+    bool v14;                              // cc
+
+    numCol1 = NumColumns();
+    numCol2 = NumColumns();
+    if (theNumSeed == 48) {
+        aNumCol = 8;
+        aNumRow = 5;
+    } else {
+        aNumRow = theNumSeed / numCol1;
+        aNumCol = theNumSeed % numCol2;
+    }
+    // 拓展僵尸选卡适配键盘选取
+    if (mApp->mGameMode == GameMode::GAMEMODE_MP_VS) {
+        aNumRow2 = 5;
+    } else if (Has7Rows()) {
+        aNumRow2 = 5;
+    } else {
+        aNumRow2 = 4;
+    }
+    if (mIsZombieChooser) {
+        isZombieChooser = theNumSeed == 14;
+        if (theNumSeed == 14)
+            isZombieChooser = thePlayerIndex == 1;
+        if (isZombieChooser)
+            return 19;
+        numZombieSeed = theNumSeed == 19;
+        if (theNumSeed == 19)
+            numZombieSeed = thePlayerIndex == 3;
+        if (numZombieSeed)
+            return 19;
+        aNumRow2 = 5;
+    }
+    switch (thePlayerIndex) {
+        case 0:
+            if (aNumRow > 0)
+                --aNumRow;
+            goto LABEL_31;
+        case 1:
+            v14 = aNumRow < aNumRow2;
+            if (v14)
+                ++aNumRow;
+            goto LABEL_31;
+        case 2:
+            if (aNumCol > 0)
+                --aNumCol;
+            goto LABEL_21;
+        case 3:
+            v14 = aNumCol < NumColumns() - 1;
+            if (v14)
+                ++aNumCol;
+        LABEL_31:
+            result = aNumCol + NumColumns() * aNumRow;
+            break;
+        default:
+        LABEL_21:
+            result = aNumCol + NumColumns() * aNumRow;
+            break;
+    }
+    return result;
+}
