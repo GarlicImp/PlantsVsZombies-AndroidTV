@@ -965,6 +965,19 @@ public class SetActivity extends Activity {
             return true;
         });
 
+        final CheckBox moreZombieSeeds = new CheckBox(this);
+        moreZombieSeeds.setText(R.string.addon_ingame_moreZombieSeeds);
+        moreZombieSeeds.setChecked(sharedPreferences.getBoolean("moreZombieSeeds", false));
+        moreZombieSeeds.setOnCheckedChangeListener((compoundButton, bool) -> sharedPreferences.edit().putBoolean("moreZombieSeeds", bool).apply());
+        moreZombieSeeds.setLayoutParams(matchWrapParams);
+        moreZombieSeeds.setOnLongClickListener(v -> {
+            new AlertDialog.Builder(SetActivity.this)
+                    .setTitle(R.string.addon_ingame_moreZombieSeeds)
+                    .setMessage(R.string.addon_ingame_moreZombieSeeds_info)
+                    .setPositiveButton("OK", null)
+                    .create().show();
+            return true;
+        });
 
         container.addView(manualCollect);
         container.addView(canShop);
@@ -978,6 +991,7 @@ public class SetActivity extends Activity {
         container.addView(useXboxMusics);
         container.addView(useOpenSL);
         container.addView(jumpLogo);
+        container.addView(moreZombieSeeds);
         try {
             Class.forName("com.android.support.CkHomuraMenu");
             final CheckBox useMenu = new CheckBox(this);

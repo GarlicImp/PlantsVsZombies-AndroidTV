@@ -1478,16 +1478,13 @@ void Board::DrawShovel(Sexy::Graphics *g) {
 void Board::Draw(Sexy::Graphics *g) {
     old_Board_Draw(this, g);
 
-    if (gVSMoreSeedsButton == nullptr)
+    if (gVSMorePacketsButton == nullptr)
         return;
 
-    if (gVSMoreSeedsButton->mDrawString == true) {
+    if (gVSMorePacketsButton->mDrawString == true) {
         Color aColor = Color(0, 205, 0, 255);
         g->SetColor(aColor);
         g->SetFont(*Sexy_FONT_DWARVENTODCRAFT18_Addr);
-
-        pvzstl::string moreSeeds = StrFormat("拓展僵尸选卡");
-        g->DrawString(moreSeeds, MORE_SEEDS_BUTTON_X + 40, MORE_SEEDS_BUTTON_Y + 25);
 
         pvzstl::string morePackets = StrFormat("额外卡槽");
         g->DrawString(morePackets, MORE_PACKETS_BUTTON_X + 40, MORE_PACKETS_BUTTON_Y + 25);

@@ -260,6 +260,7 @@ inline void *LawnApp_LawnMessageBoxAddr;
 inline void *LawnApp_ReanimationGetAddr;
 inline void *LawnApp_TryHelpTextScreenAddr;
 inline void *LawnApp_KillSeedChooserScreenAddr;
+inline void *LawnApp_GetSeedsAvailableAddr;
 inline void *LawnApp_IsIZombieLevelAddr;
 inline void *LawnApp_AddTodParticleAddr;
 inline void *LawnApp_AddReanimationAddr;
@@ -1467,6 +1468,7 @@ inline bool GetFunctionAddr() {
     LawnApp_ReanimationGetAddr = dlsym(handle, "_ZN7LawnApp14ReanimationGetE13ReanimationID");
     LawnApp_TryHelpTextScreenAddr = dlsym(handle, "_ZN7LawnApp17TryHelpTextScreenEi");
     LawnApp_KillSeedChooserScreenAddr = dlsym(handle, "_ZN7LawnApp21KillSeedChooserScreenEv");
+    LawnApp_GetSeedsAvailableAddr = dlsym(handle, "_ZN7LawnApp17GetSeedsAvailableEb");
     LawnApp_IsIZombieLevelAddr = dlsym(handle, "_ZN7LawnApp14IsIZombieLevelEv");
     LawnApp_AddTodParticleAddr = dlsym(handle, "_ZN7LawnApp14AddTodParticleEffi14ParticleEffect");
     LawnApp_AddReanimationAddr = dlsym(handle, "_ZN7LawnApp14AddReanimationEffi15ReanimationType");

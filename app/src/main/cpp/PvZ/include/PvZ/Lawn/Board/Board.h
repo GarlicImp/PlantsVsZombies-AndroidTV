@@ -127,7 +127,11 @@ enum TouchState {
     TOUCHSTATE_VALID_COBCONON_SECOND = 15,
 };
 
-enum TouchPlayerIndex { TOUCHPLAYER_NONE = -1, TOUCHPLAYER_PLAYER1 = 0, TOUCHPLAYER_PLAYER2 = 1 };
+enum TouchPlayerIndex {
+    TOUCHPLAYER_NONE = -1,
+    TOUCHPLAYER_PLAYER1 = 0,
+    TOUCHPLAYER_PLAYER2 = 1,
+};
 
 class Board : public Sexy::__Widget {
 public:

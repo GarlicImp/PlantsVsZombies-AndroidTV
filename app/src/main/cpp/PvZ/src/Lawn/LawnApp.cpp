@@ -342,10 +342,10 @@ bool LawnApp::IsChallengeWithoutSeedBank() {
     return mGameMode == GameMode::GAMEMODE_CHALLENGE_BUTTERED_POPCORN || old_LawnApp_IsChallengeWithoutSeedBank(this);
 }
 
-int LawnApp::GetSeedsAvailable(int theIsZombieChooser) {
-    // 解锁僵尸方六张隐藏卡片
-    if (theIsZombieChooser) {
-        return 86;
+int LawnApp::GetSeedsAvailable(bool theIsZombieChooser) {
+    // 解锁僵尸方拓展卡片
+    if (theIsZombieChooser && moreZombieSeeds) {
+        return NUM_ZOMBIE_SEED_IN_CHOOSER;
     }
 
     return old_LawnApp_GetSeedsAvailable(this, theIsZombieChooser);

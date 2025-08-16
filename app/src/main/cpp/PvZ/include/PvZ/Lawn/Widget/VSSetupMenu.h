@@ -34,15 +34,13 @@ class DefaultPlayerInfo;
 
 class VSSetupWidget {
 public:
-    LawnApp *mApp;
-    Board *mBoard;
-    Sexy::ButtonWidget *mMoreSeedsButton;
-    Sexy::ButtonWidget *mMorePacketsButton;
-    Sexy::Image *mCheckboxImage;
-    Sexy::Image *mCheckboxImagePress;
-    bool mIsMoreSeeds;
-    bool mIsMorePackets;
-    bool mDrawString;
+    LawnApp *mApp = reinterpret_cast<LawnApp *>(*gLawnApp_Addr);
+    Sexy::ButtonWidget *mMoreSeedsButton = nullptr;
+    Sexy::ButtonWidget *mMorePacketsButton = nullptr;
+    Sexy::Image *mCheckboxImage = nullptr;
+    Sexy::Image *mCheckboxImagePress = nullptr;
+    bool mIsMorePackets = false;
+    bool mDrawString = false;
 
     VSSetupWidget();
     ~VSSetupWidget();
@@ -59,11 +57,8 @@ private:
     static inline Sexy::ButtonListener sButtonListener{&sButtonListenerVtable};
 };
 
-constexpr const int MORE_SEEDS_BUTTON_X = 800;
-constexpr const int MORE_SEEDS_BUTTON_Y = 150;
 constexpr const int MORE_PACKETS_BUTTON_X = 800;
 constexpr const int MORE_PACKETS_BUTTON_Y = 200;
-inline VSSetupWidget *gVSMoreSeedsButton;
 inline VSSetupWidget *gVSMorePacketsButton;
 
 

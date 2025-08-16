@@ -235,7 +235,7 @@ bool SeedChooserScreen::SeedNotAllowedToPick(SeedType theSeedType) {
     // 此处添加一些逻辑，就可以自定义Ban卡
     // 此处Ban卡仅对植物方生效，theSeedType取值范围是0~39。
 
-    if (gVSMoreSeedsButton != nullptr && gVSMoreSeedsButton->mIsMoreSeeds) {
+    if (moreZombieSeeds) {
         if (theSeedType == SeedType::SEED_BLOVER) {
             return false;
         }
@@ -251,7 +251,7 @@ bool SeedChooserScreen::SeedNotAllowedToPick(SeedType theSeedType) {
 
 SeedType SeedChooserScreen::GetZombieSeedType(SeedType theSeedType) {
     int aSeedType = theSeedType + SEED_ZOMBIE_GRAVESTONE;
-    if (gVSMoreSeedsButton != nullptr && gVSMoreSeedsButton->mIsMoreSeeds) { // 解锁更多对战僵尸
+    if (moreZombieSeeds) { // 解锁更多对战僵尸
         return aSeedType > SEED_ZOMBIE_SQUASH_HEAD ? SEED_NONE : (SeedType)aSeedType;
     } else {
         return aSeedType > SEED_ZOMBIE_GARGANTUAR ? SEED_NONE : (SeedType)aSeedType;
@@ -377,7 +377,7 @@ void SeedChooserScreen::GetSeedPositionInChooser(int theIndex, int &x, int &y) {
     int aCol = theIndex % NumColumns();
     x = 53 * aCol + 22;
     if (mIsZombieChooser) {
-        if (aRow == 3 && gVSMoreSeedsButton != nullptr && !gVSMoreSeedsButton->mIsMoreSeeds) {
+        if (aRow == 3 && !moreZombieSeeds) {
             x = 53 * aCol + 48;
         }
     }

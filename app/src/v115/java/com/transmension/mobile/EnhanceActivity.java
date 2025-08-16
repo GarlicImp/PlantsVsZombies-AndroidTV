@@ -233,6 +233,8 @@ public class EnhanceActivity extends MainActivity {
 
     public static native void nativeJumpLogo();
 
+    public static native void nativeMoreZombieSeeds();
+
     public static native void nativeHeavyWeaponAccel();
 
     public static native void nativeIntroVideoCompleted();
@@ -579,7 +581,9 @@ public class EnhanceActivity extends MainActivity {
         if (sharedPreferences.getBoolean("jumpLogo", false))
             nativeJumpLogo();
 
-        //读取设置中的“重型武器重力感应”设置项，决定是否开启重力感应
+        if (sharedPreferences.getBoolean("moreZombieSeeds", false))
+            nativeMoreZombieSeeds();
+
         if (sharedPreferences.getBoolean("heavyWeaponAccel", false))
             nativeHeavyWeaponAccel();
 

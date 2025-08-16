@@ -51,6 +51,7 @@ inline bool useXboxMusic;
 inline bool seedBankPin;    // 无尽置顶种子栏
 inline bool dynamicPreview; // 动态种植预览
 inline bool jumpLogo;       // 跳过加载界面的宝开Logo
+inline bool moreZombieSeeds;  // 解锁更多对战僵尸
 inline bool heavyWeaponAccel;
 
 inline int speedUpMode;

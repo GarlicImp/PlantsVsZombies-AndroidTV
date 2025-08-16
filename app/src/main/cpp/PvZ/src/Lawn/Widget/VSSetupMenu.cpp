@@ -26,23 +26,12 @@
 using namespace Sexy;
 
 VSSetupWidget::VSSetupWidget() {
-    mApp = reinterpret_cast<LawnApp *>(*gLawnApp_Addr);
-    mBoard = mApp->mBoard;
-    mMoreSeedsButton = nullptr;
-    mMorePacketsButton = nullptr;
-    mCheckboxImage = nullptr;
-    mCheckboxImagePress = nullptr;
-    mIsMoreSeeds = false;
-    mIsMorePackets = false;
-    mDrawString = false;
+    if (moreZombieSeeds) {
+        game_patches::drawMoreZombieSeeds.Modify();
+    }
 }
 
 VSSetupWidget::~VSSetupWidget() {
-    gVSMoreSeedsButton->mMoreSeedsButton->mBtnNoDraw = true;
-    gVSMoreSeedsButton->mMoreSeedsButton->mDisabled = true;
-    gVSMoreSeedsButton->mDrawString = false;
-    gVSMoreSeedsButton = nullptr;
-
     gVSMorePacketsButton->mMorePacketsButton->mBtnNoDraw = true;
     gVSMorePacketsButton->mMorePacketsButton->mDisabled = true;
     gVSMorePacketsButton->mDrawString = false;
@@ -50,10 +39,6 @@ VSSetupWidget::~VSSetupWidget() {
 }
 
 void VSSetupWidget::SetDisable() {
-    gVSMoreSeedsButton->mMoreSeedsButton->mBtnNoDraw = true;
-    gVSMoreSeedsButton->mMoreSeedsButton->mDisabled = true;
-    gVSMoreSeedsButton->mDrawString = false;
-
     gVSMorePacketsButton->mMorePacketsButton->mBtnNoDraw = true;
     gVSMorePacketsButton->mMorePacketsButton->mDisabled = true;
     gVSMorePacketsButton->mDrawString = false;
@@ -61,16 +46,7 @@ void VSSetupWidget::SetDisable() {
 
 void VSSetupWidget::ButtonDepress(this VSSetupWidget &self, int theId) {
     if (theId == 1145) {
-        self.CheckboxChecked(1145, self.mIsMoreSeeds);
-        std::swap(gVSMoreSeedsButton->mCheckboxImage, gVSMoreSeedsButton->mCheckboxImagePress);
-        ButtonWidget *aButton = gVSMoreSeedsButton->mMoreSeedsButton;
-        aButton->mButtonImage = gVSMoreSeedsButton->mCheckboxImage;
-        aButton->mOverImage = gVSMoreSeedsButton->mCheckboxImage;
-        aButton->mDownImage = gVSMoreSeedsButton->mCheckboxImage;
-        // 绘制更多僵尸并允许点选
-        self.GetZombieSeedType();
-    } else if (theId == 1146) {
-        self.CheckboxChecked(1146, self.mIsMorePackets);
+        self.CheckboxChecked(1145, moreZombieSeeds);
         std::swap(gVSMorePacketsButton->mCheckboxImage, gVSMorePacketsButton->mCheckboxImagePress);
         ButtonWidget *aButton = gVSMorePacketsButton->mMorePacketsButton;
         aButton->mButtonImage = gVSMorePacketsButton->mCheckboxImage;
@@ -82,23 +58,10 @@ void VSSetupWidget::ButtonDepress(this VSSetupWidget &self, int theId) {
 void VSSetupWidget::CheckboxChecked(int theId, bool checked) {
     switch (theId) {
         case 1145:
-            mIsMoreSeeds = !checked;
-            break;
-        case 1146:
             mIsMorePackets = !checked;
             break;
         default:
             break;
-    }
-}
-
-void VSSetupWidget::GetZombieSeedType() {
-    if (mIsMoreSeeds) {
-        game_patches::numDrawZombieSeedChooser.Modify();
-        game_patches::allowZombieSeedHitIndex.Modify();
-    } else {
-        game_patches::numDrawZombieSeedChooser.Restore();
-        game_patches::allowZombieSeedHitIndex.Restore();
     }
 }
 
@@ -108,31 +71,23 @@ void VSSetupMenu::__Constructor() {
     Image *aCheckbox = *Sexy_IMAGE_OPTIONS_CHECKBOX0_Addr;
     Image *aCheckboxPressed = *Sexy_IMAGE_OPTIONS_CHECKBOX1_Addr;
     pvzstl::string str = StrFormat("");
-    // 拓展僵尸选卡
-    gVSMoreSeedsButton = new VSSetupWidget;
-    ButtonWidget *aMoreSeedsButton = MakeNewButton(1145, &mButtonListener, this, str, nullptr, aCheckbox, aCheckbox, aCheckbox);
-    gVSMoreSeedsButton->mMoreSeedsButton = aMoreSeedsButton;
-    gVSMoreSeedsButton->mCheckboxImage = aCheckbox;
-    gVSMoreSeedsButton->mCheckboxImagePress = aCheckboxPressed;
-    aMoreSeedsButton->Resize(MORE_SEEDS_BUTTON_X, MORE_SEEDS_BUTTON_Y, 175, 50);
-    mApp->mBoard->AddWidget(aMoreSeedsButton);
     // 拓展卡槽
     gVSMorePacketsButton = new VSSetupWidget;
-    ButtonWidget *aMorePacketsButton = MakeNewButton(1146, &mButtonListener, this, str, nullptr, aCheckbox, aCheckbox, aCheckbox);
+    ButtonWidget *aMorePacketsButton = MakeNewButton(1145, &mButtonListener, this, str, nullptr, aCheckbox, aCheckbox, aCheckbox);
     gVSMorePacketsButton->mMorePacketsButton = aMorePacketsButton;
     gVSMorePacketsButton->mCheckboxImage = aCheckbox;
     gVSMorePacketsButton->mCheckboxImagePress = aCheckboxPressed;
     aMorePacketsButton->Resize(MORE_PACKETS_BUTTON_X, MORE_PACKETS_BUTTON_Y, 175, 50);
     mApp->mBoard->AddWidget(aMorePacketsButton);
 
-    gVSMoreSeedsButton->mDrawString = true;
+    gVSMorePacketsButton->mDrawString = true;
 }
 
 void VSSetupMenu::__Destructor() {
     old_VSSetupMenu_Destructor(this);
 
-    if (gVSMoreSeedsButton != nullptr)
-        gVSMoreSeedsButton->~VSSetupWidget();
+    if (gVSMorePacketsButton != nullptr)
+        gVSMorePacketsButton->~VSSetupWidget();
 }
 
 void VSSetupMenu::Draw(Graphics *g) {
@@ -224,7 +179,7 @@ void VSSetupMenu::ButtonDepress(int theId) {
             }
             break;
         case 10: // 自定义战场
-            gVSMoreSeedsButton->SetDisable();
+            gVSMorePacketsButton->SetDisable();
             break;
         case 11: // 随机战场
             if (aNumPackets == 7) {
@@ -255,11 +210,8 @@ void VSSetupMenu::ButtonDepress(int theId) {
                 //                }
             }
             break;
-        case 1145: // 拓展僵尸选卡
-            gVSMoreSeedsButton->ButtonDepress(1145);
-            break;
-        case 1146: // 额外卡槽
-            gVSMorePacketsButton->ButtonDepress(1146);
+        case 1145: // 额外卡槽
+            gVSMorePacketsButton->ButtonDepress(1145);
             break;
         default:
             break;

@@ -1027,6 +1027,10 @@ extern "C" JNIEXPORT void JNICALL Java_com_transmension_mobile_EnhanceActivity_n
     jumpLogo = true;
 }
 
+extern "C" JNIEXPORT void JNICALL Java_com_transmension_mobile_EnhanceActivity_nativeMoreZombieSeeds(JNIEnv *env, jclass clazz) {
+    moreZombieSeeds = true;
+}
+
 extern "C" JNIEXPORT void JNICALL Java_com_transmension_mobile_EnhanceActivity_nativeIntroVideoCompleted(JNIEnv *env, jclass clazz) {
     LawnApp *lawnApp = (LawnApp *)*gLawnApp_Addr;
     lawnApp->mTitleScreen->mVideoCompleted = true;

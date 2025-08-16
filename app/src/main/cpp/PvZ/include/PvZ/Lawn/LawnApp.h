@@ -257,6 +257,12 @@ public:
     void SetSecondPlayer(int thePlayerIndex) {
         reinterpret_cast<void (*)(LawnApp *, int)>(LawnApp_SetSecondPlayerAddr)(this, thePlayerIndex);
     }
+    void PlayFoley(FoleyType theFoleyType) {
+        reinterpret_cast<void (*)(LawnApp *, FoleyType)>(LawnApp_PlayFoleyAddr)(this, theFoleyType);
+    }
+    void PlaySample(int theSoundNum) {
+        reinterpret_cast<void (*)(LawnApp *, int)>(LawnApp_PlaySampleAddr)(this, theSoundNum);
+    }
 
     LawnApp() {
         __Constructor();
@@ -286,12 +292,6 @@ public:
     void KillSeedChooserScreen();
     bool IsIZombieLevel();
     bool IsWallnutBowlingLevel();
-    void PlayFoley(FoleyType theFoleyType) {
-        reinterpret_cast<void (*)(LawnApp *, FoleyType)>(LawnApp_PlayFoleyAddr)(this, theFoleyType);
-    }
-    void PlaySample(int theSoundNum) {
-        reinterpret_cast<void (*)(LawnApp *, int)>(LawnApp_PlaySampleAddr)(this, theSoundNum);
-    }
     bool IsAdventureMode();
     bool IsPuzzleMode();
     bool IsLittleTroubleLevel();
@@ -311,7 +311,7 @@ public:
     void KillDialog(Dialogs theId);
     void Load(const char *theGroupName);
     void DoConvertImitaterImages();
-    int GetSeedsAvailable(int theIsZombieChooser);
+    int GetSeedsAvailable(bool theIsZombieChooser);
     bool GrantAchievement(AchievementId theAchievementId);
     void SetFoleyVolume(FoleyType theFoleyType, double theVolume);
     void ShowLeaderboards();
@@ -368,7 +368,7 @@ inline void (*old_LawnApp_LoadingThreadProc)(LawnApp *lawnApp);
 
 inline bool (*old_LawnApp_IsChallengeWithoutSeedBank)(LawnApp *lawnApp);
 
-inline int (*old_LawnApp_GetSeedsAvailable)(LawnApp *lawnApp, int isZombieChooser);
+inline int (*old_LawnApp_GetSeedsAvailable)(LawnApp *lawnApp, bool isZombieChooser);
 
 inline void (*old_LawnApp_HardwareInit)(LawnApp *lawnApp);
 
