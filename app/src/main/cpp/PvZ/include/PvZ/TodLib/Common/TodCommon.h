@@ -65,7 +65,7 @@ inline float RandRangeFloat(float theMin, float theMax) {
 }
 
 inline void TodDrawImageCelF(Sexy::Graphics *g, Sexy::Image *theImageStrip, float thePosX, float thePosY, int theCelCol, int theCelRow) {
-    reinterpret_cast<void (*)(Sexy::Graphics *, Sexy::Image *, float, float, int, int)>(RandRangeFloatAddr)(g, theImageStrip, thePosX, thePosY, theCelCol, theCelRow);
+    reinterpret_cast<void (*)(Sexy::Graphics *, Sexy::Image *, float, float, int, int)>(TodDrawImageCelFAddr)(g, theImageStrip, thePosX, thePosY, theCelCol, theCelRow);
 }
 
 inline void TodScaleRotateTransformMatrix(Sexy::SexyMatrix3 &m, float x, float y, float rad, float theScaleX, float theScaleY) {
