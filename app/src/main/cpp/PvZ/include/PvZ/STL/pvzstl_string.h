@@ -461,7 +461,7 @@ public:
         return n;
     }
 
-    void swap(basic_string &other) noexcept {
+    void swap(basic_string &other) noexcept /* strengthened */ {
         if (__get_rep()->__is_leaked()) {
             __get_rep()->__set_sharable();
         }
@@ -579,7 +579,7 @@ protected:
         [[nodiscard]] static __rep &__empty_rep() noexcept {
 #ifdef PVZ_VERSION
             assert(::gLibBaseOffset != 0);
-            constexpr uintptr_t offset = (sizeof(CharT) == sizeof(int8_t)) ? /* string */ 0x71BB54 : /* wstring */ 0x69E45C;
+            constexpr uintptr_t offset = std::is_same_v<CharT, char> ? /* string */ 0x71BB54 : /* basic_string<int> */ 0x69E45C;
             return *reinterpret_cast<__rep *>(::gLibBaseOffset + offset);
 #else
             alignas(__rep) static constinit std::byte empty_rep_storage[sizeof(__rep) + sizeof(CharT)] = {};
@@ -873,9 +873,22 @@ template <typename CharT>
 using string = basic_string<char>;
 
 /* `basic_string<int>` in PvZ */
-// using wstring = basic_string<wchar_t>;
-// using u32string = basic_string<char32_t>;
+using wstring = basic_string<wchar_t>;
+using u32string = basic_string<char32_t>;
 
 } // namespace pvzstl
+
+
+namespace std {
+
+template <typename CharT>
+struct hash<pvzstl::basic_string<CharT>> {
+    [[nodiscard]] size_t operator()(const pvzstl::basic_string<CharT> &str) const noexcept {
+        using StringView = basic_string_view<CharT>;
+        return hash<StringView>{}(StringView{str});
+    }
+};
+
+} // namespace std
 
 #endif // PVZ_STL_PVZSTL_STRING_H
