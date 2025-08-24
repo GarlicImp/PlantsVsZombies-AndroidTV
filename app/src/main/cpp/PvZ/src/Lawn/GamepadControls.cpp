@@ -641,12 +641,11 @@ void GamepadControls::OnButtonDown(ButtonCode theButton, int theIsZombieControl,
             if (!mBoard->CanTakeDeathMoney(aCost) || !aSeedPacket->CanPickUp() || mBoard->CanPlantAt(aGridX, aGridY, aPacketType) || mBoard->HasLevelAwardDropped())
                 return;
 
-            if (aPacketType == SeedType::SEED_ZOMBIE_GRAVESTONE) {
+            if (aPacketType == SeedType::SEED_ZOMBIE_GRAVESTONE || aPacketType == SeedType::SEED_ZOMBIE_BUNGEE) {
                 return old_GamepadControls_OnButtonDown(this, theButton, theIsZombieControl, thePlayerIndex);
             }
 
             ZombieType aZombieType = Challenge::IZombieSeedTypeToZombieType(aPacketType);
-            Zombie *aZombie = nullptr;
             if (mBoard->TakeDeathMoney(aCost)) {
                 if (aZombieType == ZombieType::ZOMBIE_BOBSLED) {
                     mBoard->AddZombieInRow(ZombieType::ZOMBIE_BOBSLED, aGridY, -5, 1);
@@ -661,7 +660,7 @@ void GamepadControls::OnButtonDown(ButtonCode theButton, int theIsZombieControl,
                     mBoard->DisplayAdviceAgain(str, MessageStyle::MESSAGE_STYLE_HUGE_WAVE, AdviceType::ADVICE_HUGE_WAVE);
                     mBoard->SpawnZombieWave();
                 } else {
-                    aZombie = mBoard->AddZombie(aZombieType, -5, false);
+                    Zombie *aZombie = mBoard->AddZombie(aZombieType, -5, false);
                     if (aZombie)
                         aZombie->RiseFromGrave(aGridX, aGridY);
                 }
