@@ -449,7 +449,7 @@ void DrawSeedPacket(Sexy::Graphics *g,
             DrawSeedType(&aPlantG, x, y, theSeedType, theImitaterType, v28, v29, theDrawScale);
     }
     if (theDrawCost) {
-        pvzstl::string str{};
+        pvzstl::string str;
         Board *board = lawnApp->mBoard;
         if (board != nullptr && board->PlantUsesAcceleratedPricing(realSeedType)) {
             if (theUseCurrentCost) {

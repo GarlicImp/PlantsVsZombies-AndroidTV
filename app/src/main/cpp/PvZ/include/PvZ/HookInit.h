@@ -623,7 +623,7 @@ inline void InitOpenSL() {
 
 inline void InitIntroVideo() {
 
-    //        MSHookFunction(j_AGVideoOpenAddr,(void *) AGVideoOpen,nullptr);
+    //    MSHookFunction(j_AGVideoOpenAddr,(void *) AGVideoOpen,nullptr);
     //    MSHookFunction(j_AGVideoShowAddr,(void *) AGVideoShow,nullptr);
     //    MSHookFunction(j_AGVideoEnableAddr,(void *) AGVideoEnable,nullptr);
     //    MSHookFunction(j_AGVideoIsPlayingAddr,(void *) AGVideoIsPlaying,nullptr);
@@ -631,7 +631,7 @@ inline void InitIntroVideo() {
     //    MSHookFunction(j_AGVideoPauseAddr,(void *) AGVideoPause,nullptr);
     //    MSHookFunction(j_AGVideoResumeAddr,(void *) AGVideoResume,nullptr);
 
-    const std::string libGameMain{"libGameMain.so"};
+    //    const std::string libGameMain = "libGameMain.so";
     //    homura::HookPltFunction(libGameMain, AGVideoOpenOffset, AGVideoOpen, nullptr);
     //    homura::HookPltFunction(libGameMain, AGVideoShowOffset, AGVideoShow, nullptr);
     //    homura::HookPltFunction(libGameMain, AGVideoEnableOffset, AGVideoEnable, nullptr);

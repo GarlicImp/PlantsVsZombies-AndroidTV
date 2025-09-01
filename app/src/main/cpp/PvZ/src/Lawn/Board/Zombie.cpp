@@ -558,7 +558,7 @@ void Zombie::Draw(Sexy::Graphics *g) {
     // 根据玩家的“僵尸显血”功能是否开启，决定是否在游戏的原始old_Zombie_Draw函数执行完后额外绘制血量文本。
     old_Zombie_Draw(this, g);
     int drawHeightOffset = 0;
-    pvzstl::string str{};
+    pvzstl::string str;
     if (showZombieBodyHealth || (showGargantuarHealth && (mZombieType == ZombieType::ZOMBIE_GARGANTUAR || mZombieType == ZombieType::ZOMBIE_REDEYE_GARGANTUAR))) { // 如果玩家开了"僵尸显血"
         str = StrFormat("%d/%d", mBodyHealth, mBodyMaxHealth);
         g->SetColor(white);

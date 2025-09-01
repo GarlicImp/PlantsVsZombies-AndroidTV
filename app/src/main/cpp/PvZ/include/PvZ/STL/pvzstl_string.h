@@ -457,7 +457,7 @@ public:
             traits_type::copy(__data_ + pos, c_str() + off, n2);
             return *this;
         } else {
-            const basic_string tmp{s, n2};
+            const basic_string tmp(s, n2);
             return __replace_safe(pos, n1, tmp.c_str(), n2);
         }
     }
@@ -632,7 +632,7 @@ protected:
             if (__size > 0) {
                 traits_type::copy(r->__data, __data, __size);
             }
-            r->__set_size_and_sharable(__size);
+            r->__set_size(__size);
             return r->__data;
         }
 
@@ -660,11 +660,15 @@ protected:
             __ref_count = 0;
         }
 
+        void __set_size(size_type sz) noexcept {
+            __size = sz;
+            __data[sz] = CharT{0};
+        }
+
         void __set_size_and_sharable(size_type sz) noexcept {
             if (this != &__empty_rep()) {
                 __set_sharable();
-                __size = sz;
-                __data[sz] = CharT{0};
+                __set_size(sz);
             }
         }
     };
@@ -708,7 +712,7 @@ protected:
         }
         __data_ = __rep::__create(sz, 0)->__data;
         traits_type::copy(__data_, s, sz);
-        __get_rep()->__set_size_and_sharable(sz);
+        __get_rep()->__set_size(sz);
     }
 
     // 清空范围 [ `begin() + pos`, `begin() + pos + len1` ) 中的字符,
@@ -784,7 +788,7 @@ template <typename CharT>
     using String = basic_string<CharT>;
     const auto lhs_sz = lhs.size();
     const auto rhs_sz = rhs.size();
-    String r{__uninitialized_size_tag{}, lhs_sz + rhs_sz};
+    String r(__uninitialized_size_tag{}, lhs_sz + rhs_sz);
     Traits::copy(r.__data_, lhs.c_str(), lhs_sz);
     Traits::copy(r.__data_ + lhs_sz, rhs.c_str(), rhs_sz);
     r.__data_[lhs_sz + rhs_sz] = CharT{0};
@@ -798,7 +802,7 @@ template <typename CharT>
     using String = basic_string<CharT>;
     const auto lhs_sz = Traits::length(lhs);
     const auto rhs_sz = rhs.size();
-    String r{__uninitialized_size_tag{}, lhs_sz + rhs_sz};
+    String r(__uninitialized_size_tag{}, lhs_sz + rhs_sz);
     Traits::copy(r.__data_, lhs, lhs_sz);
     Traits::copy(r.__data_ + lhs_sz, rhs.c_str(), rhs_sz);
     r.__data_[lhs_sz + rhs_sz] = CharT{0};
@@ -810,7 +814,7 @@ template <typename CharT>
     using Traits = std::char_traits<CharT>;
     using String = basic_string<CharT>;
     const auto rhs_sz = rhs.size();
-    String r{__uninitialized_size_tag{}, rhs_sz + 1};
+    String r(__uninitialized_size_tag{}, rhs_sz + 1);
     r.__data_[0] = lhs;
     Traits::copy(r.__data_ + 1, rhs.c_str(), rhs_sz);
     r.__data_[rhs_sz + 1] = CharT{0};
@@ -824,7 +828,7 @@ template <typename CharT>
     using String = basic_string<CharT>;
     const auto lhs_sz = lhs.size();
     const auto rhs_sz = Traits::length(rhs);
-    String r{__uninitialized_size_tag{}, lhs_sz + rhs_sz};
+    String r(__uninitialized_size_tag{}, lhs_sz + rhs_sz);
     Traits::copy(r.__data_, lhs.c_str(), lhs_sz);
     Traits::copy(r.__data_ + lhs_sz, rhs, rhs_sz);
     r.__data_[lhs_sz + rhs_sz] = CharT{0};
@@ -836,7 +840,7 @@ template <typename CharT>
     using Traits = std::char_traits<CharT>;
     using String = basic_string<CharT>;
     const auto lhs_sz = lhs.size();
-    String r{__uninitialized_size_tag{}, lhs_sz + 1};
+    String r(__uninitialized_size_tag{}, lhs_sz + 1);
     Traits::copy(r.__data_, lhs.c_str(), lhs_sz);
     r.__data_[lhs_sz] = rhs;
     r.__data_[lhs_sz + 1] = CharT{0};
