@@ -51,8 +51,8 @@ template <typename CharT>
 template <typename CharT>
 [[nodiscard]] basic_string<CharT> operator+(const basic_string<CharT> &lhs, CharT rhs);
 
-template <typename Tp, typename CharT>
-concept __convertible_to_string_view = std::is_convertible_v<const Tp &, std::basic_string_view<CharT>> && !std::is_convertible_v<const Tp &, const CharT *>;
+template <typename SV, typename CharT>
+concept __convertible_to_string_view = std::is_convertible_v<const SV &, std::basic_string_view<CharT>> && !std::is_convertible_v<const SV &, const CharT *>;
 
 struct __uninitialized_size_tag {};
 
@@ -71,10 +71,10 @@ public:
     using value_type = CharT;
     using size_type = std::uint32_t;
     using difference_type = std::ptrdiff_t;
-    using pointer = value_type *;
-    using const_pointer = const value_type *;
-    using reference = value_type &;
-    using const_reference = const value_type &;
+    using pointer = CharT *;
+    using const_pointer = const CharT *;
+    using reference = CharT &;
+    using const_reference = const CharT &;
 
 #ifdef __cpp_lib_ranges_as_const
     using const_iterator = std::basic_const_iterator<const_pointer>;
@@ -111,10 +111,10 @@ public:
     }
 
     basic_string(basic_string &&str, size_type pos, size_type n)
-        : basic_string{std::move(str.assign(str, pos, n))} {}
+        : basic_string(std::move(str.assign(str, pos, n))) {}
 
     basic_string(basic_string &&str, size_type pos)
-        : basic_string{std::move(str.assign(str, pos))} {}
+        : basic_string(std::move(str.assign(str, pos))) {}
 
     basic_string(const CharT *s, size_type n) {
         assert((s != nullptr || n == 0) && "basic_string(const CharT *, n) detected nullptr");
@@ -127,6 +127,10 @@ public:
     }
 
     basic_string(std::nullptr_t) = delete;
+
+    basic_string(std::initializer_list<CharT> il) {
+        __init(il.begin(), il.size());
+    }
 
     ~basic_string() {
         __get_rep()->__dispose();
@@ -157,6 +161,10 @@ public:
 
     basic_string &operator=(CharT c) {
         return assign(1, c);
+    }
+
+    basic_string &operator=(std::initializer_list<CharT> il) {
+        return assign(il);
     }
 
     basic_string &assign(const basic_string &str, size_type pos, size_type n = npos) {
@@ -195,6 +203,10 @@ public:
 
     basic_string &assign(size_type n, CharT c) {
         return __replace_aux(0, size(), n, c);
+    }
+
+    basic_string &assign(std::initializer_list<CharT> il) {
+        return assign(il.begin(), il.size());
     }
 
     [[nodiscard]] const CharT &at(size_type pos) const {
@@ -398,6 +410,10 @@ public:
         return *this;
     }
 
+    basic_string &append(std::initializer_list<CharT> il) {
+        return append(il.begin(), il.size());
+    }
+
     basic_string &operator+=(const basic_string &str) {
         return append(str);
     }
@@ -409,6 +425,10 @@ public:
     basic_string &operator+=(CharT c) {
         push_back(c);
         return *this;
+    }
+
+    basic_string &operator+=(std::initializer_list<CharT> il) {
+        return append(il);
     }
 
     basic_string &replace(size_type pos1, size_type n1, const basic_string &str, size_type pos2, size_type n2 = npos) {
@@ -475,8 +495,8 @@ public:
         return find(__self_view{str}, pos);
     }
 
-    template <__convertible_to_string_view<CharT> StringViewLike>
-    [[nodiscard]] size_type find(const StringViewLike &t, size_type pos = 0) const noexcept(std::is_nothrow_convertible_v<const StringViewLike &, __self_view>) {
+    template <__convertible_to_string_view<CharT> SV>
+    [[nodiscard]] size_type find(const SV &t, size_type pos = 0) const noexcept(std::is_nothrow_convertible_v<const SV &, __self_view>) {
         const __self_view sv = t;
         const auto xpos = __self_view{*this}.find(sv, pos);
         if constexpr (__self_view::npos == npos) {
@@ -547,20 +567,11 @@ public:
     }
 
     [[nodiscard]] basic_string substr(size_type pos = 0, size_type n = npos) const & {
-        return basic_string{*this, __check_range(pos, "basic_string::substr"), n};
+        return basic_string(*this, __check_range(pos, "basic_string::substr"), n);
     }
 
     [[nodiscard]] basic_string substr(size_type pos = 0, size_type n = npos) && {
-        return basic_string{std::move(*this), __check_range(pos, "basic_string::substr"), n};
-    }
-
-    /**
-     * @brief 就地构造 pvzstl::basic_string 对象.
-     */
-    template <typename... Args>
-        requires std::is_constructible_v<basic_string, Args &&...>
-    basic_string &__emplace(Args &&...args) noexcept(std::is_nothrow_constructible_v<basic_string, Args &&...>) {
-        return *::new (this) basic_string(std::forward<Args>(args)...);
+        return basic_string(std::move(*this), __check_range(pos, "basic_string::substr"), n);
     }
 
 protected:
@@ -769,8 +780,8 @@ template <typename CharT>
 
 template <typename CharT>
 [[nodiscard]] basic_string<CharT> operator+(const basic_string<CharT> &lhs, const basic_string<CharT> &rhs) {
+    using Traits = std::char_traits<CharT>;
     using String = basic_string<CharT>;
-    using Traits = typename String::traits_type;
     const auto lhs_sz = lhs.size();
     const auto rhs_sz = rhs.size();
     String r{__uninitialized_size_tag{}, lhs_sz + rhs_sz};
@@ -783,8 +794,8 @@ template <typename CharT>
 template <typename CharT>
 [[nodiscard]] basic_string<CharT> operator+(const CharT *lhs, const basic_string<CharT> &rhs) {
     assert((lhs != nullptr) && "operator+(const CharT *, const basic_string &) received nullptr");
+    using Traits = std::char_traits<CharT>;
     using String = basic_string<CharT>;
-    using Traits = typename String::traits_type;
     const auto lhs_sz = Traits::length(lhs);
     const auto rhs_sz = rhs.size();
     String r{__uninitialized_size_tag{}, lhs_sz + rhs_sz};
@@ -796,8 +807,8 @@ template <typename CharT>
 
 template <typename CharT>
 [[nodiscard]] basic_string<CharT> operator+(CharT lhs, const basic_string<CharT> &rhs) {
+    using Traits = std::char_traits<CharT>;
     using String = basic_string<CharT>;
-    using Traits = typename String::traits_type;
     const auto rhs_sz = rhs.size();
     String r{__uninitialized_size_tag{}, rhs_sz + 1};
     r.__data_[0] = lhs;
@@ -809,8 +820,8 @@ template <typename CharT>
 template <typename CharT>
 [[nodiscard]] basic_string<CharT> operator+(const basic_string<CharT> &lhs, const CharT *rhs) {
     assert((rhs != nullptr) && "operator+(const basic_string &, const CharT *) received nullptr");
+    using Traits = std::char_traits<CharT>;
     using String = basic_string<CharT>;
-    using Traits = typename String::traits_type;
     const auto lhs_sz = lhs.size();
     const auto rhs_sz = Traits::length(rhs);
     String r{__uninitialized_size_tag{}, lhs_sz + rhs_sz};
@@ -822,8 +833,8 @@ template <typename CharT>
 
 template <typename CharT>
 [[nodiscard]] basic_string<CharT> operator+(const basic_string<CharT> &lhs, CharT rhs) {
+    using Traits = std::char_traits<CharT>;
     using String = basic_string<CharT>;
-    using Traits = typename String::traits_type;
     const auto lhs_sz = lhs.size();
     String r{__uninitialized_size_tag{}, lhs_sz + 1};
     Traits::copy(r.__data_, lhs.c_str(), lhs_sz);

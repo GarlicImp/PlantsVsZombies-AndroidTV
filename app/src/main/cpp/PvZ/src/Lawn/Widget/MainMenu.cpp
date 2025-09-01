@@ -636,7 +636,7 @@ void MainMenu::Draw(Sexy::Graphics *g) {
     int moreTrackIndex = mainMenuReanim->FindTrackIndex("more");
     v43 = ReanimatorTransform();
     mainMenuReanim->GetCurrentTransform(moreTrackIndex, &v43);
-    new (&aSexyTransform2D) SexyTransform2D{};
+    std::construct_at(&aSexyTransform2D);
     Reanimation::MatrixFromTransform(v43, aSexyTransform2D);
     aSexyTransform2D.Translate(mCameraPositionX, mCameraPositionY);
     aSexyTransform2D.Translate(120.0, 200.0);
