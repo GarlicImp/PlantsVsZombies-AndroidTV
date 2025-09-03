@@ -246,7 +246,7 @@ public:
         reinterpret_cast<void (*)(Zombie *)>(Zombie_AttachShieldAddr)(this);
     }
     void ReanimIgnoreClipRect(const char *theTrackName, bool theIgnoreClipRect) {
-        return reinterpret_cast<void(*)(Zombie *, const char *, bool)>(Zombie_AttachShieldAddr)(this, theTrackName, theIgnoreClipRect);
+        reinterpret_cast<void (*)(Zombie *, const char *, bool)>(Zombie_ReanimIgnoreClipRectAddr)(this, theTrackName, theIgnoreClipRect);
     }
 
     Zombie() {
