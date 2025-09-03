@@ -317,11 +317,13 @@ inline void InitHookFunction() {
 
 
     homura::HookFunction(Zombie_UpdateAddr, &Zombie::Update, &old_Zombie_Update);
+    homura::HookFunction(Zombie_UpdateYetiAddr, &Zombie::UpdateYeti, nullptr);
     homura::HookFunction(Zombie_UpdateZombieGargantuarAddr, &Zombie::UpdateZombieGargantuar, nullptr);
     homura::HookFunction(Zombie_UpdateZombiePeaHeadAddr, &Zombie::UpdateZombiePeaHead, nullptr);
     homura::HookFunction(Zombie_UpdateZombieGatlingHeadAddr, &Zombie::UpdateZombieGatlingHead, nullptr);
     homura::HookFunction(Zombie_UpdateZombieJalapenoHeadAddr, &Zombie::UpdateZombieJalapenoHead, nullptr);
     //    homura::HookFunction(Zombie_UpdateZombieSquashHeadAddr, &Zombie::UpdateZombieSquashHead, nullptr);
+    homura::HookFunction(Zombie_UpdateZombieRiseFromGraveAddr, &Zombie::UpdateZombieRiseFromGrave, nullptr);
     homura::HookFunction(Zombie_GetDancerFrameAddr, &Zombie::GetDancerFrame, nullptr);
     homura::HookFunction(Zombie_RiseFromGraveAddr, &Zombie::RiseFromGrave, &old_Zombie_RiseFromGrave);
     homura::HookFunction(Zombie_EatPlantAddr, &Zombie::EatPlant, &old_Zombie_EatPlant);

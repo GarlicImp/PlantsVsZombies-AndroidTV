@@ -252,14 +252,14 @@ bool SeedChooserScreen::SeedNotAllowedToPick(SeedType theSeedType) {
 SeedType SeedChooserScreen::GetZombieSeedType(SeedType theSeedType) {
     int aSeedType = theSeedType + SEED_ZOMBIE_GRAVESTONE;
     if (moreZombieSeeds) { // 解锁更多对战僵尸
-        return aSeedType > SEED_ZOMBIE_SQUASH_HEAD ? SEED_NONE : (SeedType)aSeedType;
+        return aSeedType >= NUM_ZOMBIE_SEED_IN_CHOOSER ? SEED_NONE : (SeedType)aSeedType;
     } else {
         return aSeedType > SEED_ZOMBIE_GARGANTUAR ? SEED_NONE : (SeedType)aSeedType;
     }
 }
 
 ZombieType SeedChooserScreen::GetZombieType(ZombieType theZombieType) {
-    return theZombieType > ZOMBIE_REDEYE_GARGANTUAR ? ZOMBIE_INVALID : theZombieType;
+    return theZombieType >= NUM_ZOMBIE_TYPES ? ZOMBIE_INVALID : theZombieType;
 }
 
 void SeedChooserScreen::ClickedSeedInChooser(ChosenSeed *theChosenSeed, int thePlayerIndex) {
@@ -410,10 +410,10 @@ void SeedChooserScreen::ShowToolTip(unsigned int thePlayerIndex) {
             mToolTip2->SetWarningText(str);
         }
         // 对战显示隐藏僵尸卡信息
-        if (aSeedType >= SeedType::SEED_ZOMBIE_UNKNOWN && aSeedType <= SeedType::SEED_ZOMBIE_TALLNUT_HEAD) {
+        if (aSeedType >= SeedType::SEED_ZOMBIE_YETI && aSeedType < SeedType::NUM_ZOMBIE_SEED_IN_CHOOSER) {
             pvzstl::string aTitle, aLabel;
             switch (aSeedType) {
-                case SeedType::SEED_ZOMBIE_UNKNOWN: // 红眼巨人僵尸
+                case SeedType::SEED_ZOMBIE_YETI: // 红眼巨人僵尸
                     aTitle = TodStringTranslate("[REDEYE_GARGANTUAR_ZOMBIE]");
                     aLabel = TodStringTranslate("[REDEYE_GARGANTUAR_ZOMBIE_DESCRIPTION_HEADER]");
                     break;

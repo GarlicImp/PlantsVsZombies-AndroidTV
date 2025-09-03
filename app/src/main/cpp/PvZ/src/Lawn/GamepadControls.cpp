@@ -628,6 +628,8 @@ void GamepadControls::DrawPreview(Sexy::Graphics *g) {
 }
 
 void GamepadControls::OnButtonDown(ButtonCode theButton, int theIsZombieControl, unsigned int thePlayerIndex) {
+    old_GamepadControls_OnButtonDown(this, theButton, theIsZombieControl, thePlayerIndex);
+
     SeedBank *aSeedBank = GetSeedBank();
     SeedPacket *aSeedPacket = &aSeedBank->mSeedPackets[mSelectedSeedIndex];
     SeedType aPacketType = aSeedPacket->mPacketType;
@@ -641,37 +643,24 @@ void GamepadControls::OnButtonDown(ButtonCode theButton, int theIsZombieControl,
             if (!mBoard->CanTakeDeathMoney(aCost) || !aSeedPacket->CanPickUp() || mBoard->CanPlantAt(aGridX, aGridY, aPacketType) || mBoard->HasLevelAwardDropped())
                 return;
 
-            if (aPacketType == SeedType::SEED_ZOMBIE_GRAVESTONE || aPacketType == SeedType::SEED_ZOMBIE_BUNGEE) {
-                return old_GamepadControls_OnButtonDown(this, theButton, theIsZombieControl, thePlayerIndex);
-            }
-
             ZombieType aZombieType = Challenge::IZombieSeedTypeToZombieType(aPacketType);
             if (mBoard->TakeDeathMoney(aCost)) {
-                if (aZombieType == ZombieType::ZOMBIE_BOBSLED) {
-                    mBoard->AddZombieInRow(ZombieType::ZOMBIE_BOBSLED, aGridY, -5, 1);
-                } else if (aZombieType == ZombieType::ZOMBIE_ZAMBONI || aZombieType == ZombieType::ZOMBIE_DANCER || aZombieType == ZombieType::ZOMBIE_JACK_IN_THE_BOX
-                           || aZombieType == ZombieType::ZOMBIE_DIGGER || aZombieType == ZombieType::ZOMBIE_CATAPULT || aZombieType == ZombieType::ZOMBIE_GARGANTUAR
-                           || aZombieType == ZombieType::ZOMBIE_YETI || aZombieType == ZombieType::ZOMBIE_BALLOON || aZombieType == ZombieType::ZOMBIE_WALLNUT_HEAD
-                           || aZombieType == ZombieType::ZOMBIE_TALLNUT_HEAD || aZombieType == ZombieType::ZOMBIE_SQUASH_HEAD || aZombieType == ZombieType::ZOMBIE_JALAPENO_HEAD
-                           || aZombieType == ZombieType::ZOMBIE_REDEYE_GARGANTUAR) {
+                if (aZombieType == ZombieType::ZOMBIE_DUCKY_TUBE || aZombieType == ZombieType::ZOMBIE_SNORKEL || aZombieType == ZombieType::ZOMBIE_DOLPHIN_RIDER
+                    || aZombieType == ZombieType::ZOMBIE_BALLOON || aZombieType == ZombieType::ZOMBIE_REDEYE_GARGANTUAR
+                    || aZombieType == ZombieType::ZOMBIE_BOBSLED) {
                     mBoard->AddZombieInRow(aZombieType, aGridY, -5, true);
-                } else if (aZombieType == ZOMBIE_FLAG) {
-                    pvzstl::string str = StrFormat("[ADVICE_HUGE_WAVE]");
-                    mBoard->DisplayAdviceAgain(str, MessageStyle::MESSAGE_STYLE_HUGE_WAVE, AdviceType::ADVICE_HUGE_WAVE);
-                    mBoard->SpawnZombieWave();
-                } else {
+                } else if (aZombieType == ZOMBIE_IMP || aZombieType == ZombieType::ZOMBIE_YETI || aZombieType == ZombieType::ZOMBIE_PEA_HEAD || aZombieType == ZombieType::ZOMBIE_WALLNUT_HEAD
+                           || aZombieType == ZombieType::ZOMBIE_JALAPENO_HEAD || aZombieType == ZombieType::ZOMBIE_GATLING_HEAD || aZombieType == ZombieType::ZOMBIE_SQUASH_HEAD
+                           || aZombieType == ZombieType::ZOMBIE_TALLNUT_HEAD) {
                     Zombie *aZombie = mBoard->AddZombie(aZombieType, -5, false);
                     if (aZombie)
                         aZombie->RiseFromGrave(aGridX, aGridY);
                 }
                 aSeedPacket->Deactivate();
                 aSeedPacket->WasPlanted(mPlayerIndex2);
-                return;
             }
         }
     }
-
-    old_GamepadControls_OnButtonDown(this, theButton, theIsZombieControl, thePlayerIndex);
 }
 
 void ZenGardenControls::Update(float a2) {

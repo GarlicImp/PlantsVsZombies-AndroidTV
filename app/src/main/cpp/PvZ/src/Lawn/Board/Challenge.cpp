@@ -470,8 +470,8 @@ ZombieType Challenge::IZombieSeedTypeToZombieType(SeedType theSeedType) {
             return ZOMBIE_CATAPULT;
         case SEED_ZOMBIE_GARGANTUAR:
             return ZOMBIE_GARGANTUAR;
-        case SEED_ZOMBIE_UNKNOWN:
-            return ZOMBIE_REDEYE_GARGANTUAR;
+        case SEED_ZOMBIE_YETI:
+            return ZOMBIE_YETI;
         case SEED_ZOMBIE_DUCKY_TUBE:
             return ZOMBIE_DUCKY_TUBE;
         case SEED_ZOMBIE_SNORKEL:

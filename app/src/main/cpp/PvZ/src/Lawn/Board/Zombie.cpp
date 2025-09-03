@@ -34,6 +34,8 @@
 #include "PvZ/TodLib/Effect/Reanimator.h"
 #include "PvZ/TodLib/Effect/TodParticle.h"
 
+#include <string.h>
+
 using namespace Sexy;
 
 ZombieDefinition gZombieDefs[NUM_ZOMBIE_TYPES] = {
@@ -146,6 +148,26 @@ void Zombie::UpdateActions() {
     old_Zombie_UpdateActions(this);
 
     // UpdateZombieType类函数在此处添加
+}
+
+void Zombie::UpdateYeti() {
+    if (mMindControlled || !mHasHead || IsDeadOrDying())
+        return;
+
+    if (mApp->mGameMode == GameMode::GAMEMODE_MP_VS) { // 修复对战雪人露头就逃跑
+        if (mZombiePhase == PHASE_YETI_PRE_RUN) {
+            mPhaseCounter = RandRangeInt(1500, 2000);
+            mHasObject = true;
+            mZombiePhase = PHASE_ZOMBIE_NORMAL;
+            return;
+        }
+    }
+
+    if (mZombiePhase == ZombiePhase::PHASE_ZOMBIE_NORMAL && mPhaseCounter == 0) {
+        mZombiePhase = ZombiePhase::PHASE_YETI_RUNNING;
+        mHasObject = false;
+        PickRandomSpeed();
+    }
 }
 
 void Zombie::SquishAllInSquare(int theX, int theY, ZombieAttackType theAttackType) {
@@ -410,6 +432,15 @@ void Zombie::UpdateZombieJalapenoHead() {
     if (!mHasHead)
         return;
 
+    if (mApp->mGameMode == GameMode::GAMEMODE_MP_VS) { // 修复对战辣椒瞬爆
+        if (mZombiePhase == PHASE_ZOMBIE_NORMAL) {
+            int aDistance = 275 + Rand(175);
+            mPhaseCounter = (int)(aDistance / mVelX) * ZOMBIE_LIMP_SPEED_FACTOR;
+            mZombiePhase = PHASE_JALAPENO_PRE_BURN;
+            return;
+        }
+    }
+
     if (mPhaseCounter == 0) {
         mApp->PlayFoley(FoleyType::FOLEY_JALAPENO_IGNITE);
         mApp->PlayFoley(FoleyType::FOLEY_JUICY);
@@ -422,13 +453,13 @@ void Zombie::UpdateZombieJalapenoHead() {
         } else {
             Plant *aPlant = nullptr;
             while (mBoard->IteratePlants(aPlant)) {
-                // Rect aPlantRect = aPlant->GetPlantRect();
+//                Rect aPlantRect = aPlant->GetPlantRect(); // 原版代码遗留，但该变量并未被使用，故注释
                 if (aPlant->mRow == mRow && !aPlant->NotOnGround()) {
                     mBoard->mPlantsEaten++;
                     aPlant->Die();
                 }
             }
-            DieNoLoot(); // 修复辣椒爆炸后不死亡，原因不明
+            DieNoLoot();
         }
     }
 }
@@ -553,6 +584,55 @@ void Zombie::UpdateZombieJalapenoHead() {
 //         TakeDamage(1800, 9U);
 //     }
 // }
+
+void Zombie::UpdateZombieRiseFromGrave() {
+    if (mInPool) {
+        mAltitude = TodAnimateCurve(50, 0, mPhaseCounter, -150, -40, TodCurves::CURVE_LINEAR) * mScaleZombie;
+    } else {
+        mAltitude = TodAnimateCurve(50, 0, mPhaseCounter, -200, 0, TodCurves::CURVE_LINEAR);
+    }
+
+    if (mPhaseCounter == 0) {
+        switch (mZombieType) {
+            case ZOMBIE_POLEVAULTER:
+                mZombiePhase = PHASE_POLEVAULTER_PRE_VAULT;
+                break;
+            case ZOMBIE_NEWSPAPER:
+                mZombiePhase = PHASE_NEWSPAPER_READING;
+                break;
+            case ZOMBIE_DANCER:
+                mZombiePhase = PHASE_DANCER_DANCING_IN;
+                break;
+            case ZOMBIE_POGO:
+                mZombiePhase = PHASE_POGO_BOUNCING;
+                break;
+            case ZOMBIE_LADDER:
+                mZombiePhase = PHASE_LADDER_CARRYING;
+                break;
+            // 对战模式修复
+            case ZOMBIE_YETI:
+                mZombiePhase = PHASE_YETI_PRE_RUN;
+                break;
+            case ZOMBIE_SQUASH_HEAD: // 修复窝瓜僵尸不起跳
+                mZombiePhase = ZombiePhase::PHASE_SQUASH_PRE_LAUNCH;
+                break;
+            default:
+                mZombiePhase = PHASE_ZOMBIE_NORMAL;
+                break;
+        }
+
+        if (IsOnHighGround()) {
+            mAltitude = HIGH_GROUND_HEIGHT;
+        }
+
+        if (mInPool) {
+            ReanimIgnoreClipRect("Zombie_duckytube", true);
+            ReanimIgnoreClipRect("Zombie_whitewater", true);
+            ReanimIgnoreClipRect("Zombie_outerarm_hand", true);
+            ReanimIgnoreClipRect("Zombie_innerarm3", true);
+        }
+    }
+}
 
 void Zombie::Draw(Sexy::Graphics *g) {
     // 根据玩家的“僵尸显血”功能是否开启，决定是否在游戏的原始old_Zombie_Draw函数执行完后额外绘制血量文本。

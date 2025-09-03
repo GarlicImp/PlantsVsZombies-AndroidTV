@@ -681,11 +681,12 @@ int Plant::GetCost(SeedType theSeedType, SeedType theImitaterType) {
             case SeedType::SEED_ZOMBIE_DANCER:
             case SeedType::SEED_ZOMBIE_DIGGER:
             case SeedType::SEED_ZOMBIE_LADDER:
-            case SeedType::SEED_ZOMBIE_TALLNUT_HEAD:
+            case SeedType::SEED_ZOMBIE_GATLINGPEA_HEAD:
                 return 150;
             case SeedType::SEED_SQUASH:
             case SeedType::SEED_GARLIC:
             case SeedType::SEED_ZOMBIE_TRAFFIC_CONE:
+            case SeedType::SEED_ZOMBIE_YETI:
                 return 75;
             case SeedType::SEED_THREEPEATER:
             case SeedType::SEED_ZOMBIE_CATAPULT:
@@ -696,6 +697,7 @@ int Plant::GetCost(SeedType theSeedType, SeedType theImitaterType) {
             case SeedType::SEED_ZOMBIE_SNORKEL:
             case SeedType::SEED_ZOMBIE_DOLPHIN_RIDER:
             case SeedType::SEED_ZOMBIE_JALAPENO_HEAD:
+            case SeedType::SEED_ZOMBIE_TALLNUT_HEAD:
                 return 125;
             case SeedType::SEED_CACTUS:
             case SeedType::SEED_CABBAGEPULT:
@@ -708,7 +710,6 @@ int Plant::GetCost(SeedType theSeedType, SeedType theImitaterType) {
                 return 100;
             case SeedType::SEED_STARFRUIT:
             case SeedType::SEED_ZOMBONI:
-            case SeedType::SEED_ZOMBIE_GATLINGPEA_HEAD:
                 return 175;
             case SeedType::SEED_INSTANT_COFFEE:
             case SeedType::SEED_ZOMBIE_NORMAL:
@@ -716,7 +717,6 @@ int Plant::GetCost(SeedType theSeedType, SeedType theImitaterType) {
                 return 25;
             case SeedType::SEED_MELONPULT:
             case SeedType::SEED_ZOMBIE_FLAG:
-            case SeedType::SEED_ZOMBIE_UNKNOWN:
                 return 300;
             case SeedType::SEED_ZOMBIE_GRAVESTONE:
             case SeedType::SEED_ZOMBIE_TRASH_BIN:
@@ -760,6 +760,7 @@ int Plant::GetRefreshTime(SeedType theSeedType, SeedType theImitaterType) {
                 case SeedType::SEED_ZOMBIE_DIGGER:
                 case SeedType::SEED_ZOMBIE_BUNGEE:
                 case SeedType::SEED_ZOMBIE_LADDER:
+                case SeedType::SEED_ZOMBIE_YETI:
                 case SeedType::SEED_ZOMBIE_IMP:
                 case SeedType::SEED_ZOMBIE_BALLOON:
                 case SeedType::SEED_ZOMBIE_WALLNUT_HEAD:
@@ -776,7 +777,6 @@ int Plant::GetRefreshTime(SeedType theSeedType, SeedType theImitaterType) {
                 case SeedType::SEED_ZOMBIE_POGO:
                 case SeedType::SEED_ZOMBIE_CATAPULT:
                 case SeedType::SEED_ZOMBIE_GARGANTUAR:
-                case SeedType::SEED_ZOMBIE_UNKNOWN:
                 case SeedType::SEED_ZOMBIE_JALAPENO_HEAD:
                     refreshTime = 6000;
                     break;

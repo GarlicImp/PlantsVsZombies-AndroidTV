@@ -334,12 +334,14 @@ inline void *Zombie_ApplyButterAddr;
 inline void *Zombie_DieNoLootAddr;
 inline void *Zombie_ApplyBurnAddr;
 inline void *Zombie_DrawAddr;
+inline void *Zombie_UpdateYetiAddr;
 inline void *Zombie_UpdateZombieGargantuarAddr;
 inline void *Zombie_UpdateZombiePeaHeadAddr;
 inline void *Zombie_GetZombieRectAddr;
 inline void *Zombie_UpdateZombieGatlingHeadAddr;
 inline void *Zombie_UpdateZombieJalapenoHeadAddr;
 inline void *Zombie_UpdateZombieSquashHeadAddr;
+inline void *Zombie_UpdateZombieRiseFromGraveAddr;
 inline void *Zombie_DrawBossPartAddr;
 inline void *Zombie_BossSpawnAttackAddr;
 inline void *Zombie_DrawBungeeCordAddr;
@@ -401,6 +403,7 @@ inline void *Zombie_LoadReanimAddr;
 inline void *Zombie_LoadPlainZombieReanimAddr;
 inline void *Zombie_AttachShieldAddr;
 inline void *Zombie_PickRandomSpeedAddr;
+inline void *Zombie_ReanimIgnoreClipRectAddr;
 
 
 inline void *SeedChooserScreen_UpdateAddr;
@@ -1542,11 +1545,13 @@ inline bool GetFunctionAddr() {
     Zombie_DieNoLootAddr = dlsym(handle, "_ZN6Zombie9DieNoLootEv");
     Zombie_ApplyBurnAddr = dlsym(handle, "_ZN6Zombie9ApplyBurnEv");
     Zombie_DrawAddr = dlsym(handle, "_ZN6Zombie4DrawEPN4Sexy8GraphicsE");
+    Zombie_UpdateYetiAddr = dlsym(handle, "_ZN6Zombie10UpdateYetiEv");
     Zombie_UpdateZombieGargantuarAddr = dlsym(handle, "_ZN6Zombie22UpdateZombieGargantuarEv");
     Zombie_UpdateZombiePeaHeadAddr = dlsym(handle, "_ZN6Zombie19UpdateZombiePeaHeadEv");
     Zombie_UpdateZombieGatlingHeadAddr = dlsym(handle, "_ZN6Zombie23UpdateZombieGatlingHeadEv");
     Zombie_UpdateZombieJalapenoHeadAddr = dlsym(handle, "_ZN6Zombie24UpdateZombieJalapenoHeadEv");
     Zombie_UpdateZombieSquashHeadAddr = dlsym(handle, "_ZN6Zombie22UpdateZombieSquashHeadEv");
+    Zombie_UpdateZombieRiseFromGraveAddr = dlsym(handle, "_ZN6Zombie25UpdateZombieRiseFromGraveEv");
     Zombie_GetZombieRectAddr = dlsym(handle, "_ZN6Zombie13GetZombieRectEv");
     Zombie_DrawBossPartAddr = dlsym(handle, "_ZN6Zombie12DrawBossPartEPN4Sexy8GraphicsE8BossPart");
     Zombie_ZombieInitializeAddr = dlsym(handle, "_ZN6Zombie16ZombieInitializeEi10ZombieTypebPS_ib");
@@ -1610,6 +1615,7 @@ inline bool GetFunctionAddr() {
     Zombie_LoadPlainZombieReanimAddr = dlsym(handle, "_ZN6Zombie21LoadPlainZombieReanimEv");
     Zombie_AttachShieldAddr = dlsym(handle, "_ZN6Zombie12AttachShieldEv");
     Zombie_PickRandomSpeedAddr = dlsym(handle, "_ZN6Zombie15PickRandomSpeedEv");
+    Zombie_ReanimIgnoreClipRectAddr = dlsym(handle, "_ZN6Zombie20ReanimIgnoreClipRectEPKcb");
 
 
     SeedChooserScreen_UpdateAddr = dlsym(handle, "_ZN17SeedChooserScreen6UpdateEv");

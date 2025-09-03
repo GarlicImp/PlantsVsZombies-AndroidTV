@@ -245,6 +245,9 @@ public:
     void AttachShield() {
         reinterpret_cast<void (*)(Zombie *)>(Zombie_AttachShieldAddr)(this);
     }
+    void ReanimIgnoreClipRect(const char *theTrackName, bool theIgnoreClipRect) {
+        return reinterpret_cast<void(*)(Zombie *, const char *, bool)>(Zombie_AttachShieldAddr)(this, theTrackName, theIgnoreClipRect);
+    }
 
     Zombie() {
         __Constructor();
@@ -254,12 +257,14 @@ public:
     void DieNoLoot();
     void Update();
     void UpdateActions();
+    void UpdateYeti();
     void UpdateZombieGargantuar();
     void UpdateZombiePeaHead();
     void UpdateZombieGatlingHead();
     void BurnRow(int theRow);
     void UpdateZombieJalapenoHead();
     //    void UpdateZombieSquashHead();
+    void UpdateZombieRiseFromGrave();
     void BossDestroyIceballInRow(int theRow);
     int GetDancerFrame();
     void RiseFromGrave(int theGridX, int theGridY);

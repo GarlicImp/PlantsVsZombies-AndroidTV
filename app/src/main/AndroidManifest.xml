@@ -62,6 +62,16 @@
             android:exported="true"
             android:label="@string/second_player_set" />
 
+        <activity
+            android:name="com.transmension.mobile.CustomBalanceAdjustment"
+            android:exported="true"
+            android:label="@string/addon_custom_balance_adjustment" />
+
+        <activity
+            android:name="com.transmension.mobile.SeedChooser"
+            android:exported="true"
+            android:label="@string/addon_seed_chooser" />
+
         <meta-data
             android:name="android.max_aspect"
             android:value="2.4" />
