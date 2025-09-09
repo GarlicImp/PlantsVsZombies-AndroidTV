@@ -188,6 +188,10 @@ void Plant::SpikeRockTakeDamage() {
     }
 }
 
+bool Plant::IsSpiky() {
+    return mSeedType == SeedType::SEED_SPIKEWEED || mSeedType == SeedType::SEED_SPIKEROCK;
+}
+
 void Plant::UpdateReanimColor() {
     // 修复玩家选中但不拿起(gameState为1就是选中但不拿起，为7就是选中且拿起)某个紫卡植物时，相应的可升级绿卡植物也会闪烁的BUG。
     if (mBoard == nullptr) {

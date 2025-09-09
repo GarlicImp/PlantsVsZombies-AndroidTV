@@ -86,6 +86,8 @@ ZombieDefinition &GetZombieDefinition(ZombieType theZombieType) {
 void Zombie::ZombieInitialize(int theRow, ZombieType theType, bool theVariant, Zombie *theParentZombie, int theFromWave, bool isVisible) {
     old_Zombie_ZombieInitialize(this, theRow, theType, theVariant, theParentZombie, theFromWave, isVisible);
 
+    mSquashHeadCol = -1;
+
     if (zombieSetScale != 0 && mZombieType != ZombieType::ZOMBIE_BOSS) {
         mScaleZombie = 0.2 * zombieSetScale;
         UpdateAnimSpeed();
@@ -166,6 +168,34 @@ void Zombie::UpdateYeti() {
     if (mZombiePhase == ZombiePhase::PHASE_ZOMBIE_NORMAL && mPhaseCounter == 0) {
         mZombiePhase = ZombiePhase::PHASE_YETI_RUNNING;
         mHasObject = false;
+        PickRandomSpeed();
+    }
+}
+
+void Zombie::UpdateZombieImp() {
+    if (mZombiePhase == ZombiePhase::PHASE_IMP_GETTING_THROWN) {
+        mVelZ -= THOWN_ZOMBIE_GRAVITY;
+        mAltitude += mVelZ;
+        mPosX -= mVelX;
+
+        float aDiffY = GetPosYBasedOnRow(mRow) - mPosY;
+        mPosY += aDiffY;
+        mAltitude += aDiffY;
+        if (mAltitude <= 0.0f) {
+            mAltitude = 0.0f;
+            mZombiePhase = ZombiePhase::PHASE_IMP_LANDING;
+            PlayZombieReanim("anim_land", ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD, 0, 24.0f);
+        }
+    } else if (mZombiePhase == ZombiePhase::PHASE_IMP_LANDING) {
+        Reanimation *aBodyReanim = mApp->ReanimationGet(mBodyReanimID);
+        if (aBodyReanim->mLoopCount > 0) {
+            mZombiePhase = ZombiePhase::PHASE_ZOMBIE_NORMAL;
+            StartWalkAnim(0);
+        }
+    }
+
+    if (mZombiePhase == ZombiePhase::PHASE_IMP_PRE_RUN) {
+        mZombiePhase = PHASE_IMP_RUNNING;
         PickRandomSpeed();
     }
 }
@@ -464,126 +494,128 @@ void Zombie::UpdateZombieJalapenoHead() {
     }
 }
 
-// void Zombie::UpdateZombieSquashHead()
-//{
-//     if (mHasHead && mIsEating && mZombiePhase == ZombiePhase::PHASE_SQUASH_PRE_LAUNCH)
-//     {
-//         StopEating();
-//         PlayZombieReanim("anim_idle", ReanimLoopType::REANIM_LOOP, 20, 12.0f);
-//         mHasHead = false;
-//
-//         Reanimation* aHeadReanim = mApp->ReanimationGet(mSpecialHeadReanimID);
-//         aHeadReanim->PlayReanim("anim_jumpup", ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD, 20, 24.0f);
-//         aHeadReanim->mRenderOrder = mRenderOrder + 1;
-//         aHeadReanim->SetPosition(mPosX + 6.0f, mPosY - 21.0f);
-//
-//         Reanimation* aBodyReanim = mApp->ReanimationGet(mBodyReanimID);
-//         ReanimatorTrackInstance* aTrackInstance = aBodyReanim->GetTrackInstanceByName("anim_head1");
-//         AttachmentDetach(aTrackInstance->mAttachmentID);
-//         aHeadReanim->OverrideScale(0.75f, 0.75f);
-//         aHeadReanim->mOverlayMatrix.m10 = 0.0f;
-//
-//         mZombiePhase = ZombiePhase::PHASE_SQUASH_RISING;
-//         mPhaseCounter = 95;
-//     }
-//
-//     if (mZombiePhase == ZombiePhase::PHASE_SQUASH_RISING)
-//     {
-//         int aDestX = mBoard->GridToPixelX(mBoard->PixelToGridXKeepOnBoard(mX, mY), mRow);
-//
-//         if (mMindControlled)
-//         {
-//             Zombie* aZombie = FindZombieTarget();
-//             if (aZombie)
-//             {
-//                 aDestX = aZombie->ZombieTargetLeadX(0.0f);
-//             }
-//             else
-//             {
-//                 aDestX += 90.0f * mScaleZombie;
-//             }
-//         }
-//
-//         int aPosX = TodAnimateCurve(50, 20, mPhaseCounter, 0, aDestX - mPosX, TodCurves::CURVE_EASE_IN_OUT);
-//         int aPosY = TodAnimateCurve(50, 20, mPhaseCounter, 0, -20, TodCurves::CURVE_EASE_IN_OUT);
-//
-//         Reanimation* aHeadReanim = mApp->ReanimationGet(mSpecialHeadReanimID);
-//         aHeadReanim->SetPosition(mPosX + aPosX + 6.0f, mPosY + aPosY - 21.0f);
-//
-//         if (mPhaseCounter == 0)
-//         {
-//             aHeadReanim = mApp->ReanimationGet(mSpecialHeadReanimID);
-//             aHeadReanim->PlayReanim("anim_jumpdown", ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD, 0, 60.0f);
-//             mZombiePhase = ZombiePhase::PHASE_SQUASH_FALLING;
-//             mPhaseCounter = 10;
-//         }
-//     }
-//
-//     if (mZombiePhase == ZombiePhase::PHASE_SQUASH_FALLING)
-//     {
-//         int aPosY = TodAnimateCurve(10, 0, mPhaseCounter, -20, 74, TodCurves::CURVE_LINEAR);
-//         int aDestX = mBoard->GridToPixelX(mBoard->PixelToGridXKeepOnBoard(mX, mY), mRow);
-//
-//         if (mMindControlled)
-//         {
-//             Zombie* aZombie = FindZombieTarget();
-//             if (aZombie)
-//             {
-//                 aDestX = aZombie->ZombieTargetLeadX(0.0f);
-//             }
-//             else
-//             {
-//                 aDestX += 90.0f * mScaleZombie;
-//             }
-//         }
-//
-//         Reanimation* aHeadReanim = mApp->ReanimationGet(mSpecialHeadReanimID);
-//         aHeadReanim->SetPosition(mPosX + 6.0f + aDestX - mPosX, mPosY - 21.0f + aPosY);
-//
-//         if (mPhaseCounter == 2)
-//         {
-//             if (mMindControlled)  // 魅惑修复
-//             {
-//                 Rect aAttackRect(aDestX - 73, mPosY + 4, 65, 90);  // 具体数值未实测，待定
-//
-//                 Zombie* aZombie = nullptr;
-//                 while (mBoard->IterateZombies(aZombie))
-//                 {
-//                     if ((aZombie->mRow == mRow || aZombie->mZombieType == ZombieType::ZOMBIE_BOSS) && aZombie->EffectedByDamage(13U))
-//                     {
-//                         Rect aZombieRect = aZombie->GetZombieRect();
-//                         if (GetRectOverlap(aAttackRect, aZombieRect) > (aZombie->mZombieType == ZombieType::ZOMBIE_FOOTBALL ? -20 : 0))
-//                         {
-//                             aZombie->TakeDamage(1800, 18U);
-//                         }
-//                     }
-//                 }
-//             }
-//             else
-//             {
-//                 SquishAllInSquare(mBoard->PixelToGridXKeepOnBoard(mX, mY), mRow, ZombieAttackType::ATTACKTYPE_CHEW);
-//             }
-//         }
-//
-//         if (mPhaseCounter == 0)
-//         {
-//             mZombiePhase = ZombiePhase::PHASE_SQUASH_DONE_FALLING;
-//             mPhaseCounter = 100;
-//
-//             mBoard->ShakeBoard(1, 4);
-//             mApp->PlayFoley(FoleyType::FOLEY_THUMP);
-//         }
-//     }
-//
-//     if (mZombiePhase == ZombiePhase::PHASE_SQUASH_DONE_FALLING && mPhaseCounter == 0)
-//     {
-//         Reanimation* aHeadReanim = mApp->ReanimationGet(mSpecialHeadReanimID);
-//         aHeadReanim->ReanimationDie();
-//         mSpecialHeadReanimID = ReanimationID::REANIMATIONID_NULL;
-//
-//         TakeDamage(1800, 9U);
-//     }
-// }
+ void Zombie::UpdateZombieSquashHead() {
+    if (mHasHead && mIsEating && mZombiePhase == ZombiePhase::PHASE_SQUASH_PRE_LAUNCH) {
+        StopEating();
+        PlayZombieReanim("anim_idle", ReanimLoopType::REANIM_LOOP, 20, 12.0f);
+        mHasHead = false;
+
+        Reanimation *aHeadReanim = mApp->ReanimationGet(mSpecialHeadReanimID);
+        aHeadReanim->PlayReanim("anim_jumpup", ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD, 20, 24.0f);
+        aHeadReanim->mRenderOrder = mRenderOrder + 1;
+        aHeadReanim->SetPosition(mPosX + 6.0f, mPosY - 21.0f);
+
+        Reanimation *aBodyReanim = mApp->ReanimationGet(mBodyReanimID);
+        ReanimatorTrackInstance *aTrackInstance = aBodyReanim->GetTrackInstanceByName("anim_head1");
+        AttachmentDetach(aTrackInstance->mAttachmentID);
+        aHeadReanim->OverrideScale(0.75f, 0.75f);
+        aHeadReanim->mOverlayMatrix.m10 = 0.0f;
+
+        mZombiePhase = ZombiePhase::PHASE_SQUASH_RISING;
+        mPhaseCounter = 95;
+    }
+
+    if (mZombiePhase == ZombiePhase::PHASE_SQUASH_RISING) {
+        int aDestX = mBoard->GridToPixelX(mBoard->PixelToGridXKeepOnBoard(mX, mY), mRow);
+
+        if (mMindControlled) {
+            Zombie *aZombie = FindZombieTarget();
+            if (aZombie) {
+                aDestX = aZombie->ZombieTargetLeadX(0.0f);
+            } else {
+                aDestX += 90.0f * mScaleZombie;
+            }
+        }
+
+        if (mApp->mGameMode == GameMode::GAMEMODE_MP_VS) {
+            if (mSquashHeadCol == -1) { // 空压修复
+                Plant *aPlant = FindPlantTarget(ZombieAttackType::ATTACKTYPE_CHEW);
+                if (aPlant) {
+                    mSquashHeadCol = aPlant->mPlantCol;
+                }
+                aDestX = mBoard->GridToPixelX(mSquashHeadCol, mRow);
+            } else {
+                aDestX = mBoard->GridToPixelX(mSquashHeadCol, mRow);
+            }
+        }
+
+        int aPosX = TodAnimateCurve(50, 20, mPhaseCounter, 0, aDestX - mPosX, TodCurves::CURVE_EASE_IN_OUT);
+        int aPosY = TodAnimateCurve(50, 20, mPhaseCounter, 0, -20, TodCurves::CURVE_EASE_IN_OUT);
+
+        Reanimation *aHeadReanim = mApp->ReanimationGet(mSpecialHeadReanimID);
+        aHeadReanim->SetPosition(mPosX + aPosX + 6.0f, mPosY + aPosY - 21.0f);
+
+        if (mPhaseCounter == 0) {
+            aHeadReanim = mApp->ReanimationGet(mSpecialHeadReanimID);
+            aHeadReanim->PlayReanim("anim_jumpdown", ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD, 0, 60.0f);
+            mZombiePhase = ZombiePhase::PHASE_SQUASH_FALLING;
+            mPhaseCounter = 10;
+        }
+    }
+
+    if (mZombiePhase == ZombiePhase::PHASE_SQUASH_FALLING) {
+        int aPosY = TodAnimateCurve(10, 0, mPhaseCounter, -20, 74, TodCurves::CURVE_LINEAR);
+        int aDestX = mBoard->GridToPixelX(mBoard->PixelToGridXKeepOnBoard(mX, mY), mRow);
+
+        if (mMindControlled) {
+            Zombie *aZombie = FindZombieTarget();
+            if (aZombie) {
+                aDestX = aZombie->ZombieTargetLeadX(0.0f);
+            } else {
+                aDestX += 90.0f * mScaleZombie;
+            }
+        }
+
+        if (mApp->mGameMode == GameMode::GAMEMODE_MP_VS) {
+            if (mSquashHeadCol != -1) {
+                aDestX = mBoard->GridToPixelX(mSquashHeadCol, mRow);
+            }
+        }
+
+        Reanimation *aHeadReanim = mApp->ReanimationGet(mSpecialHeadReanimID);
+        aHeadReanim->SetPosition(mPosX + 6.0f + aDestX - mPosX, mPosY - 21.0f + aPosY);
+
+        float aSquashX = mX;
+        if (mApp->mGameMode == GameMode::GAMEMODE_MP_VS) {
+         aSquashX = mPosX + 6.0f + aDestX - mPosX;
+        }
+
+        if (mPhaseCounter == 2) {
+            if (mMindControlled) // 魅惑修复
+            {
+                Rect aAttackRect(aDestX - 73, mPosY + 4, 65, 90); // 具体数值未实测，待定
+
+                Zombie *aZombie = nullptr;
+                while (mBoard->IterateZombies(aZombie)) {
+                    if ((aZombie->mRow == mRow || aZombie->mZombieType == ZombieType::ZOMBIE_BOSS) && aZombie->EffectedByDamage(13U)) {
+                        Rect aZombieRect = aZombie->GetZombieRect();
+                        if (GetRectOverlap(aAttackRect, aZombieRect) > (aZombie->mZombieType == ZombieType::ZOMBIE_FOOTBALL ? -20 : 0)) {
+                            aZombie->TakeDamage(1800, 18U);
+                        }
+                    }
+                }
+            } else {
+                SquishAllInSquare(mBoard->PixelToGridXKeepOnBoard(aSquashX, mY), mRow, ZombieAttackType::ATTACKTYPE_CHEW);
+            }
+        }
+
+        if (mPhaseCounter == 0) {
+            mZombiePhase = ZombiePhase::PHASE_SQUASH_DONE_FALLING;
+            mPhaseCounter = 100;
+
+            mBoard->ShakeBoard(1, 4);
+            mApp->PlayFoley(FoleyType::FOLEY_THUMP);
+        }
+    }
+
+    if (mZombiePhase == ZombiePhase::PHASE_SQUASH_DONE_FALLING && mPhaseCounter == 0) {
+        Reanimation *aHeadReanim = mApp->ReanimationGet(mSpecialHeadReanimID);
+        aHeadReanim->ReanimationDie();
+        mSpecialHeadReanimID = ReanimationID::REANIMATIONID_NULL;
+
+        TakeDamage(1800, 9U);
+    }
+}
 
 void Zombie::UpdateZombieRiseFromGrave() {
     if (mInPool) {
@@ -614,7 +646,10 @@ void Zombie::UpdateZombieRiseFromGrave() {
                 mZombiePhase = PHASE_YETI_PRE_RUN;
                 break;
             case ZOMBIE_SQUASH_HEAD: // 修复窝瓜僵尸不起跳
-                mZombiePhase = ZombiePhase::PHASE_SQUASH_PRE_LAUNCH;
+                mZombiePhase = PHASE_SQUASH_PRE_LAUNCH;
+                break;
+            case ZOMBIE_IMP:
+                mZombiePhase = PHASE_IMP_PRE_RUN;
                 break;
             default:
                 mZombiePhase = PHASE_ZOMBIE_NORMAL;
@@ -1423,8 +1458,107 @@ bool Zombie::IsFireResistant() {
         || mShieldType == ShieldType::SHIELDTYPE_TRASH_BIN;
 }
 
+Rect Zombie::GetZombieAttackRect() {
+    Rect aAttackRect = mZombieAttackRect;
+    if (mZombiePhase == ZombiePhase::PHASE_POLEVAULTER_IN_VAULT || mZombiePhase == ZombiePhase::PHASE_DOLPHIN_IN_JUMP) {
+        aAttackRect = Rect(-40, 0, 100, 115);
+    }
+
+    if (IsWalkingBackwards()) {
+        aAttackRect.mX = mWidth - aAttackRect.mX - aAttackRect.mWidth;
+    }
+
+    ZombieDrawPosition aDrawPos;
+    GetDrawPos(aDrawPos);
+    aAttackRect.Offset(mX, mY + aDrawPos.mBodyY);
+    if (aDrawPos.mClipHeight > CLIP_HEIGHT_LIMIT) {
+        aAttackRect.mHeight -= aDrawPos.mClipHeight;
+    }
+
+    return aAttackRect;
+}
+
 Plant *Zombie::FindPlantTarget(ZombieAttackType theAttackType) {
     return old_Zombie_FindPlantTarget(this, theAttackType);
+}
+
+Plant* Zombie::FindPlantTargetInNextGrid(ZombieAttackType theAttackType) {
+    Rect aAttackRect = GetZombieAttackRect();
+    int aPosX = mX + mWidth / 2;
+    int aNextGridX = mBoard->PixelToGridX(mX, mY) - 1;
+    int aDistance = aPosX - mBoard->GridToPixelX(aNextGridX, 0);
+
+    Plant *aPlant = nullptr;
+    while (mBoard->IteratePlants(aPlant)) {
+        if (aPlant->mRow == mRow) {
+            if (aPosX - aPlant->mX >= aDistance && CanTargetPlant(aPlant, theAttackType)) {
+                return aPlant;
+            }
+        }
+    }
+
+    return nullptr;
+}
+
+bool Zombie::CanTargetPlant(Plant *thePlant, ZombieAttackType theAttackType) {
+    if (mApp->IsWallnutBowlingLevel() && theAttackType != ZombieAttackType::ATTACKTYPE_VAULT)
+        return false;
+
+    if (thePlant->NotOnGround() || thePlant->mSeedType == SeedType::SEED_TANGLEKELP)
+        return false;
+
+    if (!mInPool && mBoard->IsPoolSquare(thePlant->mPlantCol, thePlant->mRow))
+        return false;
+
+    if (mZombiePhase == ZombiePhase::PHASE_DIGGER_TUNNELING) {
+        return thePlant->mSeedType == SeedType::SEED_POTATOMINE && thePlant->mState == PlantState::STATE_NOTREADY;
+    }
+
+    if (thePlant->IsSpiky()) {
+        return mZombieType == ZombieType::ZOMBIE_GARGANTUAR || mZombieType == ZombieType::ZOMBIE_REDEYE_GARGANTUAR || mZombieType == ZombieType::ZOMBIE_ZAMBONI
+            || mBoard->IsPoolSquare(thePlant->mPlantCol, thePlant->mRow) || mBoard->GetFlowerPotAt(thePlant->mPlantCol, thePlant->mRow); // 扶梯僵尸给花盆上的地刺/地刺王搭梯的原理
+    }
+
+    if (theAttackType == ZombieAttackType::ATTACKTYPE_DRIVE_OVER) {
+        if (thePlant->mSeedType == SeedType::SEED_CHERRYBOMB || thePlant->mSeedType == SeedType::SEED_JALAPENO || thePlant->mSeedType == SeedType::SEED_BLOVER
+            || thePlant->mSeedType == SeedType::SEED_SQUASH) {
+            return false;
+        }
+        if (thePlant->mSeedType == SeedType::SEED_DOOMSHROOM || thePlant->mSeedType == SeedType::SEED_ICESHROOM) {
+            return thePlant->mIsAsleep;
+        }
+    }
+
+    if (mZombiePhase == ZombiePhase::PHASE_LADDER_CARRYING || mZombiePhase == ZombiePhase::PHASE_LADDER_PLACING) {
+        bool aPlaceLadder = false;
+        if (thePlant->mSeedType == SeedType::SEED_WALLNUT || thePlant->mSeedType == SeedType::SEED_TALLNUT || thePlant->mSeedType == SeedType::SEED_PUMPKINSHELL) {
+            aPlaceLadder = true;
+        }
+
+        if (mBoard->GetLadderAt(thePlant->mPlantCol, thePlant->mRow)) {
+            aPlaceLadder = false;
+        }
+
+        if ((theAttackType == ZombieAttackType::ATTACKTYPE_CHEW && aPlaceLadder) || (theAttackType == ZombieAttackType::ATTACKTYPE_LADDER && !aPlaceLadder)) {
+            return false;
+        }
+    }
+
+    if (theAttackType == ZombieAttackType::ATTACKTYPE_CHEW) {
+        Plant *aTopPlant = mBoard->GetTopPlantAt(thePlant->mPlantCol, thePlant->mRow, PlantPriority::TOPPLANT_EATING_ORDER);
+        if (aTopPlant != thePlant && aTopPlant && CanTargetPlant(aTopPlant, theAttackType)) {
+            return false;
+        }
+    }
+
+    if (theAttackType == ZombieAttackType::ATTACKTYPE_VAULT) {
+        Plant *aTopPlant = mBoard->GetTopPlantAt(thePlant->mPlantCol, thePlant->mRow, PlantPriority::TOPPLANT_ONLY_NORMAL_POSITION);
+        if (aTopPlant != thePlant && aTopPlant && CanTargetPlant(aTopPlant, theAttackType)) {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 Zombie *Zombie::FindZombieTarget() {
@@ -1576,7 +1710,7 @@ void Zombie::PickRandomSpeed() {
         } else {
             mVelX = 0.12f; // 一般模式
         }
-    } else if (mZombieType == ZombieType::ZOMBIE_IMP && (mApp->IsIZombieLevel() || mApp->mGameMode == GameMode::GAMEMODE_MP_VS)) // IZ，VS小鬼
+    } else if (mZombieType == ZombieType::ZOMBIE_IMP && (mApp->IsIZombieLevel() || mZombiePhase == ZombiePhase::PHASE_IMP_RUNNING)) // IZ，VS小鬼
     {
         mVelX = 0.9f;
     } else if (mZombiePhase == ZombiePhase::PHASE_YETI_RUNNING) {
@@ -1602,4 +1736,65 @@ void Zombie::PickRandomSpeed() {
     }
 
     UpdateAnimSpeed();
+}
+
+float Zombie::ZombieTargetLeadX(float theTime) {
+    float aSpeed = mVelX;
+    if (mChilledCounter > 0) {
+        aSpeed *= CHILLED_SPEED_FACTOR;
+    }
+    if (IsWalkingBackwards()) {
+        aSpeed = -aSpeed;
+    }
+    if (ZombieNotWalking()) {
+        aSpeed = 0.0f;
+    }
+
+    Rect aZombieRect = GetZombieRect();
+    float aCurrentPosX = aZombieRect.mX + aZombieRect.mWidth / 2;
+    float aDisplacementX = aSpeed * theTime;
+    return aCurrentPosX - aDisplacementX;
+}
+
+// 0x52A610
+bool Zombie::ZombieNotWalking() {
+    if (mIsEating || IsImmobilizied()) {
+        return true;
+    }
+
+    if (mZombiePhase == ZombiePhase::PHASE_JACK_IN_THE_BOX_POPPING || mZombiePhase == ZombiePhase::PHASE_NEWSPAPER_MADDENING || mZombiePhase == ZombiePhase::PHASE_GARGANTUAR_THROWING
+        || mZombiePhase == ZombiePhase::PHASE_GARGANTUAR_SMASHING || mZombiePhase == ZombiePhase::PHASE_CATAPULT_LAUNCHING || mZombiePhase == ZombiePhase::PHASE_CATAPULT_RELOADING
+        || mZombiePhase == ZombiePhase::PHASE_DIGGER_RISING || mZombiePhase == ZombiePhase::PHASE_DIGGER_TUNNELING_PAUSE_WITHOUT_AXE || mZombiePhase == ZombiePhase::PHASE_DIGGER_RISE_WITHOUT_AXE
+        || mZombiePhase == ZombiePhase::PHASE_DIGGER_STUNNED || mZombiePhase == ZombiePhase::PHASE_DANCER_SNAPPING_FINGERS || mZombiePhase == ZombiePhase::PHASE_DANCER_SNAPPING_FINGERS_WITH_LIGHT
+        || mZombiePhase == ZombiePhase::PHASE_DANCER_SNAPPING_FINGERS_HOLD || mZombiePhase == ZombiePhase::PHASE_DANCER_RISING || mZombiePhase == ZombiePhase::PHASE_IMP_GETTING_THROWN
+        || mZombiePhase == ZombiePhase::PHASE_IMP_LANDING || mZombiePhase == ZombiePhase::PHASE_LADDER_PLACING || mZombieHeight == ZombieHeight::HEIGHT_IN_TO_CHIMNEY
+        || mZombieHeight == ZombieHeight::HEIGHT_GETTING_BUNGEE_DROPPED || mZombieHeight == ZombieHeight::HEIGHT_ZOMBIQUARIUM || mZombieType == ZombieType::ZOMBIE_BUNGEE
+        || mZombieType == ZombieType::ZOMBIE_BOSS || mZombiePhase == ZombiePhase::PHASE_DANCER_RAISE_LEFT_1 || mZombiePhase == ZombiePhase::PHASE_DANCER_WALK_TO_RAISE
+        || mZombiePhase == ZombiePhase::PHASE_DANCER_RAISE_RIGHT_1 || mZombiePhase == ZombiePhase::PHASE_DANCER_RAISE_LEFT_2 || mZombiePhase == ZombiePhase::PHASE_DANCER_RAISE_RIGHT_2) {
+        return true;
+    }
+
+    if (mZombieType == ZombieType::ZOMBIE_DANCER || mZombieType == ZombieType::ZOMBIE_BACKUP_DANCER) {
+        Zombie *aLeader = nullptr;
+        if (mZombieType == ZombieType::ZOMBIE_DANCER) {
+            aLeader = this;
+        } else {
+            aLeader = mBoard->ZombieTryToGet(mRelatedZombieID);
+        }
+
+        if (aLeader) {
+            if (aLeader->IsImmobilizied() || aLeader->mIsEating) {
+                return true;
+            }
+
+            for (int i = 0; i < NUM_BACKUP_DANCERS; i++) {
+                Zombie *aDancer = mBoard->ZombieTryToGet(aLeader->mFollowerZombieID[i]);
+                if (aDancer && (aDancer->IsImmobilizied() || aDancer->mIsEating)) {
+                    return true;
+                }
+            }
+        }
+    }
+
+    return false;
 }

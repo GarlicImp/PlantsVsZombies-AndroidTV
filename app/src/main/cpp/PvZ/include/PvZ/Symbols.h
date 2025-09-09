@@ -335,6 +335,7 @@ inline void *Zombie_DieNoLootAddr;
 inline void *Zombie_ApplyBurnAddr;
 inline void *Zombie_DrawAddr;
 inline void *Zombie_UpdateYetiAddr;
+inline void *Zombie_UpdateZombieImpAddr;
 inline void *Zombie_UpdateZombieGargantuarAddr;
 inline void *Zombie_UpdateZombiePeaHeadAddr;
 inline void *Zombie_GetZombieRectAddr;
@@ -816,6 +817,7 @@ inline void *Sexy_AudiereMusicInterface_SetChannelVolumeAddr;
 
 
 inline void *AttachmentDrawAddr;
+inline void *AttachmentDetachAddr;
 inline void *AttachmentDieAddr;
 inline void *AttachReanimAddr;
 
@@ -1546,6 +1548,7 @@ inline bool GetFunctionAddr() {
     Zombie_ApplyBurnAddr = dlsym(handle, "_ZN6Zombie9ApplyBurnEv");
     Zombie_DrawAddr = dlsym(handle, "_ZN6Zombie4DrawEPN4Sexy8GraphicsE");
     Zombie_UpdateYetiAddr = dlsym(handle, "_ZN6Zombie10UpdateYetiEv");
+    Zombie_UpdateZombieImpAddr = dlsym(handle, "_ZN6Zombie15UpdateZombieImpEv");
     Zombie_UpdateZombieGargantuarAddr = dlsym(handle, "_ZN6Zombie22UpdateZombieGargantuarEv");
     Zombie_UpdateZombiePeaHeadAddr = dlsym(handle, "_ZN6Zombie19UpdateZombiePeaHeadEv");
     Zombie_UpdateZombieGatlingHeadAddr = dlsym(handle, "_ZN6Zombie23UpdateZombieGatlingHeadEv");
@@ -1966,9 +1969,14 @@ inline bool GetFunctionAddr() {
     ImitaterDialog_OnKeyDownAddr = dlsym(handle, "_ZN14ImitaterDialog9OnKeyDownEN4Sexy7KeyCodeEj");
     ImitaterDialog_KeyDownAddr = dlsym(handle, "_ZN14ImitaterDialog7KeyDownEN4Sexy7KeyCodeE");
     ImitaterDialog_ShowToolTipAddr = dlsym(handle, "_ZN14ImitaterDialog11ShowToolTipEv");
+
+
     AttachmentDrawAddr = dlsym(handle, "_Z14AttachmentDraw12AttachmentIDPN4Sexy8GraphicsEb");
+    AttachmentDetachAddr = dlsym(handle, "_Z16AttachmentDetachR12AttachmentID");
     AttachmentDieAddr = dlsym(handle, "_Z13AttachmentDieR12AttachmentID");
     AttachReanimAddr = dlsym(handle, "_Z12AttachReanimR12AttachmentIDP11Reanimationff");
+
+
     TodScaleRotateTransformMatrixAddr = dlsym(handle, "_Z29TodScaleRotateTransformMatrixRN4Sexy11SexyMatrix3Efffff");
     TodBltMatrixAddr = dlsym(handle, "_Z12TodBltMatrixPN4Sexy8GraphicsEPNS_5ImageERKNS_11SexyMatrix3ERKNS_5TRectIiEERKNS_5ColorEiSA_");
     ReanimatorTransform_ReanimatorTransformAddr = dlsym(handle, "_ZN19ReanimatorTransformC2Ev");

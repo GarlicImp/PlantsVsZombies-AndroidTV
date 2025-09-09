@@ -249,6 +249,7 @@ public:
     void PlayBodyReanim(const char *theTrackName, ReanimLoopType theLoopType, int theBlendTime, float theAnimRate);
     void SpikeweedAttack();
     void SpikeRockTakeDamage();
+    bool IsSpiky();
     bool DrawMagnetItemsOnTop();
     void SetImitaterFilterEffect();
     void BurnRow(int theRow);

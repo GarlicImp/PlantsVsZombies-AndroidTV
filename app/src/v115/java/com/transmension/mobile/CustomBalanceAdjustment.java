@@ -20,52 +20,37 @@
  package com.transmension.mobile;
 
  import static com.transmension.mobile.Global.globalIsSelected;
- import static com.transmension.mobile.Global.seedName;
- import static com.transmension.mobile.Global.seedNameSelected;
+ import static com.transmension.mobile.Global.currentSelectedSeed;
 
- import android.animation.LayoutTransition;
- import android.animation.ObjectAnimator;
  import android.app.ActionBar;
  import android.app.Activity;
- import android.app.AlertDialog;
  import android.content.Context;
  import android.content.Intent;
  import android.content.SharedPreferences;
  import android.content.res.Configuration;
  import android.graphics.Color;
- import android.graphics.Typeface;
  import android.graphics.drawable.ColorDrawable;
- import android.graphics.drawable.ShapeDrawable;
- import android.graphics.drawable.shapes.RoundRectShape;
  import android.os.Build;
  import android.os.Bundle;
- import android.preference.PreferenceManager;
- import android.transition.Slide;
- import android.util.Xml;
  import android.view.Gravity;
  import android.view.KeyEvent;
  import android.view.View;
  import android.view.Window;
  import android.widget.Button;
- import android.widget.CheckBox;
  import android.widget.LinearLayout;
  import android.widget.NumberPicker;
  import android.widget.ScrollView;
  import android.widget.TableLayout;
- import android.widget.TableRow;
  import android.widget.TextView;
  import android.widget.Toast;
 
  import com.trans.pvztv.R;
 
- import org.xmlpull.v1.XmlPullParser;
- import org.xmlpull.v1.XmlPullParserException;
-
- import java.io.IOException;
- import java.io.InputStream;
- import java.util.Locale;
-
  public class CustomBalanceAdjustment extends Activity {
+
+     private SharedPreferences sharedPreferences;
+     private NumberPicker costPicker;
+     private NumberPicker refreshPicker;
 
      @Override
      protected void onCreate(Bundle savedInstanceState) {
@@ -90,8 +75,11 @@
              actionBar.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
          }
 
+         // 配置标题
          setTitle(getString(R.string.custom_balance_title));
-         SharedPreferences sharedPreferences = getSharedPreferences("data", 0);
+
+         // 初始化SharedPreferences
+         sharedPreferences = getSharedPreferences("data", 0);
 
          ScrollView scrollView = new ScrollView(this);
          LinearLayout linearLayout = new LinearLayout(this);
@@ -115,7 +103,7 @@
 
          Button seedPicker = new Button(this);
          boolean isSelected = globalIsSelected;
-         seedPicker.setText(isSelected ? seedNameSelected : "选择卡片类型");
+         seedPicker.setText(isSelected ? currentSelectedSeed : "选择卡片类型");
          seedPicker.setTextSize(17f);
          seedPicker.setOnClickListener(view -> {
              startActivity(new Intent(CustomBalanceAdjustment.this, SeedChooser.class));
@@ -130,7 +118,47 @@
          costInfo.setText("花费");
          costInfo.setTextSize(15f);
 
-         NumberPicker costPicker = new NumberPicker(this);
+         // 初始化UI组件
+         NumberPicker costPicker = getCostPicker();
+         NumberPicker refreshPicker = getRefreshPicker();
+
+         // 配置NumberPicker
+         costPicker.setLayoutParams(weightParams);
+         costPicker.setValue(sharedPreferences.getInt("cost", 0));
+         refreshPicker.setLayoutParams(weightParams);
+         refreshPicker.setValue(sharedPreferences.getInt("refresh", 0));
+
+         // 配置文本
+         TextView refreshInfo = new TextView(this);
+         refreshInfo.setGravity(Gravity.CENTER);
+         refreshInfo.setText("冷却时间");
+         refreshInfo.setTextSize(15f);
+
+         balanceChooser.addView(costInfo);
+         balanceChooser.addView(costPicker);
+         balanceChooser.addView(refreshInfo);
+         balanceChooser.addView(refreshPicker);
+
+         // 设置保存按钮
+         Button saveButton = new Button(this);
+         saveButton.setText("保存修改");
+         saveButton.setTextSize(17f);
+         saveButton.setOnClickListener(view -> {
+             saveSeedConfig();
+         });
+
+         linearLayout.setOrientation(LinearLayout.VERTICAL);
+         linearLayout.addView(intro);
+         linearLayout.addView(tableLayout);
+         linearLayout.addView(seedPicker);
+         linearLayout.addView(balanceChooser);
+         linearLayout.addView(saveButton);
+         scrollView.addView(linearLayout);
+         setContentView(scrollView);
+     }
+
+     private NumberPicker getCostPicker() {
+         costPicker = new NumberPicker(this);
          costPicker.setFormatter(new NumberPicker.Formatter() {
              @Override
              public String format(int value) {
@@ -139,43 +167,12 @@
          });
          costPicker.setMinValue(0);
          costPicker.setMaxValue(12);
-         costPicker.setLayoutParams(weightParams);
-         costPicker.setValue(sharedPreferences.getInt("cost", 0));
 
-         TextView refreshInfo = new TextView(this);
-         refreshInfo.setGravity(Gravity.CENTER);
-         refreshInfo.setText("冷却时间");
-         refreshInfo.setTextSize(15f);
-
-         NumberPicker refreshPicker = getRefreshPicker();
-         refreshPicker.setLayoutParams(weightParams);
-         refreshPicker.setValue(sharedPreferences.getInt("refresh", 0));
-
-         balanceChooser.addView(costInfo);
-         balanceChooser.addView(costPicker);
-         balanceChooser.addView(refreshInfo);
-         balanceChooser.addView(refreshPicker);
-
-         Button save = new Button(this);
-         save.setText("保存修改");
-         save.setTextSize(17f);
-         save.setOnClickListener(view -> {
-//             sharedPreferences.edit().putInt("cost", costPicker.getValue()).putInt("refresh", refreshPicker.getValue()).putInt("scaleX", scaleSeekBar.getProgress()).putInt("scaleY", scaleSeekBar.getProgress()).putBoolean("shiLiuBiJiu", !fullscreenCheckBox.isChecked()).apply();
-//             Toast.makeText(CustomBalanceAdjustment.this, getString(R.string.addon_aspect_toast1) + (fullscreenCheckBox.isChecked() ? getString(R.string.addon_aspect_toast2) : String.format(Locale.getDefault(), "%d: %d", costPicker.getValue(), refreshPicker.getValue())) + String.format(Locale.getDefault(), getString(R.string.addon_aspect_toast3), scaleSeekBar.getProgress()), Toast.LENGTH_SHORT).show();
-         });
-
-         linearLayout.setOrientation(LinearLayout.VERTICAL);
-         linearLayout.addView(intro);
-         linearLayout.addView(tableLayout);
-         linearLayout.addView(seedPicker);
-         linearLayout.addView(balanceChooser);
-         linearLayout.addView(save);
-         scrollView.addView(linearLayout);
-         setContentView(scrollView);
+         return costPicker;
      }
 
      private NumberPicker getRefreshPicker() {
-         NumberPicker refreshPicker = new NumberPicker(this);
+         refreshPicker = new NumberPicker(this);
          refreshPicker.setFormatter(value -> {
              switch (value) {
                  case 0:
@@ -192,7 +189,34 @@
          });
          refreshPicker.setMinValue(0);
          refreshPicker.setMaxValue(3);
+
          return refreshPicker;
+     }
+
+     private void onSeedSelected(String seedName) {
+         currentSelectedSeed = seedName;
+//         selectedSeedView.setText("当前选择: " + seedName);
+
+         // 加载已保存的值
+         costPicker.setValue(sharedPreferences.getInt(seedName + "_cost", 100));
+         refreshPicker.setValue(sharedPreferences.getInt(seedName + "_refresh", 30));
+     }
+
+
+     private void saveSeedConfig() {
+         if (currentSelectedSeed == null) {
+             Toast.makeText(this, "请先选择种子", Toast.LENGTH_SHORT).show();
+             return;
+         }
+
+         sharedPreferences.edit()
+                 .putInt(currentSelectedSeed + "_cost", costPicker.getValue())
+                 .putInt(currentSelectedSeed + "_refresh", refreshPicker.getValue())
+                 .apply();
+
+         Toast.makeText(this,
+                 currentSelectedSeed + "配置已保存",
+                 Toast.LENGTH_SHORT).show();
      }
 
      @Override

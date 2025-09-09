@@ -1349,6 +1349,8 @@ enum ZombiePhase {
     // 以下是新增状态
     PHASE_YETI_PRE_RUN,
     PHASE_JALAPENO_PRE_BURN,
+    PHASE_IMP_PRE_RUN,
+    PHASE_IMP_RUNNING
 };
 enum ZombieType {
     ZOMBIE_INVALID = -1,

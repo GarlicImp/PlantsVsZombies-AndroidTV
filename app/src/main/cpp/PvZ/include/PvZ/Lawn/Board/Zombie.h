@@ -115,6 +115,7 @@ public:
     int mPrevFrame;                                   // 23
     bool mVariant;                                    // 96
     bool mIsEating;                                   // 97
+    short mSquashHeadCol;                             // 新增成员，用于窝瓜僵尸修复
     int mJustGotShotCounter;                          // 25
     int mShieldJustGotShotCounter;                    // 26
     int mShieldRecoilCounter;                         // 27
@@ -258,12 +259,13 @@ public:
     void Update();
     void UpdateActions();
     void UpdateYeti();
+    void UpdateZombieImp();
     void UpdateZombieGargantuar();
     void UpdateZombiePeaHead();
     void UpdateZombieGatlingHead();
     void BurnRow(int theRow);
     void UpdateZombieJalapenoHead();
-    //    void UpdateZombieSquashHead();
+    void UpdateZombieSquashHead();
     void UpdateZombieRiseFromGrave();
     void BossDestroyIceballInRow(int theRow);
     int GetDancerFrame();
@@ -278,7 +280,10 @@ public:
     bool IsTangleKelpTarget();
     void DrawReanim(Sexy::Graphics *graphics, ZombieDrawPosition *theZombieDrawPosition, int theBaseRenderGroup);
     void DropHead(unsigned int theDamageFlags);
+    Sexy::Rect GetZombieAttackRect();
     Plant *FindPlantTarget(ZombieAttackType theAttackType);
+    Plant *FindPlantTargetInNextGrid(ZombieAttackType theAttackType);
+    bool CanTargetPlant(Plant *thePlant, ZombieAttackType theAttackType);
     Zombie *FindZombieTarget();
     void TakeDamage(int theDamage, unsigned int theDamageFlags);
     void PlayZombieReanim(const char *theTrackName, ReanimLoopType theLoopType, int theBlendTime, float theAnimRate);
@@ -314,6 +319,8 @@ public:
     int GetShieldDamageIndex();
     bool IsFireResistant();
     void PickRandomSpeed();
+    float ZombieTargetLeadX(float theTime);
+    bool ZombieNotWalking();
 
 protected:
     void __Constructor() {
