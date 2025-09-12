@@ -181,8 +181,8 @@ inline float TodAnimateCurveFloatTime(float theTimeStart, float theTimeEnd, floa
     return reinterpret_cast<float (*)(float, float, float, float, float, TodCurves)>(TodAnimateCurveFloatTimeAddr)(theTimeStart, theTimeEnd, theTimeAge, thePositionStart, thePositionEnd, theCurve);
 }
 
-inline void TodLoadResources(const pvzstl::string &theGroup) {
-    reinterpret_cast<void (*)(const pvzstl::string &)>(TodLoadResourcesAddr)(theGroup);
+inline bool TodLoadResources(const pvzstl::string &theGroup) {
+    return reinterpret_cast<bool (*)(const pvzstl::string &)>(TodLoadResourcesAddr)(theGroup);
 }
 
 inline pvzstl::string TodReplaceString(const pvzstl::string &theText, const char *theStringToFind, const pvzstl::string &theStringToSubstitute) {
@@ -204,6 +204,10 @@ inline TodAllocator *FindGlobalAllocator(int theSize) {
 // inline unsigned long AverageNearByPixels(Sexy::MemoryImage *theImage, unsigned long *thePixel, int x, int y);
 //
 // inline void FixPixelsOnAlphaEdgeForBlending(Sexy::Image *theImage);
+
+inline bool FloatApproxEqual(float theFloatVal1, float theFloatVal2) {
+    return fabs(theFloatVal1 - theFloatVal2) < FLT_EPSILON;
+}
 
 inline void SetBit(uint &theNum, int theIdx, bool theValue = true) {
     if (theValue)

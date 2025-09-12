@@ -51,19 +51,26 @@ ProjectileDefinition gProjectileDefinition[] = {
     {ProjectileType::PROJECTILE_ZOMBIE_PEA, 0, 20},
 };
 
-int Projectile::ProjectileInitialize(int theX, int theY, int theRenderOrder, int theRow, ProjectileType theProjectileType) {
+ProjectileDefinition gNewProjectileDefinition[] {
+    {ProjectileType::PROJCTILE_ZOMBIE_SOUL, 0, 0},
+};
+
+void Projectile::ProjectileInitialize(int theX, int theY, int theRenderOrder, int theRow, ProjectileType theProjectileType) {
     //    projectile->mNewProjectileLastX = theX;
     //    projectile->mNewProjectileLastY = theY;
     if (!isOnlyTouchFireWood) {
         // 僵尸子弹与加农炮子弹NULL
         if (theProjectileType == ProjectileType::PROJECTILE_COBBIG || theProjectileType == ProjectileType::PROJECTILE_ZOMBIE_PEA) {
-            return old_Projectile_ProjectileInitialize(this, theX, theY, theRenderOrder, theRow, theProjectileType);
+            old_Projectile_ProjectileInitialize(this, theX, theY, theRenderOrder, theRow, theProjectileType);
+            return;
         }
         if (theProjectileType == ProjectileType::PROJECTILE_STAR && banStar) {
-            return old_Projectile_ProjectileInitialize(this, theX, theY, theRenderOrder, theRow, theProjectileType);
+            old_Projectile_ProjectileInitialize(this, theX, theY, theRenderOrder, theRow, theProjectileType);
+            return;
         }
         if (isOnlyPeaUseable && theProjectileType != ProjectileType::PROJECTILE_PEA) {
-            return old_Projectile_ProjectileInitialize(this, theX, theY, theRenderOrder, theRow, theProjectileType);
+            old_Projectile_ProjectileInitialize(this, theX, theY, theRenderOrder, theRow, theProjectileType);
+            return;
         }
         if (bulletSpinnerChosenNum != -1) {
             theProjectileType = (ProjectileType)bulletSpinnerChosenNum;
@@ -76,7 +83,12 @@ int Projectile::ProjectileInitialize(int theX, int theY, int theRenderOrder, int
         }
     }
 
-    return old_Projectile_ProjectileInitialize(this, theX, theY, theRenderOrder, theRow, theProjectileType);
+    old_Projectile_ProjectileInitialize(this, theX, theY, theRenderOrder, theRow, theProjectileType);
+
+    if (mProjectileType == ProjectileType::PROJCTILE_ZOMBIE_SOUL) {
+        TodParticleSystem* aParticle = mApp->AddTodParticle(mPosX + 13.0f, mPosY + 13.0f, 400000, ParticleEffect::PARTICLE_PUFFSHROOM_TRAIL);
+        AttachParticle(mAttachmentID, aParticle, 13.0f, 13.0f);
+    }
 }
 
 Plant* Projectile::FindCollisionTargetPlant() {
@@ -229,8 +241,41 @@ void Projectile::Update() {
         // 如果开了高级暂停
         return;
     }
-    return old_Projectile_Update(this);
+
+    old_Projectile_Update(this);
 }
+
+void Projectile::UpdateNormalMotion() {
+    if (mProjectileType == ProjectileType::PROJCTILE_ZOMBIE_SOUL) {
+        Zombie* aZombie = mBoard->ZombieTryToGet(mTargetZombieID);
+        if (aZombie) {
+            Rect aZombieRect = aZombie->GetZombieRect();
+            SexyVector2 aTargetCenter(aZombie->ZombieTargetLeadX(0.0f), aZombieRect.mY + aZombieRect.mHeight / 2);
+            SexyVector2 aProjectileCenter(mPosX + mWidth / 2, mPosY + mHeight / 2);
+            SexyVector2 aToTarget = (aTargetCenter - aProjectileCenter).Normalize();
+            SexyVector2 aMotion(mVelX, mVelY);
+
+            aMotion += aToTarget * (0.001f * mProjectileAge);
+            aMotion = aMotion.Normalize();
+            aMotion *= 2.0f;
+
+            mVelX = aMotion.x;
+            mVelY = aMotion.y;
+            mRotation = -atan2(mVelY, mVelX);
+        }
+
+        mPosY += mVelY;
+        mPosX += mVelX;
+        mShadowY += mVelY;
+        mRow = mBoard->PixelToGridYKeepOnBoard(mPosX, mPosY);
+
+        CheckForCollision();
+        return;
+    }
+
+    old_Projectile_UpdateNormalMotion(this);
+}
+
 
 void Projectile::PlayImpactSound(Zombie* theZombie) {
     bool aPlayHelmSound = true;
@@ -267,7 +312,8 @@ void Projectile::PlayImpactSound(Zombie* theZombie) {
 
 void Projectile::DoImpact(Zombie* theZombie) {
     if (!projectilePierce) {
-        return old_Projectile_DoImpact(this, theZombie);
+        old_Projectile_DoImpact(this, theZombie);
+        return;
     }
     // 负责 直线子弹帧伤
     PlayImpactSound(theZombie);
@@ -392,6 +438,18 @@ void Projectile::CheckForCollision() {
         return;
     }
 
+//    if (mProjectileType == ProjectileType::PROJCTILE_ZOMBIE_SOUL) {
+//        Zombie* aZombie = mBoard->ZombieTryToGet(mTargetZombieID);
+//        if (aZombie && aZombie->EffectedByDamage(mDamageRangeFlags)) {
+//            Rect aProjectileRect = GetProjectileRect();
+//            Rect aZombieRect = aZombie->GetZombieRect();
+//            if (GetRectOverlap(aProjectileRect, aZombieRect) >= 0 && mPosY > aZombieRect.mY && mPosY < aZombieRect.mY + aZombieRect.mHeight) {
+//                DoImpact(aZombie);
+//            }
+//        }
+//        return;
+//    }
+
     if (mMotionType == ProjectileMotion::MOTION_HOMING) {
         Zombie* aZombie = mBoard->ZombieTryToGet(mTargetZombieID);
         if (aZombie && aZombie->EffectedByDamage(mDamageRangeFlags)) {
@@ -507,52 +565,74 @@ unsigned int Projectile::GetDamageFlags(Zombie* theZombie) {
 
 ProjectileDefinition& Projectile::GetProjectileDef() {
     ProjectileDefinition& aProjectileDef = gProjectileDefinition[(int)mProjectileType];
+    ProjectileDefinition& aNewProjectileDef = gNewProjectileDefinition[(int)mProjectileType - NUM_PROJECTILES - 1];
 
-    return aProjectileDef;
+    if (mProjectileType < ProjectileType::NUM_PROJECTILES) {
+        return aProjectileDef;
+    } else {
+        return aNewProjectileDef;
+    }
 }
 
 void Projectile::Draw(Graphics* g) {
-    old_Projectile_Draw(this, g);
+    if (mProjectileType < NUM_PROJECTILES) {
+        old_Projectile_Draw(this, g);
+        return;
+    }
 
-    //    const ProjectileDefinition& aProjectileDef = GetProjectileDef();
-    //
-    //    Image* aImage;
-    //    float aScale = 1.0f;
-    //    if (mProjectileType == ProjectileType::)
-    //    {
-    //        aImage = ;
-    //    }
-    //
-    //    bool aMirror = false;
-    //    if (mMotionType == ProjectileMotion::MOTION_BEE_BACKWARDS)
-    //    {
-    //        aMirror = true;
-    //    }
-    //
-    //    if (aImage)
-    //    {
-    //        int aCelWidth = aImage->GetCelWidth();
-    //        int aCelHeight = aImage->GetCelHeight();
-    //        Rect aSrcRect(aCelWidth * mFrame, aCelHeight * aProjectileDef.mImageRow, aCelWidth, aCelHeight);
-    //        if (FloatApproxEqual(mRotation, 0.0f) && FloatApproxEqual(aScale, 1.0f))
-    //        {
-    //            Rect aDestRect(0, 0, aCelWidth, aCelHeight);
-    //            g->DrawImageMirror(aImage, aDestRect, aSrcRect, aMirror);
-    //        }
-    //        else
-    //        {
-    //            float aOffsetX = mPosX + aCelWidth * 0.5f;
-    //            float aOffsetY = mPosZ + mPosY + aCelHeight * 0.5f;
-    //            SexyTransform2D aTransform;
-    //            TodScaleRotateTransformMatrix(aTransform, aOffsetX + mBoard->mX, aOffsetY + mBoard->mY, mRotation, aScale, aScale);
-    //            TodBltMatrix(g, aImage, aTransform, g->mClipRect, Color::White, g->mDrawMode, aSrcRect);
-    //        }
-    //    }
+    Graphics gProj(*g);
+    gProj.SetColorizeImages(true);
+//    gProj.SetColor(mOverrideColor);
 
-    //    if (mAttachmentID != AttachmentID::ATTACHMENTID_NULL)
-    //    {
-    //        Graphics theParticleGraphics(*g);
-    //        MakeParentGraphicsFrame(&theParticleGraphics);
-    //        AttachmentDraw(mAttachmentID, &theParticleGraphics, false);
-    //    }
+    const ProjectileDefinition& aProjectileDef = GetProjectileDef();
+
+    Image* aImage;
+    float aScaleX = 1.0f;
+    float aScaleY = 1.0f;
+
+    bool aMirror = false;
+    if (mMotionType == ProjectileMotion::MOTION_BEE_BACKWARDS) {
+        aMirror = true;
+    }
+
+    if (mProjectileType == ProjectileType::PROJCTILE_ZOMBIE_SOUL) {
+        aImage = *IMAGE_PUFFSHROOM_PUFF1;
+        aScaleX = aScaleY = TodAnimateCurveFloat(0, 30, mProjectileAge, 0.3f, 1.0f, TodCurves::CURVE_LINEAR);
+    }
+
+    if (aImage) {
+        int aCelWidth = aImage->GetCelWidth();
+        int aCelHeight = aImage->GetCelHeight();
+        Rect aSrcRect(aCelWidth * mFrame, aCelHeight * aProjectileDef.mImageRow, aCelWidth, aCelHeight);
+        if (FloatApproxEqual(mRotation, 0.0f) && FloatApproxEqual(aScaleX, 1.0f) && FloatApproxEqual(aScaleY, 1.0f)) {
+            Rect aDestRect(0, 0, aCelWidth, aCelHeight);
+            gProj.DrawImageMirror(aImage, aDestRect, aSrcRect, aMirror);
+        } else {
+            float aOffsetX = mPosX + aCelWidth * 0.5f;
+            float aOffsetY = mPosZ + mPosY + aCelHeight * 0.5f;
+            float aWideScreenOffsetX = 240;
+            float aWideScreenOffsetY = 80;
+            if (aMirror)
+                aScaleX *= -1;
+
+            SexyTransform2D aTransform;
+            TodScaleRotateTransformMatrix(aTransform, aOffsetX + mBoard->mX + aWideScreenOffsetX, aOffsetY + mBoard->mY + aWideScreenOffsetY, mRotation, aScaleX, aScaleY);
+            TodBltMatrix(&gProj, aImage, aTransform, gProj.mClipRect, Color::White, gProj.mDrawMode, aSrcRect);
+        }
+    }
+
+    if (mAttachmentID != AttachmentID::ATTACHMENTID_NULL) {
+        Graphics theParticleGraphics(gProj);
+        MakeParentGraphicsFrame(&theParticleGraphics);
+        AttachmentDraw(mAttachmentID, &theParticleGraphics, false);
+    }
+}
+
+void Projectile::DrawShadow(Graphics* g) {
+    switch (mProjectileType) {
+        case ProjectileType::PROJCTILE_ZOMBIE_SOUL:
+            return;
+    }
+
+    old_Projectile_DrawShadow(this, g);
 }

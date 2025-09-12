@@ -144,10 +144,18 @@ struct AddonImages {
     Sexy::Image *gamerpic;
     Sexy::Image *crater_night_roof_center;
     Sexy::Image *crater_night_roof_left;
+    Sexy::Image *IMAGE_SEEDCHOOSER_LARGE_BACKGROUND2;
+    Sexy::Image *IMAGE_ZOMBIEJACKSONHEAD;
+    Sexy::Image *IMAGE_ZOMBIEBACKUPDANCERHEAD2;
+    Sexy::Image *IMAGE_REANIM_ZOMBIE_JACKSON_OUTERARM_UPPER2;
+    Sexy::Image *IMAGE_REANIM_ZOMBIE_BACKUP_OUTERARM_UPPER2;
+    Sexy::Image *IMAGE_REANIM_ZOMBIE_JACKSON_OUTERARM_HAND;
+    Sexy::Image *IMAGE_REANIM_ZOMBIE_DANCER_INNERARM_HAND;
 } inline addonImages; // 此处是新增贴图的列表；
 
 struct AddonSounds {
     int achievement;
+    int thriller;
 } inline addonSounds; // 此处是新增音频的列表。注意新增的音频数量有限制，最多新增62个。（最大总音频256个，原版游戏已经使用了194个，还剩62个空余。未来我也许会拓宽此限制。）
 
 struct AddonZombatarImages {

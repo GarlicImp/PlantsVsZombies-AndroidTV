@@ -151,6 +151,7 @@ public:
     void ShowToolTip(unsigned int thePlayerIndex);
     static SeedType GetZombieIndexBySeedType(SeedType theSeedType);
     int GetNextSeedInDir(int theNumSeed, int thePlayerIndex);
+    void Draw(Sexy::Graphics *g);
 
     void MouseMove(int x, int y);
     void MouseDown(int x, int y, int theClickCount);
@@ -203,5 +204,7 @@ inline void (*old_SeedChooserScreen_MouseDown)(SeedChooserScreen *a, int x, int 
 inline void (*old_SeedChooserScreen_MouseDrag)(SeedChooserScreen *seedChooserScreen, int x, int y);
 
 inline void (*old_SeedChooserScreen_MouseUp)(SeedChooserScreen *seedChooserScreen, int x, int y);
+
+inline void (*old_SeedChooserScreen_Draw)(SeedChooserScreen *, Sexy::Graphics *);
 
 #endif // PVZ_LAWN_WIDGET_SEED_CHOOSER_SCREEN_H

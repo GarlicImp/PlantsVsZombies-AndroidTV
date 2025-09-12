@@ -96,6 +96,7 @@ public:
         return reinterpret_cast<float (*)(Coin *)>(Coin_GetSunScaleAddr)(this);
     }
 
+    void CoinInitialize(int theX, int theY, CoinType theCoinType, CoinMotion theCoinMotion);
     void GamepadCursorOver(int thePlayerIndex);
     void Update();
     void UpdateFallForAward();
@@ -108,8 +109,9 @@ inline bool enableManualCollect;
 inline bool BanDropCoin;
 
 
-inline void (*old_Coin_GamepadCursorOver)(Coin *coin, int a2);
+inline void (*old_Coin_CoinInitialize)(Coin *, int theX, int theY, CoinType theCoinType, CoinMotion theCoinMotion);
 
+inline void (*old_Coin_GamepadCursorOver)(Coin *coin, int a2);
 
 inline void (*old_Coin_Update)(Coin *coin);
 

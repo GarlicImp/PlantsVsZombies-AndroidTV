@@ -41,8 +41,6 @@ inline void (*old_HelpBarWidget_HelpBarWidget)(Sexy::__Widget *a);
 
 inline void (*old_Sexy_ExtractLoadingSoundsResources)(int *a, int *theManager);
 
-inline FoleyParams *(*old_LookupFoley)(FoleyType type);
-
 
 int randomInt(int a, int b);
 
@@ -51,8 +49,6 @@ void DrawSeedType(Sexy::Graphics *g, float x, float y, SeedType theSeedType, See
 int SexyDialog_AddedToManager(void *instance, void *instance1);
 
 int SexyDialog_RemovedFromManager(void *instance, void *instance1);
-
-FoleyParams *LookupFoley(FoleyType theFoleyType);
 
 void Sexy_ExtractLoadingSoundsResources(int *a, int *theManager);
 

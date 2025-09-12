@@ -145,7 +145,8 @@ enum FoleyType {
     NUM_FOLEY = 104,
     FOLEY_MENU_LEFT = 105,
     FOLEY_MENU_CENTRE = 106,
-    FOLEY_MENU_RIGHT = 107
+    FOLEY_MENU_RIGHT = 107,
+    FOLEY_THRILLER
 };
 
 class FoleyParams {
@@ -155,6 +156,12 @@ public:
     int *mSfxID[10];
     uint mFoleyFlags;
 };
+
+FoleyParams *LookupFoley(FoleyType theFoleyType);
+
+extern FoleyParams gNewLawnFoleyParamArray[];
+
+inline FoleyParams *(*old_LookupFoley)(FoleyType type);
 
 // ######################################################################################################################################################
 // ############################################################ 以下正式开始拟音音效相关声明 ############################################################

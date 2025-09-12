@@ -244,16 +244,16 @@ void GamepadControls::ButtonDownFireCobcannonTest() {
     return old_GamepadControls_ButtonDownFireCobcannonTest(this);
 }
 
-void GamepadControls_InvalidatePreviewReanim(GamepadControls *gamepadControls) {
-    Reanimation *mPreviewReanim4 = gamepadControls->mGameObject.mApp->ReanimationTryToGet(gamepadControls->mPreviewReanimID4);
-    if (mPreviewReanim4 != nullptr) {
-        mPreviewReanim4->ReanimationDie();
-        gamepadControls->mPreviewReanimID4 = ReanimationID::REANIMATIONID_NULL;
+void GamepadControls::InvalidatePreviewReanim() {
+    Reanimation *aPreviewReanim4 = mGameObject.mApp->ReanimationTryToGet(mPreviewReanimID4);
+    if (aPreviewReanim4 != nullptr) {
+        aPreviewReanim4->ReanimationDie();
+        mPreviewReanimID4 = ReanimationID::REANIMATIONID_NULL;
     }
-    ReanimationID mPreviewReanim3 = gamepadControls->mPreviewReanimID3;
-    if (mPreviewReanim3 != 0) {
-        gamepadControls->mGameObject.mApp->RemoveReanimation(mPreviewReanim3);
-        gamepadControls->mPreviewReanimID3 = REANIMATIONID_NULL;
+
+    if (mPreviewReanimID3 != 0) {
+        mGameObject.mApp->RemoveReanimation(mPreviewReanimID3);
+        mPreviewReanimID3 = REANIMATIONID_NULL;
     }
 }
 
@@ -285,11 +285,11 @@ void GamepadControls::UpdatePreviewReanim() {
     }
 
     GameMode aGameMode = aApp->mGameMode;
-    int theGridX = mBoard->PixelToGridXKeepOnBoard(mCursorPositionX, mCursorPositionY);
-    int theGridY = mBoard->PixelToGridYKeepOnBoard(mCursorPositionX, mCursorPositionY);
-    SeedBank *seedBank = GetSeedBank();
-    SeedType mSeedType = aCursorObject->mType;
-    bool isImitater = seedBank->mSeedPackets[mSelectedSeedIndex].mPacketType == SeedType::SEED_IMITATER;
+    int aGridX = mBoard->PixelToGridXKeepOnBoard(mCursorPositionX, mCursorPositionY);
+    int aGridY = mBoard->PixelToGridYKeepOnBoard(mCursorPositionX, mCursorPositionY);
+    SeedBank *aSeedBank = GetSeedBank();
+    SeedType aSeedType = aCursorObject->mType;
+    bool isImitater = aSeedBank->mSeedPackets[mSelectedSeedIndex].mPacketType == SeedType::SEED_IMITATER;
 
     if ((aApp->IsWhackAZombieLevel() || aGameMode == GameMode::GAMEMODE_SCARY_POTTER_ENDLESS) && mGamepadState == 7) {
         // 开启砸罐子无尽和锤僵尸关卡的动态预览
@@ -300,26 +300,26 @@ void GamepadControls::UpdatePreviewReanim() {
     }
 
     if (mIsZombie) {
-        mSeedType = seedBank->mSeedPackets[mSelectedSeedIndex].mPacketType;
+        aSeedType = aSeedBank->mSeedPackets[mSelectedSeedIndex].mPacketType;
     }
-    if (mSeedType == SeedType::SEED_IMITATER) {
-        mSeedType = aCursorObject->mImitaterType;
+    if (aSeedType == SeedType::SEED_IMITATER) {
+        aSeedType = aCursorObject->mImitaterType;
     }
 
     bool flagUpdateCanPlant = true;
     bool flagDrawGray = false;
     bool flagUpdateChangeType = false;
-    if (mPreviewingSeedType != mSeedType && mSeedType != SeedType::SEED_NONE) {
-        Reanimation *theNewPreviewingReanim = nullptr;
-        GamepadControls_InvalidatePreviewReanim(this);
+    if (mPreviewingSeedType != aSeedType && aSeedType != SeedType::SEED_NONE) {
+        Reanimation *aNewPreviewingReanim = nullptr;
+        InvalidatePreviewReanim();
         RenderLayer aRenderLayer = mIsZombie ? RENDER_LAYER_ZOMBIE : RENDER_LAYER_PLANT;
-        int aRenderOrder = Board::MakeRenderOrder(aRenderLayer, theGridY, 100);
-        float theDrawHeightOffset = PlantDrawHeightOffset(mBoard, 0, mSeedType, theGridX, theGridY);
+        int aRenderOrder = Board::MakeRenderOrder(aRenderLayer, aGridY, 100);
+        float theDrawHeightOffset = PlantDrawHeightOffset(mBoard, 0, aSeedType, aGridX, aGridY);
         if (mIsZombie) {
-            ZombieType theZombieType = Challenge::IZombieSeedTypeToZombieType(mSeedType);
-            switch (theZombieType) {
+            ZombieType aZombieType = Challenge::IZombieSeedTypeToZombieType(aSeedType);
+            switch (aZombieType) {
                 case ZombieType::ZOMBIE_INVALID:
-                    mPreviewingSeedType = mSeedType;
+                    mPreviewingSeedType = aSeedType;
                     return;
                 case ZombieType::ZOMBIE_GARGANTUAR:
                 case ZombieType::ZOMBIE_REDEYE_GARGANTUAR: // 在对战里可能用得到
@@ -331,33 +331,33 @@ void GamepadControls::UpdatePreviewReanim() {
                 default:
                     break;
             }
-            ZombieDefinition &theZombieDefinition = GetZombieDefinition(theZombieType);
+            ZombieDefinition &theZombieDefinition = GetZombieDefinition(aZombieType);
             Reanimation *zombieReanim = aApp->AddReanimation(-20.0, -35 - theDrawHeightOffset, aRenderOrder + 1, theZombieDefinition.mReanimationType);
-            Zombie::SetupReanimLayers(zombieReanim, theZombieType);
-            if (theZombieType == ZombieType::ZOMBIE_DOOR || theZombieType == ZombieType::ZOMBIE_TRASH_BIN || theZombieType == ZombieType::ZOMBIE_NEWSPAPER
-                || theZombieType == ZombieType::ZOMBIE_LADDER) {
-                Zombie::SetupShieldReanims(theZombieType, zombieReanim);
+            Zombie::SetupReanimLayers(zombieReanim, aZombieType);
+            if (aZombieType == ZombieType::ZOMBIE_DOOR || aZombieType == ZombieType::ZOMBIE_TRASH_BIN || aZombieType == ZombieType::ZOMBIE_NEWSPAPER
+                || aZombieType == ZombieType::ZOMBIE_LADDER) {
+                Zombie::SetupShieldReanims(aZombieType, zombieReanim);
             }
             zombieReanim->mIsAttachment = true;
-            if (theZombieType == ZombieType::ZOMBIE_POGO) {
+            if (aZombieType == ZombieType::ZOMBIE_POGO) {
                 zombieReanim->PlayReanim("anim_pogo", ReanimLoopType::REANIM_LOOP, 0, 12.0);
-            } else if (theZombieType == ZombieType::ZOMBIE_DANCER) {
+            } else if (aZombieType == ZombieType::ZOMBIE_DANCER) {
                 zombieReanim->PlayReanim("anim_armraise", ReanimLoopType::REANIM_LOOP, 0, 12.0);
-            } else if (theZombieType == ZombieType::ZOMBIE_ZAMBONI) {
+            } else if (aZombieType == ZombieType::ZOMBIE_ZAMBONI) {
                 zombieReanim->PlayReanim("anim_drive", ReanimLoopType::REANIM_LOOP, 0, 12.0);
-            } else if (theZombieType == ZombieType::ZOMBIE_IMP) {
+            } else if (aZombieType == ZombieType::ZOMBIE_IMP) {
                 zombieReanim->PlayReanim("anim_walk", ReanimLoopType::REANIM_LOOP, 0, 12.0);
             } else {
-                if (theZombieType == ZombieType::ZOMBIE_FLAG) {
+                if (aZombieType == ZombieType::ZOMBIE_FLAG) {
                     Reanimation *zombieReanimAttachment = aApp->AddReanimation(0, 0, 0, ReanimationType::REANIM_ZOMBIE_FLAGPOLE);
                     zombieReanimAttachment->PlayReanim("Zombie_flag", ReanimLoopType::REANIM_LOOP, 0, 15.0);
                     mPreviewReanimID3 = aApp->ReanimationGetID(zombieReanimAttachment);
                     ReanimatorTrackInstance *TrackInstanceByName = zombieReanim->GetTrackInstanceByName("Zombie_flaghand");
                     AttachReanim(TrackInstanceByName->mAttachmentID, zombieReanimAttachment, 0.0, 0.0);
                     zombieReanim->mFrameBasePose = 0;
-                } else if (theZombieType == ZombieType::ZOMBIE_REDEYE_GARGANTUAR) {
+                } else if (aZombieType == ZombieType::ZOMBIE_REDEYE_GARGANTUAR) {
                     zombieReanim->SetImageOverride("anim_head1", *Sexy_IMAGE_REANIM_ZOMBIE_GARGANTUAR_HEAD_REDEYE_Addr);
-                } else if (theZombieType == ZombieType::ZOMBIE_PEA_HEAD) {
+                } else if (aZombieType == ZombieType::ZOMBIE_PEA_HEAD) {
                     Reanimation_HideTrackByPrefix(zombieReanim, "anim_hair", true);
                     Reanimation_HideTrackByPrefix(zombieReanim, "anim_head2", true);
                     zombieReanim->SetFramesForLayer("anim_walk2");
@@ -368,7 +368,7 @@ void GamepadControls::UpdatePreviewReanim() {
                     AttachEffect *aAttachEffect = AttachReanim(aTrackInstance->mAttachmentID, aPeaHeadReanim, 0.0f, 0.0f);
                     zombieReanim->mFrameBasePose = 0;
                     TodScaleRotateTransformMatrix((SexyMatrix3 &)aAttachEffect->mOffset, 65.0f, -8.0f, 0.2f, -1.0f, 1.0f);
-                } else if (theZombieType == ZombieType::ZOMBIE_WALLNUT_HEAD) {
+                } else if (aZombieType == ZombieType::ZOMBIE_WALLNUT_HEAD) {
                     Reanimation_HideTrackByPrefix(zombieReanim, "anim_hair", true);
                     Reanimation_HideTrackByPrefix(zombieReanim, "anim_head", true);
                     Reanimation_HideTrackByPrefix(zombieReanim, "Zombie_tie", true);
@@ -379,7 +379,7 @@ void GamepadControls::UpdatePreviewReanim() {
                     AttachEffect *aAttachEffect = AttachReanim(aTrackInstance->mAttachmentID, aWallnutHeadReanim, 0.0f, 0.0f);
                     zombieReanim->mFrameBasePose = 0;
                     TodScaleRotateTransformMatrix((SexyMatrix3 &)aAttachEffect->mOffset, 50.0f, 0.0f, 0.2f, -0.8f, 0.8f);
-                } else if (theZombieType == ZombieType::ZOMBIE_TALLNUT_HEAD) {
+                } else if (aZombieType == ZombieType::ZOMBIE_TALLNUT_HEAD) {
                     Reanimation_HideTrackByPrefix(zombieReanim, "anim_hair", true);
                     Reanimation_HideTrackByPrefix(zombieReanim, "anim_head", true);
                     Reanimation_HideTrackByPrefix(zombieReanim, "Zombie_tie", true);
@@ -390,7 +390,7 @@ void GamepadControls::UpdatePreviewReanim() {
                     AttachEffect *aAttachEffect = AttachReanim(aTrackInstance->mAttachmentID, aTallnutHeadReanim, 0.0f, 0.0f);
                     zombieReanim->mFrameBasePose = 0;
                     TodScaleRotateTransformMatrix((SexyMatrix3 &)aAttachEffect->mOffset, 37.0f, 0.0f, 0.2f, -0.8f, 0.8f);
-                } else if (theZombieType == ZombieType::ZOMBIE_JALAPENO_HEAD) {
+                } else if (aZombieType == ZombieType::ZOMBIE_JALAPENO_HEAD) {
                     Reanimation_HideTrackByPrefix(zombieReanim, "anim_hair", true);
                     Reanimation_HideTrackByPrefix(zombieReanim, "anim_head", true);
                     Reanimation_HideTrackByPrefix(zombieReanim, "Zombie_tie", true);
@@ -401,7 +401,7 @@ void GamepadControls::UpdatePreviewReanim() {
                     AttachEffect *aAttachEffect = AttachReanim(aTrackInstance->mAttachmentID, aJalapenoHeadReanim, 0.0f, 0.0f);
                     zombieReanim->mFrameBasePose = 0;
                     TodScaleRotateTransformMatrix((SexyMatrix3 &)aAttachEffect->mOffset, 55.0f, -5.0f, 0.2f, -1.0f, 1.0f);
-                } else if (theZombieType == ZombieType::ZOMBIE_GATLING_HEAD) {
+                } else if (aZombieType == ZombieType::ZOMBIE_GATLING_HEAD) {
                     Reanimation_HideTrackByPrefix(zombieReanim, "anim_hair", true);
                     Reanimation_HideTrackByPrefix(zombieReanim, "anim_head2", true);
                     zombieReanim->SetFramesForLayer("anim_walk2");
@@ -412,7 +412,7 @@ void GamepadControls::UpdatePreviewReanim() {
                     AttachEffect *aAttachEffect = AttachReanim(aTrackInstance->mAttachmentID, aGatlingHeadReanim, 0.0f, 0.0f);
                     zombieReanim->mFrameBasePose = 0;
                     TodScaleRotateTransformMatrix((SexyMatrix3 &)aAttachEffect->mOffset, 65.0f, -5.0f, 0.2f, -1.0f, 1.0f);
-                } else if (theZombieType == ZombieType::ZOMBIE_SQUASH_HEAD) {
+                } else if (aZombieType == ZombieType::ZOMBIE_SQUASH_HEAD) {
                     Reanimation_HideTrackByPrefix(zombieReanim, "anim_hair", true);
                     Reanimation_HideTrackByPrefix(zombieReanim, "anim_head2", true);
                     zombieReanim->SetFramesForLayer("anim_walk2");
@@ -426,23 +426,23 @@ void GamepadControls::UpdatePreviewReanim() {
                 }
                 zombieReanim->PlayReanim("anim_idle", ReanimLoopType::REANIM_LOOP, 0, 12.0);
             }
-            theNewPreviewingReanim = zombieReanim;
+            aNewPreviewingReanim = zombieReanim;
         } else {
-            if (mSeedType >= SeedType::NUM_SEED_TYPES || mSeedType == SeedType::NUM_SEEDS_IN_CHOOSER)
+            if (aSeedType >= SeedType::NUM_SEED_TYPES || aSeedType == SeedType::NUM_SEEDS_IN_CHOOSER)
                 return;
-            Reanimation *plantReanim = aApp->AddReanimation(0.0, theDrawHeightOffset, aRenderOrder + 2, GetPlantDefinition(mSeedType).mReanimationType);
+            Reanimation *plantReanim = aApp->AddReanimation(0.0, theDrawHeightOffset, aRenderOrder + 2, GetPlantDefinition(aSeedType).mReanimationType);
             plantReanim->mIsAttachment = true;
             if (isImitater)
-                plantReanim->mFilterEffect = GetFilterEffectTypeBySeedType(mSeedType);
+                plantReanim->mFilterEffect = GetFilterEffectTypeBySeedType(aSeedType);
             plantReanim->PlayReanim("anim_idle", ReanimLoopType::REANIM_LOOP, 0, 12.0);
 
             // 为豌豆家族加入其stem动画
-            if (mSeedType == SeedType::SEED_PEASHOOTER || mSeedType == SeedType::SEED_SNOWPEA || mSeedType == SeedType::SEED_REPEATER || mSeedType == SeedType::SEED_GATLINGPEA
-                || mSeedType == SeedType::SEED_LEFTPEATER) {
-                Reanimation *plantReanimAttachment = aApp->AddReanimation(0.0, theDrawHeightOffset, aRenderOrder + 3, GetPlantDefinition(mSeedType).mReanimationType);
+            if (aSeedType == SeedType::SEED_PEASHOOTER || aSeedType == SeedType::SEED_SNOWPEA || aSeedType == SeedType::SEED_REPEATER || aSeedType == SeedType::SEED_GATLINGPEA
+                || aSeedType == SeedType::SEED_LEFTPEATER) {
+                Reanimation *plantReanimAttachment = aApp->AddReanimation(0.0, theDrawHeightOffset, aRenderOrder + 3, GetPlantDefinition(aSeedType).mReanimationType);
                 plantReanimAttachment->mLoopType = ReanimLoopType::REANIM_LOOP;
                 if (isImitater)
-                    plantReanimAttachment->mFilterEffect = GetFilterEffectTypeBySeedType(mSeedType);
+                    plantReanimAttachment->mFilterEffect = GetFilterEffectTypeBySeedType(aSeedType);
                 plantReanimAttachment->SetFramesForLayer("anim_head_idle");
                 const char *trackName = "anim_stem";
                 if (plantReanim->TrackExists(trackName) || (trackName = "anim_idle", plantReanim->TrackExists(trackName))) {
@@ -450,58 +450,58 @@ void GamepadControls::UpdatePreviewReanim() {
                 }
             }
             // 为反向射手的两个头、三发射手的三个头加入动画
-            if (mSeedType == SeedType::SEED_SPLITPEA) {
-                Reanimation *plantReanimAttachment1 = aApp->AddReanimation(0.0, 0.0, aRenderOrder + 3, GetPlantDefinition(mSeedType).mReanimationType);
+            if (aSeedType == SeedType::SEED_SPLITPEA) {
+                Reanimation *plantReanimAttachment1 = aApp->AddReanimation(0.0, 0.0, aRenderOrder + 3, GetPlantDefinition(aSeedType).mReanimationType);
                 plantReanimAttachment1->mAnimRate = plantReanim->mAnimRate;
                 plantReanimAttachment1->mLoopType = ReanimLoopType::REANIM_LOOP;
                 if (isImitater)
-                    plantReanimAttachment1->mFilterEffect = GetFilterEffectTypeBySeedType(mSeedType);
+                    plantReanimAttachment1->mFilterEffect = GetFilterEffectTypeBySeedType(aSeedType);
                 plantReanimAttachment1->SetFramesForLayer("anim_head_idle");
                 plantReanimAttachment1->AttachToAnotherReanimation(plantReanim, "anim_idle");
-                Reanimation *plantReanimAttachment2 = aApp->AddReanimation(0.0, 0.0, aRenderOrder + 3, GetPlantDefinition(mSeedType).mReanimationType);
+                Reanimation *plantReanimAttachment2 = aApp->AddReanimation(0.0, 0.0, aRenderOrder + 3, GetPlantDefinition(aSeedType).mReanimationType);
                 plantReanimAttachment2->mAnimRate = plantReanim->mAnimRate;
                 plantReanimAttachment2->mLoopType = ReanimLoopType::REANIM_LOOP;
                 if (isImitater)
-                    plantReanimAttachment2->mFilterEffect = GetFilterEffectTypeBySeedType(mSeedType);
+                    plantReanimAttachment2->mFilterEffect = GetFilterEffectTypeBySeedType(aSeedType);
                 plantReanimAttachment2->SetFramesForLayer("anim_splitpea_idle");
                 plantReanimAttachment2->AttachToAnotherReanimation(plantReanim, "anim_idle");
-            } else if (mSeedType == SeedType::SEED_THREEPEATER) {
+            } else if (aSeedType == SeedType::SEED_THREEPEATER) {
                 plantReanim->mAnimRate = RandRangeFloat(15.0, 20.0);
-                Reanimation *plantReanimAttachment1 = aApp->AddReanimation(0.0, 0.0, aRenderOrder + 3, GetPlantDefinition(mSeedType).mReanimationType);
+                Reanimation *plantReanimAttachment1 = aApp->AddReanimation(0.0, 0.0, aRenderOrder + 3, GetPlantDefinition(aSeedType).mReanimationType);
                 plantReanimAttachment1->mAnimRate = plantReanim->mAnimRate;
                 plantReanimAttachment1->mLoopType = ReanimLoopType::REANIM_LOOP;
                 if (isImitater)
-                    plantReanimAttachment1->mFilterEffect = GetFilterEffectTypeBySeedType(mSeedType);
+                    plantReanimAttachment1->mFilterEffect = GetFilterEffectTypeBySeedType(aSeedType);
                 plantReanimAttachment1->SetFramesForLayer("anim_head_idle1");
                 plantReanimAttachment1->AttachToAnotherReanimation(plantReanim, "anim_head1");
-                Reanimation *plantReanimAttachment2 = aApp->AddReanimation(0.0, 0.0, aRenderOrder + 3, GetPlantDefinition(mSeedType).mReanimationType);
+                Reanimation *plantReanimAttachment2 = aApp->AddReanimation(0.0, 0.0, aRenderOrder + 3, GetPlantDefinition(aSeedType).mReanimationType);
                 plantReanimAttachment2->mAnimRate = plantReanim->mAnimRate;
                 plantReanimAttachment2->mLoopType = ReanimLoopType::REANIM_LOOP;
                 if (isImitater)
-                    plantReanimAttachment2->mFilterEffect = GetFilterEffectTypeBySeedType(mSeedType);
+                    plantReanimAttachment2->mFilterEffect = GetFilterEffectTypeBySeedType(aSeedType);
                 plantReanimAttachment2->SetFramesForLayer("anim_head_idle2");
                 plantReanimAttachment2->AttachToAnotherReanimation(plantReanim, "anim_head2");
-                Reanimation *plantReanimAttachment3 = aApp->AddReanimation(0.0, 0.0, aRenderOrder + 3, GetPlantDefinition(mSeedType).mReanimationType);
+                Reanimation *plantReanimAttachment3 = aApp->AddReanimation(0.0, 0.0, aRenderOrder + 3, GetPlantDefinition(aSeedType).mReanimationType);
                 plantReanimAttachment3->mAnimRate = plantReanim->mAnimRate;
                 plantReanimAttachment3->mLoopType = ReanimLoopType::REANIM_LOOP;
                 if (isImitater)
-                    plantReanimAttachment3->mFilterEffect = GetFilterEffectTypeBySeedType(mSeedType);
+                    plantReanimAttachment3->mFilterEffect = GetFilterEffectTypeBySeedType(aSeedType);
                 plantReanimAttachment3->SetFramesForLayer("anim_head_idle3");
                 plantReanimAttachment3->AttachToAnotherReanimation(plantReanim, "anim_head3");
             }
-            theNewPreviewingReanim = plantReanim;
+            aNewPreviewingReanim = plantReanim;
         }
-        mPreviewingSeedType = mSeedType;
-        mPreviewReanimID4 = aApp->ReanimationGetID(theNewPreviewingReanim);
+        mPreviewingSeedType = aSeedType;
+        mPreviewReanimID4 = aApp->ReanimationGetID(aNewPreviewingReanim);
         flagUpdateChangeType = true;
     } else {
         // 如果目标预览植物类型没变化, 则为模仿者上色
         Reanimation *mPreviewReanim4 = aApp->ReanimationTryToGet(mPreviewReanimID4);
         if (mPreviewReanim4 != nullptr) {
-            FilterEffect aFilterEffect = isImitater ? GetFilterEffectTypeBySeedType(mSeedType) : FilterEffect::FILTEREFFECT_NONE;
+            FilterEffect aFilterEffect = isImitater ? GetFilterEffectTypeBySeedType(aSeedType) : FilterEffect::FILTEREFFECT_NONE;
             mPreviewReanim4->mFilterEffect = aFilterEffect;
-            if (mSeedType == SeedType::SEED_THREEPEATER || mSeedType == SeedType::SEED_SPLITPEA || mSeedType == SeedType::SEED_PEASHOOTER || mSeedType == SeedType::SEED_SNOWPEA
-                || mSeedType == SeedType::SEED_REPEATER || mSeedType == SeedType::SEED_GATLINGPEA || mSeedType == SeedType::SEED_LEFTPEATER) {
+            if (aSeedType == SeedType::SEED_THREEPEATER || aSeedType == SeedType::SEED_SPLITPEA || aSeedType == SeedType::SEED_PEASHOOTER || aSeedType == SeedType::SEED_SNOWPEA
+                || aSeedType == SeedType::SEED_REPEATER || aSeedType == SeedType::SEED_GATLINGPEA || aSeedType == SeedType::SEED_LEFTPEATER) {
                 int mTrackCount = mPreviewReanim4->mDefinition->mTrackCount;
                 for (int i = 0; i < mTrackCount; i++) {
                     ReanimatorTrackInstance *reanimatorTrackInstance = mPreviewReanim4->mTrackInstances + i;
@@ -538,18 +538,18 @@ void GamepadControls::UpdatePreviewReanim() {
         flagUpdateCanPlant = false;
         flagDrawGray = true;
     }
-    if (mBoard->CanPlantAt(theGridX, theGridY, mSeedType) != PlantingReason::PLANTING_OK) {
+    if (mBoard->CanPlantAt(aGridX, aGridY, aSeedType) != PlantingReason::PLANTING_OK) {
         flagUpdateCanPlant = false;
         flagDrawGray = true;
     }
     if (!mBoard->HasConveyorBeltSeedBank(mPlayerIndex2) && aCursorObject->mCursorType != CursorType::CURSOR_TYPE_PLANT_FROM_USABLE_COIN) {
         if (mIsZombie && aGameMode == GameMode::GAMEMODE_MP_VS) {
-            if (!mBoard->CanTakeDeathMoney(mBoard->GetCurrentPlantCost(mSeedType, SeedType::SEED_NONE))) {
+            if (!mBoard->CanTakeDeathMoney(mBoard->GetCurrentPlantCost(aSeedType, SeedType::SEED_NONE))) {
                 flagUpdateCanPlant = false;
                 flagDrawGray = true;
             }
         } else {
-            if (!mBoard->CanTakeSunMoney(mBoard->GetCurrentPlantCost(mSeedType, SeedType::SEED_NONE), mPlayerIndex2)) {
+            if (!mBoard->CanTakeSunMoney(mBoard->GetCurrentPlantCost(aSeedType, SeedType::SEED_NONE), mPlayerIndex2)) {
                 flagUpdateCanPlant = false;
                 flagDrawGray = true;
             }
@@ -649,12 +649,20 @@ void GamepadControls::OnButtonDown(ButtonCode theButton, int theIsZombieControl,
                     || aZombieType == ZombieType::ZOMBIE_BALLOON || aZombieType == ZombieType::ZOMBIE_REDEYE_GARGANTUAR
                     || aZombieType == ZombieType::ZOMBIE_BOBSLED) {
                     mBoard->AddZombieInRow(aZombieType, aGridY, -5, true);
-                } else if (aZombieType == ZOMBIE_IMP || aZombieType == ZombieType::ZOMBIE_YETI || aZombieType == ZombieType::ZOMBIE_PEA_HEAD || aZombieType == ZombieType::ZOMBIE_WALLNUT_HEAD
+                } else if (aZombieType == ZombieType::ZOMBIE_IMP || aZombieType == ZombieType::ZOMBIE_YETI || aZombieType == ZombieType::ZOMBIE_PEA_HEAD || aZombieType == ZombieType::ZOMBIE_WALLNUT_HEAD
                            || aZombieType == ZombieType::ZOMBIE_JALAPENO_HEAD || aZombieType == ZombieType::ZOMBIE_GATLING_HEAD || aZombieType == ZombieType::ZOMBIE_SQUASH_HEAD
                            || aZombieType == ZombieType::ZOMBIE_TALLNUT_HEAD) {
                     Zombie *aZombie = mBoard->AddZombie(aZombieType, -5, false);
                     if (aZombie)
                         aZombie->RiseFromGrave(aGridX, aGridY);
+                } else if (aZombieType == ZombieType::ZOMBIE_JACKSON) {
+                    mBoard->AddZombieInRow(aZombieType, aGridY, -5, true);
+                    aSeedPacket->SetPacketType(SeedType::SEED_ZOMBIE_BACKUP_DANCER2, SeedType::SEED_NONE);
+                    return;
+                } else if (aZombieType == ZombieType::ZOMBIE_BACKUP_DANCER2) {
+                    Zombie *aZombie = mBoard->GetLiveJackson();
+                    if (aZombie)
+                        aZombie->LaunchAbility();
                 }
                 aSeedPacket->Deactivate();
                 aSeedPacket->WasPlanted(mPlayerIndex2);

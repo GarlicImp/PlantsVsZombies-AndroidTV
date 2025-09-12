@@ -90,15 +90,3 @@ void HelpBarWidget_HelpBarWidget(Sexy::__Widget *theWidget) {
 void Sexy_ExtractLoadingSoundsResources(int *a, int *theManager) {
     old_Sexy_ExtractLoadingSoundsResources(a, theManager);
 }
-
-FoleyParams *LookupFoley(FoleyType theFoleyType) {
-    // 新增三个Foley，用于主界面白噪音
-    if (theFoleyType == FoleyType::FOLEY_MENU_LEFT) {
-        return &gMenuLeftFoley;
-    } else if (theFoleyType == FoleyType::FOLEY_MENU_CENTRE) {
-        return &gMenuCenterFoley;
-    } else if (theFoleyType == FoleyType::FOLEY_MENU_RIGHT) {
-        return &gMenuRightFoley;
-    } else
-        return old_LookupFoley(theFoleyType);
-}

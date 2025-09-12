@@ -79,8 +79,10 @@ void VSSetupMenu::__Constructor() {
     gVSMorePacketsButton->mCheckboxImagePress = aCheckboxPressed;
     aMorePacketsButton->Resize(MORE_PACKETS_BUTTON_X, MORE_PACKETS_BUTTON_Y, 175, 50);
     mApp->mBoard->AddWidget(aMorePacketsButton);
-
     gVSMorePacketsButton->mDrawString = true;
+
+    mApp->mDanceMode = false;
+    mApp->mBoard->mDanceMode = false;
 }
 
 void VSSetupMenu::__Destructor() {

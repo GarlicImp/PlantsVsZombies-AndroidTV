@@ -30,6 +30,8 @@ constexpr int NUM_BOBSLED_FOLLOWERS = 3;
 constexpr int NUM_BACKUP_DANCERS = 4;
 constexpr int NUM_BOSS_BUNGEES = 3;
 
+constexpr int MAX_DEAD_FOLLOWERS = 10;
+
 constexpr const int ZOMBIE_START_RANDOM_OFFSET = 40;
 constexpr const int BUNGEE_ZOMBIE_HEIGHT = 3000;
 constexpr const int RENDER_GROUP_SHIELD = 1;
@@ -54,7 +56,7 @@ constexpr const float THOWN_ZOMBIE_GRAVITY = 0.05f;
 constexpr const float CHILLED_SPEED_FACTOR = 0.4f;
 constexpr const float CLIP_HEIGHT_LIMIT = -100.0f;
 constexpr const float CLIP_HEIGHT_OFF = -200.0f;
-// const Color ZOMBIE_MINDCONTROLLED_COLOR = Color(128, 0, 192, 255);
+const Sexy::Color ZOMBIE_MINDCONTROLLED_COLOR = Sexy::Color(128, 0, 192, 255);
 
 enum ZombieAttackType {
     ATTACKTYPE_CHEW,
@@ -124,6 +126,7 @@ public:
     int mPhaseCounter;                                // 30
     int mFromWave;                                    // 31
     bool mDroppedLoot;                                // 128
+    bool mIsRevived;                                  // 新增成员，用于新增僵尸MJ
     int mZombieFade;                                  // 33
     bool mFlatTires;                                  // 136
     int mUseLadderCol;                                // 35
@@ -176,11 +179,11 @@ public:
     ReanimationID mSpecialHeadReanimID;               // 85
     int mFireballRow;                                 // 86
     bool mIsFireBall;                                 // 348
-    int mMoweredReanimID;                             // 88
+    ReanimationID mMoweredReanimID;                   // 88
     int mLastPortalX;                                 // 89
     bool mBloated;                                    // 360
     int unkMems[6];                                   // 91 ~ 96
-    int mZombieID;                                    // 97
+    ZombieID mZombieID;                               // 97
     // 大小98个整数
 
     void RemoveColdEffects() {
@@ -197,9 +200,6 @@ public:
     }
     void StartEating() {
         reinterpret_cast<void (*)(Zombie *)>(Zombie_StartEatingAddr)(this);
-    }
-    void DropArm(unsigned int theDamageFlags) {
-        reinterpret_cast<void (*)(Zombie *, unsigned int)>(Zombie_DropArmAddr)(this, theDamageFlags);
     }
     static void SetupReanimLayers(Reanimation *aReanim, ZombieType theZombieType) {
         reinterpret_cast<void (*)(Reanimation *, ZombieType)>(Zombie_SetupReanimLayersAddr)(aReanim, theZombieType);
@@ -249,6 +249,9 @@ public:
     void ReanimIgnoreClipRect(const char *theTrackName, bool theIgnoreClipRect) {
         reinterpret_cast<void (*)(Zombie *, const char *, bool)>(Zombie_ReanimIgnoreClipRectAddr)(this, theTrackName, theIgnoreClipRect);
     }
+    void SetAnimRate(float theAnimRate) {
+        reinterpret_cast<void (*)(Zombie *, float)>(Zombie_SetAnimRateAddr)(this, theAnimRate);
+    }
 
     Zombie() {
         __Constructor();
@@ -258,6 +261,8 @@ public:
     void DieNoLoot();
     void Update();
     void UpdateActions();
+    void UpdateZombieBackupDancer2();
+    void UpdateZombieJackson();
     void UpdateYeti();
     void UpdateZombieImp();
     void UpdateZombieGargantuar();
@@ -279,7 +284,11 @@ public:
     void DrawBungeeCord(Sexy::Graphics *graphics, int theOffsetX, int theOffsetY);
     bool IsTangleKelpTarget();
     void DrawReanim(Sexy::Graphics *graphics, ZombieDrawPosition *theZombieDrawPosition, int theBaseRenderGroup);
+    bool CanLoseBodyParts();
+    void SetupReanimForLostHead();
     void DropHead(unsigned int theDamageFlags);
+    void SetupReanimForLostArm(unsigned int theDamageFlags);
+    void DropArm(unsigned int theDamageFlags);
     Sexy::Rect GetZombieAttackRect();
     Plant *FindPlantTarget(ZombieAttackType theAttackType);
     Plant *FindPlantTargetInNextGrid(ZombieAttackType theAttackType);
@@ -321,6 +330,15 @@ public:
     void PickRandomSpeed();
     float ZombieTargetLeadX(float theTime);
     bool ZombieNotWalking();
+    ZombiePhase GetDancerPhase();
+    ZombieID SummonBackupDancer(int theRow, int thePosX);
+    void SummonBackupDancers();
+    void RaiseDeadZombie(ZombieType theZombieType, int theRow, int thePosX);
+    void RaiseDeadZombies();
+    bool NeedsMoreBackupDancers();
+    void DropSoul();
+    void LaunchAbility();
+    static bool IsUpgrade(SeedType theSeedType);
 
 protected:
     void __Constructor() {
@@ -339,8 +357,11 @@ public:
     const char *mZombieName;
 };
 extern ZombieDefinition gZombieDefs[NUM_ZOMBIE_TYPES];
+extern ZombieDefinition gNewZombieDefs[];
 
 ZombieDefinition &GetZombieDefinition(ZombieType theZombieType);
+
+inline std::vector<ZombieType>gDeadFollowers;
 /***************************************************************************************************************/
 
 inline bool zombieBloated;
@@ -376,6 +397,8 @@ inline void (*old_Zombie_DieNoLoot)(Zombie *);
 inline void (*old_Zombie_DrawReanim)(Zombie *zombie, Sexy::Graphics *graphics, ZombieDrawPosition *zombieDrawPosition, int theBaseRenderGroup);
 
 inline void (*old_Zombie_DropHead)(Zombie *zombie, unsigned int a2);
+
+inline void (*old_Zombie_DropArm)(Zombie *, unsigned int);
 
 inline Plant *(*old_Zombie_FindPlantTarget)(Zombie *, ZombieAttackType);
 

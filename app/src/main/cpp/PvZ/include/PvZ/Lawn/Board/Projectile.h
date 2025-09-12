@@ -36,6 +36,8 @@ public:
 };
 extern ProjectileDefinition gProjectileDefinition[NUM_PROJECTILES];
 
+extern ProjectileDefinition gNewProjectileDefinition[];
+
 class Projectile : public __GameObject {
 public:
     int mFrame;                     // 13
@@ -83,10 +85,11 @@ public:
         reinterpret_cast<void (*)(Projectile *, Zombie *, GridItem *)>(Projectile_DoSplashDamageAddr)(this, theZombie, theGridItem);
     }
 
-    int ProjectileInitialize(int theX, int theY, int theRenderOrder, int theRow, ProjectileType theProjectileType);
+    void ProjectileInitialize(int theX, int theY, int theRenderOrder, int theRow, ProjectileType theProjectileType);
     void ConvertToFireball(int theGridX);
     void ConvertToPea(int theGridX);
     void Update();
+    void UpdateNormalMotion();
     void DoImpact(Zombie *theZombie);
     void CheckForCollision();
     Zombie *FindCollisionMindControlledTarget();
@@ -100,6 +103,7 @@ public:
     bool PeaAboutToHitTorchwood();
     Zombie *FindCollisionTarget();
     void Draw(Sexy::Graphics *g);
+    void DrawShadow(Sexy::Graphics* g);
 };
 
 /***************************************************************************************************************/
@@ -120,7 +124,7 @@ inline bool ColdPeaCanPassFireWood;
 // inline GridItem *(*Projectile_FindCollisionTargetGridItem)(Projectile *a);
 
 
-inline int (*old_Projectile_ProjectileInitialize)(Projectile *projectile, int theX, int theY, int theRenderOrder, int theRow, ProjectileType theProjectileType);
+inline void (*old_Projectile_ProjectileInitialize)(Projectile *projectile, int theX, int theY, int theRenderOrder, int theRow, ProjectileType theProjectileType);
 
 inline void (*old_Projectile_ConvertToPea)(Projectile *projectile, int aGridX);
 
@@ -129,5 +133,9 @@ inline void (*old_Projectile_Update)(Projectile *a);
 inline void (*old_Projectile_DoImpact)(Projectile *a1, Zombie *a2);
 
 inline void (*old_Projectile_Draw)(Projectile *, Sexy::Graphics *);
+
+inline void (*old_Projectile_DrawShadow)(Projectile *, Sexy::Graphics *);
+
+inline void (*old_Projectile_UpdateNormalMotion)(Projectile *);
 
 #endif // PVZ_LAWN_BOARD_PROJECTILE_H

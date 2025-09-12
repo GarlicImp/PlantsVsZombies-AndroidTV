@@ -28,6 +28,8 @@ struct TodAllocator {
     int mGrowCount;
     int mTotalItems;
     int mItemSize;
+
+    void Free(void* theItem, int theItemSize);
 };
 extern int gNumGlobalAllocators;
 extern TodAllocator gGlobalAllocators[MAX_GLOBAL_ALLOCATORS];
@@ -47,6 +49,22 @@ public:
     TodListNode<T>* mTail;
     int mSize;
     TodAllocator* mpAllocator;
+
+    inline T RemoveHead()
+    {
+        TodListNode<T>* aHead = mHead;
+        TodListNode<T>* aSecNode = aHead->mNext;
+        mHead = aSecNode;
+        if (aSecNode)
+            aSecNode->mPrev = nullptr;
+        else
+            mTail = nullptr;
+
+        T aVal = aHead->mValue;
+        mSize--;
+        mpAllocator->Free(aHead, sizeof(TodListNode<T>));
+        return aVal;
+    }
 };
 
 #endif // PVZ_SEXYAPPFRAMEWORK_TODLIB_COMMON_TOD_LIST_H

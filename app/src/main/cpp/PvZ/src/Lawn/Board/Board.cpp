@@ -1698,6 +1698,17 @@ int Board::GetLiveZombiesCount() {
     return num;
 }
 
+Zombie *Board::GetLiveJackson() {
+    Zombie *aZombie = nullptr;
+    while (IterateZombies(aZombie)) {
+        if (!aZombie->mDead && aZombie->mHasHead && !aZombie->IsDeadOrDying() && aZombie->IsOnBoard() && aZombie->mZombieType == ZombieType::ZOMBIE_JACKSON) {
+            return aZombie;
+        }
+    }
+
+    return nullptr;
+}
+
 void Board::UpdateLevelEndSequence() {
     // 修复无尽最后一波僵尸出现后高级暂停无法暂停下一关的到来
     if (requestPause)
@@ -3575,7 +3586,7 @@ void Board::FixReanimErrorAfterLoad() {
                             break;
                     }
                     break;
-                case ShieldType::SHIELDTYPE_TRASH_BIN:
+                case ShieldType::SHIELDTYPE_TRASHCAN:
                     switch (shieldDamageIndex) {
                         case 0:
                             mBodyReanim->SetImageOverride("anim_screendoor", *Sexy_IMAGE_REANIM_ZOMBIE_TRASHCAN1_Addr);

@@ -444,6 +444,9 @@ public:
     bool HasLevelAwardDropped() {
         return reinterpret_cast<bool (*)(Board *)>(Board_HasLevelAwardDroppedAddr)(this);
     }
+    bool CanDropLoot() {
+        return reinterpret_cast<bool (*)(Board *)>(Board_CanDropLootAddr)(this);
+    }
     void SpawnZombiesFromGraves() {
         reinterpret_cast<void (*)(Board *)>(Board_SpawnZombiesFromGravesAddr)(this);
     }
@@ -476,6 +479,12 @@ public:
     }
     void ResetLawnMowers() {
         reinterpret_cast<void (*)(Board *)>(Board_ResetLawnMowersAddr)(this);
+    }
+    ZombieID ZombieGetID(Zombie *theZombie) {
+        return reinterpret_cast<ZombieID(*)(Board *, Zombie *)>(Board_ZombieGetIDAddr)(this, theZombie);
+    }
+    void SetDanceMode(bool theEnableDance) {
+        reinterpret_cast<void (*)(Board *, bool)>(Board_SetDanceModeAddr)(this, theEnableDance);
     }
 
     Board(LawnApp *theApp);
@@ -545,6 +554,7 @@ public:
     static int MakeRenderOrder(RenderLayer theRenderLayer, int theRow, int theLayerOffset);
     int GetLiveGargantuarCount();
     int GetLiveZombiesCount();
+    Zombie *GetLiveJackson();
     void FixReanimErrorAfterLoad();
     void DoPlantingAchievementCheck(SeedType theSeedType);
     bool GrantAchievement(AchievementId theAchievementId, bool theIsShow);

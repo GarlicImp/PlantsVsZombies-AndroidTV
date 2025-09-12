@@ -104,6 +104,8 @@ void Reanimation_SetImageDefinition(Reanimation *reanim, const char *trackName, 
 // "addonFiles/compiled/reanim/zombatar_zombie_head.reanim"
 static ReanimationParams gNewReanimationParamArray[] = {
     {ReanimationType::REANIM_ZOMBATAR_HEAD, "addonFiles/compiled/reanim/zombatar_zombie_head.reanim", 1},
+    {ReanimationType::REANIM_JACKSON, "addonFiles/compiled/reanim/Zombie_jackson.reanim", 0},
+    {ReanimationType::REANIM_BACKUP_DANCER2, "addonFiles/compiled/reanim/Zombie_backup2.reanim", 0},
 };
 
 void ReanimatorLoadDefinitions(ReanimationParams *theReanimationParamArray, int theReanimationParamArraySize) {

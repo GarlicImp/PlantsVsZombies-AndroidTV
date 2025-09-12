@@ -166,6 +166,7 @@ inline void *Board_ZombiePickerInitForWaveAddr;
 inline void *Board_PutZombieInWaveAddr;
 inline void *Board_PickZombieTypeAddr;
 inline void *Board_HasLevelAwardDroppedAddr;
+inline void *Board_CanDropLootAddr;
 inline void *Board_SpawnZombiesFromGravesAddr;
 inline void *Board_ClearAdviceAddr;
 inline void *Board_NextWaveComingAddr;
@@ -184,6 +185,10 @@ inline void *Board_CountZombiesOnScreenAddr;
 inline void *Board_GetPosYBasedOnRowAddr;
 inline void *Board_RemoveAllMowersAddr;
 inline void *Board_ResetLawnMowersAddr;
+inline void *Board_ZombieGetIDAddr;
+inline void *Board_SetDanceModeAddr;
+
+
 inline void *SyncBoardAddr;
 inline void *FixBoardAfterLoadAddr;
 inline void *SyncReanimationAddr;
@@ -405,6 +410,7 @@ inline void *Zombie_LoadPlainZombieReanimAddr;
 inline void *Zombie_AttachShieldAddr;
 inline void *Zombie_PickRandomSpeedAddr;
 inline void *Zombie_ReanimIgnoreClipRectAddr;
+inline void *Zombie_SetAnimRateAddr;
 
 
 inline void *SeedChooserScreen_UpdateAddr;
@@ -435,8 +441,10 @@ inline void *SeedChooserScreen_RemoveToolTipAddr;
 inline void *SeedChooserScreen_ClickedSeedInChooserAddr;
 inline void *SeedChooserScreen_CrazyDavePickSeedsAddr;
 inline void *SeedChooserScreen_FindSeedInBankAddr;
+inline void *SeedChooserScreen_DrawAddr;
 
 
+inline void *Coin_CoinInitializeAddr;
 inline void *Coin_UpadteAddr;
 inline void *Coin_DieAddr;
 inline void *Coin_IsLevelAwardAddr;
@@ -539,6 +547,7 @@ inline void *Plant_PlantInitializeAddr;
 inline void *Plant_CobCannonFireAddr;
 inline void *Plant_UpdateReanimColorAddr;
 inline void *Plant_DrawAddr;
+inline void *Plant_FindTargetZombieAddr;
 inline void *Plant_FindTargetGridItemAddr;
 inline void *Plant_GetImageAddr;
 inline void *Plant_GetPlantRectAddr;
@@ -562,6 +571,7 @@ inline void *Plant_PlayBodyReanimAddr;
 
 
 inline void *Projectile_UpdateAddr;
+inline void *Projectile_UpdateNormalMotionAddr;
 inline void *Projectile_ProjectileInitializeAddr;
 inline void *Projectile_ConvertToFireballAddr;
 inline void *Projectile_ConvertToPeaAddr;
@@ -581,6 +591,7 @@ inline void *Projectile_DoSplashDamageAddr;
 inline void *Projectile_GetDamageFlagsAddr;
 inline void *Projectile_PeaAboutToHitTorchwoodAddr;
 inline void *Projectile_DrawAddr;
+inline void *Projectile_DrawShadowAddr;
 
 
 inline void *SeedPacket_UpdateAddr;
@@ -712,6 +723,7 @@ inline void *Reanimation_GetTrackInstanceByNameAddr;
 inline void *Reanimation_ShowOnlyTrackAddr;
 inline void *Reanimation_SetImageOverrideAddr;
 inline void *Reanimation_GetTrackMatrixAddr;
+inline void *Reanimation_GetAttachmentOverlayMatrixAddr;
 
 
 inline void *Sexy_GamepadApp_CheckGamepadAddr;
@@ -918,6 +930,8 @@ inline void *HelpTextScreen_KeyDownAddr;
 inline void *HouseChooserDialog_GameButtonDownAddr;
 inline void *ReanimAtlas_GetEncodedReanimAtlasAddr;
 inline void *ReanimatorEnsureDefinitionLoadedAddr;
+
+
 inline void *ReanimatorCache_GetPlantImageSizeAddr;
 inline void *ReanimatorCache_MakeCachedPlantFrameAddr;
 inline void *ReanimatorCache_MakeBlankCanvasImageAddr;
@@ -926,6 +940,10 @@ inline void *ReanimatorCache_DrawCachedPlantAddr;
 inline void *ReanimatorCache_LoadCachedImagesAddr;
 inline void *ReanimatorCache_MakeCachedZombieFrameAddr;
 inline void *ReanimatorCache_UpdateReanimationForVariationAddr;
+inline void *ReanimatorCache_ReanimatorCacheInitializeAddr;
+inline void *ReanimatorCache_ReanimatorCacheDisposeAddr;
+
+
 inline void *HelpBarWidget_HelpBarWidgetAddr;
 inline void *Sexy_SexyAppBase_Is3DAcceleratedAddr;
 inline void *Sexy_SexyAppBase_Set3DAcceleratedAddr;
@@ -1108,10 +1126,13 @@ inline Sexy::Image **Sexy_IMAGE_REANIM_ZOMBIE_GARGANTUAR_OUTERARM_LOWER2_Addr;
 inline Sexy::Image **Sexy_IMAGE_REANIM_ZOMBIE_GARGANTUAR_FOOT2_Addr;
 inline Sexy::Image **Sexy_IMAGE_OPTIONS_CHECKBOX0_Addr;
 inline Sexy::Image **Sexy_IMAGE_OPTIONS_CHECKBOX1_Addr;
-// inline Sexy::Image **Sexy_IMAGE_BLANK_Addr;
+
 namespace Sexy {
 inline Image **IMAGE_BLANK;
+inline Image **IMAGE_SEEDCHOOSER_BACKGROUND2;
+inline Image **IMAGE_PUFFSHROOM_PUFF1;
 }
+
 inline Sexy::Image **Sexy_IMAGE_SEEDPACKETFLASH_Addr;
 inline Sexy::Image **Sexy_IMAGE_ALMANAC_GROUNDDAY_Addr;
 inline Sexy::Image **Sexy_IMAGE_ALMANAC_GROUNDNIGHTPOOL_Addr;
@@ -1378,6 +1399,7 @@ inline bool GetFunctionAddr() {
     Board_PutZombieInWaveAddr = dlsym(handle, "_ZN5Board15PutZombieInWaveE10ZombieTypeiP12ZombiePicker");
     Board_PickZombieTypeAddr = dlsym(handle, "_ZN5Board14PickZombieTypeEiiP12ZombiePicker");
     Board_HasLevelAwardDroppedAddr = dlsym(handle, "_ZN5Board20HasLevelAwardDroppedEv");
+    Board_CanDropLootAddr = dlsym(handle, "_ZN5Board11CanDropLootEv");
     Board_SpawnZombiesFromGravesAddr = dlsym(handle, "_ZN5Board22SpawnZombiesFromGravesEv");
     Board_ClearAdviceAddr = dlsym(handle, "_ZN5Board11ClearAdviceE10AdviceType");
     Board_NextWaveComingAddr = dlsym(handle, "_ZN5Board14NextWaveComingEv");
@@ -1397,6 +1419,9 @@ inline bool GetFunctionAddr() {
     Board_RemoveAllZombiesAddr = dlsym(handle, "_ZN5Board16RemoveAllZombiesEv");
     Board_RemoveAllMowersAddr = dlsym(handle, "_ZN5Board15RemoveAllMowersEv");
     Board_ResetLawnMowersAddr = dlsym(handle, "_ZN5Board15ResetLawnMowersEv");
+    Board_ZombieGetIDAddr = dlsym(handle, "_ZN5Board11ZombieGetIDEP6Zombie");
+    Board_SetDanceModeAddr = dlsym(handle, "_ZN5Board12SetDanceModeEb");
+
     SyncBoardAddr = dlsym(handle, "_Z9SyncBoardP15SaveGameContextP5Board");
     FixBoardAfterLoadAddr = dlsym(handle, "_Z17FixBoardAfterLoadP5Board");
     SyncReanimationAddr = dlsym(handle, "_Z15SyncReanimationP5BoardP11ReanimationP15SaveGameContext");
@@ -1619,6 +1644,7 @@ inline bool GetFunctionAddr() {
     Zombie_AttachShieldAddr = dlsym(handle, "_ZN6Zombie12AttachShieldEv");
     Zombie_PickRandomSpeedAddr = dlsym(handle, "_ZN6Zombie15PickRandomSpeedEv");
     Zombie_ReanimIgnoreClipRectAddr = dlsym(handle, "_ZN6Zombie20ReanimIgnoreClipRectEPKcb");
+    Zombie_SetAnimRateAddr = dlsym(handle, "_ZN6Zombie11SetAnimRateEf");
 
 
     SeedChooserScreen_UpdateAddr = dlsym(handle, "_ZN17SeedChooserScreen6UpdateEv");
@@ -1649,8 +1675,10 @@ inline bool GetFunctionAddr() {
     SeedChooserScreen_ClickedSeedInChooserAddr = dlsym(handle, "_ZN17SeedChooserScreen20ClickedSeedInChooserER10ChosenSeedi");
     SeedChooserScreen_CrazyDavePickSeedsAddr = dlsym(handle, "_ZN17SeedChooserScreen18CrazyDavePickSeedsEv");
     SeedChooserScreen_FindSeedInBankAddr = dlsym(handle, "_ZN17SeedChooserScreen14FindSeedInBankEii");
+    SeedChooserScreen_DrawAddr = dlsym(handle, "_ZN17SeedChooserScreen4DrawEPN4Sexy8GraphicsE");
 
 
+    Coin_CoinInitializeAddr = dlsym(handle, "_ZN4Coin14CoinInitializeEii8CoinType10CoinMotion");
     Coin_UpadteAddr = dlsym(handle, "_ZN4Coin6UpdateEv");
     Coin_DieAddr = dlsym(handle, "_ZN4Coin3DieEv");
     Coin_IsLevelAwardAddr = dlsym(handle, "_ZN4Coin12IsLevelAwardEv");
@@ -1753,6 +1781,7 @@ inline bool GetFunctionAddr() {
     Plant_DrawSeedTypeAddr = dlsym(handle, "_ZN5Plant12DrawSeedTypeEPN4Sexy8GraphicsE8SeedTypeS3_13DrawVariationff");
     Plant_UpdateReanimColorAddr = dlsym(handle, "_ZN5Plant17UpdateReanimColorEv");
     Plant_DrawAddr = dlsym(handle, "_ZN5Plant4DrawEPN4Sexy8GraphicsE");
+    Plant_FindTargetZombieAddr = dlsym(handle, "_ZN5Plant16FindTargetZombieEi11PlantWeapon");
     Plant_FindTargetGridItemAddr = dlsym(handle, "_ZN5Plant18FindTargetGridItemEi11PlantWeapon");
     Plant_GetImageAddr = dlsym(handle, "_ZN5Plant8GetImageE8SeedType");
     Plant_GetPlantRectAddr = dlsym(handle, "_ZN5Plant12GetPlantRectEv");
@@ -1776,6 +1805,7 @@ inline bool GetFunctionAddr() {
 
 
     Projectile_UpdateAddr = dlsym(handle, "_ZN10Projectile6UpdateEv");
+    Projectile_UpdateNormalMotionAddr  = dlsym(handle, "_ZN10Projectile18UpdateNormalMotionEv");
     Projectile_ProjectileInitializeAddr = dlsym(handle, "_ZN10Projectile20ProjectileInitializeEiiii14ProjectileType");
     Projectile_ConvertToFireballAddr = dlsym(handle, "_ZN10Projectile17ConvertToFireballEi");
     Projectile_ConvertToPeaAddr = dlsym(handle, "_ZN10Projectile12ConvertToPeaEi");
@@ -1795,6 +1825,7 @@ inline bool GetFunctionAddr() {
     Projectile_GetDamageFlagsAddr = dlsym(handle, "_ZN10Projectile14GetDamageFlagsEP6Zombie");
     Projectile_PeaAboutToHitTorchwoodAddr = dlsym(handle, "_ZN10Projectile22PeaAboutToHitTorchwoodEv");
     Projectile_DrawAddr = dlsym(handle, "_ZN10Projectile4DrawEPN4Sexy8GraphicsE");
+    Projectile_DrawShadowAddr = dlsym(handle, "_ZN10Projectile10DrawShadowEPN4Sexy8GraphicsE");
 
 
     SeedPacket_UpdateAddr = dlsym(handle, "_ZN10SeedPacket6UpdateEv");
@@ -1927,6 +1958,7 @@ inline bool GetFunctionAddr() {
     Reanimation_SetPositionAddr = dlsym(handle, "_ZN11Reanimation11SetPositionEff");
     Reanimation_SetImageOverrideAddr = dlsym(handle, "_ZN11Reanimation16SetImageOverrideEPKcPN4Sexy5ImageE");
     Reanimation_GetTrackMatrixAddr = dlsym(handle, "_ZN11Reanimation14GetTrackMatrixEiRN4Sexy15SexyTransform2DE");
+    Reanimation_GetAttachmentOverlayMatrixAddr = dlsym(handle, "_ZN11Reanimation26GetAttachmentOverlayMatrixEiRN4Sexy15SexyTransform2DE");
 
 
     ZenGarden_GetStinkyAddr = dlsym(handle, "_ZN9ZenGarden9GetStinkyEv");
@@ -2120,6 +2152,8 @@ inline bool GetFunctionAddr() {
     Sexy_SexyAppBase_SexyAppBaseAddr = dlsym(handle, "_ZN4Sexy11SexyAppBaseC2Ev");
     Sexy_SexyAppBase_Set3DAcceleratedAddr = dlsym(handle, "_ZN4Sexy11SexyAppBase15Set3DAccleratedEbb");
     Sexy_ResourceManager_GetSoundThrowAddr = dlsym(handle, "_ZN4Sexy15ResourceManager13GetSoundThrowERKSs");
+
+
     ReanimatorCache_GetPlantImageSizeAddr = dlsym(handle, "_ZN15ReanimatorCache17GetPlantImageSizeE8SeedTypeRiS1_S1_S1_");
     ReanimatorCache_MakeCachedPlantFrameAddr = dlsym(handle, "_ZN15ReanimatorCache20MakeCachedPlantFrameE8SeedType13DrawVariation");
     ReanimatorCache_MakeBlankCanvasImageAddr = dlsym(handle, "_ZN15ReanimatorCache20MakeBlankCanvasImageEii");
@@ -2128,6 +2162,10 @@ inline bool GetFunctionAddr() {
     ReanimatorCache_LoadCachedImagesAddr = dlsym(handle, "_ZN15ReanimatorCache16LoadCachedImagesEv");
     ReanimatorCache_MakeCachedZombieFrameAddr = dlsym(handle, "_ZN15ReanimatorCache21MakeCachedZombieFrameE10ZombieType");
     ReanimatorCache_UpdateReanimationForVariationAddr = dlsym(handle, "_ZN15ReanimatorCache29UpdateReanimationForVariationEP11Reanimation13DrawVariation");
+    ReanimatorCache_ReanimatorCacheInitializeAddr = dlsym(handle, "_ZN15ReanimatorCache25ReanimatorCacheInitializeEv");
+    ReanimatorCache_ReanimatorCacheDisposeAddr = dlsym(handle, "_ZN15ReanimatorCache22ReanimatorCacheDisposeEv");
+
+
     HelpBarWidget_HelpBarWidgetAddr = dlsym(handle, "_ZN13HelpBarWidgetC2Ev");
     ToolTipWidget_SetWarningTextAddr = dlsym(handle, "_ZN13ToolTipWidget14SetWarningTextERKSs");
     ToolTipWidget_SetTitleAddr = dlsym(handle, "_ZN13ToolTipWidget8SetTitleERKSs");
@@ -2310,6 +2348,8 @@ inline bool GetFunctionAddr() {
     Sexy_IMAGE_OPTIONS_CHECKBOX1_Addr = (Sexy::Image **)dlsym(handle, "_ZN4Sexy23IMAGE_OPTIONS_CHECKBOX1E");
     //    Sexy_IMAGE_BLANK_Addr = (Sexy::Image **)dlsym(handle, "_ZN4Sexy11IMAGE_BLANKE");
     Sexy::IMAGE_BLANK = reinterpret_cast<Sexy::Image **>(dlsym(handle, "_ZN4Sexy11IMAGE_BLANKE"));
+    Sexy::IMAGE_SEEDCHOOSER_BACKGROUND2 = reinterpret_cast<Sexy::Image **>(dlsym(handle, "_ZN4Sexy29IMAGE_SEEDCHOOSER_BACKGROUND2E"));
+    Sexy::IMAGE_PUFFSHROOM_PUFF1 = reinterpret_cast<Sexy::Image **>(dlsym(handle, "_ZN4Sexy22IMAGE_PUFFSHROOM_PUFF1E"));
     Sexy_IMAGE_SEEDPACKETFLASH_Addr = (Sexy::Image **)dlsym(handle, "_ZN4Sexy21IMAGE_SEEDPACKETFLASHE");
     Sexy_IMAGE_ALMANAC_GROUNDDAY_Addr = (Sexy::Image **)dlsym(handle, "_ZN4Sexy23IMAGE_ALMANAC_GROUNDDAYE");
     Sexy_IMAGE_ALMANAC_GROUNDNIGHTPOOL_Addr = (Sexy::Image **)dlsym(handle, "_ZN4Sexy29IMAGE_ALMANAC_GROUNDNIGHTPOOLE");

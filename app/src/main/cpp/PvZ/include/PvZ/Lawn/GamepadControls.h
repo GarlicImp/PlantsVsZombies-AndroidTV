@@ -100,6 +100,7 @@ public:
 
 //    GamepadControls(Board *theBoard, int thePlayerIndex1, int thePlayerIndex2);
     void ButtonDownFireCobcannonTest();
+    void InvalidatePreviewReanim();
     void Draw(Sexy::Graphics *g);
     void Update(float a2);
     void DrawPreview(Sexy::Graphics *g);

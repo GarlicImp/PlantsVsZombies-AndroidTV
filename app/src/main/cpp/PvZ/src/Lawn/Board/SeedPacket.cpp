@@ -43,7 +43,8 @@ void SeedPacket::Update() {
 
         if (mApp->IsIZombieLevel()) {
             // 在IZ模式不暂停刷新种子卡片
-            return old_SeedPacket_Update(this);
+            old_SeedPacket_Update(this);
+            return;
         }
 
         if (mApp->mGameScene == GameScenes::SCENE_PLAYING && mPacketType != SeedType::SEED_NONE) {
@@ -54,7 +55,17 @@ void SeedPacket::Update() {
         }
     }
 
-    return old_SeedPacket_Update(this);
+    for (int i = 0; i < SEEDBANK_MAX; ++i) {
+        SeedPacket *aSeedPacket = &mSeedBank->mSeedPackets[i];
+        SeedType aPacketType = aSeedPacket->mPacketType;
+        if (aPacketType == SeedType::SEED_ZOMBIE_BACKUP_DANCER2) {
+            if (!mBoard->GetLiveJackson()) {
+                aSeedPacket->SetPacketType(SeedType::SEED_ZOMBIE_JACKSON, SeedType::SEED_NONE);
+            }
+        }
+    }
+
+    old_SeedPacket_Update(this);
 }
 
 void SeedPacket::UpdateSelected() {
@@ -69,7 +80,8 @@ void SeedPacket::UpdateSelected() {
         mSelectedBy2P = selectedBy2P;
         return;
     }
-    return old_SeedPacket_UpdateSelected(this);
+
+    old_SeedPacket_UpdateSelected(this);
 }
 
 void SeedPacket::DrawOverlay(Sexy::Graphics *g) {
@@ -140,10 +152,21 @@ void SeedPacket::FlashIfReady() {
 void SeedPacket::SetPacketType(SeedType theSeedType, SeedType theImitaterType) {
     old_SeedPacket_SetPacketType(this, theSeedType, theImitaterType);
 
+    int aRefreshTime = Plant::GetRefreshTime(theSeedType, theImitaterType);
     // 此处修改对战开局的初始冷却
     if (mApp->mGameMode == GameMode::GAMEMODE_MP_VS) {
         switch (theSeedType) {
             case SEED_SUNSHROOM: // 清除阳光菇的初始冷却
+                mRefreshTime = 0;
+                mRefreshing = false;
+                mActive = true;
+                break;
+            case SEED_ZOMBIE_JACKSON:
+                mRefreshTime = aRefreshTime;
+                mRefreshing = true;
+                mActive = false;
+                break;
+            case SEED_ZOMBIE_BACKUP_DANCER2:
                 mRefreshTime = 0;
                 mRefreshing = false;
                 mActive = true;
@@ -180,7 +203,7 @@ void DrawSeedPacket(Sexy::Graphics *g,
     int celToDraw;
     if (theSeedType == SeedType::SEED_IMITATER) {
         celToDraw = 0;
-    } else if (Plant::IsUpgrade(realSeedType)) {
+    } else if (Plant::IsUpgrade(realSeedType) || Zombie::IsUpgrade(theSeedType)) {
         celToDraw = 1;
     } else if (theSeedType == SeedType::SEED_BEGHOULED_BUTTON_CRATER) {
         celToDraw = 3;
@@ -199,7 +222,7 @@ void DrawSeedPacket(Sexy::Graphics *g,
     }
 
     if (isSeedPacketSelected) {
-        if (g->mScaleX > 1.0f && theSeedType <= SeedType::SEED_LEFTPEATER) {
+        if (g->mScaleX > 1.0f && theSeedType < SeedType::NUM_SEEDS_IN_CHOOSER) {
             // 紫卡背景BUG就是在这里修复的
             if (celToDraw == 2) {
                 TodDrawImageCelScaledF(g, *Sexy_IMAGE_SEEDPACKET_LARGER_Addr, x, y, 0, 0, g->mScaleX * 0.5f, g->mScaleY * 0.5f);
@@ -208,7 +231,11 @@ void DrawSeedPacket(Sexy::Graphics *g,
             }
         } else if (isZombieSeed) {
             float heightOffset = g->mScaleX > 1.2 ? -1.5f : 0.0f;
-            TodDrawImageScaledF(g, *Sexy_IMAGE_ZOMBIE_SEEDPACKET_Addr, x, y + heightOffset, g->mScaleX, g->mScaleY);
+            if (Zombie::IsUpgrade(theSeedType)) {
+                TodDrawImageCelScaledF(g, *Sexy_IMAGE_SEEDS_Addr, x, y + heightOffset, celToDraw, 0, g->mScaleX, g->mScaleY);
+            } else {
+                TodDrawImageScaledF(g, *Sexy_IMAGE_ZOMBIE_SEEDPACKET_Addr, x, y + heightOffset, g->mScaleX, g->mScaleY);
+            }
         } else {
             TodDrawImageCelScaledF(g, *Sexy_IMAGE_SEEDS_Addr, x, y, celToDraw, 0, g->mScaleX, g->mScaleY);
         }
@@ -330,6 +357,8 @@ void DrawSeedPacket(Sexy::Graphics *g,
         case SeedType::SEED_ZOMBIE_TRAFFIC_CONE:
         case SeedType::SEED_ZOMBIE_PAIL:
         case SeedType::SEED_ZOMBIE_DANCER:
+        case SeedType::SEED_ZOMBIE_JACKSON:
+        case SeedType::SEED_ZOMBIE_BACKUP_DANCER2:
             offsetY = -7.0;
             offsetX = -3.0;
             theDrawScale = 0.35;

@@ -258,6 +258,9 @@ public:
     void GetTrackMatrix(int theTrackIndex, Sexy::SexyTransform2D &theMatrix) {
         reinterpret_cast<void (*)(Reanimation *, int, Sexy::SexyTransform2D &)>(Reanimation_GetTrackMatrixAddr)(this, theTrackIndex, theMatrix);
     }
+    void GetAttachmentOverlayMatrix(int theTrackIndex, Sexy::SexyTransform2D &theOverlayMatrix) {
+        reinterpret_cast<void (*)(Reanimation *, int, Sexy::SexyTransform2D &)>(Reanimation_GetAttachmentOverlayMatrixAddr)(this, theTrackIndex, theOverlayMatrix);
+    }
 
     void Draw(Sexy::Graphics *g);
     bool DrawTrack(Sexy::Graphics *g, int theTrackIndex, int theRenderGroup, TodTriangleGroup *theTriangleGroup);

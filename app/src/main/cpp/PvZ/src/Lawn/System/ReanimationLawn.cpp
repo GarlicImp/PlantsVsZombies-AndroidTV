@@ -57,6 +57,36 @@ void ReanimatorCache::GetPlantImageSize(SeedType theSeedType, int &theOffsetX, i
     }
 }
 
+void ReanimatorCache::ReanimatorCacheInitialize() {
+    mApp = (LawnApp *)*Sexy_gSexyAppBase_Addr;
+    for (int i = 0; i < SeedType::NUM_SEED_TYPES; i++)
+        mPlantImages[i] = nullptr;
+    for (int i = 0; i < LawnMowerType::NUM_MOWER_TYPES; i++)
+        mLawnMowers[i] = nullptr;
+    for (int i = 0; i < ZombieType::NUM_ZOMBIE_TYPES; i++)
+        mZombieImages[i] = nullptr;
+
+    for (int i = 0; i < ZombieType::NUM_NEW_ZOMBIE_TYPES - NUM_CACHED_ZOMBIE_TYPES; i++)
+        gNewZombieImages[i] = nullptr;
+}
+
+void ReanimatorCache::ReanimatorCacheDispose() {
+    for (int i = 0; i < SeedType::NUM_SEED_TYPES; i++)
+        delete mPlantImages[i];
+    while (mImageVariationList.mSize != 0) {
+        ReanimCacheImageVariation aImageVariation = mImageVariationList.RemoveHead();
+        if (aImageVariation.mImage != nullptr)
+            delete aImageVariation.mImage;
+    }
+    for (int i = 0; i < LawnMowerType::NUM_MOWER_TYPES; i++)
+        delete mLawnMowers[i];
+    for (int i = 0; i < ZombieType::NUM_ZOMBIE_TYPES; i++)
+        delete mZombieImages[i];
+
+    for (int i = 0; i < ZombieType::NUM_NEW_ZOMBIE_TYPES - NUM_CACHED_ZOMBIE_TYPES; i++)
+        delete gNewZombieImages[i];
+}
+
 void ReanimatorCache::DrawCachedPlant(Graphics *graphics, float thePosX, float thePosY, SeedType theSeedType, DrawVariation theDrawVariation) {
     if (theDrawVariation == DrawVariation::VARIATION_IMITATER_LESS || theDrawVariation == DrawVariation::VARIATION_IMITATER || theDrawVariation == DrawVariation::VARIATION_NORMAL) {
         Image *image = (Image *)mPlantImages[theSeedType];
@@ -87,13 +117,73 @@ void ReanimatorCache::DrawCachedPlant(Graphics *graphics, float thePosX, float t
 }
 
 void ReanimatorCache::DrawCachedZombie(Graphics *g, float thePosX, float thePosY, ZombieType theZombieType) {
-    if (mZombieImages[(int)theZombieType] == nullptr)
-        mZombieImages[(int)theZombieType] = MakeCachedZombieFrame(theZombieType);
-    TodDrawImageScaledF(g, (Image *)mZombieImages[(int)theZombieType], thePosX, thePosY, g->mScaleX, g->mScaleY);
+    if (theZombieType < NUM_CACHED_ZOMBIE_TYPES) {
+        if (mZombieImages[(int)theZombieType] == nullptr)
+            mZombieImages[(int)theZombieType] = MakeCachedZombieFrame(theZombieType);
+        TodDrawImageScaledF(g, (Image *)mZombieImages[(int)theZombieType], thePosX, thePosY, g->mScaleX, g->mScaleY);
+    } else {
+        if (gNewZombieImages[(int)theZombieType - NUM_CACHED_ZOMBIE_TYPES - 1] == nullptr)
+            gNewZombieImages[(int)theZombieType - NUM_CACHED_ZOMBIE_TYPES - 1] = MakeCachedZombieFrame(theZombieType);
+        TodDrawImageScaledF(g, (Image *)gNewZombieImages[(int)theZombieType - NUM_CACHED_ZOMBIE_TYPES - 1], thePosX, thePosY, g->mScaleX, g->mScaleY);
+    }
+}
+
+MemoryImage*ReanimatorCache::MakeBlankMemoryImage(int theWidth, int theHeight) {
+    MemoryImage *aImage = new MemoryImage();
+
+    int aBitsCount = theWidth * theHeight;
+    aImage->mBits = new unsigned long[aBitsCount + 1];
+    aImage->mWidth = theWidth;
+    aImage->mHeight = theHeight;
+    aImage->mHasTrans = true;
+    aImage->mHasAlpha = true;
+    memset(aImage->mBits, 0, aBitsCount * 4);
+    aImage->mBits[aBitsCount] = Sexy::MEMORYCHECK_ID;
+    return aImage;
 }
 
 // 为红眼巨人增加SeedPacket图标
 Sexy::MemoryImage *ReanimatorCache::MakeCachedZombieFrame(ZombieType theZombieType) {
+    if (theZombieType > ZombieType::NUM_CACHED_ZOMBIE_TYPES) {
+    int maxWidth = 200;
+    int maxHeight = 210;
+
+//    MemoryImage *aMemoryImage = MakeBlankMemoryImage(maxWidth, maxHeight);
+    MemoryImage *aMemoryImage = MakeBlankCanvasImage(maxWidth, maxHeight);
+    Graphics aMemoryGraphics((Image *)aMemoryImage);
+    aMemoryGraphics.SetLinearBlend(true);
+
+    ZombieType aUseZombieType = theZombieType;
+    ZombieDefinition &aZombieDef = GetZombieDefinition(aUseZombieType);
+
+    float aPosX = 40.0f, aPosY = 40.0f;
+    if (theZombieType == ZombieType::ZOMBIE_JACKSON) {
+        Reanimation aReanim;
+//        aReanim.OverrideScale(0.79872f, 0.79872f);
+//        aPosX += 8;
+//        aPosY += 32;
+
+        aReanim.ReanimationInitializeType(aPosX, aPosY, aZombieDef.mReanimationType);
+        aReanim.PlayReanim("anim_moonwalk", ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD, 0, 24.0f);
+        aReanim.Update();
+        aReanim.Draw(&aMemoryGraphics);
+        gNewZombieImages[theZombieType - NUM_CACHED_ZOMBIE_TYPES - 1] = aMemoryImage;
+    } else if (theZombieType == ZombieType::ZOMBIE_BACKUP_DANCER2) {
+        Reanimation aReanim;
+//        aReanim.OverrideScale(0.79872f, 0.79872f);
+//        aPosX += 8;
+//        aPosY += 32;
+
+        aReanim.ReanimationInitializeType(aPosX, aPosY, aZombieDef.mReanimationType);
+        aReanim.PlayReanim("anim_armraise", ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD, 0, 24.0f);
+        aReanim.mAnimTime = 0.5f;
+        aReanim.Update();
+        aReanim.Draw(&aMemoryGraphics);
+        gNewZombieImages[theZombieType - NUM_CACHED_ZOMBIE_TYPES - 1] = aMemoryImage;
+    }
+    return aMemoryImage;
+}
+
     switch (theZombieType) {
         case ZOMBIE_REDEYE_GARGANTUAR: {
             mZombieImages[theZombieType]->~MemoryImage();

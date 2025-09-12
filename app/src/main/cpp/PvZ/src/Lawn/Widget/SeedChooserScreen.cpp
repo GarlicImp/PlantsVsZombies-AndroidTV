@@ -394,10 +394,14 @@ void SeedChooserScreen::GetSeedPositionInChooser(int theIndex, int &x, int &y) {
 }
 
 int SeedChooserScreen::NumColumns() {
-    if (mIsZombieChooser)
-        return 5;
-    else
+    if (mIsZombieChooser) {
+        if (moreZombieSeeds)
+            return 6;
+        else
+            return 5;
+    } else {
         return 8;
+    }
 }
 
 void SeedChooserScreen::ShowToolTip(unsigned int thePlayerIndex) {
@@ -413,10 +417,10 @@ void SeedChooserScreen::ShowToolTip(unsigned int thePlayerIndex) {
         if (aSeedType >= SeedType::SEED_ZOMBIE_YETI && aSeedType < SeedType::NUM_ZOMBIE_SEED_IN_CHOOSER) {
             pvzstl::string aTitle, aLabel;
             switch (aSeedType) {
-                case SeedType::SEED_ZOMBIE_YETI: // 红眼巨人僵尸
-                    aTitle = TodStringTranslate("[REDEYE_GARGANTUAR_ZOMBIE]");
-                    aLabel = TodStringTranslate("[REDEYE_GARGANTUAR_ZOMBIE_DESCRIPTION_HEADER]");
-                    break;
+//                case SeedType::SEED_ZOMBIE_REDEYE_GARGANTUAR: // 红眼巨人僵尸
+//                    aTitle = TodStringTranslate("[REDEYE_GARGANTUAR_ZOMBIE]");
+//                    aLabel = TodStringTranslate("[REDEYE_GARGANTUAR_ZOMBIE_DESCRIPTION_HEADER]");
+//                    break;
                 case SeedType::SEED_ZOMBIE_PEA_HEAD: // 豌豆射手僵尸
                     aTitle = TodStringTranslate("[PEA_HEAD_ZOMBIE]");
                     aLabel = TodStringTranslate("[PEA_HEAD_ZOMBIE_DESCRIPTION_HEADER]");
@@ -440,6 +444,10 @@ void SeedChooserScreen::ShowToolTip(unsigned int thePlayerIndex) {
                 case SeedType::SEED_ZOMBIE_TALLNUT_HEAD: // 高坚果僵尸
                     aTitle = TodStringTranslate("[TALLNUT_HEAD_ZOMBIE]");
                     aLabel = TodStringTranslate("[TALLNUT_HEAD_ZOMBIE_DESCRIPTION_HEADER]");
+                    break;
+                case SeedType::SEED_ZOMBIE_JACKSON:
+                    aTitle = TodStringTranslate("[JACKSON_ZOMBIE]");
+                    aLabel = TodStringTranslate("[JACKSON_ZOMBIE_DESCRIPTION_HEADER]");
                     break;
                 default:
                     return;
@@ -647,9 +655,8 @@ int SeedChooserScreen::GetNextSeedInDir(int theNumSeed, int thePlayerIndex) {
         aNumRow = theNumSeed / numCol1;
         aNumCol = theNumSeed % numCol2;
     }
-    // 拓展僵尸选卡适配键盘选取
     if (mApp->mGameMode == GameMode::GAMEMODE_MP_VS) {
-        aNumRow2 = 5;
+        aNumRow2 = 4;
     } else if (Has7Rows()) {
         aNumRow2 = 5;
     } else {
@@ -666,7 +673,7 @@ int SeedChooserScreen::GetNextSeedInDir(int theNumSeed, int thePlayerIndex) {
             numZombieSeed = thePlayerIndex == 3;
         if (numZombieSeed)
             return 19;
-        aNumRow2 = 5;
+        aNumRow2 = 5; // 拓展僵尸选卡适配键盘选取
     }
     switch (thePlayerIndex) {
         case 0:
@@ -695,4 +702,16 @@ int SeedChooserScreen::GetNextSeedInDir(int theNumSeed, int thePlayerIndex) {
             break;
     }
     return result;
+}
+
+void SeedChooserScreen::Draw(Graphics *g) {
+    Image *aBackgroundImage = *IMAGE_SEEDCHOOSER_BACKGROUND2;
+    if (moreZombieSeeds) {
+        aBackgroundImage = addonImages.IMAGE_SEEDCHOOSER_LARGE_BACKGROUND2;
+        if (mIsZombieChooser) {
+            g->DrawImage(aBackgroundImage, 0, 87);
+        }
+    }
+
+    old_SeedChooserScreen_Draw(this, g);
 }

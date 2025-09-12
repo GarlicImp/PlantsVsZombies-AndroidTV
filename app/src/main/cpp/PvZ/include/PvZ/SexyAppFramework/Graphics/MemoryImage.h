@@ -24,6 +24,8 @@
 
 namespace Sexy {
 
+const ulong MEMORYCHECK_ID = 0x4BEEFADE;
+
 class SexyMatrix3;
 
 class MemoryImage : public __Image {
@@ -34,8 +36,8 @@ public:
     int mBitsChangedCount; // 31
     int unk1[4];           // 32 ~ 35
     bool mUnkModeRelated;  // 144
-    bool mUnkMode1;        // 145
-    bool mUnkMode2;        // 146
+    bool mHasTrans;        // 145
+    bool mHasAlpha;        // 146
     bool mUnkBool;         // 147
     bool mIsVolatile;      // 148
     int unk2[20];          // 38 ~ 57

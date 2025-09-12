@@ -60,13 +60,19 @@ public:
             this, g, thePosX, thePosY, theReanimationType, theTrackName, theDrawVariation);
     }
 
+    void ReanimatorCacheInitialize();
+    void ReanimatorCacheDispose();
     void GetPlantImageSize(SeedType theSeedType, int &theOffsetX, int &theOffsetY, int &theWidth, int &theHeight);
     void UpdateReanimationForVariation(Reanimation *theReanim, DrawVariation theDrawVariation);
     void LoadCachedImages();
     Sexy::MemoryImage *MakeCachedZombieFrame(ZombieType theZombieType);
     void DrawCachedPlant(Sexy::Graphics *g, float thePosX, float thePosY, SeedType theSeedType, DrawVariation theDrawVariation);
     void DrawCachedZombie(Sexy::Graphics *g, float thePosX, float thePosY, ZombieType theZombieType);
+    Sexy::MemoryImage* MakeBlankMemoryImage(int theWidth, int theHeight);
 };
+
+inline Sexy::MemoryImage *gNewZombieImages[NUM_NEW_ZOMBIE_TYPES - NUM_CACHED_ZOMBIE_TYPES];
+
 
 inline void (*old_ReanimatorCache_LoadCachedImages)(ReanimatorCache *a1);
 

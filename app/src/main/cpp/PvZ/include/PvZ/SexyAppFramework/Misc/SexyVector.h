@@ -82,6 +82,12 @@ public:
     float MagnitudeSquared() const {
         return x * x + y * y;
     }
+
+    SexyVector2 Normalize() const
+    {
+        float aMag = Magnitude();
+        return aMag!=0 ? (*this)/aMag : *this;
+    }
 };
 
 } // namespace Sexy

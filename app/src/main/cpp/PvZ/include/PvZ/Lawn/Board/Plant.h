@@ -148,6 +148,7 @@ public:
     MagnetItemType mItemType; //+0x10
 };
 
+class Zombie;
 class GridItem;
 
 class Plant : public __GameObject {
@@ -222,6 +223,9 @@ public:
     }
     void DrawMagnetItems(Sexy::Graphics *g) {
         reinterpret_cast<void (*)(Plant *, Sexy::Graphics *)>(Plant_DrawMagnetItemsAddr)(this, g);
+    }
+    Zombie *FindTargetZombie(int theRow, PlantWeapon thePlantWeapon) {
+        return reinterpret_cast<Zombie *(*)(Plant *, int, PlantWeapon)>(Plant_FindTargetZombieAddr)(this, theRow, thePlantWeapon);
     }
 
     void PlantInitialize(int theGridX, int theGridY, SeedType theSeedType, SeedType theImitaterType, int a6);

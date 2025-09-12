@@ -30,6 +30,10 @@
 
 #include <cmath>
 
+void Coin::CoinInitialize(int theX, int theY, CoinType theCoinType, CoinMotion theCoinMotion) {
+    old_Coin_CoinInitialize(this, theX, theY, theCoinType, theCoinMotion);
+}
+
 void Coin::GamepadCursorOver(int thePlayerIndex) {
     //*((uint32_t *)a + 29) == 16 则意味着是砸罐子种子雨老虎机中的植物卡片
 

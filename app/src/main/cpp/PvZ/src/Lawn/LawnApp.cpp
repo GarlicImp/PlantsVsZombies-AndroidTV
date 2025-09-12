@@ -100,6 +100,14 @@ void LawnApp::LoadAddonImages() {
     addonImages.crater_night_roof_left->mNumRows = 1;
     addonImages.crater_night_roof_left->mNumCols = 2;
 
+    addonImages.IMAGE_SEEDCHOOSER_LARGE_BACKGROUND2 = GetImageByFileName("addonFiles/images/SeedChooser_Large_Background2");
+    addonImages.IMAGE_ZOMBIEJACKSONHEAD = GetImageByFileName("addonFiles/particles/ZombieJacksonHead");
+    addonImages.IMAGE_ZOMBIEBACKUPDANCERHEAD2 = GetImageByFileName("addonFiles/particles/ZombieBackupDancerHead2");
+    addonImages.IMAGE_REANIM_ZOMBIE_JACKSON_OUTERARM_UPPER2 = GetImageByFileName("addonFiles/reanim/NewZombies/Zombie_jackson_outerarm_upper_bone");
+    addonImages.IMAGE_REANIM_ZOMBIE_BACKUP_OUTERARM_UPPER2 = GetImageByFileName("addonFiles/reanim/NewZombies/Zombie_backup_outerarm_upper_bone2");
+    addonImages.IMAGE_REANIM_ZOMBIE_JACKSON_OUTERARM_HAND = GetImageByFileName("addonFiles/reanim/NewZombies/Zombie_jackson_outerhand");
+    addonImages.IMAGE_REANIM_ZOMBIE_DANCER_INNERARM_HAND = GetImageByFileName("addonFiles/reanim/NewZombies/Zombie_backup_innerhand2");
+
     int addonImagesNum = (sizeof(AddonImages) / sizeof(Sexy::Image *));
     mCompletedLoadingThreadTasks += 9 * addonImagesNum;
 
@@ -113,6 +121,7 @@ void LawnApp::LoadAddonImages() {
 // 此处写明具体每个音频对应哪个文件.
 void LawnApp::LoadAddonSounds() {
     addonSounds.achievement = GetSoundByFileName("addonFiles/sounds/achievement");
+    addonSounds.thriller = GetSoundByFileName("addonFiles/sounds/thriller");
 
     int addonSoundsNum = (sizeof(addonSounds) / sizeof(int));
     mCompletedLoadingThreadTasks += 54 * addonSoundsNum;
