@@ -673,7 +673,7 @@ protected:
         }
         // NB: Not required, but considered best practice.
         if (s == nullptr) {
-            throw std::logic_error{"basic_string::__init null not valid"};
+            throw std::logic_error{"basic_string::__construct null not valid"};
         }
         __rep *r = __rep::__create(n, 0);
         traits_type::copy(r->__data, s, n);
