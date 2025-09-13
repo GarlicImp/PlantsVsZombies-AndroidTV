@@ -100,15 +100,11 @@ public:
         other.__data_ = __rep::__empty_rep().__data;
     }
 
-    basic_string(const basic_string &str, size_type pos, size_type n) {
-        str.__check_range(pos, "basic_string");
-        __init(str.c_str() + pos, std::min(n, str.size() - pos));
-    }
+    basic_string(const basic_string &str, size_type pos, size_type n)
+        : __data_{__construct(str.c_str() + str.__check_range(pos, "basic_string"), std::min(n, str.size() - pos))} {}
 
-    basic_string(const basic_string &str, size_type pos) {
-        str.__check_range(pos, "basic_string");
-        __init(str.c_str() + pos, str.size() - pos);
-    }
+    basic_string(const basic_string &str, size_type pos)
+        : __data_{__construct(str.c_str() + str.__check_range(pos, "basic_string"), str.size() - pos)} {}
 
     basic_string(basic_string &&str, size_type pos, size_type n)
         : basic_string(std::move(str.assign(str, pos, n))) {}
@@ -116,21 +112,19 @@ public:
     basic_string(basic_string &&str, size_type pos)
         : basic_string(std::move(str.assign(str, pos))) {}
 
-    basic_string(const CharT *s, size_type n) {
-        assert((s != nullptr || n == 0) && "basic_string(const CharT *, n) detected nullptr");
-        __init(s, n);
-    }
+    basic_string(const CharT *s, size_type n)
+        : __data_{__construct(s, n)} {}
 
-    basic_string(const CharT *s) {
-        assert((s != nullptr) && "basic_string(const CharT *) detected nullptr");
-        __init(s, traits_type::length(s));
-    }
+    basic_string(const CharT *s)
+        : __data_{__construct(s, ((s != nullptr) ? traits_type::length(s) : npos))} {}
 
     basic_string(std::nullptr_t) = delete;
 
-    basic_string(std::initializer_list<CharT> il) {
-        __init(il.begin(), il.size());
-    }
+    basic_string(size_type n, CharT c)
+        : __data_{__construct(n, c)} {}
+
+    basic_string(std::initializer_list<CharT> il)
+        : __data_{__construct(il.begin(), il.size())} {}
 
     ~basic_string() {
         __get_rep()->__dispose();
@@ -575,8 +569,6 @@ public:
     }
 
 protected:
-    mutable CharT *__data_;
-
     struct __rep {
         // npos = sizeof(__rep) + (sizeof(CharT) * (m + 1))
         // __max_size = m / 4
@@ -673,6 +665,32 @@ protected:
         }
     };
 
+    mutable CharT *__data_;
+
+    [[nodiscard]] static CharT *__construct(const CharT *s, size_type n) {
+        if (n == 0) {
+            return __rep::__empty_rep().__data;
+        }
+        // NB: Not required, but considered best practice.
+        if (s == nullptr) {
+            throw std::logic_error{"basic_string::__init null not valid"};
+        }
+        __rep *r = __rep::__create(n, 0);
+        traits_type::copy(r->__data, s, n);
+        r->__set_size(n);
+        return r->__data;
+    }
+
+    [[nodiscard]] static CharT *__construct(size_type n, CharT c) {
+        if (n == 0) {
+            return __rep::__empty_rep().__data;
+        }
+        __rep *r = __rep::__create(n, 0);
+        traits_type::assign(r->__data, n, c);
+        r->__set_size(n);
+        return r->__data;
+    }
+
     // Construct a string with enough storage to hold `size` characters, but don't initialize the characters.
     // The contents of the string, including the null terminator, must be initialized separately.
     explicit basic_string(__uninitialized_size_tag, size_type size)
@@ -699,20 +717,6 @@ protected:
 
     [[nodiscard]] bool __disjunct(const CharT *s) const noexcept {
         return (s < c_str()) || (c_str() + size() < s);
-    }
-
-    void __init(const CharT *s, size_type sz) {
-        if (sz == 0) {
-            __data_ = __rep::__empty_rep().__data;
-            return;
-        }
-        // NB: Not required, but considered best practice.
-        if (s == nullptr) {
-            throw std::logic_error{"basic_string::__init null not valid"};
-        }
-        __data_ = __rep::__create(sz, 0)->__data;
-        traits_type::copy(__data_, s, sz);
-        __get_rep()->__set_size(sz);
     }
 
     // 清空范围 [ `begin() + pos`, `begin() + pos + len1` ) 中的字符,
@@ -898,9 +902,9 @@ namespace std {
 
 template <typename CharT>
 struct hash<pvzstl::basic_string<CharT>> {
-    [[nodiscard]] size_t operator()(const pvzstl::basic_string<CharT> &str) const noexcept {
+    [[nodiscard]] size_t operator()(const pvzstl::basic_string<CharT> &val) const noexcept {
         using StringView = basic_string_view<CharT>;
-        return hash<StringView>{}(StringView{str});
+        return hash<StringView>{}(StringView{val});
     }
 };
 
