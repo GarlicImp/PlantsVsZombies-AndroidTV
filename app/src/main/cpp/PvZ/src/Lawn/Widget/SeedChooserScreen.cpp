@@ -395,10 +395,7 @@ void SeedChooserScreen::GetSeedPositionInChooser(int theIndex, int &x, int &y) {
 
 int SeedChooserScreen::NumColumns() {
     if (mIsZombieChooser) {
-        if (moreZombieSeeds)
-            return 6;
-        else
-            return 5;
+        return 5;
     } else {
         return 8;
     }
@@ -673,7 +670,7 @@ int SeedChooserScreen::GetNextSeedInDir(int theNumSeed, int thePlayerIndex) {
             numZombieSeed = thePlayerIndex == 3;
         if (numZombieSeed)
             return 19;
-        aNumRow2 = 5; // 拓展僵尸选卡适配键盘选取
+        aNumRow2 = 6; // 拓展僵尸选卡适配键盘选取
     }
     switch (thePlayerIndex) {
         case 0:
@@ -705,13 +702,89 @@ int SeedChooserScreen::GetNextSeedInDir(int theNumSeed, int thePlayerIndex) {
 }
 
 void SeedChooserScreen::Draw(Graphics *g) {
-    Image *aBackgroundImage = *IMAGE_SEEDCHOOSER_BACKGROUND2;
-    if (moreZombieSeeds) {
-        aBackgroundImage = addonImages.IMAGE_SEEDCHOOSER_LARGE_BACKGROUND2;
-        if (mIsZombieChooser) {
-            g->DrawImage(aBackgroundImage, 0, 87);
-        }
-    }
+//    Image *aBackgroundImage = *IMAGE_SEEDCHOOSER_BACKGROUND2;
+//    if (moreZombieSeeds) {
+//        aBackgroundImage = addonImages.IMAGE_SEEDCHOOSER_LARGE_BACKGROUND2;
+//        if (mIsZombieChooser) {
+//            g->DrawImage(aBackgroundImage, 0, 87);
+//        }
+//    }
+
+//    if (mIsZombieChooser) {
+//        int aNumSeeds = NUM_ZOMBIE_SEED_IN_CHOOSER;
+//        for (SeedType aSeedShadow = SEED_ZOMBIE_GRAVESTONE; aSeedShadow < aNumSeeds; aSeedShadow = (SeedType)(aSeedShadow + 1)) {
+//            int x, y;
+//            GetSeedPositionInChooser(aSeedShadow, x, y);
+//
+//            if (mApp->GetSeedsAvailable(aSeedShadow)) {
+//                ChosenSeed &aChosenSeed = mChosenSeeds[aSeedShadow - SEED_ZOMBIE_GRAVESTONE];
+//                if (aChosenSeed.mSeedState != SEED_IN_CHOOSER) {
+//                    Graphics aSeedGraphics(*g);
+//                    DrawSeedPacket(&aSeedGraphics, x, y, aSeedShadow, SEED_NONE, 0, 55, true, false, mIsZombieChooser, true);
+//                }
+//            } else {
+//                Graphics aSeedGraphics(*g);
+//                ChosenSeed &aChosenSeed = mChosenSeeds[aSeedShadow - SEED_ZOMBIE_GRAVESTONE];
+////                aSeedGraphics.DrawImage(Sexy::IMAGE_SEEDPACKETSILHOUETTE, x, y);
+//            }
+//        }
+//
+//        int aNumSeedsInBank = std::min(mBoard->mSeedBank2->mNumPackets, aNumSeeds);
+//        for (int anIndex = 0; anIndex < aNumSeedsInBank; anIndex++)
+//        {
+//            if (FindSeedInBank(anIndex, mPlayerIndex) == SEED_NONE)
+//            {
+//                int x, y;
+//                GetSeedPositionInBank(anIndex, x, y, mPlayerIndex);
+////                g->DrawImage(Sexy::IMAGE_SEEDPACKETSILHOUETTE, x, y);
+//            }
+//        }
+//
+//        for (SeedType aSeedType = SEED_ZOMBIE_GRAVESTONE; aSeedType < NUM_ZOMBIE_SEED_IN_CHOOSER; aSeedType = (SeedType)(aSeedType + 1))
+//        {
+//            ChosenSeed& aChosenSeed = mChosenSeeds[aSeedType - SEED_ZOMBIE_GRAVESTONE];
+//            ChosenSeedState aSeedState = aChosenSeed.mSeedState;
+//            if (mApp->GetSeedsAvailable(aSeedType) && aSeedState != SEED_FLYING_TO_BANK && aSeedState != SEED_FLYING_TO_CHOOSER &&
+//                aSeedState != SEED_PACKET_HIDDEN && (aSeedState == SEED_IN_CHOOSER || mBoard->mCutScene->mSeedChoosing))
+//            {
+//                bool aGrayed = false;
+////                if (((SeedNotRecommendedToPick(aSeedType) || SeedNotAllowedToPick(aSeedType)) && aSeedState == SEED_IN_CHOOSER) ||
+////                    SeedNotAllowedDuringTrial(aSeedType))
+////                    aGrayed = true;
+//
+//                int aPosX = aChosenSeed.mX;
+//                int aPosY = aChosenSeed.mY;
+//                if (aSeedState == SEED_IN_BANK)
+//                {
+//                    aPosX -= mX;
+//                    aPosY -= mY;
+//                }
+//
+//                Graphics aSeedGraphics(*g);
+//                DrawSeedPacket(&aSeedGraphics, aPosX, aPosY, aChosenSeed.mSeedType, aChosenSeed.mImitaterType, 0, aGrayed ? 115 : 255, true, false, mIsZombieChooser, true);
+//            }
+//        }
+//
+//        for (SeedType aSeedType = SEED_ZOMBIE_GRAVESTONE; aSeedType < NUM_ZOMBIE_SEED_IN_CHOOSER; aSeedType = (SeedType)(aSeedType + 1))
+//        {
+//            ChosenSeed& aChosenSeed = mChosenSeeds[aSeedType - SEED_ZOMBIE_GRAVESTONE];
+//            ChosenSeedState aSeedState = aChosenSeed.mSeedState;
+//            if (mApp->GetSeedsAvailable(aSeedType) && (aSeedState == SEED_FLYING_TO_BANK || aSeedState == SEED_FLYING_TO_CHOOSER))
+//            {
+//                if (aSeedState == SEED_FLYING_TO_BANK)
+//                {
+//                    GetSeedPositionInChooser(aSeedType, aChosenSeed.mStartX, aChosenSeed.mStartY);
+//                }
+//                else if (aSeedState == SEED_FLYING_TO_CHOOSER)
+//                {
+//                    GetSeedPositionInChooser(aSeedType, aChosenSeed.mEndY, aChosenSeed.mEndY);
+//                }
+//
+//                DrawSeedPacket(g, aChosenSeed.mX, aChosenSeed.mY, aChosenSeed.mSeedType, aChosenSeed.mImitaterType, 0, 255, true, false, mIsZombieChooser, true);
+//            }
+//        }
+//        return;
+//    }
 
     old_SeedChooserScreen_Draw(this, g);
 }

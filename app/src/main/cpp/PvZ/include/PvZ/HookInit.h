@@ -347,6 +347,7 @@ inline void InitHookFunction() {
     homura::HookFunction(Zombie_DropArmAddr, &Zombie::DropArm, &old_Zombie_DropArm);
     homura::HookFunction(Zombie_ZombieInitializeAddr, &Zombie::ZombieInitialize, &old_Zombie_ZombieInitialize);
     homura::HookFunction(Zombie_DieNoLootAddr, &Zombie::DieNoLoot, &old_Zombie_DieNoLoot);
+    homura::HookFunction(Zombie_StopZombieSoundAddr, &Zombie::StopZombieSound, nullptr);
     homura::HookFunction(GetZombieDefinitionAddr, &GetZombieDefinition, nullptr);
     homura::HookFunction(Zombie_FindPlantTargetAddr, &Zombie::FindPlantTarget, &old_Zombie_FindPlantTarget);
     homura::HookFunction(Zombie_FindZombieTargetAddr, &Zombie::FindZombieTarget, &old_Zombie_FindZombieTarget);
@@ -363,6 +364,7 @@ inline void InitHookFunction() {
     homura::HookFunction(Zombie_SquishAllInSquareAddr, &Zombie::SquishAllInSquare, &old_Zombie_SquishAllInSquare);
     homura::HookFunction(Zombie_StopEatingAddr, &Zombie::StopEating, &old_Zombie_StopEating);
     homura::HookFunction(Zombie_PickRandomSpeedAddr, &Zombie::PickRandomSpeed, nullptr);
+    homura::HookFunction(Zombie_UpdateZombieWalkingAddr, &Zombie::UpdateZombieWalking, &old_Zombie_UpdateZombieWalking);
 
 
     homura::HookFunction(Sexy_Dialog_AddedToManagerWidgetManagerAddr, &SexyDialog_AddedToManager, &old_SexyDialog_AddedToManager);

@@ -337,6 +337,7 @@ inline void *GamepadControls_UpdatePreviewReanimAddr;
 inline void *Zombie_UpdateAddr;
 inline void *Zombie_ApplyButterAddr;
 inline void *Zombie_DieNoLootAddr;
+inline void *Zombie_StopZombieSoundAddr;
 inline void *Zombie_ApplyBurnAddr;
 inline void *Zombie_DrawAddr;
 inline void *Zombie_UpdateYetiAddr;
@@ -411,6 +412,8 @@ inline void *Zombie_AttachShieldAddr;
 inline void *Zombie_PickRandomSpeedAddr;
 inline void *Zombie_ReanimIgnoreClipRectAddr;
 inline void *Zombie_SetAnimRateAddr;
+inline void *Zombie_UpdateZombieWalkingAddr;
+inline void *Zombie_DrawDancerReanimAddr;
 
 
 inline void *SeedChooserScreen_UpdateAddr;
@@ -1570,6 +1573,7 @@ inline bool GetFunctionAddr() {
     Zombie_UpdateAddr = dlsym(handle, "_ZN6Zombie6UpdateEv");
     Zombie_ApplyButterAddr = dlsym(handle, "_ZN6Zombie11ApplyButterEv");
     Zombie_DieNoLootAddr = dlsym(handle, "_ZN6Zombie9DieNoLootEv");
+    Zombie_StopZombieSoundAddr = dlsym(handle, "_ZN6Zombie15StopZombieSoundEv");
     Zombie_ApplyBurnAddr = dlsym(handle, "_ZN6Zombie9ApplyBurnEv");
     Zombie_DrawAddr = dlsym(handle, "_ZN6Zombie4DrawEPN4Sexy8GraphicsE");
     Zombie_UpdateYetiAddr = dlsym(handle, "_ZN6Zombie10UpdateYetiEv");
@@ -1645,6 +1649,8 @@ inline bool GetFunctionAddr() {
     Zombie_PickRandomSpeedAddr = dlsym(handle, "_ZN6Zombie15PickRandomSpeedEv");
     Zombie_ReanimIgnoreClipRectAddr = dlsym(handle, "_ZN6Zombie20ReanimIgnoreClipRectEPKcb");
     Zombie_SetAnimRateAddr = dlsym(handle, "_ZN6Zombie11SetAnimRateEf");
+    Zombie_UpdateZombieWalkingAddr = dlsym(handle, "_ZN6Zombie19UpdateZombieWalkingEv");
+    Zombie_DrawDancerReanimAddr = dlsym(handle, "_ZN6Zombie16DrawDancerReanimEPN4Sexy8GraphicsER18ZombieDrawPosition");
 
 
     SeedChooserScreen_UpdateAddr = dlsym(handle, "_ZN17SeedChooserScreen6UpdateEv");

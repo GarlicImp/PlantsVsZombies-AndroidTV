@@ -252,6 +252,9 @@ public:
     void SetAnimRate(float theAnimRate) {
         reinterpret_cast<void (*)(Zombie *, float)>(Zombie_SetAnimRateAddr)(this, theAnimRate);
     }
+    void DrawDancerReanim(Sexy::Graphics *g, ZombieDrawPosition &theDrawPos) {
+        reinterpret_cast<void (*)(Zombie *, Sexy::Graphics *, ZombieDrawPosition &)>(Zombie_DrawDancerReanimAddr)(this, g, theDrawPos);
+    }
 
     Zombie() {
         __Constructor();
@@ -259,6 +262,7 @@ public:
     void ZombieInitialize(int theRow, ZombieType theType, bool theVariant, Zombie *theParentZombie, int theFromWave, bool theIsVisible);
     void Draw(Sexy::Graphics *g);
     void DieNoLoot();
+    void StopZombieSound();
     void Update();
     void UpdateActions();
     void UpdateZombieBackupDancer2();
@@ -283,7 +287,7 @@ public:
     void BossSpawnAttack();
     void DrawBungeeCord(Sexy::Graphics *graphics, int theOffsetX, int theOffsetY);
     bool IsTangleKelpTarget();
-    void DrawReanim(Sexy::Graphics *graphics, ZombieDrawPosition *theZombieDrawPosition, int theBaseRenderGroup);
+    void DrawReanim(Sexy::Graphics *g, ZombieDrawPosition &theDrawPos, int theBaseRenderGroup);
     bool CanLoseBodyParts();
     void SetupReanimForLostHead();
     void DropHead(unsigned int theDamageFlags);
@@ -330,15 +334,19 @@ public:
     void PickRandomSpeed();
     float ZombieTargetLeadX(float theTime);
     bool ZombieNotWalking();
+    bool IsMovingAtChilledSpeed();
+    void UpdateZombieWalking();
     ZombiePhase GetDancerPhase();
     ZombieID SummonBackupDancer(int theRow, int thePosX);
     void SummonBackupDancers();
     void RaiseDeadZombie(ZombieType theZombieType, int theRow, int thePosX);
     void RaiseDeadZombies();
     bool NeedsMoreBackupDancers();
+    bool CanDropSoul();
     void DropSoul();
     void LaunchAbility();
     static bool IsUpgrade(SeedType theSeedType);
+    void JacksonDie();
 
 protected:
     void __Constructor() {
@@ -357,6 +365,7 @@ public:
     const char *mZombieName;
 };
 extern ZombieDefinition gZombieDefs[NUM_ZOMBIE_TYPES];
+inline ZombieDefinition gZombieTrashBinDef = {ZombieType::ZOMBIE_TRASH_BIN, ReanimationType::REANIM_ZOMBIE, 1, 99, 1, 4000, "TRASHCAN_ZOMBIE"};
 extern ZombieDefinition gNewZombieDefs[];
 
 ZombieDefinition &GetZombieDefinition(ZombieType theZombieType);
@@ -371,7 +380,6 @@ inline bool showHelmAndShieldHealth;
 inline int maidCheats; // 女仆秘籍
 inline int boardEdgeAdjust;
 inline int zombieSetScale;
-inline ZombieDefinition gZombieTrashBinDef = {ZombieType::ZOMBIE_TRASH_BIN, ReanimationType::REANIM_ZOMBIE, 1, 99, 1, 4000, "TRASHCAN_ZOMBIE"};
 
 
 inline void (*old_Zombie_Update)(Zombie *a1);
@@ -394,7 +402,7 @@ inline void (*old_Zombie_ZombieInitialize)(Zombie *zombie, int theRow, ZombieTyp
 
 inline void (*old_Zombie_DieNoLoot)(Zombie *);
 
-inline void (*old_Zombie_DrawReanim)(Zombie *zombie, Sexy::Graphics *graphics, ZombieDrawPosition *zombieDrawPosition, int theBaseRenderGroup);
+inline void (*old_Zombie_DrawReanim)(Zombie *zombie, Sexy::Graphics *graphics, ZombieDrawPosition &zombieDrawPosition, int theBaseRenderGroup);
 
 inline void (*old_Zombie_DropHead)(Zombie *zombie, unsigned int a2);
 
@@ -427,5 +435,7 @@ inline int (*old_Zombie_GetBobsledPosition)(Zombie *);
 inline void (*old_Zombie_SquishAllInSquare)(Zombie *, int theX, int theY, ZombieAttackType theAttackType);
 
 inline void (*old_Zombie_StopEating)(Zombie *);
+
+inline void (*old_Zombie_UpdateZombieWalking)(Zombie *);
 
 #endif // PVZ_LAWN_BOARD_ZOMBIE_H

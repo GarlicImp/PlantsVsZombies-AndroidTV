@@ -61,6 +61,8 @@ void SeedPacket::Update() {
         if (aPacketType == SeedType::SEED_ZOMBIE_BACKUP_DANCER2) {
             if (!mBoard->GetLiveJackson()) {
                 aSeedPacket->SetPacketType(SeedType::SEED_ZOMBIE_JACKSON, SeedType::SEED_NONE);
+                aSeedPacket->Deactivate();
+                aSeedPacket->WasPlanted(1);
             }
         }
     }
@@ -162,14 +164,14 @@ void SeedPacket::SetPacketType(SeedType theSeedType, SeedType theImitaterType) {
                 mActive = true;
                 break;
             case SEED_ZOMBIE_JACKSON:
-                mRefreshTime = aRefreshTime;
+                mRefreshTime = aRefreshTime * 2 / 3;
                 mRefreshing = true;
                 mActive = false;
                 break;
             case SEED_ZOMBIE_BACKUP_DANCER2:
-                mRefreshTime = 0;
-                mRefreshing = false;
-                mActive = true;
+                mRefreshTime = 1000;
+                mRefreshing = true;
+                mActive = false;
                 break;
             default:
                 break;
@@ -473,7 +475,11 @@ void DrawSeedPacket(Sexy::Graphics *g,
         aPlantG.ClipRect(x, y, g->mScaleX * 50.0f, coolDownHeight * g->mScaleY);
         if (isSeedPacketSelected) {
             if (Challenge::IsMPSeedType(theSeedType)) {
-                TodDrawImageScaledF(&aPlantG, *Sexy_IMAGE_ZOMBIE_SEEDPACKET_Addr, x, y, g->mScaleX, g->mScaleY);
+                if (Zombie::IsUpgrade(theSeedType)) {
+                    TodDrawImageCelScaledF(&aPlantG, *Sexy_IMAGE_SEEDS_Addr, x, y, celToDraw, 0, g->mScaleX, g->mScaleY);
+                } else {
+                    TodDrawImageScaledF(&aPlantG, *Sexy_IMAGE_ZOMBIE_SEEDPACKET_Addr, x, y, g->mScaleX, g->mScaleY);
+                }
             } else {
                 TodDrawImageCelScaledF(&aPlantG, *Sexy_IMAGE_SEEDS_Addr, x, y, celToDraw, 0, g->mScaleX, g->mScaleY);
             }
