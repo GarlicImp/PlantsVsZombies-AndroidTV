@@ -250,7 +250,8 @@ void Projectile::UpdateNormalMotion() {
         Zombie* aZombie = mBoard->ZombieTryToGet(mTargetZombieID);
         if (aZombie) {
             Rect aZombieRect = aZombie->GetZombieRect();
-            SexyVector2 aTargetCenter(aZombie->ZombieTargetLeadX(0.0f), aZombieRect.mY + aZombieRect.mHeight / 2);
+            int aOffsetCenter = RandRangeInt(-40, 40);
+            SexyVector2 aTargetCenter(aZombie->ZombieTargetLeadX(0.0f) + aOffsetCenter, aZombieRect.mY + aZombieRect.mHeight / 2 + aOffsetCenter);
             SexyVector2 aProjectileCenter(mPosX + mWidth / 2, mPosY + mHeight / 2);
             SexyVector2 aToTarget = (aTargetCenter - aProjectileCenter).Normalize();
             SexyVector2 aMotion(mVelX, mVelY);
@@ -269,7 +270,7 @@ void Projectile::UpdateNormalMotion() {
         mShadowY += mVelY;
         mRow = mBoard->PixelToGridYKeepOnBoard(mPosX, mPosY);
 
-        CheckForCollision();
+//        CheckForCollision();
         return;
     }
 

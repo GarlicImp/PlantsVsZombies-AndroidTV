@@ -702,30 +702,36 @@ int SeedChooserScreen::GetNextSeedInDir(int theNumSeed, int thePlayerIndex) {
 }
 
 void SeedChooserScreen::Draw(Graphics *g) {
-//    Image *aBackgroundImage = *IMAGE_SEEDCHOOSER_BACKGROUND2;
-//    if (moreZombieSeeds) {
-//        aBackgroundImage = addonImages.IMAGE_SEEDCHOOSER_LARGE_BACKGROUND2;
-//        if (mIsZombieChooser) {
-//            g->DrawImage(aBackgroundImage, 0, 87);
-//        }
-//    }
-
 //    if (mIsZombieChooser) {
+//        if (mApp->GetDialog(DIALOG_STORE) || mApp->GetDialog(DIALOG_ALMANAC))
+//            return;
+////
+//        g->SetLinearBlend(true);
+//        if (!mBoard->ChooseSeedsOnCurrentLevel() || (mBoard->mCutScene && mBoard->mCutScene->IsBeforePreloading()))
+//            return;
+////
+//        Image *aBackgroundImage = *IMAGE_SEEDCHOOSER_BACKGROUND2;
+//        g->DrawImage(aBackgroundImage, 0, 87);
+//        int aStringX = *(reinterpret_cast<int *>(aBackgroundImage) + 9) / 2;
+//        Color aColor = Color(0, 255, 0);
+//        TodDrawString(g, "[CHOOSE_YOUR_ZOMBIES]", aStringX, 114, *Sexy::FONT_DWARVENTODCRAFT18, aColor, DS_ALIGN_CENTER);
+//
 //        int aNumSeeds = NUM_ZOMBIE_SEED_IN_CHOOSER;
 //        for (SeedType aSeedShadow = SEED_ZOMBIE_GRAVESTONE; aSeedShadow < aNumSeeds; aSeedShadow = (SeedType)(aSeedShadow + 1)) {
 //            int x, y;
 //            GetSeedPositionInChooser(aSeedShadow, x, y);
 //
+//            int aZombieSeed = aSeedShadow - SEED_ZOMBIE_GRAVESTONE;
 //            if (mApp->GetSeedsAvailable(aSeedShadow)) {
-//                ChosenSeed &aChosenSeed = mChosenSeeds[aSeedShadow - SEED_ZOMBIE_GRAVESTONE];
+//                ChosenSeed &aChosenSeed = mChosenSeeds[aZombieSeed];
 //                if (aChosenSeed.mSeedState != SEED_IN_CHOOSER) {
 //                    Graphics aSeedGraphics(*g);
 //                    DrawSeedPacket(&aSeedGraphics, x, y, aSeedShadow, SEED_NONE, 0, 55, true, false, mIsZombieChooser, true);
 //                }
 //            } else {
 //                Graphics aSeedGraphics(*g);
-//                ChosenSeed &aChosenSeed = mChosenSeeds[aSeedShadow - SEED_ZOMBIE_GRAVESTONE];
-////                aSeedGraphics.DrawImage(Sexy::IMAGE_SEEDPACKETSILHOUETTE, x, y);
+//                ChosenSeed &aChosenSeed = mChosenSeeds[aZombieSeed];
+//                aSeedGraphics.DrawImage(*Sexy::IMAGE_SEEDPACKETSILHOUETTE, x, y);
 //            }
 //        }
 //
@@ -736,7 +742,7 @@ void SeedChooserScreen::Draw(Graphics *g) {
 //            {
 //                int x, y;
 //                GetSeedPositionInBank(anIndex, x, y, mPlayerIndex);
-////                g->DrawImage(Sexy::IMAGE_SEEDPACKETSILHOUETTE, x, y);
+//                g->DrawImage(*Sexy::IMAGE_SEEDPACKETSILHOUETTE, x, y);
 //            }
 //        }
 //
@@ -748,20 +754,24 @@ void SeedChooserScreen::Draw(Graphics *g) {
 //                aSeedState != SEED_PACKET_HIDDEN && (aSeedState == SEED_IN_CHOOSER || mBoard->mCutScene->mSeedChoosing))
 //            {
 //                bool aGrayed = false;
-////                if (((SeedNotRecommendedToPick(aSeedType) || SeedNotAllowedToPick(aSeedType)) && aSeedState == SEED_IN_CHOOSER) ||
-////                    SeedNotAllowedDuringTrial(aSeedType))
-////                    aGrayed = true;
+//                if (((SeedNotRecommendedToPick(aSeedType) || SeedNotAllowedToPick(aSeedType)) && aSeedState == SEED_IN_CHOOSER) ||
+//                    SeedNotAllowedDuringTrial(aSeedType))
+//                    aGrayed = true;
 //
 //                int aPosX = aChosenSeed.mX;
 //                int aPosY = aChosenSeed.mY;
+//                int x, y;
 //                if (aSeedState == SEED_IN_BANK)
 //                {
-//                    aPosX -= mX;
-//                    aPosY -= mY;
+//
+//                    GetSeedPositionInBank(aSeedType, x, y, mPlayerIndex);
+////                    aPosX -= mX;
+////                    aPosY -= mY;
 //                }
 //
 //                Graphics aSeedGraphics(*g);
-//                DrawSeedPacket(&aSeedGraphics, aPosX, aPosY, aChosenSeed.mSeedType, aChosenSeed.mImitaterType, 0, aGrayed ? 115 : 255, true, false, mIsZombieChooser, true);
+////                DrawSeedPacket(&aSeedGraphics, aPosX, aPosY, aChosenSeed.mSeedType, aChosenSeed.mImitaterType, 0, aGrayed ? 115 : 255, true, false, mIsZombieChooser, true);
+//                DrawPacket(&aSeedGraphics, aPosX, aPosY, aChosenSeed.mSeedType, SeedType::SEED_NONE, 0, aGrayed ? 115 : 255, &white, true, true);
 //            }
 //        }
 //
@@ -780,7 +790,8 @@ void SeedChooserScreen::Draw(Graphics *g) {
 //                    GetSeedPositionInChooser(aSeedType, aChosenSeed.mEndY, aChosenSeed.mEndY);
 //                }
 //
-//                DrawSeedPacket(g, aChosenSeed.mX, aChosenSeed.mY, aChosenSeed.mSeedType, aChosenSeed.mImitaterType, 0, 255, true, false, mIsZombieChooser, true);
+////                DrawSeedPacket(g, aChosenSeed.mX, aChosenSeed.mY, aChosenSeed.mSeedType, aChosenSeed.mImitaterType, 0, 255, true, false, mIsZombieChooser, true);
+//                DrawPacket(g, aChosenSeed.mX, aChosenSeed.mX, aChosenSeed.mSeedType, SeedType::SEED_NONE, 0, 255, &white, true, true);
 //            }
 //        }
 //        return;

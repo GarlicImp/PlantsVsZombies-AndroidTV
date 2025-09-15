@@ -893,7 +893,6 @@ void Zombie::DrawBossPart(Sexy::Graphics *g, int theBossPart) {
             g->mTransX = 800.0f;
             g->mTransY = 200.0f;
             g->DrawString(str, 0, 0);
-            //            StringDelete((int *)holder);
             g->mTransX = tmpTransX;
             g->mTransY = tmpTransY;
             g->SetFont(nullptr);
@@ -1600,9 +1599,38 @@ void Zombie::DrawReanim(Sexy::Graphics *g, ZombieDrawPosition &theDrawPos, int t
         }
     }
 
-    if (mZombieType == ZombieType::ZOMBIE_JACKSON) {
+    Reanimation *aBodyReanim = mApp->ReanimationGet(mBodyReanimID);
+    if (aBodyReanim == nullptr) {
+        //        TodTrace("Missing zombie reanimation");
+        return;
+    }
+
+    if (theDrawPos.mClipHeight > CLIP_HEIGHT_LIMIT) {
+        float aDrawHeight = 120.0f - theDrawPos.mClipHeight + 71.0f;
+        g->SetClipRect(theDrawPos.mImageOffsetX - 200.0f, theDrawPos.mImageOffsetY + theDrawPos.mBodyY - 78.0f, 520, aDrawHeight);
+    }
+
+    int aFadeAlpha = 255;
+    if (mZombieFade >= 0) {
+        aFadeAlpha = ClampInt(255 * mZombieFade / 10, 0, 255);
+    }
+
+    Color aColorOverride(255, 255, 255, aFadeAlpha);
+    Color aExtraAdditiveColor = Color::Black;
+    bool aEnableExtraAdditiveDraw = false;
+    if (mIsRevived) {
+        aColorOverride = ZOMBIE_REVIVED_COLOR;
+        aColorOverride.mAlpha = aFadeAlpha;
+        aExtraAdditiveColor = aColorOverride;
+        aEnableExtraAdditiveDraw = true;
+    } else if (mZombieType == ZombieType::ZOMBIE_JACKSON) {
         DrawDancerReanim(g, theDrawPos);
     }
+    aBodyReanim->mColorOverride = aColorOverride;
+    aBodyReanim->mExtraAdditiveColor = aExtraAdditiveColor;
+    aBodyReanim->mEnableExtraAdditiveDraw = aEnableExtraAdditiveDraw;
+
+    aBodyReanim->DrawRenderGroup(g, theBaseRenderGroup);
 }
 
 bool Zombie::CanLoseBodyParts() {
@@ -2452,6 +2480,8 @@ void Zombie::RaiseDeadZombie(ZombieType theZombieType, int theRow, int thePosX) 
         aZombie->TakeShieldDamage(aZombie->mShieldMaxHealth * 2 / 3 + 2, 0U);
     }
     aZombie->mIsRevived = true;
+    aZombie->mHasArm = false;
+    aZombie->SetupLostArmReanim();
 }
 
 void Zombie::RaiseDeadZombies() {

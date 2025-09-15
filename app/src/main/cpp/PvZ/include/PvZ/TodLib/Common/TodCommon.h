@@ -64,6 +64,14 @@ inline float RandRangeFloat(float theMin, float theMax) {
     return reinterpret_cast<float (*)(float, float)>(RandRangeFloatAddr)(theMin, theMax);
 }
 
+inline int ClampInt(int theNum, int theMin, int theMax) {
+    return theNum <= theMin ? theMin : theNum >= theMax ? theMax : theNum;
+}
+
+inline float ClampFloat(float theNum, float theMin, float theMax) {
+    return theNum <= theMin ? theMin : theNum >= theMax ? theMax : theNum;
+}
+
 inline void TodDrawImageCelF(Sexy::Graphics *g, Sexy::Image *theImageStrip, float thePosX, float thePosY, int theCelCol, int theCelRow) {
     reinterpret_cast<void (*)(Sexy::Graphics *, Sexy::Image *, float, float, int, int)>(TodDrawImageCelFAddr)(g, theImageStrip, thePosX, thePosY, theCelCol, theCelRow);
 }

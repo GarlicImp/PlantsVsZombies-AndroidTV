@@ -49,8 +49,8 @@ inline AttachEffect *AttachReanim(AttachmentID &theAttachmentID, Reanimation *th
     return reinterpret_cast<AttachEffect *(*)(AttachmentID &, Reanimation *, float, float)>(AttachReanimAddr)(theAttachmentID, theReanimation, theOffsetX, theOffsetY);
 }
 
-inline void AttachmentDraw(AttachmentID &theAttachmentID, Sexy::Graphics *g, bool theParentHidden) {
-    reinterpret_cast<void (*)(AttachmentID &, Sexy::Graphics *, bool)>(AttachmentDrawAddr)(theAttachmentID, g, theParentHidden);
+inline void AttachmentDraw(AttachmentID theAttachmentID, Sexy::Graphics *g, bool theParentHidden) {
+    reinterpret_cast<void (*)(AttachmentID, Sexy::Graphics *, bool)>(AttachmentDrawAddr)(theAttachmentID, g, theParentHidden);
 }
 
 inline void AttachmentDetach(AttachmentID &theAttachmentID) {

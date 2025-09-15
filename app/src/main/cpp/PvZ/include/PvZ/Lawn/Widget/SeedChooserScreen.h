@@ -129,6 +129,12 @@ public:
     void LandFlyingSeed(ChosenSeed &theChosenSeed) {
         reinterpret_cast<void (*)(SeedChooserScreen *, ChosenSeed &)>(SeedChooserScreen_LandFlyingSeedAddr)(this, theChosenSeed);
     }
+    bool SeedNotRecommendedToPick(SeedType theSeedType) {
+        return reinterpret_cast<bool (*)(SeedChooserScreen *, SeedType)>(SeedChooserScreen_SeedNotRecommendedToPickAddr)(this, theSeedType);
+    }
+    bool SeedNotAllowedDuringTrial(SeedType theSeedType) {
+        return reinterpret_cast<bool (*)(SeedChooserScreen *, SeedType)>(SeedChooserScreen_SeedNotAllowedDuringTrialAddr)(this, theSeedType);
+    }
 
     SeedChooserScreen(bool theIsZombieChooser);
     void EnableStartButton(int theIsEnabled);

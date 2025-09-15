@@ -187,6 +187,7 @@ inline void *Board_RemoveAllMowersAddr;
 inline void *Board_ResetLawnMowersAddr;
 inline void *Board_ZombieGetIDAddr;
 inline void *Board_SetDanceModeAddr;
+inline void *Board_ChooseSeedsOnCurrentLevelAddr;
 
 
 inline void *SyncBoardAddr;
@@ -445,6 +446,8 @@ inline void *SeedChooserScreen_ClickedSeedInChooserAddr;
 inline void *SeedChooserScreen_CrazyDavePickSeedsAddr;
 inline void *SeedChooserScreen_FindSeedInBankAddr;
 inline void *SeedChooserScreen_DrawAddr;
+inline void *SeedChooserScreen_SeedNotRecommendedToPickAddr;
+inline void *SeedChooserScreen_SeedNotAllowedDuringTrialAddr;
 
 
 inline void *Coin_CoinInitializeAddr;
@@ -1133,7 +1136,10 @@ inline Sexy::Image **Sexy_IMAGE_OPTIONS_CHECKBOX1_Addr;
 namespace Sexy {
 inline Image **IMAGE_BLANK;
 inline Image **IMAGE_SEEDCHOOSER_BACKGROUND2;
+inline Image **IMAGE_SEEDPACKETSILHOUETTE;
 inline Image **IMAGE_PUFFSHROOM_PUFF1;
+
+inline Font **FONT_DWARVENTODCRAFT18;
 }
 
 inline Sexy::Image **Sexy_IMAGE_SEEDPACKETFLASH_Addr;
@@ -1424,6 +1430,7 @@ inline bool GetFunctionAddr() {
     Board_ResetLawnMowersAddr = dlsym(handle, "_ZN5Board15ResetLawnMowersEv");
     Board_ZombieGetIDAddr = dlsym(handle, "_ZN5Board11ZombieGetIDEP6Zombie");
     Board_SetDanceModeAddr = dlsym(handle, "_ZN5Board12SetDanceModeEb");
+    Board_ChooseSeedsOnCurrentLevelAddr = dlsym(handle, "_ZN5Board25ChooseSeedsOnCurrentLevelEv");
 
     SyncBoardAddr = dlsym(handle, "_Z9SyncBoardP15SaveGameContextP5Board");
     FixBoardAfterLoadAddr = dlsym(handle, "_Z17FixBoardAfterLoadP5Board");
@@ -1682,6 +1689,8 @@ inline bool GetFunctionAddr() {
     SeedChooserScreen_CrazyDavePickSeedsAddr = dlsym(handle, "_ZN17SeedChooserScreen18CrazyDavePickSeedsEv");
     SeedChooserScreen_FindSeedInBankAddr = dlsym(handle, "_ZN17SeedChooserScreen14FindSeedInBankEii");
     SeedChooserScreen_DrawAddr = dlsym(handle, "_ZN17SeedChooserScreen4DrawEPN4Sexy8GraphicsE");
+    SeedChooserScreen_SeedNotRecommendedToPickAddr = dlsym(handle, "_ZN17SeedChooserScreen24SeedNotRecommendedToPickE8SeedType");
+    SeedChooserScreen_SeedNotAllowedDuringTrialAddr = dlsym(handle, "_ZN17SeedChooserScreen25SeedNotAllowedDuringTrialE8SeedType");;
 
 
     Coin_CoinInitializeAddr = dlsym(handle, "_ZN4Coin14CoinInitializeEii8CoinType10CoinMotion");
@@ -2355,7 +2364,11 @@ inline bool GetFunctionAddr() {
     //    Sexy_IMAGE_BLANK_Addr = (Sexy::Image **)dlsym(handle, "_ZN4Sexy11IMAGE_BLANKE");
     Sexy::IMAGE_BLANK = reinterpret_cast<Sexy::Image **>(dlsym(handle, "_ZN4Sexy11IMAGE_BLANKE"));
     Sexy::IMAGE_SEEDCHOOSER_BACKGROUND2 = reinterpret_cast<Sexy::Image **>(dlsym(handle, "_ZN4Sexy29IMAGE_SEEDCHOOSER_BACKGROUND2E"));
+    Sexy::IMAGE_SEEDPACKETSILHOUETTE = reinterpret_cast<Sexy::Image **>(dlsym(handle, "_ZN4Sexy26IMAGE_SEEDPACKETSILHOUETTEE"));
     Sexy::IMAGE_PUFFSHROOM_PUFF1 = reinterpret_cast<Sexy::Image **>(dlsym(handle, "_ZN4Sexy22IMAGE_PUFFSHROOM_PUFF1E"));
+
+    Sexy::FONT_DWARVENTODCRAFT18 = reinterpret_cast<Sexy::Font **>(dlsym(handle, "_ZN4Sexy22FONT_DWARVENTODCRAFT18E"));
+
     Sexy_IMAGE_SEEDPACKETFLASH_Addr = (Sexy::Image **)dlsym(handle, "_ZN4Sexy21IMAGE_SEEDPACKETFLASHE");
     Sexy_IMAGE_ALMANAC_GROUNDDAY_Addr = (Sexy::Image **)dlsym(handle, "_ZN4Sexy23IMAGE_ALMANAC_GROUNDDAYE");
     Sexy_IMAGE_ALMANAC_GROUNDNIGHTPOOL_Addr = (Sexy::Image **)dlsym(handle, "_ZN4Sexy29IMAGE_ALMANAC_GROUNDNIGHTPOOLE");

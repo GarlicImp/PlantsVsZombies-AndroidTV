@@ -486,6 +486,9 @@ public:
     void SetDanceMode(bool theEnableDance) {
         reinterpret_cast<void (*)(Board *, bool)>(Board_SetDanceModeAddr)(this, theEnableDance);
     }
+    bool ChooseSeedsOnCurrentLevel() {
+        return reinterpret_cast<bool (*)(Board *)>(Board_ChooseSeedsOnCurrentLevelAddr)(this);
+    }
 
     Board(LawnApp *theApp);
     void InitLevel();
