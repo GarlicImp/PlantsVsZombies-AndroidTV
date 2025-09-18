@@ -3852,6 +3852,16 @@ void Board::KillAllZombiesInRadius(int theRow, int theX, int theY, int theRadius
     }
 }
 
+void Board::KillAllPlantsInRadius(int theX, int theY, int theRadius) {
+    Plant *aPlant = nullptr;
+    while (IteratePlants(aPlant)) {
+        if (GetCircleRectOverlap(theX, theY, theRadius, aPlant->GetPlantRect())) {
+            mPlantsEaten++;
+            aPlant->Die();
+        }
+    }
+}
+
 void Board::RemoveCutsceneZombies() {
     Zombie *aZombie = nullptr;
     while (IterateZombies(aZombie)) {

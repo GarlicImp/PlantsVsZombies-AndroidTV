@@ -213,6 +213,23 @@ inline TodAllocator *FindGlobalAllocator(int theSize) {
 //
 // inline void FixPixelsOnAlphaEdgeForBlending(Sexy::Image *theImage);
 
+inline Sexy::Color GetFlashingColor(int theCounter, int theFlashTime) {
+    int aTimeAge = theCounter % theFlashTime;
+    int aTimeInf = theFlashTime / 2;
+    int aGrayness = std::clamp(55 + 200 * abs(aTimeInf - aTimeAge) / aTimeInf, 0, 255);
+    return Sexy::Color(aGrayness, aGrayness, aGrayness, 255);
+}
+
+inline Sexy::Color ColorAdd(const Sexy::Color& theColor1, const Sexy::Color& theColor2)
+{
+    int r = theColor1.mRed + theColor2.mRed;
+    int g = theColor1.mGreen + theColor2.mGreen;
+    int b = theColor1.mBlue + theColor2.mBlue;
+    int a = theColor1.mAlpha + theColor2.mAlpha;
+
+    return Sexy::Color(ClampInt(r, 0, 255), ClampInt(g, 0, 255), ClampInt(b, 0, 255), ClampInt(a, 0, 255));  // 线性减淡
+}
+
 inline bool FloatApproxEqual(float theFloatVal1, float theFloatVal2) {
     return fabs(theFloatVal1 - theFloatVal2) < FLT_EPSILON;
 }
@@ -225,13 +242,6 @@ inline void SetBit(uint &theNum, int theIdx, bool theValue = true) {
 }
 inline bool TestBit(uint theNum, int theIdx) {
     return theNum & (1 << theIdx);
-}
-
-inline Sexy::Color GetFlashingColor(int theCounter, int theFlashTime) {
-    int aTimeAge = theCounter % theFlashTime;
-    int aTimeInf = theFlashTime / 2;
-    int aGrayness = std::clamp(55 + 200 * abs(aTimeInf - aTimeAge) / aTimeInf, 0, 255);
-    return Sexy::Color(aGrayness, aGrayness, aGrayness, 255);
 }
 
 #endif // PVZ_SEXYAPPFRAMEWORK_TODLIB_COMMON_TOD_COMMON_H

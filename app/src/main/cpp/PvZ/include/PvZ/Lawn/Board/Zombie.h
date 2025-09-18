@@ -193,9 +193,6 @@ public:
     void ApplyButter() {
         reinterpret_cast<void (*)(Zombie *)>(Zombie_ApplyButterAddr)(this);
     }
-    void ApplyBurn() {
-        reinterpret_cast<void (*)(Zombie *)>(Zombie_ApplyBurnAddr)(this);
-    }
     TodParticleSystem *AddAttachedParticle(int thePosX, int thePosY, ParticleEffect theEffect) {
         return reinterpret_cast<TodParticleSystem *(*)(Zombie *, int, int, ParticleEffect)>(Zombie_AddAttachedParticleAddr)(this, thePosX, thePosY, theEffect);
     }
@@ -211,9 +208,6 @@ public:
     void UpdatePlaying() {
         reinterpret_cast<void (*)(Zombie *)>(Zombie_UpdatePlayingAddr)(this);
     }
-    int TakeHelmDamage(int theDamage, unsigned int theDamageFlags) {
-        return reinterpret_cast<int (*)(Zombie *, int, unsigned int)>(Zombie_TakeHelmDamageAddr)(this, theDamage, theDamageFlags);
-    }
     int TakeFlyingDamage(int theDamage, unsigned int theDamageFlags) {
         return reinterpret_cast<int (*)(Zombie *, int, unsigned int)>(Zombie_TakeFlyingDamageAddr)(this, theDamage, theDamageFlags);
     }
@@ -222,9 +216,6 @@ public:
     }
     void TakeBodyDamage(int theDamage, unsigned int theDamageFlags) {
         reinterpret_cast<void (*)(Zombie *, int, unsigned int)>(Zombie_TakeBodyDamageAddr)(this, theDamage, theDamageFlags);
-    }
-    void UpdateDamageStates(unsigned int theDamageFlags) {
-        reinterpret_cast<void (*)(Zombie *, unsigned int)>(Zombie_UpdateDamageStatesAddr)(this, theDamageFlags);
     }
     void GetTrackPosition(const char *theTrackName, float &thePosX, float &thePosY) {
         reinterpret_cast<void (*)(Zombie *, const char *, float &, float &)>(Zombie_GetTrackPositionAddr)(this, theTrackName, thePosX, thePosY);
@@ -256,6 +247,15 @@ public:
     void DrawDancerReanim(Sexy::Graphics *g, ZombieDrawPosition &theDrawPos) {
         reinterpret_cast<void (*)(Zombie *, Sexy::Graphics *, ZombieDrawPosition &)>(Zombie_DrawDancerReanimAddr)(this, g, theDrawPos);
     }
+    void PlayDeathAnim(unsigned int theDamageFlags) {
+        reinterpret_cast<void (*)(Zombie *, unsigned int)>(Zombie_PlayDeathAnimAddr)(this, theDamageFlags);
+    }
+    void DrawBobsledReanim(Sexy::Graphics* g, ZombieDrawPosition& theDrawPos, bool theBeforeZombie) {
+        reinterpret_cast<void (*)(Zombie *, Sexy::Graphics*, ZombieDrawPosition&, bool)>(Zombie_DrawBobsledReanimAddr)(this, g, theDrawPos, theBeforeZombie);
+    }
+    void DrawBungeeReanim(Sexy::Graphics* g, ZombieDrawPosition& theDrawPos) {
+        reinterpret_cast<void (*)(Zombie *, Sexy::Graphics*, ZombieDrawPosition&)>(Zombie_DrawBungeeReanimAddr)(this, g, theDrawPos);
+    }
 
     Zombie() {
         __Constructor();
@@ -266,7 +266,8 @@ public:
     void StopZombieSound();
     void Update();
     void UpdateActions();
-    void UpdateZombieBackupDancer2();
+    void DoSpecial();
+    void UpdateZombieBackupDancer();
     void UpdateZombieJackson();
     void UpdateYeti();
     void UpdateZombieImp();
@@ -277,6 +278,7 @@ public:
     void UpdateZombieJalapenoHead();
     void UpdateZombieSquashHead();
     void UpdateZombieRiseFromGrave();
+    void UpdateDamageStates(unsigned int theDamageFlags);
     void BossDestroyIceballInRow(int theRow);
     int GetDancerFrame();
     void RiseFromGrave(int theGridX, int theGridY);
@@ -284,6 +286,7 @@ public:
     void DetachShield();
     void CheckForBoardEdge();
     void DrawBossPart(Sexy::Graphics *g, int theBossPart);
+    static bool IsZombotany(ZombieType theZombieType);
     static bool ZombieTypeCanGoInPool(ZombieType theZombieType);
     void BossSpawnAttack();
     void DrawBungeeCord(Sexy::Graphics *graphics, int theOffsetX, int theOffsetY);
@@ -300,6 +303,7 @@ public:
     bool CanTargetPlant(Plant *thePlant, ZombieAttackType theAttackType);
     Zombie *FindZombieTarget();
     void TakeDamage(int theDamage, unsigned int theDamageFlags);
+    int TakeHelmDamage(int theDamage, unsigned int theDamageFlags);
     void PlayZombieReanim(const char *theTrackName, ReanimLoopType theLoopType, int theBlendTime, float theAnimRate);
     void StartWalkAnim(int theBlendTime);
     void ReanimShowPrefix(const char *theTrackPrefix, int theRenderGroup);
@@ -308,6 +312,7 @@ public:
     void SetRow(int theRow);
     void StartMindControlled();
     void UpdateReanim();
+    void UpdateReanimColor();
     void SetupLostArmReanim();
     void SetZombatarReanim();
     bool IsImmobilizied();
@@ -326,6 +331,7 @@ public:
     Sexy::Rect GetZombieRect();
     void GetDrawPos(ZombieDrawPosition &theDrawPos);
     bool IsOnHighGround();
+    void DropLoot();
     bool IsOnBoard();
     bool EffectedByDamage(unsigned int theDamageRangeFlags);
     int GetHelmDamageIndex();
@@ -334,6 +340,7 @@ public:
     bool IsFireResistant();
     void PickRandomSpeed();
     float ZombieTargetLeadX(float theTime);
+    void ApplyBurn();
     bool ZombieNotWalking();
     bool IsMovingAtChilledSpeed();
     void UpdateZombieWalking();
@@ -415,6 +422,8 @@ inline Zombie *(*old_Zombie_FindZombieTarget)(Zombie *);
 
 inline void (*old_Zombie_TakeDamage)(Zombie *, int theDamage, unsigned int theDamageFlags);
 
+inline int (*old_Zombie_TakeHelmDamage)(Zombie *, int theDamage, unsigned int theDamageFlags);
+
 inline void (*old_Zombie_PlayZombieReanim)(Zombie *, const char *theTrackName, ReanimLoopType theLoopType, int theBlendTime, float theAnimRate);
 
 inline void (*old_Zombie_StartWalkAnim)(Zombie *, int theBlendTime);
@@ -438,5 +447,9 @@ inline void (*old_Zombie_SquishAllInSquare)(Zombie *, int theX, int theY, Zombie
 inline void (*old_Zombie_StopEating)(Zombie *);
 
 inline void (*old_Zombie_UpdateZombieWalking)(Zombie *);
+
+inline void (*old_Zombie_DropLoot)(Zombie *);
+
+inline void (*old_Zombie_ApplyBurn)(Zombie *);
 
 #endif // PVZ_LAWN_BOARD_ZOMBIE_H

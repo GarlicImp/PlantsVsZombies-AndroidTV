@@ -442,6 +442,10 @@ void SeedChooserScreen::ShowToolTip(unsigned int thePlayerIndex) {
                     aTitle = TodStringTranslate("[TALLNUT_HEAD_ZOMBIE]");
                     aLabel = TodStringTranslate("[TALLNUT_HEAD_ZOMBIE_DESCRIPTION_HEADER]");
                     break;
+                case SeedType::SEED_ZOMBIE_EXPLODE_O_NUT_HEAD: // 爆炸坚果僵尸
+                    aTitle = TodStringTranslate("[EXPLODE_O_NUT_HEAD_ZOMBIE]");
+                    aLabel = TodStringTranslate("[EXPLODE_O_NUT_HEAD_ZOMBIE_DESCRIPTION_HEADER]");
+                    break;
                 case SeedType::SEED_ZOMBIE_JACKSON:
                     aTitle = TodStringTranslate("[JACKSON_ZOMBIE]");
                     aLabel = TodStringTranslate("[JACKSON_ZOMBIE_DESCRIPTION_HEADER]");

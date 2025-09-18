@@ -415,6 +415,10 @@ inline void *Zombie_ReanimIgnoreClipRectAddr;
 inline void *Zombie_SetAnimRateAddr;
 inline void *Zombie_UpdateZombieWalkingAddr;
 inline void *Zombie_DrawDancerReanimAddr;
+inline void *Zombie_DropLootAddr;
+inline void *Zombie_PlayDeathAnimAddr;
+inline void *Zombie_DrawBobsledReanimAddr;
+inline void *Zombie_DrawBungeeReanimAddr;
 
 
 inline void *SeedChooserScreen_UpdateAddr;
@@ -730,6 +734,8 @@ inline void *Reanimation_ShowOnlyTrackAddr;
 inline void *Reanimation_SetImageOverrideAddr;
 inline void *Reanimation_GetTrackMatrixAddr;
 inline void *Reanimation_GetAttachmentOverlayMatrixAddr;
+inline void *Reanimation_AssignRenderGroupToPrefixAddr;
+inline void *Reanimation_PropogateColorToAttachmentsAddr;
 
 
 inline void *Sexy_GamepadApp_CheckGamepadAddr;
@@ -838,6 +844,7 @@ inline void *AttachmentDrawAddr;
 inline void *AttachmentDetachAddr;
 inline void *AttachmentDieAddr;
 inline void *AttachReanimAddr;
+inline void *AttachmentUpdateAndSetMatrixAddr;
 
 
 inline void *TodScaleRotateTransformMatrixAddr;
@@ -1138,6 +1145,8 @@ inline Image **IMAGE_BLANK;
 inline Image **IMAGE_SEEDCHOOSER_BACKGROUND2;
 inline Image **IMAGE_SEEDPACKETSILHOUETTE;
 inline Image **IMAGE_PUFFSHROOM_PUFF1;
+inline Image **IMAGE_REANIM_WALLNUT_CRACKED1;
+inline Image **IMAGE_REANIM_WALLNUT_CRACKED2;
 
 inline Font **FONT_DWARVENTODCRAFT18;
 }
@@ -1658,6 +1667,10 @@ inline bool GetFunctionAddr() {
     Zombie_SetAnimRateAddr = dlsym(handle, "_ZN6Zombie11SetAnimRateEf");
     Zombie_UpdateZombieWalkingAddr = dlsym(handle, "_ZN6Zombie19UpdateZombieWalkingEv");
     Zombie_DrawDancerReanimAddr = dlsym(handle, "_ZN6Zombie16DrawDancerReanimEPN4Sexy8GraphicsER18ZombieDrawPosition");
+    Zombie_DropLootAddr = dlsym(handle, "_ZN6Zombie8DropLootEv");
+    Zombie_PlayDeathAnimAddr = dlsym(handle, "_ZN6Zombie13PlayDeathAnimEj");
+    Zombie_DrawBobsledReanimAddr = dlsym(handle, "_ZN6Zombie17DrawBobsledReanimEPN4Sexy8GraphicsER18ZombieDrawPositionb");
+    Zombie_DrawBungeeReanimAddr = dlsym(handle, "_ZN6Zombie16DrawBungeeReanimEPN4Sexy8GraphicsER18ZombieDrawPosition");
 
 
     SeedChooserScreen_UpdateAddr = dlsym(handle, "_ZN17SeedChooserScreen6UpdateEv");
@@ -1974,6 +1987,8 @@ inline bool GetFunctionAddr() {
     Reanimation_SetImageOverrideAddr = dlsym(handle, "_ZN11Reanimation16SetImageOverrideEPKcPN4Sexy5ImageE");
     Reanimation_GetTrackMatrixAddr = dlsym(handle, "_ZN11Reanimation14GetTrackMatrixEiRN4Sexy15SexyTransform2DE");
     Reanimation_GetAttachmentOverlayMatrixAddr = dlsym(handle, "_ZN11Reanimation26GetAttachmentOverlayMatrixEiRN4Sexy15SexyTransform2DE");
+    Reanimation_AssignRenderGroupToPrefixAddr = dlsym(handle, "_ZN11Reanimation25AssignRenderGroupToPrefixEPKci");
+    Reanimation_PropogateColorToAttachmentsAddr = dlsym(handle, "_ZN11Reanimation27PropogateColorToAttachmentsEv");
 
 
     ZenGarden_GetStinkyAddr = dlsym(handle, "_ZN9ZenGarden9GetStinkyEv");
@@ -2022,6 +2037,7 @@ inline bool GetFunctionAddr() {
     AttachmentDetachAddr = dlsym(handle, "_Z16AttachmentDetachR12AttachmentID");
     AttachmentDieAddr = dlsym(handle, "_Z13AttachmentDieR12AttachmentID");
     AttachReanimAddr = dlsym(handle, "_Z12AttachReanimR12AttachmentIDP11Reanimationff");
+    AttachmentUpdateAndSetMatrixAddr = dlsym(handle, "_Z28AttachmentUpdateAndSetMatrixR12AttachmentIDRKN4Sexy15SexyTransform2DE");
 
 
     TodScaleRotateTransformMatrixAddr = dlsym(handle, "_Z29TodScaleRotateTransformMatrixRN4Sexy11SexyMatrix3Efffff");
@@ -2366,6 +2382,8 @@ inline bool GetFunctionAddr() {
     Sexy::IMAGE_SEEDCHOOSER_BACKGROUND2 = reinterpret_cast<Sexy::Image **>(dlsym(handle, "_ZN4Sexy29IMAGE_SEEDCHOOSER_BACKGROUND2E"));
     Sexy::IMAGE_SEEDPACKETSILHOUETTE = reinterpret_cast<Sexy::Image **>(dlsym(handle, "_ZN4Sexy26IMAGE_SEEDPACKETSILHOUETTEE"));
     Sexy::IMAGE_PUFFSHROOM_PUFF1 = reinterpret_cast<Sexy::Image **>(dlsym(handle, "_ZN4Sexy22IMAGE_PUFFSHROOM_PUFF1E"));
+    Sexy::IMAGE_REANIM_WALLNUT_CRACKED1 = reinterpret_cast<Sexy::Image **>(dlsym(handle, "_ZN4Sexy29IMAGE_REANIM_WALLNUT_CRACKED1E"));
+    Sexy::IMAGE_REANIM_WALLNUT_CRACKED2 = reinterpret_cast<Sexy::Image **>(dlsym(handle, "_ZN4Sexy29IMAGE_REANIM_WALLNUT_CRACKED2E"));
 
     Sexy::FONT_DWARVENTODCRAFT18 = reinterpret_cast<Sexy::Font **>(dlsym(handle, "_ZN4Sexy22FONT_DWARVENTODCRAFT18E"));
 

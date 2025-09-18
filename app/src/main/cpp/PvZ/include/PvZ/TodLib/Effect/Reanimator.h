@@ -261,6 +261,12 @@ public:
     void GetAttachmentOverlayMatrix(int theTrackIndex, Sexy::SexyTransform2D &theOverlayMatrix) {
         reinterpret_cast<void (*)(Reanimation *, int, Sexy::SexyTransform2D &)>(Reanimation_GetAttachmentOverlayMatrixAddr)(this, theTrackIndex, theOverlayMatrix);
     }
+    void AssignRenderGroupToPrefix(const char *theTrackName, int theRenderGroup) {
+        reinterpret_cast<void (*)(Reanimation *, const char *, int)>(Reanimation_AssignRenderGroupToPrefixAddr)(this, theTrackName, theRenderGroup);
+    }
+    void PropogateColorToAttachments() {
+        reinterpret_cast<void(*)(Reanimation *)>(Reanimation_PropogateColorToAttachmentsAddr)(this);
+    }
 
     void Draw(Sexy::Graphics *g);
     bool DrawTrack(Sexy::Graphics *g, int theTrackIndex, int theRenderGroup, TodTriangleGroup *theTriangleGroup);

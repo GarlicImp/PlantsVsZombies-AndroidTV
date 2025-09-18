@@ -49,6 +49,10 @@ inline AttachEffect *AttachReanim(AttachmentID &theAttachmentID, Reanimation *th
     return reinterpret_cast<AttachEffect *(*)(AttachmentID &, Reanimation *, float, float)>(AttachReanimAddr)(theAttachmentID, theReanimation, theOffsetX, theOffsetY);
 }
 
+inline void AttachmentUpdateAndSetMatrix(AttachmentID& theAttachmentID, const Sexy::SexyTransform2D& theMatrix) {
+    reinterpret_cast<void(*)(AttachmentID&, const Sexy::SexyTransform2D&)>(AttachmentUpdateAndSetMatrixAddr)(theAttachmentID, theMatrix);
+}
+
 inline void AttachmentDraw(AttachmentID theAttachmentID, Sexy::Graphics *g, bool theParentHidden) {
     reinterpret_cast<void (*)(AttachmentID, Sexy::Graphics *, bool)>(AttachmentDrawAddr)(theAttachmentID, g, theParentHidden);
 }

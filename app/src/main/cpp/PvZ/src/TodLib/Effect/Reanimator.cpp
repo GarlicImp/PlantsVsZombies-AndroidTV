@@ -106,6 +106,7 @@ static ReanimationParams gNewReanimationParamArray[] = {
     {ReanimationType::REANIM_ZOMBATAR_HEAD, "addonFiles/compiled/reanim/zombatar_zombie_head.reanim", 1},
     {ReanimationType::REANIM_JACKSON, "addonFiles/compiled/reanim/Zombie_jackson.reanim", 0},
     {ReanimationType::REANIM_BACKUP_DANCER2, "addonFiles/compiled/reanim/Zombie_backup2.reanim", 0},
+    {ReanimationType::REANIM_GIGA_FOOTBALL, "addonFiles/compiled/reanim/Zombie_giga_football.reanim", 0},
 };
 
 void ReanimatorLoadDefinitions(ReanimationParams *theReanimationParamArray, int theReanimationParamArraySize) {

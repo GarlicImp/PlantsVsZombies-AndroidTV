@@ -575,6 +575,7 @@ public:
     void PutZombieInWave(ZombieType theZombieType, int theWaveNumber, ZombiePicker *theZombiePicker);
     int TotalZombiesHealthInWave(int theWaveIndex);
     void KillAllZombiesInRadius(int theRow, int theX, int theY, int theRadius, int theRowRange, bool theBurn, int theDamageRangeFlags);
+    void KillAllPlantsInRadius(int theX, int theY, int theRadius);
     void RemoveCutsceneZombies();
     int CountZombiesOnScreen();
     float GetPosYBasedOnRow(float thePosX, int theRow);

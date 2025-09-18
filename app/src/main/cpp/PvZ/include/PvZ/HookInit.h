@@ -342,7 +342,7 @@ inline void InitHookFunction() {
     homura::HookFunction(Zombie_DrawBungeeCordAddr, &Zombie::DrawBungeeCord, nullptr);
     homura::HookFunction(Zombie_IsTangleKelpTargetAddr, &Zombie::IsTangleKelpTarget, nullptr);
     homura::HookFunction(Zombie_IsTangleKelpTarget2Addr, &Zombie::IsTangleKelpTarget, nullptr);
-    homura::HookFunction(Zombie_DrawReanimAddr, &Zombie::DrawReanim, &old_Zombie_DrawReanim);
+    homura::HookFunction(Zombie_DrawReanimAddr, &Zombie::DrawReanim, nullptr);
     homura::HookFunction(Zombie_DropHeadAddr, &Zombie::DropHead, &old_Zombie_DropHead);
     homura::HookFunction(Zombie_DropArmAddr, &Zombie::DropArm, &old_Zombie_DropArm);
     homura::HookFunction(Zombie_ZombieInitializeAddr, &Zombie::ZombieInitialize, &old_Zombie_ZombieInitialize);
@@ -352,6 +352,7 @@ inline void InitHookFunction() {
     homura::HookFunction(Zombie_FindPlantTargetAddr, &Zombie::FindPlantTarget, &old_Zombie_FindPlantTarget);
     homura::HookFunction(Zombie_FindZombieTargetAddr, &Zombie::FindZombieTarget, &old_Zombie_FindZombieTarget);
     homura::HookFunction(Zombie_TakeDamageAddr, &Zombie::TakeDamage, &old_Zombie_TakeDamage);
+    homura::HookFunction(Zombie_TakeHelmDamageAddr, &Zombie::TakeHelmDamage, &old_Zombie_TakeHelmDamage);
     homura::HookFunction(Zombie_PlayZombieReanimAddr, &Zombie::PlayZombieReanim, &old_Zombie_PlayZombieReanim);
     homura::HookFunction(Zombie_StartWalkAnimAddr, &Zombie::StartWalkAnim, &old_Zombie_StartWalkAnim);
     homura::HookFunction(Zombie_ReanimShowPrefixAddr, &Zombie::ReanimShowPrefix, &old_Zombie_ReanimShowPrefix);
@@ -365,6 +366,9 @@ inline void InitHookFunction() {
     homura::HookFunction(Zombie_StopEatingAddr, &Zombie::StopEating, &old_Zombie_StopEating);
     homura::HookFunction(Zombie_PickRandomSpeedAddr, &Zombie::PickRandomSpeed, nullptr);
     homura::HookFunction(Zombie_UpdateZombieWalkingAddr, &Zombie::UpdateZombieWalking, &old_Zombie_UpdateZombieWalking);
+    homura::HookFunction(Zombie_UpdateDamageStatesAddr, &Zombie::UpdateDamageStates, nullptr);
+    homura::HookFunction(Zombie_DropLootAddr, &Zombie::DropLoot, &old_Zombie_DropLoot);
+    homura::HookFunction(Zombie_ApplyBurnAddr, &Zombie::ApplyBurn, &old_Zombie_ApplyBurn);
 
 
     homura::HookFunction(Sexy_Dialog_AddedToManagerWidgetManagerAddr, &SexyDialog_AddedToManager, &old_SexyDialog_AddedToManager);
