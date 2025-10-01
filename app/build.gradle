@@ -6,6 +6,18 @@ def keystoreProperties = new Properties()
 def keystorePropertiesFile = rootProject.file("keystore.properties")
 if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+} else {
+    Runtime.getRuntime().exec(
+            "keytool", "-genkeypair",
+            "-v", "-keystore", "${System.getProperty("user.home")}/debug.keystore",
+            "-storepass", "android",
+            "-keypass", "android",
+            "-alias", "androiddebugkey",
+            "-keyalg", "RSA",
+            "-keysize", "2048",
+            "-validity", "10000",
+            "-dname", "CN=Android Debug,O=Android,C=US"
+    ).waitFor()
 }
 
 android {
@@ -57,7 +69,7 @@ android {
     flavorDimensions += "version"
 
     productFlavors {
-        create("v111") {
+        register("v111") {
             dimension = "version"
             applicationId = "com.trans.pvz"
             versionName = "1.1.1"
@@ -68,7 +80,7 @@ android {
             }
         }
 
-        create("v115") {
+        register("v115") {
             dimension = "version"
             versionName = "1.1.5"
             externalNativeBuild {
