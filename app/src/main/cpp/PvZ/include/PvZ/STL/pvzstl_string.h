@@ -65,8 +65,6 @@ struct _uninitialized_size_tag {};
 template <typename CharT>
 class basic_string {
 public:
-    static_assert(std::is_same_v<CharT, char> || std::is_same_v<CharT, wchar_t> || std::is_same_v<CharT, char32_t>);
-
     using traits_type = std::char_traits<CharT>;
     using value_type = CharT;
     using size_type = std::uint32_t;
@@ -86,6 +84,15 @@ public:
     using reverse_iterator = const_reverse_iterator;
 
     using _self_view = std::basic_string_view<CharT>;
+
+#ifdef PVZ_VERSION
+    static_assert(std::is_same_v<CharT, char> || std::is_same_v<CharT, wchar_t> || std::is_same_v<CharT, char32_t>);
+#else
+    static_assert(!std::is_array_v<CharT>, "Character type of basic_string must not be an array");
+    static_assert(std::is_standard_layout_v<CharT>, "Character type of basic_string must be standard-layout");
+    static_assert(std::is_trivial_v<CharT>, "Character type of basic_string must be trivial");
+    static_assert(std::is_same_v<CharT, typename traits_type::char_type>, "traits_type::char_type must be the same type as CharT");
+#endif
 
     static constexpr size_type npos = static_cast<size_type>(-1);
 
@@ -890,10 +897,12 @@ template <typename CharT>
 }
 
 using string = basic_string<char>;
-
-/* `basic_string<int>` in PvZ */
-using wstring = basic_string<wchar_t>;
-using u32string = basic_string<char32_t>;
+using wstring = basic_string<wchar_t>; // `basic_string<int>` in PvZ
+#ifndef PVZ_VERSION
+using u8string = basic_string<char8_t>;
+using u16string = basic_string<char16_t>;
+#endif
+using u32string = basic_string<char32_t>; // `basic_string<int>` in PvZ
 
 } // namespace pvzstl
 
