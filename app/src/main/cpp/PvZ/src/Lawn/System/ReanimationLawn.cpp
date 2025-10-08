@@ -186,7 +186,23 @@ Sexy::MemoryImage *ReanimatorCache::MakeCachedZombieFrame(ZombieType theZombieTy
         aReanim->Update();
         aReanim->Draw(&aMemoryGraphics);
         gNewZombieImages[theZombieType - NUM_CACHED_ZOMBIE_TYPES - 1] = aMemoryImage;
-    } else if (theZombieType == ZombieType::ZOMBIE_JACKSON) {
+    } else if (theZombieType == ZombieType::ZOMBIE_GIGA_FOOTBALL) {
+        Reanimation aReanim;
+        aReanim.ReanimationInitializeType(aPosX, aPosY, aZombieDef.mReanimationType);
+        aReanim.PlayReanim("anim_idle", ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD, 0, 24.0f);
+        aReanim.mAnimTime = 0.5f;
+        aReanim.Update();
+        aReanim.Draw(&aMemoryGraphics);
+        gNewZombieImages[theZombieType - NUM_CACHED_ZOMBIE_TYPES - 1] = aMemoryImage;
+    } else if (theZombieType == ZombieType::ZOMBIE_SUPER_FAN_IMP) {
+        Reanimation aReanim;
+        aReanim.ReanimationInitializeType(aPosX, aPosY, aZombieDef.mReanimationType);
+        aReanim.PlayReanim("anim_idle", ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD, 0, 24.0f);
+        aReanim.mAnimTime = 0.5f;
+        aReanim.Update();
+        aReanim.Draw(&aMemoryGraphics);
+        gNewZombieImages[theZombieType - NUM_CACHED_ZOMBIE_TYPES - 1] = aMemoryImage;
+    }  else if (theZombieType == ZombieType::ZOMBIE_JACKSON) {
         Reanimation aReanim;
         aReanim.ReanimationInitializeType(aPosX, aPosY, aZombieDef.mReanimationType);
         aReanim.PlayReanim("anim_moonwalk", ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD, 0, 24.0f);
@@ -197,14 +213,6 @@ Sexy::MemoryImage *ReanimatorCache::MakeCachedZombieFrame(ZombieType theZombieTy
         Reanimation aReanim;
         aReanim.ReanimationInitializeType(aPosX, aPosY, aZombieDef.mReanimationType);
         aReanim.PlayReanim("anim_armraise", ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD, 0, 24.0f);
-        aReanim.mAnimTime = 0.5f;
-        aReanim.Update();
-        aReanim.Draw(&aMemoryGraphics);
-        gNewZombieImages[theZombieType - NUM_CACHED_ZOMBIE_TYPES - 1] = aMemoryImage;
-    } else if (theZombieType == ZombieType::ZOMBIE_GIGA_FOOTBALL) {
-        Reanimation aReanim;
-        aReanim.ReanimationInitializeType(aPosX, aPosY, aZombieDef.mReanimationType);
-        aReanim.PlayReanim("anim_idle", ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD, 0, 24.0f);
         aReanim.mAnimTime = 0.5f;
         aReanim.Update();
         aReanim.Draw(&aMemoryGraphics);

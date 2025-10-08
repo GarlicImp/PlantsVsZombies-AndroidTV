@@ -2272,7 +2272,7 @@ void TestMenuWidget_DrawZombieSelection(ZombatarWidget *zombatarWidget, Sexy::Gr
         ZombieType::ZOMBIE_FLAG,
         ZombieType::ZOMBIE_TRAFFIC_CONE,
         ZombieType::ZOMBIE_DOOR,
-        ZombieType::ZOMBIE_TRASH_BIN,
+        ZombieType::ZOMBIE_TRASHCAN,
         ZombieType::ZOMBIE_PAIL,
         ZombieType::ZOMBIE_DUCKY_TUBE,
     };

@@ -26,7 +26,7 @@
 using namespace Sexy;
 
 VSSetupWidget::VSSetupWidget() {
-    if (moreZombieSeeds) {
+    if (gMoreZombieSeeds) {
         game_patches::drawMoreZombieSeeds.Modify();
     }
 }

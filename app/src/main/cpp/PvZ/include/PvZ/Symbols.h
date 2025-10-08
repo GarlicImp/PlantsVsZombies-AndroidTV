@@ -342,6 +342,7 @@ inline void *Zombie_StopZombieSoundAddr;
 inline void *Zombie_ApplyBurnAddr;
 inline void *Zombie_DrawAddr;
 inline void *Zombie_UpdateYetiAddr;
+inline void *Zombie_UpdateZombieFlyerAddr;
 inline void *Zombie_UpdateZombieImpAddr;
 inline void *Zombie_UpdateZombieGargantuarAddr;
 inline void *Zombie_UpdateZombiePeaHeadAddr;
@@ -419,6 +420,8 @@ inline void *Zombie_DropLootAddr;
 inline void *Zombie_PlayDeathAnimAddr;
 inline void *Zombie_DrawBobsledReanimAddr;
 inline void *Zombie_DrawBungeeReanimAddr;
+inline void *Zombie_CheckIfPreyCaughtAddr;
+inline void *Zombie_EatZombieAddr;
 
 
 inline void *SeedChooserScreen_UpdateAddr;
@@ -1149,6 +1152,8 @@ inline Image **IMAGE_REANIM_WALLNUT_CRACKED1;
 inline Image **IMAGE_REANIM_WALLNUT_CRACKED2;
 
 inline Font **FONT_DWARVENTODCRAFT18;
+
+inline int *SOUND_BALLOON_POP;
 }
 
 inline Sexy::Image **Sexy_IMAGE_SEEDPACKETFLASH_Addr;
@@ -1593,6 +1598,7 @@ inline bool GetFunctionAddr() {
     Zombie_ApplyBurnAddr = dlsym(handle, "_ZN6Zombie9ApplyBurnEv");
     Zombie_DrawAddr = dlsym(handle, "_ZN6Zombie4DrawEPN4Sexy8GraphicsE");
     Zombie_UpdateYetiAddr = dlsym(handle, "_ZN6Zombie10UpdateYetiEv");
+    Zombie_UpdateZombieFlyerAddr = dlsym(handle, "_ZN6Zombie17UpdateZombieFlyerEv");
     Zombie_UpdateZombieImpAddr = dlsym(handle, "_ZN6Zombie15UpdateZombieImpEv");
     Zombie_UpdateZombieGargantuarAddr = dlsym(handle, "_ZN6Zombie22UpdateZombieGargantuarEv");
     Zombie_UpdateZombiePeaHeadAddr = dlsym(handle, "_ZN6Zombie19UpdateZombiePeaHeadEv");
@@ -1671,6 +1677,8 @@ inline bool GetFunctionAddr() {
     Zombie_PlayDeathAnimAddr = dlsym(handle, "_ZN6Zombie13PlayDeathAnimEj");
     Zombie_DrawBobsledReanimAddr = dlsym(handle, "_ZN6Zombie17DrawBobsledReanimEPN4Sexy8GraphicsER18ZombieDrawPositionb");
     Zombie_DrawBungeeReanimAddr = dlsym(handle, "_ZN6Zombie16DrawBungeeReanimEPN4Sexy8GraphicsER18ZombieDrawPosition");
+    Zombie_CheckIfPreyCaughtAddr = dlsym(handle, "_ZN6Zombie17CheckIfPreyCaughtEv");
+    Zombie_EatZombieAddr = dlsym(handle, "_ZN6Zombie9EatZombieEPS_");
 
 
     SeedChooserScreen_UpdateAddr = dlsym(handle, "_ZN17SeedChooserScreen6UpdateEv");
@@ -2386,6 +2394,8 @@ inline bool GetFunctionAddr() {
     Sexy::IMAGE_REANIM_WALLNUT_CRACKED2 = reinterpret_cast<Sexy::Image **>(dlsym(handle, "_ZN4Sexy29IMAGE_REANIM_WALLNUT_CRACKED2E"));
 
     Sexy::FONT_DWARVENTODCRAFT18 = reinterpret_cast<Sexy::Font **>(dlsym(handle, "_ZN4Sexy22FONT_DWARVENTODCRAFT18E"));
+
+    Sexy::SOUND_BALLOON_POP = reinterpret_cast<int *>(dlsym(handle, "_ZN4Sexy17SOUND_BALLOON_POPE"));
 
     Sexy_IMAGE_SEEDPACKETFLASH_Addr = (Sexy::Image **)dlsym(handle, "_ZN4Sexy21IMAGE_SEEDPACKETFLASHE");
     Sexy_IMAGE_ALMANAC_GROUNDDAY_Addr = (Sexy::Image **)dlsym(handle, "_ZN4Sexy23IMAGE_ALMANAC_GROUNDDAYE");

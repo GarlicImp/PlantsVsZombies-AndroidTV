@@ -122,6 +122,8 @@ void LawnApp::LoadAddonImages() {
 void LawnApp::LoadAddonSounds() {
     addonSounds.achievement = GetSoundByFileName("addonFiles/sounds/achievement");
     addonSounds.thriller = GetSoundByFileName("addonFiles/sounds/thriller");
+    addonSounds.allstardbl = GetSoundByFileName("addonFiles/sounds/allstardbl");
+    addonSounds.whistle = GetSoundByFileName("addonFiles/sounds/whistle");
 
     int addonSoundsNum = (sizeof(addonSounds) / sizeof(int));
     mCompletedLoadingThreadTasks += 54 * addonSoundsNum;
@@ -353,7 +355,7 @@ bool LawnApp::IsChallengeWithoutSeedBank() {
 
 int LawnApp::GetSeedsAvailable(bool theIsZombieChooser) {
     // 解锁僵尸方拓展卡片
-    if (theIsZombieChooser && moreZombieSeeds) {
+    if (theIsZombieChooser && gMoreZombieSeeds) {
         return NUM_ZOMBIE_SEED_IN_CHOOSER;
     }
 

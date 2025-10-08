@@ -47,10 +47,12 @@ constexpr const int POGO_BOUNCE_TIME = 80;
 constexpr const int DOLPHIN_JUMP_TIME = 120;
 constexpr const int JackInTheBoxZombieRadius = 115;
 constexpr const int JackInTheBoxPlantRadius = 90;
+constexpr const int SuperFanImpZombieRadius = 35;
+constexpr const int SuperFanImpPlantRadius = 30;
 constexpr const int BOBSLED_CRASH_TIME = 150;
 constexpr const int ZOMBIE_BACKUP_DANCER_RISE_HEIGHT = -200;
 constexpr const int BOSS_FLASH_HEALTH_FRACTION = 10;
-constexpr const int TICKS_BETWEEN_EATS = 4;
+constexpr const int TICKS_BETWEEN_EATS = 8;
 constexpr const int DAMAGE_PER_EAT = TICKS_BETWEEN_EATS;
 constexpr const float THOWN_ZOMBIE_GRAVITY = 0.05f;
 constexpr const float CHILLED_SPEED_FACTOR = 0.4f;
@@ -256,21 +258,30 @@ public:
     void DrawBungeeReanim(Sexy::Graphics* g, ZombieDrawPosition& theDrawPos) {
         reinterpret_cast<void (*)(Zombie *, Sexy::Graphics*, ZombieDrawPosition&)>(Zombie_DrawBungeeReanimAddr)(this, g, theDrawPos);
     }
+    void EatZombie(Zombie *theZombie) {
+        reinterpret_cast<void (*)(Zombie *, Zombie *)>(Zombie_EatZombieAddr)(this, theZombie);
+    }
 
     Zombie() {
         __Constructor();
     }
     void ZombieInitialize(int theRow, ZombieType theType, bool theVariant, Zombie *theParentZombie, int theFromWave, bool theIsVisible);
+    void CheckIfPreyCaught();
     void Draw(Sexy::Graphics *g);
+    void DieWithLoot();
     void DieNoLoot();
     void StopZombieSound();
     void Update();
     void UpdateActions();
     void DoSpecial();
+    void UpdateZombieGigaFootball();
     void UpdateZombieBackupDancer();
     void UpdateZombieJackson();
+    void LandFlyer(unsigned int theDamageFlags);
+    void UpdateZombieFlyer();
     void UpdateYeti();
     void UpdateZombieImp();
+    void UpdateImpGettingTackle();
     void UpdateZombieGargantuar();
     void UpdateZombiePeaHead();
     void UpdateZombieGatlingHead();
@@ -300,6 +311,7 @@ public:
     Sexy::Rect GetZombieAttackRect();
     Plant *FindPlantTarget(ZombieAttackType theAttackType);
     Plant *FindPlantTargetInNextGrid(ZombieAttackType theAttackType);
+    Zombie *FindZombieFootball();
     bool CanTargetPlant(Plant *thePlant, ZombieAttackType theAttackType);
     Zombie *FindZombieTarget();
     void TakeDamage(int theDamage, unsigned int theDamageFlags);
@@ -327,6 +339,8 @@ public:
     static bool IsZombatarZombie(ZombieType theType);
     void SquishAllInSquare(int theX, int theY, ZombieAttackType theAttackType);
     bool IsWalkingBackwards();
+    void SetupDoorArms(Reanimation *aReanim, bool theShow);
+    void ShowDoorArms(bool theShow);
     void StopEating();
     Sexy::Rect GetZombieRect();
     void GetDrawPos(ZombieDrawPosition &theDrawPos);
@@ -373,7 +387,7 @@ public:
     const char *mZombieName;
 };
 extern ZombieDefinition gZombieDefs[NUM_ZOMBIE_TYPES];
-inline ZombieDefinition gZombieTrashBinDef = {ZombieType::ZOMBIE_TRASH_BIN, ReanimationType::REANIM_ZOMBIE, 1, 99, 1, 4000, "TRASHCAN_ZOMBIE"};
+inline ZombieDefinition gZombieTrashBinDef = {ZombieType::ZOMBIE_TRASHCAN, ReanimationType::REANIM_ZOMBIE, 1, 99, 1, 4000, "TRASHCAN_ZOMBIE"};
 extern ZombieDefinition gNewZombieDefs[];
 
 ZombieDefinition &GetZombieDefinition(ZombieType theZombieType);
@@ -416,10 +430,6 @@ inline void (*old_Zombie_DropHead)(Zombie *zombie, unsigned int a2);
 
 inline void (*old_Zombie_DropArm)(Zombie *, unsigned int);
 
-inline Plant *(*old_Zombie_FindPlantTarget)(Zombie *, ZombieAttackType);
-
-inline Zombie *(*old_Zombie_FindZombieTarget)(Zombie *);
-
 inline void (*old_Zombie_TakeDamage)(Zombie *, int theDamage, unsigned int theDamageFlags);
 
 inline int (*old_Zombie_TakeHelmDamage)(Zombie *, int theDamage, unsigned int theDamageFlags);
@@ -443,8 +453,6 @@ inline void (*old_Zombie_UpdateReanim)(Zombie *);
 inline int (*old_Zombie_GetBobsledPosition)(Zombie *);
 
 inline void (*old_Zombie_SquishAllInSquare)(Zombie *, int theX, int theY, ZombieAttackType theAttackType);
-
-inline void (*old_Zombie_StopEating)(Zombie *);
 
 inline void (*old_Zombie_UpdateZombieWalking)(Zombie *);
 

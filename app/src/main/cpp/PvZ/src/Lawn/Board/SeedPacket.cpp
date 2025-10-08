@@ -59,8 +59,15 @@ void SeedPacket::Update() {
         SeedPacket *aSeedPacket = &mSeedBank->mSeedPackets[i];
         SeedType aPacketType = aSeedPacket->mPacketType;
         if (aPacketType == SeedType::SEED_ZOMBIE_BACKUP_DANCER2) {
-            if (!mBoard->GetLiveJackson()) {
+            if (!mBoard->GetLiveZombieByType(ZombieType::ZOMBIE_JACKSON)) {
                 aSeedPacket->SetPacketType(SeedType::SEED_ZOMBIE_JACKSON, SeedType::SEED_NONE);
+                aSeedPacket->Deactivate();
+                aSeedPacket->WasPlanted(1);
+            }
+        }
+        if (aPacketType == SeedType::SEED_ZOMBIE_SUPER_FAN_IMP) {
+            if (!mBoard->GetLiveZombieByType(ZombieType::ZOMBIE_GIGA_FOOTBALL)) {
+                aSeedPacket->SetPacketType(SeedType::SEED_ZOMBIE_GIGA_FOOTBALL, SeedType::SEED_NONE);
                 aSeedPacket->Deactivate();
                 aSeedPacket->WasPlanted(1);
             }
@@ -159,6 +166,16 @@ void SeedPacket::SetPacketType(SeedType theSeedType, SeedType theImitaterType) {
     if (mApp->mGameMode == GameMode::GAMEMODE_MP_VS) {
         switch (theSeedType) {
             case SEED_SUNSHROOM: // 清除阳光菇的初始冷却
+                mRefreshTime = 0;
+                mRefreshing = false;
+                mActive = true;
+                break;
+            case SEED_ZOMBIE_GIGA_FOOTBALL:
+                mRefreshTime = aRefreshTime * 2 / 3;
+                mRefreshing = true;
+                mActive = false;
+                break;
+            case SEED_ZOMBIE_SUPER_FAN_IMP:
                 mRefreshTime = 0;
                 mRefreshing = false;
                 mActive = true;
@@ -368,7 +385,7 @@ void DrawSeedPacket(Sexy::Graphics *g,
         case SeedType::SEED_ZOMBIE_LADDER:
         case SeedType::SEED_ZOMBIE_DIGGER:
         case SeedType::SEED_ZOMBIE_SCREEN_DOOR:
-        case SeedType::SEED_ZOMBIE_TRASH_BIN:
+        case SeedType::SEED_ZOMBIE_TRASHCAN:
         case SeedType::SEED_ZOMBIE_POGO:
         case SeedType::SEED_ZOMBIE_JACK_IN_THE_BOX:
         case SeedType::SEED_ZOMBIE_DUCKY_TUBE:
@@ -403,6 +420,7 @@ void DrawSeedPacket(Sexy::Graphics *g,
             theDrawScale = 0.35;
             break;
         case SeedType::SEED_ZOMBIE_IMP:
+        case SeedType::SEED_ZOMBIE_SUPER_FAN_IMP:
             offsetY = -17.0;
             offsetX = -12.0;
             theDrawScale = 0.4;

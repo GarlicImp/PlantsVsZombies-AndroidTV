@@ -557,7 +557,7 @@ public:
     static int MakeRenderOrder(RenderLayer theRenderLayer, int theRow, int theLayerOffset);
     int GetLiveGargantuarCount();
     int GetLiveZombiesCount();
-    Zombie *GetLiveJackson();
+    Zombie *GetLiveZombieByType(ZombieType theZombieType);
     void FixReanimErrorAfterLoad();
     void DoPlantingAchievementCheck(SeedType theSeedType);
     bool GrantAchievement(AchievementId theAchievementId, bool theIsShow);

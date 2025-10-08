@@ -334,7 +334,7 @@ void GamepadControls::UpdatePreviewReanim() {
             ZombieDefinition &theZombieDefinition = GetZombieDefinition(aZombieType);
             Reanimation *zombieReanim = aApp->AddReanimation(-20.0, -35 - theDrawHeightOffset, aRenderOrder + 1, theZombieDefinition.mReanimationType);
             Zombie::SetupReanimLayers(zombieReanim, aZombieType);
-            if (aZombieType == ZombieType::ZOMBIE_DOOR || aZombieType == ZombieType::ZOMBIE_TRASH_BIN || aZombieType == ZombieType::ZOMBIE_NEWSPAPER
+            if (aZombieType == ZombieType::ZOMBIE_DOOR || aZombieType == ZombieType::ZOMBIE_TRASHCAN || aZombieType == ZombieType::ZOMBIE_NEWSPAPER
                 || aZombieType == ZombieType::ZOMBIE_LADDER) {
                 Zombie::SetupShieldReanims(aZombieType, zombieReanim);
             }
@@ -676,10 +676,15 @@ void GamepadControls::OnButtonDown(ButtonCode theButton, int theIsZombieControl,
                     aSeedPacket->SetPacketType(SeedType::SEED_ZOMBIE_BACKUP_DANCER2, SeedType::SEED_NONE);
                     return;
                 } else if (aZombieType == ZombieType::ZOMBIE_BACKUP_DANCER2) {
-                    Zombie *aZombie = mBoard->GetLiveJackson();
+                    Zombie *aZombie = mBoard->GetLiveZombieByType(ZombieType::ZOMBIE_JACKSON);
                     if (aZombie)
                         aZombie->LaunchAbility();
                 } else if (aZombieType == ZombieType::ZOMBIE_GIGA_FOOTBALL) {
+                    aSeedPacket->SetPacketType(SeedType::SEED_ZOMBIE_SUPER_FAN_IMP, SeedType::SEED_NONE);
+                    Zombie *aZombie = mBoard->AddZombie(aZombieType, -5, false);
+                    if (aZombie)
+                        aZombie->RiseFromGrave(aGridX, aGridY);
+                } else if (aZombieType == ZombieType::ZOMBIE_SUPER_FAN_IMP) {
                     Zombie *aZombie = mBoard->AddZombie(aZombieType, -5, false);
                     if (aZombie)
                         aZombie->RiseFromGrave(aGridX, aGridY);

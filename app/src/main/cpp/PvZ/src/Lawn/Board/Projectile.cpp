@@ -312,6 +312,16 @@ void Projectile::PlayImpactSound(Zombie* theZombie) {
 }
 
 void Projectile::DoImpact(Zombie* theZombie) {
+    if (mApp->mGameMode == GameMode::GAMEMODE_MP_VS) {
+        if (theZombie && theZombie->IsFlying()) {
+            if (mProjectileType == ProjectileType::PROJECTILE_SPIKE) {
+                unsigned int aDamageFlags = GetDamageFlags(theZombie);
+                theZombie->TakeDamage(theZombie->mFlyingHealth, aDamageFlags);
+                return;
+            }
+        }
+    }
+
     if (!projectilePierce) {
         old_Projectile_DoImpact(this, theZombie);
         return;
@@ -438,18 +448,6 @@ void Projectile::CheckForCollision() {
         Die();
         return;
     }
-
-//    if (mProjectileType == ProjectileType::PROJCTILE_ZOMBIE_SOUL) {
-//        Zombie* aZombie = mBoard->ZombieTryToGet(mTargetZombieID);
-//        if (aZombie && aZombie->EffectedByDamage(mDamageRangeFlags)) {
-//            Rect aProjectileRect = GetProjectileRect();
-//            Rect aZombieRect = aZombie->GetZombieRect();
-//            if (GetRectOverlap(aProjectileRect, aZombieRect) >= 0 && mPosY > aZombieRect.mY && mPosY < aZombieRect.mY + aZombieRect.mHeight) {
-//                DoImpact(aZombie);
-//            }
-//        }
-//        return;
-//    }
 
     if (mMotionType == ProjectileMotion::MOTION_HOMING) {
         Zombie* aZombie = mBoard->ZombieTryToGet(mTargetZombieID);

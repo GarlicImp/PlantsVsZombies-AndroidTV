@@ -235,6 +235,8 @@ public class EnhanceActivity extends MainActivity {
 
     public static native void nativeMoreZombieSeeds();
 
+    public static native void nativeVSBalanceAdjustment();
+
     public static native void nativeHeavyWeaponAccel();
 
     public static native void nativeIntroVideoCompleted();
@@ -581,8 +583,11 @@ public class EnhanceActivity extends MainActivity {
         if (sharedPreferences.getBoolean("jumpLogo", false))
             nativeJumpLogo();
 
-        if (sharedPreferences.getBoolean("moreZombieSeeds", false))
+        if (sharedPreferences.getBoolean("gMoreZombieSeeds", false))
             nativeMoreZombieSeeds();
+
+        if (sharedPreferences.getBoolean("gVSBalanceAdjustment", false))
+            nativeVSBalanceAdjustment();
 
         if (sharedPreferences.getBoolean("heavyWeaponAccel", false))
             nativeHeavyWeaponAccel();

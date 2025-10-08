@@ -179,7 +179,7 @@ void TrashBin::Draw(Sexy::Graphics *g) {
     //    TodStringTranslate(holder,"[TRASH_HEIGHT]");
     //    TodReplaceNumberString(holder1,holder,"{HEIGHT}",(int)trashBin->mTrashHeight);
     //
-    //    if (mTrashPileType == ZOMBIE_TRASH_BIN::PLANT_PILE) {
+    //    if (mTrashPileType == ZOMBIE_TRASHCAN::PLANT_PILE) {
     //        Rect theRect ={317,658,120,50};
     //        Sexy::Font* theFont = *Sexy_FONT_CONTINUUMBOLD14_Addr;
     //        TodDrawStringWrapped(g, holder1, &theRect, theFont, &yellow, DrawStringJustification::DS_ALIGN_CENTER, false);

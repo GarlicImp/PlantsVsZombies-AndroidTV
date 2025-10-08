@@ -235,7 +235,7 @@ bool SeedChooserScreen::SeedNotAllowedToPick(SeedType theSeedType) {
     // 此处添加一些逻辑，就可以自定义Ban卡
     // 此处Ban卡仅对植物方生效，theSeedType取值范围是0~39。
 
-    if (moreZombieSeeds) {
+    if (gMoreZombieSeeds) {
         if (theSeedType == SeedType::SEED_BLOVER) {
             return false;
         }
@@ -251,7 +251,7 @@ bool SeedChooserScreen::SeedNotAllowedToPick(SeedType theSeedType) {
 
 SeedType SeedChooserScreen::GetZombieSeedType(SeedType theSeedType) {
     int aSeedType = theSeedType + SEED_ZOMBIE_GRAVESTONE;
-    if (moreZombieSeeds) { // 解锁更多对战僵尸
+    if (gMoreZombieSeeds) { // 解锁更多对战僵尸
         return aSeedType >= NUM_ZOMBIE_SEED_IN_CHOOSER ? SEED_NONE : (SeedType)aSeedType;
     } else {
         return aSeedType > SEED_ZOMBIE_GARGANTUAR ? SEED_NONE : (SeedType)aSeedType;
@@ -377,7 +377,7 @@ void SeedChooserScreen::GetSeedPositionInChooser(int theIndex, int &x, int &y) {
     int aCol = theIndex % NumColumns();
     x = 53 * aCol + 22;
     if (mIsZombieChooser) {
-        if (aRow == 3 && !moreZombieSeeds) {
+        if (aRow == 3 && !gMoreZombieSeeds) {
             x = 53 * aCol + 48;
         }
     }
@@ -445,6 +445,10 @@ void SeedChooserScreen::ShowToolTip(unsigned int thePlayerIndex) {
                 case SeedType::SEED_ZOMBIE_EXPLODE_O_NUT_HEAD: // 爆炸坚果僵尸
                     aTitle = TodStringTranslate("[EXPLODE_O_NUT_HEAD_ZOMBIE]");
                     aLabel = TodStringTranslate("[EXPLODE_O_NUT_HEAD_ZOMBIE_DESCRIPTION_HEADER]");
+                    break;
+                case SeedType::SEED_ZOMBIE_GIGA_FOOTBALL:
+                    aTitle = TodStringTranslate("[GIGA_FOOTBALL_ZOMBIE]");
+                    aLabel = TodStringTranslate("[GIGA_FOOTBALL_ZOMBIE_DESCRIPTION_HEADER]");
                     break;
                 case SeedType::SEED_ZOMBIE_JACKSON:
                     aTitle = TodStringTranslate("[JACKSON_ZOMBIE]");

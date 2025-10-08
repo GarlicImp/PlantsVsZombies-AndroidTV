@@ -672,76 +672,82 @@ PlantDefinition &GetPlantDefinition(SeedType theSeedType) {
 }
 
 int Plant::GetCost(SeedType theSeedType, SeedType theImitaterType) {
-    LawnApp *lawnApp = (LawnApp *)*gLawnApp_Addr;
-    if (lawnApp->mGameMode == GameMode::GAMEMODE_MP_VS) {
+    auto *gLawnApp = reinterpret_cast<LawnApp *>(*gLawnApp_Addr);
+    if (gLawnApp->mGameMode == GameMode::GAMEMODE_MP_VS) {
         if (theSeedType == SeedType::SEED_IMITATER && theImitaterType != SeedType::SEED_NONE) {
             theSeedType = theImitaterType;
         }
-        switch (theSeedType) {
-            case SeedType::SEED_CHERRYBOMB:
-            case SeedType::SEED_SNOWPEA:
-            case SeedType::SEED_REPEATER:
-            case SeedType::SEED_ZOMBIE_FOOTBALL:
-            case SeedType::SEED_ZOMBIE_DANCER:
-            case SeedType::SEED_ZOMBIE_DIGGER:
-            case SeedType::SEED_ZOMBIE_LADDER:
-            case SeedType::SEED_ZOMBIE_GATLINGPEA_HEAD:
-            case SeedType::SEED_ZOMBIE_GIGA_FOOTBALL:
-                return 150;
-            case SeedType::SEED_SQUASH:
-            case SeedType::SEED_GARLIC:
-            case SeedType::SEED_ZOMBIE_TRAFFIC_CONE:
-            case SeedType::SEED_ZOMBIE_YETI:
-                return 75;
-            case SeedType::SEED_THREEPEATER:
-            case SeedType::SEED_ZOMBIE_CATAPULT:
-                return 200;
-            case SeedType::SEED_JALAPENO:
-            case SeedType::SEED_TORCHWOOD:
-            case SeedType::SEED_ZOMBIE_BUNGEE:
-            case SeedType::SEED_ZOMBIE_SNORKEL:
-            case SeedType::SEED_ZOMBIE_DOLPHIN_RIDER:
-            case SeedType::SEED_ZOMBIE_JALAPENO_HEAD:
-            case SeedType::SEED_ZOMBIE_TALLNUT_HEAD:
-            case SeedType::SEED_ZOMBIE_EXPLODE_O_NUT_HEAD:
-            case SeedType::SEED_ZOMBIE_JACKSON:
-                return 125;
-            case SeedType::SEED_CACTUS:
-            case SeedType::SEED_CABBAGEPULT:
-            case SeedType::SEED_KERNELPULT:
-            case SeedType::SEED_ZOMBIE_POLEVAULTER:
-            case SeedType::SEED_ZOMBIE_PAIL:
-            case SeedType::SEED_ZOMBIE_SCREEN_DOOR:
-            case SeedType::SEED_ZOMBIE_JACK_IN_THE_BOX:
-            case SeedType::SEED_ZOMBIE_WALLNUT_HEAD:
-                return 100;
-            case SeedType::SEED_STARFRUIT:
-            case SeedType::SEED_ZOMBONI:
-                return 175;
-            case SeedType::SEED_INSTANT_COFFEE:
-            case SeedType::SEED_ZOMBIE_NORMAL:
-            case SeedType::SEED_ZOMBIE_DUCKY_TUBE:
-                return 25;
-            case SeedType::SEED_MELONPULT:
-            case SeedType::SEED_ZOMBIE_FLAG:
-                return 300;
-            case SeedType::SEED_ZOMBIE_GRAVESTONE:
-            case SeedType::SEED_ZOMBIE_TRASH_BIN:
-            case SeedType::SEED_ZOMBIE_NEWSPAPER:
-            case SeedType::SEED_ZOMBIE_IMP:
-            case SeedType::SEED_ZOMBIE_PEA_HEAD:
-            case SeedType::SEED_ZOMBIE_SQUASH_HEAD:
-            case SeedType::SEED_ZOMBIE_BACKUP_DANCER2:
-                return 50;
-            case SeedType::SEED_ZOMBIE_POGO:
-            case SeedType::SEED_ZOMBIE_BALLOON:
-                return 225;
-            case SeedType::SEED_ZOMBIE_GARGANTUAR:
-                return 250;
-            default:
-                return GetPlantDefinition(theSeedType).mSeedCost;
+        if (gVSBalanceAdjustment) {
+            return GetCostAdjusted(theSeedType);
+        } else {
+            switch (theSeedType) {
+                case SeedType::SEED_CHERRYBOMB:
+                case SeedType::SEED_SNOWPEA:
+                case SeedType::SEED_REPEATER:
+                case SeedType::SEED_ZOMBIE_FOOTBALL:
+                case SeedType::SEED_ZOMBIE_DANCER:
+                case SeedType::SEED_ZOMBIE_DIGGER:
+                case SeedType::SEED_ZOMBIE_LADDER:
+                case SeedType::SEED_ZOMBIE_GATLINGPEA_HEAD:
+                case SeedType::SEED_ZOMBIE_GIGA_FOOTBALL:
+                    return 150;
+                case SeedType::SEED_SQUASH:
+                case SeedType::SEED_GARLIC:
+                case SeedType::SEED_ZOMBIE_TRAFFIC_CONE:
+                case SeedType::SEED_ZOMBIE_YETI:
+                    return 75;
+                case SeedType::SEED_THREEPEATER:
+                case SeedType::SEED_ZOMBIE_CATAPULT:
+                    return 200;
+                case SeedType::SEED_JALAPENO:
+                case SeedType::SEED_TORCHWOOD:
+                case SeedType::SEED_ZOMBIE_BUNGEE:
+                case SeedType::SEED_ZOMBIE_SNORKEL:
+                case SeedType::SEED_ZOMBIE_DOLPHIN_RIDER:
+                case SeedType::SEED_ZOMBIE_JALAPENO_HEAD:
+                case SeedType::SEED_ZOMBIE_TALLNUT_HEAD:
+                case SeedType::SEED_ZOMBIE_EXPLODE_O_NUT_HEAD:
+                case SeedType::SEED_ZOMBIE_JACKSON:
+                    return 125;
+                case SeedType::SEED_CACTUS:
+                case SeedType::SEED_CABBAGEPULT:
+                case SeedType::SEED_KERNELPULT:
+                case SeedType::SEED_ZOMBIE_POLEVAULTER:
+                case SeedType::SEED_ZOMBIE_PAIL:
+                case SeedType::SEED_ZOMBIE_SCREEN_DOOR:
+                case SeedType::SEED_ZOMBIE_JACK_IN_THE_BOX:
+                case SeedType::SEED_ZOMBIE_BALLOON:
+                case SeedType::SEED_ZOMBIE_WALLNUT_HEAD:
+                    return 100;
+                case SeedType::SEED_STARFRUIT:
+                case SeedType::SEED_ZOMBONI:
+                    return 175;
+                case SeedType::SEED_INSTANT_COFFEE:
+                case SeedType::SEED_ZOMBIE_NORMAL:
+                case SeedType::SEED_ZOMBIE_DUCKY_TUBE:
+                    return 25;
+                case SeedType::SEED_MELONPULT:
+                case SeedType::SEED_ZOMBIE_FLAG:
+                    return 300;
+                case SeedType::SEED_ZOMBIE_GRAVESTONE:
+                case SeedType::SEED_ZOMBIE_TRASHCAN:
+                case SeedType::SEED_ZOMBIE_NEWSPAPER:
+                case SeedType::SEED_ZOMBIE_IMP:
+                case SeedType::SEED_ZOMBIE_PEA_HEAD:
+                case SeedType::SEED_ZOMBIE_SQUASH_HEAD:
+                case SeedType::SEED_ZOMBIE_SUPER_FAN_IMP:
+                case SeedType::SEED_ZOMBIE_BACKUP_DANCER2:
+                    return 50;
+                case SeedType::SEED_ZOMBIE_POGO:
+                    return 225;
+                case SeedType::SEED_ZOMBIE_GARGANTUAR:
+                    return 250;
+                default:
+                    return GetPlantDefinition(theSeedType).mSeedCost;
+            }
         }
     }
+
     return old_Plant_GetCost(theSeedType, theImitaterType);
 }
 
@@ -749,85 +755,249 @@ int Plant::GetRefreshTime(SeedType theSeedType, SeedType theImitaterType) {
     if (seedPacketFastCoolDown) {
         return 0;
     }
-    LawnApp *lawnApp = (LawnApp *)*gLawnApp_Addr;
-    if (lawnApp->mGameMode == GameMode::GAMEMODE_MP_VS) {
-        int refreshTime;
+
+    auto *gLawnApp = reinterpret_cast<LawnApp *>(*gLawnApp_Addr);
+    if (gLawnApp->mGameMode == GameMode::GAMEMODE_MP_VS) {
         if (theSeedType == SeedType::SEED_IMITATER && theImitaterType != SeedType::SEED_NONE) {
             theSeedType = theImitaterType;
         }
-        if (Challenge::IsMPSeedType(theSeedType)) {
-            switch (theSeedType) {
-                case SeedType::SEED_ZOMBIE_TRASH_BIN:
-                case SeedType::SEED_ZOMBIE_TRAFFIC_CONE:
-                case SeedType::SEED_ZOMBIE_POLEVAULTER:
-                case SeedType::SEED_ZOMBIE_PAIL:
-                case SeedType::SEED_ZOMBIE_FLAG:
-                case SeedType::SEED_ZOMBIE_FOOTBALL:
-                case SeedType::SEED_ZOMBIE_DANCER:
-                case SeedType::SEED_ZOMBIE_JACK_IN_THE_BOX:
-                case SeedType::SEED_ZOMBIE_DIGGER:
-                case SeedType::SEED_ZOMBIE_BUNGEE:
-                case SeedType::SEED_ZOMBIE_LADDER:
-                case SeedType::SEED_ZOMBIE_YETI:
-                case SeedType::SEED_ZOMBIE_IMP:
-                case SeedType::SEED_ZOMBIE_BALLOON:
-                case SeedType::SEED_ZOMBIE_WALLNUT_HEAD:
-                case SeedType::SEED_ZOMBIE_GATLINGPEA_HEAD:
-                case SeedType::SEED_ZOMBIE_SQUASH_HEAD:
-                case SeedType::SEED_ZOMBIE_TALLNUT_HEAD:
-                case SeedType::SEED_ZOMBIE_EXPLODE_O_NUT_HEAD:
-                case SeedType::SEED_ZOMBIE_JACKSON:
-                case SeedType::SEED_ZOMBIE_BACKUP_DANCER2:
-                case SeedType::SEED_ZOMBIE_GIGA_FOOTBALL:
-                    refreshTime = 3000;
-                    break;
-                case SeedType::SEED_ZOMBIE_NEWSPAPER:
-                case SeedType::SEED_ZOMBIE_SCREEN_DOOR:
-                    refreshTime = 1500;
-                    break;
-                case SeedType::SEED_ZOMBONI:
-                case SeedType::SEED_ZOMBIE_POGO:
-                case SeedType::SEED_ZOMBIE_CATAPULT:
-                case SeedType::SEED_ZOMBIE_GARGANTUAR:
-                case SeedType::SEED_ZOMBIE_JALAPENO_HEAD:
-                    refreshTime = 6000;
-                    break;
-                default:
-                    refreshTime = 750;
-                    break;
-            }
+        int aRefreshTime;
+        if (gVSBalanceAdjustment) {
+            aRefreshTime =  GetRefreshTimeAdjusted(theSeedType);
         } else {
-            switch (theSeedType) {
-                case SeedType::SEED_CHERRYBOMB:
-                case SeedType::SEED_ICESHROOM:
-                case SeedType::SEED_DOOMSHROOM:
-                case SeedType::SEED_JALAPENO:
-                    refreshTime = 6000;
-                    break;
-                case SeedType::SEED_GRAVEBUSTER:
+            if (Challenge::IsMPSeedType(theSeedType)) {
+                switch (theSeedType) {
+                    case SeedType::SEED_ZOMBIE_TRASHCAN:
+                    case SeedType::SEED_ZOMBIE_TRAFFIC_CONE:
+                    case SeedType::SEED_ZOMBIE_POLEVAULTER:
+                    case SeedType::SEED_ZOMBIE_PAIL:
+                    case SeedType::SEED_ZOMBIE_FLAG:
+                    case SeedType::SEED_ZOMBIE_FOOTBALL:
+                    case SeedType::SEED_ZOMBIE_DANCER:
+                    case SeedType::SEED_ZOMBIE_JACK_IN_THE_BOX:
+                    case SeedType::SEED_ZOMBIE_DIGGER:
+                    case SeedType::SEED_ZOMBIE_BUNGEE:
+                    case SeedType::SEED_ZOMBIE_LADDER:
+                    case SeedType::SEED_ZOMBIE_YETI:
+                    case SeedType::SEED_ZOMBIE_IMP:
+                    case SeedType::SEED_ZOMBIE_BALLOON:
+                    case SeedType::SEED_ZOMBIE_WALLNUT_HEAD:
+                    case SeedType::SEED_ZOMBIE_GATLINGPEA_HEAD:
+                    case SeedType::SEED_ZOMBIE_SQUASH_HEAD:
+                    case SeedType::SEED_ZOMBIE_TALLNUT_HEAD:
+                    case SeedType::SEED_ZOMBIE_EXPLODE_O_NUT_HEAD:
+                    case SeedType::SEED_ZOMBIE_JACKSON:
+                    case SeedType::SEED_ZOMBIE_BACKUP_DANCER2:
+                    case SeedType::SEED_ZOMBIE_GIGA_FOOTBALL:
+                        aRefreshTime = 3000;
+                        break;
+                    case SeedType::SEED_ZOMBIE_NEWSPAPER:
+                    case SeedType::SEED_ZOMBIE_SCREEN_DOOR:
+                        aRefreshTime = 1500;
+                        break;
+                    case SeedType::SEED_ZOMBONI:
+                    case SeedType::SEED_ZOMBIE_POGO:
+                    case SeedType::SEED_ZOMBIE_CATAPULT:
+                    case SeedType::SEED_ZOMBIE_GARGANTUAR:
+                    case SeedType::SEED_ZOMBIE_JALAPENO_HEAD:
+                        aRefreshTime = 6000;
+                        break;
+                    default:
+                        aRefreshTime = 750;
+                        break;
+                }
+            } else {
+                switch (theSeedType) {
+                    case SeedType::SEED_CHERRYBOMB:
+                    case SeedType::SEED_ICESHROOM:
+                    case SeedType::SEED_DOOMSHROOM:
+                    case SeedType::SEED_JALAPENO:
+                        aRefreshTime = 6000;
+                        break;
+                    case SeedType::SEED_GRAVEBUSTER:
+                    case SeedType::SEED_SQUASH:
+                        aRefreshTime = 3000;
+                        break;
+                    case SeedType::SEED_THREEPEATER:
+                    case SeedType::SEED_STARFRUIT:
+                    case SeedType::SEED_MELONPULT:
+                        aRefreshTime = 1500;
+                        break;
+                    default:
+                        aRefreshTime = GetPlantDefinition(theSeedType).mRefreshTime;
+                        break;
+                }
+            }
+        }
+        if (gLawnApp->mBoard->mChallenge->IsMPSuddenDeath() && *Challenge_gVSSuddenDeathMode_Addr == 1) {
+            //sd不减冷却的卡片
+            switch (theSeedType) {  // 此处用switch-case替换旧的if-else，方便后续增删
+                // 墓碑和向日葵，sd用不到
+                case SeedType::SEED_ZOMBIE_GRAVESTONE:
+                case SeedType::SEED_SUNFLOWER:
+                // 默认五个不减cd的
+                case SeedType::SEED_TALLNUT:
+                case SeedType::SEED_WALLNUT:
+                case SeedType::SEED_PUMPKINSHELL:
+                case SeedType::SEED_ZOMBIE_TRASHCAN:
+                case SeedType::SEED_ZOMBIE_SCREEN_DOOR:
+                    return aRefreshTime;
+                // 平衡调整后不减cd
+                case SeedType::SEED_POTATOMINE:
                 case SeedType::SEED_SQUASH:
-                    refreshTime = 3000;
-                    break;
-                case SeedType::SEED_THREEPEATER:
-                case SeedType::SEED_STARFRUIT:
-                case SeedType::SEED_MELONPULT:
-                    refreshTime = 1500;
-                    break;
+                case SeedType::SEED_CHERRYBOMB:
+                case SeedType::SEED_JALAPENO:
+                case SeedType::SEED_DOOMSHROOM:
+                case SeedType::SEED_ICESHROOM:
+                    if (gVSBalanceAdjustment)
+                        return aRefreshTime;
                 default:
-                    refreshTime = GetPlantDefinition(theSeedType).mRefreshTime;
-                    break;
+                    return aRefreshTime / 3;
             }
         }
-        if (lawnApp->mBoard->mChallenge->IsMPSuddenDeath() && *Challenge_gVSSuddenDeathMode_Addr == 1) {
-            if (theSeedType == SeedType::SEED_ZOMBIE_GRAVESTONE || theSeedType == SeedType::SEED_SUNFLOWER || theSeedType == SeedType::SEED_TALLNUT || theSeedType == SeedType::SEED_WALLNUT
-                || theSeedType == SeedType::SEED_ZOMBIE_SCREEN_DOOR || theSeedType == SeedType::SEED_PUMPKINSHELL || theSeedType == SeedType::SEED_ZOMBIE_TRASH_BIN) {
-                return refreshTime;
-            }
-            refreshTime /= 3;
-        }
-        return refreshTime;
+        return aRefreshTime;
     }
     return old_Plant_GetRefreshTime(theSeedType, theImitaterType);
+}
+
+int Plant::GetCostAdjusted(SeedType theSeedType) {
+    switch (theSeedType) {
+        case SeedType::SEED_SUNSHROOM:
+            return 0;
+        case SeedType::SEED_INSTANT_COFFEE:
+        case SeedType::SEED_ZOMBIE_NORMAL:
+        case SeedType::SEED_ZOMBIE_DUCKY_TUBE:
+            return 25;
+        case SeedType::SEED_GRAVEBUSTER: // 75 -> 50
+        case SeedType::SEED_HYPNOSHROOM: // 75 -> 50
+        case SeedType::SEED_ICESHROOM: // 75 -> 50
+        case SeedType::SEED_PUMPKINSHELL: // 125 -> 50
+        case SeedType::SEED_ZOMBIE_GRAVESTONE:
+        case SeedType::SEED_ZOMBIE_TRASHCAN:
+        case SeedType::SEED_ZOMBIE_NEWSPAPER:
+        case SeedType::SEED_ZOMBIE_IMP:
+        case SeedType::SEED_ZOMBIE_PEA_HEAD:
+        case SeedType::SEED_ZOMBIE_SQUASH_HEAD:
+        case SeedType::SEED_ZOMBIE_SUPER_FAN_IMP:
+        case SeedType::SEED_ZOMBIE_BACKUP_DANCER2:
+            return 50;
+        case SeedType::SEED_PEASHOOTER: // 100 -> 75
+        case SeedType::SEED_KERNELPULT: // 100 -> 75
+        case SeedType::SEED_SQUASH:
+        case SeedType::SEED_GARLIC:
+        case SeedType::SEED_ZOMBIE_TRAFFIC_CONE:
+        case SeedType::SEED_ZOMBIE_POLEVAULTER: // 100 -> 75
+        case SeedType::SEED_ZOMBIE_JACK_IN_THE_BOX: // 100 -> 75
+        case SeedType::SEED_ZOMBIE_YETI:
+        case SeedType::SEED_ZOMBIE_SNORKEL:
+            return 75;
+        case SeedType::SEED_CACTUS:
+        case SeedType::SEED_TALLNUT: // 125 -> 100
+        case SeedType::SEED_ZOMBIE_PAIL:
+        case SeedType::SEED_ZOMBIE_SCREEN_DOOR:
+        case SeedType::SEED_ZOMBIE_DOLPHIN_RIDER:
+        case SeedType::SEED_ZOMBIE_BALLOON:
+        case SeedType::SEED_ZOMBIE_WALLNUT_HEAD:
+            return 100;
+        case SeedType::SEED_SNOWPEA: // 150 -> 125
+        case SeedType::SEED_JALAPENO:
+        case SeedType::SEED_TORCHWOOD:
+        case SeedType::SEED_ZOMBIE_BUNGEE:
+        case SeedType::SEED_ZOMBIE_JALAPENO_HEAD:
+        case SeedType::SEED_ZOMBIE_TALLNUT_HEAD:
+        case SeedType::SEED_ZOMBIE_EXPLODE_O_NUT_HEAD:
+        case SeedType::SEED_ZOMBIE_JACKSON:
+            return 125;
+        case SeedType::SEED_REPEATER:
+        case SeedType::SEED_ZOMBIE_FOOTBALL:
+        case SeedType::SEED_ZOMBIE_DANCER:
+        case SeedType::SEED_ZOMBONI:
+        case SeedType::SEED_ZOMBIE_DIGGER:
+        case SeedType::SEED_ZOMBIE_LADDER:
+        case SeedType::SEED_ZOMBIE_GATLINGPEA_HEAD:
+        case SeedType::SEED_ZOMBIE_GIGA_FOOTBALL:
+            return 150;
+        case SeedType::SEED_DOOMSHROOM: // 125 -> 175
+        case SeedType::SEED_STARFRUIT:
+        case SeedType::SEED_ZOMBIE_CATAPULT: // 200 -> 175
+            return 175;
+        case SeedType::SEED_MELONPULT: // 300 -> 200
+        case SeedType::SEED_ZOMBIE_POGO: // 225 -> 200
+            return 200;
+        case SeedType::SEED_THREEPEATER: // 200 -> 225
+        case SeedType::SEED_ZOMBIE_GARGANTUAR: // 250 -> 225
+        case SeedType::SEED_ZOMBIE_FLAG: // 300 -> 225
+            return 225;
+//            return 250;
+        default:
+            return GetPlantDefinition(theSeedType).mSeedCost;
+    }
+
+    return GetPlantDefinition(theSeedType).mSeedCost;
+}
+
+int Plant::GetRefreshTimeAdjusted(SeedType theSeedType) {
+    if (Challenge::IsMPSeedType(theSeedType)) {
+        switch (theSeedType) {
+            case SeedType::SEED_ZOMBONI:
+            case SeedType::SEED_ZOMBIE_POGO:
+            case SeedType::SEED_ZOMBIE_CATAPULT:
+            case SeedType::SEED_ZOMBIE_GARGANTUAR:
+            case SeedType::SEED_ZOMBIE_JALAPENO_HEAD:
+                return 6000;
+            case SeedType::SEED_ZOMBIE_TRASHCAN:
+            case SeedType::SEED_ZOMBIE_POLEVAULTER:
+            case SeedType::SEED_ZOMBIE_PAIL:
+            case SeedType::SEED_ZOMBIE_FLAG:
+            case SeedType::SEED_ZOMBIE_FOOTBALL:
+            case SeedType::SEED_ZOMBIE_DANCER:
+            case SeedType::SEED_ZOMBIE_JACK_IN_THE_BOX:
+            case SeedType::SEED_ZOMBIE_BUNGEE:
+            case SeedType::SEED_ZOMBIE_YETI:
+            case SeedType::SEED_ZOMBIE_IMP:
+            case SeedType::SEED_ZOMBIE_BALLOON:
+            case SeedType::SEED_ZOMBIE_WALLNUT_HEAD:
+            case SeedType::SEED_ZOMBIE_GATLINGPEA_HEAD:
+            case SeedType::SEED_ZOMBIE_SQUASH_HEAD:
+            case SeedType::SEED_ZOMBIE_TALLNUT_HEAD:
+            case SeedType::SEED_ZOMBIE_EXPLODE_O_NUT_HEAD:
+            case SeedType::SEED_ZOMBIE_JACKSON:
+            case SeedType::SEED_ZOMBIE_BACKUP_DANCER2:
+            case SeedType::SEED_ZOMBIE_GIGA_FOOTBALL:
+                return 3000;
+            case SeedType::SEED_ZOMBIE_TRAFFIC_CONE: // 30 -> 15
+            case SeedType::SEED_ZOMBIE_NEWSPAPER:
+            case SeedType::SEED_ZOMBIE_SCREEN_DOOR:
+            case SeedType::SEED_ZOMBIE_DIGGER: // 30 -> 15
+            case SeedType::SEED_ZOMBIE_LADDER: // 30 -> 15
+                return 1500;
+            default:
+                return 750;
+        }
+    } else {
+        switch (theSeedType) {
+            case SeedType::SEED_CHERRYBOMB:
+            case SeedType::SEED_ICESHROOM:
+            case SeedType::SEED_DOOMSHROOM:
+            case SeedType::SEED_JALAPENO:
+            case SeedType::SEED_PUMPKINSHELL: // 30 -> 60
+            case SeedType::SEED_TALLNUT: // 30 -> 60
+                return 6000;
+            case SeedType::SEED_GRAVEBUSTER:
+            case SeedType::SEED_SQUASH:
+                return 3000;
+            case SeedType::SEED_PEASHOOTER: // 7.5 -> 15
+            case SeedType::SEED_SNOWPEA: // 7.5 -> 15
+            case SeedType::SEED_REPEATER: // 7.5 -> 15
+            case SeedType::SEED_THREEPEATER:
+            case SeedType::SEED_STARFRUIT:
+            case SeedType::SEED_KERNELPULT: // 7.5 -> 15
+            case SeedType::SEED_MELONPULT:
+                return 1500;
+            default:
+                return GetPlantDefinition(theSeedType).mRefreshTime;
+        }
+    }
 }
 
 bool Plant::IsNocturnal(SeedType theSeedtype) {

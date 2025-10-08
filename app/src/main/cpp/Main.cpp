@@ -469,7 +469,7 @@ extern "C" JNIEXPORT void JNICALL Java_com_android_support_Preferences_Changes(J
             checkZombiesAllowed[ZombieType::ZOMBIE_GARGANTUAR] = boolean; // 白眼巨人僵尸
             break;
         case 226:
-            checkZombiesAllowed[ZombieType::ZOMBIE_TRASH_BIN] = boolean; // 垃圾桶僵尸
+            checkZombiesAllowed[ZombieType::ZOMBIE_TRASHCAN] = boolean; // 垃圾桶僵尸
             break;
         case 227:
             checkZombiesAllowed[ZombieType::ZOMBIE_PEA_HEAD] = boolean; // 豌豆射手僵尸
@@ -1028,7 +1028,11 @@ extern "C" JNIEXPORT void JNICALL Java_com_transmension_mobile_EnhanceActivity_n
 }
 
 extern "C" JNIEXPORT void JNICALL Java_com_transmension_mobile_EnhanceActivity_nativeMoreZombieSeeds(JNIEnv *env, jclass clazz) {
-    moreZombieSeeds = true;
+    gMoreZombieSeeds = true;
+}
+
+extern "C" JNIEXPORT void JNICALL Java_com_transmension_mobile_EnhanceActivity_nativeVSBalanceAdjustment(JNIEnv *env, jclass clazz) {
+    gVSBalanceAdjustment = true;
 }
 
 extern "C" JNIEXPORT void JNICALL Java_com_transmension_mobile_EnhanceActivity_nativeIntroVideoCompleted(JNIEnv *env, jclass clazz) {

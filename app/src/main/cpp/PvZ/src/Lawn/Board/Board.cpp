@@ -1698,10 +1698,10 @@ int Board::GetLiveZombiesCount() {
     return num;
 }
 
-Zombie *Board::GetLiveJackson() {
+Zombie *Board::GetLiveZombieByType(ZombieType theZombieType) {
     Zombie *aZombie = nullptr;
     while (IterateZombies(aZombie)) {
-        if (!aZombie->mDead && aZombie->mHasHead && !aZombie->IsDeadOrDying() && aZombie->IsOnBoard() && aZombie->mZombieType == ZombieType::ZOMBIE_JACKSON) {
+        if (!aZombie->mDead && aZombie->mHasHead && !aZombie->IsDeadOrDying() && aZombie->IsOnBoard() && aZombie->mZombieType == theZombieType) {
             return aZombie;
         }
     }

@@ -237,6 +237,8 @@ public:
     static Sexy::Image *GetImage(SeedType theSeedType);
     static int GetCost(SeedType theSeedType, SeedType theImitaterType);
     static int GetRefreshTime(SeedType theSeedType, SeedType theImitaterType);
+    static int GetCostAdjusted(SeedType theSeedType);
+    static int GetRefreshTimeAdjusted(SeedType theSeedType);
     static bool IsNocturnal(SeedType theSeedtype);
     static bool IsAquatic(SeedType theSeedType);
     static bool IsFlying(SeedType theSeedtype);

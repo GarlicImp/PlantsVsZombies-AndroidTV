@@ -436,8 +436,8 @@ ZombieType Challenge::IZombieSeedTypeToZombieType(SeedType theSeedType) {
     switch (theSeedType) {
         case SEED_ZOMBIE_NORMAL:
             return ZOMBIE_NORMAL;
-        case SEED_ZOMBIE_TRASH_BIN:
-            return ZOMBIE_TRASH_BIN;
+        case SEED_ZOMBIE_TRASHCAN:
+            return ZOMBIE_TRASHCAN;
         case SEED_ZOMBIE_TRAFFIC_CONE:
             return ZOMBIE_TRAFFIC_CONE;
         case SEED_ZOMBIE_POLEVAULTER:
@@ -502,6 +502,8 @@ ZombieType Challenge::IZombieSeedTypeToZombieType(SeedType theSeedType) {
             return ZOMBIE_BACKUP_DANCER2;
         case SEED_ZOMBIE_GIGA_FOOTBALL:
             return ZOMBIE_GIGA_FOOTBALL;
+        case SEED_ZOMBIE_SUPER_FAN_IMP:
+            return ZOMBIE_SUPER_FAN_IMP;
         case SEED_ZOMBIE_BOBSLED:
             return ZOMBIE_BOBSLED; // 雪橇车小队
         default:
