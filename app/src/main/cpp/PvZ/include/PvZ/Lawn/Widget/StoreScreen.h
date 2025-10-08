@@ -87,7 +87,7 @@ public:
     void DrawItem(Sexy::Graphics *g, int a3, StoreItem theStoreItem);
     void ButtonDepress(int buttonId);
     void PurchaseItem(StoreItem item);
-    void Draw(Sexy::Graphics *a2);
+    void Draw(Sexy::Graphics *g);
     bool IsPottedPlant(StoreItem theStoreItem);
 
     void MouseDown(int x, int y, int theClickCount);

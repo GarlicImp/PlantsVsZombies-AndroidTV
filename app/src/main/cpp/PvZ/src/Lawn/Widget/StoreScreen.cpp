@@ -132,30 +132,28 @@ void StoreScreen::PurchaseItem(StoreItem item) {
     mApp->GrantAchievement(AchievementId::ACHIEVEMENT_SHOP);
 }
 
-void StoreScreen::Draw(Sexy::Graphics *a2) {
+void StoreScreen::Draw(Sexy::Graphics *g) {
     // 绘制商店页数字符串
-    old_StoreScreen_Draw(this, a2);
+    old_StoreScreen_Draw(this, g);
 
-    int theTotalPages = 0;
+    int aNumPages = 0;
     if (mApp->HasFinishedAdventure() && showHouse) {
-        theTotalPages = 5;
+        aNumPages = StorePages::NUM_STORE_PAGES;
     } else {
-        for (int i = 0; i < 4; ++i) {
-            if (IsPageShown((StorePages)i)) {
-                theTotalPages++;
+        for (StorePages aPage = STORE_PAGE_SLOT_UPGRADES; aPage < STORE_PAGE_HOUSE; aPage = (StorePages)(aPage + 1)) {
+            if (IsPageShown(aPage)) {
+                aNumPages++;
             }
         }
     }
 
-    if (theTotalPages <= 1) {
+    if (aNumPages <= 1) {
         return;
     }
-    if (mPage != 5) {
-        ++((int &)mPage);
-    }
-    pvzstl::string str = StrFormat("%d/%d", mPage, theTotalPages);
-    Color theColor = {200, 200, 200, 255};
-    TodDrawString(a2, str, 410, 512, *Sexy_FONT_BRIANNETOD16_Addr, theColor, DrawStringJustification::DS_ALIGN_CENTER);
+
+    int aPage = mPage == 5 ? 5 : mPage + 1;
+    pvzstl::string aPageString = StrFormat("%d/%d", aPage, aNumPages);
+    TodDrawString(g, aPageString, 410, 512, *Sexy_FONT_BRIANNETOD16_Addr, Color(200, 200, 200, 255), DrawStringJustification::DS_ALIGN_CENTER);
 }
 
 bool StoreScreen::IsPottedPlant(StoreItem theStoreItem) {
