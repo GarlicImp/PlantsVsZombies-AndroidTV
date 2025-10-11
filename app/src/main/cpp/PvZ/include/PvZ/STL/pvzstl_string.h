@@ -33,24 +33,6 @@ extern uintptr_t gLibBaseOffset;
 
 namespace pvzstl {
 
-template <typename CharT>
-class basic_string;
-
-template <typename CharT>
-[[nodiscard]] basic_string<CharT> operator+(const basic_string<CharT> &lhs, const basic_string<CharT> &rhs);
-
-template <typename CharT>
-[[nodiscard]] basic_string<CharT> operator+(const CharT *lhs, const basic_string<CharT> &rhs);
-
-template <typename CharT>
-[[nodiscard]] basic_string<CharT> operator+(CharT lhs, const basic_string<CharT> &rhs);
-
-template <typename CharT>
-[[nodiscard]] basic_string<CharT> operator+(const basic_string<CharT> &lhs, const CharT *rhs);
-
-template <typename CharT>
-[[nodiscard]] basic_string<CharT> operator+(const basic_string<CharT> &lhs, CharT rhs);
-
 template <typename SV, typename CharT>
 concept _convertible_to_string_view = std::is_convertible_v<const SV &, std::basic_string_view<CharT>> && !std::is_convertible_v<const SV &, const CharT *>;
 
@@ -661,7 +643,7 @@ protected:
 
         void _set_size(size_type sz) noexcept {
             _size = sz;
-            _data[sz] = CharT{0};
+            _data[sz] = CharT{};
         }
 
         void _set_size_and_sharable(size_type sz) noexcept {
@@ -766,11 +748,55 @@ protected:
         return *this;
     }
 
-    friend basic_string operator+ <>(const basic_string &, const basic_string &);
-    friend basic_string operator+ <>(const CharT *, const basic_string &);
-    friend basic_string operator+ <>(CharT, const basic_string &);
-    friend basic_string operator+ <>(const basic_string &, const CharT *);
-    friend basic_string operator+ <>(const basic_string &, CharT);
+    [[nodiscard]] friend basic_string operator+(const basic_string &lhs, const basic_string &rhs) {
+        const size_type lhs_sz = lhs.size();
+        const size_type rhs_sz = rhs.size();
+        basic_string r(_uninitialized_size_tag{}, lhs_sz + rhs_sz);
+        traits_type::copy(r._dataplus, lhs.c_str(), lhs_sz);
+        traits_type::copy(r._dataplus + lhs_sz, rhs.c_str(), rhs_sz);
+        r._dataplus[lhs_sz + rhs_sz] = CharT{};
+        return r;
+    }
+
+    [[nodiscard]] friend basic_string operator+(const CharT *lhs, const basic_string &rhs) {
+        assert((lhs != nullptr) && "operator+(const CharT *, const basic_string &) received nullptr");
+        const size_type lhs_sz = traits_type::length(lhs);
+        const size_type rhs_sz = rhs.size();
+        basic_string r(_uninitialized_size_tag{}, lhs_sz + rhs_sz);
+        traits_type::copy(r._dataplus, lhs, lhs_sz);
+        traits_type::copy(r._dataplus + lhs_sz, rhs.c_str(), rhs_sz);
+        r._dataplus[lhs_sz + rhs_sz] = CharT{};
+        return r;
+    }
+
+    [[nodiscard]] friend basic_string operator+(CharT lhs, const basic_string &rhs) {
+        const size_type rhs_sz = rhs.size();
+        basic_string r(_uninitialized_size_tag{}, rhs_sz + 1);
+        r._dataplus[0] = lhs;
+        traits_type::copy(r._dataplus + 1, rhs.c_str(), rhs_sz);
+        r._dataplus[rhs_sz + 1] = CharT{};
+        return r;
+    }
+
+    [[nodiscard]] friend basic_string operator+(const basic_string &lhs, const CharT *rhs) {
+        assert((rhs != nullptr) && "operator+(const basic_string &, const CharT *) received nullptr");
+        const size_type lhs_sz = lhs.size();
+        const size_type rhs_sz = traits_type::length(rhs);
+        basic_string r(_uninitialized_size_tag{}, lhs_sz + rhs_sz);
+        traits_type::copy(r._dataplus, lhs.c_str(), lhs_sz);
+        traits_type::copy(r._dataplus + lhs_sz, rhs, rhs_sz);
+        r._dataplus[lhs_sz + rhs_sz] = CharT{};
+        return r;
+    }
+
+    [[nodiscard]] friend basic_string operator+(const basic_string &lhs, CharT rhs) {
+        const size_type lhs_sz = lhs.size();
+        basic_string r(_uninitialized_size_tag{}, lhs_sz + 1);
+        traits_type::copy(r._dataplus, lhs.c_str(), lhs_sz);
+        r._dataplus[lhs_sz] = rhs;
+        r._dataplus[lhs_sz + 1] = CharT{};
+        return r;
+    }
 };
 
 template <typename CharT>
@@ -791,71 +817,6 @@ template <typename CharT>
 template <typename CharT>
 [[nodiscard]] auto operator<=>(const basic_string<CharT> &lhs, const CharT *rhs) {
     return std::basic_string_view<CharT>{lhs} <=> std::basic_string_view<CharT>{rhs};
-}
-
-template <typename CharT>
-[[nodiscard]] basic_string<CharT> operator+(const basic_string<CharT> &lhs, const basic_string<CharT> &rhs) {
-    using Traits = std::char_traits<CharT>;
-    using String = basic_string<CharT>;
-    const auto lhs_sz = lhs.size();
-    const auto rhs_sz = rhs.size();
-    String r(_uninitialized_size_tag{}, lhs_sz + rhs_sz);
-    Traits::copy(r._dataplus, lhs.c_str(), lhs_sz);
-    Traits::copy(r._dataplus + lhs_sz, rhs.c_str(), rhs_sz);
-    r._dataplus[lhs_sz + rhs_sz] = CharT{0};
-    return r;
-}
-
-template <typename CharT>
-[[nodiscard]] basic_string<CharT> operator+(const CharT *lhs, const basic_string<CharT> &rhs) {
-    assert((lhs != nullptr) && "operator+(const CharT *, const basic_string &) received nullptr");
-    using Traits = std::char_traits<CharT>;
-    using String = basic_string<CharT>;
-    const auto lhs_sz = Traits::length(lhs);
-    const auto rhs_sz = rhs.size();
-    String r(_uninitialized_size_tag{}, lhs_sz + rhs_sz);
-    Traits::copy(r._dataplus, lhs, lhs_sz);
-    Traits::copy(r._dataplus + lhs_sz, rhs.c_str(), rhs_sz);
-    r._dataplus[lhs_sz + rhs_sz] = CharT{0};
-    return r;
-}
-
-template <typename CharT>
-[[nodiscard]] basic_string<CharT> operator+(CharT lhs, const basic_string<CharT> &rhs) {
-    using Traits = std::char_traits<CharT>;
-    using String = basic_string<CharT>;
-    const auto rhs_sz = rhs.size();
-    String r(_uninitialized_size_tag{}, rhs_sz + 1);
-    r._dataplus[0] = lhs;
-    Traits::copy(r._dataplus + 1, rhs.c_str(), rhs_sz);
-    r._dataplus[rhs_sz + 1] = CharT{0};
-    return r;
-}
-
-template <typename CharT>
-[[nodiscard]] basic_string<CharT> operator+(const basic_string<CharT> &lhs, const CharT *rhs) {
-    assert((rhs != nullptr) && "operator+(const basic_string &, const CharT *) received nullptr");
-    using Traits = std::char_traits<CharT>;
-    using String = basic_string<CharT>;
-    const auto lhs_sz = lhs.size();
-    const auto rhs_sz = Traits::length(rhs);
-    String r(_uninitialized_size_tag{}, lhs_sz + rhs_sz);
-    Traits::copy(r._dataplus, lhs.c_str(), lhs_sz);
-    Traits::copy(r._dataplus + lhs_sz, rhs, rhs_sz);
-    r._dataplus[lhs_sz + rhs_sz] = CharT{0};
-    return r;
-}
-
-template <typename CharT>
-[[nodiscard]] basic_string<CharT> operator+(const basic_string<CharT> &lhs, CharT rhs) {
-    using Traits = std::char_traits<CharT>;
-    using String = basic_string<CharT>;
-    const auto lhs_sz = lhs.size();
-    String r(_uninitialized_size_tag{}, lhs_sz + 1);
-    Traits::copy(r._dataplus, lhs.c_str(), lhs_sz);
-    r._dataplus[lhs_sz] = rhs;
-    r._dataplus[lhs_sz + 1] = CharT{0};
-    return r;
 }
 
 template <typename CharT>
