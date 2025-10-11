@@ -30,10 +30,10 @@ using namespace Sexy;
 static GameButton *gChallengeScreenCloseButton;
 
 ChallengeScreen::ChallengeScreen(LawnApp *theApp, ChallengePage thePage) {
-    __Constructor(theApp, thePage);
+    _constructor(theApp, thePage);
 }
 
-void ChallengeScreen::__Constructor(LawnApp *theApp, ChallengePage thePage) {
+void ChallengeScreen::_constructor(LawnApp *theApp, ChallengePage thePage) {
     // 去除按钮对触控的遮挡
     old_ChallengeScreen_ChallengeScreen(this, theApp, thePage);
 

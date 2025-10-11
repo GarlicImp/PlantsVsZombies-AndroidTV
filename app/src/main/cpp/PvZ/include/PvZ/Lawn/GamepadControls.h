@@ -110,7 +110,7 @@ public:
 protected:
     friend void InitHookFunction();
 
-    void __Constructor(Board *theBoard, int thePlayerIndex1, int thePlayerIndex2);
+    void _constructor(Board *theBoard, int thePlayerIndex1, int thePlayerIndex2);
 };
 
 class ZenGardenControls : public GamepadControls {

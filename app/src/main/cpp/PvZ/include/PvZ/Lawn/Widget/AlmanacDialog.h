@@ -97,8 +97,8 @@ public:
 protected:
     friend void InitHookFunction();
 
-    void __Constructor(LawnApp *theApp);
-    void __Destructor();
+    void _constructor(LawnApp *theApp);
+    void _destructor();
 };
 
 

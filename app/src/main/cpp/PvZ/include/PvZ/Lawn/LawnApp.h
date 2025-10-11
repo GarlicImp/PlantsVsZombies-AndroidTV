@@ -263,7 +263,7 @@ public:
     }
 
     LawnApp() {
-        __Constructor();
+        _constructor();
     };
     void Init();
     bool IsNight();
@@ -333,7 +333,7 @@ public:
 protected:
     friend void InitHookFunction();
 
-    void __Constructor();
+    void _constructor();
 };
 
 /***************************************************************************************************************/

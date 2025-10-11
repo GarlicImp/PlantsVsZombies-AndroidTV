@@ -86,11 +86,11 @@ public:
     }
 
     ~TodParticleSystem() {
-        __Destructor();
+        _destructor();
     }
 
 protected:
-    void __Destructor() {
+    void _destructor() {
         reinterpret_cast<void (*)(TodParticleSystem *)>(TodParticleSystem_Delete2Addr)(this);
     }
 };

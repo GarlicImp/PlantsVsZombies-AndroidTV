@@ -121,7 +121,7 @@ protected:
     __Music() = default;
     ~__Music() = default;
 
-    void __Constructor() {
+    void _constructor() {
         reinterpret_cast<void (*)(__Music*)>(Music_MusicAddr)(this);
     }
 };
@@ -132,10 +132,10 @@ class Music2 : public __Music { // 加载TV版ogg格式音乐时用。无鼓点�
 public:
     // 大小26个整数
     Music2() {
-        __Constructor();
+        _constructor();
     }
     ~Music2() {
-        __Destructor();
+        _destructor();
     }
 
     void StopAllMusic();
@@ -146,8 +146,8 @@ public:
 protected:
     friend void InitHookFunction();
 
-    void __Constructor();
-    void __Destructor() {
+    void _constructor();
+    void _destructor() {
         reinterpret_cast<void (*)(Music2*)>(Music2_DeleteAddr)(this);
     };
 };

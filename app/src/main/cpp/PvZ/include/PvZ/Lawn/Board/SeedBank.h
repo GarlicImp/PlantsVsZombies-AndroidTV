@@ -49,7 +49,7 @@ public:
 
     SeedBank(bool thePlayerIndex);
     ~SeedBank() {
-        __Destructor();
+        _destructor();
     }
     void Draw(Sexy::Graphics *g);
     bool MouseHitTest(int x, int y, HitResult *theHitResult);
@@ -62,8 +62,8 @@ public:
 protected:
     friend void InitHookFunction();
 
-    void __Constructor(bool thePlayerIndex);
-    void __Destructor() {
+    void _constructor(bool thePlayerIndex);
+    void _destructor() {
         reinterpret_cast<void (*)(SeedBank *)>(SeedBank_DeleteAddr)(this);
     }
 };

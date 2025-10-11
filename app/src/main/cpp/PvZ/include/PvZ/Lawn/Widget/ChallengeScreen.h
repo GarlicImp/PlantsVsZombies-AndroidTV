@@ -83,7 +83,7 @@ public:
 protected:
     friend void InitHookFunction();
 
-    void __Constructor(LawnApp *theApp, ChallengePage thePage);
+    void _constructor(LawnApp *theApp, ChallengePage thePage);
     void __Destructor2();
 };
 

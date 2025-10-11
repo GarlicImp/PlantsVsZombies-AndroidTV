@@ -48,7 +48,7 @@ public:
 protected:
     friend void InitHookFunction();
 
-    void __Constructor(LawnApp *theApp);
+    void _constructor(LawnApp *theApp);
     void __Destructor2();
 };
 

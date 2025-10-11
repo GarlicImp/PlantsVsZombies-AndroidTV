@@ -168,7 +168,7 @@ public:
 protected:
     friend void InitHookFunction();
 
-    void __Constructor(bool theIsZombieChooser);
+    void _constructor(bool theIsZombieChooser);
 };
 
 /***************************************************************************************************************/

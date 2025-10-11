@@ -29,11 +29,11 @@ public:
     // 115: 192, 111: 194
 
     ConfirmBackToMainDialog(bool theBool) {
-        __Constructor(theBool);
+        _constructor(theBool);
     }
 
 protected:
-    void __Constructor(bool theBool) {
+    void _constructor(bool theBool) {
         reinterpret_cast<void (*)(ConfirmBackToMainDialog *, bool)>(ConfirmBackToMainDialog_ConfirmBackToMainDialogAddr)(this, theBool);
     }
 };

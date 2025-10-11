@@ -86,11 +86,11 @@ private:
 class DaveHelp : public Sexy::__Widget {
 public:
     DaveHelp(LawnApp *theApp) {
-        __Constructor(theApp);
+        _constructor(theApp);
     }
 
 protected:
-    void __Constructor(LawnApp *theApp) {
+    void _constructor(LawnApp *theApp) {
         reinterpret_cast<void (*)(DaveHelp *, LawnApp *)>(DaveHelp_DaveHelpAddr)(this, theApp);
     }
 };

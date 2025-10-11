@@ -103,11 +103,11 @@ private:
 class TestMenuWidget : public Sexy::MenuWidget {
 public:
     TestMenuWidget() {
-        __Constructor();
+        _constructor();
     }
 
 protected:
-    void __Constructor() {
+    void _constructor() {
         reinterpret_cast<void (*)(TestMenuWidget *)>(TestMenuWidget_TestMenuWidgetAddr)(this);
     }
 };

@@ -36,7 +36,7 @@ public:
 
     //    GameButton(int theId, ButtonListener *theListener) { Create(); }
     ~GameButton() {
-        __Destructor();
+        _destructor();
     }
     bool IsMouseOver() {
         return reinterpret_cast<bool (*)(GameButton *)>(GameButton_IsMouseOverAddr)(this);
@@ -61,10 +61,10 @@ public:
     }
 
 protected:
-    void __Constructor(int theId, Sexy::ButtonListener *theListener) {
+    void _constructor(int theId, Sexy::ButtonListener *theListener) {
         reinterpret_cast<void (*)(GameButton *, int, Sexy::ButtonListener *)>(GameButton_GameButtonAddr)(this, theId, theListener);
     }
-    void __Destructor() {
+    void _destructor() {
         reinterpret_cast<void (*)(GameButton *)>(GameButton_DeleteAddr)(this);
     }
 };

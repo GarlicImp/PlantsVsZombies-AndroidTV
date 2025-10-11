@@ -87,13 +87,13 @@ protected:
 
     friend void ::InitHookFunction();
 
-    void __Constructor();
+    void _constructor();
 };
 
 class SexyAppBase : public __SexyAppBase {
 public:
     SexyAppBase() {
-        __Constructor();
+        _constructor();
     }
 
     ~SexyAppBase() = delete;

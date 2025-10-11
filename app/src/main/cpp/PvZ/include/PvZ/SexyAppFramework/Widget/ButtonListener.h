@@ -25,7 +25,7 @@ namespace Sexy {
 class ButtonListener {
 public:
     struct VTable {
-        void *__Destructor = nullptr;
+        void *_destructor = nullptr;
         void *__Destructor2 = nullptr;
         void *ButtonPress = nullptr;
         void *ButtonPress2 = nullptr;

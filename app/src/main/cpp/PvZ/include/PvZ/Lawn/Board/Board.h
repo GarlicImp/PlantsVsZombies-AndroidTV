@@ -599,7 +599,7 @@ public:
 protected:
     friend void InitHookFunction();
 
-    void __Constructor(LawnApp *theApp);
+    void _constructor(LawnApp *theApp);
 };
 
 int GetRectOverlap(const Sexy::Rect &rect1, const Sexy::Rect &rect2);

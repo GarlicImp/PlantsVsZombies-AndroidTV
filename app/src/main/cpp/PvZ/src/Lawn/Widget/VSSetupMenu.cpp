@@ -65,7 +65,7 @@ void VSSetupWidget::CheckboxChecked(int theId, bool checked) {
     }
 }
 
-void VSSetupMenu::__Constructor() {
+void VSSetupMenu::_constructor() {
     old_VSSetupMenu_Constructor(this);
 
     Image *aCheckbox = *Sexy_IMAGE_OPTIONS_CHECKBOX0_Addr;
@@ -85,7 +85,7 @@ void VSSetupMenu::__Constructor() {
     mApp->mBoard->mDanceMode = false;
 }
 
-void VSSetupMenu::__Destructor() {
+void VSSetupMenu::_destructor() {
     old_VSSetupMenu_Destructor(this);
 
     if (gVSMorePacketsButton != nullptr)

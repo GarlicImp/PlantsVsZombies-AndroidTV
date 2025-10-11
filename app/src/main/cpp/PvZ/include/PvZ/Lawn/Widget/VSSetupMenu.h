@@ -126,10 +126,10 @@ public:
     }
 
     VSSetupMenu() {
-        __Constructor();
+        _constructor();
     }
     ~VSSetupMenu() {
-        __Destructor();
+        _destructor();
     }
     void Draw(Sexy::Graphics *g);
     void Update();
@@ -140,8 +140,8 @@ public:
 
 protected:
     friend void InitHookFunction();
-    void __Constructor();
-    void __Destructor();
+    void _constructor();
+    void _destructor();
 };
 
 

@@ -44,7 +44,7 @@ public:
 #endif
     // 115: 191, 111: 193
 
-    //    void __Constructor(LawnApp *theApp,
+    //    void _constructor(LawnApp *theApp,
     //                       Sexy::Image *theImage,
     //                       int theId,
     //                       bool isModal,
@@ -55,7 +55,7 @@ public:
     //        reinterpret_cast<void (*)(__LawnDialog *, LawnApp *, Sexy::Image *, int, bool, const pvzstl::string &, const pvzstl::string &, const pvzstl::string &, int)>(LawnDialog_LawnDialogAddr)(
     //            this, theApp, theImage, theId, isModal, theDialogHeader, theDialogLines, theDialogFooter, theButtonMode);
     //    }
-    //    void __Destructor() {
+    //    void _destructor() {
     //        reinterpret_cast<void(*)(__LawnDialog*)>(LawnDialog_Delete2Addr)(this);
     //    }
 
@@ -76,10 +76,10 @@ public:
     //               const pvzstl::string &theDialogLines,
     //               const pvzstl::string &theDialogFooter,
     //               int theButtonMode) {
-    //        __LawnDialog::__Constructor(theApp, theImage, theId, isModal, theDialogHeader, theDialogLines, theDialogFooter, theButtonMode);
+    //        __LawnDialog::_constructor(theApp, theImage, theId, isModal, theDialogHeader, theDialogLines, theDialogFooter, theButtonMode);
     //    }
     //    ~LawnDialog() {
-    //        __LawnDialog::__Destructor();
+    //        __LawnDialog::_destructor();
     //    };
 };
 

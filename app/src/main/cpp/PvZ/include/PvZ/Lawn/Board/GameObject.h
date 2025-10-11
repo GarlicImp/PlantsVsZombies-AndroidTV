@@ -42,7 +42,7 @@ public:
     int mRenderOrder;   // 12
     // 大小13个整数
 
-    void __Destructor() {
+    void _destructor() {
         reinterpret_cast<bool (*)(__GameObject *)>(GameObject_Delete2Addr)(this);
     }
     bool BeginDraw(Sexy::Graphics *g) {
@@ -64,7 +64,7 @@ class GameObject : public __GameObject {
 public:
     GameObject() = delete;
     ~GameObject() {
-        __GameObject::__Destructor();
+        __GameObject::_destructor();
     };
 };
 

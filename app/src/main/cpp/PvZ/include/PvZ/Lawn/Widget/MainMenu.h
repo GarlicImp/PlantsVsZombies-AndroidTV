@@ -112,7 +112,7 @@ public:
     };
 
     MainMenu(LawnApp *theApp) {
-        __Constructor(theApp);
+        _constructor(theApp);
     }
     void KeyDown(Sexy::KeyCode theKeyCode);
     void ButtonDepress(MainMenuButtonId theSelectedButton);
@@ -137,7 +137,7 @@ public:
 protected:
     friend void InitHookFunction();
 
-    void __Constructor(LawnApp *theApp);
+    void _constructor(LawnApp *theApp);
     void __Destructor2();
 };
 

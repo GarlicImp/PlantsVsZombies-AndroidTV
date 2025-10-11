@@ -21,7 +21,7 @@
 #include "PvZ/Lawn/LawnApp.h"
 #include "PvZ/Lawn/System/PlayerInfo.h"
 
-void Sexy::__SexyAppBase::__Constructor() {
+void Sexy::__SexyAppBase::_constructor() {
     old_Sexy_SexyAppBase_SexyAppBase(this);
     //    LOGD("%d",*((uint32_t *)appBase + 464));
     //    *((uint32_t *)appBase + 464) = 0; ;

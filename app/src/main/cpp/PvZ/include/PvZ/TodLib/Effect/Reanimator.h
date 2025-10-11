@@ -193,10 +193,10 @@ public:
     // 大小55个整数
 
     Reanimation() {
-        __Constructor();
+        _constructor();
     }
     ~Reanimation() {
-        __Destructor();
+        _destructor();
     }
     void SetPosition(float theX, float theY) {
         reinterpret_cast<void (*)(Reanimation *, float, float)>(Reanimation_SetPositionAddr)(this, theX, theY);
@@ -277,10 +277,10 @@ public:
     int GetZombatarEyeWearTrackIndex();
 
 protected:
-    void __Constructor() {
+    void _constructor() {
         reinterpret_cast<void (*)(Reanimation *)>(Reanimation_ReanimationAddr)(this);
     }
-    void __Destructor() {
+    void _destructor() {
         reinterpret_cast<void (*)(Reanimation *)>(Reanimation_Delete2Addr)(this);
     }
 };

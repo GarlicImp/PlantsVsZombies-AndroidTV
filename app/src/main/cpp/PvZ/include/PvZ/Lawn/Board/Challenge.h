@@ -157,8 +157,8 @@ public:
 protected:
     friend void InitHookFunction();
 
-    void __Constructor();
-    void __Destructor();
+    void _constructor();
+    void _destructor();
 };
 
 /***************************************************************************************************************/

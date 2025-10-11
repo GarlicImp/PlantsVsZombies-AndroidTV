@@ -23,10 +23,10 @@
 #include "PvZ/Misc.h"
 
 TrashBin::TrashBin(TrashPileType theTrashPileType, float theHeight) {
-    __Constructor(theTrashPileType, theHeight);
+    _constructor(theTrashPileType, theHeight);
 }
 
-void TrashBin::__Constructor(TrashPileType theTrashPileType, float theHeight) {
+void TrashBin::_constructor(TrashPileType theTrashPileType, float theHeight) {
     old_TrashBin_TrashBin(this, theTrashPileType, theHeight);
 
     int thePileNum = theHeight / (theTrashPileType == TrashBin::ZOMBIE_PILE ? zombiePileHeight : plantPileHeight) + 1;

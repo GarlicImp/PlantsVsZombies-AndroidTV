@@ -263,7 +263,7 @@ public:
     }
 
     Zombie() {
-        __Constructor();
+        _constructor();
     }
     void ZombieInitialize(int theRow, ZombieType theType, bool theVariant, Zombie *theParentZombie, int theFromWave, bool theIsVisible);
     void CheckIfPreyCaught();
@@ -371,7 +371,7 @@ public:
     void JacksonDie();
 
 protected:
-    void __Constructor() {
+    void _constructor() {
         reinterpret_cast<void (*)(Zombie *)>(Zombie_ZombieAddr)(this);
     };
 };

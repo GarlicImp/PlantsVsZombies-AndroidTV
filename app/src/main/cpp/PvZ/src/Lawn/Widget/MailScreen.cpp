@@ -33,10 +33,10 @@ GameButton *gMailScreenSwitchButton;
 } // namespace
 
 MailScreen::MailScreen(LawnApp *theApp) {
-    __Constructor(theApp);
+    _constructor(theApp);
 }
 
-void MailScreen::__Constructor(LawnApp *theApp) {
+void MailScreen::_constructor(LawnApp *theApp) {
     // 修复MailScreen的可触控区域不为全屏。
     old_MailScreen_MailScreen(this, theApp);
 

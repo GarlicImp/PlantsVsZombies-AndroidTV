@@ -66,10 +66,10 @@ SeedType gArtChallengeStarFruit[MAX_GRID_SIZE_Y][MAX_GRID_SIZE_X] = {
 };
 
 Challenge::Challenge() {
-    __Constructor();
+    _constructor();
 }
 
-void Challenge::__Constructor() {
+void Challenge::_constructor() {
     if (requestJumpSurvivalStage) {
         // 如果玩家按了无尽跳关
         if (mSurvivalStage > 0 || mApp->mGameScene == GameScenes::SCENE_PLAYING) {
@@ -551,7 +551,7 @@ void Challenge::HeavyWeaponPacketClicked(SeedPacket* theSeedPacket) {
     old_Challenge_HeavyWeaponPacketClicked(this, theSeedPacket);
 }
 
-void Challenge::__Destructor() {
+void Challenge::_destructor() {
     old_Challenge_Delete(this);
 
     if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_HEAVY_WEAPON && heavyWeaponAccel) {

@@ -57,10 +57,10 @@
 using namespace Sexy;
 
 Board::Board(LawnApp *theApp) {
-    __Constructor(theApp);
+    _constructor(theApp);
 }
 
-void Board::__Constructor(LawnApp *theApp) {
+void Board::_constructor(LawnApp *theApp) {
     old_Board_Board(this, theApp);
 
     delete gBoardMenuButton;

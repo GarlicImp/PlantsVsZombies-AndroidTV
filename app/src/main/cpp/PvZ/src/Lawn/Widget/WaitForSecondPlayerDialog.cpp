@@ -23,7 +23,7 @@
 
 using namespace Sexy;
 
-void WaitForSecondPlayerDialog::__Constructor(LawnApp *theApp) {
+void WaitForSecondPlayerDialog::_constructor(LawnApp *theApp) {
     old_WaitForSecondPlayerDialog_WaitForSecondPlayerDialog(this, theApp);
 
     GameButtonDown(ButtonCode::BUTTONCODE_A, 1);
@@ -76,7 +76,7 @@ void WaitForSecondPlayerDialog::__Constructor(LawnApp *theApp) {
     mIsCreatingRoom = false;
 }
 
-void WaitForSecondPlayerDialog::__Destructor() {
+void WaitForSecondPlayerDialog::_destructor() {
     old_WaitForSecondPlayerDialog_Delete(this);
 }
 

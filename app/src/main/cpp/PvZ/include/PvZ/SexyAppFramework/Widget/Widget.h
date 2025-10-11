@@ -53,10 +53,10 @@ public:
     int *mAnimatorForState[4];     // 60 ~ 63
     // 大小64个整数！
 
-    void __Constructor() {
+    void _constructor() {
         reinterpret_cast<void (*)(__Widget *)>(Sexy_Widget___ConstructorAddr)(this);
     }
-    void __Destructor() {
+    void _destructor() {
         reinterpret_cast<void (*)(__Widget *)>(Sexy_Widget___DestructorAddr)(this);
     }
 
@@ -86,10 +86,10 @@ protected:
 class Widget : public __Widget {
 public:
     Widget() {
-        __Widget::__Constructor();
+        __Widget::_constructor();
     }
     ~Widget() {
-        __Widget::__Destructor();
+        __Widget::_destructor();
     }
 };
 

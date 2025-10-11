@@ -42,11 +42,11 @@ public:
     // 大小97个整数
 
     ~Checkbox() {
-        __Destructor();
+        _destructor();
     }
 
 protected:
-    void __Destructor() {
+    void _destructor() {
         reinterpret_cast<void (*)(Checkbox *)>(Sexy_Checkbox_DeleteAddr)(this);
     }
 };

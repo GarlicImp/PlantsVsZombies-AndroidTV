@@ -46,10 +46,10 @@ public:
     }
 
     WaitForSecondPlayerDialog(LawnApp *theApp) {
-        __Constructor(theApp);
+        _constructor(theApp);
     }
     ~WaitForSecondPlayerDialog() {
-        __Destructor();
+        _destructor();
     }
     void Update();
     void Draw(Sexy::Graphics *g);
@@ -58,8 +58,8 @@ public:
 protected:
     friend void InitHookFunction();
 
-    void __Constructor(LawnApp *theApp);
-    void __Destructor();
+    void _constructor(LawnApp *theApp);
+    void _destructor();
 };
 
 void WaitForSecondPlayerDialog_ButtonDepress(Sexy::ButtonListener *listener, int id);

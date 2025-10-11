@@ -56,17 +56,17 @@ public:
 class MaskHelpWidget : public Sexy::__Widget {
 public:
     MaskHelpWidget(LawnApp *theApp) {
-        __Constructor(theApp);
+        _constructor(theApp);
     }
     ~MaskHelpWidget() {
-        __Destructor();
+        _destructor();
     }
 
 protected:
-    void __Constructor(LawnApp *theApp) {
+    void _constructor(LawnApp *theApp) {
         reinterpret_cast<void (*)(MaskHelpWidget *, LawnApp *)>(MaskHelpWidget_MaskHelpWidgetAddr)(this, theApp);
     }
-    void __Destructor() {
+    void _destructor() {
         reinterpret_cast<void (*)(MaskHelpWidget *)>(MaskHelpWidget_DeleteAddr)(this);
     }
 };

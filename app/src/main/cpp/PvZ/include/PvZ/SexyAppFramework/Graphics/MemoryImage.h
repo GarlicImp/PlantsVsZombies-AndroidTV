@@ -44,10 +44,10 @@ public:
     // 大小58个整数
 
     MemoryImage() {
-        __Constructor();
+        _constructor();
     }
     ~MemoryImage() {
-        __Destructor();
+        _destructor();
     }
 
     ulong *GetBits() {
@@ -74,10 +74,10 @@ public:
     void PopTransform();
 
 protected:
-    void __Constructor() {
+    void _constructor() {
         reinterpret_cast<void (*)(MemoryImage *)>(Sexy_MemoryImage_MemoryImageAddr)(this);
     }
-    void __Destructor() {
+    void _destructor() {
         reinterpret_cast<void (*)(MemoryImage *)>(Sexy_MemoryImage_DeleteAddr)(this);
     }
 };

@@ -52,20 +52,20 @@ public:
     // 大小204个整数
 
     MessageWidget(LawnApp *theApp) {
-        __Constructor(theApp);
+        _constructor(theApp);
     }
     ~MessageWidget() {
-        __Destructor();
+        _destructor();
     }
     Sexy::Font *GetFont() {
         return reinterpret_cast<Sexy::Font *(*)(MessageWidget *)>(MessageWidget_GetFontAddr)(this);
     }
 
 protected:
-    void __Constructor(LawnApp *theApp) {
+    void _constructor(LawnApp *theApp) {
         reinterpret_cast<void (*)(MessageWidget *, LawnApp *)>(MessageWidget_MessageWidgetAddr)(this, theApp);
     }
-    void __Destructor() {
+    void _destructor() {
         reinterpret_cast<void (*)(MessageWidget *)>(MessageWidget_DeleteAddr)(this);
     }
 };

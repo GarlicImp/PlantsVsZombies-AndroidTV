@@ -490,7 +490,7 @@ void MainMenu::SyncButtons() {
     EnableButtons();
 }
 
-void MainMenu::__Constructor(LawnApp *theApp) {
+void MainMenu::_constructor(LawnApp *theApp) {
     old_MainMenu_MainMenu(this, theApp);
 }
 

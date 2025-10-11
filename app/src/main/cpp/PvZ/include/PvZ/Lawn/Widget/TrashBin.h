@@ -47,9 +47,9 @@ public:
 protected:
     friend void InitHookFunction();
 
-    void __Constructor(TrashPileType theTrashPileType, float theHeight);
+    void _constructor(TrashPileType theTrashPileType, float theHeight);
 
-    void __Destructor() {
+    void _destructor() {
         reinterpret_cast<void (*)(TrashBin *)>(TrashBin_DeleteAddr)(this);
     }
 };
