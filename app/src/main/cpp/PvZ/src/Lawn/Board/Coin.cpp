@@ -30,6 +30,8 @@
 
 #include <cmath>
 
+using namespace Sexy;
+
 void Coin::CoinInitialize(int theX, int theY, CoinType theCoinType, CoinMotion theCoinMotion) {
     old_Coin_CoinInitialize(this, theX, theY, theCoinType, theCoinMotion);
 }
@@ -242,4 +244,26 @@ bool Coin::MouseHitTest(int theX, int theY, int **theHitResult, int thePlayerInd
     }
 
     return old_Coin_MouseHitTest(this, theX, theY, theHitResult, thePlayerIndex);
+}
+
+bool Coin::IsSun() {
+    return mType == CoinType::COIN_SUN || mType == CoinType::COIN_SMALLSUN || mType == CoinType::COIN_LARGESUN;
+}
+
+void Coin::Draw(Graphics *g) {
+    old_Coin_Draw(this, g);
+}
+
+Color Coin::GetColor() {
+    if ((IsSun() || IsMoney()) && mIsBeingCollected) {
+        float aAlpha = ClampFloat(mCollectionDistance * 0.035f, 0.35f, 1.0f) * 255.0f;
+        return Color(255, 255, 255, aAlpha);
+    }
+
+    if (mFadeCount > 0) {
+        int aAlpha = TodAnimateCurve(15, 0, mFadeCount, 255, 0, TodCurves::CURVE_LINEAR);
+        return Color(255, 255, 255, aAlpha);
+    }
+
+    return Color::White;
 }

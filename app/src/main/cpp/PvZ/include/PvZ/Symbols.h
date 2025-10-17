@@ -188,6 +188,7 @@ inline void *Board_ResetLawnMowersAddr;
 inline void *Board_ZombieGetIDAddr;
 inline void *Board_SetDanceModeAddr;
 inline void *Board_ChooseSeedsOnCurrentLevelAddr;
+inline void *Board_RowCanHaveZombiesAddr;
 
 
 inline void *SyncBoardAddr;
@@ -473,6 +474,8 @@ inline void *Coin_GamepadCursorOverAddr;
 inline void *Coin_MouseHitTestAddr;
 inline void *Coin_TryAutoCollectAfterLevelAwardAddr;
 inline void *Coin_MouseDownAddr;
+inline void *Coin_DrawAddr;
+inline void *Coin_GetColorAddr;
 
 
 inline void *StoreScreen_UpdateAddr;
@@ -1445,6 +1448,7 @@ inline bool GetFunctionAddr() {
     Board_ZombieGetIDAddr = dlsym(handle, "_ZN5Board11ZombieGetIDEP6Zombie");
     Board_SetDanceModeAddr = dlsym(handle, "_ZN5Board12SetDanceModeEb");
     Board_ChooseSeedsOnCurrentLevelAddr = dlsym(handle, "_ZN5Board25ChooseSeedsOnCurrentLevelEv");
+    Board_RowCanHaveZombiesAddr = dlsym(handle, "_ZN5Board17RowCanHaveZombiesEi");
 
     SyncBoardAddr = dlsym(handle, "_Z9SyncBoardP15SaveGameContextP5Board");
     FixBoardAfterLoadAddr = dlsym(handle, "_Z17FixBoardAfterLoadP5Board");
@@ -1730,6 +1734,8 @@ inline bool GetFunctionAddr() {
     Coin_MouseHitTestAddr = dlsym(handle, "_ZN4Coin12MouseHitTestEiiP9HitResulti");
     Coin_TryAutoCollectAfterLevelAwardAddr = dlsym(handle, "_ZN4Coin29TryAutoCollectAfterLevelAwardEv");
     Coin_MouseDownAddr = dlsym(handle, "_ZN4Coin9MouseDownEiii");
+    Coin_DrawAddr = dlsym(handle, "_ZN4Coin4DrawEPN4Sexy8GraphicsE");
+    Coin_GetColorAddr = dlsym(handle, "_ZN4Coin8GetColorEv");
 
 
     StoreScreen_UpdateAddr = dlsym(handle, "_ZN11StoreScreen6UpdateEv");

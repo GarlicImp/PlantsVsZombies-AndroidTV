@@ -199,6 +199,8 @@ inline void InitHookFunction() {
     homura::HookFunction(Coin_GamepadCursorOverAddr, &Coin::GamepadCursorOver, &old_Coin_GamepadCursorOver);
     homura::HookFunction(Coin_MouseHitTestAddr, &Coin::MouseHitTest, &old_Coin_MouseHitTest);
     homura::HookFunction(Coin_UpdateFallAddr, &Coin::UpdateFall, &old_Coin_UpdateFall);
+    homura::HookFunction(Coin_DrawAddr, &Coin::Draw, &old_Coin_Draw);
+    homura::HookFunction(Coin_GetColorAddr, &Coin::GetColor, nullptr);
 
 
     homura::HookFunction(GamepadControls_ButtonDownFireCobcannonTestAddr, &GamepadControls::ButtonDownFireCobcannonTest, &old_GamepadControls_ButtonDownFireCobcannonTest);

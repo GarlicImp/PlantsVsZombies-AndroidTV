@@ -145,7 +145,6 @@ MemoryImage*ReanimatorCache::MakeBlankMemoryImage(int theWidth, int theHeight) {
 }
 
 Sexy::MemoryImage *ReanimatorCache::MakeCachedZombieFrame(ZombieType theZombieType) {
-    if (theZombieType > ZombieType::NUM_CACHED_ZOMBIE_TYPES) {
     int maxWidth = 200;
     int maxHeight = 210;
 
@@ -157,99 +156,203 @@ Sexy::MemoryImage *ReanimatorCache::MakeCachedZombieFrame(ZombieType theZombieTy
     ZombieDefinition &aZombieDef = GetZombieDefinition(aUseZombieType);
 
     float aPosX = 40.0f, aPosY = 40.0f;
-    if (theZombieType == ZombieType::ZOMBIE_EXPLODE_O_NUT_HEAD) {
-        Reanimation *aReanim = mApp->AddReanimation(aPosX, aPosY, 0, aZombieDef.mReanimationType);
-        aReanim->mIsAttachment = true;
-        aReanim->SetFramesForLayer("anim_idle");
-        Zombie::SetupReanimLayers(aReanim, aUseZombieType);
-        aReanim->AssignRenderGroupToPrefix("anim_hair", RENDER_GROUP_HIDDEN);
-        aReanim->AssignRenderGroupToPrefix("anim_head", RENDER_GROUP_HIDDEN);
-        aReanim->AssignRenderGroupToPrefix("anim_head2", RENDER_GROUP_HIDDEN);
-        aReanim->AssignRenderGroupToPrefix("Zombie_tie", RENDER_GROUP_HIDDEN);
 
-        ReanimationType aHeadType = ReanimationType::REANIM_WALLNUT;
+    if (theZombieType > ZombieType::NUM_CACHED_ZOMBIE_TYPES) {
+        if (theZombieType == ZombieType::ZOMBIE_SUNFLOWER_HEAD) {
+            Reanimation *aReanim = mApp->AddReanimation(aPosX, aPosY, 0, aZombieDef.mReanimationType);
+            aReanim->mIsAttachment = true;
+            aReanim->SetFramesForLayer("anim_idle");
+            Zombie::SetupReanimLayers(aReanim, aUseZombieType);
+            aReanim->AssignRenderGroupToPrefix("anim_hair", RENDER_GROUP_HIDDEN);
+            aReanim->AssignRenderGroupToPrefix("anim_head", RENDER_GROUP_HIDDEN);
+            aReanim->AssignRenderGroupToPrefix("anim_head2", RENDER_GROUP_HIDDEN);
+
+            ReanimationType aHeadType = ReanimationType::REANIM_SUNFLOWER;
+
+            Reanimation *aHeadReanim = mApp->AddReanimation(0, 0, 0, aHeadType);
+            aHeadReanim->PlayReanim("anim_idle", ReanimLoopType::REANIM_LOOP, 0, 15.0f);
+
+            ReanimatorTrackInstance *aTrackInstance = aReanim->GetTrackInstanceByName("Zombie_body");
+            AttachEffect *aAttachEffect = AttachReanim(aTrackInstance->mAttachmentID, aHeadReanim, 0.0f, 0.0f);
+            aReanim->mFrameBasePose = 0;
+
+            TodScaleRotateTransformMatrix(aAttachEffect->mOffset, 65.0f, -10.0f, 0.2f, -1.0f, 1.0f);
+
+            aHeadReanim->AssignRenderGroupToTrack("frontleaf_left_tip", RENDER_GROUP_HIDDEN);
+            aHeadReanim->AssignRenderGroupToTrack("frontleaf_right_tip", RENDER_GROUP_HIDDEN);
+            aHeadReanim->AssignRenderGroupToTrack("frontleaf", RENDER_GROUP_HIDDEN);
+            aHeadReanim->AssignRenderGroupToTrack("stalk_bottom", RENDER_GROUP_HIDDEN);
+            aHeadReanim->AssignRenderGroupToTrack("backleaf_right_tip", RENDER_GROUP_HIDDEN);
+            aHeadReanim->AssignRenderGroupToTrack("backleaf_left_tip", RENDER_GROUP_HIDDEN);
+            aHeadReanim->AssignRenderGroupToTrack("backleaf", RENDER_GROUP_HIDDEN);
+
+            SexyTransform2D aOverlayMatrix;
+            aReanim->GetAttachmentOverlayMatrix(aReanim->FindTrackIndex("Zombie_body"), aOverlayMatrix);
+            AttachmentUpdateAndSetMatrix(aTrackInstance->mAttachmentID, aOverlayMatrix);
+
+            aReanim->Update();
+            aReanim->Draw(&aMemoryGraphics);
+            gNewZombieImages[theZombieType - NUM_CACHED_ZOMBIE_TYPES - 1] = aMemoryImage;
+        } else if (theZombieType == ZombieType::ZOMBIE_EXPLODE_O_NUT_HEAD) {
+            Reanimation *aReanim = mApp->AddReanimation(aPosX, aPosY, 0, aZombieDef.mReanimationType);
+            aReanim->mIsAttachment = true;
+            aReanim->SetFramesForLayer("anim_idle");
+            Zombie::SetupReanimLayers(aReanim, aUseZombieType);
+            aReanim->AssignRenderGroupToPrefix("anim_hair", RENDER_GROUP_HIDDEN);
+            aReanim->AssignRenderGroupToPrefix("anim_head", RENDER_GROUP_HIDDEN);
+            aReanim->AssignRenderGroupToPrefix("anim_head2", RENDER_GROUP_HIDDEN);
+            aReanim->AssignRenderGroupToPrefix("Zombie_tie", RENDER_GROUP_HIDDEN);
+
+            ReanimationType aHeadType = ReanimationType::REANIM_WALLNUT;
+
+            Reanimation *aHeadReanim = mApp->AddReanimation(0, 0, 0, aHeadType);
+            aHeadReanim->PlayReanim("anim_idle", ReanimLoopType::REANIM_LOOP, 0, 15.0f);
+
+            ReanimatorTrackInstance *aTrackInstance = aReanim->GetTrackInstanceByName("Zombie_body");
+            AttachEffect *aAttachEffect = AttachReanim(aTrackInstance->mAttachmentID, aHeadReanim, 0.0f, 0.0f);
+            aReanim->mFrameBasePose = 0;
+
+            TodScaleRotateTransformMatrix(aAttachEffect->mOffset, 50.0f, 0.0f, 0.2f, -0.8f, 0.8f);
+            aHeadReanim->mColorOverride = Color(255, 64, 64);
+
+            SexyTransform2D aOverlayMatrix;
+            aReanim->GetAttachmentOverlayMatrix(aReanim->FindTrackIndex("Zombie_body"), aOverlayMatrix);
+            AttachmentUpdateAndSetMatrix(aTrackInstance->mAttachmentID, aOverlayMatrix);
+
+            aReanim->Update();
+            aReanim->Draw(&aMemoryGraphics);
+            gNewZombieImages[theZombieType - NUM_CACHED_ZOMBIE_TYPES - 1] = aMemoryImage;
+        } else if (theZombieType == ZombieType::ZOMBIE_GIGA_FOOTBALL) {
+            Reanimation aReanim;
+            aReanim.ReanimationInitializeType(aPosX, aPosY, aZombieDef.mReanimationType);
+            aReanim.PlayReanim("anim_idle", ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD, 0, 24.0f);
+            aReanim.mAnimTime = 0.5f;
+            aReanim.Update();
+            aReanim.Draw(&aMemoryGraphics);
+            gNewZombieImages[theZombieType - NUM_CACHED_ZOMBIE_TYPES - 1] = aMemoryImage;
+        } else if (theZombieType == ZombieType::ZOMBIE_SUPER_FAN_IMP) {
+            Reanimation aReanim;
+            aReanim.ReanimationInitializeType(aPosX, aPosY, aZombieDef.mReanimationType);
+            aReanim.PlayReanim("anim_idle", ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD, 0, 24.0f);
+            aReanim.mAnimTime = 0.5f;
+            aReanim.Update();
+            aReanim.Draw(&aMemoryGraphics);
+            gNewZombieImages[theZombieType - NUM_CACHED_ZOMBIE_TYPES - 1] = aMemoryImage;
+        } else if (theZombieType == ZombieType::ZOMBIE_JACKSON) {
+            Reanimation aReanim;
+            aReanim.ReanimationInitializeType(aPosX, aPosY, aZombieDef.mReanimationType);
+            aReanim.PlayReanim("anim_moonwalk", ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD, 0, 24.0f);
+            aReanim.Update();
+            aReanim.Draw(&aMemoryGraphics);
+            gNewZombieImages[theZombieType - NUM_CACHED_ZOMBIE_TYPES - 1] = aMemoryImage;
+        } else if (theZombieType == ZombieType::ZOMBIE_BACKUP_DANCER2) {
+            Reanimation aReanim;
+            aReanim.ReanimationInitializeType(aPosX, aPosY, aZombieDef.mReanimationType);
+            aReanim.PlayReanim("anim_armraise", ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD, 0, 24.0f);
+            aReanim.mAnimTime = 0.5f;
+            aReanim.Update();
+            aReanim.Draw(&aMemoryGraphics);
+            gNewZombieImages[theZombieType - NUM_CACHED_ZOMBIE_TYPES - 1] = aMemoryImage;
+        }
+        return aMemoryImage;
+    }
+
+    if (theZombieType == ZombieType::ZOMBIE_PEA_HEAD || theZombieType == ZombieType::ZOMBIE_GATLING_HEAD || theZombieType == ZombieType::ZOMBIE_SQUASH_HEAD) { // 为植物僵尸增加SeedPacket图标
+        Reanimation aReanim;
+        aReanim.ReanimationInitializeType(aPosX, aPosY, aZombieDef.mReanimationType);
+        aReanim.mIsAttachment = true;
+        aReanim.SetFramesForLayer("anim_idle");
+        Zombie::SetupReanimLayers(&aReanim, aUseZombieType);
+        aReanim.AssignRenderGroupToPrefix("anim_hair", RENDER_GROUP_HIDDEN);
+        aReanim.AssignRenderGroupToPrefix("anim_head2", RENDER_GROUP_HIDDEN);
+
+        ReanimatorTrackInstance *aTrackInstance = aReanim.GetTrackInstanceByName("anim_head1");
+        aTrackInstance->mImageOverride = *IMAGE_BLANK;
+
+        ReanimationType aHeadType;
+
+        if (theZombieType == ZombieType::ZOMBIE_PEA_HEAD)
+            aHeadType = ReanimationType::REANIM_PEASHOOTER;
+        else if (theZombieType == ZombieType::ZOMBIE_GATLING_HEAD)
+            aHeadType = ReanimationType::REANIM_GATLINGPEA;
+        else if (theZombieType == ZombieType::ZOMBIE_SQUASH_HEAD)
+            aHeadType = ReanimationType::REANIM_SQUASH;
+
+        Reanimation *aHeadReanim = mApp->AddReanimation(0, 0, 0, aHeadType);
+        if (theZombieType == ZombieType::ZOMBIE_SQUASH_HEAD)
+            aHeadReanim->PlayReanim("anim_idle", ReanimLoopType::REANIM_LOOP, 0, 15.0f);
+        else
+            aHeadReanim->PlayReanim("anim_head_idle", ReanimLoopType::REANIM_LOOP, 0, 15.0f);
+
+        AttachEffect *aAttachEffect = AttachReanim(aTrackInstance->mAttachmentID, aHeadReanim, 0.0f, 0.0f);
+        aReanim.mFrameBasePose = 0;
+
+        if (theZombieType == ZombieType::ZOMBIE_SQUASH_HEAD)
+            TodScaleRotateTransformMatrix(aAttachEffect->mOffset, 55.0f, -15.0f, 0.2f, -0.75f, 0.75f);
+        else
+            TodScaleRotateTransformMatrix(aAttachEffect->mOffset, 65.0f, -5.0f, 0.2f, -1.0f, 1.0f);
+
+        SexyTransform2D aOverlayMatrix;
+        aReanim.GetAttachmentOverlayMatrix(aReanim.FindTrackIndex("anim_head1"), aOverlayMatrix);
+        AttachmentUpdateAndSetMatrix(aTrackInstance->mAttachmentID, aOverlayMatrix);
+
+        aReanim.Update();
+        aReanim.Draw(&aMemoryGraphics);
+        mZombieImages[theZombieType] = aMemoryImage;
+        return aMemoryImage;
+    } else if (theZombieType == ZombieType::ZOMBIE_WALLNUT_HEAD || theZombieType == ZombieType::ZOMBIE_TALLNUT_HEAD || theZombieType == ZombieType::ZOMBIE_JALAPENO_HEAD) {
+        Reanimation aReanim;
+        aReanim.ReanimationInitializeType(aPosX, aPosY, aZombieDef.mReanimationType);
+        aReanim.mIsAttachment = true;
+        aReanim.SetFramesForLayer("anim_idle");
+        Zombie::SetupReanimLayers(&aReanim, aUseZombieType);
+        aReanim.AssignRenderGroupToPrefix("anim_hair", RENDER_GROUP_HIDDEN);
+        aReanim.AssignRenderGroupToPrefix("anim_head", RENDER_GROUP_HIDDEN);
+        aReanim.AssignRenderGroupToPrefix("anim_head2", RENDER_GROUP_HIDDEN);
+        aReanim.AssignRenderGroupToPrefix("Zombie_tie", RENDER_GROUP_HIDDEN);
+
+        ReanimationType aHeadType;
+
+        if (theZombieType == ZombieType::ZOMBIE_WALLNUT_HEAD)
+            aHeadType = ReanimationType::REANIM_WALLNUT;
+        else if (theZombieType == ZombieType::ZOMBIE_TALLNUT_HEAD)
+            aHeadType = ReanimationType::REANIM_TALLNUT;
+        else if (theZombieType == ZombieType::ZOMBIE_JALAPENO_HEAD)
+            aHeadType = ReanimationType::REANIM_JALAPENO;
 
         Reanimation *aHeadReanim = mApp->AddReanimation(0, 0, 0, aHeadType);
         aHeadReanim->PlayReanim("anim_idle", ReanimLoopType::REANIM_LOOP, 0, 15.0f);
 
-        ReanimatorTrackInstance *aTrackInstance = aReanim->GetTrackInstanceByName("Zombie_body");
+        ReanimatorTrackInstance *aTrackInstance = aReanim.GetTrackInstanceByName("Zombie_body");
         AttachEffect *aAttachEffect = AttachReanim(aTrackInstance->mAttachmentID, aHeadReanim, 0.0f, 0.0f);
-        aReanim->mFrameBasePose = 0;
+        aReanim.mFrameBasePose = 0;
 
-        TodScaleRotateTransformMatrix(aAttachEffect->mOffset, 50.0f, 0.0f, 0.2f, -0.8f, 0.8f);
-        aHeadReanim->mColorOverride = Color(255, 64, 64);
+        if (theZombieType == ZombieType::ZOMBIE_WALLNUT_HEAD)
+            TodScaleRotateTransformMatrix(aAttachEffect->mOffset, 50.0f, 0.0f, 0.2f, -0.8f, 0.8f);
+        else if (theZombieType == ZombieType::ZOMBIE_TALLNUT_HEAD)
+            TodScaleRotateTransformMatrix(aAttachEffect->mOffset, 37.0f, 0.0f, 0.2f, -0.8f, 0.8f);
+        else if (theZombieType == ZombieType::ZOMBIE_JALAPENO_HEAD)
+            TodScaleRotateTransformMatrix(aAttachEffect->mOffset, 55.0f, -5.0f, 0.2f, -1.0f, 1.0f);
 
         SexyTransform2D aOverlayMatrix;
-        aReanim->GetAttachmentOverlayMatrix(aReanim->FindTrackIndex("Zombie_body"), aOverlayMatrix);
+        aReanim.GetAttachmentOverlayMatrix(aReanim.FindTrackIndex("Zombie_body"), aOverlayMatrix);
         AttachmentUpdateAndSetMatrix(aTrackInstance->mAttachmentID, aOverlayMatrix);
 
-        aReanim->Update();
-        aReanim->Draw(&aMemoryGraphics);
-        gNewZombieImages[theZombieType - NUM_CACHED_ZOMBIE_TYPES - 1] = aMemoryImage;
-    } else if (theZombieType == ZombieType::ZOMBIE_GIGA_FOOTBALL) {
-        Reanimation aReanim;
-        aReanim.ReanimationInitializeType(aPosX, aPosY, aZombieDef.mReanimationType);
-        aReanim.PlayReanim("anim_idle", ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD, 0, 24.0f);
-        aReanim.mAnimTime = 0.5f;
         aReanim.Update();
         aReanim.Draw(&aMemoryGraphics);
-        gNewZombieImages[theZombieType - NUM_CACHED_ZOMBIE_TYPES - 1] = aMemoryImage;
-    } else if (theZombieType == ZombieType::ZOMBIE_SUPER_FAN_IMP) {
+        mZombieImages[theZombieType] = aMemoryImage;
+        return aMemoryImage;
+    } else if (theZombieType == ZombieType::ZOMBIE_REDEYE_GARGANTUAR) { // 为红眼巨人增加SeedPacket图标
         Reanimation aReanim;
-        aReanim.ReanimationInitializeType(aPosX, aPosY, aZombieDef.mReanimationType);
-        aReanim.PlayReanim("anim_idle", ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD, 0, 24.0f);
-        aReanim.mAnimTime = 0.5f;
+        aReanim.ReanimationInitializeType(aPosX, aPosY + 20, aZombieDef.mReanimationType);
+        aReanim.SetFramesForLayer("anim_idle");
+        Zombie::SetupReanimLayers(&aReanim, ZombieType::ZOMBIE_REDEYE_GARGANTUAR);
+        aReanim.SetImageOverride("anim_head1", *Sexy_IMAGE_REANIM_ZOMBIE_GARGANTUAR_HEAD_REDEYE_Addr);
         aReanim.Update();
         aReanim.Draw(&aMemoryGraphics);
-        gNewZombieImages[theZombieType - NUM_CACHED_ZOMBIE_TYPES - 1] = aMemoryImage;
-    }  else if (theZombieType == ZombieType::ZOMBIE_JACKSON) {
-        Reanimation aReanim;
-        aReanim.ReanimationInitializeType(aPosX, aPosY, aZombieDef.mReanimationType);
-        aReanim.PlayReanim("anim_moonwalk", ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD, 0, 24.0f);
-        aReanim.Update();
-        aReanim.Draw(&aMemoryGraphics);
-        gNewZombieImages[theZombieType - NUM_CACHED_ZOMBIE_TYPES - 1] = aMemoryImage;
-    } else if (theZombieType == ZombieType::ZOMBIE_BACKUP_DANCER2) {
-        Reanimation aReanim;
-        aReanim.ReanimationInitializeType(aPosX, aPosY, aZombieDef.mReanimationType);
-        aReanim.PlayReanim("anim_armraise", ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD, 0, 24.0f);
-        aReanim.mAnimTime = 0.5f;
-        aReanim.Update();
-        aReanim.Draw(&aMemoryGraphics);
-        gNewZombieImages[theZombieType - NUM_CACHED_ZOMBIE_TYPES - 1] = aMemoryImage;
-    }
-    return aMemoryImage;
-}
-
-    switch (theZombieType) {
-        case ZOMBIE_REDEYE_GARGANTUAR: { // 为红眼巨人增加SeedPacket图标
-            mZombieImages[theZombieType]->~MemoryImage();
-            mZombieImages[theZombieType] = nullptr;
-
-            Sexy::MemoryImage *BlankCanvasImage = MakeBlankCanvasImage((theZombieType == ZombieType::ZOMBIE_ZAMBONI ? 512 : 256), 256);
-            Graphics *graphics = new Graphics((Image *)BlankCanvasImage);
-            graphics->SetLinearBlend(true);
-            ZombieType zombieType_reanim = theZombieType != ZombieType::ZOMBIE_CACHED_POLEVAULTER_WITH_POLE ? theZombieType : ZombieType::ZOMBIE_POLEVAULTER;
-            ReanimationType reanimationType = GetZombieDefinition(zombieType_reanim).mReanimationType;
-            float x = 40;
-            float y = 60;
-            Reanimation reanimation;
-            reanimation.ReanimationInitializeType(x, y, reanimationType);
-            reanimation.SetFramesForLayer("anim_idle");
-            Zombie::SetupReanimLayers(&reanimation, zombieType_reanim);
-            reanimation.SetImageOverride("anim_head1", *Sexy_IMAGE_REANIM_ZOMBIE_GARGANTUAR_HEAD_REDEYE_Addr);
-            reanimation.Update();
-            reanimation.Draw(graphics);
-            mZombieImages[theZombieType] = BlankCanvasImage;
-            delete graphics;
-            return BlankCanvasImage;
-        }
-            // TODO:植物僵尸缓存动画
-            // 暂时用P的图代替
-            //        case ZOMBIE_PEA_HEAD: {
-            //
-            //        }
-        default:
-            return old_ReanimatorCache_MakeCachedZombieFrame(this, theZombieType);
+        mZombieImages[theZombieType] = aMemoryImage;
+        return aMemoryImage;
+    } else {
+        return old_ReanimatorCache_MakeCachedZombieFrame(this, theZombieType);
     }
 }

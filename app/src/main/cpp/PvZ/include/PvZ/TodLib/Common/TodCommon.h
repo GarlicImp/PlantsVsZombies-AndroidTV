@@ -72,6 +72,10 @@ inline float ClampFloat(float theNum, float theMin, float theMax) {
     return theNum <= theMin ? theMin : theNum >= theMax ? theMax : theNum;
 }
 
+inline float Distance2D(float x1, float y1, float x2, float y2) {
+    return sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+}
+
 inline void TodDrawImageCelF(Sexy::Graphics *g, Sexy::Image *theImageStrip, float thePosX, float thePosY, int theCelCol, int theCelRow) {
     reinterpret_cast<void (*)(Sexy::Graphics *, Sexy::Image *, float, float, int, int)>(TodDrawImageCelFAddr)(g, theImageStrip, thePosX, thePosY, theCelCol, theCelRow);
 }

@@ -30,7 +30,8 @@ constexpr int NUM_BOBSLED_FOLLOWERS = 3;
 constexpr int NUM_BACKUP_DANCERS = 4;
 constexpr int NUM_BOSS_BUNGEES = 3;
 
-constexpr int MAX_DEAD_FOLLOWERS = 10;
+constexpr int MAX_DEAD_FOLLOWERS = 15;
+constexpr int ProductorZombieLaunchRate = 2500;
 
 constexpr const int ZOMBIE_START_RANDOM_OFFSET = 40;
 constexpr const int BUNGEE_ZOMBIE_HEIGHT = 3000;
@@ -95,6 +96,7 @@ public:
     float mClipHeight;
 };
 
+class Coin;
 class Plant;
 class Reanimation;
 class TodParticleSystem;
@@ -288,6 +290,7 @@ public:
     void BurnRow(int theRow);
     void UpdateZombieJalapenoHead();
     void UpdateZombieSquashHead();
+    void UpdateZombieSunflowerHead();
     void UpdateZombieRiseFromGrave();
     void UpdateDamageStates(unsigned int theDamageFlags);
     void BossDestroyIceballInRow(int theRow);
@@ -366,9 +369,10 @@ public:
     bool NeedsMoreBackupDancers();
     bool CanDropSoul();
     void DropSoul();
-    void LaunchAbility();
     static bool IsUpgrade(SeedType theSeedType);
     void JacksonDie();
+    bool CanDance();
+    void SetDanceRow();
 
 protected:
     void _constructor() {
@@ -393,6 +397,7 @@ extern ZombieDefinition gNewZombieDefs[];
 ZombieDefinition &GetZombieDefinition(ZombieType theZombieType);
 
 inline std::vector<ZombieType>gDeadFollowers;
+inline int gSetRowCount = 0;
 /***************************************************************************************************************/
 
 inline bool zombieBloated;

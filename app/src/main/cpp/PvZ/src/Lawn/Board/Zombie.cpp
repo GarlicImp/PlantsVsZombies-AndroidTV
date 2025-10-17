@@ -76,6 +76,7 @@ ZombieDefinition gZombieDefs[NUM_ZOMBIE_TYPES] = {
 };
 
 ZombieDefinition gNewZombieDefs[] = {
+    {ZOMBIE_SUNFLOWER_HEAD, REANIM_ZOMBIE, 1, 99, 1, 4000, "ZOMBIE"},
     {ZOMBIE_EXPLODE_O_NUT_HEAD, REANIM_ZOMBIE, 4, 99, 1, 3000, "ZOMBIE"},
     {ZOMBIE_GIGA_FOOTBALL, REANIM_GIGA_FOOTBALL, 7, 16, 5, 2000, "FOOTBALL_ZOMBIE"},
     {ZOMBIE_SUPER_FAN_IMP, REANIM_SUPER_FAN_IMP, 10, 48, 1, 0, "IMP"},
@@ -120,6 +121,33 @@ void Zombie::ZombieInitialize(int theRow, ZombieType theType, bool theVariant, Z
     }
 
     switch (theType) {
+        case ZombieType::ZOMBIE_SUNFLOWER_HEAD: {
+            LoadPlainZombieReanim();
+            ReanimShowPrefix("anim_hair", RENDER_GROUP_HIDDEN);
+            ReanimShowPrefix("anim_head", RENDER_GROUP_HIDDEN);
+
+            Reanimation *aBodyReanim = mApp->ReanimationGet(mBodyReanimID);
+            ReanimatorTrackInstance *aTrackInstance = aBodyReanim->GetTrackInstanceByName("Zombie_body");
+            Reanimation *aHeadReanim = mApp->AddReanimation(0.0f, 0.0f, 0, ReanimationType::REANIM_SUNFLOWER);
+            aHeadReanim->PlayReanim("anim_idle", ReanimLoopType::REANIM_LOOP, 0, 15.0f);
+            mSpecialHeadReanimID = mApp->ReanimationGetID(aHeadReanim);
+            AttachEffect *aAttachEffect = AttachReanim(aTrackInstance->mAttachmentID, aHeadReanim, 0.0f, 0.0f);
+            aBodyReanim->mFrameBasePose = 0;
+            TodScaleRotateTransformMatrix(aAttachEffect->mOffset, 65.0f, -10.0f, 0.2f, -1.0f, 1.0f);
+
+            aHeadReanim->AssignRenderGroupToTrack("frontleaf_left_tip", RENDER_GROUP_HIDDEN);
+            aHeadReanim->AssignRenderGroupToTrack("frontleaf_right_tip", RENDER_GROUP_HIDDEN);
+            aHeadReanim->AssignRenderGroupToTrack("frontleaf", RENDER_GROUP_HIDDEN);
+            aHeadReanim->AssignRenderGroupToTrack("stalk_bottom", RENDER_GROUP_HIDDEN);
+            aHeadReanim->AssignRenderGroupToTrack("backleaf_right_tip", RENDER_GROUP_HIDDEN);
+            aHeadReanim->AssignRenderGroupToTrack("backleaf_left_tip", RENDER_GROUP_HIDDEN);
+            aHeadReanim->AssignRenderGroupToTrack("backleaf", RENDER_GROUP_HIDDEN);
+
+            mBodyHealth = 500;
+            mVariant = false;
+            break;
+        }
+
         case ZombieType::ZOMBIE_EXPLODE_O_NUT_HEAD: {
             LoadPlainZombieReanim();
             ReanimShowPrefix("anim_hair", RENDER_GROUP_HIDDEN);
@@ -292,11 +320,27 @@ void Zombie::UpdateActions() {
     if (mZombieType == ZombieType::ZOMBIE_JACKSON) {
         UpdateZombieJackson();
     }
+    if (mZombieType == ZombieType::ZOMBIE_SUNFLOWER_HEAD) {
+        UpdateZombieSunflowerHead();
+    }
 }
 
 void Zombie::DoSpecial() {
     switch (mZombieType) {
-        case ZombieType::ZOMBIE_EXPLODE_O_NUT_HEAD:
+        case ZombieType::ZOMBIE_JACKSON: {
+            mZombiePhase = ZombiePhase::PHASE_JACKSON_SNAPPING_FINGERS;
+            PlayZombieReanim("anim_point", ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD, 20, 24.0f);
+            //        mApp->PlayFoley(FoleyType::FOLEY_THRILLER);
+            mApp->PlaySample(addonSounds.thriller); // PlayFoley仅第一次播放生效，故暂时采用PlaySample
+
+            pvzstl::string str = StrFormat("[RAISE_DEAD]");
+            mBoard->DisplayAdviceAgain(str, MessageStyle::MESSAGE_STYLE_HUGE_WAVE, AdviceType::ADVICE_HUGE_WAVE);
+
+            SummonBackupDancers();
+            RaiseDeadZombies();
+            break;
+        }
+        case ZombieType::ZOMBIE_EXPLODE_O_NUT_HEAD: {
             mApp->PlayFoley(FoleyType::FOLEY_CHERRYBOMB);
 
             int aPosX = mX + mWidth / 2;
@@ -311,6 +355,9 @@ void Zombie::DoSpecial() {
             mApp->AddTodParticle(aPosX, aPosY, Board::MakeRenderOrder(RenderLayer::RENDER_LAYER_TOP, 0, 0), ParticleEffect::PARTICLE_POWIE);
             mBoard->ShakeBoard(3, -4);
             DieNoLoot();
+            break;
+        }
+        default:
             break;
     }
 }
@@ -471,6 +518,18 @@ void Zombie::UpdateZombieBackupDancer() {
 }
 
 void Zombie::UpdateZombieJackson() {
+    if (mBoard->mDanceMode) {
+        gSetRowCount++;
+    }
+    if (gSetRowCount >= 750) {
+        Zombie *aZombie = nullptr;
+        while (mBoard->IterateZombies(aZombie)) {
+            if (aZombie)
+                aZombie->SetDanceRow();
+        }
+        gSetRowCount = 0;
+    }
+
     if (mZombiePhase == ZombiePhase::PHASE_JACKSON_SNAPPING_FINGERS) {
         Reanimation *aBodyReanim = mApp->ReanimationTryToGet(mBodyReanimID);
         if (aBodyReanim->mLoopCount > 0) {
@@ -558,9 +617,9 @@ void Zombie::UpdateZombieJackson() {
             }
         }
 
-//        if (mHasHead && mSummonCounter == 0 && NeedsMoreBackupDancers()) {
-//            mSummonCounter = 100;
-//        }
+        if (mHasHead && mSummonCounter == 0 && NeedsMoreBackupDancers()) {
+            mSummonCounter = 100;
+        }
     }
 }
 
@@ -1184,6 +1243,31 @@ void Zombie::UpdateZombieSquashHead() {
     }
 }
 
+void Zombie::UpdateZombieSunflowerHead() {
+    if (!mHasHead)
+        return;
+
+    if (mZombiePhase != ZombiePhase::PHASE_SUNFLOWER_HEAD_SPAWNING) {
+        if (mPhaseCounter <= 0) {
+            mZombiePhase = ZombiePhase::PHASE_SUNFLOWER_HEAD_SPAWNING;
+            mPhaseCounter = RandRangeInt(300, ProductorZombieLaunchRate / 2);
+        }
+    }
+
+    if (mZombiePhase == ZombiePhase::PHASE_SUNFLOWER_HEAD_SPAWNING) {
+        if (mPhaseCounter <= 100) {
+            int aFlashCountdown = TodAnimateCurve(100, 0, mPhaseCounter, 0, 100, TodCurves::CURVE_LINEAR);
+            mJustGotShotCounter = std::max(mJustGotShotCounter, aFlashCountdown);
+        }
+        if (mPhaseCounter <= 0) {
+            mPhaseCounter = RandRangeInt(ProductorZombieLaunchRate -150, ProductorZombieLaunchRate);
+            mApp->PlayFoley(FoleyType::FOLEY_SPAWN_SUN);
+
+            mBoard->AddCoin(mX, mY, CoinType::COIN_SUN, CoinMotion::COIN_MOTION_FROM_FROM_GRAVE);
+        }
+    }
+}
+
 void Zombie::UpdateZombieRiseFromGrave() {
     if (mInPool) {
         mAltitude = TodAnimateCurve(50, 0, mPhaseCounter, -150, -40, TodCurves::CURVE_LINEAR) * mScaleZombie;
@@ -1262,7 +1346,9 @@ void Zombie::UpdateDamageStates(unsigned int theDamageFlags) {
         }
 
         DropSoul();
-        DoSpecial();
+        if (mZombieType == ZombieType::ZOMBIE_EXPLODE_O_NUT_HEAD) {
+            DoSpecial();
+        }
     }
 }
 
@@ -1353,7 +1439,7 @@ int Zombie::GetDancerFrame() {
 bool Zombie::IsZombotany(ZombieType theZombieType) {
     return theZombieType == ZombieType::ZOMBIE_PEA_HEAD || theZombieType == ZombieType::ZOMBIE_WALLNUT_HEAD || theZombieType == ZombieType::ZOMBIE_TALLNUT_HEAD
         || theZombieType == ZombieType::ZOMBIE_JALAPENO_HEAD || theZombieType == ZombieType::ZOMBIE_GATLING_HEAD || theZombieType == ZombieType::ZOMBIE_SQUASH_HEAD
-        || theZombieType == ZombieType::ZOMBIE_EXPLODE_O_NUT_HEAD;
+        || theZombieType == ZombieType::ZOMBIE_SUNFLOWER_HEAD || theZombieType == ZombieType::ZOMBIE_EXPLODE_O_NUT_HEAD;
 }
 
 bool Zombie::ZombieTypeCanGoInPool(ZombieType theZombieType) {
@@ -2723,11 +2809,8 @@ void Zombie::UpdateReanimColor() {
     Color aColorOverride;
     if (mZombieType == ZombieType::ZOMBIE_EXPLODE_O_NUT_HEAD) {
         aColorOverride = Color(255, 64, 64);
-    } else {
-//        aColorOverride = Color(255, 255, 255);
+        aHeadReanim->mColorOverride = aColorOverride;
     }
-
-    aHeadReanim->mColorOverride = aColorOverride;
 }
 
 bool Zombie::IsImmobilizied() {
@@ -2755,6 +2838,16 @@ void Zombie::SetupLostArmReanim() {
             ReanimShowPrefix("Zombie_disco_outerarm_upper", -1);
             break;
         case ZombieType::ZOMBIE_BACKUP_DANCER:
+            ReanimShowPrefix("Zombie_disco_outerarm_lower", -1);
+            ReanimShowPrefix("Zombie_disco_outerhand", -1);
+            break;
+        case ZombieType::ZOMBIE_JACKSON:
+            ReanimShowPrefix("Zombie_disco_outerarm_lower", -1);
+            ReanimShowPrefix("Zombie_disco_outerhand_point", -1);
+            ReanimShowPrefix("Zombie_disco_outerhand", -1);
+            ReanimShowPrefix("Zombie_disco_outerarm_upper", -1);
+            break;
+        case ZombieType::ZOMBIE_BACKUP_DANCER2:
             ReanimShowPrefix("Zombie_disco_outerarm_lower", -1);
             ReanimShowPrefix("Zombie_disco_outerhand", -1);
             break;
@@ -3173,10 +3266,13 @@ void Zombie::RaiseDeadZombies() {
             int aRow, aPosX;
             if (i < 5) {
                 aRow = i;
-                aPosX = mPosX + 240;
-            } else {
+                aPosX = mPosX;
+            } else if (i < 10) {
                 aRow = i - 5;
-                aPosX = mPosX + 320;
+                aPosX = mPosX + 100;
+            } else {
+                aRow = i - 10;
+                aPosX = mPosX + 200;
             }
 
             RaiseDeadZombie(gDeadFollowers[i], aRow, aPosX);
@@ -3227,9 +3323,9 @@ bool Zombie::CanDropSoul() {
     if (mIsRevived) // 复生的僵尸不掉落灵魂
         return false;
 
-    return mZombieType != ZombieType::ZOMBIE_JACKSON && mZombieType != ZombieType::ZOMBIE_BACKUP_DANCER2 && mZombieType != ZombieType::ZOMBIE_DANCER && mZombieType != ZombieType::ZOMBIE_BACKUP_DANCER
-        && mZombieType != ZombieType::ZOMBIE_ZAMBONI && mZombieType != ZombieType::ZOMBIE_CATAPULT && mZombieType != ZombieType::ZOMBIE_GARGANTUAR
-        && mZombieType != ZombieType::ZOMBIE_REDEYE_GARGANTUAR && mZombieType != ZombieType::ZOMBIE_BALLOON && mZombieType != ZombieType::ZOMBIE_BUNGEE && mZombieType != ZombieType::ZOMBIE_DIGGER;
+    return mZombieType != ZombieType::ZOMBIE_JACKSON &&  mZombieType != ZombieType::ZOMBIE_DANCER && mZombieType != ZombieType::ZOMBIE_ZAMBONI && mZombieType != ZombieType::ZOMBIE_CATAPULT
+        && mZombieType != ZombieType::ZOMBIE_GARGANTUAR && mZombieType != ZombieType::ZOMBIE_REDEYE_GARGANTUAR && mZombieType != ZombieType::ZOMBIE_BALLOON && mZombieType != ZombieType::ZOMBIE_BUNGEE
+        && mZombieType != ZombieType::ZOMBIE_DIGGER;
 }
 
 void Zombie::DropSoul() {
@@ -3255,21 +3351,6 @@ void Zombie::DropSoul() {
     }
 }
 
-void Zombie::LaunchAbility() {
-    if (mZombieType == ZombieType::ZOMBIE_JACKSON) {
-        mZombiePhase = ZombiePhase::PHASE_JACKSON_SNAPPING_FINGERS;
-        PlayZombieReanim("anim_point", ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD, 20, 24.0f);
-//        mApp->PlayFoley(FoleyType::FOLEY_THRILLER);
-        mApp->PlaySample(addonSounds.thriller); // PlayFoley仅第一次播放生效，故暂时采用PlaySample
-
-        pvzstl::string str = StrFormat("[RAISE_DEAD]");
-        mBoard->DisplayAdviceAgain(str, MessageStyle::MESSAGE_STYLE_HUGE_WAVE, AdviceType::ADVICE_HUGE_WAVE);
-
-        SummonBackupDancers();
-        RaiseDeadZombies();
-    }
-}
-
 bool Zombie::IsUpgrade(SeedType theSeedType) {
     return theSeedType == SeedType::SEED_ZOMBIE_GIGA_FOOTBALL || theSeedType == SeedType::SEED_ZOMBIE_SUPER_FAN_IMP || theSeedType == SeedType::SEED_ZOMBIE_JACKSON || theSeedType == SeedType::SEED_ZOMBIE_BACKUP_DANCER2;
 }
@@ -3282,4 +3363,41 @@ void Zombie::JacksonDie() {
     mApp->mSoundSystem->StopFoley(FoleyType::FOLEY_DANCER);
 
     gDeadFollowers.clear();
+}
+
+bool Zombie::CanDance() {
+    return mZombieType == ZombieType::ZOMBIE_NORMAL || mZombieType == ZombieType::ZOMBIE_TRAFFIC_CONE || mZombieType == ZombieType::ZOMBIE_PAIL;
+}
+
+void Zombie::SetDanceRow() {
+    if (!CanDance() || mIsEating)
+        return;
+
+    StartWalkAnim(20);
+
+    bool aCanGoUp = true;
+    bool aCanGoDown = true;
+    bool aIsPool = mBoard->mPlantRow[mRow] == PlantRowType::PLANTROW_POOL;
+    if (!mBoard->RowCanHaveZombies(mRow - 1)) {
+        aCanGoUp = false;
+    } else if (mBoard->mPlantRow[mRow - 1] == PlantRowType::PLANTROW_POOL && !aIsPool) {
+        aCanGoUp = false;
+    } else if (mBoard->mPlantRow[mRow - 1] != PlantRowType::PLANTROW_POOL && aIsPool) {
+        aCanGoUp = false;
+    }
+    if (!mBoard->RowCanHaveZombies(mRow + 1)) {
+        aCanGoDown = false;
+    } else if (mBoard->mPlantRow[mRow + 1] == PlantRowType::PLANTROW_POOL && !aIsPool) {
+        aCanGoDown = false;
+    } else if (mBoard->mPlantRow[mRow + 1] != PlantRowType::PLANTROW_POOL && aIsPool) {
+        aCanGoDown = false;
+    }
+
+    if (aCanGoDown && !aCanGoUp) {
+        SetRow(mRow + 1);
+    } else if (!aCanGoDown && aCanGoUp) {
+        SetRow(mRow - 1);
+    } else if (aCanGoDown && aCanGoUp) {
+        SetRow((Rand(2) == 0) ? (mRow + 1) : (mRow - 1));
+    }
 }

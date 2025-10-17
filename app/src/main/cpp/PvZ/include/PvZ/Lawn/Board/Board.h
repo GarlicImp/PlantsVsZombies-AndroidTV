@@ -489,6 +489,9 @@ public:
     bool ChooseSeedsOnCurrentLevel() {
         return reinterpret_cast<bool (*)(Board *)>(Board_ChooseSeedsOnCurrentLevelAddr)(this);
     }
+    bool RowCanHaveZombies(int theRow) {
+        return reinterpret_cast<bool (*)(Board *, int)>(Board_RowCanHaveZombiesAddr)(this, theRow);
+    }
 
     Board(LawnApp *theApp);
     void InitLevel();

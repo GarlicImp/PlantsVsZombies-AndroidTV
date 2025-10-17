@@ -102,6 +102,9 @@ public:
     void UpdateFallForAward();
     void UpdateFall();
     bool MouseHitTest(int theX, int theY, int **theHitResult, int thePlayerIndex);
+    bool IsSun();
+    void Draw(Sexy::Graphics *g);
+    Sexy::Color GetColor();
 };
 
 /***************************************************************************************************************/
@@ -118,5 +121,7 @@ inline void (*old_Coin_Update)(Coin *coin);
 inline void (*old_Coin_UpdateFall)(Coin *coin);
 
 inline bool (*old_Coin_MouseHitTest)(Coin *coin, int a2, int a3, int **hitResult, int a5);
+
+inline void (*old_Coin_Draw)(Coin *, Sexy::Graphics *);
 
 #endif // PVZ_LAWN_BOARD_COIN_H

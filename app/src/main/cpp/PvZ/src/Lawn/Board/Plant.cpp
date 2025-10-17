@@ -690,6 +690,7 @@ int Plant::GetCost(SeedType theSeedType, SeedType theImitaterType) {
                 case SeedType::SEED_ZOMBIE_LADDER:
                 case SeedType::SEED_ZOMBIE_GATLINGPEA_HEAD:
                 case SeedType::SEED_ZOMBIE_GIGA_FOOTBALL:
+                case SeedType::SEED_ZOMBIE_JACKSON:
                     return 150;
                 case SeedType::SEED_SQUASH:
                 case SeedType::SEED_GARLIC:
@@ -707,7 +708,6 @@ int Plant::GetCost(SeedType theSeedType, SeedType theImitaterType) {
                 case SeedType::SEED_ZOMBIE_JALAPENO_HEAD:
                 case SeedType::SEED_ZOMBIE_TALLNUT_HEAD:
                 case SeedType::SEED_ZOMBIE_EXPLODE_O_NUT_HEAD:
-                case SeedType::SEED_ZOMBIE_JACKSON:
                     return 125;
                 case SeedType::SEED_CACTUS:
                 case SeedType::SEED_CABBAGEPULT:
@@ -718,6 +718,7 @@ int Plant::GetCost(SeedType theSeedType, SeedType theImitaterType) {
                 case SeedType::SEED_ZOMBIE_JACK_IN_THE_BOX:
                 case SeedType::SEED_ZOMBIE_BALLOON:
                 case SeedType::SEED_ZOMBIE_WALLNUT_HEAD:
+                case SeedType::SEED_ZOMBIE_BACKUP_DANCER2:
                     return 100;
                 case SeedType::SEED_STARFRUIT:
                 case SeedType::SEED_ZOMBONI:
@@ -736,12 +737,13 @@ int Plant::GetCost(SeedType theSeedType, SeedType theImitaterType) {
                 case SeedType::SEED_ZOMBIE_PEA_HEAD:
                 case SeedType::SEED_ZOMBIE_SQUASH_HEAD:
                 case SeedType::SEED_ZOMBIE_SUPER_FAN_IMP:
-                case SeedType::SEED_ZOMBIE_BACKUP_DANCER2:
                     return 50;
                 case SeedType::SEED_ZOMBIE_POGO:
                     return 225;
                 case SeedType::SEED_ZOMBIE_GARGANTUAR:
                     return 250;
+                case SeedType::SEED_ZOMBIE_SUNFLOWER_HEAD:
+                    return 0;
                 default:
                     return GetPlantDefinition(theSeedType).mSeedCost;
             }
@@ -863,6 +865,7 @@ int Plant::GetRefreshTime(SeedType theSeedType, SeedType theImitaterType) {
 int Plant::GetCostAdjusted(SeedType theSeedType) {
     switch (theSeedType) {
         case SeedType::SEED_SUNSHROOM:
+        case SeedType::SEED_ZOMBIE_SUNFLOWER_HEAD:
             return 0;
         case SeedType::SEED_INSTANT_COFFEE:
         case SeedType::SEED_ZOMBIE_NORMAL:
@@ -879,7 +882,6 @@ int Plant::GetCostAdjusted(SeedType theSeedType) {
         case SeedType::SEED_ZOMBIE_PEA_HEAD:
         case SeedType::SEED_ZOMBIE_SQUASH_HEAD:
         case SeedType::SEED_ZOMBIE_SUPER_FAN_IMP:
-        case SeedType::SEED_ZOMBIE_BACKUP_DANCER2:
             return 50;
         case SeedType::SEED_PEASHOOTER: // 100 -> 75
         case SeedType::SEED_KERNELPULT: // 100 -> 75
@@ -898,6 +900,7 @@ int Plant::GetCostAdjusted(SeedType theSeedType) {
         case SeedType::SEED_ZOMBIE_DOLPHIN_RIDER:
         case SeedType::SEED_ZOMBIE_BALLOON:
         case SeedType::SEED_ZOMBIE_WALLNUT_HEAD:
+        case SeedType::SEED_ZOMBIE_BACKUP_DANCER2:
             return 100;
         case SeedType::SEED_SNOWPEA: // 150 -> 125
         case SeedType::SEED_JALAPENO:
@@ -906,7 +909,6 @@ int Plant::GetCostAdjusted(SeedType theSeedType) {
         case SeedType::SEED_ZOMBIE_JALAPENO_HEAD:
         case SeedType::SEED_ZOMBIE_TALLNUT_HEAD:
         case SeedType::SEED_ZOMBIE_EXPLODE_O_NUT_HEAD:
-        case SeedType::SEED_ZOMBIE_JACKSON:
             return 125;
         case SeedType::SEED_REPEATER:
         case SeedType::SEED_ZOMBIE_FOOTBALL:
@@ -916,6 +918,7 @@ int Plant::GetCostAdjusted(SeedType theSeedType) {
         case SeedType::SEED_ZOMBIE_LADDER:
         case SeedType::SEED_ZOMBIE_GATLINGPEA_HEAD:
         case SeedType::SEED_ZOMBIE_GIGA_FOOTBALL:
+        case SeedType::SEED_ZOMBIE_JACKSON:
             return 150;
         case SeedType::SEED_DOOMSHROOM: // 125 -> 175
         case SeedType::SEED_STARFRUIT:
