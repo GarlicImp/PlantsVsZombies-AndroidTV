@@ -165,10 +165,12 @@ void SeedPacket::SetPacketType(SeedType theSeedType, SeedType theImitaterType) {
     // 此处修改对战开局的初始冷却
     if (mApp->mGameMode == GameMode::GAMEMODE_MP_VS) {
         switch (theSeedType) {
-            case SEED_SUNSHROOM: // 清除阳光菇的初始冷却
-                mRefreshTime = 0;
-                mRefreshing = false;
-                mActive = true;
+            case SEED_SUNSHROOM:
+                if (gVSBalanceAdjustment) { // 清除阳光菇的初始冷却
+                    mRefreshTime = 0;
+                    mRefreshing = false;
+                    mActive = true;
+                }
                 break;
             case SEED_ZOMBIE_SUNFLOWER_HEAD:
                 mRefreshTime = 1000;

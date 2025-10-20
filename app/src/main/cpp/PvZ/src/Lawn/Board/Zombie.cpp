@@ -1250,11 +1250,16 @@ void Zombie::UpdateZombieSunflowerHead() {
     if (mZombiePhase != ZombiePhase::PHASE_SUNFLOWER_HEAD_SPAWNING) {
         if (mPhaseCounter <= 0) {
             mZombiePhase = ZombiePhase::PHASE_SUNFLOWER_HEAD_SPAWNING;
-            mPhaseCounter = RandRangeInt(300, ProductorZombieLaunchRate / 2);
+//            mPhaseCounter = RandRangeInt(300, ProductorZombieLaunchRate / 2);
+            mPhaseCounter = RandRangeInt(ProductorZombieLaunchRate -150, ProductorZombieLaunchRate);
         }
     }
 
     if (mZombiePhase == ZombiePhase::PHASE_SUNFLOWER_HEAD_SPAWNING) {
+        if (mMindControlled) {
+            return;
+        }
+
         if (mPhaseCounter <= 100) {
             int aFlashCountdown = TodAnimateCurve(100, 0, mPhaseCounter, 0, 100, TodCurves::CURVE_LINEAR);
             mJustGotShotCounter = std::max(mJustGotShotCounter, aFlashCountdown);
@@ -2276,7 +2281,8 @@ void Zombie::DrawReanim(Sexy::Graphics *g, ZombieDrawPosition &theDrawPos, int t
         }
     }
 
-    if (mShieldType == ShieldType::SHIELDTYPE_NEWSPAPER || mShieldType == ShieldType::SHIELDTYPE_DOOR || mShieldType == ShieldType::SHIELDTYPE_LADDER) {
+    if (mShieldType == ShieldType::SHIELDTYPE_NEWSPAPER || mShieldType == ShieldType::SHIELDTYPE_DOOR || mShieldType == ShieldType::SHIELDTYPE_LADDER
+        || mShieldType == ShieldType::SHIELDTYPE_TRASHCAN) {
         aBodyReanim->mColorOverride = aColorOverride;
         aBodyReanim->mExtraAdditiveColor = aExtraAdditiveColor;
         aBodyReanim->mEnableExtraAdditiveDraw = aEnableExtraAdditiveDraw;

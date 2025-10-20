@@ -695,7 +695,6 @@ int Plant::GetCost(SeedType theSeedType, SeedType theImitaterType) {
                 case SeedType::SEED_SQUASH:
                 case SeedType::SEED_GARLIC:
                 case SeedType::SEED_ZOMBIE_TRAFFIC_CONE:
-                case SeedType::SEED_ZOMBIE_YETI:
                     return 75;
                 case SeedType::SEED_THREEPEATER:
                 case SeedType::SEED_ZOMBIE_CATAPULT:
@@ -726,6 +725,7 @@ int Plant::GetCost(SeedType theSeedType, SeedType theImitaterType) {
                 case SeedType::SEED_INSTANT_COFFEE:
                 case SeedType::SEED_ZOMBIE_NORMAL:
                 case SeedType::SEED_ZOMBIE_DUCKY_TUBE:
+                case SeedType::SEED_ZOMBIE_SUNFLOWER_HEAD:
                     return 25;
                 case SeedType::SEED_MELONPULT:
                 case SeedType::SEED_ZOMBIE_FLAG:
@@ -733,6 +733,7 @@ int Plant::GetCost(SeedType theSeedType, SeedType theImitaterType) {
                 case SeedType::SEED_ZOMBIE_GRAVESTONE:
                 case SeedType::SEED_ZOMBIE_TRASHCAN:
                 case SeedType::SEED_ZOMBIE_NEWSPAPER:
+                case SeedType::SEED_ZOMBIE_YETI:
                 case SeedType::SEED_ZOMBIE_IMP:
                 case SeedType::SEED_ZOMBIE_PEA_HEAD:
                 case SeedType::SEED_ZOMBIE_SQUASH_HEAD:
@@ -742,8 +743,6 @@ int Plant::GetCost(SeedType theSeedType, SeedType theImitaterType) {
                     return 225;
                 case SeedType::SEED_ZOMBIE_GARGANTUAR:
                     return 250;
-                case SeedType::SEED_ZOMBIE_SUNFLOWER_HEAD:
-                    return 0;
                 default:
                     return GetPlantDefinition(theSeedType).mSeedCost;
             }
@@ -865,11 +864,11 @@ int Plant::GetRefreshTime(SeedType theSeedType, SeedType theImitaterType) {
 int Plant::GetCostAdjusted(SeedType theSeedType) {
     switch (theSeedType) {
         case SeedType::SEED_SUNSHROOM:
-        case SeedType::SEED_ZOMBIE_SUNFLOWER_HEAD:
             return 0;
         case SeedType::SEED_INSTANT_COFFEE:
         case SeedType::SEED_ZOMBIE_NORMAL:
         case SeedType::SEED_ZOMBIE_DUCKY_TUBE:
+        case SeedType::SEED_ZOMBIE_SUNFLOWER_HEAD:
             return 25;
         case SeedType::SEED_GRAVEBUSTER: // 75 -> 50
         case SeedType::SEED_HYPNOSHROOM: // 75 -> 50
@@ -877,7 +876,9 @@ int Plant::GetCostAdjusted(SeedType theSeedType) {
         case SeedType::SEED_PUMPKINSHELL: // 125 -> 50
         case SeedType::SEED_ZOMBIE_GRAVESTONE:
         case SeedType::SEED_ZOMBIE_TRASHCAN:
+        case SeedType::SEED_ZOMBIE_TRAFFIC_CONE: // 75 -> 50
         case SeedType::SEED_ZOMBIE_NEWSPAPER:
+        case SeedType::SEED_ZOMBIE_YETI:
         case SeedType::SEED_ZOMBIE_IMP:
         case SeedType::SEED_ZOMBIE_PEA_HEAD:
         case SeedType::SEED_ZOMBIE_SQUASH_HEAD:
@@ -887,10 +888,8 @@ int Plant::GetCostAdjusted(SeedType theSeedType) {
         case SeedType::SEED_KERNELPULT: // 100 -> 75
         case SeedType::SEED_SQUASH:
         case SeedType::SEED_GARLIC:
-        case SeedType::SEED_ZOMBIE_TRAFFIC_CONE:
         case SeedType::SEED_ZOMBIE_POLEVAULTER: // 100 -> 75
         case SeedType::SEED_ZOMBIE_JACK_IN_THE_BOX: // 100 -> 75
-        case SeedType::SEED_ZOMBIE_YETI:
         case SeedType::SEED_ZOMBIE_SNORKEL:
             return 75;
         case SeedType::SEED_CACTUS:
@@ -949,7 +948,7 @@ int Plant::GetRefreshTimeAdjusted(SeedType theSeedType) {
             case SeedType::SEED_ZOMBIE_JALAPENO_HEAD:
                 return 6000;
             case SeedType::SEED_ZOMBIE_TRASHCAN:
-            case SeedType::SEED_ZOMBIE_POLEVAULTER:
+            case SeedType::SEED_ZOMBIE_TRAFFIC_CONE:
             case SeedType::SEED_ZOMBIE_PAIL:
             case SeedType::SEED_ZOMBIE_FLAG:
             case SeedType::SEED_ZOMBIE_FOOTBALL:
@@ -968,7 +967,7 @@ int Plant::GetRefreshTimeAdjusted(SeedType theSeedType) {
             case SeedType::SEED_ZOMBIE_BACKUP_DANCER2:
             case SeedType::SEED_ZOMBIE_GIGA_FOOTBALL:
                 return 3000;
-            case SeedType::SEED_ZOMBIE_TRAFFIC_CONE: // 30 -> 15
+            case SeedType::SEED_ZOMBIE_POLEVAULTER: // 30 -> 15
             case SeedType::SEED_ZOMBIE_NEWSPAPER:
             case SeedType::SEED_ZOMBIE_SCREEN_DOOR:
             case SeedType::SEED_ZOMBIE_DIGGER: // 30 -> 15

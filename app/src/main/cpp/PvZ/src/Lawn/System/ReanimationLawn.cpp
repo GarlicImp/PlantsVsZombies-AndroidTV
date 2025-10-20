@@ -153,6 +153,9 @@ Sexy::MemoryImage *ReanimatorCache::MakeCachedZombieFrame(ZombieType theZombieTy
     aMemoryGraphics.SetLinearBlend(true);
 
     ZombieType aUseZombieType = theZombieType;
+    if (theZombieType == ZombieType::ZOMBIE_CACHED_POLEVAULTER_WITH_POLE) {
+        aUseZombieType = ZombieType::ZOMBIE_POLEVAULTER;
+    }
     ZombieDefinition &aZombieDef = GetZombieDefinition(aUseZombieType);
 
     float aPosX = 40.0f, aPosY = 40.0f;
@@ -338,6 +341,30 @@ Sexy::MemoryImage *ReanimatorCache::MakeCachedZombieFrame(ZombieType theZombieTy
         aReanim.GetAttachmentOverlayMatrix(aReanim.FindTrackIndex("Zombie_body"), aOverlayMatrix);
         AttachmentUpdateAndSetMatrix(aTrackInstance->mAttachmentID, aOverlayMatrix);
 
+        aReanim.Update();
+        aReanim.Draw(&aMemoryGraphics);
+        mZombieImages[theZombieType] = aMemoryImage;
+        return aMemoryImage;
+    } else if (aZombieDef.mReanimationType == ReanimationType::REANIM_ZOMBIE) {
+        Reanimation aReanim;
+        aReanim.ReanimationInitializeType(aPosX, aPosY, aZombieDef.mReanimationType);
+        aReanim.SetFramesForLayer("anim_idle");
+        Zombie::SetupReanimLayers(&aReanim, aUseZombieType);
+
+        if (theZombieType == ZombieType::ZOMBIE_DOOR) {
+            aReanim.AssignRenderGroupToTrack("anim_screendoor", RENDER_GROUP_NORMAL);
+            aReanim.AssignRenderGroupToTrack("Zombie_outerarm_screendoor", RENDER_GROUP_NORMAL);
+        } else if (theZombieType == ZombieType::ZOMBIE_TRASHCAN) {
+            aReanim.AssignRenderGroupToTrack("anim_screendoor", RENDER_GROUP_NORMAL);
+            aReanim.AssignRenderGroupToTrack("Zombie_outerarm_screendoor", RENDER_GROUP_NORMAL);
+            aReanim.SetImageOverride("anim_screendoor", *IMAGE_REANIM_ZOMBIE_TRASHCAN1);
+        } else if (theZombieType == ZombieType::ZOMBIE_FLAG) {
+            //            Reanimation aReanimFlag;
+            //            aReanimFlag.ReanimationInitializeType(aPosX, aPosY, ReanimationType::REANIM_ZOMBIE_FLAGPOLE);
+            //            aReanimFlag.SetFramesForLayer("Zombie_flag");
+            //            aReanimFlag.Draw(&aMemoryGraphics);
+            return old_ReanimatorCache_MakeCachedZombieFrame(this, theZombieType);
+        }
         aReanim.Update();
         aReanim.Draw(&aMemoryGraphics);
         mZombieImages[theZombieType] = aMemoryImage;

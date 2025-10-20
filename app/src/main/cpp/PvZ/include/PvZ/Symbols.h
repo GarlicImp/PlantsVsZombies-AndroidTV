@@ -1153,6 +1153,7 @@ inline Image **IMAGE_SEEDPACKETSILHOUETTE;
 inline Image **IMAGE_PUFFSHROOM_PUFF1;
 inline Image **IMAGE_REANIM_WALLNUT_CRACKED1;
 inline Image **IMAGE_REANIM_WALLNUT_CRACKED2;
+inline Image **IMAGE_REANIM_ZOMBIE_TRASHCAN1;
 
 inline Font **FONT_DWARVENTODCRAFT18;
 
@@ -2398,6 +2399,7 @@ inline bool GetFunctionAddr() {
     Sexy::IMAGE_PUFFSHROOM_PUFF1 = reinterpret_cast<Sexy::Image **>(dlsym(handle, "_ZN4Sexy22IMAGE_PUFFSHROOM_PUFF1E"));
     Sexy::IMAGE_REANIM_WALLNUT_CRACKED1 = reinterpret_cast<Sexy::Image **>(dlsym(handle, "_ZN4Sexy29IMAGE_REANIM_WALLNUT_CRACKED1E"));
     Sexy::IMAGE_REANIM_WALLNUT_CRACKED2 = reinterpret_cast<Sexy::Image **>(dlsym(handle, "_ZN4Sexy29IMAGE_REANIM_WALLNUT_CRACKED2E"));
+    Sexy::IMAGE_REANIM_ZOMBIE_TRASHCAN1 = reinterpret_cast<Sexy::Image **>(dlsym(handle, "_ZN4Sexy29IMAGE_REANIM_ZOMBIE_TRASHCAN1E"));
 
     Sexy::FONT_DWARVENTODCRAFT18 = reinterpret_cast<Sexy::Font **>(dlsym(handle, "_ZN4Sexy22FONT_DWARVENTODCRAFT18E"));
 
