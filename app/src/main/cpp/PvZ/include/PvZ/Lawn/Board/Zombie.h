@@ -49,7 +49,7 @@ constexpr const int DOLPHIN_JUMP_TIME = 120;
 constexpr const int JackInTheBoxZombieRadius = 115;
 constexpr const int JackInTheBoxPlantRadius = 90;
 constexpr const int SuperFanImpZombieRadius = 35;
-constexpr const int SuperFanImpPlantRadius = 30;
+constexpr const int SuperFanImpPlantRadius = 20;
 constexpr const int BOBSLED_CRASH_TIME = 150;
 constexpr const int ZOMBIE_BACKUP_DANCER_RISE_HEIGHT = -200;
 constexpr const int BOSS_FLASH_HEALTH_FRACTION = 10;
@@ -168,7 +168,7 @@ public:
     bool mPlayingSong;                                // 276
     int mParticleOffsetX;                             // 70
     int mParticleOffsetY;                             // 71
-    int *mAttachmentID;                               // 72
+    AttachmentID mAttachmentID;                       // 72
     int mSummonCounter;                               // 73
     ReanimationID mBodyReanimID;                      // 74
     float mScaleZombie;                               // 75
@@ -263,6 +263,19 @@ public:
     void EatZombie(Zombie *theZombie) {
         reinterpret_cast<void (*)(Zombie *, Zombie *)>(Zombie_EatZombieAddr)(this, theZombie);
     }
+    void RemoveIceTrap() {
+        reinterpret_cast<void (*)(Zombie *)>(Zombie_RemoveIceTrapAddr)(this);
+    }
+    void BungeeDropPlant() {
+        reinterpret_cast<void (*)(Zombie *)>(Zombie_BungeeDropPlantAddr)(this);
+    }
+    void BalloonPropellerHatSpin(bool theSpinning) {
+        reinterpret_cast<void (*)(Zombie *, bool)>(Zombie_BalloonPropellerHatSpinAddr)(this, theSpinning);
+    }
+    void BobsledBurn() {
+        reinterpret_cast<void (*)(Zombie *)>(Zombie_BobsledBurnAddr)(this);
+    }
+
 
     Zombie() {
         _constructor();
@@ -284,6 +297,7 @@ public:
     void UpdateYeti();
     void UpdateZombieImp();
     void UpdateImpGettingTackle();
+    void UpdateZombieJackInTheBox();
     void UpdateZombieGargantuar();
     void UpdateZombiePeaHead();
     void UpdateZombieGatlingHead();
@@ -314,7 +328,7 @@ public:
     Sexy::Rect GetZombieAttackRect();
     Plant *FindPlantTarget(ZombieAttackType theAttackType);
     Plant *FindPlantTargetInNextGrid(ZombieAttackType theAttackType);
-    Zombie *FindZombieFootball();
+    Zombie *FindZombieGigaFootball();
     bool CanTargetPlant(Plant *thePlant, ZombieAttackType theAttackType);
     Zombie *FindZombieTarget();
     void TakeDamage(int theDamage, unsigned int theDamageFlags);

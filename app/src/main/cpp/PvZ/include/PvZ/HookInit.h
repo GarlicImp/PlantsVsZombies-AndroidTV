@@ -292,6 +292,7 @@ inline void InitHookFunction() {
     homura::HookFunction(Plant_PlantInitializeAddr, &Plant::PlantInitialize, &old_Plant_PlantInitialize);
     homura::HookFunction(Plant_SetSleepingAddr, &Plant::SetSleeping, &old_Plant_SetSleeping);
     homura::HookFunction(Plant_UpdateReanimColorAddr, &Plant::UpdateReanimColor, &old_Plant_UpdateReanimColor);
+    homura::HookFunction(Plant_FindTargetZombieAddr, &Plant::FindTargetZombie, nullptr);
     homura::HookFunction(Plant_FindTargetGridItemAddr, &Plant::FindTargetGridItem, nullptr);
     homura::HookFunction(Plant_GetCostAddr, &Plant::GetCost, &old_Plant_GetCost);
     homura::HookFunction(Plant_DieAddr, &Plant::Die, &old_Plant_Die);
@@ -327,6 +328,7 @@ inline void InitHookFunction() {
     homura::HookFunction(Zombie_UpdateYetiAddr, &Zombie::UpdateYeti, nullptr);
     homura::HookFunction(Zombie_UpdateZombieFlyerAddr, &Zombie::UpdateZombieFlyer, nullptr);
     homura::HookFunction(Zombie_UpdateZombieImpAddr, &Zombie::UpdateZombieImp, nullptr);
+    homura::HookFunction(Zombie_UpdateZombieJackInTheBoxAddr, &Zombie::UpdateZombieJackInTheBox, nullptr);
     homura::HookFunction(Zombie_UpdateZombieGargantuarAddr, &Zombie::UpdateZombieGargantuar, nullptr);
     homura::HookFunction(Zombie_UpdateZombiePeaHeadAddr, &Zombie::UpdateZombiePeaHead, nullptr);
     homura::HookFunction(Zombie_UpdateZombieGatlingHeadAddr, &Zombie::UpdateZombieGatlingHead, nullptr);

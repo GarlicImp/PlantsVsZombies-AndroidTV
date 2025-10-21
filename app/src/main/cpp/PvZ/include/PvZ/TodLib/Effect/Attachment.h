@@ -69,6 +69,10 @@ inline void AttachParticle(AttachmentID &theAttachmentID, TodParticleSystem *the
     reinterpret_cast<void (*)(AttachmentID &, TodParticleSystem *, float, float)>(AttachParticleAddr)(theAttachmentID, theParticleSystem, theOffsetX, theOffsetY);
 }
 
+inline void AttachmentDetachCrossFadeParticleType(AttachmentID& theAttachmentID, ParticleEffect theParticleEffect, const char* theCrossFadeName) {
+    reinterpret_cast<void (*)(AttachmentID &, ParticleEffect, const char*)>(AttachmentDetachCrossFadeParticleTypeAddr)(theAttachmentID, theParticleEffect, theCrossFadeName);
+}
+
 class AttachmentHolder {};
 
 #endif // PVZ_SEXYAPPFRAMEWORK_EFFECT_ATTACHMENT_H

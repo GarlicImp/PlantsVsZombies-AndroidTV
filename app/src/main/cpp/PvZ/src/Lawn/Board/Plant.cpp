@@ -599,6 +599,113 @@ void Plant::DoSpecial() {
 //     old_Plant_CobCannonFire(plant,x,y);
 // }
 
+Zombie *Plant::FindTargetZombie(int theRow, PlantWeapon thePlantWeapon) {
+    int aDamageRangeFlags = GetDamageRangeFlags(thePlantWeapon);
+    Rect aAttackRect = GetPlantAttackRect(thePlantWeapon);
+    int aHighestWeight = 0;
+    Zombie *aBestZombie = nullptr;
+
+    Zombie *aZombie = nullptr;
+    while (mBoard->IterateZombies(aZombie)) {
+        int aRowDeviation = aZombie->mRow - theRow;
+        if (aZombie->mZombieType == ZombieType::ZOMBIE_BOSS) {
+            aRowDeviation = 0;
+        }
+
+        if (!aZombie->mHasHead || aZombie->IsTangleKelpTarget()) {
+            if (mSeedType == SeedType::SEED_POTATOMINE || mSeedType == SeedType::SEED_CHOMPER || mSeedType == SeedType::SEED_TANGLEKELP) {
+                continue;
+            }
+        }
+
+        bool needPortalCheck = false;
+        if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_PORTAL_COMBAT) {
+            if (mSeedType == SeedType::SEED_PEASHOOTER || mSeedType == SeedType::SEED_CACTUS || mSeedType == SeedType::SEED_REPEATER) {
+                needPortalCheck = true;
+            }
+        }
+
+        if (mSeedType != SeedType::SEED_CATTAIL) {
+            if (mSeedType == SeedType::SEED_GLOOMSHROOM) {
+                if (aRowDeviation < -1 || aRowDeviation > 1) {
+                    continue;
+                }
+            } else if (needPortalCheck) {
+                if (!mBoard->mChallenge->CanTargetZombieWithPortals(this, aZombie)) {
+                    continue;
+                }
+            } else if (aRowDeviation) {
+                continue;
+            }
+        }
+
+        if (aZombie->EffectedByDamage(aDamageRangeFlags)) {
+            int aExtraRange = 0;
+
+            if (mSeedType == SeedType::SEED_CHOMPER) {
+                if (aZombie->mZombiePhase == ZombiePhase::PHASE_DIGGER_WALKING) {
+                    aAttackRect.mX += 20;
+                    aAttackRect.mWidth -= 20;
+                }
+
+                if (aZombie->mZombiePhase == ZombiePhase::PHASE_POGO_BOUNCING || (aZombie->mZombieType == ZombieType::ZOMBIE_BUNGEE && aZombie->mTargetCol == mPlantCol)) {
+                    continue;
+                }
+
+                if (aZombie->mIsEating || mState == PlantState::STATE_CHOMPER_BITING) {
+                    aExtraRange = 60;
+                }
+            }
+
+            if (mSeedType == SeedType::SEED_POTATOMINE) {
+                if ((aZombie->mZombieType == ZombieType::ZOMBIE_POGO && aZombie->mHasObject) || aZombie->mZombiePhase == ZombiePhase::PHASE_POLEVAULTER_IN_VAULT
+                    || aZombie->mZombiePhase == ZombiePhase::PHASE_POLEVAULTER_PRE_VAULT) {
+                    continue;
+                }
+
+                if (aZombie->mZombieType == ZombieType::ZOMBIE_POLEVAULTER) {
+                    aAttackRect.mX += 40;
+                    aAttackRect.mWidth -= 40; // 原版经典土豆地雷 Bug 及“四撑杆引雷”的原理
+                }
+
+                if (aZombie->mZombieType == ZombieType::ZOMBIE_BUNGEE && aZombie->mTargetCol != mPlantCol) {
+                    continue;
+                }
+
+                if (aZombie->mIsEating) {
+                    aExtraRange = 30;
+                }
+            }
+
+            if ((mSeedType == SeedType::SEED_EXPLODE_O_NUT && aZombie->mZombiePhase == ZombiePhase::PHASE_POLEVAULTER_IN_VAULT) || (mSeedType == SeedType::SEED_TANGLEKELP && !aZombie->mInPool)) {
+                continue;
+            }
+
+            Rect aZombieRect = aZombie->GetZombieRect();
+            if (!needPortalCheck && GetRectOverlap(aAttackRect, aZombieRect) < -aExtraRange) {
+                continue;
+            }
+
+            ////////////////////
+
+            int aWeight = -aZombieRect.mX;
+            if (mSeedType == SeedType::SEED_CATTAIL) {
+                aWeight = -Distance2D(mX + 40.0f, mY + 40.0f, aZombieRect.mX + aZombieRect.mWidth / 2, aZombieRect.mY + aZombieRect.mHeight / 2);
+                if (aZombie->IsFlying()) {
+                    aWeight += 10000; // 优先攻击飞行单位
+                }
+            }
+
+            if (aBestZombie == nullptr || aWeight > aHighestWeight) {
+                aHighestWeight = aWeight;
+                aBestZombie = aZombie;
+            }
+        }
+    }
+
+    return aBestZombie;
+}
+
 GridItem *Plant::FindTargetGridItem(PlantWeapon thePlantWeapon) {
     // 对战模式专用，植物索敌僵尸墓碑和靶子僵尸。
     // 原版函数BUG：植物还会索敌梯子和毁灭菇弹坑，故重写以修复BUG。
@@ -779,12 +886,10 @@ int Plant::GetRefreshTime(SeedType theSeedType, SeedType theImitaterType) {
                     case SeedType::SEED_ZOMBIE_DIGGER:
                     case SeedType::SEED_ZOMBIE_BUNGEE:
                     case SeedType::SEED_ZOMBIE_LADDER:
-                    case SeedType::SEED_ZOMBIE_YETI:
                     case SeedType::SEED_ZOMBIE_IMP:
                     case SeedType::SEED_ZOMBIE_BALLOON:
                     case SeedType::SEED_ZOMBIE_WALLNUT_HEAD:
                     case SeedType::SEED_ZOMBIE_GATLINGPEA_HEAD:
-                    case SeedType::SEED_ZOMBIE_SQUASH_HEAD:
                     case SeedType::SEED_ZOMBIE_TALLNUT_HEAD:
                     case SeedType::SEED_ZOMBIE_EXPLODE_O_NUT_HEAD:
                     case SeedType::SEED_ZOMBIE_JACKSON:
@@ -794,6 +899,9 @@ int Plant::GetRefreshTime(SeedType theSeedType, SeedType theImitaterType) {
                         break;
                     case SeedType::SEED_ZOMBIE_NEWSPAPER:
                     case SeedType::SEED_ZOMBIE_SCREEN_DOOR:
+                    case SeedType::SEED_ZOMBIE_YETI:
+                    case SeedType::SEED_ZOMBIE_SQUASH_HEAD:
+                    case SeedType::SEED_ZOMBIE_SUPER_FAN_IMP:
                         aRefreshTime = 1500;
                         break;
                     case SeedType::SEED_ZOMBONI:
@@ -892,8 +1000,9 @@ int Plant::GetCostAdjusted(SeedType theSeedType) {
         case SeedType::SEED_ZOMBIE_JACK_IN_THE_BOX: // 100 -> 75
         case SeedType::SEED_ZOMBIE_SNORKEL:
             return 75;
-        case SeedType::SEED_CACTUS:
         case SeedType::SEED_TALLNUT: // 125 -> 100
+        case SeedType::SEED_CACTUS:
+        case SeedType::SEED_SPLITPEA: // 125 -> 100
         case SeedType::SEED_ZOMBIE_PAIL:
         case SeedType::SEED_ZOMBIE_SCREEN_DOOR:
         case SeedType::SEED_ZOMBIE_DOLPHIN_RIDER:
@@ -902,9 +1011,12 @@ int Plant::GetCostAdjusted(SeedType theSeedType) {
         case SeedType::SEED_ZOMBIE_BACKUP_DANCER2:
             return 100;
         case SeedType::SEED_SNOWPEA: // 150 -> 125
+        case SeedType::SEED_CHOMPER: // 150 -> 125
         case SeedType::SEED_JALAPENO:
         case SeedType::SEED_TORCHWOOD:
+        case SeedType::SEED_ZOMBIE_DIGGER: // 150 -> 125
         case SeedType::SEED_ZOMBIE_BUNGEE:
+        case SeedType::SEED_ZOMBIE_LADDER: // 150 -> 125
         case SeedType::SEED_ZOMBIE_JALAPENO_HEAD:
         case SeedType::SEED_ZOMBIE_TALLNUT_HEAD:
         case SeedType::SEED_ZOMBIE_EXPLODE_O_NUT_HEAD:
@@ -913,22 +1025,20 @@ int Plant::GetCostAdjusted(SeedType theSeedType) {
         case SeedType::SEED_ZOMBIE_FOOTBALL:
         case SeedType::SEED_ZOMBIE_DANCER:
         case SeedType::SEED_ZOMBONI:
-        case SeedType::SEED_ZOMBIE_DIGGER:
-        case SeedType::SEED_ZOMBIE_LADDER:
+        case SeedType::SEED_ZOMBIE_CATAPULT: // 200 -> 150
         case SeedType::SEED_ZOMBIE_GATLINGPEA_HEAD:
         case SeedType::SEED_ZOMBIE_GIGA_FOOTBALL:
         case SeedType::SEED_ZOMBIE_JACKSON:
             return 150;
         case SeedType::SEED_DOOMSHROOM: // 125 -> 175
         case SeedType::SEED_STARFRUIT:
-        case SeedType::SEED_ZOMBIE_CATAPULT: // 200 -> 175
             return 175;
         case SeedType::SEED_MELONPULT: // 300 -> 200
+        case SeedType::SEED_ZOMBIE_FLAG: // 300 -> 200
         case SeedType::SEED_ZOMBIE_POGO: // 225 -> 200
+        case SeedType::SEED_ZOMBIE_GARGANTUAR: // 250 -> 200
             return 200;
         case SeedType::SEED_THREEPEATER: // 200 -> 225
-        case SeedType::SEED_ZOMBIE_GARGANTUAR: // 250 -> 225
-        case SeedType::SEED_ZOMBIE_FLAG: // 300 -> 225
             return 225;
 //            return 250;
         default:
@@ -953,14 +1063,13 @@ int Plant::GetRefreshTimeAdjusted(SeedType theSeedType) {
             case SeedType::SEED_ZOMBIE_FLAG:
             case SeedType::SEED_ZOMBIE_FOOTBALL:
             case SeedType::SEED_ZOMBIE_DANCER:
-            case SeedType::SEED_ZOMBIE_JACK_IN_THE_BOX:
+            case SeedType::SEED_ZOMBIE_DIGGER:
             case SeedType::SEED_ZOMBIE_BUNGEE:
-            case SeedType::SEED_ZOMBIE_YETI:
+            case SeedType::SEED_ZOMBIE_LADDER:
             case SeedType::SEED_ZOMBIE_IMP:
             case SeedType::SEED_ZOMBIE_BALLOON:
             case SeedType::SEED_ZOMBIE_WALLNUT_HEAD:
             case SeedType::SEED_ZOMBIE_GATLINGPEA_HEAD:
-            case SeedType::SEED_ZOMBIE_SQUASH_HEAD:
             case SeedType::SEED_ZOMBIE_TALLNUT_HEAD:
             case SeedType::SEED_ZOMBIE_EXPLODE_O_NUT_HEAD:
             case SeedType::SEED_ZOMBIE_JACKSON:
@@ -970,8 +1079,10 @@ int Plant::GetRefreshTimeAdjusted(SeedType theSeedType) {
             case SeedType::SEED_ZOMBIE_POLEVAULTER: // 30 -> 15
             case SeedType::SEED_ZOMBIE_NEWSPAPER:
             case SeedType::SEED_ZOMBIE_SCREEN_DOOR:
-            case SeedType::SEED_ZOMBIE_DIGGER: // 30 -> 15
-            case SeedType::SEED_ZOMBIE_LADDER: // 30 -> 15
+            case SeedType::SEED_ZOMBIE_JACK_IN_THE_BOX: // 30 -> 15
+            case SeedType::SEED_ZOMBIE_YETI:
+            case SeedType::SEED_ZOMBIE_SQUASH_HEAD:
+            case SeedType::SEED_ZOMBIE_SUPER_FAN_IMP:
                 return 1500;
             default:
                 return 750;
@@ -992,6 +1103,7 @@ int Plant::GetRefreshTimeAdjusted(SeedType theSeedType) {
             case SeedType::SEED_SNOWPEA: // 7.5 -> 15
             case SeedType::SEED_REPEATER: // 7.5 -> 15
             case SeedType::SEED_THREEPEATER:
+            case SeedType::SEED_SPLITPEA: // 7.5 -> 15
             case SeedType::SEED_STARFRUIT:
             case SeedType::SEED_KERNELPULT: // 7.5 -> 15
             case SeedType::SEED_MELONPULT:

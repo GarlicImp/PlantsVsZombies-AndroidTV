@@ -697,15 +697,13 @@ void GamepadControls::OnButtonDown(ButtonCode theButton, int theIsZombieControl,
                     if (aZombie)
                         aZombie->DoSpecial();
                 } else if (aZombieType == ZombieType::ZOMBIE_GIGA_FOOTBALL) {
+                    mBoard->AddZombieInRow(aZombieType, aGridY, -5, true);
                     aSeedPacket->SetPacketType(SeedType::SEED_ZOMBIE_SUPER_FAN_IMP, SeedType::SEED_NONE);
-                    Zombie *aZombie = mBoard->AddZombie(aZombieType, -5, false);
-                    if (aZombie)
-                        aZombie->RiseFromGrave(aGridX, aGridY);
                     return;
                 } else if (aZombieType == ZombieType::ZOMBIE_SUPER_FAN_IMP) {
-                    Zombie *aZombie = mBoard->AddZombie(aZombieType, -5, false);
+                    Zombie *aZombie = mBoard->GetLiveZombieByType(ZombieType::ZOMBIE_GIGA_FOOTBALL);
                     if (aZombie)
-                        aZombie->RiseFromGrave(aGridX, aGridY);
+                        aZombie->DoSpecial();
                 }
                 aSeedPacket->Deactivate();
                 aSeedPacket->WasPlanted(mPlayerIndex2);

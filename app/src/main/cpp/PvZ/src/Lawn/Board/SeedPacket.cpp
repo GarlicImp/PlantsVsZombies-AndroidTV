@@ -183,9 +183,9 @@ void SeedPacket::SetPacketType(SeedType theSeedType, SeedType theImitaterType) {
                 mActive = false;
                 break;
             case SEED_ZOMBIE_SUPER_FAN_IMP:
-                mRefreshTime = 0;
-                mRefreshing = false;
-                mActive = true;
+                mRefreshTime = 500;
+                mRefreshing = true;
+                mActive = false;
                 break;
             case SEED_ZOMBIE_JACKSON:
                 mRefreshTime = aRefreshTime * 2 / 3;

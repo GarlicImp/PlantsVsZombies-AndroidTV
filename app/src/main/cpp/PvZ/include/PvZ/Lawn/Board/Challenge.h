@@ -123,6 +123,12 @@ public:
     void UpdateStormyNight() {
         reinterpret_cast<void (*)(Challenge *)>(Challenge_UpdateStormyNightAddr)(this);
     }
+    int CanTargetZombieWithPortals(Plant *thePlant, Zombie *theZombie) {
+        return reinterpret_cast<int (*)(Challenge *, Plant *, Zombie *)>(Challenge_CanTargetZombieWithPortalsAddr)(this, thePlant, theZombie);
+    }
+    void ScaryPotterJackExplode(int thePosX, int thePosY) {
+        reinterpret_cast<void (*)(Challenge *, int, int)>(Challenge_ScaryPotterJackExplodeAddr)(this, thePosX, thePosY);
+    }
 
     Challenge();
     void Update();

@@ -345,6 +345,7 @@ inline void *Zombie_DrawAddr;
 inline void *Zombie_UpdateYetiAddr;
 inline void *Zombie_UpdateZombieFlyerAddr;
 inline void *Zombie_UpdateZombieImpAddr;
+inline void *Zombie_UpdateZombieJackInTheBoxAddr;
 inline void *Zombie_UpdateZombieGargantuarAddr;
 inline void *Zombie_UpdateZombiePeaHeadAddr;
 inline void *Zombie_GetZombieRectAddr;
@@ -423,6 +424,10 @@ inline void *Zombie_DrawBobsledReanimAddr;
 inline void *Zombie_DrawBungeeReanimAddr;
 inline void *Zombie_CheckIfPreyCaughtAddr;
 inline void *Zombie_EatZombieAddr;
+inline void *Zombie_RemoveIceTrapAddr;
+inline void *Zombie_BungeeDropPlantAddr;
+inline void *Zombie_BalloonPropellerHatSpinAddr;
+inline void *Zombie_BobsledBurnAddr;
 
 
 inline void *SeedChooserScreen_UpdateAddr;
@@ -550,6 +555,8 @@ inline void *Challenge_HeavyWeaponPacketClickedAddr;
 inline void *Challenge_DrawWeatherAddr;
 inline void *Challenge_DrawRainAddr;
 inline void *Challenge_DrawStormNightAddr;
+inline void *Challenge_CanTargetZombieWithPortalsAddr;
+inline void *Challenge_ScaryPotterJackExplodeAddr;
 
 
 inline void *Plant_UpdateAddr;
@@ -851,6 +858,8 @@ inline void *AttachmentDetachAddr;
 inline void *AttachmentDieAddr;
 inline void *AttachReanimAddr;
 inline void *AttachmentUpdateAndSetMatrixAddr;
+inline void *AttachParticleAddr;
+inline void *AttachmentDetachCrossFadeParticleTypeAddr;
 
 
 inline void *TodScaleRotateTransformMatrixAddr;
@@ -1013,7 +1022,6 @@ inline void *GetFlashingColorAddr;
 inline void *RandRangeIntAddr;
 inline void *RandRangeFloatAddr;
 inline void *FindGlobalAllocatorAddr;
-inline void *AttachParticleAddr;
 inline void *TodLoadResourcesAddr;
 inline void *TodParticleSystem_DrawAddr;
 inline void *PoolEffect_BilinearLookupFixedPointAddr;
@@ -1154,10 +1162,17 @@ inline Image **IMAGE_PUFFSHROOM_PUFF1;
 inline Image **IMAGE_REANIM_WALLNUT_CRACKED1;
 inline Image **IMAGE_REANIM_WALLNUT_CRACKED2;
 inline Image **IMAGE_REANIM_ZOMBIE_TRASHCAN1;
+inline Image **IMAGE_ZOMBIEIMPHEAD;
+inline Image **IMAGE_REANIM_ZOMBIE_OUTERARM_UPPER2;
+inline Image **IMAGE_REANIM_ZOMBIE_FOOTBALL_LEFTARM_UPPER2;
+inline Image **IMAGE_REANIM_ZOMBIE_FOOTBALL_LEFTARM_HAND;
+inline Image **IMAGE_REANIM_ZOMBIE_IMP_ARM1_BONE;
+inline Image **IMAGE_REANIM_ZOMBIE_IMP_ARM2;
 
 inline Font **FONT_DWARVENTODCRAFT18;
 
 inline int *SOUND_BALLOON_POP;
+inline int *SOUND_BOING;
 }
 
 inline Sexy::Image **Sexy_IMAGE_SEEDPACKETFLASH_Addr;
@@ -1222,7 +1237,6 @@ inline int *gFoleyParamArraySizeAddr;
 inline int *Challenge_gVSSuddenDeathMode_Addr;
 inline int *Sexy_gSexyAppBase_Addr;
 inline int *Sexy_SOUND_PAUSE_Addr;
-inline int *Sexy_SOUND_BOING_Addr;
 inline int *Sexy_SOUND_FROZEN_Addr;
 inline int *Sexy_SOUND_TAP_Addr;
 inline int *Sexy_SOUND_FINALWAVE_Addr;
@@ -1605,6 +1619,7 @@ inline bool GetFunctionAddr() {
     Zombie_UpdateYetiAddr = dlsym(handle, "_ZN6Zombie10UpdateYetiEv");
     Zombie_UpdateZombieFlyerAddr = dlsym(handle, "_ZN6Zombie17UpdateZombieFlyerEv");
     Zombie_UpdateZombieImpAddr = dlsym(handle, "_ZN6Zombie15UpdateZombieImpEv");
+    Zombie_UpdateZombieJackInTheBoxAddr = dlsym(handle, "_ZN6Zombie24UpdateZombieJackInTheBoxEv");
     Zombie_UpdateZombieGargantuarAddr = dlsym(handle, "_ZN6Zombie22UpdateZombieGargantuarEv");
     Zombie_UpdateZombiePeaHeadAddr = dlsym(handle, "_ZN6Zombie19UpdateZombiePeaHeadEv");
     Zombie_UpdateZombieGatlingHeadAddr = dlsym(handle, "_ZN6Zombie23UpdateZombieGatlingHeadEv");
@@ -1684,6 +1699,10 @@ inline bool GetFunctionAddr() {
     Zombie_DrawBungeeReanimAddr = dlsym(handle, "_ZN6Zombie16DrawBungeeReanimEPN4Sexy8GraphicsER18ZombieDrawPosition");
     Zombie_CheckIfPreyCaughtAddr = dlsym(handle, "_ZN6Zombie17CheckIfPreyCaughtEv");
     Zombie_EatZombieAddr = dlsym(handle, "_ZN6Zombie9EatZombieEPS_");
+    Zombie_RemoveIceTrapAddr = dlsym(handle, "_ZN6Zombie13RemoveIceTrapEv");
+    Zombie_BungeeDropPlantAddr = dlsym(handle, "_ZN6Zombie15BungeeDropPlantEv");
+    Zombie_BalloonPropellerHatSpinAddr = dlsym(handle, "_ZN6Zombie23BalloonPropellerHatSpinEb");
+    Zombie_BobsledBurnAddr = dlsym(handle, "_ZN6Zombie11BobsledBurnEv");
 
 
     SeedChooserScreen_UpdateAddr = dlsym(handle, "_ZN17SeedChooserScreen6UpdateEv");
@@ -1811,6 +1830,8 @@ inline bool GetFunctionAddr() {
     Challenge_DrawWeatherAddr = dlsym(handle, "_ZN9Challenge11DrawWeatherEPN4Sexy8GraphicsE");
     Challenge_DrawRainAddr = dlsym(handle, "_ZN9Challenge8DrawRainEPN4Sexy8GraphicsE");
     Challenge_DrawStormNightAddr = dlsym(handle, "_ZN9Challenge14DrawStormNightEPN4Sexy8GraphicsE");
+    Challenge_CanTargetZombieWithPortalsAddr = dlsym(handle, "_ZN9Challenge26CanTargetZombieWithPortalsEP5PlantP6Zombie");
+    Challenge_ScaryPotterJackExplodeAddr = dlsym(handle, "_ZN9Challenge22ScaryPotterJackExplodeEii");
 
 
     Plant_UpdateAddr = dlsym(handle, "_ZN5Plant6UpdateEv");
@@ -2053,6 +2074,8 @@ inline bool GetFunctionAddr() {
     AttachmentDieAddr = dlsym(handle, "_Z13AttachmentDieR12AttachmentID");
     AttachReanimAddr = dlsym(handle, "_Z12AttachReanimR12AttachmentIDP11Reanimationff");
     AttachmentUpdateAndSetMatrixAddr = dlsym(handle, "_Z28AttachmentUpdateAndSetMatrixR12AttachmentIDRKN4Sexy15SexyTransform2DE");
+    AttachParticleAddr = dlsym(handle, "_Z14AttachParticleR12AttachmentIDP17TodParticleSystemff");
+    AttachmentDetachCrossFadeParticleTypeAddr = dlsym(handle, "_Z37AttachmentDetachCrossFadeParticleTypeR12AttachmentID14ParticleEffectPKc");
 
 
     TodScaleRotateTransformMatrixAddr = dlsym(handle, "_Z29TodScaleRotateTransformMatrixRN4Sexy11SexyMatrix3Efffff");
@@ -2249,7 +2272,6 @@ inline bool GetFunctionAddr() {
     FindGlobalAllocatorAddr = dlsym(handle, "_Z19FindGlobalAllocatori");
     TodLoadResourcesAddr = dlsym(handle, "_Z16TodLoadResourcesRKSs");
     TodParticleSystem_DrawAddr = dlsym(handle, "_ZN17TodParticleSystem4DrawEPN4Sexy8GraphicsE");
-    AttachParticleAddr = dlsym(handle, "_Z14AttachParticleR12AttachmentIDP17TodParticleSystemff");
     PoolEffect_BilinearLookupFixedPointAddr = dlsym(handle, "_ZN10PoolEffect24BilinearLookupFixedPointEjj");
     PoolEffect_PoolEffectDrawAddr = dlsym(handle, "_ZN10PoolEffect14PoolEffectDrawEPN4Sexy8GraphicsEb");
     Sexy_DefaultProfileMgr_GetAnyProfileAddr = dlsym(handle, "_ZN4Sexy17DefaultProfileMgr13GetAnyProfileEv");
@@ -2400,6 +2422,12 @@ inline bool GetFunctionAddr() {
     Sexy::IMAGE_REANIM_WALLNUT_CRACKED1 = reinterpret_cast<Sexy::Image **>(dlsym(handle, "_ZN4Sexy29IMAGE_REANIM_WALLNUT_CRACKED1E"));
     Sexy::IMAGE_REANIM_WALLNUT_CRACKED2 = reinterpret_cast<Sexy::Image **>(dlsym(handle, "_ZN4Sexy29IMAGE_REANIM_WALLNUT_CRACKED2E"));
     Sexy::IMAGE_REANIM_ZOMBIE_TRASHCAN1 = reinterpret_cast<Sexy::Image **>(dlsym(handle, "_ZN4Sexy29IMAGE_REANIM_ZOMBIE_TRASHCAN1E"));
+    Sexy::IMAGE_ZOMBIEIMPHEAD = reinterpret_cast<Sexy::Image **>(dlsym(handle, "_ZN4Sexy19IMAGE_ZOMBIEIMPHEADE"));
+    Sexy::IMAGE_REANIM_ZOMBIE_OUTERARM_UPPER2 = reinterpret_cast<Sexy::Image **>(dlsym(handle, "_ZN4Sexy35IMAGE_REANIM_ZOMBIE_OUTERARM_UPPER2E"));
+    Sexy::IMAGE_REANIM_ZOMBIE_FOOTBALL_LEFTARM_UPPER2 = reinterpret_cast<Sexy::Image **>(dlsym(handle, "_ZN4Sexy43IMAGE_REANIM_ZOMBIE_FOOTBALL_LEFTARM_UPPER2E"));
+    Sexy::IMAGE_REANIM_ZOMBIE_FOOTBALL_LEFTARM_HAND = reinterpret_cast<Sexy::Image **>(dlsym(handle, "_ZN4Sexy41IMAGE_REANIM_ZOMBIE_FOOTBALL_LEFTARM_HANDE"));
+    Sexy::IMAGE_REANIM_ZOMBIE_IMP_ARM1_BONE = reinterpret_cast<Sexy::Image **>(dlsym(handle, "_ZN4Sexy33IMAGE_REANIM_ZOMBIE_IMP_ARM1_BONEE"));
+    Sexy::IMAGE_REANIM_ZOMBIE_IMP_ARM2 = reinterpret_cast<Sexy::Image **>(dlsym(handle, "_ZN4Sexy28IMAGE_REANIM_ZOMBIE_IMP_ARM2E"));
 
     Sexy::FONT_DWARVENTODCRAFT18 = reinterpret_cast<Sexy::Font **>(dlsym(handle, "_ZN4Sexy22FONT_DWARVENTODCRAFT18E"));
 
@@ -2465,7 +2493,7 @@ inline bool GetFunctionAddr() {
     Challenge_gVSSuddenDeathMode_Addr = (int *)dlsym(handle, "_ZN9Challenge18gVSSuddenDeathModeE");
     Sexy_gSexyAppBase_Addr = (int *)dlsym(handle, "_ZN4Sexy12gSexyAppBaseE");
     Sexy_SOUND_PAUSE_Addr = (int *)dlsym(handle, "_ZN4Sexy11SOUND_PAUSEE");
-    Sexy_SOUND_BOING_Addr = (int *)dlsym(handle, "_ZN4Sexy11SOUND_BOINGE");
+    Sexy::SOUND_BOING = reinterpret_cast<int *>(dlsym(handle, "_ZN4Sexy11SOUND_BOINGE"));
     Sexy_SOUND_FROZEN_Addr = (int *)dlsym(handle, "_ZN4Sexy12SOUND_FROZENE");
     Sexy_SOUND_TAP_Addr = (int *)dlsym(handle, "_ZN4Sexy9SOUND_TAPE");
     Sexy_SOUND_FINALWAVE_Addr = (int *)dlsym(handle, "_ZN4Sexy15SOUND_FINALWAVEE");
