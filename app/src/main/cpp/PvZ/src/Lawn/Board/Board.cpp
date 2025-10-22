@@ -796,9 +796,8 @@ void Board::PickBackground() {
     }
 }
 
-bool Board_StageIsNight(Board *board) {
+bool Board::StageIsNight() {
     // 关系到天上阳光掉落与否。
-    BackgroundType mBackground = board->mBackground;
     return mBackground == BackgroundType::BACKGROUND_2_NIGHT || mBackground == BackgroundType::BACKGROUND_4_FOG || mBackground == BackgroundType::BACKGROUND_MUSHROOM_GARDEN
         || mBackground == BackgroundType::BACKGROUND_6_BOSS;
 }

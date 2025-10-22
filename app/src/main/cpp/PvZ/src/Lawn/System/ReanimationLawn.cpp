@@ -196,6 +196,34 @@ Sexy::MemoryImage *ReanimatorCache::MakeCachedZombieFrame(ZombieType theZombieTy
             aReanim->Update();
             aReanim->Draw(&aMemoryGraphics);
             gNewZombieImages[theZombieType - NUM_CACHED_ZOMBIE_TYPES - 1] = aMemoryImage;
+        } else if (theZombieType == ZombieType::ZOMBIE_TORCHWOOD_HEAD) {
+            Reanimation *aReanim = mApp->AddReanimation(aPosX, aPosY, 0, aZombieDef.mReanimationType);
+            aReanim->mIsAttachment = true;
+            aReanim->SetFramesForLayer("anim_idle");
+            Zombie::SetupReanimLayers(aReanim, aUseZombieType);
+            aReanim->AssignRenderGroupToPrefix("anim_hair", RENDER_GROUP_HIDDEN);
+            aReanim->AssignRenderGroupToPrefix("anim_head", RENDER_GROUP_HIDDEN);
+            aReanim->AssignRenderGroupToPrefix("anim_head2", RENDER_GROUP_HIDDEN);
+            aReanim->AssignRenderGroupToPrefix("Zombie_tie", RENDER_GROUP_HIDDEN);
+
+            ReanimationType aHeadType = ReanimationType::REANIM_TORCHWOOD;
+
+            Reanimation *aHeadReanim = mApp->AddReanimation(0, 0, 0, aHeadType);
+            aHeadReanim->PlayReanim("anim_idle", ReanimLoopType::REANIM_LOOP, 0, 15.0f);
+
+            ReanimatorTrackInstance *aTrackInstance = aReanim->GetTrackInstanceByName("Zombie_body");
+            AttachEffect *aAttachEffect = AttachReanim(aTrackInstance->mAttachmentID, aHeadReanim, 0.0f, 0.0f);
+            aReanim->mFrameBasePose = 0;
+
+            TodScaleRotateTransformMatrix(aAttachEffect->mOffset, 65.0f, -10.0f, 0.2f, -1.0f, 0.8f);
+
+            SexyTransform2D aOverlayMatrix;
+            aReanim->GetAttachmentOverlayMatrix(aReanim->FindTrackIndex("Zombie_body"), aOverlayMatrix);
+            AttachmentUpdateAndSetMatrix(aTrackInstance->mAttachmentID, aOverlayMatrix);
+
+            aReanim->Update();
+            aReanim->Draw(&aMemoryGraphics);
+            gNewZombieImages[theZombieType - NUM_CACHED_ZOMBIE_TYPES - 1] = aMemoryImage;
         } else if (theZombieType == ZombieType::ZOMBIE_EXPLODE_O_NUT_HEAD) {
             Reanimation *aReanim = mApp->AddReanimation(aPosX, aPosY, 0, aZombieDef.mReanimationType);
             aReanim->mIsAttachment = true;

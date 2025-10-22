@@ -496,6 +496,8 @@ ZombieType Challenge::IZombieSeedTypeToZombieType(SeedType theSeedType) {
             return ZOMBIE_TALLNUT_HEAD; // 高坚果僵尸
         case SEED_ZOMBIE_SUNFLOWER_HEAD:
             return ZOMBIE_SUNFLOWER_HEAD;
+        case SEED_ZOMBIE_TORCHWOOD_HEAD:
+            return ZOMBIE_TORCHWOOD_HEAD;
         case SEED_ZOMBIE_EXPLODE_O_NUT_HEAD:
             return ZOMBIE_EXPLODE_O_NUT_HEAD;
         case SEED_ZOMBIE_JACKSON:

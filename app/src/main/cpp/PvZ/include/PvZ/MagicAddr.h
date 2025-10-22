@@ -74,7 +74,7 @@ inline void ApplyPatches() {
     game_patches::repairShopB = homura::Patcher::CreateWithStr(libGameMain, 0x1C1D1C, true, "06 E0");
     game_patches::autoPickupSeedPacketDisable = homura::Patcher::CreateWithStr(libGameMain, 0x1C4114, true, "16");
     game_patches::drawMorePlantSeeds = homura::Patcher::CreateWithStr(libGameMain, 0x150576, true, "30");
-    game_patches::drawMoreZombieSeeds = homura::Patcher::CreateWithStr(libGameMain, 0x14FC7E, true, "22");
+    game_patches::drawMoreZombieSeeds = homura::Patcher::CreateWithStr(libGameMain, 0x14FC7E, true, "23");
 #endif // PVZ_VERSION
 
     game_patches::whackAZombieNormalSpeed.Modify();

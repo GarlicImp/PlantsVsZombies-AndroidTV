@@ -440,6 +440,17 @@ void GamepadControls::UpdatePreviewReanim() {
                     aHeadReanim->AssignRenderGroupToTrack("backleaf_right_tip", RENDER_GROUP_HIDDEN);
                     aHeadReanim->AssignRenderGroupToTrack("backleaf_left_tip", RENDER_GROUP_HIDDEN);
                     aHeadReanim->AssignRenderGroupToTrack("backleaf", RENDER_GROUP_HIDDEN);
+                } else if (aZombieType == ZombieType::ZOMBIE_TORCHWOOD_HEAD) {
+                    Reanimation_HideTrackByPrefix(zombieReanim, "anim_hair", true);
+                    Reanimation_HideTrackByPrefix(zombieReanim, "anim_head", true);
+                    Reanimation_HideTrackByPrefix(zombieReanim, "Zombie_tie", true);
+                    zombieReanim->SetFramesForLayer("anim_walk2");
+                    ReanimatorTrackInstance *aTrackInstance = zombieReanim->GetTrackInstanceByName("zombie_body");
+                    Reanimation *aHeadReanim = aApp->AddReanimation(0.0f, 0.0f, 0, ReanimationType::REANIM_TORCHWOOD);
+                    aHeadReanim->PlayReanim("anim_idle", ReanimLoopType::REANIM_LOOP, 0, 15.0f);
+                    AttachEffect *aAttachEffect = AttachReanim(aTrackInstance->mAttachmentID, aHeadReanim, 0.0f, 0.0f);
+                    zombieReanim->mFrameBasePose = 0;
+                    TodScaleRotateTransformMatrix(aAttachEffect->mOffset, 65.0f, -10.0f, 0.2f, -1.0f, 0.8f);
                 } else if (aZombieType == ZombieType::ZOMBIE_EXPLODE_O_NUT_HEAD) {
                     Reanimation_HideTrackByPrefix(zombieReanim, "anim_hair", true);
                     Reanimation_HideTrackByPrefix(zombieReanim, "anim_head", true);
@@ -684,7 +695,7 @@ void GamepadControls::OnButtonDown(ButtonCode theButton, int theIsZombieControl,
                     Zombie *aZombie = mBoard->AddZombie(aZombieType, -5, false);
                     if (aZombie)
                         aZombie->RiseFromGrave(aGridX, aGridY);
-                } else if (aZombieType == ZombieType::ZOMBIE_SUNFLOWER_HEAD || aZombieType == ZombieType::ZOMBIE_EXPLODE_O_NUT_HEAD) {
+                } else if (aZombieType == ZombieType::ZOMBIE_SUNFLOWER_HEAD || aZombieType == ZombieType::ZOMBIE_TORCHWOOD_HEAD || aZombieType == ZombieType::ZOMBIE_EXPLODE_O_NUT_HEAD) {
                     Zombie *aZombie = mBoard->AddZombie(aZombieType, -5, false);
                     if (aZombie)
                         aZombie->RiseFromGrave(aGridX, aGridY);

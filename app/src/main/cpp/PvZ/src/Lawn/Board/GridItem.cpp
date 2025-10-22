@@ -214,7 +214,7 @@ void GridItem::DrawCrater(Sexy::Graphics* g) {
     int theCelCol = 0;
 
     if (mBoard->IsPoolSquare(mGridX, mGridY)) {
-        if (Board_StageIsNight(mBoard)) {
+        if (mBoard->StageIsNight()) {
             aImage = *Sexy_IMAGE_CRATER_WATER_NIGHT_Addr;
         } else {
             aImage = *Sexy_IMAGE_CRATER_WATER_DAY_Addr;
@@ -227,7 +227,7 @@ void GridItem::DrawCrater(Sexy::Graphics* g) {
         aYPos = sin(aPos + aTime) * 2.0f;
     } else if (Board_StageHasRoof(mBoard)) {
         if (mGridX < 5) {
-            if (Board_StageIsNight(mBoard)) {
+            if (mBoard->StageIsNight()) {
                 aImage = addonImages.crater_night_roof_left;
             } else {
                 aImage = *Sexy_IMAGE_CRATER_ROOF_LEFT_Addr;
@@ -235,7 +235,7 @@ void GridItem::DrawCrater(Sexy::Graphics* g) {
             aXPos += 16.0f;
             aYPos += -16.0f;
         } else {
-            if (Board_StageIsNight(mBoard)) {
+            if (mBoard->StageIsNight()) {
                 aImage = addonImages.crater_night_roof_center;
             } else {
                 aImage = *Sexy_IMAGE_CRATER_ROOF_CENTER_Addr;
@@ -246,7 +246,7 @@ void GridItem::DrawCrater(Sexy::Graphics* g) {
         if (fading) {
             theCelCol = 1;
         }
-    } else if (Board_StageIsNight(mBoard)) {
+    } else if (mBoard->StageIsNight()) {
         theCelCol = 1;
         if (fading) {
             aImage = *Sexy_IMAGE_CRATER_FADING_Addr;

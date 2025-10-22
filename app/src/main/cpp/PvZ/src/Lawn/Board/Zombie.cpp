@@ -77,6 +77,7 @@ ZombieDefinition gZombieDefs[NUM_ZOMBIE_TYPES] = {
 
 ZombieDefinition gNewZombieDefs[] = {
     {ZOMBIE_SUNFLOWER_HEAD, REANIM_ZOMBIE, 1, 99, 1, 4000, "ZOMBIE"},
+    {ZOMBIE_TORCHWOOD_HEAD, REANIM_ZOMBIE, 1, 99, 1, 4000, "ZOMBIE"},
     {ZOMBIE_EXPLODE_O_NUT_HEAD, REANIM_ZOMBIE, 4, 99, 1, 3000, "ZOMBIE"},
     {ZOMBIE_GIGA_FOOTBALL, REANIM_GIGA_FOOTBALL, 7, 16, 5, 2000, "FOOTBALL_ZOMBIE"},
     {ZOMBIE_SUPER_FAN_IMP, REANIM_SUPER_FAN_IMP, 10, 48, 1, 0, "IMP"},
@@ -145,6 +146,27 @@ void Zombie::ZombieInitialize(int theRow, ZombieType theType, bool theVariant, Z
 
             mBodyHealth = 500;
             mVariant = false;
+            break;
+        }
+
+        case ZombieType::ZOMBIE_TORCHWOOD_HEAD: {
+            LoadPlainZombieReanim();
+            ReanimShowPrefix("anim_hair", RENDER_GROUP_HIDDEN);
+            ReanimShowPrefix("anim_head", RENDER_GROUP_HIDDEN);
+            ReanimShowPrefix("Zombie_tie", RENDER_GROUP_HIDDEN);
+
+            Reanimation *aBodyReanim = mApp->ReanimationGet(mBodyReanimID);
+            ReanimatorTrackInstance *aTrackInstance = aBodyReanim->GetTrackInstanceByName("Zombie_body");
+            Reanimation *aHeadReanim = mApp->AddReanimation(0.0f, 0.0f, 0, ReanimationType::REANIM_TORCHWOOD);
+            aHeadReanim->PlayReanim("anim_idle", ReanimLoopType::REANIM_LOOP, 0, 15.0f);
+            mSpecialHeadReanimID = mApp->ReanimationGetID(aHeadReanim);
+            AttachEffect *aAttachEffect = AttachReanim(aTrackInstance->mAttachmentID, aHeadReanim, 0.0f, 0.0f);
+            aBodyReanim->mFrameBasePose = 0;
+            TodScaleRotateTransformMatrix(aAttachEffect->mOffset, 65.0f, -10.0f, 0.2f, -1.0f, 0.8f);
+
+            mBodyHealth = 500;
+            mVariant = false;
+            mHasObject = true; // 可点燃植物和僵尸豌豆
             break;
         }
 
@@ -330,6 +352,9 @@ void Zombie::UpdateActions() {
     if (mZombieType == ZombieType::ZOMBIE_SUNFLOWER_HEAD) {
         UpdateZombieSunflowerHead();
     }
+    if (mZombieType == ZombieType::ZOMBIE_TORCHWOOD_HEAD) {
+        UpdateZombieTorchwoodHead();
+    }
 }
 
 void Zombie::DoSpecial() {
@@ -454,7 +479,7 @@ void Zombie::UpdateZombieGigaFootball() {
 
             SeedType aSeedType = aPlant->mSeedType;
             // 不撞一次性植物植物
-            if (aSeedType == SEED_CHERRYBOMB || ((aSeedType == SEED_ICESHROOM || aSeedType == SEED_DOOMSHROOM) && aPlant->mDoSpecialCountdown > 0) ||
+            if (aSeedType == SEED_CHERRYBOMB || ((aSeedType == SEED_ICESHROOM || aSeedType == SEED_DOOMSHROOM) && !aPlant->mIsAsleep) ||
                 aSeedType == SEED_SQUASH || aSeedType == SEED_JALAPENO || aSeedType == SEED_BLOVER)
                 return;
 
@@ -1351,6 +1376,83 @@ void Zombie::UpdateZombieSunflowerHead() {
     }
 }
 
+void Zombie::UpdateZombieTorchwoodHead() {
+    Reanimation *aHeadReanim = mApp->ReanimationTryToGet(mSpecialHeadReanimID);
+
+    if (mChilledCounter > 0 || mIceTrapCounter > 0) {
+        mHasObject = false;
+    }
+
+    if (mHasObject) {
+        if (aHeadReanim)
+            aHeadReanim->AssignRenderGroupToTrack("Torchwood_fire1", RENDER_GROUP_NORMAL);
+
+        Rect aAttackRect = GetZombieAttackRect();
+        Projectile *aProjectile = nullptr;
+        while (mBoard->IterateProjectiles(aProjectile)) {
+            if (aProjectile->mRow == mRow) {
+                Rect aProjectileRect = aProjectile->GetProjectileRect();
+                if (GetRectOverlap(aAttackRect, aProjectileRect) >= 10) {
+                    if (mMindControlled) {
+                        int aGridX = mBoard->PixelToGridX(mX, mY);
+                        if (aProjectile->mProjectileType == ProjectileType::PROJECTILE_PEA) {
+                            aProjectile->ConvertToFireball(aGridX);
+                        } else if (aProjectile->mProjectileType == ProjectileType::PROJECTILE_SNOWPEA) {
+                            aProjectile->ConvertToPea(aGridX);
+                        }
+                    } else {
+                        if (aProjectile->mProjectileType == ProjectileType::PROJECTILE_ZOMBIE_PEA) {
+                            aProjectile->ConvertToZombieFireball();
+                        }
+                    }
+                }
+            }
+        }
+
+        Plant *aPlant = FindPlantTarget(ZombieAttackType::ATTACKTYPE_CHEW);
+        if (aPlant) {
+            SeedType aSeedType = aPlant->mSeedType;
+            if (aSeedType == SEED_CHERRYBOMB || (aSeedType == SEED_POTATOMINE && aPlant->mState == STATE_POTATO_ARMED)
+                || ((aSeedType == SEED_ICESHROOM || aSeedType == SEED_DOOMSHROOM) && !aPlant->mIsAsleep) || aSeedType == SEED_SQUASH || aSeedType == SEED_JALAPENO || aSeedType == SEED_BLOVER)
+                return;
+
+            mApp->PlayFoley(FoleyType::FOLEY_JALAPENO_IGNITE);
+            mApp->PlayFoley(FoleyType::FOLEY_JUICY);
+            int aRenderOrder = mBoard->MakeRenderOrder(RenderLayer::RENDER_LAYER_PARTICLE, mRow, 1);
+            Reanimation *aOriReanim = mApp->ReanimationTryToGet(mBoard->mFwooshID[mRow][aPlant->mRow]);
+            if (aOriReanim) {
+                aOriReanim->ReanimationDie();
+            }
+
+            float aPosX = mBoard->GridToPixelX(aPlant->mPlantCol, aPlant->mRow) + 40.0f;
+            float aPosY = mBoard->GridToPixelY(aPlant->mPlantCol, aPlant->mRow);
+            Reanimation *aFwoosh = mApp->AddReanimation(aPosX, aPosY, aRenderOrder, ReanimationType::REANIM_JALAPENO_FIRE);
+            aFwoosh->SetFramesForLayer("anim_flame");
+            aFwoosh->mLoopType = ReanimLoopType::REANIM_LOOP_FULL_LAST_FRAME;
+            aFwoosh->mAnimRate *= RandRangeFloat(0.7f, 1.3f);
+
+            float aScale = RandRangeFloat(0.9f, 1.1f);
+            float aFlip = Rand(2) ? 1.0f : -1.0f;
+            aFwoosh->OverrideScale(aScale * aFlip, 1);
+
+            mBoard->mFwooshID[mRow][aPlant->mRow] = mApp->ReanimationGetID(aFwoosh);
+            mBoard->mFwooshCountDown = 100;
+            aPlant->Die();
+        }
+
+        Zombie *aZombie = FindZombieTarget();
+        if (aZombie) {
+            aZombie->TakeDamage(10, 0U);
+            if (aZombie->mBodyHealth < 10) {
+                aZombie->ApplyBurn();
+            }
+        }
+    } else {
+        if (aHeadReanim)
+            aHeadReanim->AssignRenderGroupToTrack("Torchwood_fire1", RENDER_GROUP_HIDDEN);
+    }
+}
+
 void Zombie::UpdateZombieRiseFromGrave() {
     if (mInPool) {
         mAltitude = TodAnimateCurve(50, 0, mPhaseCounter, -150, -40, TodCurves::CURVE_LINEAR) * mScaleZombie;
@@ -1524,7 +1626,7 @@ int Zombie::GetDancerFrame() {
 bool Zombie::IsZombotany(ZombieType theZombieType) {
     return theZombieType == ZombieType::ZOMBIE_PEA_HEAD || theZombieType == ZombieType::ZOMBIE_WALLNUT_HEAD || theZombieType == ZombieType::ZOMBIE_TALLNUT_HEAD
         || theZombieType == ZombieType::ZOMBIE_JALAPENO_HEAD || theZombieType == ZombieType::ZOMBIE_GATLING_HEAD || theZombieType == ZombieType::ZOMBIE_SQUASH_HEAD
-        || theZombieType == ZombieType::ZOMBIE_SUNFLOWER_HEAD || theZombieType == ZombieType::ZOMBIE_EXPLODE_O_NUT_HEAD;
+        || theZombieType == ZombieType::ZOMBIE_SUNFLOWER_HEAD || theZombieType == ZombieType::ZOMBIE_TORCHWOOD_HEAD || theZombieType == ZombieType::ZOMBIE_EXPLODE_O_NUT_HEAD;
 }
 
 bool Zombie::ZombieTypeCanGoInPool(ZombieType theZombieType) {

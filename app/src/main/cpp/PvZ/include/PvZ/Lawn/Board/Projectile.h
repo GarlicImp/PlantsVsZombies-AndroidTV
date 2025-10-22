@@ -87,6 +87,7 @@ public:
 
     void ProjectileInitialize(int theX, int theY, int theRenderOrder, int theRow, ProjectileType theProjectileType);
     void ConvertToFireball(int theGridX);
+    void ConvertToZombieFireball();
     void ConvertToPea(int theGridX);
     void Update();
     void UpdateNormalMotion();

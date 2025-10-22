@@ -305,6 +305,7 @@ public:
     void UpdateZombieJalapenoHead();
     void UpdateZombieSquashHead();
     void UpdateZombieSunflowerHead();
+    void UpdateZombieTorchwoodHead();
     void UpdateZombieRiseFromGrave();
     void UpdateDamageStates(unsigned int theDamageFlags);
     void BossDestroyIceballInRow(int theRow);

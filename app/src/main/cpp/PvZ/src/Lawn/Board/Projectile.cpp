@@ -52,6 +52,7 @@ ProjectileDefinition gProjectileDefinition[] = {
 };
 
 ProjectileDefinition gNewProjectileDefinition[] {
+    {ProjectileType::PROJECTILE_ZOMBIE_FIREBALL, 0, 40},
     {ProjectileType::PROJCTILE_ZOMBIE_SOUL, 0, 0},
 };
 
@@ -99,7 +100,7 @@ Plant* Projectile::FindCollisionTargetPlant() {
         if (aPlant->mRow != mRow)
             continue;
 
-        if (mProjectileType == ProjectileType::PROJECTILE_ZOMBIE_PEA) {
+        if (mProjectileType == ProjectileType::PROJECTILE_ZOMBIE_PEA || mProjectileType == ProjectileType::PROJECTILE_ZOMBIE_FIREBALL) {
             if (aPlant->mSeedType == SeedType::SEED_PUFFSHROOM || aPlant->mSeedType == SeedType::SEED_SUNSHROOM || aPlant->mSeedType == SeedType::SEED_POTATOMINE
                 || aPlant->mSeedType == SeedType::SEED_SPIKEWEED || aPlant->mSeedType == SeedType::SEED_SPIKEROCK || aPlant->mSeedType == SeedType::SEED_LILYPAD) // 僵尸豌豆不能击中低矮植物
                 continue;
@@ -107,7 +108,7 @@ Plant* Projectile::FindCollisionTargetPlant() {
 
         Rect aPlantRect = aPlant->GetPlantRect();
         if (GetRectOverlap(aProjectileRect, aPlantRect) > 8) {
-            if (mProjectileType == ProjectileType::PROJECTILE_ZOMBIE_PEA) {
+            if (mProjectileType == ProjectileType::PROJECTILE_ZOMBIE_PEA || mProjectileType == ProjectileType::PROJECTILE_ZOMBIE_FIREBALL) {
                 return mBoard->GetTopPlantAt(aPlant->mPlantCol, aPlant->mRow, PlantPriority::TOPPLANT_EATING_ORDER);
             } else {
                 return mBoard->GetTopPlantAt(aPlant->mPlantCol, aPlant->mRow, PlantPriority::TOPPLANT_CATAPULT_ORDER);
@@ -222,6 +223,24 @@ void Projectile::ConvertToFireball(int theGridX) {
     AttachReanim(mAttachmentID, aFirePeaReanim, aOffsetX, aOffsetY);
 }
 
+void Projectile::ConvertToZombieFireball() {
+    mProjectileType = ProjectileType::PROJECTILE_ZOMBIE_FIREBALL;
+    mApp->PlayFoley(FoleyType::FOLEY_FIREPEA);
+
+    float aOffsetX = -25.0f;
+    float aOffsetY = -25.0f;
+    Reanimation* aFirePeaReanim = mApp->AddReanimation(0.0f, 0.0f, 0, ReanimationType::REANIM_FIRE_PEA);
+    if (mMotionType == ProjectileMotion::MOTION_BACKWARDS) {
+        aFirePeaReanim->OverrideScale(-1.0f, 1.0f);
+        aOffsetX += 80.0f;
+    }
+
+    aFirePeaReanim->SetPosition(mPosX + aOffsetX, mPosY + aOffsetY);
+    aFirePeaReanim->mLoopType = ReanimLoopType::REANIM_LOOP;
+    aFirePeaReanim->mAnimRate = RandRangeFloat(50.0f, 80.0f);
+    AttachReanim(mAttachmentID, aFirePeaReanim, aOffsetX, aOffsetY);
+}
+
 void Projectile::ConvertToPea(int theGridX) {
     if (ColdPeaCanPassFireWood) {
         if (mHitTorchwoodGridX != theGridX) {
@@ -312,15 +331,24 @@ void Projectile::PlayImpactSound(Zombie* theZombie) {
 }
 
 void Projectile::DoImpact(Zombie* theZombie) {
-    if (mApp->mGameMode == GameMode::GAMEMODE_MP_VS) {
-        if (theZombie && theZombie->IsFlying()) {
-            if (mProjectileType == ProjectileType::PROJECTILE_SPIKE) {
-                unsigned int aDamageFlags = GetDamageFlags(theZombie);
-                theZombie->TakeDamage(theZombie->mFlyingHealth, aDamageFlags);
-                return;
+    if (theZombie) {
+        if (mApp->mGameMode == GameMode::GAMEMODE_MP_VS) {
+            if (theZombie->IsFlying()) {
+                if (mProjectileType == ProjectileType::PROJECTILE_SPIKE) {
+                    unsigned int aDamageFlags = GetDamageFlags(theZombie);
+                    theZombie->TakeDamage(theZombie->mFlyingHealth, aDamageFlags);
+                    return;
+                }
+            }
+        }
+
+        if (theZombie->mZombieType == ZombieType::ZOMBIE_TORCHWOOD_HEAD && theZombie->mHasObject == false) {
+            if (mProjectileType == ProjectileType::PROJECTILE_FIREBALL) {
+                theZombie->mHasObject = true; // 重新点燃火炬
             }
         }
     }
+
 
     if (!projectilePierce) {
         old_Projectile_DoImpact(this, theZombie);
@@ -508,6 +536,31 @@ void Projectile::CheckForCollision() {
             DoImpact(aZombie);
         }
         return;
+    } else if (mProjectileType == ProjectileType::PROJECTILE_ZOMBIE_FIREBALL) {
+        Plant* aPlant = FindCollisionTargetPlant();
+        if (aPlant) {
+            const ProjectileDefinition& aProjectileDef = GetProjectileDef();
+            aPlant->mPlantHealth -= aProjectileDef.mDamage;
+            aPlant->mEatenFlashCountdown = std::max(aPlant->mEatenFlashCountdown, 25);
+
+            mApp->PlayFoley(FoleyType::FOLEY_IGNITE);
+            Reanimation* aFireReanim = mApp->AddReanimation(mPosX - 38.0f, mPosY - 20.0f, mRenderOrder + 1, ReanimationType::REANIM_JALAPENO_FIRE);
+            aFireReanim->mAnimTime = 0.25f;
+            aFireReanim->mAnimRate = 24.0f;
+            aFireReanim->OverrideScale(0.7f, 0.4f);
+            Die();
+            return;
+        }
+        Zombie* aZombie = FindCollisionMindControlledTarget();
+        if (aZombie) {
+            if (aZombie->mOnHighGround && CantHitHighGround()) {
+                return;
+            }
+
+            mProjectileType = ProjectileType::PROJECTILE_FIREBALL;
+            DoImpact(aZombie);
+        }
+        return;
     }
 
     //    if ((mDamageRangeFlags & 1) == 0) { //TV的原版代码中存在这个，但是我这么写会导致仙人掌打不到气球。因此注释
@@ -597,6 +650,8 @@ void Projectile::Draw(Graphics* g) {
     if (mProjectileType == ProjectileType::PROJCTILE_ZOMBIE_SOUL) {
         aImage = *IMAGE_PUFFSHROOM_PUFF1;
         aScaleX = aScaleY = TodAnimateCurveFloat(0, 30, mProjectileAge, 0.3f, 1.0f, TodCurves::CURVE_LINEAR);
+    } else if (mProjectileType == ProjectileType::PROJECTILE_ZOMBIE_FIREBALL) {
+        aImage = nullptr;
     }
 
     if (aImage) {
@@ -628,10 +683,72 @@ void Projectile::Draw(Graphics* g) {
 }
 
 void Projectile::DrawShadow(Graphics* g) {
-    switch (mProjectileType) {
-        case ProjectileType::PROJCTILE_ZOMBIE_SOUL:
-            return;
+    int aCelCol = 0;
+    float aScale = 1.0f;
+    float aStretch = 1.0f;
+    float aOffsetX = mPosX - mX;
+    float aOffsetY = mPosY - mY;
+
+    int aGridX = mBoard->PixelToGridXKeepOnBoard(mX, mY);
+    bool isHighGround = false;
+    if (mBoard->mGridSquareType[aGridX][mRow] == GridSquareType::GRIDSQUARE_HIGH_GROUND) {
+        isHighGround = true;
+    }
+    if (mOnHighGround && !isHighGround) {
+        aOffsetY += HIGH_GROUND_HEIGHT;
+    } else if (!mOnHighGround && isHighGround) {
+        aOffsetY -= HIGH_GROUND_HEIGHT;
     }
 
-    old_Projectile_DrawShadow(this, g);
+    if (mBoard->StageIsNight()) {
+        aCelCol = 1;
+    }
+
+    switch (mProjectileType) {
+        case ProjectileType::PROJECTILE_PEA:
+        case ProjectileType::PROJECTILE_ZOMBIE_PEA:
+            aOffsetX += 3.0f;
+            break;
+
+        case ProjectileType::PROJECTILE_SNOWPEA:
+            aOffsetX += -1.0f;
+            aScale = 1.3f;
+            break;
+
+        case ProjectileType::PROJECTILE_STAR:
+            aOffsetX += 7.0f;
+            break;
+
+        case ProjectileType::PROJECTILE_CABBAGE:
+        case ProjectileType::PROJECTILE_KERNEL:
+        case ProjectileType::PROJECTILE_BUTTER:
+        case ProjectileType::PROJECTILE_MELON:
+        case ProjectileType::PROJECTILE_WINTERMELON:
+            aOffsetX += 3.0f;
+            aOffsetY += 10.0f;
+            aScale = 1.6f;
+            break;
+
+        case ProjectileType::PROJECTILE_PUFF:
+        case ProjectileType::PROJCTILE_ZOMBIE_SOUL:
+            return;
+
+        case ProjectileType::PROJECTILE_COBBIG:
+            aScale = 1.0f;
+            aStretch = 3.0f;
+            aOffsetX += 57.0f;
+            break;
+
+        case ProjectileType::PROJECTILE_FIREBALL:
+        case ProjectileType::PROJECTILE_ZOMBIE_FIREBALL:
+            aScale = 1.4f;
+            break;
+    }
+
+    if (mMotionType == ProjectileMotion::MOTION_LOBBED) {
+        float aHeight = ClampFloat(-mPosZ, 0.0f, 200.0f);
+        aScale *= 200.0f / (aHeight + 200.0f);
+    }
+
+    TodDrawImageCelScaledF(g, *IMAGE_PEA_SHADOWS, aOffsetX, (mShadowY - mPosY + aOffsetY), aCelCol, 0, aScale * aStretch, aScale);
 }

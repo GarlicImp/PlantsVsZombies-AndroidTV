@@ -802,6 +802,7 @@ int Plant::GetCost(SeedType theSeedType, SeedType theImitaterType) {
                 case SeedType::SEED_SQUASH:
                 case SeedType::SEED_GARLIC:
                 case SeedType::SEED_ZOMBIE_TRAFFIC_CONE:
+                case SeedType::SEED_ZOMBIE_TORCHWOOD_HEAD:
                     return 75;
                 case SeedType::SEED_THREEPEATER:
                 case SeedType::SEED_ZOMBIE_CATAPULT:
@@ -891,6 +892,7 @@ int Plant::GetRefreshTime(SeedType theSeedType, SeedType theImitaterType) {
                     case SeedType::SEED_ZOMBIE_WALLNUT_HEAD:
                     case SeedType::SEED_ZOMBIE_GATLINGPEA_HEAD:
                     case SeedType::SEED_ZOMBIE_TALLNUT_HEAD:
+                    case SeedType::SEED_ZOMBIE_TORCHWOOD_HEAD:
                     case SeedType::SEED_ZOMBIE_EXPLODE_O_NUT_HEAD:
                     case SeedType::SEED_ZOMBIE_JACKSON:
                     case SeedType::SEED_ZOMBIE_BACKUP_DANCER2:
@@ -999,6 +1001,7 @@ int Plant::GetCostAdjusted(SeedType theSeedType) {
         case SeedType::SEED_ZOMBIE_POLEVAULTER: // 100 -> 75
         case SeedType::SEED_ZOMBIE_JACK_IN_THE_BOX: // 100 -> 75
         case SeedType::SEED_ZOMBIE_SNORKEL:
+        case SeedType::SEED_ZOMBIE_TORCHWOOD_HEAD:
             return 75;
         case SeedType::SEED_TALLNUT: // 125 -> 100
         case SeedType::SEED_CACTUS:
@@ -1071,6 +1074,7 @@ int Plant::GetRefreshTimeAdjusted(SeedType theSeedType) {
             case SeedType::SEED_ZOMBIE_WALLNUT_HEAD:
             case SeedType::SEED_ZOMBIE_GATLINGPEA_HEAD:
             case SeedType::SEED_ZOMBIE_TALLNUT_HEAD:
+            case SeedType::SEED_ZOMBIE_TORCHWOOD_HEAD:
             case SeedType::SEED_ZOMBIE_EXPLODE_O_NUT_HEAD:
             case SeedType::SEED_ZOMBIE_JACKSON:
             case SeedType::SEED_ZOMBIE_BACKUP_DANCER2:

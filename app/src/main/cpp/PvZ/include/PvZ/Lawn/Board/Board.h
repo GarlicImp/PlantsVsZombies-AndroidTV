@@ -269,7 +269,7 @@ public:
     int mIceTrapCounter;                        // 5582
     int mBoardRandSeed;                         // 5583
     ParticleSystemID mPoolSparklyParticleID;    // 5584
-    Reanimation *mFwooshID[6][12];              // 5585 ~ 5656
+    ReanimationID mFwooshID[MAX_GRID_SIZE_Y][12];    // 5585 ~ 5656
     int mFwooshCountDown;                       // 5657
     int mTimeStopCounter;                       // 5658
     bool mDroppedFirstCoin;                     // 22636
@@ -536,6 +536,7 @@ public:
     bool IsLastStandFinalStage();
     bool MouseHitTest(int x, int y, HitResult *theHitResult, bool thePlayerIndex);
     void DrawShovel(Sexy::Graphics *g);
+    bool StageIsNight();
     bool StageHasPool();
     bool StageHasRoof();
     Zombie *AddZombieInRow(ZombieType theZombieType, int theRow, int theFromWave, bool theIsRustle);
@@ -800,8 +801,6 @@ bool Board_ZenGardenItemNumIsZero(Board *, CursorType);
 void Board_SetGrids(Board *board);
 
 bool Board_KeyUp(Board *board, int keyCode);
-
-bool Board_StageIsNight(Board *board);
 
 bool Board_StageHasRoof(Board *board);
 

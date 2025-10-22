@@ -404,7 +404,7 @@ bool LawnApp::GrantAchievement(AchievementId theAchievementId) {
 bool LawnApp::IsNight() {
     // 添加非冒险模式（如：小游戏、花园、智慧树）关卡内进商店的昼夜判定
     if (mBoard != nullptr) {
-        return Board_StageIsNight(mBoard);
+        return mBoard->StageIsNight();
     }
 
     if (IsIceDemo() || mPlayerInfo == nullptr)

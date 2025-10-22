@@ -1168,6 +1168,7 @@ inline Image **IMAGE_REANIM_ZOMBIE_FOOTBALL_LEFTARM_UPPER2;
 inline Image **IMAGE_REANIM_ZOMBIE_FOOTBALL_LEFTARM_HAND;
 inline Image **IMAGE_REANIM_ZOMBIE_IMP_ARM1_BONE;
 inline Image **IMAGE_REANIM_ZOMBIE_IMP_ARM2;
+inline Image **IMAGE_PEA_SHADOWS;
 
 inline Font **FONT_DWARVENTODCRAFT18;
 
@@ -2428,6 +2429,7 @@ inline bool GetFunctionAddr() {
     Sexy::IMAGE_REANIM_ZOMBIE_FOOTBALL_LEFTARM_HAND = reinterpret_cast<Sexy::Image **>(dlsym(handle, "_ZN4Sexy41IMAGE_REANIM_ZOMBIE_FOOTBALL_LEFTARM_HANDE"));
     Sexy::IMAGE_REANIM_ZOMBIE_IMP_ARM1_BONE = reinterpret_cast<Sexy::Image **>(dlsym(handle, "_ZN4Sexy33IMAGE_REANIM_ZOMBIE_IMP_ARM1_BONEE"));
     Sexy::IMAGE_REANIM_ZOMBIE_IMP_ARM2 = reinterpret_cast<Sexy::Image **>(dlsym(handle, "_ZN4Sexy28IMAGE_REANIM_ZOMBIE_IMP_ARM2E"));
+    Sexy::IMAGE_PEA_SHADOWS = reinterpret_cast<Sexy::Image **>(dlsym(handle, "_ZN4Sexy17IMAGE_PEA_SHADOWSE"));
 
     Sexy::FONT_DWARVENTODCRAFT18 = reinterpret_cast<Sexy::Font **>(dlsym(handle, "_ZN4Sexy22FONT_DWARVENTODCRAFT18E"));
 

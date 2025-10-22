@@ -177,18 +177,8 @@ void SeedPacket::SetPacketType(SeedType theSeedType, SeedType theImitaterType) {
                 mRefreshing = true;
                 mActive = false;
                 break;
-            case SEED_ZOMBIE_GIGA_FOOTBALL:
-                mRefreshTime = aRefreshTime * 2 / 3;
-                mRefreshing = true;
-                mActive = false;
-                break;
             case SEED_ZOMBIE_SUPER_FAN_IMP:
                 mRefreshTime = 500;
-                mRefreshing = true;
-                mActive = false;
-                break;
-            case SEED_ZOMBIE_JACKSON:
-                mRefreshTime = aRefreshTime * 2 / 3;
                 mRefreshing = true;
                 mActive = false;
                 break;
@@ -459,6 +449,7 @@ void DrawSeedPacket(Sexy::Graphics *g,
         case SeedType::SEED_ZOMBIE_SQUASH_HEAD:
         case SeedType::SEED_ZOMBIE_TALLNUT_HEAD:
         case SeedType::SEED_ZOMBIE_SUNFLOWER_HEAD:
+        case SeedType::SEED_ZOMBIE_TORCHWOOD_HEAD:
         case SeedType::SEED_ZOMBIE_EXPLODE_O_NUT_HEAD:
             offsetY = -7.0;
             offsetX = -3.0;
