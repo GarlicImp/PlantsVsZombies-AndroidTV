@@ -314,6 +314,8 @@ inline void (*old_Plant_Die)(Plant *this_);
 
 inline void (*old_Plant_PlayBodyReanim)(Plant *, const char *theTrackName, ReanimLoopType theLoopType, int theBlendTime, float theAnimRate);
 
+inline Zombie *(*old_Plant_FindTargetZombie)(Plant *, int theRow, PlantWeapon thePlantWeapon);
+
 // inline void (*old_Plant_CobCannonFire)(Plant* plant, int x, int y);
 
 #endif // PVZ_LAWN_BOARD_PLANT_H

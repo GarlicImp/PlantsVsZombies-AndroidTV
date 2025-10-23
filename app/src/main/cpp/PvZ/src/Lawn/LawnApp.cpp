@@ -511,7 +511,7 @@ bool LawnApp::IsWallnutBowlingLevel() {
     if (mBoard == nullptr)
         return false;
 
-    if (mGameMode == GameMode::GAMEMODE_CHALLENGE_WALLNUT_BOWLING || mGameMode == GameMode::GAMEMODE_CHALLENGE_WALLNUT_BOWLING_2)
+    if (mGameMode == GameMode::GAMEMODE_CHALLENGE_WALLNUT_BOWLING || mGameMode == GameMode::GAMEMODE_CHALLENGE_WALLNUT_BOWLING_2 || mGameMode == GameMode::GAMEMODE_TWO_PLAYER_COOP_BOWLING)
         return true;
 
     return IsAdventureMode() && mPlayerInfo->mLevel == 5;

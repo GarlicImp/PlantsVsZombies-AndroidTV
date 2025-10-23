@@ -677,6 +677,9 @@ void GamepadControls::OnButtonDown(ButtonCode theButton, int theIsZombieControl,
     if (mGameObject.mApp->mGameMode == GameMode::GAMEMODE_MP_VS && theButton == ButtonCode::BUTTONCODE_A) {
 
         if (mIsZombie) {
+            if (aPacketType == SeedType::SEED_ZOMBIE_GRAVESTONE)
+                return;
+
             int aGridX = mBoard->PixelToGridXKeepOnBoard((int)mCursorPositionX, (int)mCursorPositionY);
             int aGridY = mBoard->PixelToGridYKeepOnBoard((int)mCursorPositionX, (int)mCursorPositionY);
 

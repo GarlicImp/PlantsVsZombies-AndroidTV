@@ -428,6 +428,7 @@ inline void *Zombie_RemoveIceTrapAddr;
 inline void *Zombie_BungeeDropPlantAddr;
 inline void *Zombie_BalloonPropellerHatSpinAddr;
 inline void *Zombie_BobsledBurnAddr;
+inline void *Zombie_CanTargetPlantAddr;
 
 
 inline void *SeedChooserScreen_UpdateAddr;
@@ -1704,6 +1705,7 @@ inline bool GetFunctionAddr() {
     Zombie_BungeeDropPlantAddr = dlsym(handle, "_ZN6Zombie15BungeeDropPlantEv");
     Zombie_BalloonPropellerHatSpinAddr = dlsym(handle, "_ZN6Zombie23BalloonPropellerHatSpinEb");
     Zombie_BobsledBurnAddr = dlsym(handle, "_ZN6Zombie11BobsledBurnEv");
+    Zombie_CanTargetPlantAddr = dlsym(handle, "_ZN6Zombie14CanTargetPlantEP5Plant16ZombieAttackType");
 
 
     SeedChooserScreen_UpdateAddr = dlsym(handle, "_ZN17SeedChooserScreen6UpdateEv");

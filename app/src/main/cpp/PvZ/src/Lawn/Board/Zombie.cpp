@@ -368,7 +368,7 @@ void Zombie::DoSpecial() {
             if (aZombieImp == nullptr)
                 return;
 
-            aZombieImp->mPosX = mPosX - 90.0f;
+            aZombieImp->mPosX = mPosX - 50.0f;
             aZombieImp->mPosY = GetPosYBasedOnRow(mRow);
             aZombieImp->SetRow(mRow);
             aZombieImp->mVariant = false;
@@ -517,7 +517,7 @@ void Zombie::UpdateZombieGigaFootball() {
             mPhaseCounter = RandRangeInt(1000, 1500);
             Plant *aPlant = FindPlantTarget(ZombieAttackType::ATTACKTYPE_CHEW);
             if (!aPlant) {
-                StartWalkAnim(20);
+                StartWalkAnim(0);
             }
         }
     } else if (mZombiePhase == ZombiePhase::PHASE_FOOTBALL_WALKING) {
@@ -529,6 +529,11 @@ void Zombie::UpdateZombieGigaFootball() {
             mApp->PlaySample(addonSounds.whistle);
             mZombiePhase = ZombiePhase::PHASE_FOOTBALL_CHARGING;
             PickRandomSpeed();
+
+            Plant *aPlant = FindPlantTarget(ZombieAttackType::ATTACKTYPE_CHEW);
+            if (!aPlant) {
+                StartWalkAnim(0);
+            }
         }
     }
 
