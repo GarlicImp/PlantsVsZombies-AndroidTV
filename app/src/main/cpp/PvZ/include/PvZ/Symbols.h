@@ -193,6 +193,7 @@ inline void *Board_ZombieGetIDAddr;
 inline void *Board_SetDanceModeAddr;
 inline void *Board_ChooseSeedsOnCurrentLevelAddr;
 inline void *Board_RowCanHaveZombiesAddr;
+inline void *Board_GetLevelRandSeedAddr;
 
 
 inline void *SyncBoardAddr;
@@ -312,6 +313,8 @@ inline void *LawnApp_KillBoardAddr;
 inline void *LawnApp_ShowGameSelectorAddr;
 inline void *LawnApp_SetSecondPlayerAddr;
 inline void *LawnApp_PlayerToGamepadIndexAddr;
+inline void *LawnApp_ShowSeedChooserScreenAddr;
+inline void *LawnApp_ShowZombieChooserScreenAddr;
 
 
 inline void *ChallengeScreen_UpdateAddr;
@@ -469,6 +472,11 @@ inline void *SeedChooserScreen_SeedNotRecommendedToPickAddr;
 inline void *SeedChooserScreen_SeedNotAllowedDuringTrialAddr;
 inline void *SeedChooserScreen_CanPickNowAddr;
 inline void *SeedChooserScreen_ShouldDisplayCursorAddr;
+inline void *SeedChooserScreen_UpdateViewLawnAddr;
+inline void *SeedChooserScreen_PickFromWeightedArrayUsingSpecialRandSeedAddr;
+inline void *SeedChooserScreen_PickRandomSeedsAddr;
+inline void *SeedChooserScreen_PickedPlantTypeAddr;
+inline void *SeedChooserScreen_UpdateAfterPurchaseAddr;
 
 
 inline void *Coin_CoinInitializeAddr;
@@ -936,14 +944,24 @@ inline void *Sexy_MemoryImage_BitsChangedAddr;
 inline void *LawnDialog_LawnDialogAddr;
 inline void *LawnDialog_Delete2Addr;
 inline void *LawnDialog_ResizeAddr;
+
+
 inline void *Sexy_Widget_ResizeAddr;
 inline void *Sexy_Widget___ConstructorAddr;
 inline void *Sexy_Widget___DestructorAddr;
 inline void *Sexy_Widget_SetVisibleAddr;
 inline void *Sexy_Widget_MoveAddr;
+inline void *Sexy_Widget_DeferOverlayAddr;
+inline void *Sexy_Widget_UpdateAddr;
+
+
 inline void *Sexy_WidgetContainer_SetFocusAddr;
+inline void *Sexy_WidgetContainer_MarkDirtyAddr;
 inline void *Sexy_WidgetContainer_AddWidgetAddr;
 inline void *Sexy_WidgetContainer_RemoveWidgetAddr;
+inline void *Sexy_WidgetContainer_BringToBackAddr;
+
+
 inline void *Sexy_WidgetManager_GetWidgetAtAddr;
 inline void *Sexy_WidgetManager_SetFocusAddr;
 inline void *Sexy_WidgetManager_MouseDownAddr;
@@ -954,9 +972,7 @@ inline void *Sexy_Image_GetWidthAddr;
 inline void *Sexy_Image_GetHeightAddr;
 inline void *Sexy_Image_GetCelHeightAddr;
 inline void *Sexy_Image_SetWrapModeAddr;
-inline void *Sexy_WidgetContainer_MarkDirtyAddr;
 inline void *Sexy_MenuWidget_DrawAddr;
-inline void *Sexy_Widget_DeferOverlayAddr;
 inline void *Sexy_SexyMatrix3_SexyMatrix3Addr;
 inline void *Sexy_SexyTransform2D_SexyTransform2DAddr;
 inline void *Sexy_SexyTransform2D_ScaleAddr;
@@ -1015,6 +1031,8 @@ inline void *ToolTipWidget_SetWarningTextAddr;
 inline void *ToolTipWidget_SetTitleAddr;
 inline void *ToolTipWidget_SetLabelAddr;
 inline void *ToolTipWidget_DrawAddr;
+inline void *ToolTipWidget_UpdateAddr;
+
 
 inline void *GridItem_UpdateAddr;
 inline void *GridItem_UpdateBrainAddr;
@@ -1512,6 +1530,8 @@ inline bool LoadGameMain() {
     Board_SetDanceModeAddr = dlsym(handle, "_ZN5Board12SetDanceModeEb");
     Board_ChooseSeedsOnCurrentLevelAddr = dlsym(handle, "_ZN5Board25ChooseSeedsOnCurrentLevelEv");
     Board_RowCanHaveZombiesAddr = dlsym(handle, "_ZN5Board17RowCanHaveZombiesEi");
+    Board_GetLevelRandSeedAddr = dlsym(handle, "_ZN5Board16GetLevelRandSeedEv");
+
 
     SyncBoardAddr = dlsym(handle, "_Z9SyncBoardP15SaveGameContextP5Board");
     FixBoardAfterLoadAddr = dlsym(handle, "_Z17FixBoardAfterLoadP5Board");
@@ -1631,6 +1651,8 @@ inline bool LoadGameMain() {
     LawnApp_ShowGameSelectorAddr = dlsym(handle, "_ZN7LawnApp16ShowGameSelectorEv");
     LawnApp_SetSecondPlayerAddr = dlsym(handle, "_ZN7LawnApp15SetSecondPlayerEi");
     LawnApp_PlayerToGamepadIndexAddr = dlsym(handle, "_ZN7LawnApp20PlayerToGamepadIndexEi");
+    LawnApp_ShowSeedChooserScreenAddr = dlsym(handle, "_ZN7LawnApp21ShowSeedChooserScreenEv");
+    LawnApp_ShowZombieChooserScreenAddr = dlsym(handle, "_ZN7LawnApp23ShowZombieChooserScreenEv");
 
 
     ChallengeScreen_UpdateAddr = dlsym(handle, "_ZN15ChallengeScreen6UpdateEv");
@@ -1789,6 +1811,11 @@ inline bool LoadGameMain() {
     SeedChooserScreen_SeedNotAllowedDuringTrialAddr = dlsym(handle, "_ZN17SeedChooserScreen25SeedNotAllowedDuringTrialE8SeedType");
     SeedChooserScreen_CanPickNowAddr = dlsym(handle, "_ZN17SeedChooserScreen10CanPickNowEv");
     SeedChooserScreen_ShouldDisplayCursorAddr = dlsym(handle, "_ZN17SeedChooserScreen19ShouldDisplayCursorEi");
+    SeedChooserScreen_UpdateViewLawnAddr = dlsym(handle, "_ZN17SeedChooserScreen14UpdateViewLawnEv");
+    SeedChooserScreen_PickFromWeightedArrayUsingSpecialRandSeedAddr = dlsym(handle, "_ZN17SeedChooserScreen41PickFromWeightedArrayUsingSpecialRandSeedEPK16TodWeightedArrayiRN4Sexy6MTRandE");
+    SeedChooserScreen_PickRandomSeedsAddr = dlsym(handle, "_ZN17SeedChooserScreen15PickRandomSeedsEv");
+    SeedChooserScreen_PickedPlantTypeAddr = dlsym(handle, "_ZN17SeedChooserScreen15PickedPlantTypeE8SeedType");
+    SeedChooserScreen_UpdateAfterPurchaseAddr = dlsym(handle, "_ZN17SeedChooserScreen19UpdateAfterPurchaseEv");
 
 
     Coin_CoinInitializeAddr = dlsym(handle, "_ZN4Coin14CoinInitializeEii8CoinType10CoinMotion");
@@ -2242,16 +2269,26 @@ inline bool LoadGameMain() {
     LawnDialog_LawnDialogAddr = dlsym(handle, "_ZN10LawnDialogC2EP7LawnAppPN4Sexy5ImageEibRKSsS6_S6_i");
     LawnDialog_Delete2Addr = dlsym(handle, "_ZN10LawnDialogD2Ev");
     LawnDialog_ResizeAddr = dlsym(handle, "_ZN10LawnDialog6ResizeEiiii");
+
+
     Sexy_Widget_ResizeAddr = dlsym(handle, "_ZN4Sexy6Widget6ResizeEiiii");
     Sexy_Widget___ConstructorAddr = dlsym(handle, "_ZN4Sexy6WidgetC2Ev");
     Sexy_Widget___DestructorAddr = dlsym(handle, "_ZN4Sexy6WidgetD2Ev");
     Sexy_Widget_SetVisibleAddr = dlsym(handle, "_ZN4Sexy6Widget10SetVisibleEb");
     Sexy_Widget_MoveAddr = dlsym(handle, "_ZN4Sexy6Widget4MoveEii");
-    Sexy_WidgetManager_GetWidgetAtAddr = dlsym(handle, "_ZN4Sexy13WidgetManager11GetWidgetAtEiiPiS1_");
-    Sexy_WidgetManager_SetFocusAddr = dlsym(handle, "_ZN4Sexy13WidgetManager11GetWidgetAtEiiPiS1_");
+    Sexy_Widget_DeferOverlayAddr = dlsym(handle, "_ZN4Sexy6Widget12DeferOverlayEi");
+    Sexy_Widget_UpdateAddr = dlsym(handle, "_ZN4Sexy6Widget6UpdateEv");
+
+
+    Sexy_WidgetContainer_MarkDirtyAddr = dlsym(handle, "_ZN4Sexy15WidgetContainer9MarkDirtyEv");
     Sexy_WidgetContainer_AddWidgetAddr = dlsym(handle, "_ZN4Sexy15WidgetContainer9AddWidgetEPNS_6WidgetE");
     Sexy_WidgetContainer_RemoveWidgetAddr = dlsym(handle, "_ZN4Sexy15WidgetContainer12RemoveWidgetEPNS_6WidgetE");
     Sexy_WidgetContainer_SetFocusAddr = dlsym(handle, "_ZN4Sexy15WidgetContainer8SetFocusEPNS_6WidgetE");
+    Sexy_WidgetContainer_BringToBackAddr = dlsym(handle, "_ZN4Sexy15WidgetContainer11BringToBackEPNS_6WidgetE");
+
+
+    Sexy_WidgetManager_GetWidgetAtAddr = dlsym(handle, "_ZN4Sexy13WidgetManager11GetWidgetAtEiiPiS1_");
+    Sexy_WidgetManager_SetFocusAddr = dlsym(handle, "_ZN4Sexy13WidgetManager11GetWidgetAtEiiPiS1_");
     Sexy_WidgetManager_MouseDownAddr = dlsym(handle, "_ZN4Sexy13WidgetManager8SetFocusEPNS_6WidgetE");
     Sexy_WidgetManager_MouseDragAddr = dlsym(handle, "_ZN4Sexy13WidgetManager9MouseDragEii");
     Sexy_WidgetManager_MouseUpAddr = dlsym(handle, "_ZN4Sexy13WidgetManager7MouseUpEiii");
@@ -2260,9 +2297,7 @@ inline bool LoadGameMain() {
     Sexy_Image_GetHeightAddr = dlsym(handle, "_ZN4Sexy5Image9GetHeightEv");
     Sexy_Image_GetCelHeightAddr = dlsym(handle, "_ZN4Sexy5Image12GetCelHeightEv");
     Sexy_Image_SetWrapModeAddr = dlsym(handle, "_ZN4Sexy5Image11SetWrapModeENS_8WrapModeES1_");
-    Sexy_WidgetContainer_MarkDirtyAddr = dlsym(handle, "_ZN4Sexy15WidgetContainer9MarkDirtyEv");
     Sexy_MenuWidget_DrawAddr = dlsym(handle, "_ZN4Sexy10MenuWidget4DrawEPNS_8GraphicsE");
-    Sexy_Widget_DeferOverlayAddr = dlsym(handle, "_ZN4Sexy6Widget12DeferOverlayEi");
     Sexy_SexyMatrix3_SexyMatrix3Addr = dlsym(handle, "_ZN4Sexy11SexyMatrix3C2Ev");
     Sexy_SexyTransform2D_SexyTransform2DAddr = dlsym(handle, "_ZN4Sexy15SexyTransform2DC2Ev");
     Sexy_SexyTransform2D_ScaleAddr = dlsym(handle, "_ZN4Sexy15SexyTransform2D5ScaleEff");
@@ -2321,6 +2356,8 @@ inline bool LoadGameMain() {
     ToolTipWidget_SetTitleAddr = dlsym(handle, "_ZN13ToolTipWidget8SetTitleERKSs");
     ToolTipWidget_SetLabelAddr = dlsym(handle, "_ZN13ToolTipWidget8SetLabelERKSs");
     ToolTipWidget_DrawAddr = dlsym(handle, "_ZN13ToolTipWidget4DrawEPN4Sexy8GraphicsE");
+    ToolTipWidget_UpdateAddr = dlsym(handle, "_ZN13ToolTipWidget6UpdateEv");
+
 
     TodDrawImageCelCenterScaledFAddr = dlsym(handle, "_Z28TodDrawImageCelCenterScaledFPN4Sexy8GraphicsEPNS_5ImageEffiff");
     TodDrawImageCelFAddr = dlsym(handle, "_Z16TodDrawImageCelFPN4Sexy8GraphicsEPNS_5ImageEffii");

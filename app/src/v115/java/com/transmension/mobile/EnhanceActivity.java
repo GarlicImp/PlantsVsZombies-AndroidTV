@@ -233,7 +233,7 @@ public class EnhanceActivity extends MainActivity {
 
     public static native void nativeJumpLogo();
 
-    public static native void nativeMoreZombieSeeds();
+    public static native void nativeMoreSeedType();
 
     public static native void nativeVSBalanceAdjustment();
 
@@ -583,8 +583,8 @@ public class EnhanceActivity extends MainActivity {
         if (sharedPreferences.getBoolean("jumpLogo", false))
             nativeJumpLogo();
 
-        if (sharedPreferences.getBoolean("gMoreZombieSeeds", false))
-            nativeMoreZombieSeeds();
+        if (sharedPreferences.getBoolean("gMoreSeedType", false))
+            nativeMoreSeedType();
 
         if (sharedPreferences.getBoolean("gVSBalanceAdjustment", false))
             nativeVSBalanceAdjustment();

@@ -25,6 +25,7 @@
 #include "PvZ/Lawn/Widget/ConfirmBackToMainDialog.h"
 #include "PvZ/Lawn/Widget/MainMenu.h"
 #include "PvZ/Lawn/Widget/WaitForSecondPlayerDialog.h"
+#include "PvZ/Lawn/Widget/SeedChooserScreen.h"
 #include "PvZ/Misc.h"
 #include "PvZ/STL/pvzstl_string.h"
 #include "PvZ/Symbols.h"
@@ -378,8 +379,8 @@ bool LawnApp::IsChallengeWithoutSeedBank() {
 }
 
 int LawnApp::GetSeedsAvailable(bool theIsZombieChooser) {
-    // 解锁僵尸方拓展卡片
-    if (theIsZombieChooser && gMoreZombieSeeds) {
+    // 解锁拓展卡片
+    if (gMoreSeedType) {
         return NUM_ZOMBIE_SEED_IN_CHOOSER;
     }
 
@@ -591,6 +592,16 @@ bool LawnApp::IsWhackAZombieLevel() {
     return IsAdventureMode() && mPlayerInfo->mLevel == 15;
 }
 
+bool LawnApp::IsStormyNightLevel() {
+    if (mBoard == nullptr)
+        return false;
+
+    if (mGameMode == GameMode::GAMEMODE_CHALLENGE_STORMY_NIGHT)
+        return true;
+
+    return IsAdventureMode() && mPlayerInfo->mLevel == 40;
+}
+
 bool LawnApp::IsVSMode() {
     return mGameMode == GameMode::GAMEMODE_MP_VS;
 }
@@ -615,6 +626,23 @@ bool LawnApp::IsFinalBossLevel() {
 
 PottedPlant *LawnApp::GetPottedPlantByIndex(int thePottedPlantIndex) {
     return &mPlayerInfo->mPottedPlants[thePottedPlantIndex];
+}
+
+void LawnApp::ShowSeedChooserScreen() {
+    mSeedChooserScreen = new SeedChooserScreen(false);
+    mSeedChooserScreen->Resize(0, 0, *(int *)(Sexy::IMAGE_SEEDCHOOSER_BACKGROUND + 36), *(int *)(Sexy::IMAGE_SEEDCHOOSER_BACKGROUND + 40));
+    //    mWidgetManager->AddWidget(reinterpret_cast<Widget *>(mSeedChooserScreen));
+    //    mWidgetManager->BringToBack(reinterpret_cast<Widget *>(mSeedChooserScreen));
+    (*(void(__fastcall **)(int *, SeedChooserScreen *))(*(int *)mWidgetManager + 24))((int *)mWidgetManager, mSeedChooserScreen);
+    (*(void(__fastcall **)(int *, SeedChooserScreen *))(*(int *)mWidgetManager + 60))((int *)mWidgetManager, mSeedChooserScreen);
+}
+void LawnApp::ShowZombieChooserScreen() {
+    mZombieChooserScreen = new SeedChooserScreen(true);
+    mZombieChooserScreen->Resize(0, 0, 800 - *(int *)(Sexy::IMAGE_SEEDCHOOSER_BACKGROUND2 + 36), 0);
+    //    mWidgetManager->AddWidget(reinterpret_cast<Widget *>(mZombieChooserScreen));
+    //    mWidgetManager->BringToBack(reinterpret_cast<Widget *>(mZombieChooserScreen));
+    (*(void(__fastcall **)(int *, SeedChooserScreen *))(*(int *)mWidgetManager + 24))((int *)mWidgetManager, mZombieChooserScreen);
+    (*(void(__fastcall **)(int *, SeedChooserScreen *))(*(int *)mWidgetManager + 60))((int *)mWidgetManager, mZombieChooserScreen);
 }
 
 static bool zombatarResLoaded;

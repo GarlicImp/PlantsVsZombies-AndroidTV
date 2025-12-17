@@ -908,8 +908,8 @@ extern "C" JNIEXPORT void JNICALL Java_com_transmension_mobile_EnhanceActivity_n
     jumpLogo = true;
 }
 
-extern "C" JNIEXPORT void JNICALL Java_com_transmension_mobile_EnhanceActivity_nativeMoreZombieSeeds(JNIEnv *env, jclass clazz) {
-    gMoreZombieSeeds = true;
+extern "C" JNIEXPORT void JNICALL Java_com_transmension_mobile_EnhanceActivity_nativeMoreSeedType(JNIEnv *env, jclass clazz) {
+    gMoreSeedType = true;
 }
 
 extern "C" JNIEXPORT void JNICALL Java_com_transmension_mobile_EnhanceActivity_nativeVSBalanceAdjustment(JNIEnv *env, jclass clazz) {

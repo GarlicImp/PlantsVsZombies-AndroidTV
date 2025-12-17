@@ -23,9 +23,11 @@
 #include "PvZ/Lawn/Board/ToolTipWidget.h"
 #include "PvZ/Lawn/Common/ConstEnums.h"
 #include "PvZ/Lawn/GamepadControls.h"
+#include "PvZ/SexyAppFramework/Misc/MTRand.h"
 #include "PvZ/SexyAppFramework/Widget/ButtonListener.h"
 #include "PvZ/SexyAppFramework/Widget/Widget.h"
 #include "PvZ/Symbols.h"
+#include "PvZ/TodLib/Common/TodCommon.h"
 
 class Board;
 class LawnApp;
@@ -151,6 +153,13 @@ public:
     bool ShouldDisplayCursor(int thePlayerIndex) {
         return reinterpret_cast<bool (*)(SeedChooserScreen *, int)>(SeedChooserScreen_ShouldDisplayCursorAddr)(this, thePlayerIndex);
     }
+    void UpdateViewLawn() {
+        reinterpret_cast<void (*)(SeedChooserScreen *)>(SeedChooserScreen_UpdateViewLawnAddr)(this);
+    }
+    int PickFromWeightedArrayUsingSpecialRandSeed(TodWeightedArray *theArray, int theCount, Sexy::MTRand &theLevelRNG) {
+        return reinterpret_cast<int (*)(SeedChooserScreen *, TodWeightedArray *, int, Sexy::MTRand &)>(SeedChooserScreen_PickFromWeightedArrayUsingSpecialRandSeedAddr)(
+            this, theArray, theCount, theLevelRNG);
+    }
 
     SeedChooserScreen(bool theIsZombieChooser);
     void EnableStartButton(int theIsEnabled);
@@ -161,6 +170,7 @@ public:
     void OnPlayerPickedSeed(int thePlayerIndex);
     void ClickedSeedInChooser(ChosenSeed &theChosenSeed, int thePlayerIndex);
     void CrazyDavePickSeeds();
+    void PickRandomSeeds();
     void OnStartButton();
     void Update();
     bool SeedNotAllowedToPick(SeedType theSeedType);
@@ -179,6 +189,9 @@ public:
     int GetNextSeedInDir(int theNumSeed, int theMoveDirection);
     void Draw(Sexy::Graphics *g);
     SeedType SeedHitTest(int x, int y);
+    bool PickedPlantType(SeedType theSeedType);
+    void UpdateAfterPurchase();
+    int GetPage();
 
     void MouseMove(int x, int y);
     void MouseDown(int x, int y, int theClickCount);
@@ -194,6 +207,8 @@ protected:
 
 /***************************************************************************************************************/
 inline bool daveNoPickSeeds;
+
+inline ChosenSeed gNewChosenSeeds[NUM_NEW_SEED_TYPES - SEED_IMP_PEAR];
 
 
 inline void (*old_SeedChooserScreen_RebuildHelpbar)(SeedChooserScreen *instance);

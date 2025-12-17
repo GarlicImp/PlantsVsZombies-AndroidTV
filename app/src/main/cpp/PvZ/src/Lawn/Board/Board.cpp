@@ -960,6 +960,9 @@ bool Board::StageHas6Rows() {
     return mBackground == BackgroundType::BACKGROUND_3_POOL || mBackground == BackgroundType::BACKGROUND_4_FOG;
 }
 
+bool Board::StageHasFog() {
+    return !mApp->IsStormyNightLevel() && mApp->mGameMode != GameMode::GAMEMODE_CHALLENGE_INVISIGHOUL && mBackground == BackgroundType::BACKGROUND_4_FOG;
+}
 
 void Board::UpdateFwoosh() {
     if (requestPause) {

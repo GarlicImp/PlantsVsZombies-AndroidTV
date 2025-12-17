@@ -91,6 +91,8 @@ inline void InitHookFunction() {
     homura::HookFunction(LawnApp_KillSeedChooserScreenAddr, &LawnApp::KillSeedChooserScreen, &old_LawnApp_KillSeedChooserScreen);
     homura::HookFunction(LawnApp_GetSeedsAvailableAddr, &LawnApp::GetSeedsAvailable, &old_LawnApp_GetSeedsAvailable);
     homura::HookFunction(LawnApp_ClearSecondPlayerAddr, &LawnApp::ClearSecondPlayer, &old_LawnApp_ClearSecondPlayer);
+    //    homura::HookFunction(LawnApp_ShowSeedChooserScreenAddr, &LawnApp::ShowSeedChooserScreen, nullptr);
+    //    homura::HookFunction(LawnApp_ShowZombieChooserScreenAddr, &LawnApp::ShowZombieChooserScreen, nullptr);
     // homura::HookFunction(LawnApp_HasSeedTypeAddr, &LawnApp_HasSeedType, &old_LawnApp_HasSeedType);
 
 
@@ -258,7 +260,9 @@ inline void InitHookFunction() {
     homura::HookFunction(SeedChooserScreen_DrawAddr, &SeedChooserScreen::Draw, &old_SeedChooserScreen_Draw);
     homura::HookFunction(SeedChooserScreen_SeedHitTestAddr, &SeedChooserScreen::SeedHitTest, &old_SeedChooserScreen_SeedHitTest);
     homura::HookFunction(SeedChooserScreen_OnKeyDownAddr, &SeedChooserScreen::OnKeyDown, &old_SeedChooserScreen_OnKeyDown);
-
+    homura::HookFunction(SeedChooserScreen_PickRandomSeedsAddr, &SeedChooserScreen::PickRandomSeeds, nullptr);
+    homura::HookFunction(SeedChooserScreen_PickedPlantTypeAddr, &SeedChooserScreen::PickedPlantType, nullptr);
+    homura::HookFunction(SeedChooserScreen_UpdateAfterPurchaseAddr, &SeedChooserScreen::UpdateAfterPurchase, nullptr);
 
     homura::HookFunction(MainMenu_KeyDownAddr, &MainMenu::KeyDown, &old_MainMenu_KeyDown);
     homura::HookFunction(MainMenu_ButtonDepressAddr, &MainMenu::ButtonDepress, &old_MainMenu_ButtonDepress);

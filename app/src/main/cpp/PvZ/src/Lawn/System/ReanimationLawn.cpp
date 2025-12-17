@@ -68,6 +68,8 @@ void ReanimatorCache::ReanimatorCacheInitialize() {
     for (int i = 0; i < ZombieType::NUM_ZOMBIE_TYPES; i++)
         mZombieImages[i] = nullptr;
 
+    for (int i = 0; i < SeedType::NUM_NEW_SEED_TYPES - SEED_IMP_PEAR; i++)
+        gNewPlantImages[i] = nullptr;
     for (int i = 0; i < ZombieType::NUM_NEW_ZOMBIE_TYPES - NUM_CACHED_ZOMBIE_TYPES; i++)
         gNewZombieImages[i] = nullptr;
 }
@@ -85,36 +87,42 @@ void ReanimatorCache::ReanimatorCacheDispose() {
     for (int i = 0; i < ZombieType::NUM_ZOMBIE_TYPES; i++)
         delete mZombieImages[i];
 
+    for (int i = 0; i < SeedType::NUM_NEW_SEED_TYPES - SEED_IMP_PEAR; i++)
+        delete gNewPlantImages[i];
     for (int i = 0; i < ZombieType::NUM_NEW_ZOMBIE_TYPES - NUM_CACHED_ZOMBIE_TYPES; i++)
         delete gNewZombieImages[i];
 }
 
-void ReanimatorCache::DrawCachedPlant(Graphics *graphics, float thePosX, float thePosY, SeedType theSeedType, DrawVariation theDrawVariation) {
+void ReanimatorCache::DrawCachedPlant(Graphics *g, float thePosX, float thePosY, SeedType theSeedType, DrawVariation theDrawVariation) {
+    Image *aImage = nullptr;
     if (theDrawVariation == DrawVariation::VARIATION_IMITATER_LESS || theDrawVariation == DrawVariation::VARIATION_IMITATER || theDrawVariation == DrawVariation::VARIATION_NORMAL) {
-        Image *image = (Image *)mPlantImages[theSeedType];
-        if (image == nullptr) {
+        aImage = (Image *)mPlantImages[theSeedType];
+        if (theSeedType > NUM_SEED_TYPES) {
+            aImage = (Image *)gNewPlantImages[theSeedType - SEED_IMP_PEAR];
+        }
+        if (aImage == nullptr) {
             return;
         }
         if (theDrawVariation == DrawVariation::VARIATION_IMITATER) {
-            image = FilterEffectGetImage(image, FilterEffect::FILTEREFFECT_WASHED_OUT);
+            aImage = FilterEffectGetImage(aImage, FilterEffect::FILTEREFFECT_WASHED_OUT);
         } else if (theDrawVariation == DrawVariation::VARIATION_IMITATER_LESS) {
-            image = FilterEffectGetImage(image, FilterEffect::FILTEREFFECT_LESS_WASHED_OUT);
+            aImage = FilterEffectGetImage(aImage, FilterEffect::FILTEREFFECT_LESS_WASHED_OUT);
         }
-        int a, b, c, d;
-        GetPlantImageSize(theSeedType, a, b, c, d);
-        float xScaled = graphics->mScaleX;
-        float yScaled = graphics->mScaleY;
+        int aOffsetX, aOffsetY, aWidth, aHeight;
+        GetPlantImageSize(theSeedType, aOffsetX, aOffsetY, aWidth, aHeight);
+        float aScaledX = g->mScaleX;
+        float aScaledY = g->mScaleY;
         // 修复关闭3D加速后SeedPacket上不显示植物
         // if (Sexy_SexyAppBase_Is3DAccelerated(a1->mApp)) {
-        TodDrawImageScaledF(graphics, image, thePosX + xScaled * a, thePosY + yScaled * b, xScaled, yScaled);
+        TodDrawImageScaledF(g, aImage, thePosX + aScaledX * aOffsetX, thePosY + aScaledY * aOffsetY, aScaledX, aScaledY);
         // } else {
-        // if (xScaled == 1.0 && yScaled == 1.0) {
-        // DrawImage(graphics, image, thePosX + a, thePosY + b);
+        // if (aScaledX == 1.0 && aScaledY == 1.0) {
+        // DrawImage(g, aImage, thePosX + aOffsetX, thePosY + aOffsetY);
         // return;
         // }
         // }
     } else {
-        old_ReanimatorCache_DrawCachedPlant(this, graphics, thePosX, thePosY, theSeedType, theDrawVariation);
+        old_ReanimatorCache_DrawCachedPlant(this, g, thePosX, thePosY, theSeedType, theDrawVariation);
     }
 }
 

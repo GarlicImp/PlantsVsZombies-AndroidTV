@@ -95,6 +95,10 @@ PlantDefinition gPlantDefs[SeedType::NUM_SEED_TYPES] = {
     {SeedType::SEED_SPROUT, nullptr, ReanimationType::REANIM_ZENGARDEN_SPROUT, 33, 0, 3000, PlantSubClass::SUBCLASS_NORMAL, 0, "SPROUT"},
     {SeedType::SEED_LEFTPEATER, nullptr, ReanimationType::REANIM_REPEATER, 5, 200, 750, PlantSubClass::SUBCLASS_SHOOTER, 150, "REPEATER"}};
 
+PlantDefinition gNewPlantDefs[] = {
+    {SeedType::SEED_IMP_PEAR, nullptr, ReanimationType::REANIM_WALLNUT, 10, 0, 750, PlantSubClass::SUBCLASS_NORMAL, 0, "IMP_PEAR"},
+};
+
 void Plant::PlantInitialize(int theGridX, int theGridY, SeedType theSeedType, SeedType theImitaterType, int a6) {
     // 在初始化植物后更新一次动画，以解决开场前存在的植物只绘制阴影而不绘制植物本体的问题
     old_Plant_PlantInitialize(this, theGridX, theGridY, theSeedType, theImitaterType, a6);
@@ -1057,7 +1061,11 @@ void Plant::Die() {
 }
 
 PlantDefinition &GetPlantDefinition(SeedType theSeedType) {
-    return gPlantDefs[theSeedType];
+    if (theSeedType <= SeedType::NUM_SEED_TYPES) {
+        return gPlantDefs[theSeedType];
+    } else {
+        return gNewPlantDefs[theSeedType - SEED_IMP_PEAR];
+    }
 }
 
 int Plant::GetCost(SeedType theSeedType, SeedType theImitaterType) {

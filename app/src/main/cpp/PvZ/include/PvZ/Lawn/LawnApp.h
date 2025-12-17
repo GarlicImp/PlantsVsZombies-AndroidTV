@@ -305,6 +305,7 @@ public:
     bool IsSquirrelLevel();
     bool IsSurvivalEndless(GameMode theGameMode);
     bool IsWhackAZombieLevel();
+    bool IsStormyNightLevel();
     bool IsVSMode();
     bool IsCoopMode();
     bool IsTwinSunbankMode();
@@ -327,6 +328,8 @@ public:
     void LoadZombatarResources();
     PottedPlant *GetPottedPlantByIndex(int thePottedPlantIndex);
     void ClearSecondPlayer();
+    void ShowSeedChooserScreen();
+    void ShowZombieChooserScreen();
     bool Is3DAccelerated() {
         // 修复关闭3D加速后MV错位
         return mNewIs3DAccelerated || (mCreditScreen != nullptr);

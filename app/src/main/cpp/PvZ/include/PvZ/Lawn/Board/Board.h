@@ -465,6 +465,9 @@ public:
     void UpdateCoverLayer() {
         reinterpret_cast<void (*)(Board *)>(Board_UpdateCoverLayerAddr)(this);
     }
+    int GetLevelRandSeed() {
+        return reinterpret_cast<int (*)(Board *)>(Board_GetLevelRandSeedAddr)(this);
+    }
 
     Board(LawnApp *theApp);
     void InitLevel();
@@ -515,6 +518,7 @@ public:
     bool StageHasPool();
     bool StageHasRoof();
     bool StageHas6Rows();
+    bool StageHasFog();
     bool ZombieIsAddInRow(ZombieType theZombieType);
     Zombie *AddZombieInRow(ZombieType theZombieType, int theRow, int theFromWave, bool theIsRustle);
     Zombie *AddZombie(ZombieType theZombieType, int theFromWave, bool theIsRustle);

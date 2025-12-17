@@ -18,6 +18,7 @@
  */
 
 #include "PvZ/Lawn/Widget/SeedChooserPage.h"
+#include "Homura/Logger.h"
 
 SeedChooserPage::SeedChooserPage() {
     ;
@@ -26,7 +27,7 @@ SeedChooserPage::SeedChooserPage() {
 SeedChooserPage::~SeedChooserPage() {
     mNextPageButton->mBtnNoDraw = true;
     mNextPageButton->mDisabled = true;
-    gSeedChooserPage = nullptr;
+    gPlantChooserPage = nullptr;
 }
 
 int SeedChooserPage::GetPage() {
@@ -42,7 +43,10 @@ void SeedChooserPage::PageUp() {
 }
 
 void SeedChooserPage::ButtonDepress(this SeedChooserPage &self, int theId) {
-    if (theId == SeedChooserPage_NextPage) {
+    if (theId == SeedChooserPage_NextPlantPage) {
+        self.PageUp();
+    }
+    if (theId == SeedChooserPage_NextZombiePage) {
         self.PageUp();
     }
 }

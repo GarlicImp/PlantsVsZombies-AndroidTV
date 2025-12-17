@@ -67,6 +67,9 @@ public:
     void RemoveWidget(Widget *theWidget) {
         reinterpret_cast<void (*)(__WidgetContainer *, Widget *)>(Sexy_WidgetContainer_RemoveWidgetAddr)(this, theWidget);
     }
+    void BringToBack(Widget *theWidget) {
+        reinterpret_cast<void (*)(__WidgetContainer *, Widget *)>(Sexy_WidgetContainer_BringToBackAddr)(this, theWidget);
+    }
 
 protected:
     __WidgetContainer() = default;

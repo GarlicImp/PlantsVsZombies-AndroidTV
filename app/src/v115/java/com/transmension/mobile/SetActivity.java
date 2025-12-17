@@ -965,15 +965,15 @@ public class SetActivity extends Activity {
             return true;
         });
 
-        final CheckBox moreZombieSeeds = new CheckBox(this);
-        moreZombieSeeds.setText(R.string.addon_ingame_moreZombieSeeds);
-        moreZombieSeeds.setChecked(sharedPreferences.getBoolean("gMoreZombieSeeds", false));
-        moreZombieSeeds.setOnCheckedChangeListener((compoundButton, bool) -> sharedPreferences.edit().putBoolean("gMoreZombieSeeds", bool).apply());
-        moreZombieSeeds.setLayoutParams(matchWrapParams);
-        moreZombieSeeds.setOnLongClickListener(v -> {
+        final CheckBox moreSeedType = new CheckBox(this);
+        moreSeedType.setText(R.string.addon_ingame_moreSeedType);
+        moreSeedType.setChecked(sharedPreferences.getBoolean("gMoreSeedType", false));
+        moreSeedType.setOnCheckedChangeListener((compoundButton, bool) -> sharedPreferences.edit().putBoolean("gMoreSeedType", bool).apply());
+        moreSeedType.setLayoutParams(matchWrapParams);
+        moreSeedType.setOnLongClickListener(v -> {
             new AlertDialog.Builder(SetActivity.this)
-                    .setTitle(R.string.addon_ingame_moreZombieSeeds)
-                    .setMessage(R.string.addon_ingame_moreZombieSeeds_info)
+                    .setTitle(R.string.addon_ingame_moreSeedType)
+                    .setMessage(R.string.addon_ingame_moreSeedType_info)
                     .setPositiveButton("OK", null)
                     .create().show();
             return true;
@@ -1005,7 +1005,7 @@ public class SetActivity extends Activity {
         container.addView(useXboxMusics);
         container.addView(useOpenSL);
         container.addView(jumpLogo);
-        container.addView(moreZombieSeeds);
+        container.addView(moreSeedType);
         container.addView(VSBalanceAdjustment);
         try {
             Class.forName("com.android.support.CkHomuraMenu");

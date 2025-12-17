@@ -28,9 +28,11 @@ class SeedChooserPage {
 public:
     enum {
         NUM_SEED_CHOOSER_PAGE = 1,
-        SeedChooserPage_NextPage = 107,
+        SeedChooserPage_NextPlantPage = 107,
+        SeedChooserPage_NextZombiePage = 108,
     };
 
+    bool mIsZombie = false;
     int mPage = 0;
     GameButton *mNextPageButton = nullptr;
 
@@ -47,7 +49,8 @@ private:
     };
 };
 
-inline SeedChooserPage *gSeedChooserPage;
+inline SeedChooserPage *gPlantChooserPage;
+inline SeedChooserPage *gZombieChooserPage;
 
 
 #endif // PVZ_LAWN_WIDGET_SEED_CHOOSER_PAGE_H

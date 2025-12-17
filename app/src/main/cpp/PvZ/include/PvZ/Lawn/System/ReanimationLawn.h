@@ -71,6 +71,7 @@ public:
     Sexy::MemoryImage *MakeBlankMemoryImage(int theWidth, int theHeight);
 };
 
+inline Sexy::MemoryImage *gNewPlantImages[NUM_NEW_SEED_TYPES - SEED_IMP_PEAR];
 inline Sexy::MemoryImage *gNewZombieImages[NUM_NEW_ZOMBIE_TYPES - NUM_CACHED_ZOMBIE_TYPES];
 
 

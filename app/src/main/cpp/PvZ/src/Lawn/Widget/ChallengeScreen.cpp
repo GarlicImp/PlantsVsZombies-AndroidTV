@@ -51,7 +51,7 @@ void ChallengeScreen::_constructor(LawnApp *theApp, ChallengePage thePage) {
     //
     // for (int aChallengeMode = 0; aChallengeMode < NUM_CHALLENGE_MODES; aChallengeMode++) {
     // ChallengeDefinition& aDef = GetChallengeDefinition(aChallengeMode);
-    // if (aDef.mPage == thePage)
+    // if (aDef.mPage1 == thePage)
     // mUnlockChallengeIndex = aChallengeMode;
     // }
     // }

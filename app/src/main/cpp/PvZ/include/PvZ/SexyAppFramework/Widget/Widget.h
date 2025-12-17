@@ -72,6 +72,9 @@ public:
     void DeferOverlay(int thePriority = 0) {
         reinterpret_cast<void (*)(__Widget *, int)>(Sexy_Widget_DeferOverlayAddr)(this, thePriority);
     }
+    void Update() {
+        reinterpret_cast<void (*)(__Widget *)>(Sexy_Widget_UpdateAddr)(this);
+    }
 
     void MarkDirty();
     void AddWidget(__Widget *theWidget);

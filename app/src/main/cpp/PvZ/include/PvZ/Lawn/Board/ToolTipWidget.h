@@ -49,6 +49,9 @@ public:
     void Draw(Sexy::Graphics *g) {
         reinterpret_cast<void (*)(ToolTipWidget *, Sexy::Graphics *)>(ToolTipWidget_DrawAddr)(this, g);
     }
+    void Update() {
+        reinterpret_cast<void (*)(ToolTipWidget *)>(ToolTipWidget_UpdateAddr)(this);
+    }
 };
 
 #endif // PVZ_LAWN_BOARD_TOOL_TIP_WIDGET_H
