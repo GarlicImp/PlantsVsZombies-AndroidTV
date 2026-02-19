@@ -32,6 +32,8 @@ namespace Sexy {
 
 class Widget;
 
+typedef std::vector<Color> ColorVector;
+
 class __Widget : public __WidgetContainer {
 public:
     bool mVisible;                 // 116
@@ -41,11 +43,11 @@ public:
     bool mIsDown;                  // 120
     bool mIsOver;                  // 121
     bool mHasTransparencies;       // 122
-    int mColorsUnk[2];             // 32 ~ 33
+    ColorVector mColors;           // 31 ~ 33
     Insets mMouseInsets;           // 34 ~ 37
     bool mDoFinger;                // 152
     bool mWantsFocus;              // 153
-    int unk1[11];                  // 38 ~ 48
+    int unk1[10];                  // 38 ~ 48
     __Widget *mFocusLinks[4];      // 49 ~ 52 ，上下左右
     int unk2[2];                   // 53 ~ 54
     __Widget *mFocusedChildWidget; // 55
