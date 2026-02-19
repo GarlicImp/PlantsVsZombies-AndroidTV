@@ -109,7 +109,8 @@ public:
     GameButton *mStoreButton;                // 959
     GameButton *mStartButton;                // 960
     GameButton *mAlmanacButton;              // 961
-    int unkMems3[4];                         // 962 ~ 965
+    std::vector<GameButton*> mButtons;       // 962 ~ 964
+    int unkMems3;                            // 965
     // 大小966个整数
     int mNewMemberOHHHHHHHHHHHHHHHHH;
 

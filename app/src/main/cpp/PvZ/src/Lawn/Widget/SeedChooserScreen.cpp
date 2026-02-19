@@ -1054,7 +1054,7 @@ void SeedChooserScreen::Draw(Graphics *g) {
         int aCursorPositionY = (aGamepadIndex == 1) ? mCursorPositionY2 : mCursorPositionY1;
         for (int i = 0; i != 2; ++i) {
             int v50 = *(int *)(mBoard->unknownMembers3[i + 7] + 152);
-            if (v50 != -1 && !unkMems3[3]) {
+            if (v50 != -1 && !unkMems3) {
                 if (v50 == mPlayerIndex || !mApp->IsVSMode()) {
                     Image *aSeedSelectorImage = (v50 == mApp->mTwoPlayerState) ? *Sexy::IMAGE_SEED_SELECTOR_BLUE : *Sexy::IMAGE_SEED_SELECTOR;
                     g->DrawImage(aSeedSelectorImage, aCursorPositionX - 8, aCursorPositionY - 4, 64, 85);
