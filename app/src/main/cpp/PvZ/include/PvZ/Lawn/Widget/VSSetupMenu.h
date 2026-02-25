@@ -22,6 +22,7 @@
 
 #include "PvZ/Lawn/GamepadControls.h"
 #include "PvZ/SexyAppFramework/Widget/ButtonListener.h"
+#include "PvZ/SexyAppFramework/Widget/MenuWidget.h"
 #include "PvZ/SexyAppFramework/Widget/Widget.h"
 #include "PvZ/Symbols.h"
 #include "WaitForSecondPlayerDialog.h"
@@ -110,7 +111,7 @@ inline Sexy::ButtonWidget *gVSSelectBgPoolNightButton;
 inline Sexy::ButtonWidget *gVSSelectBgRoofButton;
 inline Sexy::ButtonWidget *gVSSelectBgRoofNightButton;
 
-class VSSetupMenu : public Sexy::__Widget {
+class VSSetupMenu : public Sexy::MenuWidget {
 public:
     enum {
         VSSetupMenu_Quick_Play = 9,     // 快速游戏
@@ -118,8 +119,6 @@ public:
         VSSetupMenu_Random_Battle = 11, // 随机战场
     };
 
-    Sexy::ButtonListener mButtonListener; // 64
-    int unkInt[5];                        // 65 ~ 69
     int mInt70;                           // 70
     int mInt71;                           // 71
     int mInt72;                           // 72
@@ -127,11 +126,11 @@ public:
     VSSetupState mState;                  // 74 0:WaitForSecondPlayerDialog,1:未分配手柄阵营,2:已分配手柄阵营,3:自定义战场选卡中
     int mController1Index;                // 75 // 0:手柄1, 1:手柄2
     int mController2Index;                // 76 // 0:手柄1, 1:手柄2
-    int mController1Position;             // 77  // -1 0 1， 分别位于中 左 右
-    int mController2Position;             // 78  // -1 0 1， 分别位于中 左 右
+    int mSide1;                           // 77  // -1 0 1， 分别位于中 左 右
+    int mSide2;                           // 78  // -1 0 1， 分别位于中 左 右
     int unkInt79;                         // 79
-    int mNextFirstPick;                   // 80
-    int mInt81;                           // 81
+    int mSeedPickTurn;                    // 80
+    int mChooserAnimateUpdateCnt;         // 81
     VSSetupMode mSetupMode;               // 82
     int unkInt83[85];                     // 83 ~ 167
     int mInt168;                          // 168

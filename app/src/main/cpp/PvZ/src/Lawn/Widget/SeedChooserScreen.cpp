@@ -372,7 +372,7 @@ void SeedChooserScreen::ClickedSeedInChooser(ChosenSeed &theChosenSeed, int theP
     } else {
         if (mApp->IsVSMode()) {
             VSSetupMenu *aVSSetupScreen = mApp->mVSSetupScreen;
-            aActualPlayerIndex = (thePlayerIndex == 1) ? aVSSetupScreen->mController2Position : aVSSetupScreen->mController1Position;
+            aActualPlayerIndex = (thePlayerIndex == 1) ? aVSSetupScreen->mSide2 : aVSSetupScreen->mSide1;
             theChosenSeed.mChosenPlayerIndex = aActualPlayerIndex;
         } else {
             aActualPlayerIndex = thePlayerIndex;

@@ -143,14 +143,14 @@ void VSSetupMenu::DrawOverlay(Graphics *g) {
         g->SetColorizeImages(true);
         g->SetColor(theColor);
 
-        if (!tcp_connected && mController1Position == -1) {
+        if (!tcp_connected && mSide1 == -1) {
             Sexy::Widget *theController1Widget = FindWidget(7);
             g->DrawImage(*Sexy_IMAGE_ZEN_NEXTGARDEN_Addr, theController1Widget->mX + 160, theController1Widget->mY + 40);
             g->DrawImageMirror(*Sexy_IMAGE_ZEN_NEXTGARDEN_Addr, theController1Widget->mX - 50, theController1Widget->mY + 40, true);
         }
 
 
-        if (tcpClientSocket < 0 && mController2Position == -1) {
+        if (tcpClientSocket < 0 && mSide2 == -1) {
             Sexy::Widget *theController2Widget = FindWidget(8);
             g->DrawImage(*Sexy_IMAGE_ZEN_NEXTGARDEN_Addr, theController2Widget->mX + 160, theController2Widget->mY + 40);
             g->DrawImageMirror(*Sexy_IMAGE_ZEN_NEXTGARDEN_Addr, theController2Widget->mX - 50, theController2Widget->mY + 40, true);
@@ -325,12 +325,12 @@ void VSSetupMenu::MouseUp(int x, int y, int theCount) {
             return;
         Sexy::Widget *theController1Widget = FindWidget(7);
         int newController1Position = theController1Widget->mX > 400 ? 1 : theController1Widget->mX > 250 ? -1 : 0;
-        if (newController1Position == mController1Position) {
+        if (newController1Position == mSide1) {
             GameButtonDown(GamepadButton::BUTTONCODE_A, 0, 0);
         }
-        mController1Position = newController1Position;
+        mSide1 = newController1Position;
         if (tcpClientSocket >= 0) {
-            U8_Event event = {{EventType::EVENT_VSSETUPMENU_SET_CONTROLLER}, mController1Position == -1 ? uint8_t(2) : uint8_t(mController1Position)};
+            U8_Event event = {{EventType::EVENT_VSSETUPMENU_SET_CONTROLLER}, mSide1 == -1 ? uint8_t(2) : uint8_t(mSide1)};
             sendWithSize(tcpClientSocket, &event, sizeof(U8_Event), 0);
         }
         is1PControllerMoving = false;
@@ -340,18 +340,18 @@ void VSSetupMenu::MouseUp(int x, int y, int theCount) {
         Sexy::Widget *theController2Widget = FindWidget(8);
         int newController2Position = theController2Widget->mX > 400 ? 1 : theController2Widget->mX > 250 ? -1 : 0;
 
-        if (newController2Position == mController2Position) {
+        if (newController2Position == mSide2) {
             GameButtonDown(GamepadButton::BUTTONCODE_A, 1, 0);
         }
-        mController2Position = newController2Position;
+        mSide2 = newController2Position;
         if (tcpServerSocket >= 0) {
-            U8_Event event = {{EventType::EVENT_VSSETUPMENU_SET_CONTROLLER}, mController2Position == -1 ? uint8_t(2) : uint8_t(mController2Position)};
+            U8_Event event = {{EventType::EVENT_VSSETUPMENU_SET_CONTROLLER}, mSide2 == -1 ? uint8_t(2) : uint8_t(mSide2)};
             sendWithSize(tcpServerSocket, &event, sizeof(U8_Event), 0);
         }
         is2PControllerMoving = false;
     }
     touchingOnWhichController = 0;
-    if (mController1Position != -1 && mController2Position != -1 && mController1Position != mController2Position) {
+    if (mSide1 != -1 && mSide2 != -1 && mSide1 != mSide2) {
         GameButtonDown(GamepadButton::BUTTONCODE_A, 0, 0);
         GameButtonDown(GamepadButton::BUTTONCODE_A, 1, 0);
     }
@@ -382,8 +382,8 @@ void VSSetupMenu::Update() {
     if (mState == VS_SETUP_STATE_SIDES && !tcp_connected && tcpClientSocket == -1 && !isKeyboardTwoPlayerMode) {
         // 本地游戏
         // 自动分配阵营
-        //        mController1Position = 0;
-        //        mController2Position = 1;
+        //        mSide1 = 0;
+        //        mSide2 = 1;
         //        GameButtonDown(GamepadButton::BUTTONCODE_A, 0, 0);
         //        GameButtonDown(GamepadButton::BUTTONCODE_A, 1, 0);
         return;
@@ -590,12 +590,12 @@ void VSSetupMenu::processClientEvent(void *buf, ssize_t bufSize) {
         case EVENT_VSSETUPMENU_SET_CONTROLLER: {
             U8_Event *event1 = (U8_Event *)event;
             int realData = event1->data == 2 ? -1 : event1->data;
-            if (mController2Position == realData) {
+            if (mSide2 == realData) {
                 GameButtonDown(GamepadButton::BUTTONCODE_A, 1, 0);
             }
-            mController2Position = realData;
+            mSide2 = realData;
             is2PControllerMoving = false;
-            if (mController1Position != -1 && mController2Position != -1 && mController1Position != mController2Position) {
+            if (mSide1 != -1 && mSide2 != -1 && mSide1 != mSide2) {
                 GameButtonDown(GamepadButton::BUTTONCODE_A, 0, 0);
                 GameButtonDown(GamepadButton::BUTTONCODE_A, 1, 0);
             }
@@ -681,12 +681,12 @@ void VSSetupMenu::processServerEvent(void *buf, ssize_t bufSize) {
         case EVENT_VSSETUPMENU_SET_CONTROLLER: {
             U8_Event *event1 = (U8_Event *)event;
             int realData = event1->data == 2 ? -1 : event1->data;
-            if (mController1Position == realData) {
+            if (mSide1 == realData) {
                 GameButtonDown(GamepadButton::BUTTONCODE_A, 0, 0);
             }
-            mController1Position = realData;
+            mSide1 = realData;
             is1PControllerMoving = false;
-            if (mController1Position != -1 && mController2Position != -1 && mController1Position != mController2Position) {
+            if (mSide1 != -1 && mSide2 != -1 && mSide1 != mSide2) {
                 GameButtonDown(GamepadButton::BUTTONCODE_A, 0, 0);
                 GameButtonDown(GamepadButton::BUTTONCODE_A, 1, 0);
             }
@@ -744,7 +744,7 @@ void VSSetupMenu::OnStateEnter(VSSetupState theState) {
         }
         return;
     } else if (theState == VSSetupState::VS_SETUP_STATE_SELECT_BATTLE) {
-        gGamepad1ToPlayerIndex = mController1Position;
+        gGamepad1ToPlayerIndex = mSide1;
     } else if (tcpClientSocket >= 0) {
         U8_Event event = {{EventType::EVENT_VSSETUPMENU_ENTER_STATE}, uint8_t(theState)};
         sendWithSize(tcpClientSocket, &event, sizeof(U8_Event), 0);
@@ -753,7 +753,7 @@ void VSSetupMenu::OnStateEnter(VSSetupState theState) {
     old_VSSetupMenu_OnStateEnter(this, theState);
 
     //    if (mState == VS_SETUP_STATE_CUSTOM_BATTLE) {
-    //    mNextFirstPick = msNextFirstPick; // 0:植物先选,1:僵尸先选
+    //    mSeedPickTurn = msNextFirstPick; // 0:植物先选,1:僵尸先选
     //    }
 }
 
@@ -766,15 +766,15 @@ void VSSetupMenu::ButtonDepress(int theId) {
         // 自动分配阵营
         // GameButtonDown(GamepadButton::BUTTONCODE_LEFT, 0, 0);
         // GameButtonDown(GamepadButton::BUTTONCODE_RIGHT, 1, 0);
-        if (mController1Position != -1 && mController2Position != -1 && mController1Position != mController2Position) {
+        if (mSide1 != -1 && mSide2 != -1 && mSide1 != mSide2) {
             GameButtonDown(GamepadButton::BUTTONCODE_A, 0, 0);
             GameButtonDown(GamepadButton::BUTTONCODE_A, 1, 0);
         }
         //        else {
         //            return;
         // // 自动分配阵营
-        // mController1Position = 0;
-        // mController2Position = 1;
+        // mSide1 = 0;
+        // mSide2 = 1;
         // GameButtonDown(GamepadButton::BUTTONCODE_A, 0, 0);
         // GameButtonDown(GamepadButton::BUTTONCODE_A, 1, 0);
         //        }
