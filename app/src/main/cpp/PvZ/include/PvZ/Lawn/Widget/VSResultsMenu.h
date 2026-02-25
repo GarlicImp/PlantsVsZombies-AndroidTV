@@ -34,9 +34,14 @@ public:
         VSResultsMenu_Quit_VS = 1,
     };
 
-    int unk[5];           // 70 ~ 74
-    int mResultsButtonId; // 75
-    int unk2[9];          // 76 ~ 84
+    int unk[5];                             // 70 ~ 74
+    int mResultsButtonId;                   // 75
+    int unk2[2];                            // 76 ~ 77
+    int mSides[2];                          // 78 ~ 79
+    int unk3[2];                            // 80 ~ 81
+    ParticleSystemID mSparkleParticleID;    // 82
+    ParticleSystemID mSmokeParticleID;      // 83
+    int unk4;                               // 84
 
 
     void Update();
