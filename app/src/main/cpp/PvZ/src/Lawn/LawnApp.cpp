@@ -110,81 +110,81 @@ void LawnApp::LoadAddonImages() {
 
     constexpr unsigned int addonImagesNum = (sizeof(AddonImages) / sizeof(Sexy::Image *));
 
-//    /*   贴图           路径          行数           列数    */
-//    constexpr std::array<std::tuple<Sexy::Image **, const char *, unsigned int, unsigned int>, addonImagesNum> initList = {
-//        {{&addonImages.pole_night, "addonFiles/images/pole_night", 1, 1},
-//         {&addonImages.trees_night, "addonFiles/images/trees_night", 1, 1},
-//         {&addonImages.googlyeye, "addonFiles/images/googlyeye", 1, 1},
-//         {&addonImages.squirrel, "addonFiles/images/squirrel", 1, 1},
-//         {&addonImages.stripe_day_coop, "addonFiles/images/stripe_day_coop", 1, 1},
-//         {&addonImages.stripe_pool_coop, "addonFiles/images/stripe_pool_coop", 1, 1},
-//         {&addonImages.stripe_roof_left, "addonFiles/images/stripe_roof_left", 1, 1},
-//         {&addonImages.butter_glove, "addonFiles/images/butter_glove", 1, 1},
-//         {&addonImages.custom_cobcannon, "addonFiles/images/custom_cobcannon", 1, 1},
-//         {&addonImages.hood1_house, "addonFiles/images/hood1_house", 1, 1},
-//         {&addonImages.hood2_house, "addonFiles/images/hood2_house", 1, 1},
-//         {&addonImages.hood3_house, "addonFiles/images/hood3_house", 1, 1},
-//         {&addonImages.hood4_house, "addonFiles/images/hood4_house", 1, 1},
-//         {&addonImages.house_hill_house, "addonFiles/images/house_hill_house", 1, 1},
-//         {&addonImages.achievement_homeLawnsecurity, "addonFiles/images/achievement_homeLawnsecurity", 1, 1},
-//         {&addonImages.achievement_chomp, "addonFiles/images/achievement_chomp", 1, 1},
-//         {&addonImages.achievement_closeshave, "addonFiles/images/achievement_closeshave", 1, 1},
-//         {&addonImages.achievement_coop, "addonFiles/images/achievement_coop", 1, 1},
-//         {&addonImages.achievement_explodonator, "addonFiles/images/achievement_explodonator", 1, 1},
-//         {&addonImages.achievement_garg, "addonFiles/images/achievement_garg", 1, 1},
-//         {&addonImages.achievement_immortal, "addonFiles/images/achievement_immortal", 1, 1},
-//         {&addonImages.achievement_shop, "addonFiles/images/achievement_shop", 1, 1},
-//         {&addonImages.achievement_soilplants, "addonFiles/images/achievement_soilplants", 1, 1},
-//         {&addonImages.achievement_tree, "addonFiles/images/achievement_tree", 1, 1},
-//         {&addonImages.achievement_versusz, "addonFiles/images/achievement_versusz", 1, 1},
-//         {&addonImages.achievement_morticulturalist, "addonFiles/images/achievement_morticulturalist", 1, 1},
-//         {&addonImages.hole, "addonFiles/images/hole", 1, 1},
-//         {&addonImages.hole_bjorn, "addonFiles/images/hole_bjorn", 1, 1},
-//         {&addonImages.hole_china, "addonFiles/images/hole_china", 1, 1},
-//         {&addonImages.hole_gems, "addonFiles/images/hole_gems", 1, 1},
-//         {&addonImages.hole_chuzzle, "addonFiles/images/hole_chuzzle", 1, 1},
-//         {&addonImages.hole_heavyrocks, "addonFiles/images/hole_heavyrocks", 1, 1},
-//         {&addonImages.hole_duwei, "addonFiles/images/hole_duwei", 1, 1},
-//         {&addonImages.hole_pipe, "addonFiles/images/hole_pipe", 1, 1},
-//         {&addonImages.hole_tiki, "addonFiles/images/hole_tiki", 1, 1},
-//         {&addonImages.hole_worm, "addonFiles/images/hole_worm", 1, 1},
-//         {&addonImages.hole_top, "addonFiles/images/hole_top", 1, 1},
-//         {&addonImages.plant_can, "addonFiles/images/plant_can", 1, 1},
-//         {&addonImages.zombie_can, "addonFiles/images/zombie_can", 1, 1},
-//         {&addonImages.plant_pile01_stack01, "addonFiles/images/plant_pile01_stack01", 1, 1},
-//         {&addonImages.plant_pile01_stack02, "addonFiles/images/plant_pile01_stack02", 1, 1},
-//         {&addonImages.plant_pile02_stack01, "addonFiles/images/plant_pile02_stack01", 1, 1},
-//         {&addonImages.plant_pile02_stack02, "addonFiles/images/plant_pile02_stack02", 1, 1},
-//         {&addonImages.plant_pile03_stack01, "addonFiles/images/plant_pile03_stack01", 1, 1},
-//         {&addonImages.plant_pile03_stack02, "addonFiles/images/plant_pile03_stack02", 1, 1},
-//         {&addonImages.zombie_pile01_stack01, "addonFiles/images/zombie_pile01_stack01", 1, 1},
-//         {&addonImages.zombie_pile01_stack02, "addonFiles/images/zombie_pile01_stack02", 1, 1},
-//         {&addonImages.zombie_pile01_stack03, "addonFiles/images/zombie_pile01_stack03", 1, 1},
-//         {&addonImages.zombie_pile02_stack01, "addonFiles/images/zombie_pile02_stack01", 1, 1},
-//         {&addonImages.zombie_pile02_stack02, "addonFiles/images/zombie_pile02_stack02", 1, 1},
-//         {&addonImages.zombie_pile02_stack03, "addonFiles/images/zombie_pile02_stack03", 1, 1},
-//         {&addonImages.zombie_pile03_stack01, "addonFiles/images/zombie_pile03_stack01", 1, 1},
-//         {&addonImages.zombie_pile03_stack02, "addonFiles/images/zombie_pile03_stack02", 1, 1},
-//         {&addonImages.zombie_pile03_stack03, "addonFiles/images/zombie_pile03_stack03", 1, 1},
-//         {&addonImages.survival_button, "addonFiles/images/survival_button", 1, 1},
-//         {&addonImages.leaderboards, "addonFiles/images/leaderboards", 1, 1},
-//         {&addonImages.SelectorScreen_WoodSign3, "addonFiles/images/ZombatarWidget/SelectorScreen_WoodSign3", 1, 1},
-//         {&addonImages.SelectorScreen_WoodSign3_press, "addonFiles/images/ZombatarWidget/SelectorScreen_WoodSign3_press", 1, 1},
-//         {&addonImages.zombatar_portrait, "ZOMBATAR", 1, 1},
-//         {&addonImages.crater_night_roof_center, "addonFiles/images/crater_night_roof_center", 1, 2},
-//         {&addonImages.crater_night_roof_left, "addonFiles/images/crater_night_roof_left", 1, 2},
-//         {&addonImages.leaderboard_selector, "images/leaderboard_selector", 1, 1}}};
-//
-//    static_assert(initList.size() == addonImagesNum, "Init config count doesn't match expected count!");
-//
-//    for (const auto &[imagePtr, filePath, rows, cols] : initList) {
-//        *imagePtr = GetImageByFileName(filePath);
-//        if (*imagePtr != nullptr && (rows > 1 || cols > 1)) {
-//            // 如果图片包含多行或多列，则设置其mNumRows和mNumCols属性
-//            (*imagePtr)->mNumRows = rows;
-//            (*imagePtr)->mNumCols = cols;
-//        }
-//    }
+    //    /*   贴图           路径          行数           列数    */
+    //    constexpr std::array<std::tuple<Sexy::Image **, const char *, unsigned int, unsigned int>, addonImagesNum> initList = {
+    //        {{&addonImages.pole_night, "addonFiles/images/pole_night", 1, 1},
+    //         {&addonImages.trees_night, "addonFiles/images/trees_night", 1, 1},
+    //         {&addonImages.googlyeye, "addonFiles/images/googlyeye", 1, 1},
+    //         {&addonImages.squirrel, "addonFiles/images/squirrel", 1, 1},
+    //         {&addonImages.stripe_day_coop, "addonFiles/images/stripe_day_coop", 1, 1},
+    //         {&addonImages.stripe_pool_coop, "addonFiles/images/stripe_pool_coop", 1, 1},
+    //         {&addonImages.stripe_roof_left, "addonFiles/images/stripe_roof_left", 1, 1},
+    //         {&addonImages.butter_glove, "addonFiles/images/butter_glove", 1, 1},
+    //         {&addonImages.custom_cobcannon, "addonFiles/images/custom_cobcannon", 1, 1},
+    //         {&addonImages.hood1_house, "addonFiles/images/hood1_house", 1, 1},
+    //         {&addonImages.hood2_house, "addonFiles/images/hood2_house", 1, 1},
+    //         {&addonImages.hood3_house, "addonFiles/images/hood3_house", 1, 1},
+    //         {&addonImages.hood4_house, "addonFiles/images/hood4_house", 1, 1},
+    //         {&addonImages.house_hill_house, "addonFiles/images/house_hill_house", 1, 1},
+    //         {&addonImages.achievement_homeLawnsecurity, "addonFiles/images/achievement_homeLawnsecurity", 1, 1},
+    //         {&addonImages.achievement_chomp, "addonFiles/images/achievement_chomp", 1, 1},
+    //         {&addonImages.achievement_closeshave, "addonFiles/images/achievement_closeshave", 1, 1},
+    //         {&addonImages.achievement_coop, "addonFiles/images/achievement_coop", 1, 1},
+    //         {&addonImages.achievement_explodonator, "addonFiles/images/achievement_explodonator", 1, 1},
+    //         {&addonImages.achievement_garg, "addonFiles/images/achievement_garg", 1, 1},
+    //         {&addonImages.achievement_immortal, "addonFiles/images/achievement_immortal", 1, 1},
+    //         {&addonImages.achievement_shop, "addonFiles/images/achievement_shop", 1, 1},
+    //         {&addonImages.achievement_soilplants, "addonFiles/images/achievement_soilplants", 1, 1},
+    //         {&addonImages.achievement_tree, "addonFiles/images/achievement_tree", 1, 1},
+    //         {&addonImages.achievement_versusz, "addonFiles/images/achievement_versusz", 1, 1},
+    //         {&addonImages.achievement_morticulturalist, "addonFiles/images/achievement_morticulturalist", 1, 1},
+    //         {&addonImages.hole, "addonFiles/images/hole", 1, 1},
+    //         {&addonImages.hole_bjorn, "addonFiles/images/hole_bjorn", 1, 1},
+    //         {&addonImages.hole_china, "addonFiles/images/hole_china", 1, 1},
+    //         {&addonImages.hole_gems, "addonFiles/images/hole_gems", 1, 1},
+    //         {&addonImages.hole_chuzzle, "addonFiles/images/hole_chuzzle", 1, 1},
+    //         {&addonImages.hole_heavyrocks, "addonFiles/images/hole_heavyrocks", 1, 1},
+    //         {&addonImages.hole_duwei, "addonFiles/images/hole_duwei", 1, 1},
+    //         {&addonImages.hole_pipe, "addonFiles/images/hole_pipe", 1, 1},
+    //         {&addonImages.hole_tiki, "addonFiles/images/hole_tiki", 1, 1},
+    //         {&addonImages.hole_worm, "addonFiles/images/hole_worm", 1, 1},
+    //         {&addonImages.hole_top, "addonFiles/images/hole_top", 1, 1},
+    //         {&addonImages.plant_can, "addonFiles/images/plant_can", 1, 1},
+    //         {&addonImages.zombie_can, "addonFiles/images/zombie_can", 1, 1},
+    //         {&addonImages.plant_pile01_stack01, "addonFiles/images/plant_pile01_stack01", 1, 1},
+    //         {&addonImages.plant_pile01_stack02, "addonFiles/images/plant_pile01_stack02", 1, 1},
+    //         {&addonImages.plant_pile02_stack01, "addonFiles/images/plant_pile02_stack01", 1, 1},
+    //         {&addonImages.plant_pile02_stack02, "addonFiles/images/plant_pile02_stack02", 1, 1},
+    //         {&addonImages.plant_pile03_stack01, "addonFiles/images/plant_pile03_stack01", 1, 1},
+    //         {&addonImages.plant_pile03_stack02, "addonFiles/images/plant_pile03_stack02", 1, 1},
+    //         {&addonImages.zombie_pile01_stack01, "addonFiles/images/zombie_pile01_stack01", 1, 1},
+    //         {&addonImages.zombie_pile01_stack02, "addonFiles/images/zombie_pile01_stack02", 1, 1},
+    //         {&addonImages.zombie_pile01_stack03, "addonFiles/images/zombie_pile01_stack03", 1, 1},
+    //         {&addonImages.zombie_pile02_stack01, "addonFiles/images/zombie_pile02_stack01", 1, 1},
+    //         {&addonImages.zombie_pile02_stack02, "addonFiles/images/zombie_pile02_stack02", 1, 1},
+    //         {&addonImages.zombie_pile02_stack03, "addonFiles/images/zombie_pile02_stack03", 1, 1},
+    //         {&addonImages.zombie_pile03_stack01, "addonFiles/images/zombie_pile03_stack01", 1, 1},
+    //         {&addonImages.zombie_pile03_stack02, "addonFiles/images/zombie_pile03_stack02", 1, 1},
+    //         {&addonImages.zombie_pile03_stack03, "addonFiles/images/zombie_pile03_stack03", 1, 1},
+    //         {&addonImages.survival_button, "addonFiles/images/survival_button", 1, 1},
+    //         {&addonImages.leaderboards, "addonFiles/images/leaderboards", 1, 1},
+    //         {&addonImages.SelectorScreen_WoodSign3, "addonFiles/images/ZombatarWidget/SelectorScreen_WoodSign3", 1, 1},
+    //         {&addonImages.SelectorScreen_WoodSign3_press, "addonFiles/images/ZombatarWidget/SelectorScreen_WoodSign3_press", 1, 1},
+    //         {&addonImages.zombatar_portrait, "ZOMBATAR", 1, 1},
+    //         {&addonImages.crater_night_roof_center, "addonFiles/images/crater_night_roof_center", 1, 2},
+    //         {&addonImages.crater_night_roof_left, "addonFiles/images/crater_night_roof_left", 1, 2},
+    //         {&addonImages.leaderboard_selector, "images/leaderboard_selector", 1, 1}}};
+    //
+    //    static_assert(initList.size() == addonImagesNum, "Init config count doesn't match expected count!");
+    //
+    //    for (const auto &[imagePtr, filePath, rows, cols] : initList) {
+    //        *imagePtr = GetImageByFileName(filePath);
+    //        if (*imagePtr != nullptr && (rows > 1 || cols > 1)) {
+    //            // 如果图片包含多行或多列，则设置其mNumRows和mNumCols属性
+    //            (*imagePtr)->mNumRows = rows;
+    //            (*imagePtr)->mNumCols = cols;
+    //        }
+    //    }
 
     //    addonImages.IMAGE_SEEDCHOOSER_LARGE_BACKGROUND2 = GetImageByFileName("addonFiles/images/SeedChooser_Large_Background2");
     //    addonImages.IMAGE_ZOMBIEJACKSONHEAD = GetImageByFileName("addonFiles/particles/ZombieJacksonHead");

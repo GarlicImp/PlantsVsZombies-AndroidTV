@@ -666,7 +666,7 @@ static size_t SubstrateHookFunctionARM(SubstrateProcessRef process, void *symbol
 static size_t SubstrateHookFunction(SubstrateProcessRef process, void *symbol, void *replace, void **result) {
     if (MSDebug)
         MSLog(MSLogLevelNotice, "SubstrateHookFunction(%p, %p, %p, %p)\n", process, symbol, replace, result);
-    
+
     if ((reinterpret_cast<uintptr_t>(symbol) & 0x1) == 0)
         return SubstrateHookFunctionARM(process, symbol, replace, result);
     else
