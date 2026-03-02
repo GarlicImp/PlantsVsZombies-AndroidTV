@@ -36,23 +36,23 @@ typedef std::vector<Color> ColorVector;
 
 class Widget : public WidgetContainer {
 public:
-    bool mVisible;                 // 116
-    bool mMouseVisible;            // 117
-    bool mDisabled;                // 118
-    bool mHasFocus;                // 119
-    bool mIsDown;                  // 120
-    bool mIsOver;                  // 121
-    bool mHasTransparencies;       // 122
-    ColorVector mColors;           // 31 ~ 33
-    Insets mMouseInsets;           // 34 ~ 37
-    bool mDoFinger;                // 152
-    bool mWantsFocus;              // 153
-    int unk1[10];                  // 38 ~ 48
-    __Widget *mFocusLinks[4];      // 49 ~ 52 ，上下左右
-    int unk2[2];                   // 53 ~ 54
-    __Widget *mFocusedChildWidget; // 55
-    int unk3[4];                   // 56 ~ 59
-    int *mAnimatorForState[4];     // 60 ~ 63
+    bool mVisible;               // 116
+    bool mMouseVisible;          // 117
+    bool mDisabled;              // 118
+    bool mHasFocus;              // 119
+    bool mIsDown;                // 120
+    bool mIsOver;                // 121
+    bool mHasTransparencies;     // 122
+    ColorVector mColors;         // 31 ~ 33
+    Insets mMouseInsets;         // 34 ~ 37
+    bool mDoFinger;              // 152
+    bool mWantsFocus;            // 153
+    int unk1[10];                // 38 ~ 48
+    Widget *mFocusLinks[4];      // 49 ~ 52 ，上下左右
+    int unk2[2];                 // 53 ~ 54
+    Widget *mFocusedChildWidget; // 55
+    int unk3[4];                 // 56 ~ 59
+    int *mAnimatorForState[4];   // 60 ~ 63
     // 大小64个整数！
 
     void _constructor() {
