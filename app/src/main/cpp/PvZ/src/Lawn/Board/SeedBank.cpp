@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -27,7 +27,6 @@
 #include "PvZ/Lawn/LawnApp.h"
 #include "PvZ/Lawn/Widget/VSSetupMenu.h"
 #include "PvZ/MagicAddr.h"
-#include "PvZ/Misc.h"
 #include "PvZ/SexyAppFramework/Graphics/Graphics.h"
 #include "PvZ/Symbols.h"
 
@@ -114,7 +113,7 @@ void SeedBank::Draw(Sexy::Graphics *g) {
             }
             if (!mApp->IsSlotMachineLevel()) {
                 if (mApp->IsCoopMode() || mApp->mGameMode == GameMode::GAMEMODE_MP_VS) {
-                    bool rightSideSeedbank = mBoard->mSeedBankRight == this;
+                    bool rightSideSeedbank = mBoard->mSeedBank[1] == this;
                     GamepadControls *gamepadControls = rightSideSeedbank ? mBoard->mGamepadControls2 : mBoard->mGamepadControls1;
                     if (gamepadControls->mPlayerIndex2 != -1 && i == gamepadControls->mSelectedSeedIndex) {
                         if (rightSideSeedbank) {
@@ -195,7 +194,7 @@ void SeedBank::Draw(Sexy::Graphics *g) {
             theMoney = mBoard->mSunMoney1 & ~mBoard->mSunMoney1 >> 31; // mSunMoney1
         }
 
-        if (mApp->IsCoopMode() && mBoard->mSeedBankRight == this) {
+        if (mApp->IsCoopMode() && mBoard->mSeedBank[1] == this) {
             theMoney = mBoard->mSunMoney2 & ~mBoard->mSunMoney2 >> 31; // mSunMoney2
         }
         Color theColor = {0, 0, 0, 255};

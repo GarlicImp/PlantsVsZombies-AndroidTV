@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -24,13 +24,23 @@
 #include "PvZ/Symbols.h"
 
 class TypingCheck {
-protected:
+public:
     pvzstl::string mPhrase;
-    pvzstl::string mRecentTyping;
 
 public:
     void SetPhrase(const pvzstl::string &thePhrase) {
-        reinterpret_cast<void (*)(const pvzstl::string &)>(TypingCheck_SetPhraseAddr)(thePhrase);
+        reinterpret_cast<void (*)(TypingCheck *, const pvzstl::string &)>(TypingCheck_SetPhraseAddr)(this, thePhrase);
+    }
+    void AddChar(char theChar) {
+        reinterpret_cast<void (*)(TypingCheck *, char)>(TypingCheck_AddCharAddr)(this, theChar);
+    }
+
+    TypingCheck(pvzstl::string &basicString) {
+        reinterpret_cast<void (*)(TypingCheck *, pvzstl::string &)>(TypingCheck_CreateByStringAddr)(this, basicString);
+    }
+
+    TypingCheck() {
+        reinterpret_cast<void (*)(TypingCheck *)>(TypingCheck_TypingCheckAddr)(this);
     }
 };
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -24,7 +24,7 @@
 #include "PvZ/Lawn/Common/ConstEnums.h"
 #include "PvZ/SexyAppFramework/Widget/CheckboxListener.h"
 
-class SettingsDialog : public __LawnDialog {
+class SettingsDialog : public LawnDialog {
 public:
     int *mSliderListener;                     // 191
     Sexy::CheckboxListener mCheckboxListener; // 192

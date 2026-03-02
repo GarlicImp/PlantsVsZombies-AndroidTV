@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -69,13 +69,14 @@ void Projectile::ProjectileInitialize(int theX, int theY, int theRenderOrder, in
             return;
         }
         if (bulletSpinnerChosenNum != -1) {
-            theProjectileType = (ProjectileType)bulletSpinnerChosenNum;
+            theProjectileType = ProjectileType(bulletSpinnerChosenNum);
         }
         if (randomBullet) {
-            theProjectileType = (ProjectileType)randomInt(1, 12);
-        }
-        if (theProjectileType == ProjectileType::PROJECTILE_COBBIG && banCobCannon) {
-            theProjectileType = (ProjectileType)randomInt(1, 10); // 同时降低好友玉米黄油的概率!!
+            int aNumProjectile = PROJECTILE_ZOMBIE_PEA - 1 - banCobCannon;
+            theProjectileType = ProjectileType(RandRangeInt(PROJECTILE_SNOWPEA, aNumProjectile));
+            if (banCobCannon && theProjectileType == ProjectileType::PROJECTILE_COBBIG) {
+                theProjectileType = ProjectileType(theProjectileType + 1);
+            }
         }
     }
 
@@ -187,7 +188,7 @@ void Projectile::ConvertToFireball(int theGridX) {
             return;
         }
         if (randomBullet) {
-            mProjectileType = (ProjectileType)randomInt(1, 12);
+            mProjectileType = ProjectileType(RandRangeInt(PROJECTILE_SNOWPEA, PROJECTILE_ZOMBIE_PEA - 1));
             return;
         }
     }

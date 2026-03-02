@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -27,7 +27,7 @@
 
 #include <cstdlib>
 
-struct TodAllocator;
+class TodAllocator;
 
 namespace Sexy {
 class Graphics;
@@ -171,7 +171,7 @@ inline void TodScaleTransformMatrix(Sexy::SexyMatrix3 &m, float x, float y, floa
     reinterpret_cast<void *(*)(Sexy::SexyMatrix3 &, float, float, float, float)>(TodScaleTransformMatrixAddr)(m, x, y, theScaleX, theScaleY);
 }
 
-inline void TodDrawString(Sexy::Graphics *g, const pvzstl::string &theText, int thePosX, int thePosY, Sexy::Font *theFont, const Sexy::Color theColor, DrawStringJustification theJustification) {
+inline void TodDrawString(Sexy::Graphics *g, const pvzstl::string &theText, int thePosX, int thePosY, Sexy::Font *theFont, Sexy::Color theColor, DrawStringJustification theJustification) {
     reinterpret_cast<void *(*)(Sexy::Graphics *, const pvzstl::string &, int, int, Sexy::Font *, const Sexy::Color, DrawStringJustification)>(TodDrawStringAddr)(
         g, theText, thePosX, thePosY, theFont, theColor, theJustification);
 }

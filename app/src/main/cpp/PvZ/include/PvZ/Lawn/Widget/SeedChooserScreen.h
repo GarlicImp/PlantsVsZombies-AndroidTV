@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -61,7 +61,7 @@ public:
     bool mCrazyDavePicked;      // 60
 };
 
-class SeedChooserScreen : public Sexy::__Widget {
+class SeedChooserScreen : public Sexy::Widget, public Sexy::ButtonListener {
 private:
     enum {
         SeedChooserScreen_Start = 100,
@@ -74,15 +74,21 @@ private:
     };
 
 public:
-    Sexy::ButtonListener mButtonListener;    // 64
-    int unkMem1;                             // 65
+    enum SeedDir {
+        SEED_DIR_UP,
+        SEED_DIR_DOWN,
+        SEED_DIR_LEFT,
+        SEED_DIR_RIGHT,
+    };
+
+    bool mShowHelpText;                      // 65
     GameButton *mImitaterButton;             // 66
     ChosenSeed mChosenSeeds[NUM_SEED_TYPES]; // 67 ~ 930
     LawnApp *mApp;                           // 931
     Board *mBoard;                           // 932
     int mSeedChooserAge;                     // 933
     int mSeedsInFlight;                      // 934
-    int mSeedsInBothBank;                    // 935
+    int mSeedsInBank;                        // 935
     int mSeedsIn1PBank;                      // 936
     int mSeedsIn2PBank;                      // 937
     ToolTipWidget *mToolTip1;                // 938
@@ -103,7 +109,7 @@ public:
     bool mIsZombieChooser;                   // 3812
     SeedBank *mSeedBank1;                    // 954
     SeedBank *mSeedBank2;                    // 955
-    int unkCounter;                          // 956
+    int mDimCounter;                         // 956
     int mImitaterDialogOpened;               // 957
     GameButton *mViewLawnButton;             // 958
     GameButton *mStoreButton;                // 959
@@ -169,7 +175,7 @@ public:
     SeedType FindSeedInBank(int theIndexInBank, int thePlayerIndex);
     void ClickedSeedInBank(ChosenSeed *theChosenSeed, unsigned int thePlayerIndex);
     void OnKeyDown(Sexy::KeyCode theKey, unsigned int thePlayerIndex);
-    void GameButtonDown(GamepadButton theButton, unsigned int thePlayerIndex);
+    void GameButtonDown(Sexy::GamepadButton theButton, unsigned int thePlayerIndex);
     void
     DrawPacket(Sexy::Graphics *g, int x, int y, SeedType theSeedType, SeedType theImitaterType, float thePercentDark, int theGrayness, Sexy::Color *theColor, bool theDrawCost, bool theUseCurrentCost);
     void ButtonDepress(int theId);
@@ -178,8 +184,9 @@ public:
     int NumColumns();
     void ShowToolTip(unsigned int thePlayerIndex);
     static SeedType GetZombieIndexBySeedType(SeedType theSeedType);
-    int GetNextSeedInDir(int theNumSeed, int theMoveDirection);
+    int GetNextSeedInDir(int theNumSeed, SeedDir theMoveDirection);
     void Draw(Sexy::Graphics *g);
+    void DrawBanIcon(Sexy::Graphics *g);
     SeedType SeedHitTest(int x, int y);
 
     void MouseMove(int x, int y);
@@ -219,7 +226,7 @@ inline void (*old_SeedChooserScreen_CrazyDavePickSeeds)(SeedChooserScreen *a);
 
 inline void (*old_SeedChooserScreen_ClickedSeedInBank)(SeedChooserScreen *seedChooserScreen, ChosenSeed *theChosenSeed, unsigned int playerIndex);
 
-inline void (*old_SeedChooserScreen_GameButtonDown)(SeedChooserScreen *a1, GamepadButton a2, unsigned int a3);
+inline void (*old_SeedChooserScreen_GameButtonDown)(SeedChooserScreen *a1, Sexy::GamepadButton a2, unsigned int a3);
 
 inline void (*old_SeedChooserScreen_ButtonDepress)(SeedChooserScreen *seedChooserScreen, int id);
 

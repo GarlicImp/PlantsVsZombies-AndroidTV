@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -154,11 +154,12 @@ public:
     void ScaryPotterOpenPot(GridItem *theScaryPot);
     GridItem *IZombieGetBrainTarget(Zombie *theZombie);
     void IZombieSquishBrain(GridItem *theBrain);
-    int ScaryPotterCountSunInPot(GridItem *theGridItem);
+    int ScaryPotterCountSunInPot(GridItem *theScaryPot);
     SeedType GetArtChallengeSeed(int theGridX, int theGridY);
     void InitZombieWavesFromList(ZombieType *theZombieList, int theListLength);
     void IZombieSetupPlant(Plant *thePlant);
     void HeavyWeaponReanimUpdate();
+    void MouseDownWhackAZombie(int theX, int theY, int thePlayerIndex);
 
 protected:
     friend void InitHookFunction();

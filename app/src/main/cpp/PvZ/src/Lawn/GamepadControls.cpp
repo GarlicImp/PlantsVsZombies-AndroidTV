@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -30,7 +30,6 @@
 #include "PvZ/Lawn/LawnApp.h"
 #include "PvZ/Lawn/Widget/WaitForSecondPlayerDialog.h"
 #include "PvZ/MagicAddr.h"
-#include "PvZ/Misc.h"
 #include "PvZ/SexyAppFramework/Graphics/Graphics.h"
 #include "PvZ/Symbols.h"
 #include "PvZ/TodLib/Effect/Attachment.h"
@@ -337,7 +336,7 @@ void GamepadControls::UpdatePreviewReanim() {
         InvalidatePreviewReanim();
         RenderLayer aRenderLayer = mIsZombie ? RENDER_LAYER_ZOMBIE : RENDER_LAYER_PLANT;
         int aRenderOrder = Board::MakeRenderOrder(aRenderLayer, aGridY, 100);
-        float theDrawHeightOffset = PlantDrawHeightOffset(mBoard, 0, aSeedType, aGridX, aGridY);
+        float theDrawHeightOffset = PlantDrawHeightOffset(mBoard, nullptr, aSeedType, aGridX, aGridY);
         if (mIsZombie) {
             ZombieType aZombieType = Challenge::IZombieSeedTypeToZombieType(aSeedType);
             switch (aZombieType) {
@@ -642,7 +641,7 @@ void GamepadControls::DrawPreview(Sexy::Graphics *g) {
             } else {
                 for (int i = 0; i != 6; ++i) {
                     if (mBoard->CanPlantAt(mGridX, i, mSelectedSeedType) == PlantingReason::PLANTING_OK) {
-                        float offset = PlantDrawHeightOffset(mBoard, 0, mSelectedSeedType, mGridX, i);
+                        float offset = PlantDrawHeightOffset(mBoard, nullptr, mSelectedSeedType, mGridX, i);
                         g->DrawImage(mPreviewImage, 0, offset + (i - mGridY) * 85);
                     }
                 }
@@ -665,14 +664,14 @@ void GamepadControls::DrawPreview(Sexy::Graphics *g) {
     old_GamepadControls_DrawPreview(this, g);
 }
 
-void GamepadControls::OnButtonDown(GamepadButton theButton, int thePlayerIndex, unsigned int unk) {
+void GamepadControls::OnButtonDown(Sexy::GamepadButton theButton, int thePlayerIndex, unsigned int unk) {
     old_GamepadControls_OnButtonDown(this, theButton, thePlayerIndex, unk);
 
     SeedBank *aSeedBank = GetSeedBank();
     SeedPacket *aSeedPacket = &aSeedBank->mSeedPackets[mSelectedSeedIndex];
     SeedType aPacketType = aSeedPacket->mPacketType;
     int aCost = mBoard->GetCurrentPlantCost(aSeedPacket->mPacketType, SeedType::SEED_NONE);
-    if (mGameObject.mApp->mGameMode == GameMode::GAMEMODE_MP_VS && theButton == GamepadButton::BUTTONCODE_A) {
+    if (mGameObject.mApp->mGameMode == GameMode::GAMEMODE_MP_VS && theButton == Sexy::GamepadButton::GAMEPAD_BUTTON_A) {
 
         if (mIsZombie) {
             if (aPacketType == SeedType::SEED_ZOMBIE_GRAVESTONE)

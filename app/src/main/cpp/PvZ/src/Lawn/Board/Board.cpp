@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -18,7 +18,7 @@
  */
 
 #include "PvZ/Lawn/Board/Board.h"
-#include "Homura/Container.h"
+#include "Homura/ContainerUtils.h"
 #include "Homura/Formation.h"
 #include "Homura/Logger.h"
 #include "PvZ/Android/IntroVideo.h"
@@ -29,6 +29,7 @@
 #include "PvZ/Lawn/Board/CursorObject.h"
 #include "PvZ/Lawn/Board/CutScene.h"
 #include "PvZ/Lawn/Board/GridItem.h"
+#include "PvZ/Lawn/Board/MessageWidget.h"
 #include "PvZ/Lawn/Board/Plant.h"
 #include "PvZ/Lawn/Board/Projectile.h"
 #include "PvZ/Lawn/Board/SeedBank.h"
@@ -77,7 +78,7 @@ void Board::_constructor(LawnApp *theApp) {
 
     pvzstl::string str =
         TodStringTranslate((theApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN || theApp->mGameMode == GameMode::GAMEMODE_TREE_OF_WISDOM) ? "[MAIN_MENU_BUTTON]" : "[MENU_BUTTON]");
-    gBoardMenuButton = MakeButton(1000, &mButtonListener, this, str);
+    gBoardMenuButton = MakeButton(1000, this, this, str);
     gBoardMenuButton->Resize(705, -3, 120, 80);
     gBoardMenuButton->mBtnNoDraw = true;
     gBoardMenuButton->mDisabled = true;
@@ -89,13 +90,13 @@ void Board::_constructor(LawnApp *theApp) {
 
     if (theApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_LAST_STAND) {
         pvzstl::string str1 = TodStringTranslate("[START_ONSLAUGHT]");
-        gBoardStoreButton = MakeButton(1001, &mButtonListener, this, str1);
+        gBoardStoreButton = MakeButton(1001, this, this, str1);
         gBoardStoreButton->Resize(0, 0, 0, 0);
         gBoardStoreButton->mBtnNoDraw = true;
         gBoardStoreButton->mDisabled = true;
     } else {
         pvzstl::string str1 = TodStringTranslate("[SHOP_BUTTON]");
-        gBoardStoreButton = MakeButton(1001, &mButtonListener, this, str1);
+        gBoardStoreButton = MakeButton(1001, this, this, str1);
         if (theApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN || theApp->mGameMode == GameMode::GAMEMODE_TREE_OF_WISDOM) {
             gBoardStoreButton->Resize(0, 550, 170, 120);
         } else {
@@ -133,29 +134,29 @@ void Board::SetGrids() {
     }
 }
 
-int LawnSaveGame(Board *board, int *a2) {
+bool LawnSaveGame(Board *theBoard, const pvzstl::string &theFilePath) {
 
     // 结盟模式存档，将SeedBank2的4个种子放到SeedBank1里面。因为原版存档逻辑难以改动，只好出此下策，凑合着存吧。
-    if (board->mApp->IsCoopMode()) {
-        if (board->mApp->mGameMode == GameMode::GAMEMODE_TWO_PLAYER_COOP_BOWLING || board->mApp->mGameMode == GameMode::GAMEMODE_TWO_PLAYER_COOP_BOSS) {
-            int theSeedNum = 6;
-            SeedBank *seedBank1 = board->mSeedBankLeft;
-            SeedBank *seedBank2 = board->mSeedBankRight;
+    if (theBoard->mApp->IsCoopMode()) {
+        if (theBoard->mApp->mGameMode == GameMode::GAMEMODE_TWO_PLAYER_COOP_BOWLING || theBoard->mApp->mGameMode == GameMode::GAMEMODE_TWO_PLAYER_COOP_BOSS) {
+            int aNumSeeds = 6;
+            SeedBank *seedBank1 = theBoard->mSeedBank[0];
+            SeedBank *seedBank2 = theBoard->mSeedBank[1];
             seedBank1->mX = seedBank2->mX;
-            for (int i = 0; i < theSeedNum; ++i) {
+            for (int i = 0; i < aNumSeeds; ++i) {
                 seedBank1->mSeedPackets[i].mSlotMachiningNextSeed = (SeedType)seedBank2->mSeedPackets[i].mY;
                 seedBank1->mSeedPackets[i].mTimesUsed = seedBank2->mSeedPackets[i].mX;
                 seedBank1->mSeedPackets[i].mImitaterType = seedBank2->mSeedPackets[i].mPacketType;
                 seedBank1->mSeedPackets[i].mRefreshCounter = seedBank2->mSeedPackets[i].mOffsetY;
                 seedBank1->mSeedPackets[i].mSlotMachineCountDown = seedBank2->mSeedPackets[i].mIndex;
             }
-            int result = old_LawnSaveGame(board, a2);
+            bool result = old_LawnSaveGame(theBoard, theFilePath);
             seedBank1->mX = 0;
             return result;
         } else {
             int theSeedNum = 4;
-            SeedBank *seedBank1 = board->mSeedBankLeft;
-            SeedBank *seedBank2 = board->mSeedBankRight;
+            SeedBank *seedBank1 = theBoard->mSeedBank[0];
+            SeedBank *seedBank2 = theBoard->mSeedBank[1];
             seedBank1->mNumPackets = 2 * theSeedNum;
             seedBank1->mX = seedBank2->mX;
             for (int i = theSeedNum; i < 2 * theSeedNum; ++i) {
@@ -175,31 +176,31 @@ int LawnSaveGame(Board *board, int *a2) {
                 seedBank1->mSeedPackets[i].mSelected = seedBank2->mSeedPackets[i - theSeedNum].mSelected;
                 seedBank1->mSeedPackets[i].mSelectedByBothPlayer = seedBank2->mSeedPackets[i - theSeedNum].mSelectedByBothPlayer;
             }
-            int result = old_LawnSaveGame(board, a2);
+            bool result = old_LawnSaveGame(theBoard, theFilePath);
             seedBank1->mNumPackets = theSeedNum;
             seedBank1->mX = 0;
             return result;
         }
     }
     // Zombie *zombie = NULL;
-    // while (Board_IterateZombies(board, &zombie)) {
+    // while (Board_IterateZombies(theBoard, &zombie)) {
     // if (zombie->mZombieType == ZombieType::Flag) {
     // LawnApp_RemoveReanimation(zombie->mApp, zombie->mBossFireBallReanimID);
     // zombie->mBossFireBallReanimID = 0;
     // }
     // }
-    return old_LawnSaveGame(board, a2);
+    return old_LawnSaveGame(theBoard, theFilePath);
 }
 
 
-int LawnLoadGame(Board *board, int *a2) {
+bool LawnLoadGame(Board *theBoard, SaveGameContext *theFilePath) {
     // 结盟模式读档，将SeedBank2的4个种子从SeedBank1里面取出。因为原版读档逻辑难以改动，只好出此下策，凑合着读吧。
-    if (board->mApp->IsCoopMode()) {
-        if (board->mApp->mGameMode == GameMode::GAMEMODE_TWO_PLAYER_COOP_BOWLING || board->mApp->mGameMode == GameMode::GAMEMODE_TWO_PLAYER_COOP_BOSS) {
-            int result = old_LawnLoadGame(board, a2);
+    if (theBoard->mApp->IsCoopMode()) {
+        if (theBoard->mApp->mGameMode == GameMode::GAMEMODE_TWO_PLAYER_COOP_BOWLING || theBoard->mApp->mGameMode == GameMode::GAMEMODE_TWO_PLAYER_COOP_BOSS) {
+            bool result = old_LawnLoadGame(theBoard, theFilePath);
             int theSeedNum = 6;
-            SeedBank *seedBank1 = board->mSeedBankLeft;
-            SeedBank *seedBank2 = board->mSeedBankRight;
+            SeedBank *seedBank1 = theBoard->mSeedBank[0];
+            SeedBank *seedBank2 = theBoard->mSeedBank[1];
             seedBank2->mNumPackets = theSeedNum;
             seedBank1->mNumPackets = theSeedNum;
             seedBank2->mX = seedBank1->mX;
@@ -219,10 +220,10 @@ int LawnLoadGame(Board *board, int *a2) {
             }
             return result;
         } else {
-            int result = old_LawnLoadGame(board, a2);
+            bool result = old_LawnLoadGame(theBoard, theFilePath);
             int theSeedNum = 4;
-            SeedBank *seedBank1 = board->mSeedBankLeft;
-            SeedBank *seedBank2 = board->mSeedBankRight;
+            SeedBank *seedBank1 = theBoard->mSeedBank[0];
+            SeedBank *seedBank2 = theBoard->mSeedBank[1];
             seedBank2->mNumPackets = theSeedNum;
             seedBank1->mNumPackets = theSeedNum;
             seedBank2->mX = seedBank1->mX;
@@ -249,7 +250,7 @@ int LawnLoadGame(Board *board, int *a2) {
     }
 
 
-    return old_LawnLoadGame(board, a2);
+    return old_LawnLoadGame(theBoard, theFilePath);
 }
 
 void Board::ShovelDown() {
@@ -262,7 +263,7 @@ void Board::ShovelDown() {
     bool isInShovelTutorial = (unsigned int)(mTutorialState - 15) <= 2;
     if (isInShovelTutorial) {
         // 如果正在铲子教学中(即冒险1-5的保龄球的开场前，戴夫要求你铲掉三个豌豆的这段时间),则发送铲除键来铲除。
-        mGamepadControls1->OnKeyDown(KeyCode::KEYCODE_SHOVEL, 1112);
+        mGamepadControls1->OnKeyDown(KeyCode::KEYCODE_QUICK_DIG, 1112);
         ClearCursor(0);
         RefreshSeedPacketFromCursor(0);
         return;
@@ -946,9 +947,8 @@ bool Board::StageIsNight() {
 
 bool Board::StageHasPool() {
     // 关系到泳池特有的僵尸，如救生圈僵尸、海豚僵尸、潜水僵尸在本关出现与否。此处我们添加水族馆场景。
-    // return mBackground == BackgroundType::Zombiquarium || old_Board_StageHasPool(this);
-    return (mBackground == BackgroundType::BACKGROUND_ZOMBIQUARIUM && mApp->mGameMode != GameMode::GAMEMODE_CHALLENGE_ZOMBIQUARIUM) || mBackground == BackgroundType::BACKGROUND_3_POOL
-        || mBackground == BackgroundType::BACKGROUND_4_FOG;
+    return (mBackground == BackgroundType::BACKGROUND_ZOMBIQUARIUM && mApp->mGameMode != GameMode::GAMEMODE_CHALLENGE_ZOMBIQUARIUM && mApp->mGameMode != GameMode::GAMEMODE_CHALLENGE_ZEN_GARDEN)
+        || mBackground == BackgroundType::BACKGROUND_3_POOL || mBackground == BackgroundType::BACKGROUND_4_FOG;
 }
 
 bool Board::StageHasRoof() {
@@ -985,15 +985,6 @@ void Board::DrawFog(Sexy::Graphics *g) {
     old_Board_DrawFog(this, g);
 }
 
-bool Board::ZombieIsAddInRow(ZombieType theZombieType) {
-    if (!mApp->IsVSMode())
-        return false;
-
-    return theZombieType == ZOMBIE_FLAG || theZombieType == ZOMBIE_DANCER || theZombieType == ZOMBIE_DUCKY_TUBE || theZombieType == ZOMBIE_SNORKEL || theZombieType == ZOMBIE_ZAMBONI
-        || theZombieType == ZOMBIE_BOBSLED || theZombieType == ZOMBIE_DOLPHIN_RIDER || theZombieType == ZOMBIE_JACK_IN_THE_BOX || theZombieType == ZOMBIE_BALLOON || theZombieType == ZOMBIE_DIGGER
-        || theZombieType == ZOMBIE_CATAPULT || theZombieType == ZOMBIE_GARGANTUAR;
-}
-
 Zombie *Board::AddZombieInRow(ZombieType theZombieType, int theRow, int theFromWave, bool theIsRustle) {
     // 修复蹦极僵尸出现时草丛也会摇晃
     if (theZombieType == ZombieType::ZOMBIE_BUNGEE)
@@ -1005,13 +996,13 @@ Zombie *Board::AddZombieInRow(ZombieType theZombieType, int theRow, int theFromW
 
         Zombie *aZombie = old_Board_AddZombieInRow(this, theZombieType, theRow, theFromWave, theIsRustle);
         if (tcpClientSocket >= 0) {
-            if (theZombieType == ZOMBIE_BUNGEE) {
-                GamepadControls *theGamepad = mGamepadControls1->mIsZombie ? mGamepadControls1 : mGamepadControls2;
-                int theTargetCol = PixelToGridXKeepOnBoard(theGamepad->mCursorPositionX, theGamepad->mCursorPositionY);
+            if (theZombieType == ZombieType::ZOMBIE_BUNGEE) {
+                GamepadControls *aGamepad = mGamepadControls1->mIsZombie ? mGamepadControls1 : mGamepadControls2;
+                int aTargetCol = PixelToGridXKeepOnBoard(aGamepad->mCursorPositionX, aGamepad->mCursorPositionY);
                 U16Buf32Buf32_Event event;
                 event.type = EventType::EVENT_SERVER_BOARD_ZOMBIE_BUNGEE_ADD;
                 event.data1 = uint16_t(mZombies.DataArrayGetID(aZombie));
-                event.data2.u8x4.u8_1 = uint8_t(theTargetCol);
+                event.data2.u8x4.u8_1 = uint8_t(aTargetCol);
                 event.data2.u8x4.u8_2 = uint8_t(theRow);
                 event.data3.f32 = aZombie->mAltitude;
                 sendWithSize(tcpClientSocket, &event, sizeof(U16Buf32Buf32_Event), 0);
@@ -1020,7 +1011,7 @@ Zombie *Board::AddZombieInRow(ZombieType theZombieType, int theRow, int theFromW
                 event.type = EventType::EVENT_SERVER_BOARD_ZOMBIE_ADD;
                 event.data1[0] = uint8_t(theZombieType);
                 event.data1[1] = uint8_t(theRow);
-                event.data1[2] = uint8_t(theFromWave);
+                event.data1[2] = int8_t(theFromWave);
                 event.data1[3] = uint8_t(theIsRustle);
 
                 event.data2 = uint16_t(mZombies.DataArrayGetID(aZombie));
@@ -1095,9 +1086,9 @@ void Board::processClientEvent(void *buf, ssize_t bufSize) {
         case EVENT_CLIENT_BOARD_TOUCH_DRAG: {
             I16I16_Event *event1 = (I16I16_Event *)event;
             MouseDragSecond(event1->data1, event1->data2);
-            GamepadControls *clientGamepadControls = mGamepadControls2->mPlayerIndex2 == 1 ? mGamepadControls2 : mGamepadControls1;
-            I16I16_Event eventReply = {{EventType::EVENT_BOARD_TOUCH_DRAG_REPLY}, int16_t(clientGamepadControls->mCursorPositionX), int16_t(clientGamepadControls->mCursorPositionY)};
-            sendWithSize(tcpClientSocket, &eventReply, sizeof(I16I16_Event), 0);
+            //            GamepadControls *clientGamepadControls = mGamepadControls2->mPlayerIndex2 == 1 ? mGamepadControls2 : mGamepadControls1;
+            //            I16I16_Event eventReply = {{EventType::EVENT_BOARD_TOUCH_DRAG_REPLY}, int16_t(clientGamepadControls->mCursorPositionX), int16_t(clientGamepadControls->mCursorPositionY)};
+            //            sendWithSize(tcpClientSocket, &eventReply, sizeof(I16I16_Event), 0);
         } break;
         case EVENT_CLIENT_BOARD_TOUCH_UP: {
             I16I16_Event *event1 = (I16I16_Event *)event;
@@ -1123,7 +1114,7 @@ void Board::processClientEvent(void *buf, ssize_t bufSize) {
             }
 
             mApp->ShowVSResultsScreen();
-            mApp->mVSResultsScreen->InitFromBoard(this);
+            mApp->mVSResultsMenu->InitFromBoard(this);
             mApp->KillBoard();
         } break;
         default:
@@ -1210,12 +1201,17 @@ size_t Board::getServerEventSize(EventType type) {
         case EVENT_SERVER_BOARD_ZOMBIE_MIND_CONTROLLED:
         case EVENT_SERVER_BOARD_PLANT_DO_SPECIAL:
         case EVENT_SERVER_BOARD_LAWNMOWER_START:
+        case EVENT_SERVER_BOARD_ZOMBIE_DO_SPECIAL:
             return sizeof(U16_Event);
 
-        // --- 僵尸冻结、巨人投掷小鬼 ---
+        // --- 大嘴花吞咬、僵尸冻结、巨人投掷小鬼、僵尸状态计数 ---
+        case EVENT_SERVER_BOARD_PLANT_CHOMPER_BIT:
         case EVENT_SERVER_BOARD_ZOMBIE_ICE_TRAP:
         case EVENT_SERVER_BOARD_ZOMBIE_IMP_THROW:
+        case EVENT_SERVER_BOARD_ZOMBIE_PHASE_COUNTER:
             return sizeof(U16U16_Event);
+
+        // --- 撑杆跳跃、巨人开始投掷,锤击 ---
         case EVENT_SERVER_BOARD_ZOMBIE_POLEVAULTER_VAULT:
         case EVENT_SERVER_BOARD_ZOMBIE_GARGANTUAR_START_THROW:
         case EVENT_SERVER_BOARD_ZOMBIE_GARGANTUAR_START_SMASH:
@@ -1253,20 +1249,20 @@ void Board::processServerEvent(void *buf, ssize_t bufSize) {
         case EVENT_BOARD_TOUCH_DOWN_REPLY: {
             U8U8I16I16_Event *event1 = (U8U8I16I16_Event *)event;
             GamepadControls *clientGamepadControls = mGamepadControls2->mPlayerIndex2 == 1 ? mGamepadControls2 : mGamepadControls1;
-            SeedBank *clientSeedBank = mGamepadControls2->mPlayerIndex2 == 1 ? mSeedBankRight : mSeedBankLeft;
+            SeedBank *clientSeedBank = mGamepadControls2->mPlayerIndex2 == 1 ? mSeedBank[1] : mSeedBank[0];
             if (clientGamepadControls->mSelectedSeedIndex != event1->data1) {
                 clientGamepadControls->mSelectedSeedIndex = event1->data1;
                 clientSeedBank->mSeedPackets[event1->data1].mLastSelectedTime = 0.0f; // 动画效果专用
             }
             clientGamepadControls->mGamepadState = event1->data2;
-            clientGamepadControls->mCursorPositionX = event1->data3;
-            clientGamepadControls->mCursorPositionY = event1->data4;
+            //            clientGamepadControls->mCursorPositionX = event1->data3;
+            //            clientGamepadControls->mCursorPositionY = event1->data4;
         } break;
         case EVENT_BOARD_TOUCH_DRAG_REPLY: {
             U16U16_Event *event1 = (U16U16_Event *)event;
             GamepadControls *clientGamepadControls = mGamepadControls2->mPlayerIndex2 == 1 ? mGamepadControls2 : mGamepadControls1;
-            clientGamepadControls->mCursorPositionX = event1->data1;
-            clientGamepadControls->mCursorPositionY = event1->data2;
+            //            clientGamepadControls->mCursorPositionX = event1->data1;
+            //            clientGamepadControls->mCursorPositionY = event1->data2;
         } break;
         case EVENT_BOARD_TOUCH_UP_REPLY: {
             U8U8_Event *event1 = (U8U8_Event *)event;
@@ -1278,7 +1274,7 @@ void Board::processServerEvent(void *buf, ssize_t bufSize) {
         case EVENT_SERVER_BOARD_TOUCH_DOWN: {
             U8U8I16I16_Event *event1 = (U8U8I16I16_Event *)event;
             GamepadControls *serverGamepadControls = mGamepadControls1->mPlayerIndex2 == 0 ? mGamepadControls1 : mGamepadControls2;
-            SeedBank *serverSeedBank = mGamepadControls1->mPlayerIndex2 == 0 ? mSeedBankLeft : mSeedBankRight;
+            SeedBank *serverSeedBank = mGamepadControls1->mPlayerIndex2 == 0 ? mSeedBank[0] : mSeedBank[1];
             if (serverGamepadControls->mSelectedSeedIndex != event1->data1) {
                 serverGamepadControls->mSelectedSeedIndex = event1->data1;
                 serverSeedBank->mSeedPackets[event1->data1].mLastSelectedTime = 0.0f; // 动画效果专用
@@ -1349,7 +1345,7 @@ void Board::processServerEvent(void *buf, ssize_t bufSize) {
             }
         } break;
         case EVENT_SERVER_BOARD_GRIDITEM_DIE: {
-            U16_Event *eventGridItemDie = reinterpret_cast<U16_Event *>(event);
+            U16_Event *eventGridItemDie = static_cast<U16_Event *>(event);
             uint16_t serverGridItemID = eventGridItemDie->data;
             uint16_t clientGridItemID;
             if (homura::FindInMap(serverGridItemIDMap, serverGridItemID, clientGridItemID)) {
@@ -1398,7 +1394,7 @@ void Board::processServerEvent(void *buf, ssize_t bufSize) {
             }
         } break;
         case EVENT_SERVER_BOARD_PLANT_FIRE: {
-            U16U16U16Buf32Buf32_Event *eventPlantFire = reinterpret_cast<U16U16U16Buf32Buf32_Event *>(event);
+            U16U16U16Buf32Buf32_Event *eventPlantFire = static_cast<U16U16U16Buf32Buf32_Event *>(event);
             uint16_t serverPlantID = eventPlantFire->data1;
             uint16_t clientPlantID;
             if (homura::FindInMap(serverPlantIDMap, serverPlantID, clientPlantID)) {
@@ -1423,7 +1419,7 @@ void Board::processServerEvent(void *buf, ssize_t bufSize) {
             tcp_connected = true;
         } break;
         case EVENT_SERVER_BOARD_PLANT_DIE: {
-            U16_Event *eventPlantDie = reinterpret_cast<U16_Event *>(event);
+            U16_Event *eventPlantDie = static_cast<U16_Event *>(event);
             uint16_t serverPlantID = eventPlantDie->data;
             uint16_t clientPlantID;
             if (homura::FindInMap(serverPlantIDMap, serverPlantID, clientPlantID)) {
@@ -1434,7 +1430,7 @@ void Board::processServerEvent(void *buf, ssize_t bufSize) {
             }
         } break;
         case EVENT_SERVER_BOARD_PLANT_DO_SPECIAL: {
-            U16_Event *eventPlantDoSpecial = reinterpret_cast<U16_Event *>(event);
+            U16_Event *eventPlantDoSpecial = static_cast<U16_Event *>(event);
             uint16_t serverPlantID = eventPlantDoSpecial->data;
             uint16_t clientPlantID;
             if (homura::FindInMap(serverPlantIDMap, serverPlantID, clientPlantID)) {
@@ -1445,7 +1441,7 @@ void Board::processServerEvent(void *buf, ssize_t bufSize) {
             }
         } break;
         case EVENT_SERVER_BOARD_PLANT_FINDTARGETANDFIRE: {
-            U8U8U16_Event *event1 = reinterpret_cast<U8U8U16_Event *>(event);
+            U8U8U16_Event *event1 = static_cast<U8U8U16_Event *>(event);
             uint16_t serverPlantID = event1->data3;
             uint16_t clientPlantID;
             if (homura::FindInMap(serverPlantIDMap, serverPlantID, clientPlantID)) {
@@ -1463,7 +1459,7 @@ void Board::processServerEvent(void *buf, ssize_t bufSize) {
             }
         } break;
         case EVENT_SERVER_BOARD_PLANT_KERNELPLUT_FINDTARGETANDFIRE: {
-            U8U8U16U16_Event *event1 = reinterpret_cast<U8U8U16U16_Event *>(event);
+            U8U8U16U16_Event *event1 = static_cast<U8U8U16U16_Event *>(event);
             uint16_t serverPlantID = event1->data3;
             uint16_t clientPlantID;
             if (homura::FindInMap(serverPlantIDMap, serverPlantID, clientPlantID)) {
@@ -1484,7 +1480,7 @@ void Board::processServerEvent(void *buf, ssize_t bufSize) {
             }
         } break;
         case EVENT_SERVER_BOARD_PLANT_SHOOTER_LAUNCH: {
-            U16_Event *event1 = reinterpret_cast<U16_Event *>(event);
+            U16_Event *event1 = static_cast<U16_Event *>(event);
             uint16_t serverPlantID = event1->data;
             uint16_t clientPlantID;
             if (homura::FindInMap(serverPlantIDMap, serverPlantID, clientPlantID)) {
@@ -1496,8 +1492,23 @@ void Board::processServerEvent(void *buf, ssize_t bufSize) {
                 }
             }
         } break;
+        case EVENT_SERVER_BOARD_PLANT_CHOMPER_BIT: {
+            U16U16_Event *eventChomperBit = static_cast<U16U16_Event *>(event);
+            uint16_t serverPlantID = eventChomperBit->data1;
+            uint16_t serverZombieID = eventChomperBit->data2;
+            uint16_t clientPlantID;
+            uint16_t clientZombieID;
+            if (homura::FindInMap(serverPlantIDMap, serverPlantID, clientPlantID) && homura::FindInMap(serverZombieIDMap, serverZombieID, clientZombieID)) {
+                Plant *aPlant = mPlants.DataArrayGet(clientPlantID);
+                Zombie *aZombie = mZombies.DataArrayGet(clientZombieID);
+                tcp_connected = false;
+                aZombie->DieWithLoot();
+                aPlant->mState = PlantState::STATE_CHOMPER_BITING_GOT_ONE;
+                tcp_connected = true;
+            }
+        } break;
         case EVENT_SERVER_BOARD_ZOMBIE_DIE: {
-            U16_Event *eventZombieDie = reinterpret_cast<U16_Event *>(event);
+            U16_Event *eventZombieDie = static_cast<U16_Event *>(event);
             uint16_t serverZombieID = eventZombieDie->data;
             uint16_t clientZombieID;
             if (homura::FindInMap(serverZombieIDMap, serverZombieID, clientZombieID)) {
@@ -1508,7 +1519,7 @@ void Board::processServerEvent(void *buf, ssize_t bufSize) {
             }
         } break;
         case EVENT_SERVER_BOARD_ZOMBIE_MIND_CONTROLLED: {
-            U16_Event *eventZombieMindControlled = reinterpret_cast<U16_Event *>(event);
+            U16_Event *eventZombieMindControlled = static_cast<U16_Event *>(event);
             uint16_t serverZombieID = eventZombieMindControlled->data;
             uint16_t clientZombieID;
             if (homura::FindInMap(serverZombieIDMap, serverZombieID, clientZombieID)) {
@@ -1517,12 +1528,15 @@ void Board::processServerEvent(void *buf, ssize_t bufSize) {
             }
         } break;
         case EVENT_SERVER_BOARD_ZOMBIE_ADD: {
-            U8x4U16Buf32x2_Event *eventZombieAdd = reinterpret_cast<U8x4U16Buf32x2_Event *>(event);
+            U8x4U16Buf32x2_Event *eventZombieAdd = static_cast<U8x4U16Buf32x2_Event *>(event);
             ZombieType aZombieType = ZombieType(eventZombieAdd->data1[0]);
-            if (aZombieType == ZombieType::ZOMBIE_IMP || aZombieType == ZombieType::ZOMBIE_BACKUP_DANCER) // 移除主机生成时向客机同步传递的小鬼和舞伴
+            uint8_t aRow = eventZombieAdd->data1[1];
+            int8_t aFromWave = eventZombieAdd->data1[2];
+            uint8_t aIsRustle = eventZombieAdd->data1[3];
+            if (aZombieType == ZombieType::ZOMBIE_BACKUP_DANCER) // 移除主机生成时向客机同步传递的舞伴
                 return;
             tcp_connected = false;
-            Zombie *aZombie = AddZombieInRow(aZombieType, eventZombieAdd->data1[1], eventZombieAdd->data1[2], eventZombieAdd->data1[3]);
+            Zombie *aZombie = AddZombieInRow(aZombieType, aRow, aFromWave, aIsRustle);
             serverZombieIDMap.emplace(eventZombieAdd->data2, uint16_t(mZombies.DataArrayGetID(aZombie)));
             tcp_connected = true;
             float aVelX = eventZombieAdd->data3[0].f32;
@@ -1530,26 +1544,26 @@ void Board::processServerEvent(void *buf, ssize_t bufSize) {
             aZombie->mPosX = eventZombieAdd->data3[1].f32;
         } break;
         case EVENT_SERVER_BOARD_ZOMBIE_BUNGEE_ADD: {
-            U16Buf32Buf32_Event *eventZombieBungeeAdd = reinterpret_cast<U16Buf32Buf32_Event *>(event);
+            U16Buf32Buf32_Event *eventZombieBungeeAdd = static_cast<U16Buf32Buf32_Event *>(event);
 
-            int theTargetCol = eventZombieBungeeAdd->data2.u8x4.u8_1;
-            int theRow = eventZombieBungeeAdd->data2.u8x4.u8_2;
+            int aTargetCol = eventZombieBungeeAdd->data2.u8x4.u8_1;
+            int aRow = eventZombieBungeeAdd->data2.u8x4.u8_2;
 
             tcp_connected = false;
-            Zombie *aZombie = AddZombieInRow(ZOMBIE_BUNGEE, theRow, 0, false);
+            Zombie *aZombie = AddZombieInRow(ZOMBIE_BUNGEE, aRow, 0, false);
             serverZombieIDMap.emplace(eventZombieBungeeAdd->data1, uint16_t(mZombies.DataArrayGetID(aZombie)));
             tcp_connected = true;
 
             aZombie->mAltitude = eventZombieBungeeAdd->data3.f32;
-            aZombie->mTargetCol = theTargetCol;
-            aZombie->SetRow(theRow);
-            aZombie->mPosX = GridToPixelX(theTargetCol, theRow);
-            aZombie->mPosY = aZombie->GetPosYBasedOnRow(theRow);
-            aZombie->mRenderOrder = Board::MakeRenderOrder(RENDER_LAYER_GRAVE_STONE, theRow, 7);
+            aZombie->mTargetCol = aTargetCol;
+            aZombie->SetRow(aRow);
+            aZombie->mPosX = GridToPixelX(aTargetCol, aRow);
+            aZombie->mPosY = aZombie->GetPosYBasedOnRow(aRow);
+            aZombie->mRenderOrder = Board::MakeRenderOrder(RENDER_LAYER_GRAVE_STONE, aRow, 7);
 
         } break;
         case EVENT_SERVER_BOARD_ZOMBIE_ADD_BY_CHEAT: {
-            U16Buf32Buf32_Event *eventZombieAddByCheat = reinterpret_cast<U16Buf32Buf32_Event *>(event);
+            U16Buf32Buf32_Event *eventZombieAddByCheat = static_cast<U16Buf32Buf32_Event *>(event);
             int theGridX = eventZombieAddByCheat->data2.u8x4.u8_1;
             int theGridY = eventZombieAddByCheat->data2.u8x4.u8_2;
             uint16_t serverZombieID = eventZombieAddByCheat->data1;
@@ -1577,7 +1591,7 @@ void Board::processServerEvent(void *buf, ssize_t bufSize) {
             }
         } break;
         case EVENT_SERVER_BOARD_ZOMBIE_SUMMON_BACKUP_DANCERS: {
-            U16x4U16_Event *eventSummonBackupDancers = reinterpret_cast<U16x4U16_Event *>(event);
+            U16x4U16_Event *eventSummonBackupDancers = static_cast<U16x4U16_Event *>(event);
             uint16_t serverZombieID = eventSummonBackupDancers->data2;
             uint16_t clientZombieID;
             if (homura::FindInMap(serverZombieIDMap, serverZombieID, clientZombieID)) {
@@ -1592,7 +1606,7 @@ void Board::processServerEvent(void *buf, ssize_t bufSize) {
             }
         } break;
         case EVENT_SERVER_BOARD_ZOMBIE_PICK_SPEED: {
-            U16U16U16Buf32Buf32_Event *eventPickSpeed = reinterpret_cast<U16U16U16Buf32Buf32_Event *>(event);
+            U16U16U16Buf32Buf32_Event *eventPickSpeed = static_cast<U16U16U16Buf32Buf32_Event *>(event);
             uint16_t serverZombieID = eventPickSpeed->data1;
             uint16_t clientZombieID;
             if (homura::FindInMap(serverZombieIDMap, serverZombieID, clientZombieID)) {
@@ -1616,7 +1630,7 @@ void Board::processServerEvent(void *buf, ssize_t bufSize) {
             }
         } break;
         case EVENT_SERVER_BOARD_ZOMBIE_ICE_TRAP: {
-            U16U16_Event *eventIceTrap = reinterpret_cast<U16U16_Event *>(event);
+            U16U16_Event *eventIceTrap = static_cast<U16U16_Event *>(event);
             uint16_t serverZombieID = eventIceTrap->data1;
             uint16_t clientZombieID;
             if (homura::FindInMap(serverZombieIDMap, serverZombieID, clientZombieID)) {
@@ -1626,20 +1640,23 @@ void Board::processServerEvent(void *buf, ssize_t bufSize) {
             }
         } break;
         case EVENT_SERVER_BOARD_ZOMBIE_IMP_THROW: {
-            U16U16U16Buf32Buf32_Event *eventImpThrow = reinterpret_cast<U16U16U16Buf32Buf32_Event *>(event);
-            uint16_t serverZombieID = eventImpThrow->data1;
-            uint16_t clientZombieID;
-            if (homura::FindInMap(serverZombieIDMap, serverZombieID, clientZombieID)) {
-                Zombie *aZombie = mZombies.DataArrayGet(clientZombieID);
+            U16U16U16Buf32Buf32_Event *eventImpThrow = static_cast<U16U16U16Buf32Buf32_Event *>(event);
+            uint16_t serverGargantuarID = eventImpThrow->data1;
+            uint16_t serverImpID = eventImpThrow->data2;
+            uint16_t clientGargantuarID;
+            uint16_t clientImpID;
+            if (homura::FindInMap(serverZombieIDMap, serverImpID, clientImpID) && homura::FindInMap(serverZombieIDMap, serverGargantuarID, clientGargantuarID)) {
+                Zombie *aGargantuar = mZombies.DataArrayGet(clientGargantuarID);
+                Zombie *aZombieImp = mZombies.DataArrayGet(clientImpID);
                 float aOffsetDistance = eventImpThrow->data4.f32;
                 tcp_connected = false;
-                Zombie *aZombieImp = aZombie->ThrowAZombieImp(aOffsetDistance);
+                if (aGargantuar && aZombieImp)
+                    aZombieImp->ThrowZombieImp(aGargantuar, aOffsetDistance);
                 tcp_connected = true;
-                serverZombieIDMap.emplace(eventImpThrow->data2, uint16_t(mZombies.DataArrayGetID(aZombieImp)));
             }
         } break;
         case EVENT_SERVER_BOARD_ZOMBIE_POLEVAULTER_VAULT: {
-            U16Buf32_Event *event1 = reinterpret_cast<U16Buf32_Event *>(event);
+            U16Buf32_Event *event1 = static_cast<U16Buf32_Event *>(event);
             uint16_t serverZombieID = event1->data1;
             uint16_t clientZombieID;
             if (homura::FindInMap(serverZombieIDMap, serverZombieID, clientZombieID)) {
@@ -1655,7 +1672,7 @@ void Board::processServerEvent(void *buf, ssize_t bufSize) {
             }
         } break;
         case EVENT_SERVER_BOARD_ZOMBIE_GARGANTUAR_START_SMASH: {
-            U16Buf32_Event *event1 = reinterpret_cast<U16Buf32_Event *>(event);
+            U16Buf32_Event *event1 = static_cast<U16Buf32_Event *>(event);
             uint16_t serverZombieID = event1->data1;
             uint16_t clientZombieID;
             if (homura::FindInMap(serverZombieIDMap, serverZombieID, clientZombieID)) {
@@ -1667,7 +1684,7 @@ void Board::processServerEvent(void *buf, ssize_t bufSize) {
             }
         } break;
         case EVENT_SERVER_BOARD_ZOMBIE_GARGANTUAR_START_THROW: {
-            U16Buf32_Event *event1 = reinterpret_cast<U16Buf32_Event *>(event);
+            U16Buf32_Event *event1 = static_cast<U16Buf32_Event *>(event);
             uint16_t serverZombieID = event1->data1;
             uint16_t clientZombieID;
             if (homura::FindInMap(serverZombieIDMap, serverZombieID, clientZombieID)) {
@@ -1682,7 +1699,7 @@ void Board::processServerEvent(void *buf, ssize_t bufSize) {
             DisplayAdviceAgain("[ADVICE_HUGE_WAVE]", MESSAGE_STYLE_HUGE_WAVE, ADVICE_HUGE_WAVE);
         } break;
         case EVENT_SERVER_BOARD_ZOMBIE_YUCKY_SETROW: {
-            U16U16_Event *event1 = reinterpret_cast<U16U16_Event *>(event);
+            U16U16_Event *event1 = static_cast<U16U16_Event *>(event);
             uint16_t serverZombieID = event1->data1;
             uint16_t clientZombieID;
             if (homura::FindInMap(serverZombieIDMap, serverZombieID, clientZombieID)) {
@@ -1691,8 +1708,31 @@ void Board::processServerEvent(void *buf, ssize_t bufSize) {
                 aZombie->StartWalkAnim(20);
             }
         } break;
+        case EVENT_SERVER_BOARD_ZOMBIE_PHASE_COUNTER: {
+            U8U8U16U16_Event *eventZombiePhaseCounter = static_cast<U8U8U16U16_Event *>(event);
+            uint8_t serverZombiePhase = eventZombiePhaseCounter->data1;
+            uint16_t serverZombieID = eventZombiePhaseCounter->data3;
+            uint16_t clientZombieID;
+            uint16_t serverPhaseCounter = eventZombiePhaseCounter->data4;
+            if (homura::FindInMap(serverZombieIDMap, serverZombieID, clientZombieID)) {
+                Zombie *aZombie = mZombies.DataArrayGet(clientZombieID);
+                aZombie->mZombiePhase = ZombiePhase(serverZombiePhase);
+                aZombie->mPhaseCounter = serverPhaseCounter;
+            }
+        } break;
+        case EVENT_SERVER_BOARD_ZOMBIE_DO_SPECIAL: {
+            U16_Event *eventZombieDoSpecial = static_cast<U16_Event *>(event);
+            uint16_t serverZombieID = eventZombieDoSpecial->data;
+            uint16_t clientZombieID;
+            if (homura::FindInMap(serverZombieIDMap, serverZombieID, clientZombieID)) {
+                Zombie *aZombie = mZombies.DataArrayGet(clientZombieID);
+                tcp_connected = false;
+                aZombie->DoSpecial();
+                tcp_connected = true;
+            }
+        } break;
         case EVENT_SERVER_BOARD_LAWNMOWER_START: {
-            U16_Event *eventLawnMowerStart = reinterpret_cast<U16_Event *>(event);
+            U16_Event *eventLawnMowerStart = static_cast<U16_Event *>(event);
             uint16_t aRow = eventLawnMowerStart->data;
             LawnMower *aLawnMower = nullptr;
             while (IterateLawnMowers(aLawnMower)) {
@@ -1700,7 +1740,7 @@ void Board::processServerEvent(void *buf, ssize_t bufSize) {
                     old_LawnMower_StartMower(aLawnMower);
                 }
             }
-        }
+        } break;
         case EVENT_SERVER_BOARD_TAKE_SUNMONEY: {
             U16_Event *event1 = (U16_Event *)event;
             mSunMoney1 = event1->data;
@@ -1711,7 +1751,7 @@ void Board::processServerEvent(void *buf, ssize_t bufSize) {
         } break;
         case EVENT_SERVER_BOARD_SEEDPACKET_WASPLANTED: {
             U8U8_Event *event1 = (U8U8_Event *)event;
-            SeedBank *theSeedBank = event1->data2 ? mSeedBankLeft : mSeedBankRight;
+            SeedBank *theSeedBank = event1->data2 ? mSeedBank[0] : mSeedBank[1];
             SeedPacket *seedPacket = &theSeedBank->mSeedPackets[event1->data1];
             seedPacket->Deactivate();
             seedPacket->WasPlanted(0);
@@ -1764,7 +1804,7 @@ void Board::processServerEvent(void *buf, ssize_t bufSize) {
             }
 
             mApp->ShowVSResultsScreen();
-            mApp->mVSResultsScreen->InitFromBoard(this);
+            mApp->mVSResultsMenu->InitFromBoard(this);
             mApp->KillBoard();
         } break;
         default:
@@ -1925,16 +1965,16 @@ void Board::Update() {
     if (setSeedPacket && choiceSeedType != SeedType::SEED_NONE) {
         if (targetSeedBank == 1) {
             if (choiceSeedType < SeedType::NUM_SEED_TYPES && !mGamepadControls1->mIsZombie) {
-                mSeedBankLeft->mSeedPackets[choiceSeedPacketIndex].mPacketType = isImitaterSeed ? SeedType::SEED_IMITATER : choiceSeedType;
-                mSeedBankLeft->mSeedPackets[choiceSeedPacketIndex].mImitaterType = isImitaterSeed ? choiceSeedType : SeedType::SEED_NONE;
+                mSeedBank[0]->mSeedPackets[choiceSeedPacketIndex].mPacketType = isImitaterSeed ? SeedType::SEED_IMITATER : choiceSeedType;
+                mSeedBank[0]->mSeedPackets[choiceSeedPacketIndex].mImitaterType = isImitaterSeed ? choiceSeedType : SeedType::SEED_NONE;
             } else if (choiceSeedType > SeedType::SEED_ZOMBIE_GRAVESTONE && mGamepadControls1->mIsZombie) // IZ模式里用不了墓碑
-                mSeedBankLeft->mSeedPackets[choiceSeedPacketIndex].mPacketType = choiceSeedType;
-        } else if (targetSeedBank == 2 && mSeedBankRight != nullptr) {
+                mSeedBank[0]->mSeedPackets[choiceSeedPacketIndex].mPacketType = choiceSeedType;
+        } else if (targetSeedBank == 2 && mSeedBank[1] != nullptr) {
             if (choiceSeedType < SeedType::NUM_SEED_TYPES && !mGamepadControls2->mIsZombie) {
-                mSeedBankRight->mSeedPackets[choiceSeedPacketIndex].mPacketType = isImitaterSeed ? SeedType::SEED_IMITATER : choiceSeedType;
-                mSeedBankRight->mSeedPackets[choiceSeedPacketIndex].mImitaterType = isImitaterSeed ? choiceSeedType : SeedType::SEED_NONE;
+                mSeedBank[1]->mSeedPackets[choiceSeedPacketIndex].mPacketType = isImitaterSeed ? SeedType::SEED_IMITATER : choiceSeedType;
+                mSeedBank[1]->mSeedPackets[choiceSeedPacketIndex].mImitaterType = isImitaterSeed ? choiceSeedType : SeedType::SEED_NONE;
             } else if (Challenge::IsZombieSeedType(choiceSeedType) && mGamepadControls2->mIsZombie)
-                mSeedBankRight->mSeedPackets[choiceSeedPacketIndex].mPacketType = choiceSeedType;
+                mSeedBank[1]->mSeedPackets[choiceSeedPacketIndex].mPacketType = choiceSeedType;
         }
         setSeedPacket = false;
     }
@@ -2196,6 +2236,58 @@ bool Board::IsFlagWave(int theWaveNumber) {
     return theWaveNumber % aWavesPerFlag == aWavesPerFlag - 1;
 }
 
+int Board::GetGraveStonesCount() {
+    int aCount = 0;
+
+    GridItem *aGridItem = nullptr;
+    while (IterateGridItems(aGridItem)) {
+        if (aGridItem->mGridItemType == GridItemType::GRIDITEM_GRAVESTONE) {
+            aCount++;
+        }
+    }
+
+    return aCount;
+}
+
+void Board::SpawnZombiesFromGraves() {
+    if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_WAR_AND_PEAS || mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_WAR_AND_PEAS_2)
+        return;
+
+    if (StageHasRoof()) {
+        SpawnZombiesFromSky();
+        TriggerVibration(VibrationEffect::VIVRATION_BUNGEE_LANDING);
+    } else if (StageHasPool()) {
+        SpawnZombiesFromPool();
+        TriggerVibration(VibrationEffect::VIVRATION_ZOMBIE_RISE_FROM_POOL);
+        return;
+    }
+
+    int aZombiePoints = GetGraveStonesCount();
+    GridItem *aGridItem = nullptr;
+    while (IterateGridItems(aGridItem)) {
+        if (aGridItem->mGridItemType != GridItemType::GRIDITEM_GRAVESTONE || aGridItem->mGridItemCounter < 100) {
+            continue;
+        }
+        if (mApp->mGameMode == GameMode::GAMEMODE_CHALLENGE_GRAVE_DANGER && Rand(mNumWaves) > mCurrentWave) {
+            continue;
+        }
+
+        ZombieType aZombieType = PickGraveRisingZombieType(aZombiePoints);
+        Zombie *aZombie = AddZombie(aZombieType, mCurrentWave, false);
+        if (aZombie == nullptr) {
+            return;
+        }
+
+        aZombie->RiseFromGrave(aGridItem->mGridX, aGridItem->mGridY);
+        aZombiePoints -= GetZombieDefinition(aZombieType).mZombieValue;
+        if (aZombieType < 1) {
+            aZombiePoints = 1;
+        }
+    }
+
+    TriggerVibration(VibrationEffect::VIVRATION_ZOMBIE_RISE_FROM_GRAVE);
+}
+
 void Board::SpawnZombieWave() {
     // 在对战模式中放出一大波僵尸时播放大波僵尸音效
     if (mApp->mGameMode == GameMode::GAMEMODE_MP_VS) {
@@ -2252,8 +2344,7 @@ void Board::DrawHammerButton(Sexy::Graphics *g, LawnApp *theApp) {
     g->DrawImage(*Sexy_IMAGE_SHOVELBANK_Addr, rect.mX, rect.mY);
     g->DrawImage(*Sexy_IMAGE_HAMMER_ICON_Addr, rect.mX - 7, rect.mY - 3);
 
-    GamepadApp *aGamepadApp = reinterpret_cast<GamepadApp *>(theApp);
-    if (aGamepadApp->HasGamepad() || (theApp->mGamePad1IsOn && theApp->mGamePad2IsOn)) {
+    if (theApp->HasGamepad() || (theApp->mGamePad1IsOn && theApp->mGamePad2IsOn)) {
         g->DrawImageCel(*Sexy_IMAGE_HELP_BUTTONS_Addr, rect.mX + 36, rect.mY + 40, 2);
     } else {
         g->DrawImageCel(*Sexy_IMAGE_HELP_BUTTONS2_Addr, rect.mX + 36, rect.mY + 40, 2);
@@ -2330,8 +2421,7 @@ void Board::DrawShovelButton(Sexy::Graphics *g, LawnApp *theApp) {
         if (theApp->IsCoopMode()) {
             g->DrawImageCel(*Sexy_IMAGE_HELP_BUTTONS_Addr, rect.mX + 40, rect.mY + 40, 1);
         } else {
-            GamepadApp *aGamepadApp = reinterpret_cast<GamepadApp *>(theApp);
-            if (aGamepadApp->HasGamepad() || (theApp->mGamePad1IsOn && theApp->mGamePad2IsOn)) {
+            if (theApp->HasGamepad() || (theApp->mGamePad1IsOn && theApp->mGamePad2IsOn)) {
                 g->DrawImageCel(*Sexy_IMAGE_HELP_BUTTONS_Addr, rect.mX + 50, rect.mY + 40, 1);
             } else {
                 g->DrawImageCel(*Sexy_IMAGE_HELP_BUTTONS2_Addr, rect.mX + 50, rect.mY + 40, 1);
@@ -2413,7 +2503,7 @@ void Board::Pause(bool thePause) {
     // 能在这里得知游戏是否暂停
     // if (thePause) Music2_StopAllMusic((Music2*)this->mApp->mMusic);
     // else Music2_StartGameMusic((Music2*)this->mApp->mMusic, true);
-    if (mApp->mGameMode == GAMEMODE_MP_VS && !mApp->mVSSetupScreen) {
+    if (mApp->mGameMode == GAMEMODE_MP_VS && !mApp->mVSSetupMenu) {
         if (mPaused == thePause)
             return;
 
@@ -2768,7 +2858,51 @@ bool mSendKeyWhenTouchUp;
 TouchState mTouchState = TouchState::TOUCHSTATE_NONE;
 float mHeavyWeaponX;
 Rect slotMachineRect = {250, 0, 320, 100};
+
+bool gClientMouseInBank = false;
+bool gClientMouseInBoard = false;
 } // namespace
+
+
+void Board::ClientMouseDownLocal(int x, int y, bool isInBank) {
+    gClientMouseInBank = isInBank;
+    gClientMouseInBoard = !isInBank;
+    if (gClientMouseInBoard) {
+        GamepadControls *clientGamepadControls = mGamepadControls2->mPlayerIndex2 == 1 ? mGamepadControls2 : mGamepadControls1;
+        clientGamepadControls->mCursorPositionX = x;
+        clientGamepadControls->mCursorPositionY = y;
+    }
+}
+
+void Board::ClientMouseDragLocal(int x, int y) {
+
+    GamepadControls *clientGamepadControls = mGamepadControls2->mPlayerIndex2 == 1 ? mGamepadControls2 : mGamepadControls1;
+    SeedBank *seedBank = clientGamepadControls->GetSeedBank();
+    bool isInBank = seedBank->ContainsPoint(x, y);
+
+    if (gClientMouseInBank) {
+        if (!isInBank) {
+            gClientMouseInBank = false;
+            gClientMouseInBoard = true;
+        }
+    }
+
+    if (gClientMouseInBoard) {
+        int seedBankHeight = seedBank->mY + seedBank->mHeight;
+        if (y < seedBankHeight && clientGamepadControls->mGamepadState == 7) {
+            gClientMouseInBoard = false;
+            return;
+        }
+        clientGamepadControls->mCursorPositionX = x;
+        clientGamepadControls->mCursorPositionY = y;
+    }
+}
+
+void Board::ClientMouseUpLocal(int x, int y) {
+    gClientMouseInBank = false;
+    gClientMouseInBoard = false;
+}
+
 
 // 触控落下手指在此处理
 void Board::MouseDown(int x, int y, int theClickCount) {
@@ -2778,10 +2912,10 @@ void Board::MouseDown(int x, int y, int theClickCount) {
         return;
     }
 
-    bool inRangeOf1PSeedBank = (mGamepadControls1->mPlayerIndex2 == 1 && mSeedBankRight->ContainsPoint(x, y))
-        || (mGamepadControls1->mPlayerIndex2 == 0 && (mSeedBankLeft->ContainsPoint(x, y) || TRect_Contains(&mTouchVSShovelRect, x, y)));
-    bool inRangeOf2PSeedBank = (mGamepadControls2->mPlayerIndex2 == 1 && mSeedBankRight->ContainsPoint(x, y))
-        || (mGamepadControls2->mPlayerIndex2 == 0 && (mSeedBankLeft->ContainsPoint(x, y) || TRect_Contains(&mTouchVSShovelRect, x, y)));
+    bool inRangeOf1PSeedBank = (mGamepadControls1->mPlayerIndex2 == 1 && mSeedBank[1]->ContainsPoint(x, y))
+        || (mGamepadControls1->mPlayerIndex2 == 0 && (mSeedBank[0]->ContainsPoint(x, y) || TRect_Contains(&mTouchVSShovelRect, x, y)));
+    bool inRangeOf2PSeedBank = (mGamepadControls2->mPlayerIndex2 == 1 && mSeedBank[1]->ContainsPoint(x, y))
+        || (mGamepadControls2->mPlayerIndex2 == 0 && (mSeedBank[0]->ContainsPoint(x, y) || TRect_Contains(&mTouchVSShovelRect, x, y)));
 
 
     // 如果是客户端
@@ -2790,10 +2924,11 @@ void Board::MouseDown(int x, int y, int theClickCount) {
             return;
         I16I16_Event event = {{EventType::EVENT_CLIENT_BOARD_TOUCH_DOWN}, int16_t(x), int16_t(y)};
         sendWithSize(tcpServerSocket, &event, sizeof(I16I16_Event), 0);
+        ClientMouseDownLocal(x, y, inRangeOf2PSeedBank);
         return;
     }
 
-    // 如果是客户端
+    // 如果是主机端
     if (tcpClientSocket >= 0) {
         if (inRangeOf2PSeedBank)
             return;
@@ -2839,7 +2974,7 @@ void Board::__MouseDown(int x, int y, int theClickCount) {
 
     SeedChooserScreen *mSeedChooserScreen = mApp->mSeedChooserScreen;
     if (mGameScene == GameScenes::SCENE_LEVEL_INTRO && mSeedChooserScreen != nullptr && mSeedChooserScreen->mChooseState == SeedChooserState::CHOOSE_VIEW_LAWN) {
-        mSeedChooserScreen->GameButtonDown(BUTTONCODE_A, 0);
+        mSeedChooserScreen->GameButtonDown(Sexy::GamepadButton::GAMEPAD_BUTTON_A, 0);
         return;
     }
     if (mGameScene == GameScenes::SCENE_LEVEL_INTRO) {
@@ -2871,7 +3006,7 @@ void Board::__MouseDown(int x, int y, int theClickCount) {
                 }
             }
             if (mGameMode == GameMode::GAMEMODE_CHALLENGE_SLOT_MACHINE) { // 拉老虎机用
-                mGamepadControls1->OnKeyDown(KeyCode::KEYCODE_HAMMER, 1112);
+                mGamepadControls1->OnKeyDown(KeyCode::KEYCODE_X_BUTTON, 1112);
                 return;
             }
             mTouchState = TouchState::TOUCHSTATE_SEED_BANK; // 记录本次触控的状态
@@ -2904,7 +3039,7 @@ void Board::__MouseDown(int x, int y, int theClickCount) {
                 }
             }
             if (mGameMode == GameMode::GAMEMODE_CHALLENGE_SLOT_MACHINE) { // 拉老虎机用
-                mGamepadControls2->OnKeyDown(KeyCode::KEYCODE_HAMMER, 1112);
+                mGamepadControls2->OnKeyDown(KeyCode::KEYCODE_X_BUTTON, 1112);
                 return;
             }
             mTouchState = TouchState::TOUCHSTATE_SEED_BANK; // 记录本次触控的状态
@@ -3034,7 +3169,7 @@ void Board::__MouseDown(int x, int y, int theClickCount) {
 
     if (mGameMode == GameMode::GAMEMODE_CHALLENGE_SLOT_MACHINE) { // 拉老虎机用
         if (TRect_Contains(&slotMachineRect, x, y)) {
-            mGamepadControls1->OnKeyDown(KeyCode::KEYCODE_HAMMER, 1112);
+            mGamepadControls1->OnKeyDown(KeyCode::KEYCODE_X_BUTTON, 1112);
             return;
         }
     }
@@ -3179,6 +3314,7 @@ void Board::MouseDrag(int x, int y) {
     if (tcp_connected) {
         I16I16_Event event = {{EventType::EVENT_CLIENT_BOARD_TOUCH_DRAG}, int16_t(x), int16_t(y)};
         sendWithSize(tcpServerSocket, &event, sizeof(I16I16_Event), 0);
+        ClientMouseDragLocal(x, y);
         return;
     }
     __MouseDrag(x, y);
@@ -3368,6 +3504,7 @@ void Board::MouseUp(int x, int y, int theClickCount) {
     if (tcp_connected) {
         I16I16_Event event = {{EventType::EVENT_CLIENT_BOARD_TOUCH_UP}, int16_t(x), int16_t(y)};
         sendWithSize(tcpServerSocket, &event, sizeof(I16I16_Event), 0);
+        ClientMouseUpLocal(x, y);
         return;
     }
     __MouseUp(x, y, theClickCount);
@@ -3404,15 +3541,15 @@ void Board::__MouseUp(int x, int y, int theClickCount) {
             } else if (mGameState == 7 || isCobCannonSelected || mCursorType == CursorType::CURSOR_TYPE_PLANT_FROM_USABLE_COIN) {
                 if (mGameMode == GameMode::GAMEMODE_CHALLENGE_BEGHOULED || mGameMode == GameMode::GAMEMODE_CHALLENGE_BEGHOULED_TWIST) {
                     mGamepadControls1->OnKeyDown(KeyCode::KEYCODE_ESCAPE, 1096);
-                    mGamepadControls1->OnKeyDown(KeyCode::KEYCODE_ACCEPT, 1096);
-                    mGamepadControls1->OnKeyDown(KeyCode::KEYCODE_ACCEPT, 1096);
+                    mGamepadControls1->OnKeyDown(KeyCode::KEYCODE_RETURN, 1096);
+                    mGamepadControls1->OnKeyDown(KeyCode::KEYCODE_RETURN, 1096);
                     mGamepadControls1->OnKeyDown(KeyCode::KEYCODE_ESCAPE, 1096);
                 } else if ((mGameMode == GameMode::GAMEMODE_CHALLENGE_LAST_STAND && mChallenge->mChallengeState == ChallengeState::STATECHALLENGE_NORMAL
                             && mApp->mGameScene == GameScenes::SCENE_PLAYING)
                            || mGameMode == GameMode::GAMEMODE_MP_VS) {
-                    mGamepadControls1->OnButtonDown(GamepadButton::BUTTONCODE_A, mGamepadControls1->mPlayerIndex1, 0);
+                    mGamepadControls1->OnButtonDown(Sexy::GamepadButton::GAMEPAD_BUTTON_A, mGamepadControls1->mPlayerIndex1, 0);
                 } else {
-                    mGamepadControls1->OnKeyDown(KeyCode::KEYCODE_ACCEPT, 1096);
+                    mGamepadControls1->OnKeyDown(KeyCode::KEYCODE_RETURN, 1096);
                 }
                 int mGameStateNew = mGamepadControls1->mGamepadState;
                 int seedPacketIndexNew = mGamepadControls1->mSelectedSeedIndex;
@@ -3442,14 +3579,14 @@ void Board::__MouseUp(int x, int y, int theClickCount) {
             } else if (mGameState_2P == 7 || isCobCannonSelected_2P || mCursorType_2P == CursorType::CURSOR_TYPE_PLANT_FROM_USABLE_COIN) {
                 if (mGameMode == GameMode::GAMEMODE_CHALLENGE_BEGHOULED || mGameMode == GameMode::GAMEMODE_CHALLENGE_BEGHOULED_TWIST) {
                     mGamepadControls2->OnKeyDown(KeyCode::KEYCODE_ESCAPE, 1096);
-                    mGamepadControls2->OnKeyDown(KeyCode::KEYCODE_ACCEPT, 1096);
-                    mGamepadControls2->OnKeyDown(KeyCode::KEYCODE_ACCEPT, 1096);
+                    mGamepadControls2->OnKeyDown(KeyCode::KEYCODE_RETURN, 1096);
+                    mGamepadControls2->OnKeyDown(KeyCode::KEYCODE_RETURN, 1096);
                     mGamepadControls2->OnKeyDown(KeyCode::KEYCODE_ESCAPE, 1096);
                 } else if ((mGameMode == GameMode::GAMEMODE_CHALLENGE_LAST_STAND && mChallengeState == ChallengeState::STATECHALLENGE_NORMAL && mApp->mGameScene == GameScenes::SCENE_PLAYING)
                            || mGameMode == GameMode::GAMEMODE_MP_VS) {
-                    mGamepadControls2->OnButtonDown(GamepadButton::BUTTONCODE_A, mGamepadControls2->mPlayerIndex1, 0);
+                    mGamepadControls2->OnButtonDown(Sexy::GamepadButton::GAMEPAD_BUTTON_A, mGamepadControls2->mPlayerIndex1, 0);
                 } else {
-                    mGamepadControls2->OnKeyDown(KeyCode::KEYCODE_ACCEPT, 1096);
+                    mGamepadControls2->OnKeyDown(KeyCode::KEYCODE_RETURN, 1096);
                 }
                 int mGameStateNew_2P = mGamepadControls2->mGamepadState;
                 int seedPacketIndexNew_2P = mGamepadControls2->mSelectedSeedIndex;
@@ -3510,7 +3647,7 @@ void Board::MouseDownSecond(int x, int y, int theClickCount) {
 
     SeedChooserScreen *mSeedChooserScreen = mApp->mSeedChooserScreen;
     if (mGameScene == GameScenes::SCENE_LEVEL_INTRO && mSeedChooserScreen != nullptr && mSeedChooserScreen->mChooseState == SeedChooserState::CHOOSE_VIEW_LAWN) {
-        mSeedChooserScreen->GameButtonDown(BUTTONCODE_A, 0);
+        mSeedChooserScreen->GameButtonDown(Sexy::GamepadButton::GAMEPAD_BUTTON_A, 0);
         return;
     }
     if (mGameScene == GameScenes::SCENE_LEVEL_INTRO) {
@@ -3543,7 +3680,7 @@ void Board::MouseDownSecond(int x, int y, int theClickCount) {
                 }
             }
             if (mGameMode == GameMode::GAMEMODE_CHALLENGE_SLOT_MACHINE) { // 拉老虎机用
-                mGamepadControls1->OnKeyDown(KeyCode::KEYCODE_HAMMER, 1112);
+                mGamepadControls1->OnKeyDown(KeyCode::KEYCODE_X_BUTTON, 1112);
                 return;
             }
             gTouchStateSecond = TouchState::TOUCHSTATE_SEED_BANK; // 记录本次触控的状态
@@ -3577,7 +3714,7 @@ void Board::MouseDownSecond(int x, int y, int theClickCount) {
                 }
             }
             if (mGameMode == GameMode::GAMEMODE_CHALLENGE_SLOT_MACHINE) { // 拉老虎机用
-                mGamepadControls2->OnKeyDown(KeyCode::KEYCODE_HAMMER, 1112);
+                mGamepadControls2->OnKeyDown(KeyCode::KEYCODE_X_BUTTON, 1112);
                 return;
             }
             gTouchStateSecond = TouchState::TOUCHSTATE_SEED_BANK; // 记录本次触控的状态
@@ -3616,7 +3753,7 @@ void Board::MouseDownSecond(int x, int y, int theClickCount) {
 
     if (mObjectType == GameObjectType::OBJECT_TYPE_SHOVEL) {
         if (!useNewShovel) {
-            mGamepadControls1->OnKeyDown(KeyCode::KEYCODE_SHOVEL, 1112);
+            mGamepadControls1->OnKeyDown(KeyCode::KEYCODE_QUICK_DIG, 1112);
             return;
         }
         gPlayerIndexSecond = TouchPlayerIndex::TOUCHPLAYER_PLAYER1; // 玩家1
@@ -3730,7 +3867,7 @@ void Board::MouseDownSecond(int x, int y, int theClickCount) {
 
     if (mGameMode == GameMode::GAMEMODE_CHALLENGE_SLOT_MACHINE) { // 拉老虎机用
         if (TRect_Contains(&slotMachineRect, x, y)) {
-            mGamepadControls1->OnKeyDown(KeyCode::KEYCODE_HAMMER, 1112);
+            mGamepadControls1->OnKeyDown(KeyCode::KEYCODE_X_BUTTON, 1112);
             return;
         }
     }
@@ -4046,14 +4183,14 @@ void Board::MouseUpSecond(int x, int y, int theClickCount) {
 
                 if (aGameMode == GameMode::GAMEMODE_CHALLENGE_BEGHOULED || aGameMode == GameMode::GAMEMODE_CHALLENGE_BEGHOULED_TWIST) {
                     mGamepadControls1->OnKeyDown(KeyCode::KEYCODE_ESCAPE, 1096);
-                    mGamepadControls1->OnKeyDown(KeyCode::KEYCODE_ACCEPT, 1096);
-                    mGamepadControls1->OnKeyDown(KeyCode::KEYCODE_ACCEPT, 1096);
+                    mGamepadControls1->OnKeyDown(KeyCode::KEYCODE_RETURN, 1096);
+                    mGamepadControls1->OnKeyDown(KeyCode::KEYCODE_RETURN, 1096);
                     mGamepadControls1->OnKeyDown(KeyCode::KEYCODE_ESCAPE, 1096);
                 } else if ((aGameMode == GameMode::GAMEMODE_CHALLENGE_LAST_STAND && aChallengeState == ChallengeState::STATECHALLENGE_NORMAL && aGameScene == GameScenes::SCENE_PLAYING)
                            || aGameMode == GameMode::GAMEMODE_MP_VS) {
-                    mGamepadControls1->OnButtonDown(GamepadButton::BUTTONCODE_A, mGamepadControls1->mPlayerIndex1, 0);
+                    mGamepadControls1->OnButtonDown(Sexy::GamepadButton::GAMEPAD_BUTTON_A, mGamepadControls1->mPlayerIndex1, 0);
                 } else {
-                    mGamepadControls1->OnKeyDown(KeyCode::KEYCODE_ACCEPT, 1096);
+                    mGamepadControls1->OnKeyDown(KeyCode::KEYCODE_RETURN, 1096);
                 }
                 int mGameStateNew = mGamepadControls1->mGamepadState;
                 int numSeedsInBankNew = aSeedBank->GetNumSeedsOnConveyorBelt();
@@ -4072,14 +4209,14 @@ void Board::MouseUpSecond(int x, int y, int theClickCount) {
             } else if (aGameState_2P == 7 || aIsCobCannonSelected_2P || aCursorType_2P == CursorType::CURSOR_TYPE_PLANT_FROM_USABLE_COIN) {
                 if (aGameMode == GameMode::GAMEMODE_CHALLENGE_BEGHOULED || aGameMode == GameMode::GAMEMODE_CHALLENGE_BEGHOULED_TWIST) {
                     mGamepadControls2->OnKeyDown(KeyCode::KEYCODE_ESCAPE, 1096);
-                    mGamepadControls2->OnKeyDown(KeyCode::KEYCODE_ACCEPT, 1096);
-                    mGamepadControls2->OnKeyDown(KeyCode::KEYCODE_ACCEPT, 1096);
+                    mGamepadControls2->OnKeyDown(KeyCode::KEYCODE_RETURN, 1096);
+                    mGamepadControls2->OnKeyDown(KeyCode::KEYCODE_RETURN, 1096);
                     mGamepadControls2->OnKeyDown(KeyCode::KEYCODE_ESCAPE, 1096);
                 } else if ((aGameMode == GameMode::GAMEMODE_CHALLENGE_LAST_STAND && aChallengeState == ChallengeState::STATECHALLENGE_NORMAL && aGameScene == GameScenes::SCENE_PLAYING)
                            || aGameMode == GameMode::GAMEMODE_MP_VS) {
-                    mGamepadControls2->OnButtonDown(GamepadButton::BUTTONCODE_A, mGamepadControls2->mPlayerIndex1, 0);
+                    mGamepadControls2->OnButtonDown(Sexy::GamepadButton::GAMEPAD_BUTTON_A, mGamepadControls2->mPlayerIndex1, 0);
                 } else {
-                    mGamepadControls2->OnKeyDown(KeyCode::KEYCODE_ACCEPT, 1096);
+                    mGamepadControls2->OnKeyDown(KeyCode::KEYCODE_RETURN, 1096);
                 }
                 int mGameStateNew_2P = mGamepadControls2->mGamepadState;
                 int numSeedsInBankNew_2P = aSeedBank_2P->GetNumSeedsOnConveyorBelt();
@@ -4178,10 +4315,10 @@ void Board::RemovedFromManager(WidgetManager *theManager) {
 
 void Board::UpdateButtons() {
     SeedChooserScreen *aSeedChooser = mApp->mSeedChooserScreen;
-    VSSetupMenu *aVSSetup = mApp->mVSSetupScreen;
+    VSSetupMenu *aVSSetup = mApp->mVSSetupMenu;
     GamepadControls *aGamepad = (gGamePlayerIndex == 1) ? mGamepadControls2 : mGamepadControls1;
     if (gKeyDown) {
-        aGamepad->OnKeyDown(KeyCode::KEYCODE_SHOVEL, 1112);
+        aGamepad->OnKeyDown(KeyCode::KEYCODE_QUICK_DIG, 1112);
         aGamepad->mGamepadState = 7;
         gKeyDown = false;
         gGamePlayerIndex = -1;
@@ -4189,31 +4326,31 @@ void Board::UpdateButtons() {
     if (gButtonDown) {
         aGamepad->OnButtonDown(gButtonCode, gGamePlayerIndex, 0);
         gButtonDown = false;
-        gButtonCode = GamepadButton::BUTTONCODE_NONE;
+        gButtonCode = Sexy::GamepadButton::GAMEPAD_BUTTON_NONE;
         gGamePlayerIndex = -1;
     }
     if (gButtonDownP1) {
         mGamepadControls1->OnButtonDown(gButtonCodeP1, 0, 0);
         gButtonDownP1 = false;
-        gButtonCodeP1 = GamepadButton::BUTTONCODE_NONE;
+        gButtonCodeP1 = Sexy::GamepadButton::GAMEPAD_BUTTON_NONE;
     }
     if (gButtonDownP2) {
         mGamepadControls2->OnButtonDown(gButtonCodeP2, 0, 0);
         gButtonDownP2 = false;
-        gButtonCodeP2 = GamepadButton::BUTTONCODE_NONE;
+        gButtonCodeP2 = Sexy::GamepadButton::GAMEPAD_BUTTON_NONE;
     }
     if (gButtonDownSeedChooser) {
         aSeedChooser->GameButtonDown(gButtonCode, gGamePlayerIndex);
         gButtonDownSeedChooser = false;
-        gButtonCode = GamepadButton::BUTTONCODE_NONE;
+        gButtonCode = Sexy::GamepadButton::GAMEPAD_BUTTON_NONE;
         gGamePlayerIndex = -1;
     }
     if (gButtonDownVSSetup) {
-        if (!(aVSSetup->mState == VSSetupState::VS_SETUP_STATE_CUSTOM_BATTLE && gButtonCode == GamepadButton::BUTTONCODE_B)) { // 修复对战选卡阶段按下 B 键崩溃
+        if (!(aVSSetup->mState == VSSetupState::VS_SETUP_STATE_CUSTOM_BATTLE && gButtonCode == Sexy::GamepadButton::GAMEPAD_BUTTON_B)) { // 修复对战选卡阶段按下 B 键崩溃
             aVSSetup->GameButtonDown(gButtonCode, gGamePlayerIndex, 0);
         }
         gButtonDownVSSetup = false;
-        gButtonCode = GamepadButton::BUTTONCODE_NONE;
+        gButtonCode = Sexy::GamepadButton::GAMEPAD_BUTTON_NONE;
         gGamePlayerIndex = -1;
     }
 
@@ -4380,9 +4517,9 @@ void Board::FadeOutLevel() {
     }
 
     if (mNewWallNutAndSunFlowerAndChomperOnly && !mApp->IsSurvivalMode() && !HasConveyorBeltSeedBank(0)) {
-        int num = mSeedBankLeft->mNumPackets;
+        int num = mSeedBank[0]->mNumPackets;
         for (int i = 0; i < num; ++i) {
-            SeedType theType = mSeedBankLeft->mSeedPackets[i].mPacketType;
+            SeedType theType = mSeedBank[0]->mSeedPackets[i].mPacketType;
             if (theType == SeedType::SEED_CHOMPER || theType == SeedType::SEED_WALLNUT || theType == SeedType::SEED_SUNFLOWER) {
                 GrantAchievement(AchievementId::ACHIEVEMENT_CHOMP, true);
                 break;
@@ -4406,15 +4543,15 @@ void Board::DoPlantingAchievementCheck(SeedType theSeedType) {
 void Board::DrawUITop(Sexy::Graphics *g) {
     if (seedBankPin && !mApp->IsSlotMachineLevel()) {
         if (mApp->mGameScene != GameScenes::SCENE_PLANTS_WON && mApp->mGameScene != GameScenes::SCENE_ZOMBIES_WON) {
-            if (mSeedBankLeft->BeginDraw(g)) {
-                mSeedBankLeft->SeedBank::Draw(g);
-                mSeedBankLeft->EndDraw(g);
+            if (mSeedBank[0]->BeginDraw(g)) {
+                mSeedBank[0]->SeedBank::Draw(g);
+                mSeedBank[0]->EndDraw(g);
             }
 
-            if (mSeedBankRight != nullptr) {
-                if (mSeedBankRight->BeginDraw(g)) {
-                    mSeedBankRight->SeedBank::Draw(g);
-                    mSeedBankRight->EndDraw(g);
+            if (mSeedBank[1] != nullptr) {
+                if (mSeedBank[1]->BeginDraw(g)) {
+                    mSeedBank[1]->SeedBank::Draw(g);
+                    mSeedBank[1]->EndDraw(g);
                 }
             }
         }
@@ -4429,7 +4566,7 @@ int Board::GetSeedBankExtraWidth() {
         return 0;
     }
 
-    int aNumPackets = mSeedBankLeft->mNumPackets;
+    int aNumPackets = mSeedBank[0]->mNumPackets;
     return aNumPackets <= 6 ? 0 : aNumPackets == 7 ? 60 : aNumPackets == 8 ? 76 : aNumPackets == 9 ? 112 : 153;
 }
 
@@ -4513,27 +4650,31 @@ bool Board::RowCanHaveZombieType(int theRow, ZombieType theZombieType) {
 }
 
 void Board::ShakeBoard(int theShakeAmountX, int theShakeAmountY) {
-    // 添加 手机震动效果
     old_Board_ShakeBoard(this, theShakeAmountX, theShakeAmountY);
 
-    if (mApp->mPlayerInfo->mIsVibrateClosed) {
-        return;
+    // 添加 手机振动效果
+    switch (theShakeAmountY) {
+        case 4: // PHASE_SQUASH_FALLING
+        case 3: // GARGANTUAR_DEATH
+        case 2: // BOSS_EXPLOSION, BOSS_RV_THROW
+            TriggerVibration(VibrationEffect::VIVRATION_THUMP);
+            break;
+        case -2: // WALLNUT_BOWLING_IMPACT
+            TriggerVibration(VibrationEffect::VIVRATION_BOWLING);
+            break;
+        case -4: // PLANT_BURN
+        case -6: // JACK_IN_THE_BOX_POPPING
+            TriggerVibration(VibrationEffect::VIVRATION_EXPLOSION);
+            break;
+        default:
+            break;
     }
-
-    Native::BridgeApp *bridgeApp = Native::BridgeApp::getSingleton();
-    JNIEnv *env = bridgeApp->getJNIEnv();
-    jobject activity = bridgeApp->mNativeApp->getActivity();
-    jclass cls = env->GetObjectClass(activity);
-    jmethodID methodID = env->GetMethodID(cls, "vibrate", "(I)V");
-    // env->CallVoidMethod(activity, methodID, 120);
-    env->CallVoidMethod(activity, methodID, (abs(theShakeAmountX) + abs(theShakeAmountY)) * 50);
-    env->DeleteLocalRef(cls);
 }
 
 int Board::GetNumSeedsInBank(bool isZombieBank) {
     // 对战额外卡槽
     if (mApp->mGameMode == GameMode::GAMEMODE_MP_VS) {
-        if (gVSSetupAddonWidget != nullptr && gVSSetupAddonWidget->mMorePackets)
+        if (gVSSetupAddonWidget && gVSSetupAddonWidget->mExtraPacketsMode)
             return 7;
     }
 
@@ -4541,7 +4682,7 @@ int Board::GetNumSeedsInBank(bool isZombieBank) {
 }
 
 int Board::GetSeedPacketPositionX(int thePacketIndex, int theSeedBankIndex, bool thePlayerIndex) {
-    int aNumPackets = mSeedBankLeft->mNumPackets;
+    int aNumPackets = mSeedBank[0]->mNumPackets;
     if (mApp->mGameMode == GameMode::GAMEMODE_MP_VS) {
         if (aNumPackets == 6) {
             return thePlayerIndex ? 59 * thePacketIndex + 15 : 59 * thePacketIndex + 85;

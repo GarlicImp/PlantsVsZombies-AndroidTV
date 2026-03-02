@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -45,8 +45,8 @@ class CheckboxListener;
 // ====================================================================================================
 // ★ 控件
 // ====================================================================================================
-inline Sexy::Checkbox *MakeNewCheckbox(int theId, Sexy::CheckboxListener *theListener, Sexy::__Widget *theParent, bool theDefault) {
-    return reinterpret_cast<Sexy::Checkbox *(*)(int, Sexy::CheckboxListener *, Sexy::__Widget *, bool)>(MakeNewCheckboxAddr)(theId, theListener, theParent, theDefault);
+inline Sexy::Checkbox *MakeNewCheckbox(int theId, Sexy::CheckboxListener *theListener, Sexy::Widget *theParent, bool theDefault) {
+    return reinterpret_cast<Sexy::Checkbox *(*)(int, Sexy::CheckboxListener *, Sexy::Widget *, bool)>(MakeNewCheckboxAddr)(theId, theListener, theParent, theDefault);
 }
 
 #endif // PVZ_COMMON_LAWN_COMMON_H

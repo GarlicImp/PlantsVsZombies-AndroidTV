@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -22,14 +22,15 @@
 #include "PvZ/GlobalVariable.h"
 #include "PvZ/Lawn/Board/Board.h"
 #include "PvZ/Lawn/System/Music.h"
+#include "PvZ/Lawn/System/TypingCheck.h"
 #include "PvZ/Lawn/Widget/ChallengeScreen.h"
 #include "PvZ/Lawn/Widget/ConfirmBackToMainDialog.h"
 #include "PvZ/Lawn/Widget/MainMenu.h"
 #include "PvZ/Lawn/Widget/SeedChooserScreen.h"
+#include "PvZ/Lawn/Widget/TitleScreen.h"
 #include "PvZ/Lawn/Widget/VSResultsMenu.h"
 #include "PvZ/Lawn/Widget/VSSetupMenu.h"
 #include "PvZ/Lawn/Widget/WaitForSecondPlayerDialog.h"
-#include "PvZ/Misc.h"
 #include "PvZ/STL/pvzstl_string.h"
 #include "PvZ/Symbols.h"
 #include "PvZ/TodLib/Common/TodStringFile.h"
@@ -184,8 +185,8 @@ void LawnApp::DoConfirmBackToMain(bool theIsSave) {
         return;
     }
     auto *aBackDialog = new ConfirmBackToMainDialog(theIsSave);
-    (*(void (**)(LawnApp *, int, Sexy::__Widget *))(*(uint32_t *)this + 416))(this, Dialogs::DIALOG_CONFIRM_BACK_TO_MAIN, aBackDialog);
-    (*(void (**)(uint32_t, Sexy::__Widget *))(**((uint32_t **)this + 165) + 48))(*((uint32_t *)this + 165), aBackDialog);
+    (*(void (**)(LawnApp *, int, Sexy::Widget *))(*(uint32_t *)this + 416))(this, Dialogs::DIALOG_CONFIRM_BACK_TO_MAIN, aBackDialog);
+    (*(void (**)(uint32_t, Sexy::Widget *))(**((uint32_t **)this + 165) + 48))(*((uint32_t *)this + 165), aBackDialog);
 }
 
 
@@ -289,11 +290,11 @@ void LawnApp::HandleTcpClientMessage(void *buf, ssize_t bufSize) {
             size_t eventSize = VSSetupMenu::getClientEventSize(base->type);
             if (clientRecvBuffer.size() - offset < eventSize)
                 break; // 不完整
-            if (!mVSSetupScreen) {
+            if (!mVSSetupMenu) {
                 offset += eventSize;
                 break;
             }
-            mVSSetupScreen->processClientEvent((char *)&clientRecvBuffer[offset], eventSize);
+            mVSSetupMenu->processClientEvent((char *)&clientRecvBuffer[offset], eventSize);
             offset += eventSize;
         }
 
@@ -302,11 +303,11 @@ void LawnApp::HandleTcpClientMessage(void *buf, ssize_t bufSize) {
             size_t eventSize = VSResultsMenu::getClientEventSize(base->type);
             if (clientRecvBuffer.size() - offset < eventSize)
                 break; // 不完整
-            if (!mVSResultsScreen) {
+            if (!mVSResultsMenu) {
                 offset += eventSize;
                 break;
             }
-            mVSResultsScreen->processClientEvent((char *)&clientRecvBuffer[offset], eventSize);
+            mVSResultsMenu->processClientEvent((char *)&clientRecvBuffer[offset], eventSize);
             offset += eventSize;
         } else {
             offset += 1;
@@ -358,11 +359,11 @@ void LawnApp::HandleTcpServerMessage(void *buf, ssize_t bufSize) {
             if (serverRecvBuffer.size() - offset < eventSize)
                 break; // 不完整
 
-            if (!mVSSetupScreen) {
+            if (!mVSSetupMenu) {
                 offset += eventSize;
                 break;
             }
-            mVSSetupScreen->processServerEvent((char *)&serverRecvBuffer[offset], eventSize);
+            mVSSetupMenu->processServerEvent((char *)&serverRecvBuffer[offset], eventSize);
             offset += eventSize;
         } else
 
@@ -384,11 +385,11 @@ void LawnApp::HandleTcpServerMessage(void *buf, ssize_t bufSize) {
             if (serverRecvBuffer.size() - offset < eventSize)
                 break; // 不完整
 
-            if (!mVSResultsScreen) {
+            if (!mVSResultsMenu) {
                 offset += eventSize;
                 break;
             }
-            mVSResultsScreen->processServerEvent((char *)&serverRecvBuffer[offset], eventSize);
+            mVSResultsMenu->processServerEvent((char *)&serverRecvBuffer[offset], eventSize);
             offset += eventSize;
         } else {
             offset += 1;
@@ -588,17 +589,123 @@ void LawnApp::_constructor() {
 void LawnApp::Init() {
     // 试图修复默认加载名为player用户的问题。
 
-    old_LawnApp_Init(this);
+    DoParseCmdLine();
+    if (!mTodCheatKeys)
+        unkBool_1[2] = true;
+
+    unk9_2[1] = 0;
+    unk9_2[2] = 0;
+    mBoardResult = BOARDRESULT_NONE;
+    mKilledYetiAndRestarted = false;
+    unk9_2[0] = Sexy::GetTickCount() / 1000;
+    unk9_1[1] = 0;
+    pvzstl::string strings[5];
+    getGameInfo(strings, this);
+    mGameInfoStrings[0] = strings[0];
+    mGameInfoStrings[1] = strings[1];
+    mGameInfoStrings[2] = strings[2];
+    mGameInfoStrings[3] = strings[3];
+    mGameInfoStrings[4] = strings[4];
+    //    RpcEngine = DrRpcEngine::getRpcEngine();
+    //    pvzstl::string DomainURL;
+    //    ServerConfig::getDomainURL(DomainURL);
+    //    DrRpcEngine::setDefaultUrl(RpcEngine, DomainURL);
+    //    isEncryptionEnabled = ServerConfig::isEncryptionEnabled(RpcEngine);
+    //    DrRpcEngine::setDataEncryption(RpcEngine, isEncryptionEnabled);
+    //    if ( !LawnSession::Init(unk13_2) )
+    //        Sexy::SexyAppBase::DoExit(lawnApp, -1);
+    unk13_1[13] = 1;
+    unkBool3[0] = false;
+    //    LawnApp::SrvLoginToServer(lawnApp);
+    //    PerfTimer aPerfTimer;
+    //    Sexy::PerfTimer::PerfTimer(aPerfTimer);
+    //    Sexy::PerfTimer::Start((Sexy::PerfTimer *)&v60);
+
+    mProfileMgr->Load();
+    pvzstl::string defaultName = "player";
+    if (mProfileMgr->GetAnyProfile() == nullptr) {
+        mProfileMgr->AddProfile(defaultName);
+        mProfileMgr->Save();
+    }
+    if (mPlayerInfo == nullptr) {
+        pvzstl::string value;
+        bool readSuccess = RegistryReadString("CurUser", &value);
+        if (readSuccess) {
+            mPlayerInfo = mProfileMgr->GetProfile(value);
+        }
+    }
+
+    if (mPlayerInfo == nullptr) {
+        mPlayerInfo = mProfileMgr->GetProfile(defaultName);
+    }
+
     if (mPlayerInfo == nullptr && mProfileMgr->mNumProfiles > 0) {
         mPlayerInfo = mProfileMgr->GetAnyProfile();
     }
+
+    mMaxExecutions = GetInteger("MaxExecutions", 0);
+    mMaxPlays = GetInteger("MaxPlays", 0);
+    mMaxTime = GetInteger("MaxTime", 0);
+    LoadResourceManifest();
+    TodLoadResources("Init");
+    mTitleScreen = new TitleScreen(this);
+
+    mTitleScreen->Resize(0, 0, unkMem1_1[18], unkMem1_1[19]);
+    mWidgetManager->AddWidget(mTitleScreen);
+    mWidgetManager->SetFocus(mTitleScreen);
+    mEffectSystem->EffectSystemInitialize();
+    //    FilterEffectInitForApp();
+
+    mKonamiCheck = new TypingCheck;
+    mKonamiCheck->AddChar('a');
+    mKonamiCheck->AddChar('b');
+    mKonamiCheck->AddChar('b');
+    mKonamiCheck->AddChar('c');
+    mKonamiCheck->AddChar('d');
+    mKonamiCheck->AddChar('c');
+    mKonamiCheck->AddChar('b');
+    mKonamiCheck->AddChar('a');
+    pvzstl::string mustache = "mustache";
+    mMustacheCheck = new TypingCheck(mustache);
+
+    pvzstl::string moustache = "moustache";
+    mMoustacheCheck = new TypingCheck(moustache);
+
+    pvzstl::string trickedout = "trickedout";
+    mSuperMowerCheck = new TypingCheck(trickedout);
+
+    pvzstl::string trickedout2 = "tricked out";
+    mSuperMowerCheck2 = new TypingCheck(trickedout2);
+
+    pvzstl::string future = "future";
+    mFutureCheck = new TypingCheck(future);
+
+    pvzstl::string pinata = "pinata";
+    mPinataCheck = new TypingCheck(pinata);
+
+    pvzstl::string dance = "dance";
+    mDanceCheck = new TypingCheck(dance);
+
+    pvzstl::string daisies = "daisies";
+    mDaisyCheck = new TypingCheck(daisies);
+
+    pvzstl::string sukhbir = "sukhbir";
+    mSukhbirCheck = new TypingCheck(sukhbir);
+
+
+    ReanimatorLoadDefinitions(gLawnReanimationArrayAddr, 178);
+
+    //    ((Widget *)*gDaveWidgetAddr)->Resize(0, 0, unkMem1_1[18], unkMem1_1[19]);
+
+    mIsFullVersion = true;
+    Sexy::Graphics::SetTrackingDeviceState(false);
+    (*(void (**)(int, int *))(*(int *)unkMem6[109] + 172))(unkMem6[109], &unkMem8[1]);
 
     mNewIs3DAccelerated = mPlayerInfo == nullptr || !mPlayerInfo->mIs3DAcceleratedClosed;
 }
 
 void LawnApp::Load(const char *theGroupName) {
-    pvzstl::string str = StrFormat("%s", theGroupName);
-    TodLoadResources(str);
+    TodLoadResources(theGroupName);
 }
 
 // void LawnApp::DoConvertImitaterImages() {
@@ -667,7 +774,7 @@ bool LawnApp::IsChallengeWithoutSeedBank() {
 
 int LawnApp::GetSeedsAvailable(bool theIsZombieChooser) {
     // 解锁僵尸方拓展卡片
-    if (theIsZombieChooser && gMoreZombieSeeds) {
+    if (theIsZombieChooser && mPlayerInfo->mVSExtraSeedsMode) {
         return NUM_ZOMBIE_SEED_IN_CHOOSER;
     }
 
@@ -758,7 +865,7 @@ void LawnApp::KillLeaderboards() {
         return;
 
     mWidgetManager->RemoveWidget(gMainMenuLeaderboardsWidget);
-    (*((void (**)(LawnApp *, Sexy::__Widget *))vTable + 47))(this, gMainMenuLeaderboardsWidget); // MSGBOX()
+    (*((void (**)(LawnApp *, Sexy::Widget *))vTable + 47))(this, gMainMenuLeaderboardsWidget); // MSGBOX()
     gMainMenuLeaderboardsWidget = nullptr;
 }
 
@@ -774,7 +881,7 @@ void LawnApp::KillZombatarScreen() {
         return;
 
     mWidgetManager->RemoveWidget(gMainMenuZombatarWidget);
-    (*((void (**)(LawnApp *, Sexy::__Widget *))vTable + 47))(this, gMainMenuZombatarWidget); // MSGBOX()
+    (*((void (**)(LawnApp *, Sexy::Widget *))vTable + 47))(this, gMainMenuZombatarWidget); // MSGBOX()
     gMainMenuZombatarWidget = nullptr;
 }
 

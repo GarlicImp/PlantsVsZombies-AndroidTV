@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -26,6 +26,8 @@
 #include "PvZ/Lawn/Common/ConstEnums.h"
 #include "PvZ/TodLib/Common/TodFoley.h"
 
+#include <atomic>
+
 inline uintptr_t gLibBaseOffset;
 
 inline bool isMainMenu = true;
@@ -48,11 +50,9 @@ inline bool showHouse;
 inline bool imitater;
 inline bool positionAutoFix; // 自动光标归位
 inline bool useXboxMusic;
-inline bool seedBankPin;          // 无尽置顶种子栏
-inline bool dynamicPreview;       // 动态种植预览
-inline bool jumpLogo;             // 跳过加载界面的宝开Logo
-inline bool gMoreZombieSeeds;     // 解锁更多对战僵尸
-inline bool gVSBalanceAdjustment; // 对战平衡调整
+inline bool seedBankPin;    // 无尽置顶种子栏
+inline bool dynamicPreview; // 动态种植预览
+inline bool jumpLogo;       // 跳过加载界面的宝开Logo
 inline bool heavyWeaponAccel;
 
 inline bool gKeyDown = false;
@@ -61,15 +61,16 @@ inline bool gButtonDownP1 = false;
 inline bool gButtonDownP2 = false;
 inline bool gButtonDownSeedChooser = false;
 inline bool gButtonDownVSSetup = false;
-inline GamepadButton gButtonCode = GamepadButton::BUTTONCODE_NONE;
-inline GamepadButton gButtonCodeP1 = GamepadButton::BUTTONCODE_NONE;
-inline GamepadButton gButtonCodeP2 = GamepadButton::BUTTONCODE_NONE;
+inline Sexy::GamepadButton gButtonCode = Sexy::GamepadButton::GAMEPAD_BUTTON_NONE;
+inline Sexy::GamepadButton gButtonCodeP1 = Sexy::GamepadButton::GAMEPAD_BUTTON_NONE;
+inline Sexy::GamepadButton gButtonCodeP2 = Sexy::GamepadButton::GAMEPAD_BUTTON_NONE;
 inline int gGamePlayerIndex = -1;
 inline int gGamepad1ToPlayerIndex = -1;
 
 inline int speedUpMode;
 inline int speedUpCounter;
 
+inline std::atomic_bool gHasInputContent;
 inline std::string gInputString;
 
 // 重型武器角度设定

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -22,14 +22,19 @@
 
 #include "PvZ/Lawn/LawnApp.h"
 #include "PvZ/Symbols.h"
+#include "SexyCommonApp.h"
 
 namespace Sexy {
 
-class GamepadApp : public __SexyAppBase {
+class GamepadApp : public SexyCommonApp {
 public:
     bool HasGamepad() {
         return reinterpret_cast<bool (*)(GamepadApp *)>(Sexy_GamepadApp_HasGamepadAddr)(this);
     }
+
+protected:
+    GamepadApp() = default;
+    ~GamepadApp() = default;
 };
 
 } // namespace Sexy

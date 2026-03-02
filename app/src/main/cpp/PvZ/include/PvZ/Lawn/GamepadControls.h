@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -22,37 +22,12 @@
 
 #include "BaseGamepadControls.h"
 #include "PvZ/Lawn/Common/ConstEnums.h"
-// #include "PvZ/TodLib/Effect/FilterEffect.h"
+#include "PvZ/SexyAppFramework/Misc/GamepadButtons.h"
 #include "PvZ/SexyAppFramework/Misc/KeyCodes.h"
-
-// buttonCode 是按键键值，对应关系如下：
-enum GamepadButton {
-    BUTTONCODE_LUP = 0,     // 左摇杆上 0
-    BUTTONCODE_LDOWN = 1,   // 左摇杆下 1
-    BUTTONCODE_LLEFT = 2,   // 左摇杆左 2
-    BUTTONCODE_LRIGHT = 3,  // 左摇杆右 3
-    BUTTONCODE_UNKNOWN = 4, // 未知键 4
-    BUTTONCODE_PAUSE = 5,   // 暂停键 5
-    BUTTONCODE_A = 6,       // A 6
-    BUTTONCODE_B = 7,       // B 7
-    BUTTONCODE_X = 8,       // X 8
-    BUTTONCODE_Y = 9,       // Y 9
-    BUTTONCODE_L1 = 10,     // L1 10
-    BUTTONCODE_R1 = 11,     // R1 11
-    BUTTONCODE_L2 = 12,     // L2 12
-    BUTTONCODE_R2 = 13,     // R2 13
-    BUTTONCODE_TL = 14,     // TL 14
-    BUTTONCODE_TR = 15,     // TR 15
-    BUTTONCODE_UP = 16,     // 上 16
-    BUTTONCODE_DOWN = 17,   // 下 17
-    BUTTONCODE_LEFT = 18,   // 左 18
-    BUTTONCODE_RIGHT = 19,  // 右 19
-    BUTTONCODE_NONE = -1
-};
 
 class Zombie;
 
-class GamepadControls : public __BaseGamepadControls {
+class GamepadControls : public BaseGamepadControls {
 public:
     float mRangeFrom0to30UpdateFresh;  // 43
     int *mSelectorParticle;            // 44
@@ -82,8 +57,8 @@ public:
     SeedBank *GetSeedBank() {
         return reinterpret_cast<SeedBank *(*)(GamepadControls *)>(GamepadControls_GetSeedBankAddr)(this);
     }
-    void OnButtonUp(GamepadButton theButton, int theGamepadIndex, unsigned int a4) {
-        reinterpret_cast<void (*)(GamepadControls *, GamepadButton, int, unsigned int)>(GamepadControls_OnButtonUpAddr)(this, theButton, theGamepadIndex, a4);
+    void OnButtonUp(Sexy::GamepadButton theButton, int theGamepadIndex, unsigned int a4) {
+        reinterpret_cast<void (*)(GamepadControls *, Sexy::GamepadButton, int, unsigned int)>(GamepadControls_OnButtonUpAddr)(this, theButton, theGamepadIndex, a4);
     }
     // theGamepadIndex 根据手柄决定是0还是1
     // a4 恒定为0
@@ -106,7 +81,10 @@ public:
     void Update(float a2);
     void DrawPreview(Sexy::Graphics *g);
     void UpdatePreviewReanim();
-    void OnButtonDown(GamepadButton theButton, int thePlayerIndex, unsigned int unk);
+    void OnButtonDown(Sexy::GamepadButton theButton, int thePlayerIndex, unsigned int unk);
+
+    GamepadControls() = delete;
+    ~GamepadControls() = delete;
 
 protected:
     friend void InitHookFunction();
@@ -137,7 +115,7 @@ inline void (*old_GamepadControls_UpdatePreviewReanim)(GamepadControls *gamePad)
 
 inline void (*old_GamepadControls_DrawPreview)(GamepadControls *gamePad, Sexy::Graphics *graphics);
 
-inline void (*old_GamepadControls_OnButtonDown)(GamepadControls *, GamepadButton theButton, int thePlayerIndex, unsigned int unk);
+inline void (*old_GamepadControls_OnButtonDown)(GamepadControls *, Sexy::GamepadButton theButton, int thePlayerIndex, unsigned int unk);
 
 inline void (*old_ZenGardenControls_Update)(ZenGardenControls *a1, float a2);
 

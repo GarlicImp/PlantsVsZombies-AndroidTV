@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -25,7 +25,6 @@
 #include "PvZ/Lawn/LawnApp.h"
 #include "PvZ/Lawn/System/PoolEffect.h"
 #include "PvZ/Lawn/Widget/GameButton.h"
-#include "PvZ/Misc.h"
 #include "PvZ/SexyAppFramework/Graphics/Graphics.h"
 #include "PvZ/Symbols.h"
 #include "PvZ/TodLib/Common/TodStringFile.h"
@@ -52,12 +51,12 @@ void AlmanacDialog::_constructor(LawnApp *theApp) {
 
     old_AlmanacDialog_AlmanacDialog(this, theApp);
 
-    gAlmanacBackButton = MakeButton(ALMANAC_BUTTON_BACK, &mButtonListener, this, TodStringTranslate("[ALMANAC_INDEX]"));
+    gAlmanacBackButton = MakeButton(ALMANAC_BUTTON_BACK, this, this, TodStringTranslate("[ALMANAC_INDEX]"));
     gAlmanacBackButton->Resize(0, 0, 0, 0);
     gAlmanacBackButton->mBtnNoDraw = true;
     gAlmanacBackButton->mDisabled = true;
 
-    gAlmanacCloseButton = MakeButton(ALMANAC_BUTTON_CLOSE, &mButtonListener, this, TodStringTranslate("[CLOSE]"));
+    gAlmanacCloseButton = MakeButton(ALMANAC_BUTTON_CLOSE, this, this, TodStringTranslate("[CLOSE]"));
     gAlmanacCloseButton->Resize(ALMANAC_BUTTON_CLOSE_X, ALMANAC_BUTTON_CLOSE_Y, ALMANAC_BUTTON_WIDTH, ALMANAC_BUTTON_HEIGHT);
     AddWidget(gAlmanacBackButton);
     AddWidget(gAlmanacCloseButton);
@@ -67,7 +66,7 @@ void AlmanacDialog::_constructor(LawnApp *theApp) {
     Sexy::Image *gPlantBackImage = *Sexy_IMAGE_ALMANAC_PLANTBACK_Addr;
     Sexy::Image *gPoolBackImage = *Sexy_IMAGE_ALMANAC_GROUNDNIGHTPOOL_Addr;
     Sexy::Rect aBlankRect = Rect(ALMANAC_RECT_PLANT_X + 240, ALMANAC_RECT_PLANT_Y + 60, gPoolBackImage->mWidth, gPoolBackImage->mHeight);
-    reinterpret_cast<MemoryImage *>(gPlantBackImage)->ClearRect(aBlankRect);
+    static_cast<MemoryImage *>(gPlantBackImage)->ClearRect(aBlankRect);
 }
 
 void AlmanacDialog::_destructor() {
@@ -138,7 +137,7 @@ void AlmanacDialog::MouseDrag(int x, int y) {
     // 滚动图鉴文字
 
     if (gTouchDownInTextRect && gAlmanacDialogTouchDownY != y) {
-        (*(void (**)(Sexy::__Widget *, uint32_t, double))(*(uint32_t *)mScrollTextView + 500))(
+        (*(void (**)(Sexy::Widget *, uint32_t, double))(*(uint32_t *)mScrollTextView + 500))(
             (Widget *)mScrollTextView, *(uint32_t *)(*(uint32_t *)mScrollTextView + 500), *((double *)mScrollTextView + 35) + 0.6 * (gAlmanacDialogTouchDownY - y));
         gAlmanacDialogTouchDownY = y;
     }

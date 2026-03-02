@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -25,6 +25,7 @@
 #include "PvZ/Lawn/Board/SeedBank.h"
 #include "PvZ/Lawn/GamepadControls.h"
 #include "PvZ/Lawn/LawnApp.h"
+#include "PvZ/Lawn/Widget/VSSetupMenu.h"
 #include "PvZ/Lawn/Widget/WaitForSecondPlayerDialog.h"
 #include "PvZ/MagicAddr.h"
 #include "PvZ/Misc.h"
@@ -148,7 +149,7 @@ void SeedPacket::SetPacketType(SeedType theSeedType, SeedType theImitaterType) {
     if (mApp->mGameMode == GameMode::GAMEMODE_MP_VS) {
         switch (theSeedType) {
             case SEED_SUNSHROOM:
-                if (gVSBalanceAdjustment) { // 清除阳光菇的初始冷却
+                if (mApp->mPlayerInfo->mVSBalancePatchMode) { // 清除阳光菇的初始冷却
                     mRefreshTime = 0;
                     mRefreshing = false;
                     mActive = true;
@@ -160,6 +161,24 @@ void SeedPacket::SetPacketType(SeedType theSeedType, SeedType theImitaterType) {
     }
 }
 
+void DrawSeedType(Sexy::Graphics *g, float x, float y, SeedType theSeedType, SeedType theImitaterType, float theOffsetX, float theOffsetY, float theScale) {
+    // 和Plant::DrawSeedType配合使用，用于绘制卡槽内的模仿者SeedPacket变白效果。
+    g->PushState();
+    g->mScaleX = g->mScaleX * theScale;
+    g->mScaleY = g->mScaleY * theScale;
+    if (theSeedType == SeedType::SEED_ZOMBIE_GRAVESTONE) {
+        TodDrawImageCelScaledF(g, *Sexy_IMAGE_MP_TOMBSTONE_Addr, x + theOffsetX, y + theOffsetY, 0, 0, g->mScaleX, g->mScaleY);
+    } else {
+        if (theSeedType == SeedType::SEED_IMITATER && theImitaterType != SeedType::SEED_NONE) {
+            // 卡槽内的模仿者SeedPacket卡且为冷却状态，此时需要交换theImitaterType和theSeedType。
+            Plant::DrawSeedType(g, theImitaterType, theSeedType, DrawVariation::VARIATION_NORMAL, x + theOffsetX, y + theOffsetY);
+        } else {
+            Plant::DrawSeedType(g, theSeedType, theImitaterType, DrawVariation::VARIATION_NORMAL, x + theOffsetX, y + theOffsetY);
+        }
+    }
+    return g->PopState();
+}
+
 void DrawSeedPacket(Sexy::Graphics *g,
                     float x,
                     float y,
@@ -169,8 +188,8 @@ void DrawSeedPacket(Sexy::Graphics *g,
                     int theGrayness,
                     bool theDrawCost,
                     bool theUseCurrentCost,
-                    bool isZombieSeed,
-                    bool isSeedPacketSelected) {
+                    bool theIsZombieSeed,
+                    bool theIsPacketSelected) {
     // 修复选中紫卡、模仿者卡时卡片背景变为普通卡片背景
 
     SeedType realSeedType = theImitaterType != SeedType::SEED_NONE && theSeedType == SeedType::SEED_IMITATER ? theImitaterType : theSeedType;
@@ -204,7 +223,7 @@ void DrawSeedPacket(Sexy::Graphics *g,
         celToDraw = 2;
     }
 
-    if (isSeedPacketSelected) {
+    if (theIsPacketSelected) {
         if (g->mScaleX > 1.0f && theSeedType < SeedType::NUM_SEEDS_IN_CHOOSER) {
             // 紫卡背景BUG就是在这里修复的
             if (celToDraw == 2) {
@@ -212,7 +231,7 @@ void DrawSeedPacket(Sexy::Graphics *g,
             } else {
                 TodDrawImageCelScaledF(g, *Sexy_IMAGE_SEEDS_Addr, x, y, celToDraw, 0, g->mScaleX, g->mScaleY);
             }
-        } else if (isZombieSeed) {
+        } else if (theIsZombieSeed) {
             float heightOffset = g->mScaleX > 1.2 ? -1.5f : 0.0f;
             TodDrawImageScaledF(g, *Sexy_IMAGE_ZOMBIE_SEEDPACKET_Addr, x, y + heightOffset, g->mScaleX, g->mScaleY);
         } else {
@@ -444,7 +463,7 @@ void DrawSeedPacket(Sexy::Graphics *g,
         v28 = 52.0;
     }
 
-    if (isPlant && isSeedPacketSelected)
+    if (isPlant && theIsPacketSelected)
         DrawSeedType(g, x, y, realSeedType, theImitaterType, v28, v29, theDrawScale);
 
     if (thePercentDark > 0.0) {
@@ -454,14 +473,14 @@ void DrawSeedPacket(Sexy::Graphics *g,
         aPlantG.SetColor(theColor);
         aPlantG.SetColorizeImages(true);
         aPlantG.ClipRect(x, y, g->mScaleX * 50.0f, coolDownHeight * g->mScaleY);
-        if (isSeedPacketSelected) {
+        if (theIsPacketSelected) {
             if (Challenge::IsMPSeedType(theSeedType)) {
                 TodDrawImageScaledF(&aPlantG, *Sexy_IMAGE_ZOMBIE_SEEDPACKET_Addr, x, y, g->mScaleX, g->mScaleY);
             } else {
                 TodDrawImageCelScaledF(&aPlantG, *Sexy_IMAGE_SEEDS_Addr, x, y, celToDraw, 0, g->mScaleX, g->mScaleY);
             }
         }
-        if (isPlant && isSeedPacketSelected)
+        if (isPlant && theIsPacketSelected)
             DrawSeedType(&aPlantG, x, y, theSeedType, theImitaterType, v28, v29, theDrawScale);
     }
     if (theDrawCost) {
@@ -501,11 +520,19 @@ void DrawSeedPacket(Sexy::Graphics *g,
     g->SetColorizeImages(false);
 }
 
+void SeedPacket::WasPlanted(int thePlayerIndex) {
+    old_SeedPacket_WasPlanted(this, thePlayerIndex);
 
-void SeedPacket::WasPlanted(int player) {
-    old_SeedPacket_WasPlanted(this, player);
     if (tcpClientSocket >= 0) {
-        U8U8_Event event = {{EventType::EVENT_SERVER_BOARD_SEEDPACKET_WASPLANTED}, uint8_t(mIndex), mSeedBank == mBoard->mSeedBankLeft};
+        U8U8_Event event = {{EventType::EVENT_SERVER_BOARD_SEEDPACKET_WASPLANTED}, uint8_t(mIndex), mSeedBank == mBoard->mSeedBank[0]};
         sendWithSize(tcpClientSocket, &event, sizeof(U8U8_Event), 0);
     }
+}
+
+void SeedPacket::SlotMachineStart() {
+    mSlotMachiningPosition = 0.0f;
+    mSlotMachineCountDown = 400;
+    PickNextSlotMachineSeed();
+
+    TriggerVibration(VibrationEffect::VIVRATION_SLOT_MACHINE);
 }

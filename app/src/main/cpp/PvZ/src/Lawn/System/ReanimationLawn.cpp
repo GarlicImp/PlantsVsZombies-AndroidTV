@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -21,7 +21,6 @@
 #include "PvZ/GlobalVariable.h"
 #include "PvZ/Lawn/Board/Zombie.h"
 #include "PvZ/Lawn/LawnApp.h"
-#include "PvZ/Misc.h"
 #include "PvZ/SexyAppFramework/Graphics/Graphics.h"
 #include "PvZ/SexyAppFramework/Graphics/MemoryImage.h"
 #include "PvZ/TodLib/Effect/Attachment.h"
@@ -70,29 +69,28 @@ void ReanimatorCache::ReanimatorCacheInitialize() {
 }
 
 void ReanimatorCache::ReanimatorCacheDispose() {
-    for (int i = 0; i < SeedType::NUM_SEED_TYPES; i++)
-        delete mPlantImages[i];
-    while (mImageVariationList.mSize != 0) {
+    for (auto *mPlantImage : mPlantImages)
+        delete mPlantImage;
+    while (mImageVariationList.mSize > 0) {
         ReanimCacheImageVariation aImageVariation = mImageVariationList.RemoveHead();
-        if (aImageVariation.mImage != nullptr)
-            delete aImageVariation.mImage;
+        delete aImageVariation.mImage;
     }
-    for (int i = 0; i < LawnMowerType::NUM_MOWER_TYPES; i++)
-        delete mLawnMowers[i];
-    for (int i = 0; i < ZombieType::NUM_ZOMBIE_TYPES; i++)
-        delete mZombieImages[i];
+    for (auto *mLawnMower : mLawnMowers)
+        delete mLawnMower;
+    for (auto *mZombieImage : mZombieImages)
+        delete mZombieImage;
 }
 
 void ReanimatorCache::DrawCachedPlant(Graphics *graphics, float thePosX, float thePosY, SeedType theSeedType, DrawVariation theDrawVariation) {
     if (theDrawVariation == DrawVariation::VARIATION_IMITATER_LESS || theDrawVariation == DrawVariation::VARIATION_IMITATER || theDrawVariation == DrawVariation::VARIATION_NORMAL) {
-        Image *image = (Image *)mPlantImages[theSeedType];
-        if (image == nullptr) {
+        Image *aPlantImage = mPlantImages[theSeedType];
+        if (aPlantImage == nullptr) {
             return;
         }
         if (theDrawVariation == DrawVariation::VARIATION_IMITATER) {
-            image = FilterEffectGetImage(image, FilterEffect::FILTEREFFECT_WASHED_OUT);
+            aPlantImage = FilterEffectGetImage(aPlantImage, FilterEffect::FILTEREFFECT_WASHED_OUT);
         } else if (theDrawVariation == DrawVariation::VARIATION_IMITATER_LESS) {
-            image = FilterEffectGetImage(image, FilterEffect::FILTEREFFECT_LESS_WASHED_OUT);
+            aPlantImage = FilterEffectGetImage(aPlantImage, FilterEffect::FILTEREFFECT_LESS_WASHED_OUT);
         }
         int a, b, c, d;
         GetPlantImageSize(theSeedType, a, b, c, d);
@@ -100,10 +98,10 @@ void ReanimatorCache::DrawCachedPlant(Graphics *graphics, float thePosX, float t
         float yScaled = graphics->mScaleY;
         // 修复关闭3D加速后SeedPacket上不显示植物
         // if (Sexy_SexyAppBase_Is3DAccelerated(a1->mApp)) {
-        TodDrawImageScaledF(graphics, image, thePosX + xScaled * a, thePosY + yScaled * b, xScaled, yScaled);
+        TodDrawImageScaledF(graphics, aPlantImage, thePosX + xScaled * a, thePosY + yScaled * b, xScaled, yScaled);
         // } else {
         // if (xScaled == 1.0 && yScaled == 1.0) {
-        // DrawImage(graphics, image, thePosX + a, thePosY + b);
+        // DrawImage(graphics, aPlantImage, thePosX + a, thePosY + b);
         // return;
         // }
         // }
@@ -113,11 +111,8 @@ void ReanimatorCache::DrawCachedPlant(Graphics *graphics, float thePosX, float t
 }
 
 void ReanimatorCache::DrawCachedZombie(Graphics *g, float thePosX, float thePosY, ZombieType theZombieType) {
-    if (theZombieType < NUM_CACHED_ZOMBIE_TYPES) {
-        if (mZombieImages[(int)theZombieType] == nullptr)
-            mZombieImages[(int)theZombieType] = MakeCachedZombieFrame(theZombieType);
-        TodDrawImageScaledF(g, (Image *)mZombieImages[(int)theZombieType], thePosX, thePosY, g->mScaleX, g->mScaleY);
-    }
+    if (mZombieImages[theZombieType])
+        TodDrawImageScaledF(g, mZombieImages[theZombieType], thePosX, thePosY, g->mScaleX, g->mScaleY);
 }
 
 MemoryImage *ReanimatorCache::MakeBlankMemoryImage(int theWidth, int theHeight) {
@@ -135,18 +130,15 @@ MemoryImage *ReanimatorCache::MakeBlankMemoryImage(int theWidth, int theHeight) 
 }
 
 Sexy::MemoryImage *ReanimatorCache::MakeCachedZombieFrame(ZombieType theZombieType) {
-    int maxWidth = 200;
-    int maxHeight = 210;
+    // TODO: 修复 BLANK 绘制异常（旗帜、植物僵尸等头部透明图绘制为乱码）
+    int maxWidth = 256;
+    int maxHeight = 256;
 
     if (theZombieType == ZombieType::ZOMBIE_ZAMBONI)
-        maxWidth = 300;
-    if (theZombieType == ZombieType::ZOMBIE_CACHED_POLEVAULTER_WITH_POLE)
-        maxWidth = 250;
-    if (theZombieType == ZombieType::ZOMBIE_BUNGEE)
-        maxHeight = 810;
+        maxWidth = 512;
 
     MemoryImage *aMemoryImage = MakeBlankCanvasImage(maxWidth, maxHeight);
-    Graphics aMemoryGraphics((Image *)aMemoryImage);
+    Graphics aMemoryGraphics(aMemoryImage);
     aMemoryGraphics.SetLinearBlend(true);
 
     ZombieType aUseZombieType = theZombieType;

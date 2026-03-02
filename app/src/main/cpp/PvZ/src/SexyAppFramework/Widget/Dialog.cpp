@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -17,7 +17,16 @@
  * PlantsVsZombies-AndroidTV.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.transmension.mobile;
+#include "PvZ/SexyAppFramework/Widget/Dialog.h"
 
-public class SetActivityEntrance extends SetActivity {
+using namespace Sexy;
+
+void Dialog::AddedToManager(WidgetManager *theWidgetManager) {
+    // 记录当前游戏状态
+    old_Sexy_Dialog_AddedToManager(this, theWidgetManager);
+}
+
+void Dialog::RemovedFromManager(WidgetManager *theWidgetManager) {
+    // 记录当前游戏状态
+    old_Sexy_Dialog_RemovedFromManager(this, theWidgetManager);
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -57,7 +57,7 @@ constexpr float THOWN_ZOMBIE_GRAVITY = 0.05f;
 constexpr float CHILLED_SPEED_FACTOR = 0.4f;
 constexpr float CLIP_HEIGHT_LIMIT = -100.0f;
 constexpr float CLIP_HEIGHT_OFF = -200.0f;
-inline const Sexy::Color ZOMBIE_MINDCONTROLLED_COLOR = Sexy::Color(128, 0, 192, 255);
+constexpr Sexy::Color ZOMBIE_MINDCONTROLLED_COLOR{128, 0, 192, 255};
 
 enum ZombieAttackType {
     ATTACKTYPE_CHEW,
@@ -97,7 +97,7 @@ class Coin;
 class Plant;
 class Reanimation;
 class TodParticleSystem;
-class Zombie : public __GameObject {
+class Zombie : public GameObject {
 public:
     enum {
         ZOMBIE_WAVE_DEBUG = -1,
@@ -291,7 +291,7 @@ public:
     void UpdateZombieImp();
     void UpdateZombieJackInTheBox();
     void UpdateZombieGargantuar();
-    Zombie *ThrowAZombieImp(float theOffsetDistance);
+    void ThrowZombieImp(Zombie *theThrowerZombie, float theOffsetDistance);
     void UpdateZombiePeaHead();
     void UpdateZombieGatlingHead();
     void BurnRow(int theRow);
@@ -376,6 +376,7 @@ public:
     bool NeedsMoreBackupDancers();
     void UpdateYuckyFace();
     void UpdateZombiePolevaulter();
+    void DoSpecial();
 
 protected:
     void _constructor() {

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -25,15 +25,14 @@
 
 namespace Sexy {
 
-class MenuWidget : public __Widget {
+class MenuWidget : public Widget, public ButtonListener {
 public:
-    ButtonListener mButtonListener; // 64
-    bool mIsFading;                 // 260
-    bool unkBool2;                  // 261
-    int *mMenuParser;               // 66
-    int *mSourceFileName;           // 67
-    int unkInt1;                    // 68
-    Image *mImage;                  // 69
+    bool mIsFading;       // 260
+    bool unkBool2;        // 261
+    int *mMenuParser;     // 66
+    int *mSourceFileName; // 67
+    int unkInt1;          // 68
+    Image *mImage;        // 69
     // 大小70个整数
 
     void Draw(Graphics *g) {

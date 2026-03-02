@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -36,7 +36,7 @@ public:
 };
 extern ProjectileDefinition gProjectileDefinition[NUM_PROJECTILES];
 
-class Projectile : public __GameObject {
+class Projectile : public GameObject {
 public:
     int mFrame;                     // 13
     int mNumFrames;                 // 14

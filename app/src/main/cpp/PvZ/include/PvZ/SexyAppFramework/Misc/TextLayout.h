@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -26,6 +26,6 @@ class TextLayout {
     [[maybe_unused]] int unk[84];
 }; // 大小84个整数
 
-}; // namespace Sexy
+} // namespace Sexy
 
 #endif // PVZ_SEXYAPPFRAMEWORK_MISC_TEXT_LAYOUT_H

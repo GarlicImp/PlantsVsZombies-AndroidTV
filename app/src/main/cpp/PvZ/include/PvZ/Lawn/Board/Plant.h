@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -152,7 +152,7 @@ class Zombie;
 class GridItem;
 class TodParticleSystem;
 
-class Plant : public __GameObject {
+class Plant : public GameObject {
 public:
     SeedType mSeedType;                        // 13
     int mPlantCol;                             // 14
@@ -261,8 +261,8 @@ public:
     static Sexy::Image *GetImage(SeedType theSeedType);
     static int GetCost(SeedType theSeedType, SeedType theImitaterType);
     static int GetRefreshTime(SeedType theSeedType, SeedType theImitaterType);
-    static int GetCostAdjusted(SeedType theSeedType);
-    static int GetRefreshTimeAdjusted(SeedType theSeedType);
+    static int GetCostBalanced(SeedType theSeedType);
+    static int GetRefreshTimeBalanced(SeedType theSeedType);
     static bool IsNocturnal(SeedType theSeedType);
     static bool IsAquatic(SeedType theSeedType);
     static bool IsFlying(SeedType theSeedType);
@@ -295,6 +295,8 @@ public:
     ReanimationID GetPlantReanimationIDByIndex(int index);
     void SyncAnimationToClient();
     void SyncPingPongAnimationToClient();
+    void UpdateChomper();
+    void UpdateSquash();
 };
 
 inline float PlantDrawHeightOffset(Board *theBoard, Plant *thePlant, SeedType theSeedType, int theCol, int theRow) {
@@ -350,6 +352,8 @@ inline void (*old_Plant_UpdateProductionPlant)(Plant *);
 inline void (*old_Plant_UpdateShooter)(Plant *);
 
 inline bool (*old_Plant_FindTargetAndFire)(Plant *, int, PlantWeapon);
+
+inline void (*old_Plant_UpdateSquash)(Plant *);
 
 // inline void (*old_Plant_CobCannonFire)(Plant* plant, int x, int y);
 

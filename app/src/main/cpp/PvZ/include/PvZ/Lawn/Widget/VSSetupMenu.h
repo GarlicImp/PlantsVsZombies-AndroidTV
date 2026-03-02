@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -21,18 +21,12 @@
 #define PVZ_LAWN_WIDGET_VS_SETUP_MENU_H
 
 #include "PvZ/Lawn/GamepadControls.h"
+#include "PvZ/Lawn/Widget/VSSetupAddonWidget.h"
 #include "PvZ/SexyAppFramework/Widget/ButtonListener.h"
 #include "PvZ/SexyAppFramework/Widget/MenuWidget.h"
 #include "PvZ/SexyAppFramework/Widget/Widget.h"
 #include "PvZ/Symbols.h"
 #include "WaitForSecondPlayerDialog.h"
-
-constexpr int VS_BUTTON_MORE_PACKETS_X = 800;
-constexpr int VS_BUTTON_MORE_PACKETS_Y = 200;
-constexpr int VS_BUTTON_BAN_MODE_X = 800;
-constexpr int VS_BUTTON_BAN_MODE_Y = 240;
-constexpr int NUM_VS_BUTTONS = 2;
-constexpr int NUM_VS_BAN_PACKETS = 4;
 
 enum VSSetupState {
     VS_SETUP_STATE_CONTROLLERS = 0,
@@ -47,6 +41,11 @@ enum VSSetupMode {
     VS_SETUP_MODE_RANDOM_BATTLE = 2, // 随机战场
 };
 
+enum VSFirstPick {
+    VS_FIRST_PICK_PLANT = 0,
+    VS_FIRST_PICK_ZOMBIE = 1,
+};
+
 namespace Sexy {
 class ButtonWidget;
 }
@@ -54,62 +53,6 @@ class ButtonWidget;
 class LawnApp;
 class Board;
 class DefaultPlayerInfo;
-
-class BannedSeed {
-public:
-    int mX = 0;
-    int mY = 0;
-    int mChosenPlayerIndex = 0;
-    SeedType mSeedType = SEED_NONE;
-    BannedSeedState mSeedState = SEED_NOT_BANNED;
-};
-
-class VSSetupAddonWidget {
-public:
-    enum {
-        VSSetupAddonWidget_More_Packets = 12,
-        VSSetupAddonWidget_Ban_Mode = 13,
-    };
-
-public:
-    LawnApp *mApp = *gLawnApp_Addr;
-    Sexy::ButtonWidget *mMorePacketsButton = nullptr;
-    Sexy::ButtonWidget *mBanModeButton = nullptr;
-    Sexy::Image *mCheckboxImage[NUM_VS_BUTTONS] = {nullptr};
-    Sexy::Image *mCheckboxImagePress[NUM_VS_BUTTONS] = {nullptr};
-    bool mMorePackets = false;
-    bool mBanMode = false;
-    int mNumBanPackets = NUM_VS_BAN_PACKETS;
-    int mSeedsInBothBanned = 0;
-    BannedSeed mBannedSeed[NUM_ZOMBIE_SEED_TYPES];
-    bool mDrawString = false;
-
-    VSSetupAddonWidget();
-    ~VSSetupAddonWidget();
-    void SetDisable();
-    void SwapButtonImage(Sexy::ButtonWidget *theButton, int theIndex);
-    void ButtonDepress(this VSSetupAddonWidget &self, int theId);
-    void CheckboxChecked(int theId, bool checked);
-    void GetZombieSeedType();
-
-private:
-    static constexpr Sexy::ButtonListener::VTable sButtonListenerVtable{
-        .ButtonDepress = (void *)&VSSetupAddonWidget::ButtonDepress,
-    };
-
-    static inline Sexy::ButtonListener sButtonListener{&sButtonListenerVtable};
-};
-
-inline VSSetupAddonWidget *gVSSetupAddonWidget;
-
-inline int gVSSetupRequestState = 0;
-
-inline Sexy::ButtonWidget *gVSSelectBgDayButton;
-inline Sexy::ButtonWidget *gVSSelectBgNightButton;
-inline Sexy::ButtonWidget *gVSSelectBgPoolButton;
-inline Sexy::ButtonWidget *gVSSelectBgPoolNightButton;
-inline Sexy::ButtonWidget *gVSSelectBgRoofButton;
-inline Sexy::ButtonWidget *gVSSelectBgRoofNightButton;
 
 class VSSetupMenu : public Sexy::MenuWidget {
 public:
@@ -119,15 +62,29 @@ public:
         VSSetupMenu_Random_Battle = 11, // 随机战场
     };
 
+    inline static int msNextFirstPick;
+    static constexpr SeedType msRandomPools[9][8] = {
+        // PoolPlants_Normal
+        {SEED_PEASHOOTER, SEED_REPEATER, SEED_CABBAGEPULT, SEED_KERNELPULT, SEED_REPEATER, SEED_SNOWPEA, SEED_NONE, SEED_PEASHOOTER}, // pool 0
+        {SEED_WALLNUT, SEED_CHERRYBOMB, SEED_POTATOMINE, SEED_JALAPENO, SEED_SQUASH, SEED_NONE, SEED_PEASHOOTER, SEED_PEASHOOTER},    // pool 1
+        {SEED_CHOMPER, SEED_GRAVEBUSTER, SEED_THREEPEATER, SEED_SPIKEWEED, SEED_STARFRUIT, SEED_MELONPULT, SEED_GARLIC, SEED_NONE},   // pool 2
+        // PoolPlants_HasCoffee
+        {SEED_PUFFSHROOM, SEED_FUMESHROOM, SEED_SCAREDYSHROOM, SEED_PEASHOOTER, SEED_GRAVEBUSTER, SEED_NONE, SEED_PEASHOOTER, SEED_PEASHOOTER}, // pool 0
+        {SEED_WALLNUT, SEED_HYPNOSHROOM, SEED_ICESHROOM, SEED_DOOMSHROOM, SEED_JALAPENO, SEED_SQUASH, SEED_NONE, SEED_PEASHOOTER},              // pool 1
+        {SEED_GRAVEBUSTER, SEED_SPIKEWEED, SEED_GARLIC, SEED_NONE, SEED_PEASHOOTER, SEED_PEASHOOTER, SEED_PEASHOOTER, SEED_PEASHOOTER},         // pool 2
+        // PoolZombies
+        {SEED_ZOMBIE_NORMAL, SEED_ZOMBIE_TRASHCAN, SEED_ZOMBIE_TRAFFIC_CONE, SEED_ZOMBIE_LADDER, SEED_ZOMBIE_NEWSPAPER, SEED_NONE, SEED_PEASHOOTER, SEED_PEASHOOTER}, // pool 0
+        {SEED_ZOMBIE_TRASHCAN, SEED_ZOMBIE_PAIL, SEED_ZOMBIE_DANCER, SEED_ZOMBIE_POLEVAULTER, SEED_ZOMBIE_FOOTBALL, SEED_ZOMBIE_BUNGEE, SEED_ZOMBIE_POGO, SEED_NONE}, // pool 1
+        {SEED_ZOMBONI, SEED_ZOMBIE_CATAPULT, SEED_ZOMBIE_GARGANTUAR, SEED_ZOMBIE_FLAG, SEED_ZOMBIE_JACK_IN_THE_BOX, SEED_ZOMBIE_DIGGER, SEED_NONE, SEED_PEASHOOTER}   // pool 2
+    };
+
     int mInt70;                           // 70
     int mInt71;                           // 71
     int mInt72;                           // 72
     LawnApp *mApp;                        // 73
     VSSetupState mState;                  // 74 0:WaitForSecondPlayerDialog,1:未分配手柄阵营,2:已分配手柄阵营,3:自定义战场选卡中
-    int mController1Index;                // 75 // 0:手柄1, 1:手柄2
-    int mController2Index;                // 76 // 0:手柄1, 1:手柄2
-    int mSide1;                           // 77  // -1 0 1， 分别位于中 左 右
-    int mSide2;                           // 78  // -1 0 1， 分别位于中 左 右
+    int mControllerIndex[2];              // 75  // 0:手柄1, 1:手柄2
+    int mSides[2];                        // 77  // -1 0 1， 分别位于中 左 右
     int unkInt79;                         // 79
     int mSeedPickTurn;                    // 80
     int mChooserAnimateUpdateCnt;         // 81
@@ -159,8 +116,8 @@ public:
     int unkInt363[161];                   // 363 ~ 523
     int mInt524;                          // 524
 
-    void GameButtonDown(GamepadButton theButton, unsigned int thePlayerIndex, int a4) {
-        reinterpret_cast<void (*)(VSSetupMenu *, GamepadButton, unsigned int, int)>(VSSetupMenu_GameButtonDownAddr)(this, theButton, thePlayerIndex, a4);
+    void GameButtonDown(Sexy::GamepadButton theButton, unsigned int thePlayerIndex, int a4) {
+        reinterpret_cast<void (*)(VSSetupMenu *, Sexy::GamepadButton, unsigned int, int)>(VSSetupMenu_GameButtonDownAddr)(this, theButton, thePlayerIndex, a4);
     }
     void SetSecondPlayerIndex(int thePlayerIndex) {
         reinterpret_cast<void (*)(VSSetupMenu *, int)>(VSSetupMenu_SetSecondPlayerIndexAddr)(this, thePlayerIndex);
@@ -208,6 +165,10 @@ protected:
 
     void PickBackgroundImmediately();
 };
+
+inline VSSetupAddonWidget *gVSSetupAddonWidget;
+
+inline int gVSSetupRequestState = 0;
 
 inline bool is1PControllerMoving;
 inline bool is2PControllerMoving;

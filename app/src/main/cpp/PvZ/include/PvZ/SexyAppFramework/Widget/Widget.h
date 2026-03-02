@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -34,7 +34,7 @@ class Widget;
 
 typedef std::vector<Color> ColorVector;
 
-class __Widget : public __WidgetContainer {
+class Widget : public WidgetContainer {
 public:
     bool mVisible;                 // 116
     bool mMouseVisible;            // 117
@@ -56,43 +56,33 @@ public:
     // 大小64个整数！
 
     void _constructor() {
-        reinterpret_cast<void (*)(__Widget *)>(Sexy_Widget___ConstructorAddr)(this);
+        reinterpret_cast<void (*)(Widget *)>(Sexy_Widget___ConstructorAddr)(this);
     }
     void _destructor() {
-        reinterpret_cast<void (*)(__Widget *)>(Sexy_Widget___DestructorAddr)(this);
+        reinterpret_cast<void (*)(Widget *)>(Sexy_Widget___DestructorAddr)(this);
     }
 
     void Resize(int theX, int theY, int theWidth, int theHeight) {
-        reinterpret_cast<void (*)(__Widget *, int, int, int, int)>(Sexy_Widget_ResizeAddr)(this, theX, theY, theWidth, theHeight);
+        reinterpret_cast<void (*)(Widget *, int, int, int, int)>(Sexy_Widget_ResizeAddr)(this, theX, theY, theWidth, theHeight);
     }
     void SetVisible(bool isVisible) {
-        reinterpret_cast<void (*)(__Widget *, bool)>(Sexy_Widget_SetVisibleAddr)(this, isVisible);
+        reinterpret_cast<void (*)(Widget *, bool)>(Sexy_Widget_SetVisibleAddr)(this, isVisible);
     }
     void Move(int theNewX, int theNewY) {
-        reinterpret_cast<void (*)(__Widget *, int, int)>(Sexy_Widget_MoveAddr)(this, theNewX, theNewY);
+        reinterpret_cast<void (*)(Widget *, int, int)>(Sexy_Widget_MoveAddr)(this, theNewX, theNewY);
     }
     void DeferOverlay(int thePriority = 0) {
-        reinterpret_cast<void (*)(__Widget *, int)>(Sexy_Widget_DeferOverlayAddr)(this, thePriority);
+        reinterpret_cast<void (*)(Widget *, int)>(Sexy_Widget_DeferOverlayAddr)(this, thePriority);
     }
 
     void MarkDirty();
-    void AddWidget(__Widget *theWidget);
-    void RemoveWidget(__Widget *theWidget);
+    void AddWidget(Widget *theWidget);
+    void RemoveWidget(Widget *theWidget);
     Widget *FindWidget(int theId);
 
 protected:
-    __Widget() = default;
-    ~__Widget() = default;
-};
-
-class Widget : public __Widget {
-public:
-    Widget() {
-        __Widget::_constructor();
-    }
-    ~Widget() {
-        __Widget::_destructor();
-    }
+    Widget() = default;
+    ~Widget() = default;
 };
 
 } // namespace Sexy

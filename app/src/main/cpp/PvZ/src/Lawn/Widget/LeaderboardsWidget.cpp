@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -22,7 +22,6 @@
 #include "PvZ/GlobalVariable.h"
 #include "PvZ/Lawn/Board/Board.h"
 #include "PvZ/Lawn/LawnApp.h"
-#include "PvZ/Misc.h"
 #include "PvZ/TodLib/Common/TodStringFile.h"
 #include "PvZ/TodLib/Effect/Reanimator.h"
 
@@ -268,21 +267,18 @@ void DaveHelp_Draw(LeaderboardsWidget *leaderboardsWidget, Sexy::Graphics *g) {
 
     if (leaderboardsWidget->mApp->HasFinishedAdventure()) {
         leaderboardsWidget->mLeaderboardReanimations->backgroundReanim[1]->DrawRenderGroup(g, 1);
-        pvzstl::string str = TodStringTranslate("[LEADERBOARD_STREAK]");
-        pvzstl::string str1 = TodReplaceNumberString(str, "{STREAK}", leaderboardsWidget->mLongestRecordPool);
-        Sexy::Rect theRect = {317, 658, 120, 50};
-        Sexy::Font *theFont = *Sexy_FONT_CONTINUUMBOLD14_Addr;
-        TodDrawStringWrapped(g, str1, theRect, theFont, yellow, DrawStringJustification::DS_ALIGN_CENTER, false);
+        pvzstl::string aStr = TodReplaceNumberString(TodStringTranslate("[LEADERBOARD_STREAK]"), "{STREAK}", leaderboardsWidget->mLongestRecordPool);
+        Sexy::Rect aRect = {317, 658, 120, 50};
+        Sexy::Font *aFont = *Sexy_FONT_CONTINUUMBOLD14_Addr;
+        TodDrawStringWrapped(g, aStr, aRect, aFont, yellow, DrawStringJustification::DS_ALIGN_CENTER, false);
     }
 
     // DrawImage(g, addonImages.survival_button, 270, 579);
 
-    pvzstl::string str2 = TodStringTranslate("[PLAYERS_HOUSE]");
-    Sexy::Rect theRect1 = {240, 70, 800, 70};
-    pvzstl::string str3 = StrFormat("%s", leaderboardsWidget->mApp->mPlayerInfo->mName);
-    pvzstl::string str4 = TodReplaceString(str2, "{PLAYER}", str3);
-    Sexy::Font *theFont1 = *Sexy_FONT_HOUSEOFTERROR28_Addr;
-    TodDrawStringWrapped(g, str4, theRect1, theFont1, white, DrawStringJustification::DS_ALIGN_CENTER, false);
+    Sexy::Rect aRect = {240, 70, 800, 70};
+    pvzstl::string aStr = TodReplaceString(TodStringTranslate("[PLAYERS_HOUSE]"), "{PLAYER}", leaderboardsWidget->mApp->mPlayerInfo->mName);
+    Sexy::Font *aFont = *Sexy_FONT_HOUSEOFTERROR28_Addr;
+    TodDrawStringWrapped(g, aStr, aRect, aFont, white, DrawStringJustification::DS_ALIGN_CENTER, false);
 
     // int plantHeight = plantPileHeight * leaderboardsWidget->mPlantTrashBin->mPileNum;
     // int zombieHeight = zombiePileHeight * leaderboardsWidget->mZombieTrashBin->mPileNum;
@@ -405,7 +401,7 @@ void DaveHelp_MouseUp(LeaderboardsWidget *leaderboardsWidget, int x, int y) {}
 void DaveHelp_DealClick(LeaderboardsWidget *leaderboardsWidget, int id) {}
 
 void DaveHelp_KeyDown(LeaderboardsWidget *leaderboardsWidget, int keyCode) {
-    if (keyCode == Sexy::KEYCODE_ESCAPE || keyCode == Sexy::KEYCODE_ESCAPE2) {
+    if (keyCode == Sexy::KEYCODE_ESCAPE || keyCode == Sexy::KEYCODE_GAMEPAD_B) {
         if (leaderboardsWidget->mHighLightAchievement) {
             leaderboardsWidget->mHighLightAchievement = false;
             return;
@@ -446,14 +442,14 @@ void DaveHelp_KeyDown(LeaderboardsWidget *leaderboardsWidget, int keyCode) {
         leaderboardsWidget->mFocusedAchievementIndex = mFocusedIndex;
         return;
     }
-    if (keyCode == Sexy::KEYCODE_SHOVEL) {
+    if (keyCode == Sexy::KEYCODE_QUICK_DIG) {
         leaderboardsWidget->mApp->PlaySample(*Sexy_SOUND_GRAVEBUTTON_Addr);
         pvzstl::string str1 = TodStringTranslate("[PLANTS_KILLED]");
         pvzstl::string str2 = TodReplaceNumberString(str1, "{PLANTS}", leaderboardsWidget->mApp->mPlayerInfo->mGameStats.mMiscStats[GameStats::PLANTS_KILLED]);
         leaderboardsWidget->mApp->LawnMessageBox(Dialogs::DIALOG_MESSAGE, str2.c_str(), "", "[DIALOG_BUTTON_OK]", "", 3);
         return;
     }
-    if (keyCode == Sexy::KEYCODE_HAMMER) {
+    if (keyCode == Sexy::KEYCODE_X_BUTTON) {
         leaderboardsWidget->mApp->PlaySample(*Sexy_SOUND_GRAVEBUTTON_Addr);
         pvzstl::string str1 = TodStringTranslate("[ZOMBIES_KILLED]");
         pvzstl::string str2 = TodReplaceNumberString(str1, "{ZOMBIES}", leaderboardsWidget->mApp->mPlayerInfo->mGameStats.mMiscStats[GameStats::ZOMBIES_KILLED]);

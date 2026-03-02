@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -24,7 +24,7 @@
 
 class SeedBank;
 
-class __BaseGamepadControls {
+class BaseGamepadControls {
 public:
     int *mVtable;                    // 0
     GameObject mGameObject;          // 1 ~ 13
@@ -55,14 +55,8 @@ public:
     int unkMems[2];                // 41 ~ 42
     // 大小43个整数
 
-    __BaseGamepadControls() = delete;
-    ~__BaseGamepadControls() = delete;
-
     void GetGamepadVelocity(float *horizontal, float *vertical);
-};
 
-class BaseGamepadControls : public __BaseGamepadControls {
-public:
     BaseGamepadControls() = delete;
     ~BaseGamepadControls() = delete;
 };

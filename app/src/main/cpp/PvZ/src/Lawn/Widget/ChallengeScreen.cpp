@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -20,7 +20,6 @@
 #include "PvZ/Lawn/Widget/ChallengeScreen.h"
 #include "PvZ/Lawn/LawnApp.h"
 #include "PvZ/Lawn/Widget/GameButton.h"
-#include "PvZ/Misc.h"
 #include "PvZ/SexyAppFramework/Graphics/Graphics.h"
 #include "PvZ/Symbols.h"
 #include "PvZ/TodLib/Common/TodCommon.h"
@@ -125,7 +124,7 @@ void ChallengeScreen::Draw(Sexy::Graphics *graphics) {
 void ChallengeScreen::AddedToManager(int *theWidgetManager) {
     // 记录当前游戏状态
     pvzstl::string str = TodStringTranslate("[CLOSE]");
-    gChallengeScreenCloseButton = MakeButton(1000, &mButtonListener, this, str);
+    gChallengeScreenCloseButton = MakeButton(1000, this, this, str);
     gChallengeScreenCloseButton->Resize(800, 520, 170, 50);
     AddWidget(gChallengeScreenCloseButton);
 
@@ -146,7 +145,7 @@ void ChallengeScreen::RemovedFromManager(int *theWidgetManager) {
     }
 }
 
-void ChallengeScreen::__Destructor2() {
+void ChallengeScreen::_destructor2() {
     // 删除按钮
     old_ChallengeScreen_Delete2(this);
 
@@ -232,7 +231,7 @@ void ChallengeScreen::MouseUp(int x, int y) {
     if (!gTouchOutSide && !gChallengeItemMoved) {
         int gameIndex = mScreenTopChallengeIndex + (y - mPageTop) / gChallengeItemHeight;
         if (mSelectedMode == mUnk1[gameIndex]) {
-            KeyDown(Sexy::KEYCODE_ACCEPT);
+            KeyDown(Sexy::KEYCODE_RETURN);
         } else {
             mApp->PlaySample(*Sexy_SOUND_BUTTONCLICK_Addr);
             mSelectedMode = mUnk1[gameIndex];

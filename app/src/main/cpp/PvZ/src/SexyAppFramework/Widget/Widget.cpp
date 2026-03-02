@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -21,18 +21,18 @@
 
 using namespace Sexy;
 
-void __Widget::MarkDirty() {
-    (*((void (**)(__Widget *))this->vTable + 25))(this); // MarkDirty();
+void Widget::MarkDirty() {
+    (*((void (**)(Widget *))this->vTable + 25))(this); // MarkDirty();
 }
 
-void __Widget::AddWidget(__Widget *child) {
-    (*((void (**)(__Widget *, __Widget *))this->vTable + 6))(this, child); // AddWidget();
+void Widget::AddWidget(Widget *theWidget) {
+    (*((void (**)(Widget *, Widget *))this->vTable + 6))(this, theWidget); // AddWidget();
 }
 
-void __Widget::RemoveWidget(__Widget *child) {
-    (*((void (**)(__Widget *, __Widget *))this->vTable + 7))(this, child); // RemoveWidget();
+void Widget::RemoveWidget(Widget *theWidget) {
+    (*((void (**)(Widget *, Widget *))this->vTable + 7))(this, theWidget); // RemoveWidget();
 }
 
-Widget *__Widget::FindWidget(int theId) {
-    return (*((Widget * (**)(__Widget *, int)) this->vTable + 9))(this, theId); // FindWidget();
+Widget *Widget::FindWidget(int theId) {
+    return (*((Widget * (**)(Widget *, int)) this->vTable + 9))(this, theId); // FindWidget();
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -31,7 +31,7 @@
 #define HIWORD(a) ((a) >> 16)
 #define LOWORD(a) ((a) & 0xFFFF)
 
-void __Music::StartGameMusic(bool theStart) {
+void Music::StartGameMusic(bool theStart) {
     old_Music_StartGameMusic(this, theStart);
 }
 
@@ -40,7 +40,7 @@ bool muteMusic;
 int theCounter;
 } // namespace
 
-void __Music::PlayFromOffset(MusicFile theMusicFile, int theOffset, double theVolume) {
+void Music::PlayFromOffset(MusicFile theMusicFile, int theOffset, double theVolume) {
     mMusicInterface->StopMusic(theMusicFile);
     SetupMusicFileForTune(theMusicFile, mCurMusicTune);
     mMusicInterface->PlayMusic(theMusicFile, theOffset, theMusicFile == MusicFile::MUSIC_FILE_CREDITS_ZOMBIES_ON_YOUR_LAWN);
@@ -55,7 +55,7 @@ void __Music::PlayFromOffset(MusicFile theMusicFile, int theOffset, double theVo
     }
 }
 
-void __Music::PlayMusic(MusicTune theMusicTune, int theOffset, int theDrumsOffset) {
+void Music::PlayMusic(MusicTune theMusicTune, int theOffset, int theDrumsOffset) {
     if (mMusicDisabled)
         return;
     mLastMusicTune = theMusicTune;
@@ -179,7 +179,7 @@ void __Music::PlayMusic(MusicTune theMusicTune, int theOffset, int theDrumsOffse
     }
 }
 
-void __Music::UpdateMusicBurst() {
+void Music::UpdateMusicBurst() {
     // 加90ms静音，用于去除莫名其妙的开头鼓点声
     if (muteMusic) {
         theCounter--;
@@ -193,7 +193,7 @@ void __Music::UpdateMusicBurst() {
     UpdateMusicBurst2();
 }
 
-void __Music::UpdateMusicBurst2() {
+void Music::UpdateMusicBurst2() {
     int MusicOrder;                      // ebx
     double v7;                           // st7
     double v9;                           // st6
@@ -358,19 +358,19 @@ void __Music::UpdateMusicBurst2() {
         mMusicInterface->SetSongVolume(MusicFile::MUSIC_FILE_MAIN_MUSIC, aDrumsJumpOrder * mPauseVolume);
         mMusicInterface->SetSongVolume(MusicFile::MUSIC_FILE_DRUMS_NIGHTMOONGRAINS, aFadeTrackVolume * mPauseVolume);
         if (aPackedOrderMain != -1) {
-            mMusicInterface->PlayMusic(mCurMusicFileDrums, aPackedOrderMain, 0);
+            mMusicInterface->PlayMusic(mCurMusicFileDrums, aPackedOrderMain, false);
         }
     }
 }
 
-void __Music::StartBurst() {
+void Music::StartBurst() {
     if (mMusicBurstState == MusicBurstState::MUSIC_BURST_OFF) {
         mMusicBurstState = MusicBurstState::MUSIC_BURST_STARTING;
         mBurstStateCounter = 400;
     }
 }
 
-void __Music::MusicUpdate() {
+void Music::MusicUpdate() {
     if (mFadeOutCounter <= 0) {
         if (mNormalVolume != mPauseVolume) {
             mNormalVolume = mPauseVolume;
@@ -392,9 +392,9 @@ void __Music::MusicUpdate() {
     }
 }
 
-void __Music::ResyncChannel(MusicFile theFile1, MusicFile theFile2) {}
+void Music::ResyncChannel(MusicFile theFile1, MusicFile theFile2) {}
 
-void __Music::MusicResync() {
+void Music::MusicResync() {
     if (mCurMusicFileMain != MusicFile::MUSIC_FILE_NONE) {
         if (mCurMusicFileDrums != MusicFile::MUSIC_FILE_NONE)
             ResyncChannel(mCurMusicFileMain, mCurMusicFileDrums);
@@ -406,7 +406,7 @@ void __Music::MusicResync() {
 void Music2::_constructor() {
     // 选择使用哪一版本的音乐。xbox版是xm格式，有鼓点；TV版则是ogg格式，无鼓点。
     if (useXboxMusic) {
-        __Music::_constructor();
+        Music::_constructor();
     } else {
         old_Music2_Music2(this);
     }

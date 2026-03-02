@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -85,13 +85,17 @@ public:
     Graphics(const Graphics &theGraphics) {
         CreateGraphics(theGraphics);
     }
-    Graphics(Image *theDestImage = NULL) {
+    Graphics(Image *theDestImage = nullptr) {
         CreateImage(theDestImage);
+    }
+
+    static void SetTrackingDeviceState(bool state) {
+        reinterpret_cast<void (*)(bool)>(Sexy_Graphics_SetTrackingDeviceStateAddr)(state);
     }
     void CreateGraphics(const Graphics &theGraphics) {
         reinterpret_cast<void (*)(Graphics *, const Graphics &)>(Sexy_Graphics_GraphicsAddr)(this, theGraphics);
     }
-    void CreateImage(Image *theDestImage = NULL) {
+    void CreateImage(Image *theDestImage = nullptr) {
         reinterpret_cast<void (*)(Graphics *, Image *)>(Sexy_Graphics_Graphics2Addr)(this, theDestImage);
     }
     ~Graphics() {
@@ -185,8 +189,8 @@ inline void (*old_Sexy_Graphics_PushTransform)(Sexy::Graphics *, int *, bool);
 
 inline void (*old_Sexy_Graphics_PopTransform)(Sexy::Graphics *graphics);
 
-void Sexy_Graphics_DrawImageColorized(Sexy::Graphics *graphics, Sexy::Image *image, Sexy::Color *color, int x, int y);
+void Sexy_Graphics_DrawImageColorized(Sexy::Graphics *graphics, Sexy::Image *image, const Sexy::Color *color, int x, int y);
 
-void Sexy_Graphics_DrawImageColorizedScaled(Sexy::Graphics *graphics, Sexy::Image *image, Sexy::Color *color, float x, float y, float xScaled, float yScaled);
+void Sexy_Graphics_DrawImageColorizedScaled(Sexy::Graphics *graphics, Sexy::Image *image, const Sexy::Color *color, float x, float y, float xScaled, float yScaled);
 
 #endif // PVZ_SEXYAPPFRAMEWORK_GRAPHICS_GRAPHICS_H

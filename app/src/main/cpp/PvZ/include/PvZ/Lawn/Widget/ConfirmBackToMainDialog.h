@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -23,7 +23,7 @@
 #include "PvZ/Lawn/Common/ConstEnums.h"
 #include "PvZ/Lawn/Widget/LawnDialog.h"
 
-class ConfirmBackToMainDialog : public __LawnDialog {
+class ConfirmBackToMainDialog : public LawnDialog {
 public:
     GameButton *mRestartButton; // 191
     // 115: 192, 111: 194

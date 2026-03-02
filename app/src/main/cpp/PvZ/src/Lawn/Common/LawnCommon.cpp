@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -18,7 +18,8 @@
  */
 
 #include "PvZ/Lawn/Common/LawnCommon.h"
-#include "stdlib.h"
+
+#include <cstdlib>
 
 // 判断在 [theNumber - theRange, theNumber + theRange] 区间内是否存在 theMod 的整数倍数
 bool ModInRange(int theNumber, int theMod, int theRange) {

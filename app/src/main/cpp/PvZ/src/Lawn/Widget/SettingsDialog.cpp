@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -21,8 +21,8 @@
 #include "PvZ/Lawn/Common/ConstEnums.h"
 #include "PvZ/Lawn/LawnApp.h"
 #include "PvZ/Lawn/Widget/GameButton.h"
-#include "PvZ/Misc.h"
 #include "PvZ/SexyAppFramework/Graphics/Graphics.h"
+#include "PvZ/SexyAppFramework/Widget/Checkbox.h"
 #include "PvZ/Symbols.h"
 #include "PvZ/TodLib/Common/TodCommon.h"
 #include "PvZ/TodLib/Common/TodStringFile.h"
@@ -38,8 +38,8 @@ Sexy::Checkbox *gVibrateCheckbox;
 void SettingsDialog_AddedToManager(SettingsDialog *settingsDialog, int *manager) {
     old_SettingsDialog_AddedToManager(settingsDialog, manager);
     LawnApp *lawnApp = *gLawnApp_Addr;
-    Sexy::__Widget *mSoundSlider = settingsDialog->mSoundSlider;
-    Sexy::__Widget *mBackButton = settingsDialog->mBackButton;
+    Sexy::Widget *mSoundSlider = settingsDialog->mSoundSlider;
+    Sexy::Widget *mBackButton = settingsDialog->mBackButton;
 
 
     g3DAccleratedCheckbox = MakeNewCheckbox(1024, &settingsDialog->mCheckboxListener, settingsDialog, lawnApp->Is3DAccelerated());
@@ -69,9 +69,9 @@ void SettingsDialog_RemovedFromManager(SettingsDialog *settingsDialog, int *mana
 void SettingsDialog_Delete2(SettingsDialog *settingsDialog) {
     old_SettingsDialog_Delete2(settingsDialog);
     // Sexy_Checkbox_Delete(g3DAccleratedCheckbox); // 在安卓4.2上，这么Delete会闪退
-    (*((void (**)(Sexy::__Widget *))g3DAccleratedCheckbox->vTable + 1))(g3DAccleratedCheckbox); // Delete() ，用这种方式Delete在安卓4.2上就不会闪退，虽然我也不知道为什么会这样
+    (*((void (**)(Sexy::Widget *))g3DAccleratedCheckbox->vTable + 1))(g3DAccleratedCheckbox); // Delete() ，用这种方式Delete在安卓4.2上就不会闪退，虽然我也不知道为什么会这样
     g3DAccleratedCheckbox = nullptr;
-    (*((void (**)(Sexy::__Widget *))gVibrateCheckbox->vTable + 1))(gVibrateCheckbox); // Delete() ，用这种方式Delete在安卓4.2上就不会闪退，虽然我也不知道为什么会这样
+    (*((void (**)(Sexy::Widget *))gVibrateCheckbox->vTable + 1))(gVibrateCheckbox); // Delete() ，用这种方式Delete在安卓4.2上就不会闪退，虽然我也不知道为什么会这样
     gVibrateCheckbox = nullptr;
 }
 
@@ -97,7 +97,7 @@ void SettingsDialog_Draw(SettingsDialog *settingsDialog, Sexy::Graphics *g) {
         color1.mBlue = 0;
         color1.mAlpha = 255;
     }
-    pvzstl::string str1 = TodStringTranslate("[OPTIONS_VIBRATE]");
+    pvzstl::string str1 = TodStringTranslate("[OPTIONS_HAPTIC_FEEDBACK]");
     g->SetFont(*Sexy_FONT_DWARVENTODCRAFT18_Addr);
     g->SetColor(color1);
     g->DrawString(str1, gVibrateCheckbox->mX + 80, gVibrateCheckbox->mY + 20);

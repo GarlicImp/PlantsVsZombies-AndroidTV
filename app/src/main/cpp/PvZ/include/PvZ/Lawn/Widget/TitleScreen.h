@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -24,8 +24,7 @@
 #include "PvZ/SexyAppFramework/Widget/ButtonListener.h"
 #include "PvZ/SexyAppFramework/Widget/Widget.h"
 
-class TitleScreen : public Sexy::__Widget {
-
+class TitleScreen : public Sexy::Widget, public Sexy::ButtonListener {
 public:
     enum TitleState {
         WaitingForFirstDraw = 0,
@@ -35,18 +34,16 @@ public:
         Loading = 4
     };
 
-public:
-    Sexy::ButtonListener mButtonListener; // 64
-    Sexy::Image *mPopcapLogo;             // 65
-    Sexy::Image *mGuide;                  // 66
-    Sexy::Widget *mStartButton;           // 67
-    float mCurBarWidth;                   // 68
-    float mTotalBarWidth;                 // 69
-    float mBarVel;                        // 70
-    float mBarStartProgress;              // 71
-    bool mRegisterClicked;                // 288
-    bool mLoadingThreadComplete;          // 289
-    int mTitleAge;                        // 73
+    Sexy::Image *mPopcapLogo;    // 65
+    Sexy::Image *mGuide;         // 66
+    Sexy::Widget *mStartButton;  // 67
+    float mCurBarWidth;          // 68
+    float mTotalBarWidth;        // 69
+    float mBarVel;               // 70
+    float mBarStartProgress;     // 71
+    bool mRegisterClicked;       // 288
+    bool mLoadingThreadComplete; // 289
+    int mTitleAge;               // 73
     bool mNeedRegister;
     bool mNeedShowRegisterBox;
     bool mNeedToInit;
@@ -62,11 +59,23 @@ public:
     int unk2[2];
     bool mNeedPlayLogo; // 4 * 83
     LawnApp *mApp;      // 84
+
+    TitleScreen(LawnApp *theApp) {
+        _constructor(theApp);
+    }
+
+protected:
+    friend void InitHookFunction();
+
+    void _constructor(LawnApp *theApp);
+
 }; // 大小85个整数
 
 inline void (*old_TitleScreen_Draw)(TitleScreen *titleScreen, Sexy::Graphics *a2);
 
 inline void (*old_TitleScreen_Update)(TitleScreen *titleScreen);
+
+inline void (*old_TitleScreen_TitleScreen)(TitleScreen *titleScreen, LawnApp *);
 
 
 void TitleScreen_Draw(TitleScreen *titleScreen, Sexy::Graphics *graphics);

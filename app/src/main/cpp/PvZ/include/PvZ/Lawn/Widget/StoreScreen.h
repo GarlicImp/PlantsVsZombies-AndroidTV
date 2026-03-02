@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -85,7 +85,7 @@ public:
     void Update();
     void SetupPage();
     void DrawItem(Sexy::Graphics *g, int a3, StoreItem theStoreItem);
-    void ButtonDepress(int buttonId);
+    void ButtonDepress(int theId);
     void PurchaseItem(StoreItem item);
     void Draw(Sexy::Graphics *g);
     bool IsPottedPlant(StoreItem theStoreItem);

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -26,7 +26,7 @@
 constexpr int zombiePileHeight = 70;
 constexpr int plantPileHeight = 100;
 
-class TrashBin : public Sexy::__Widget {
+class TrashBin : public Sexy::Widget {
 public:
     enum TrashPileType { PLANT_PILE = 0, ZOMBIE_PILE = 1 };
 

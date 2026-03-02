@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -28,7 +28,7 @@ const unsigned long MEMORYCHECK_ID = 0x4BEEFADE;
 
 class SexyMatrix3;
 
-class MemoryImage : public __Image {
+class MemoryImage : public Image {
 public:
     LawnApp *mApp;         // 28
     int unkMems4;          // 29

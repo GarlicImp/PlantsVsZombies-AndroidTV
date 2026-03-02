@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -31,30 +31,29 @@ struct Curve1DUtil {
     int unk[16];
 };
 
-class ChallengeScreen : public Sexy::__Widget {
+class ChallengeScreen : public Sexy::Widget, public Sexy::ButtonListener {
 public:
-    Sexy::ButtonListener mButtonListener; // 64
-    Sexy::ButtonWidget *mButtons[94];     // 65 ~ 158
-    LawnApp *mApp;                        // 159
-    int *mToolTipWidget;                  // 160
-    ChallengePage mPageIndex;             // 161
-    bool mCheatEnableChallenges;          // 648
-    UnlockingState mUnlockState;          // 163
-    int mUnlockStateCounter;              // 164
-    int mUnlockChallengeIndex;            // 165
-    float mLockShakeX;                    // 166
-    float mLockShakeY;                    // 167
-    Curve1DUtil mUtil;                    // 168 ~ 183
-    int *mHelpBarWidget;                  // 184
-    int mScreenTopChallengeIndex;         // 185
-    int mSelectedChallengeIndex;          // 186
-    float mUnkFloat;                      // 187
-    GameMode mUnk1[94];                   // 188 ~ 281
-    int mUnk2[94];                        // 282 ~ 375
-    int mTotalGameInPage;                 // 376
-    int mSelectedChallenge;               // 377 其值固定比mSelectedMode小2
-    GameMode mSelectedMode;               // 378
-    int unk4;                             // 379
+    Sexy::ButtonWidget *mButtons[94]; // 65 ~ 158
+    LawnApp *mApp;                    // 159
+    int *mToolTipWidget;              // 160
+    ChallengePage mPageIndex;         // 161
+    bool mCheatEnableChallenges;      // 648
+    UnlockingState mUnlockState;      // 163
+    int mUnlockStateCounter;          // 164
+    int mUnlockChallengeIndex;        // 165
+    float mLockShakeX;                // 166
+    float mLockShakeY;                // 167
+    Curve1DUtil mUtil;                // 168 ~ 183
+    int *mHelpBarWidget;              // 184
+    int mScreenTopChallengeIndex;     // 185
+    int mSelectedChallengeIndex;      // 186
+    float mUnkFloat;                  // 187
+    GameMode mUnk1[94];               // 188 ~ 281
+    int mUnk2[94];                    // 282 ~ 375
+    int mTotalGameInPage;             // 376
+    int mSelectedChallenge;           // 377 其值固定比mSelectedMode小2
+    GameMode mSelectedMode;           // 378
+    int unk4;                         // 379
     // 大小380个整数
 
     void SetUnlockChallengeIndex(ChallengePage thePage, bool theIsIZombie = false) {
@@ -84,7 +83,7 @@ protected:
     friend void InitHookFunction();
 
     void _constructor(LawnApp *theApp, ChallengePage thePage);
-    void __Destructor2();
+    void _destructor2();
 };
 
 class ChallengeDefinition {

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -22,7 +22,7 @@
 
 #include "LawnDialog.h"
 
-class NewOptionsDialog : public __LawnDialog {
+class NewOptionsDialog : public LawnDialog {
 
 public:
     void ButtonDepress(int buttonId);

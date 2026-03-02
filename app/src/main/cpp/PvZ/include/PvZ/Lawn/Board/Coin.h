@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -25,7 +25,7 @@
 #include "PvZ/Lawn/System/PlayerInfo.h"
 #include "PvZ/Symbols.h"
 
-class Coin : public __GameObject {
+class Coin : public GameObject {
 public:
     float mPosX;                   // 13
     float mPosY;                   // 14

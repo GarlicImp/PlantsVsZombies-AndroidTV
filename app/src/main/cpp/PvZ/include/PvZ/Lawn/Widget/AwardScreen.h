@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -25,7 +25,7 @@
 
 class GameButton;
 
-class AwardScreen : public Sexy::__Widget {
+class AwardScreen : public Sexy::Widget {
 public:
     int unkInt64;             // 64
     GameButton *mStartButton; // 65

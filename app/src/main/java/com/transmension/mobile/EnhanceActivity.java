@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -18,6 +18,8 @@
  */
 
 package com.transmension.mobile;
+
+import static com.android.support.Preferences.context;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -232,10 +234,6 @@ public class EnhanceActivity extends MainActivity {
     public static native void nativeEnableOpenSL();
 
     public static native void nativeJumpLogo();
-
-    public static native void nativeMoreZombieSeeds();
-
-    public static native void nativeVSBalanceAdjustment();
 
     public static native void nativeHeavyWeaponAccel();
 
@@ -582,12 +580,6 @@ public class EnhanceActivity extends MainActivity {
 
         if (sharedPreferences.getBoolean("jumpLogo", false))
             nativeJumpLogo();
-
-        if (sharedPreferences.getBoolean("gMoreZombieSeeds", false))
-            nativeMoreZombieSeeds();
-
-        if (sharedPreferences.getBoolean("gVSBalanceAdjustment", false))
-            nativeVSBalanceAdjustment();
 
         if (sharedPreferences.getBoolean("heavyWeaponAccel", false))
             nativeHeavyWeaponAccel();
@@ -1120,11 +1112,92 @@ public class EnhanceActivity extends MainActivity {
         return true;
     }
 
-    private void vibrate(int time) {
-        if (vibrator == null) {
-            vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+    static final int HAPITIC_THUMP = 0;
+    static final int HAPITIC_EXPLOSION = 1;
+    static final int HAPITIC_BOWLING = 2;
+    static final int HAPITIC_SLOT_MACHINE = 3;
+    static final int HAPITIC_WHACK_HIT = 4;
+    static final int HAPITIC_WHACK_MISS = 5;
+    static final int HAPITIC_ICE_TRAP = 6;
+    static final int HAPITIC_JUMP = 7;
+    static final int HAPITIC_ZOMBIE_RISE_FROM_GRAVE = 8;
+    static final int HAPITIC_ZOMBIE_RISE_FROM_POOL = 9;
+    static final int HAPITIC_BUNGEE_LANDING = 10;
+    static final int HAPITIC_BUNGEE_RISING = 11;
+    static final int HAPITIC_BOSS_HIT = 12;
+
+    private void startVibration(int hapiticEffect) {
+        Vibrator vibrator = (Vibrator) context.getSystemService(VIBRATOR_SERVICE);
+        VibrationComposition composition = new VibrationComposition();
+        if (vibrator != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            switch (hapiticEffect) {
+                case HAPITIC_THUMP:
+                    composition.timings = new long[]{100, 25, 25, 25, 25, 25, 25, 25, 25};
+                    composition.amplitudes = new int[]{0, 255, 224, 192, 160, 128, 96, 64, 32};
+                    break;
+                case HAPITIC_EXPLOSION:
+                    composition.timings = new long[]{100, 50, 50, 50, 50, 50};
+                    composition.amplitudes = new int[]{0, 64, 128, 255, 128, 64};
+                    break;
+                case HAPITIC_BOWLING:
+                case HAPITIC_BOSS_HIT:
+                    composition.timings = new long[]{50, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20};
+                    composition.amplitudes = new int[]{0, 255, 0, 255, 0, 255, 0, 255, 0, 128, 0, 128, 0, 128, 0, 128};
+                    break;
+                case HAPITIC_SLOT_MACHINE:
+                    composition.timings = new long[]
+                            {150, 200, 50, 200, 50, 200, 50, 200, 50, 200, 50, 200, 50, 200, 50,
+                                    200, 50, 200, 50, 200, 50, 200, 50, 200, 50, 200, 50, 200, 50, 200, 50};
+                    composition.amplitudes = new int[]
+                            {255, 0, 255, 0, 255, 0, 255, 0, 128, 0, 128, 0, 128, 0, 128, 0, 64,
+                                    0, 64, 0, 64, 0, 64, 0, 32, 0, 32, 0, 32, 0, 32};
+                    break;
+                case HAPITIC_WHACK_HIT:
+                    composition.timings = new long[]{50, 30, 20, 20, 20};
+                    composition.amplitudes = new int[]{0, 255, 128, 64, 32};
+                    break;
+                case HAPITIC_WHACK_MISS:
+                    composition.timings = new long[]{50, 30, 20, 20, 20};
+                    composition.amplitudes = new int[]{0, 128, 64, 32, 16};
+                    break;
+                case HAPITIC_ICE_TRAP:
+                case HAPITIC_ZOMBIE_RISE_FROM_POOL:
+                    composition.timings = new long[]
+                            {200, 10, 40, 10, 40, 10, 40, 10, 40, 10, 40, 10, 40, 10, 40, 10, 40, 10, 40, 10, 40, 10, 40, 10,
+                                    40, 10, 40, 10, 40, 10, 40, 10, 40, 10, 40, 10, 40, 10, 40, 10, 40, 10, 40, 10, 40, 10, 40, 10,
+                                    40, 10, 40, 10, 40, 10, 40, 10, 40, 10, 40, 10, 40, 10, 40, 10, 40, 10, 40, 10, 40, 10, 40, 10, 40, 10, 40, 10, 40, 10, 40, 10};
+                    composition.amplitudes = new int[]
+                            {0, 255, 0, 255, 0, 255, 0, 255, 0, 255, 0, 255, 0, 255, 0, 255, 0, 255, 0, 255, 0, 255, 0, 255,
+                                    0, 128, 0, 128, 0, 128, 0, 128, 0, 128, 0, 128, 0, 128, 0, 128, 0, 128, 0, 128, 0, 128, 0, 128,
+                                    0, 64, 0, 64, 0, 64, 0, 64, 0, 64, 0, 64, 0, 64, 0, 64, 0, 64, 0, 64, 0, 64, 0, 64, 0, 32, 0, 32, 0, 32, 0, 32};
+                    break;
+                case HAPITIC_JUMP:
+                    composition.timings = new long[]{200, 5, 5, 5, 5, 5, 5, 5, 5};
+                    composition.amplitudes = new int[]{0, 16, 32, 48, 64, 80, 96, 112, 128};
+                    break;
+                case HAPITIC_ZOMBIE_RISE_FROM_GRAVE:
+                    composition.timings = new long[]{20, 150, 20, 150, 20, 150, 20, 150, 20, 150, 20, 150, 20, 150, 20};
+                    composition.amplitudes = new int[]{64, 0, 128, 0, 64, 0, 128, 0, 64, 0, 128, 0, 64, 0, 128};
+                    break;
+                case HAPITIC_BUNGEE_LANDING:
+                    composition.timings = new long[]{500, 300, 300, 300, 300, 300};
+                    composition.amplitudes = new int[]{0, 32, 64, 128, 64, 32};
+                    break;
+                case HAPITIC_BUNGEE_RISING:
+                    composition.timings = new long[]{30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30};
+                    composition.amplitudes = new int[]{8, 16, 24, 32, 40, 48, 56, 64, 72, 80, 88, 96, 104, 112, 120, 128};
+                    break;
+                default:
+                    break;
+            }
+            vibrator.vibrate(android.os.VibrationEffect.createWaveform(composition.timings, composition.amplitudes, composition.repeatIndex));
         }
-        vibrator.vibrate(time);
+    }
+
+    public class VibrationComposition {
+        long[] timings;
+        int[] amplitudes;
+        int repeatIndex = -1; // Don't repeat.
     }
 
     //方向键单独自定义一个类，这样方便我们自定义它

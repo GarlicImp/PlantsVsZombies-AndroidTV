@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -90,7 +90,6 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
@@ -409,7 +408,11 @@ public class SetActivity extends Activity {
         saveAspect.setText(R.string.addon_aspect_save);
         saveAspect.setOnClickListener(view -> {
             sharedPreferences.edit().putInt("width", widthPicker.getValue()).putInt("height", heightPicker.getValue()).putInt("scaleX", scaleSeekBar.getProgress()).putInt("scaleY", scaleSeekBar.getProgress()).putBoolean("shiLiuBiJiu", !fullscreenCheckBox.isChecked()).apply();
-            Toast.makeText(SetActivity.this, getString(R.string.addon_aspect_toast1) + (fullscreenCheckBox.isChecked() ? getString(R.string.addon_aspect_toast2) : String.format(Locale.getDefault(), "%d: %d", widthPicker.getValue(), heightPicker.getValue())) + String.format(Locale.getDefault(), getString(R.string.addon_aspect_toast3), scaleSeekBar.getProgress()), Toast.LENGTH_SHORT).show();
+            Toast.makeText(
+                    SetActivity.this,
+                    fullscreenCheckBox.isChecked() ? getString(R.string.addon_aspect_toast1) : getString(R.string.addon_aspect_toast2, widthPicker.getValue(), heightPicker.getValue(), scaleSeekBar.getProgress()),
+                    Toast.LENGTH_SHORT
+            ).show();
         });
 
         CheckBox immersiveCheckBox = new CheckBox(this);
@@ -939,7 +942,7 @@ public class SetActivity extends Activity {
 
         final CheckBox useOpenSL = new CheckBox(this);
         useOpenSL.setText(R.string.addon_ingame_useopensl);
-        useOpenSL.setChecked(sharedPreferences.getBoolean("useOpenSL", true));
+        useOpenSL.setChecked(sharedPreferences.getBoolean("useOpenSL", false));
         useOpenSL.setOnCheckedChangeListener((compoundButton, bool) -> sharedPreferences.edit().putBoolean("useOpenSL", bool).apply());
         useOpenSL.setLayoutParams(matchWrapParams);
         useOpenSL.setOnLongClickListener(v -> {
@@ -965,34 +968,6 @@ public class SetActivity extends Activity {
             return true;
         });
 
-        final CheckBox moreZombieSeeds = new CheckBox(this);
-        moreZombieSeeds.setText(R.string.addon_ingame_moreZombieSeeds);
-        moreZombieSeeds.setChecked(sharedPreferences.getBoolean("gMoreZombieSeeds", false));
-        moreZombieSeeds.setOnCheckedChangeListener((compoundButton, bool) -> sharedPreferences.edit().putBoolean("gMoreZombieSeeds", bool).apply());
-        moreZombieSeeds.setLayoutParams(matchWrapParams);
-        moreZombieSeeds.setOnLongClickListener(v -> {
-            new AlertDialog.Builder(SetActivity.this)
-                    .setTitle(R.string.addon_ingame_moreZombieSeeds)
-                    .setMessage(R.string.addon_ingame_moreZombieSeeds_info)
-                    .setPositiveButton("OK", null)
-                    .create().show();
-            return true;
-        });
-
-        final CheckBox VSBalanceAdjustment = new CheckBox(this);
-        VSBalanceAdjustment.setText(R.string.addon_ingame_VSBalanceAdjustment);
-        VSBalanceAdjustment.setChecked(sharedPreferences.getBoolean("gVSBalanceAdjustment", false));
-        VSBalanceAdjustment.setOnCheckedChangeListener((compoundButton, bool) -> sharedPreferences.edit().putBoolean("gVSBalanceAdjustment", bool).apply());
-        VSBalanceAdjustment.setLayoutParams(matchWrapParams);
-        VSBalanceAdjustment.setOnLongClickListener(v -> {
-            new AlertDialog.Builder(SetActivity.this)
-                    .setTitle(R.string.addon_ingame_VSBalanceAdjustment)
-                    .setMessage(R.string.addon_ingame_VSBalanceAdjustment_info)
-                    .setPositiveButton("OK", null)
-                    .create().show();
-            return true;
-        });
-
         container.addView(manualCollect);
         container.addView(canShop);
         container.addView(showCoolDown);
@@ -1005,8 +980,6 @@ public class SetActivity extends Activity {
         container.addView(useXboxMusics);
         container.addView(useOpenSL);
         container.addView(jumpLogo);
-        container.addView(moreZombieSeeds);
-        container.addView(VSBalanceAdjustment);
         try {
             Class.forName("com.android.support.CkHomuraMenu");
             final CheckBox useMenu = new CheckBox(this);
@@ -1242,7 +1215,7 @@ public class SetActivity extends Activity {
                                             String readmeContent = byteArrayOutputStream.toString("UTF-8");
 
                                             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                                            builder.setTitle(String.format(getString(R.string.addon_appearance_readmetitle), pakNameToShow)); // 设置对话框标题
+                                            builder.setTitle(getString(R.string.addon_appearance_readmetitle, pakNameToShow)); // 设置对话框标题
                                             builder.setMessage(readmeContent); // 设置对话框内容
 
                                             // 添加确定按钮和取消按钮
@@ -1368,7 +1341,7 @@ public class SetActivity extends Activity {
                     fos.flush();// 刷新缓冲区
                     is.close();
                     fos.close();
-                    Toast.makeText(this, getString(R.string.addon_adventure_importlevels_toast4) + adventureNames[adventureId], Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.addon_adventure_importlevels_toast4, adventureNames[adventureId]), Toast.LENGTH_SHORT).show();
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -1472,7 +1445,10 @@ public class SetActivity extends Activity {
         final Button buttonHide = new Button(this);
         PackageManager packageManager = getPackageManager();
         ComponentName set = new ComponentName(getPackageName(), SetActivityEntrance.class.getName());
-        buttonHide.setText(String.format(getString(R.string.addon_hide_self), packageManager.getComponentEnabledSetting(set) == PackageManager.COMPONENT_ENABLED_STATE_DISABLED ? "显示" : "隐藏"));
+        buttonHide.setText(getString(
+                R.string.addon_hide_self,
+                (packageManager.getComponentEnabledSetting(set) == PackageManager.COMPONENT_ENABLED_STATE_DISABLED) ? getString(R.string.show) : getString(R.string.hide)
+        ));
         buttonHide.setTextSize(15f);
         buttonHide.setTypeface(Typeface.DEFAULT_BOLD);
         buttonHide.setOnClickListener(view -> hideOrNot());
@@ -1642,15 +1618,15 @@ public class SetActivity extends Activity {
             new AlertDialog.Builder(this)
                     .setTitle(R.string.addon_hide_self_title1)
                     .setMessage(R.string.addon_hide_self_message1)
-                    .setNegativeButton(R.string.addon_hide_self_back, null)
-                    .setPositiveButton(R.string.addon_hide_self_ok, (dialogInterface, i1) -> packageManager.setComponentEnabledSetting(set, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, 0))
+                    .setNegativeButton(android.R.string.cancel, null)
+                    .setPositiveButton(android.R.string.ok, (dialogInterface, i1) -> packageManager.setComponentEnabledSetting(set, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, 0))
                     .show();
         } else {
             new AlertDialog.Builder(this)
                     .setTitle(R.string.addon_hide_self_title2)
                     .setMessage(R.string.addon_hide_self_message2)
-                    .setNegativeButton(R.string.addon_hide_self_back, null)
-                    .setPositiveButton(R.string.addon_hide_self_ok, (dialogInterface, i1) -> packageManager.setComponentEnabledSetting(set, PackageManager.COMPONENT_ENABLED_STATE_DISABLED, 0))
+                    .setNegativeButton(android.R.string.cancel, null)
+                    .setPositiveButton(android.R.string.ok, (dialogInterface, i1) -> packageManager.setComponentEnabledSetting(set, PackageManager.COMPONENT_ENABLED_STATE_DISABLED, 0))
                     .show();
         }
     }

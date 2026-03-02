@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -20,7 +20,6 @@
 #include "PvZ/Lawn/Widget/TrashBin.h"
 #include "PvZ/GlobalVariable.h"
 #include "PvZ/Lawn/LawnApp.h"
-#include "PvZ/Misc.h"
 
 TrashBin::TrashBin(TrashPileType theTrashPileType, float theHeight) {
     _constructor(theTrashPileType, theHeight);
@@ -62,7 +61,7 @@ Sexy::Image *TrashBin::GetZombieTrashPiece(int theLevel) {
     else
         v5 = mPileNum;
     if (v3 >= *((uint32_t *)this + v5 + 79) && v3 <= *((uint32_t *)this + v5 + 82)) {
-        while (1) {
+        while (true) {
             v3 = RandRangeInt(0, 100);
             v4 = mPileNum;
             v6 = v4 >= 3 ? 3 : mPileNum;

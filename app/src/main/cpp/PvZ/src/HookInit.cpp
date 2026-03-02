@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -18,15 +18,16 @@
  */
 
 #include "PvZ/HookInit.h"
-#include "Homura/HookFunc.h"
+#include "Homura/HookUtils.h"
 #include "PvZ/Android/IntroVideo.h"
-#include "PvZ/Android/OpenSL.h"
+#include "PvZ/Android/Native/AudioOutput.h"
 #include "PvZ/Lawn/Board/Board.h"
 #include "PvZ/Lawn/Board/Challenge.h"
 #include "PvZ/Lawn/Board/Coin.h"
 #include "PvZ/Lawn/Board/CursorObject.h"
 #include "PvZ/Lawn/Board/CutScene.h"
 #include "PvZ/Lawn/Board/GridItem.h"
+#include "PvZ/Lawn/Board/MessageWidget.h"
 #include "PvZ/Lawn/Board/Plant.h"
 #include "PvZ/Lawn/Board/Projectile.h"
 #include "PvZ/Lawn/Board/SeedBank.h"
@@ -44,6 +45,7 @@
 #include "PvZ/Lawn/Widget/ChallengeScreen.h"
 #include "PvZ/Lawn/Widget/ConfirmBackToMainDialog.h"
 #include "PvZ/Lawn/Widget/CreditScreen.h"
+#include "PvZ/Lawn/Widget/HelpBarWidget.h"
 #include "PvZ/Lawn/Widget/HelpOptionsDialog.h"
 #include "PvZ/Lawn/Widget/HelpTextScreen.h"
 #include "PvZ/Lawn/Widget/HouseChooserDialog.h"
@@ -58,7 +60,6 @@
 #include "PvZ/Lawn/Widget/VSResultsMenu.h"
 #include "PvZ/Lawn/Widget/VSSetupMenu.h"
 #include "PvZ/Lawn/Widget/WaitForSecondPlayerDialog.h"
-#include "PvZ/Misc.h"
 #include "PvZ/SexyAppFramework/Graphics/Graphics.h"
 #include "PvZ/SexyAppFramework/Widget/ButtonWidget.h"
 #include "PvZ/SexyAppFramework/Widget/WidgetManager.h"
@@ -162,6 +163,7 @@ void InitHookFunction() {
     homura::HookFunction(Board_AddAGraveStoneAddr, &Board::AddAGraveStone, &old_Board_AddAGraveStone);
     homura::HookFunction(Board_TakeSunMoneyAddr, &Board::TakeSunMoney, &old_Board_TakeSunMoney);
     homura::HookFunction(Board_TakeDeathMoneyAddr, &Board::TakeDeathMoney, &old_Board_TakeDeathMoney);
+    homura::HookFunction(Board_SpawnZombiesFromGravesAddr, &Board::SpawnZombiesFromGraves, nullptr);
 
 
     homura::HookFunction(FixBoardAfterLoadAddr, &FixBoardAfterLoad, &old_FixBoardAfterLoad);
@@ -190,11 +192,12 @@ void InitHookFunction() {
     homura::HookFunction(Challenge_IZombieGetBrainTargetAddr, &Challenge::IZombieGetBrainTarget, &old_Challenge_IZombieGetBrainTarget);
     homura::HookFunction(Challenge_IZombieSquishBrainAddr, &Challenge::IZombieSquishBrain, &old_Challenge_IZombieSquishBrain);
     homura::HookFunction(Challenge_UpdateConveyorBeltAddr, &Challenge::UpdateConveyorBelt, &old_Challenge_UpdateConveyorBelt);
+    homura::HookFunction(Challenge_MouseDownWhackAZombieAddr, &Challenge::MouseDownWhackAZombie, nullptr);
 
 
     homura::HookFunction(ChallengeScreen_AddedToManagerAddr, &ChallengeScreen::AddedToManager, &old_ChallengeScreen_AddedToManager);
     homura::HookFunction(ChallengeScreen_RemovedFromManagerAddr, &ChallengeScreen::RemovedFromManager, &old_ChallengeScreen_RemovedFromManager);
-    homura::HookFunction(ChallengeScreen_Delete2Addr, &ChallengeScreen::__Destructor2, &old_ChallengeScreen_Delete2);
+    homura::HookFunction(ChallengeScreen_Delete2Addr, &ChallengeScreen::_destructor2, &old_ChallengeScreen_Delete2);
     homura::HookFunction(ChallengeScreen_UpdateAddr, &ChallengeScreen::Update, &old_ChallengeScreen_Update);
     homura::HookFunction(ChallengeScreen_ChallengeScreenAddr, &ChallengeScreen::_constructor, &old_ChallengeScreen_ChallengeScreen);
     homura::HookFunction(ChallengeScreen_DrawAddr, &ChallengeScreen::Draw, &old_ChallengeScreen_Draw);
@@ -281,7 +284,7 @@ void InitHookFunction() {
     homura::HookFunction(MainMenu_RemovedFromManagerAddr, &MainMenu::RemovedFromManager, &old_MainMenu_RemovedFromManager);
     homura::HookFunction(MainMenu_DrawOverlayAddr, &MainMenu::DrawOverlay, &old_MainMenu_DrawOverlay);
     homura::HookFunction(MainMenu_DrawFadeAddr, &MainMenu::DrawFade, &old_MainMenu_DrawFade);
-    homura::HookFunction(MainMenu_Delete2Addr, &MainMenu::__Destructor2, &old_MainMenu_Delete2);
+    homura::HookFunction(MainMenu_Delete2Addr, &MainMenu::_destructor2, &old_MainMenu_Delete2);
     homura::HookFunction(MainMenu_DrawAddr, &MainMenu::Draw, &old_MainMenu_Draw);
 
 
@@ -315,6 +318,8 @@ void InitHookFunction() {
     homura::HookFunction(Plant_UpdateShooterAddr, &Plant::UpdateShooter, nullptr);
     homura::HookFunction(Plant_IceZombiesAddr, &Plant::IceZombies, nullptr);
     homura::HookFunction(Plant_FindTargetAndFireAddr, &Plant::FindTargetAndFire, &old_Plant_FindTargetAndFire);
+    homura::HookFunction(Plant_UpdateChomperAddr, &Plant::UpdateChomper, nullptr);
+    homura::HookFunction(Plant_UpdateSquashAddr, &Plant::UpdateSquash, &old_Plant_UpdateSquash);
 
     // MSHookFunction(Plant_CobCannonFireAddr, (void *) Plant_CobCannonFire, (void **) &old_Plant_CobCannonFire);
     // MSHookFunction(Plant_UpdateReanimAddr, (void *) Plant_UpdateReanim, (void **) &old_Plant_UpdateReanim);
@@ -340,6 +345,7 @@ void InitHookFunction() {
     homura::HookFunction(SeedPacket_SetPacketTypeAddr, &SeedPacket::SetPacketType, &old_SeedPacket_SetPacketType);
     // MSHookFunction(SeedPacket_MouseDownAddr, (void *) SeedPacket_MouseDown, (void **) &old_SeedPacket_MouseDown);
     homura::HookFunction(SeedPacket_WasPlantedAddr, &SeedPacket::WasPlanted, &old_SeedPacket_WasPlanted);
+    homura::HookFunction(SeedPacket_SlotMachineStartAddr, &SeedPacket::SlotMachineStart, nullptr);
 
 
     homura::HookFunction(Zombie_UpdateAddr, &Zombie::Update, &old_Zombie_Update);
@@ -401,8 +407,8 @@ void InitHookFunction() {
     homura::HookFunction(Zombie_UpdateYuckyFaceAddr, &Zombie::UpdateYuckyFace, &old_Zombie_UpdateYuckyFace);
 
 
-    homura::HookFunction(Sexy_Dialog_AddedToManagerWidgetManagerAddr, &SexyDialog_AddedToManager, &old_SexyDialog_AddedToManager);
-    homura::HookFunction(Sexy_Dialog_RemovedFromManagerAddr, &SexyDialog_RemovedFromManager, &old_SexyDialog_RemovedFromManager);
+    homura::HookFunction(Sexy_Dialog_AddedToManagerWidgetManagerAddr, &Sexy::Dialog::AddedToManager, &old_Sexy_Dialog_AddedToManager);
+    homura::HookFunction(Sexy_Dialog_RemovedFromManagerAddr, &Sexy::Dialog::RemovedFromManager, &old_Sexy_Dialog_RemovedFromManager);
 
 
     homura::HookFunction(SeedBank_DrawAddr, &SeedBank::Draw, &old_SeedBank_Draw);
@@ -450,7 +456,7 @@ void InitHookFunction() {
     homura::HookFunction(MailScreen_MailScreenAddr, &MailScreen::_constructor, &old_MailScreen_MailScreen);
     homura::HookFunction(MailScreen_AddedToManagerAddr, &MailScreen::AddedToManager, &old_MailScreen_AddedToManager);
     homura::HookFunction(MailScreen_RemovedFromManagerAddr, &MailScreen::RemovedFromManager, &old_MailScreen_RemovedFromManager);
-    homura::HookFunction(MailScreen_Delete2Addr, &MailScreen::__Destructor2, &old_MailScreen_Delete2);
+    homura::HookFunction(MailScreen_Delete2Addr, &MailScreen::_destructor2, &old_MailScreen_Delete2);
 
 
     homura::HookFunction(ZenGardenControls_UpdateAddr, &ZenGardenControls::Update, &old_ZenGardenControls_Update);
@@ -470,7 +476,7 @@ void InitHookFunction() {
 
     homura::HookFunction(NewOptionsDialog_ButtonDepressAddr, &NewOptionsDialog::ButtonDepress, &old_NewOptionsDialog_ButtonDepress);
 
-    homura::HookFunction(BaseGamepadControls_GetGamepadVelocityAddr, &__BaseGamepadControls::GetGamepadVelocity, nullptr);
+    homura::HookFunction(BaseGamepadControls_GetGamepadVelocityAddr, &BaseGamepadControls::GetGamepadVelocity, nullptr);
 
     homura::HookFunction(LookupFoleyAddr, &LookupFoley, &old_LookupFoley);
 
@@ -480,7 +486,7 @@ void InitHookFunction() {
     homura::HookFunction(MessageWidget_UpdateAddr, &CustomMessageWidget::Update, &old_MessageWidget_Update);
     homura::HookFunction(MessageWidget_DrawAddr, &CustomMessageWidget::Draw, &old_MessageWidget_Draw);
 
-    homura::HookFunction(Sexy_ExtractLoadingSoundsResourcesAddr, &Sexy_ExtractLoadingSoundsResources, &old_Sexy_ExtractLoadingSoundsResources);
+    homura::HookFunction(Sexy_ExtractLoadingSoundsResourcesAddr, &Sexy::ExtractLoadingSoundsResources, &old_Sexy_ExtractLoadingSoundsResources);
     // MSHookFunction(Sexy_ScrollbarWidget_MouseDownAddr, (void *) Sexy_ScrollbarWidget_MouseDown,nullptr);
 
     homura::HookFunction(CustomScrollbarWidget_RemoveScrollButtonsAddr, &Sexy::CustomScrollbarWidget::RemoveScrollButtons, nullptr);
@@ -518,7 +524,7 @@ void InitHookFunction() {
 
 
     //    homura::HookFunction(ReanimatorCache_ReanimatorCacheInitializeAddr, &ReanimatorCache::ReanimatorCacheInitialize, nullptr);
-    homura::HookFunction(ReanimatorCache_ReanimatorCacheDisposeAddr, &ReanimatorCache::ReanimatorCacheDispose, nullptr);
+    //    homura::HookFunction(ReanimatorCache_ReanimatorCacheDisposeAddr, &ReanimatorCache::ReanimatorCacheDispose, nullptr);
     homura::HookFunction(ReanimatorCache_DrawCachedPlantAddr, &ReanimatorCache::DrawCachedPlant, &old_ReanimatorCache_DrawCachedPlant);
     homura::HookFunction(ReanimatorCache_UpdateReanimationForVariationAddr, &ReanimatorCache::UpdateReanimationForVariation, &old_ReanimatorCache_UpdateReanimationForVariation);
     homura::HookFunction(ReanimatorCache_LoadCachedImagesAddr, &ReanimatorCache::LoadCachedImages, &old_ReanimatorCache_LoadCachedImages);
@@ -526,7 +532,9 @@ void InitHookFunction() {
     homura::HookFunction(ReanimatorCache_DrawCachedZombieAddr, &ReanimatorCache::DrawCachedZombie, nullptr);
 
 
-    homura::HookFunction(HelpBarWidget_HelpBarWidgetAddr, &HelpBarWidget_HelpBarWidget, &old_HelpBarWidget_HelpBarWidget);
+    homura::HookFunction(HelpBarWidget_HelpBarWidgetAddr, &HelpBarWidget::_constructor, &old_HelpBarWidget_HelpBarWidget);
+
+
     homura::HookFunction(DrawSeedTypeAddr, &DrawSeedType, nullptr);
     homura::HookFunction(DrawSeedPacketAddr, &DrawSeedPacket, nullptr);
 
@@ -560,6 +568,7 @@ void InitHookFunction() {
     homura::HookFunction(Sexy_MemoryImage_ClearRectAddr, &Sexy::MemoryImage::ClearRect, nullptr);
 
 
+    homura::HookFunction(TitleScreen_TitleScreenAddr, &TitleScreen::_constructor, &old_TitleScreen_TitleScreen);
     homura::HookFunction(TitleScreen_DrawAddr, &TitleScreen_Draw, &old_TitleScreen_Draw);
     homura::HookFunction(TitleScreen_UpdateAddr, &TitleScreen_Update, &old_TitleScreen_Update);
     homura::HookFunction(TitleScreen_SwitchStateAddr, &TitleScreen_SwitchState, nullptr);
@@ -685,8 +694,8 @@ void InitVTableHookFunction() {
 }
 
 void InitOpenSL() {
-    homura::HookFunction(Native_AudioOutput_setupAddr, &Native_AudioOutput_setup, &old_Native_AudioOutput_setup);
-    homura::HookFunction(Native_AudioOutput_shutdownAddr, &Native_AudioOutput_shutdown, &old_Native_AudioOutput_shutdown);
+    homura::HookFunction(Native_AudioOutput_setupAddr, &Native::AudioOutput::setup, &old_Native_AudioOutput_setup);
+    homura::HookFunction(Native_AudioOutput_shutdownAddr, &Native::AudioOutput::shutdown, &old_Native_AudioOutput_shutdown);
     // MSHookFunction(Native_AudioOutput_writeAddr,(void *) Native_AudioOutput_write,(void **) &old_Native_AudioOutput_write);
     homura::HookFunction(j_AGAudioWriteAddr, &AudioWrite, nullptr);
 }

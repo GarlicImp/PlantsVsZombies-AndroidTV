@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -21,12 +21,15 @@
 #define PVZ_LAWN_LAWN_APP_H
 
 #include "PvZ/Lawn/Common/ConstEnums.h"
+#include "PvZ/Lawn/System/TypingCheck.h"
 #include "PvZ/Lawn/Widget/AchievementsWidget.h"
+#include "PvZ/SexyAppFramework/GamepadApp.h"
 #include "PvZ/SexyAppFramework/Misc/ProfileMgr.h"
 #include "PvZ/SexyAppFramework/SexyAppBase.h"
 #include "PvZ/Symbols.h"
 #include "PvZ/TodLib/Common/TodFoley.h"
 #include "PvZ/TodLib/Effect/EffectSystem.h"
+#include "PvZ/TodLib/Effect/TodParticle.h"
 
 class ZenGarden;
 class Board;
@@ -45,7 +48,7 @@ class VSSetupMenu;
 class VSResultsMenu;
 class MailBox;
 
-class LawnApp : public Sexy::__SexyAppBase {
+class LawnApp : public Sexy::GamepadApp {
 public:
     Board *mBoard;                           // 552
     TitleScreen *mTitleScreen;               // 553
@@ -53,8 +56,8 @@ public:
     int unk1[2];                             // 555 ~ 556
     int *mHelpTextScreen;                    // 557
     int unkUnk;                              // 558
-    VSSetupMenu *mVSSetupScreen;             // 559
-    VSResultsMenu *mVSResultsScreen;         // 560
+    VSSetupMenu *mVSSetupMenu;               // 559
+    VSResultsMenu *mVSResultsMenu;           // 560
     SeedChooserScreen *mSeedChooserScreen;   // 561
     SeedChooserScreen *mZombieChooserScreen; // 562
     int *mAwardScreen;                       // 563
@@ -103,16 +106,16 @@ public:
     int unk9_2[3];                           // 651 ~ 653
     BoardResult mBoardResult;                // 654
     bool mKilledYetiAndRestarted;            // 2620
-    int *mKonamiCheck;                       // 656
-    int *mMustacheCheck;                     // 657
-    int *mMoustacheCheck;                    // 658
-    int *mSuperMowerCheck;                   // 659
-    int *mSuperMowerCheck2;                  // 660
-    int *mFutureCheck;                       // 661
-    int *mPinataCheck;                       // 662
-    int *mDanceCheck;                        // 663
-    int *mDaisyCheck;                        // 664
-    int *mSukhbirCheck;                      // 665
+    TypingCheck *mKonamiCheck;               // 656
+    TypingCheck *mMustacheCheck;             // 657
+    TypingCheck *mMoustacheCheck;            // 658
+    TypingCheck *mSuperMowerCheck;           // 659
+    TypingCheck *mSuperMowerCheck2;          // 660
+    TypingCheck *mFutureCheck;               // 661
+    TypingCheck *mPinataCheck;               // 662
+    TypingCheck *mDanceCheck;                // 663
+    TypingCheck *mDaisyCheck;                // 664
+    TypingCheck *mSukhbirCheck;              // 665
     bool mMustacheMode;                      // 2664
     bool mSuperMowerMode;                    // 2665
     bool mFutureMode;                        // 2666
@@ -127,7 +130,10 @@ public:
     int mTwoPlayerState;                     // 671
     int unk12[3];                            // 672 ~ 674
     MailBox *mMailBox;                       // 675
-    int unk13[26];                           // 676 ~ 701
+    int unk13_1[14];                         // 676 ~ 689
+    bool unkBool3[4];                        // 690
+    int unk13_2[6];                          // 691 ~ 696
+    pvzstl::string mGameInfoStrings[5];      // 697 ~ 701
     int *mHelpBarWidget;                     // 702
     int unk14;                               // 703
     int *mLogComposer;                       // 704
@@ -279,8 +285,8 @@ public:
     bool HasSeedType(SeedType theSeedType, int thePlayerIndex) {
         return reinterpret_cast<int (*)(LawnApp *, SeedType, int)>(LawnApp_HasSeedTypeAddr)(this, theSeedType, thePlayerIndex);
     }
-    void SafeDeleteWidget(Sexy::__Widget *widget) { // vTable + 4 * 47
-        reinterpret_cast<void (*)(LawnApp *, Sexy::__Widget *)>(LawnApp_SafeDeleteWidgetAddr)(this, widget);
+    void SafeDeleteWidget(Sexy::Widget *widget) { // vTable + 4 * 47
+        reinterpret_cast<void (*)(LawnApp *, Sexy::Widget *)>(LawnApp_SafeDeleteWidgetAddr)(this, widget);
     }
     LawnApp() {
         _constructor();

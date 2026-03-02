@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -20,14 +20,15 @@
 #ifndef PVZ_SEXYAPPFRAMEWORK_TODLIB_COMMON_DATA_ARRAY_H
 #define PVZ_SEXYAPPFRAMEWORK_TODLIB_COMMON_DATA_ARRAY_H
 
+#include <cassert>
 #include <cstdint>
 #include <cstring>
 
-enum {
-    DATA_ARRAY_INDEX_MASK = 65535,
-    DATA_ARRAY_KEY_MASK = -65536,
+enum : uint32_t {
+    DATA_ARRAY_INDEX_MASK = 0x0000'FFFF,
+    DATA_ARRAY_KEY_MASK = 0xFFFF'0000,
     DATA_ARRAY_KEY_SHIFT = 16,
-    DATA_ARRAY_MAX_SIZE = 65536,
+    DATA_ARRAY_MAX_SIZE = UINT16_MAX + 1,
     DATA_ARRAY_KEY_FIRST = 1,
 };
 
@@ -39,30 +40,23 @@ public:
         uint32_t mID;
     };
 
-    DataArrayItem *mBlock;
-    uint32_t mMaxUsedCount;
-    uint32_t mMaxSize;
-    uint32_t mFreeListHead;
-    uint32_t mSize;
-    uint32_t mNextKey;
-    const char *mName;
+    DataArrayItem *mBlock = nullptr;
+    uint32_t mMaxUsedCount = 0u;
+    uint32_t mMaxSize = 0u;
+    uint32_t mFreeListHead = 0u;
+    uint32_t mSize = 0u;
+    uint32_t mNextKey = 1u;
+    const char *mName = nullptr;
 
-    DataArray() noexcept {
-        mBlock = nullptr;
-        mMaxUsedCount = 0u;
-        mMaxSize = 0u;
-        mFreeListHead = 0u;
-        mSize = 0u;
-        mNextKey = 1u;
-        mName = nullptr;
-    }
+    DataArray() = default;
 
     ~DataArray() {
         DataArrayDispose();
     }
 
     void DataArrayInitialize(uint32_t theMaxSize, const char *theName) {
-        mBlock = reinterpret_cast<DataArrayItem *>(operator new(sizeof(DataArrayItem) * theMaxSize));
+        assert(mBlock == nullptr);
+        mBlock = reinterpret_cast<DataArrayItem *>(::operator new(sizeof(DataArrayItem) * theMaxSize));
         mMaxSize = theMaxSize;
         mNextKey = 1001u;
         mName = theName;
@@ -71,7 +65,7 @@ public:
     void DataArrayDispose() noexcept {
         if (mBlock != nullptr) {
             DataArrayFreeAll();
-            operator delete(mBlock);
+            ::operator delete(mBlock);
             mBlock = nullptr;
             mMaxUsedCount = 0u;
             mMaxSize = 0u;
@@ -83,6 +77,7 @@ public:
 
     void DataArrayFree(T *theItem) noexcept {
         auto *aItem = reinterpret_cast<DataArrayItem *>(theItem);
+        assert(DataArrayGet(aItem->mID) == theItem);
         theItem->~T();
         uint32_t anId = aItem->mID & DATA_ARRAY_INDEX_MASK;
         aItem->mID = mFreeListHead;
@@ -94,12 +89,14 @@ public:
         for (T *aItem = nullptr; IterateNext(aItem);) {
             DataArrayFree(aItem);
         }
-        mFreeListHead = 0U;
-        mMaxUsedCount = 0U;
+        mFreeListHead = 0u;
+        mMaxUsedCount = 0u;
     }
 
-    uint32_t DataArrayGetID(const T *theItem) const noexcept {
-        return reinterpret_cast<const DataArrayItem *>(theItem)->mID;
+    uint32_t DataArrayGetID(const T *theItem) /* const */ noexcept {
+        auto *aItem = reinterpret_cast<const DataArrayItem *>(theItem);
+        assert(DataArrayGet(aItem->mID) == theItem);
+        return aItem->mID;
     }
 
     bool IterateNext(T *&theItem) const noexcept {
@@ -120,6 +117,8 @@ public:
     }
 
     T *DataArrayAlloc() {
+        assert(mSize < mMaxSize);
+        assert(mFreeListHead <= mMaxUsedCount);
         uint32_t aNext = mMaxUsedCount;
         if (mFreeListHead == mMaxUsedCount) {
             mFreeListHead = ++mMaxUsedCount;
@@ -148,6 +147,7 @@ public:
     }
 
     T *DataArrayGet(uint32_t theId) noexcept {
+        // assert(DataArrayTryToGet(theId) != nullptr); // useless in net play
         return &mBlock[uint16_t(theId)].mItem;
     }
 };

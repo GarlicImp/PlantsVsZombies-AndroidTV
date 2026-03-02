@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -47,6 +47,8 @@ enum EventType : uint8_t {
     EVENT_VSSETUPMENU_MOVE_CONTROLLER,
     EVENT_VSSETUPMENU_SET_CONTROLLER,
 
+    EVENT_SERVER_VSSETUP_ADDON_BUTTON_INIT,
+
     EVENT_SEEDCHOOSER_SELECT_SEED,
 
     EVENT_CLIENT_BOARD_TOUCH_DOWN,
@@ -90,7 +92,8 @@ enum EventType : uint8_t {
     EVENT_SERVER_BOARD_PLANT_FIRE,                         // 射出子弹
     EVENT_SERVER_BOARD_PLANT_ADD,
     EVENT_SERVER_BOARD_PLANT_DIE,
-    EVENT_SERVER_BOARD_PLANT_DO_SPECIAL, // 同步一次性植物的爆炸
+    EVENT_SERVER_BOARD_PLANT_DO_SPECIAL, // 同步植物触发特性
+    EVENT_SERVER_BOARD_PLANT_CHOMPER_BIT,
 
     EVENT_SERVER_BOARD_ZOMBIE_DIE,
     EVENT_SERVER_BOARD_ZOMBIE_MIND_CONTROLLED,
@@ -107,6 +110,8 @@ enum EventType : uint8_t {
     EVENT_SERVER_BOARD_ZOMBIE_IMP_THROW,
     EVENT_SERVER_BOARD_ZOMBIE_HUGE_WAVE,    // 同步"一大波僵尸"提示
     EVENT_SERVER_BOARD_ZOMBIE_YUCKY_SETROW, // 同步吃大蒜换行
+    EVENT_SERVER_BOARD_ZOMBIE_PHASE_COUNTER,
+    EVENT_SERVER_BOARD_ZOMBIE_DO_SPECIAL, // 同步僵尸触发特性
 
     EVENT_SERVER_BOARD_LAWNMOWER_START,
 
@@ -115,7 +120,6 @@ enum EventType : uint8_t {
 
     EVENT_SERVER_BOARD_SEEDPACKET_WASPLANTED,
     EVENT_SERVER_BOARD_START_LEVEL,
-
 
     EVENT_CLIENT_VSRESULT_BUTTON_DEPRESS,
     EVENT_SERVER_VSRESULT_BUTTON_DEPRESS,
@@ -129,18 +133,22 @@ enum class UIMode {
 
 enum class InputPurpose {
     NONE = 0,
-    LAN_JOIN_MANUAL,    // 模式2：加入指定IP房间
-    SERVER_CONNECT_ADDR // 模式3：连接服务器 IP:PORT
+    LAN_JOIN_MANUAL,     // 模式2：加入指定IP房间
+    HOST_SET_PORT,       // 模式2：设置房间端口
+    SERVER_CONNECT_ADDR, // 模式3：连接服务器 IP:PORT
 };
+
 struct ServerRoomItem {
     int roomId;
     char name[128];
     bool full;
     bool gaming;
 };
-class WaitForSecondPlayerDialog : public __LawnDialog {
+
+class WaitForSecondPlayerDialog : public LawnDialog {
 public:
     bool m2PJoined;
+    // 115：192，111：194。自roomName1起的成员为我新增的成员，我Hook了构造函数调用方，为构造时分配了更多内存，因此可以为WaitForSecondPlayerDialog任意地新增成员。
 
     int *roomName1;
     int *roomName2;
@@ -209,7 +217,6 @@ public:
 
 
     bool ServerTryReadOneFrame(uint8_t &outType, uint8_t *outPayload, uint16_t &outLen);
-    static uint32_t ReadBE32(const uint8_t *p);
 
     // MODE3 drawing + selection
     void DrawServerRoomList(Sexy::Graphics *g);
@@ -219,11 +226,10 @@ public:
     void RefreshButtons();
 
     // 弹输入框（可复用一个函数，用不同 title）
-    void ShowTextInput(const char *title);
-    // 115：192，111：194。自roomName1起的成员为我新增的成员，我Hook了构造函数调用方，为构造时分配了更多内存，因此可以为WaitForSecondPlayerDialog任意地新增成员。
+    void ShowTextInput(const char *title, const char *hint);
 
-    void GameButtonDown(GamepadButton theButton, unsigned int thePlayerIndex) {
-        reinterpret_cast<void (*)(WaitForSecondPlayerDialog *, GamepadButton, unsigned int)>(WaitForSecondPlayerDialog_GameButtonDownAddr)(this, theButton, thePlayerIndex);
+    void GameButtonDown(Sexy::GamepadButton theButton, unsigned int thePlayerIndex) {
+        reinterpret_cast<void (*)(WaitForSecondPlayerDialog *, Sexy::GamepadButton, unsigned int)>(WaitForSecondPlayerDialog_GameButtonDownAddr)(this, theButton, thePlayerIndex);
     }
 
     WaitForSecondPlayerDialog(LawnApp *theApp) {
@@ -239,7 +245,7 @@ public:
     void Update();
     void Draw(Sexy::Graphics *g);
     void Resize(int theX, int theY, int theWidth, int theHeight);
-    void MouseDown(int x, int y, int count);
+    void MouseDown(int x, int y, int theClickCount);
     void CreateRoom();
     void JoinRoom();
     void UdpBroadcastRoom();
@@ -252,7 +258,6 @@ public:
     void LeaveRoom();
     void ExitRoom();
     bool ManualIpConnect();
-    void ShowIpInputDialog();
 
     void processServerEvent(void *buf, ssize_t bufSize);
     void processClientEvent(void *buf, ssize_t bufSize);
@@ -280,7 +285,6 @@ inline void (*old_WaitForSecondPlayerDialog_Delete)(WaitForSecondPlayerDialog *d
 // 双方都需要
 constexpr int UDP_PORT = 8888;
 
-
 // 主机端需要
 inline int udpBroadcastSocket = -1;
 inline int tcpListenSocket = -1;
@@ -289,7 +293,6 @@ inline int tcpPort = 0;
 inline int lastBroadcastTime = 0;
 inline sockaddr_in broadcast_addr;
 inline std::string ifname;
-
 
 // 客户端需要
 constexpr int MAX_SERVERS = 3;
@@ -327,6 +330,7 @@ union Buffer32Bit {
     int32_t i32;
     float f32;
 };
+static_assert(sizeof(Buffer32Bit) == 4);
 
 class BaseEvent {
 public:
@@ -445,13 +449,12 @@ inline server_info servers[MAX_SERVERS];
 inline int scanned_server_count = 0; // 已发现的服务端数量
 inline int udpScanSocket = -1;
 
-
 // 客户端TCP socket
 inline int tcpServerSocket = -1;
 inline bool tcp_connecting = false; // 正在尝试连接
 inline bool tcp_connected = false;
 
-static inline ssize_t sendWithSize(int socket, BaseEvent *event, size_t len, int flags) {
+inline ssize_t sendWithSize(int socket, BaseEvent *event, size_t len, int flags) {
 
     //    如果后续出现了大于255byte的数据包，记得改这里
     //    assert(len <= 255);

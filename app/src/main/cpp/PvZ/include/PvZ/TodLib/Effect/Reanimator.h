@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -20,11 +20,13 @@
 #ifndef PVZ_SEXYAPPFRAMEWORK_EFFECT_REANIMATION_H
 #define PVZ_SEXYAPPFRAMEWORK_EFFECT_REANIMATION_H
 
-#include "EffectSystem.h"
-#include "FilterEffect.h"
-
+#include "PvZ/STL/pvzstl_string.h"
+#include "PvZ/SexyAppFramework/Graphics/Color.h"
 #include "PvZ/SexyAppFramework/Misc/SexyMatrix.h"
 #include "PvZ/Symbols.h"
+#include "PvZ/TodLib/Common/DataArray.h"
+
+#include "FilterEffect.h"
 
 class Reanimation;
 class ReanimAtlas;
@@ -41,7 +43,7 @@ class Font;
 class Graphics;
 class MemoryImage;
 class Image;
-}; // namespace Sexy
+} // namespace Sexy
 
 // ######################################################################################################################################################
 // ############################################################### 以下为动画定义相关内容 ###############################################################

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -26,6 +26,7 @@
 #include "PvZ/Lawn/Board/Plant.h"
 #include "PvZ/Lawn/Board/Projectile.h"
 #include "PvZ/Lawn/LawnApp.h"
+#include "PvZ/Lawn/Widget/VSSetupMenu.h"
 #include "PvZ/MagicAddr.h"
 #include "PvZ/Misc.h"
 #include "PvZ/SexyAppFramework/Graphics/Graphics.h"
@@ -125,7 +126,7 @@ void Zombie::ZombieInitialize(int theRow, ZombieType theType, bool theVariant, Z
             break;
 
         case ZombieType::ZOMBIE_TRASHCAN:
-            if (gVSBalanceAdjustment) {
+            if (mApp->mPlayerInfo->mVSBalancePatchMode) {
                 mShieldHealth = 1100; // 800 -> 1100
             }
             break;
@@ -292,12 +293,20 @@ void Zombie::UpdateYeti() {
     if (mMindControlled || !mHasHead || IsDeadOrDying())
         return;
 
-    if (mApp->mGameMode == GameMode::GAMEMODE_MP_VS) { // 修复对战雪人露头就逃跑
+    if (mApp->IsVSMode()) { // 修复对战雪人露头就逃跑
         if (mZombiePhase == PHASE_YETI_PRE_RUN) {
             mPhaseCounter = RandRangeInt(1500, 2000);
             mHasObject = true;
             mZombiePhase = PHASE_ZOMBIE_NORMAL;
-            return;
+        } else if (mZombiePhase == ZombiePhase::PHASE_ZOMBIE_NORMAL) {
+            if (mPhaseCounter == 500 && tcpClientSocket >= 0) {
+                U8U8U16U16_Event event;
+                event.type = EventType::EVENT_SERVER_BOARD_ZOMBIE_PHASE_COUNTER;
+                event.data1 = uint8_t(mZombiePhase);
+                event.data3 = uint16_t(mBoard->mZombies.DataArrayGetID(this));
+                event.data4 = uint16_t(mPhaseCounter);
+                sendWithSize(tcpClientSocket, &event, sizeof(U8U8U16U16_Event), 0);
+            }
         }
     }
 
@@ -623,9 +632,10 @@ void Zombie::UpdateZombieGargantuar() {
     }
 
     bool doSmash = false;
-    if ((mMindControlled && FindZombieTarget()) || FindPlantTarget(ZombieAttackType::ATTACKTYPE_CHEW)) {
+    if (FindPlantTarget(ZombieAttackType::ATTACKTYPE_CHEW) || (mMindControlled && FindZombieTarget())) {
         doSmash = true;
-    } else if (mApp->IsScaryPotterLevel()) {
+    }
+    if (mApp->IsScaryPotterLevel()) {
         int aGridX = mBoard->PixelToGridX(mPosX, mPosY);
         if (mBoard->GetScaryPotAt(aGridX, mRow)) {
             doSmash = true;
@@ -652,11 +662,8 @@ void Zombie::UpdateZombieGargantuar() {
     }
 }
 
-Zombie *Zombie::ThrowAZombieImp(float theOffsetDistance) {
+void Zombie::ThrowZombieImp(Zombie *theThrowerZombie, float theOffsetDistance) {
     float aThrowingDistance = mPosX - 360.0f;
-    Zombie *aZombieImp = mBoard->AddZombie(ZombieType::ZOMBIE_IMP, mFromWave, false);
-    if (aZombieImp == nullptr)
-        return nullptr;
 
     float aMinThrowDistance = 40.0f;
     if (mBoard->StageHasRoof()) {
@@ -669,31 +676,29 @@ Zombie *Zombie::ThrowAZombieImp(float theOffsetDistance) {
         aThrowingDistance -= theOffsetDistance;
     }
 
-    aZombieImp->mPosX = mPosX - 133.0f;
-    aZombieImp->mPosY = GetPosYBasedOnRow(mRow);
-    aZombieImp->SetRow(mRow);
-    aZombieImp->mVariant = false;
-    aZombieImp->mAltitude = 88.0f;
-    aZombieImp->mRenderOrder = mRenderOrder + 1;
-    aZombieImp->mZombiePhase = ZombiePhase::PHASE_IMP_GETTING_THROWN;
-    aZombieImp->mScaleZombie = mScaleZombie;
-    aZombieImp->mBodyHealth *= mScaleZombie * mScaleZombie;
-    aZombieImp->mBodyMaxHealth *= mScaleZombie * mScaleZombie;
+    mPosX = mPosX - 133.0f;
+    mPosY = GetPosYBasedOnRow(theThrowerZombie->mRow);
+    SetRow(theThrowerZombie->mRow);
+    mVariant = false;
+    mAltitude = 88.0f;
+    mRenderOrder = mRenderOrder + 1;
+    mZombiePhase = ZombiePhase::PHASE_IMP_GETTING_THROWN;
+    mScaleZombie = theThrowerZombie->mScaleZombie;
+    mBodyHealth *= mScaleZombie * mScaleZombie;
+    mBodyMaxHealth *= mScaleZombie * mScaleZombie;
 
     if (mMindControlled) {
-        aZombieImp->mPosX = mPosX + mWidth;
-        aZombieImp->StartMindControlled();
-        aZombieImp->mVelX = -3.0f;
+        mPosX = mPosX + mWidth;
+        StartMindControlled();
+        mVelX = -3.0f;
     } else {
-        aZombieImp->mVelX = 3.0f;
+        mVelX = 3.0f;
     }
-    aZombieImp->mChilledCounter = mChilledCounter;
-    aZombieImp->mVelZ = 0.5f * (aThrowingDistance / aZombieImp->mVelX) * THOWN_ZOMBIE_GRAVITY;
-    aZombieImp->PlayZombieReanim("anim_thrown", ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD, 0, 18.0f);
-    aZombieImp->UpdateReanim();
+    mChilledCounter = theThrowerZombie->mChilledCounter;
+    mVelZ = 0.5f * (aThrowingDistance / mVelX) * THOWN_ZOMBIE_GRAVITY;
+    PlayZombieReanim("anim_thrown", ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD, 0, 18.0f);
+    UpdateReanim();
     mApp->PlayFoley(FoleyType::FOLEY_IMP);
-
-    return aZombieImp;
 }
 
 void Zombie::UpdateZombiePeaHead() {
@@ -828,40 +833,20 @@ void Zombie::BurnRow(int theRow) {
 }
 
 void Zombie::UpdateZombieJalapenoHead() {
-    // 修复辣椒僵尸被魅惑后爆炸依然伤害植物的BUG
-
     if (!mHasHead)
         return;
 
-    if (mApp->mGameMode == GameMode::GAMEMODE_MP_VS) { // 修复对战辣椒瞬爆
-        if (mZombiePhase == PHASE_ZOMBIE_NORMAL) {
+    if (mApp->IsVSMode()) { // 修复对战辣椒瞬爆
+        if (mZombiePhase == ZombiePhase::PHASE_ZOMBIE_NORMAL) {
             int aDistance = 275 + Rand(175);
-            mPhaseCounter = (int)(aDistance / mVelX) * ZOMBIE_LIMP_SPEED_FACTOR;
+            mPhaseCounter = int(aDistance / mVelX) * ZOMBIE_LIMP_SPEED_FACTOR;
             mZombiePhase = PHASE_JALAPENO_PRE_BURN;
             return;
         }
     }
 
     if (mPhaseCounter == 0) {
-        mApp->PlayFoley(FoleyType::FOLEY_JALAPENO_IGNITE);
-        mApp->PlayFoley(FoleyType::FOLEY_JUICY);
-        mBoard->DoFwoosh(mRow);
-        mBoard->ShakeBoard(3, -4);
-
-        if (mMindControlled) // 魅惑修复
-        {
-            BurnRow(mRow);
-        } else {
-            Plant *aPlant = nullptr;
-            while (mBoard->IteratePlants(aPlant)) {
-                // Rect aPlantRect = aPlant->GetPlantRect(); // 原版代码遗留，但该变量并未被使用，故注释
-                if (aPlant->mRow == mRow && !aPlant->NotOnGround()) {
-                    mBoard->mPlantsEaten++;
-                    aPlant->Die();
-                }
-            }
-        }
-        DieNoLoot();
+        DoSpecial();
     }
 }
 
@@ -1051,6 +1036,8 @@ void Zombie::UpdateZombieDancer() {
                 case ZombiePhase::PHASE_DANCER_RAISE_RIGHT_2:
                     mZombiePhase = aDancerPhase;
                     PlayZombieReanim("anim_armraise", ReanimLoopType::REANIM_LOOP, 10, 18.0f);
+                    break;
+                default:
                     break;
             }
         }
@@ -1264,7 +1251,7 @@ void Zombie::RiseFromGrave(int theGridX, int theGridY) {
     if (mBoard->mPlantRow[theGridY] == PlantRowType::PLANTROW_POOL) {
         // if (old_ZombieTypeCanGoInPool(mZombieType)) {
         DieNoLoot();
-        mBoard->AddZombieInRow(mZombieType, theGridY, mBoard->mCurrentWave, 1);
+        mBoard->AddZombieInRow(mZombieType, theGridY, mBoard->mCurrentWave, true);
         return;
         // }
     }
@@ -1958,6 +1945,7 @@ void Zombie::DrawReanim(Sexy::Graphics *g, ZombieDrawPosition &theDrawPos, int t
     Color aColorOverride(255, 255, 255, aFadeAlpha);
     Color aExtraAdditiveColor = Color::Black;
     bool aEnableExtraAdditiveDraw = false;
+    bool aColorChanged = false;
     if (mZombiePhase == ZombiePhase::PHASE_ZOMBIE_BURNED) {
         aColorOverride = Color(0, 0, 0, aFadeAlpha);
         aExtraAdditiveColor = Color::Black;
@@ -1995,9 +1983,12 @@ void Zombie::DrawReanim(Sexy::Graphics *g, ZombieDrawPosition &theDrawPos, int t
         aEnableExtraAdditiveDraw = true;
     }
 
-    aBodyReanim->mColorOverride = aColorOverride;
-    aBodyReanim->mExtraAdditiveColor = aExtraAdditiveColor;
-    aBodyReanim->mEnableExtraAdditiveDraw = aEnableExtraAdditiveDraw;
+    if (aColorOverride != aBodyReanim->mColorOverride || aExtraAdditiveColor != aBodyReanim->mExtraAdditiveColor || aEnableExtraAdditiveDraw != aBodyReanim->mEnableExtraAdditiveDraw) {
+        aColorChanged = true;
+        aBodyReanim->mColorOverride = aColorOverride;
+        aBodyReanim->mExtraAdditiveColor = aExtraAdditiveColor;
+        aBodyReanim->mEnableExtraAdditiveDraw = aEnableExtraAdditiveDraw;
+    }
 
     if (mZombieType == ZombieType::ZOMBIE_BOBSLED) {
         DrawBobsledReanim(g, theDrawPos, true);
@@ -2009,32 +2000,29 @@ void Zombie::DrawReanim(Sexy::Graphics *g, ZombieDrawPosition &theDrawPos, int t
         DrawDancerReanim(g, theDrawPos);
     } else {
         aBodyReanim->DrawRenderGroup(g, theBaseRenderGroup);
-
-        Reanimation *aHeadReanim = mApp->ReanimationGet(mSpecialHeadReanimID);
-        if (aHeadReanim && IsZombotany(mZombieType)) {
-            aHeadReanim->mColorOverride = aColorOverride;
-            aHeadReanim->mExtraAdditiveColor = aExtraAdditiveColor;
-            aHeadReanim->mEnableExtraAdditiveDraw = aEnableExtraAdditiveDraw;
-            if (mZombiePhase == ZombiePhase::PHASE_ZOMBIE_BURNED) {
-                aHeadReanim->DrawRenderGroup(g, theBaseRenderGroup);
-            }
-        }
     }
 
     if (mShieldType != ShieldType::SHIELDTYPE_NONE) {
         if (mZombiePhase == ZombiePhase::PHASE_ZOMBIE_BURNED) {
+            aColorChanged = true;
             aBodyReanim->mColorOverride = Color(0, 0, 0, aFadeAlpha);
             aBodyReanim->mExtraAdditiveColor = Color::Black;
             aBodyReanim->mEnableExtraAdditiveDraw = false;
-        } else if (mShieldJustGotShotCounter > 0) {
-            int aGrayness = mShieldJustGotShotCounter * 10;
-            aBodyReanim->mColorOverride = Color(aGrayness, aGrayness, aGrayness, aFadeAlpha);
-            aBodyReanim->mExtraAdditiveColor = Color::White;
-            aBodyReanim->mEnableExtraAdditiveDraw = true;
         } else {
-            aBodyReanim->mColorOverride = Color(255, 255, 255, aFadeAlpha);
-            aBodyReanim->mExtraAdditiveColor = Color::Black;
-            aBodyReanim->mEnableExtraAdditiveDraw = false;
+            if (mShieldJustGotShotCounter > 0) {
+                int aGrayness = mShieldJustGotShotCounter * 10;
+                aBodyReanim->mColorOverride = Color(aGrayness, aGrayness, aGrayness, aFadeAlpha);
+                aBodyReanim->mExtraAdditiveColor = Color::White;
+                aBodyReanim->mEnableExtraAdditiveDraw = true;
+                aColorChanged = true;
+            } else {
+                if (!aColorChanged) {
+                    aColorChanged = aBodyReanim->mEnableExtraAdditiveDraw || aBodyReanim->mColorOverride.mRed != 255;
+                }
+                aBodyReanim->mColorOverride = Color(255, 255, 255, aFadeAlpha);
+                aBodyReanim->mExtraAdditiveColor = Color::Black;
+                aBodyReanim->mEnableExtraAdditiveDraw = false;
+            }
         }
 
         float aShieldHitOffset = 0.0f;
@@ -2045,19 +2033,21 @@ void Zombie::DrawReanim(Sexy::Graphics *g, ZombieDrawPosition &theDrawPos, int t
         g->mTransX += aShieldHitOffset;
         aBodyReanim->DrawRenderGroup(g, RENDER_GROUP_SHIELD);
         g->mTransX -= aShieldHitOffset;
-    } else {
-        if (aEnableExtraAdditiveDraw) {
-            aBodyReanim->PropogateColorToAttachments();
+
+        if (mShieldType == ShieldType::SHIELDTYPE_NEWSPAPER || mShieldType == ShieldType::SHIELDTYPE_DOOR || mShieldType == ShieldType::SHIELDTYPE_LADDER
+            || mShieldType == ShieldType::SHIELDTYPE_TRASHCAN) {
+            aBodyReanim->mColorOverride = aColorOverride;
+            aBodyReanim->mExtraAdditiveColor = aExtraAdditiveColor;
+            aBodyReanim->mEnableExtraAdditiveDraw = aEnableExtraAdditiveDraw;
+            aBodyReanim->DrawRenderGroup(g, RENDER_GROUP_OVER_SHIELD);
         }
     }
 
-    if (mShieldType == ShieldType::SHIELDTYPE_NEWSPAPER || mShieldType == ShieldType::SHIELDTYPE_DOOR || mShieldType == ShieldType::SHIELDTYPE_LADDER
-        || mShieldType == ShieldType::SHIELDTYPE_TRASHCAN) {
-        aBodyReanim->mColorOverride = aColorOverride;
-        aBodyReanim->mExtraAdditiveColor = aExtraAdditiveColor;
-        aBodyReanim->mEnableExtraAdditiveDraw = aEnableExtraAdditiveDraw;
-        aBodyReanim->DrawRenderGroup(g, RENDER_GROUP_OVER_SHIELD);
+    if (aColorChanged) {
+        aBodyReanim->PropogateColorToAttachments();
     }
+
+    g->ClearClipRect();
 
     // 大头贴专门Draw一下
     if (IsZombatarZombie(mZombieType)) {
@@ -2066,8 +2056,6 @@ void Zombie::DrawReanim(Sexy::Graphics *g, ZombieDrawPosition &theDrawPos, int t
             aZombatarReanim->Draw(g);
         }
     }
-
-    g->ClearClipRect();
 }
 
 bool Zombie::CanLoseBodyParts() {
@@ -2323,6 +2311,12 @@ Zombie *Zombie::FindZombieTarget() {
 }
 
 void Zombie::TakeDamage(int theDamage, unsigned int theDamageFlags) {
+    if (mZombieType == ZombieType::ZOMBIE_BOSS) {
+        if (!TestBit(theDamageFlags, int(DamageFlags::DAMAGE_DOESNT_CAUSE_FLASH))) {
+            TriggerVibration(VibrationEffect::VIVRATION_BOSS_HIT);
+        }
+    }
+
     old_Zombie_TakeDamage(this, theDamage, theDamageFlags);
 }
 
@@ -2475,7 +2469,7 @@ void Zombie::PickRandomSpeed() {
     if (mApp->IsVSMode() && tcp_connected)
         return;
 
-    if (mZombiePhase == ZombiePhase::PHASE_DOLPHIN_WALKING_IN_POOL) {
+    if (mZombiePhase == ZombiePhase::PHASE_SNORKEL_WALKING_IN_POOL || (IsFlying() && mApp->IsVSMode())) {
         mVelX = 0.3f;
     } else if (mZombiePhase == ZombiePhase::PHASE_DIGGER_WALKING) { // 矿工行走
         if (mApp->IsIZombieLevel()) {
@@ -2499,10 +2493,6 @@ void Zombie::PickRandomSpeed() {
         mVelX = RandRangeFloat(0.79f, 0.81f);
     } else if (mZombiePhase == ZombiePhase::PHASE_NEWSPAPER_MAD || mZombiePhase == ZombiePhase::PHASE_DOLPHIN_WALKING || mZombiePhase == ZombiePhase::PHASE_DOLPHIN_WALKING_WITHOUT_DOLPHIN) {
         mVelX = RandRangeFloat(0.89f, 0.91f);
-    } else if (IsFlying()) {
-        if (mApp->mGameMode == GameMode::GAMEMODE_MP_VS) {
-            mVelX = 0.3f;
-        }
     } else {
         mVelX = RandRangeFloat(0.23f, 0.37f); // 普僵
         if (mVelX < 0.3f) {
@@ -2943,19 +2933,15 @@ void Zombie::UpdateYuckyFace() {
             bool canGoDown = true;
             bool canGoUp = true;
             // down
-            if (!mBoard->RowCanHaveZombies(mRow - 1)) {
-                canGoDown = false;
-            } else if (mBoard->mPlantRow[mRow - 1] == PLANTROW_POOL && !isThisRowPool) {
-                canGoDown = false;
-            } else if (mBoard->mPlantRow[mRow - 1] != PLANTROW_POOL && isThisRowPool) {
+            if (!mBoard->RowCanHaveZombies(mRow - 1) ||                               //
+                ((mBoard->mPlantRow[mRow - 1] == PLANTROW_POOL) && !isThisRowPool) || //
+                ((mBoard->mPlantRow[mRow - 1] != PLANTROW_POOL) && isThisRowPool)) {
                 canGoDown = false;
             }
             // up
-            if (!mBoard->RowCanHaveZombies(mRow + 1)) {
-                canGoUp = false;
-            } else if (mBoard->mPlantRow[mRow + 1] == PLANTROW_POOL && !isThisRowPool) {
-                canGoUp = false;
-            } else if (mBoard->mPlantRow[mRow + 1] != PLANTROW_POOL && isThisRowPool) {
+            if (!mBoard->RowCanHaveZombies(mRow + 1) ||                               //
+                ((mBoard->mPlantRow[mRow + 1] == PLANTROW_POOL) && !isThisRowPool) || //
+                ((mBoard->mPlantRow[mRow + 1] != PLANTROW_POOL) && isThisRowPool)) {
                 canGoUp = false;
             }
             // 客机不允许随机换行
@@ -2984,4 +2970,43 @@ void Zombie::UpdateYuckyFace() {
         return;
     }
     return old_Zombie_UpdateYuckyFace(this);
+}
+
+void Zombie::DoSpecial() {
+    if (mApp->IsVSMode() && mApp->mGameScene == SCENE_PLAYING) {
+        if (tcp_connected)
+            return;
+
+        if (tcpClientSocket >= 0) {
+            U16_Event event = {{EventType::EVENT_SERVER_BOARD_ZOMBIE_DO_SPECIAL}, uint16_t(mBoard->mZombies.DataArrayGetID(this))};
+            sendWithSize(tcpClientSocket, &event, sizeof(U16_Event), 0);
+        }
+    }
+
+    switch (mZombieType) {
+        case ZombieType::ZOMBIE_JALAPENO_HEAD: {
+            mApp->PlayFoley(FoleyType::FOLEY_JALAPENO_IGNITE);
+            mApp->PlayFoley(FoleyType::FOLEY_JUICY);
+            mBoard->DoFwoosh(mRow);
+            mBoard->ShakeBoard(3, -4);
+
+            if (mMindControlled) { // 修复辣椒僵尸被魅惑后爆炸依然伤害植物的BUG
+                BurnRow(mRow);
+            } else {
+                Plant *aPlant = nullptr;
+                while (mBoard->IteratePlants(aPlant)) {
+                    // Rect aPlantRect = aPlant->GetPlantRect(); // 原版代码遗留，但该变量并未被使用，故注释
+                    if (aPlant->mRow == mRow && !aPlant->NotOnGround()) {
+                        mBoard->mPlantsEaten++;
+                        aPlant->Die();
+                    }
+                }
+            }
+
+            DieNoLoot();
+            break;
+        }
+        default:
+            break;
+    }
 }

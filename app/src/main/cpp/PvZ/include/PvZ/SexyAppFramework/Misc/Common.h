@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -56,6 +56,10 @@ inline int Rand(int range) {
 
 inline float Rand(float range) {
     return reinterpret_cast<float (*)(float)>(Sexy_RandFloatAddr)(range);
+}
+
+inline int GetTickCount() {
+    return reinterpret_cast<int (*)()>(Sexy_GetTickCountAddr)();
 }
 
 inline void vformat(pvzstl::string &output, const char *fmt, va_list vList) {

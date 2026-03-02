@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -34,14 +34,14 @@ enum HouseType {
     BLUEPRINT_CLOWN = 4,
 };
 
-class HouseChooserDialog : public __LawnDialog {
+class HouseChooserDialog : public LawnDialog {
 public:
     HouseType mSelectedHouseType; // 191
     int unk[2];                   // 192 ~ 193
     // 115: 194, 111: 196
 
-    void GameButtonDown(GamepadButton theButton, int thePlayerIndex, bool a4) {
-        reinterpret_cast<void (*)(HouseChooserDialog *, GamepadButton, int, bool)>(HouseChooserDialog_GameButtonDownAddr)(this, theButton, thePlayerIndex, a4);
+    void GameButtonDown(Sexy::GamepadButton theButton, int thePlayerIndex, bool a4) {
+        reinterpret_cast<void (*)(HouseChooserDialog *, Sexy::GamepadButton, int, bool)>(HouseChooserDialog_GameButtonDownAddr)(this, theButton, thePlayerIndex, a4);
     }
 
     static bool IsHouseAvaliable(HouseType houseType);

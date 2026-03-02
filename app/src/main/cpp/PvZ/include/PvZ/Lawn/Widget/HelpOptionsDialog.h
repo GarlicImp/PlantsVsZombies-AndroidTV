@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -23,7 +23,7 @@
 #include "LawnDialog.h"
 #include "PvZ/Lawn/Common/ConstEnums.h"
 
-class HelpOptionsDialog : public __LawnDialog {
+class HelpOptionsDialog : public LawnDialog {
 public:
     LawnApp *mApp;                 // 191
     GameButton *mHowToPlayButton;  // 192

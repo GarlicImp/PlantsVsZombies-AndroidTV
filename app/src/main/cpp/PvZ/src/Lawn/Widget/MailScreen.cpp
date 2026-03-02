@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -20,7 +20,6 @@
 #include "PvZ/Lawn/Widget/MailScreen.h"
 #include "PvZ/Lawn/LawnApp.h"
 #include "PvZ/Lawn/Widget/GameButton.h"
-#include "PvZ/Misc.h"
 #include "PvZ/SexyAppFramework/Graphics/Graphics.h"
 #include "PvZ/SexyAppFramework/Misc/KeyCodes.h"
 #include "PvZ/Symbols.h"
@@ -41,18 +40,18 @@ void MailScreen::_constructor(LawnApp *theApp) {
     old_MailScreen_MailScreen(this, theApp);
 
     pvzstl::string str2 = TodStringTranslate("[MARK_MESSAGE_READ]");
-    gMailScreenReadButton = MakeButton(1002, &mButtonListener, this, str2);
+    gMailScreenReadButton = MakeButton(1002, this, this, str2);
     gMailScreenReadButton->Resize(-150, 450, 170, 80);
     AddWidget(gMailScreenReadButton);
 
     pvzstl::string str1 = TodStringTranslate("[GO_TO_READ_MAIL]");
-    gMailScreenSwitchButton = MakeButton(1001, &mButtonListener, this, str1);
+    gMailScreenSwitchButton = MakeButton(1001, this, this, str1);
     gMailScreenSwitchButton->Resize(-150, 520, 170, 80);
     AddWidget(gMailScreenSwitchButton);
 
 
     pvzstl::string str = TodStringTranslate("[CLOSE]");
-    gMailScreenCloseButton = MakeButton(1000, &mButtonListener, this, str);
+    gMailScreenCloseButton = MakeButton(1000, this, this, str);
     gMailScreenCloseButton->Resize(800, 520, 170, 80);
     AddWidget(gMailScreenCloseButton);
 
@@ -73,7 +72,7 @@ void MailScreen::RemovedFromManager(int *widgetManager) {
     old_MailScreen_RemovedFromManager(this, widgetManager);
 }
 
-void MailScreen::__Destructor2() {
+void MailScreen::_destructor2() {
     old_MailScreen_Delete2(this);
 
     gMailScreenCloseButton->~GameButton();
@@ -92,9 +91,9 @@ void MailScreen::ButtonDepress(int theId) {
     mApp = *gLawnApp_Addr;
     MailScreen *aRealMailScreen = (MailScreen *)mApp->GetDialog(Dialogs::DIALOG_MAIL);
     if (theId == 1002) {
-        aRealMailScreen->KeyDown(Sexy::KEYCODE_ACCEPT, 0, 0);
+        aRealMailScreen->KeyDown(Sexy::KEYCODE_RETURN, 0, 0);
     } else if (theId == 1001) {
-        aRealMailScreen->KeyDown(307, 0, 0);
+        aRealMailScreen->KeyDown(Sexy::KEYCODE_GAMEPAD_X, 0, 0);
         bool isAtInBox = aRealMailScreen->mPage == 0;
         gMailScreenReadButton->mDisabled = !isAtInBox;
         gMailScreenReadButton->mBtnNoDraw = !isAtInBox;
@@ -106,7 +105,7 @@ void MailScreen::ButtonDepress(int theId) {
 
 
 namespace {
-constexpr int mMailTrigger = 20;
+constexpr int MAIL_TRIGGER_DISTANCE = 20;
 int mMailTouchDownX;
 int mMailTouchDownY;
 } // namespace
@@ -119,13 +118,10 @@ void MailScreen::MouseDown(int x, int y, int theClickCount) {
 void MailScreen::MouseDrag(int x, int y) {}
 
 void MailScreen::MouseUp(int x, int y) {
-    if (mMailTouchDownX - x > mMailTrigger) {
-        KeyDown(39, 0, 0);
-    } else if (x - mMailTouchDownX > mMailTrigger) {
-        KeyDown(37, 0, 0);
-    } else if (mMailTouchDownX < 400) {
-        KeyDown(37, 0, 0);
+    const int distance = x - mMailTouchDownX;
+    if (distance > MAIL_TRIGGER_DISTANCE || (-distance <= MAIL_TRIGGER_DISTANCE && mMailTouchDownX < 400)) {
+        KeyDown(Sexy::KEYCODE_LEFT, 0, 0);
     } else {
-        KeyDown(39, 0, 0);
+        KeyDown(Sexy::KEYCODE_RIGHT, 0, 0);
     }
 }

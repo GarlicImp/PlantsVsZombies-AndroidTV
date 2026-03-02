@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -21,7 +21,6 @@
 #include "PvZ/Lawn/Board/Board.h"
 #include "PvZ/Lawn/Common/ConstEnums.h"
 #include "PvZ/Lawn/LawnApp.h"
-#include "PvZ/Misc.h"
 #include "PvZ/Symbols.h"
 
 bool HouseChooserDialog::IsHouseAvaliable(HouseType houseType) {
@@ -46,32 +45,33 @@ void HouseChooserDialog::MouseDown(int x, int y, int theClickCount) {
         return;
     int currentHouseType = mSelectedHouseType;
     if (currentHouseType == houseIdToSelect) {
-        GameButtonDown(GamepadButton::BUTTONCODE_A, 0, 0);
+        GameButtonDown(Sexy::GamepadButton::GAMEPAD_BUTTON_A, 0, false);
     } else {
         while (mSelectedHouseType != houseIdToSelect) {
-            GameButtonDown(GamepadButton::BUTTONCODE_LLEFT, 0, 0);
+            GameButtonDown(Sexy::GamepadButton::GAMEPAD_BUTTON_LEFT, 0, false);
         }
     }
 }
 
-void HouseChooserDialog::KeyDown(Sexy::KeyCode keyCode) {
-    old_HouseChooserDialog_KeyDown(this, keyCode);
+void HouseChooserDialog::KeyDown(Sexy::KeyCode theKey) {
+    old_HouseChooserDialog_KeyDown(this, theKey);
 
-    switch (keyCode) {
-        case 37:
-            return GameButtonDown(GamepadButton::BUTTONCODE_LLEFT, 0, 0);
-        case 38:
-            return GameButtonDown(GamepadButton::BUTTONCODE_LUP, 0, 0);
-        case 39:
-            return GameButtonDown(GamepadButton::BUTTONCODE_LRIGHT, 0, 0);
-        case 40:
-            return GameButtonDown(GamepadButton::BUTTONCODE_LDOWN, 0, 0);
-        case 27:
-        case 305:
-            return GameButtonDown(GamepadButton::BUTTONCODE_B, 0, 0);
-        case 13:
-        case 304:
-            return GameButtonDown(GamepadButton::BUTTONCODE_A, 0, 0);
+    using Sexy::KeyCode;
+    switch (theKey) {
+        case KeyCode::KEYCODE_LEFT:
+            return GameButtonDown(Sexy::GamepadButton::GAMEPAD_BUTTON_LEFT, 0, false);
+        case KeyCode::KEYCODE_UP:
+            return GameButtonDown(Sexy::GamepadButton::GAMEPAD_BUTTON_UP, 0, false);
+        case KeyCode::KEYCODE_RIGHT:
+            return GameButtonDown(Sexy::GamepadButton::GAMEPAD_BUTTON_RIGHT, 0, false);
+        case KeyCode::KEYCODE_DOWN:
+            return GameButtonDown(Sexy::GamepadButton::GAMEPAD_BUTTON_DOWN, 0, false);
+        case KeyCode::KEYCODE_ESCAPE:
+        case KeyCode::KEYCODE_GAMEPAD_B:
+            return GameButtonDown(Sexy::GamepadButton::GAMEPAD_BUTTON_B, 0, false);
+        case KeyCode::KEYCODE_RETURN:
+        case KeyCode::KEYCODE_GAMEPAD_A:
+            return GameButtonDown(Sexy::GamepadButton::GAMEPAD_BUTTON_A, 0, false);
         default:
             break;
     }

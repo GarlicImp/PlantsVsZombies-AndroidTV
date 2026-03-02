@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -21,7 +21,6 @@
 #include "PvZ/GlobalVariable.h"
 #include "PvZ/Lawn/LawnApp.h"
 #include "PvZ/Lawn/Widget/SeedChooserScreen.h"
-#include "PvZ/Misc.h"
 #include "PvZ/SexyAppFramework/Graphics/Graphics.h"
 #include "PvZ/SexyAppFramework/Misc/KeyCodes.h"
 
@@ -39,11 +38,11 @@ void ImitaterDialog_ShowToolTip(ImitaterDialog *instance) {
 
 bool ImitaterDialog_KeyDown(ImitaterDialog *a, int a2) {
     // 修复不选择模仿者卡片并退出时的闪退
-    if (a2 == Sexy::KEYCODE_ESCAPE || a2 == Sexy::KEYCODE_ESCAPE2) {
+    if (a2 == Sexy::KEYCODE_ESCAPE || a2 == Sexy::KEYCODE_GAMEPAD_B) {
         LawnApp *lawnApp = a->mApp;
         SeedChooserScreen *seedChooserScreen = lawnApp->mSeedChooserScreen;
         seedChooserScreen->RemoveWidget(a);
-        (*(void (**)(LawnApp *, Sexy::__Widget *))(*(uint32_t *)lawnApp + 188))(lawnApp, a);
+        (*(void (**)(LawnApp *, Sexy::Widget *))(*(uint32_t *)lawnApp + 188))(lawnApp, a);
         seedChooserScreen->mImitaterDialogOpened = 0;
         return true;
     }
@@ -65,7 +64,7 @@ void ImitaterDialog::MouseDown(int x, int y, int theCount) {
             aSeedChooser->UpdateImitaterButton();
             // (*(void (**)(int, int)) (*(uint32_t *) a[184] + 428))(a[184], a[179]);
             aSeedChooser->RemoveWidget(this);
-            (*(void (**)(LawnApp *, Sexy::__Widget *))(*(uint32_t *)mApp + 188))(mApp, this);
+            (*(void (**)(LawnApp *, Sexy::Widget *))(*(uint32_t *)mApp + 188))(mApp, this);
             aSeedChooser->mImitaterDialogOpened = 0;
         }
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -31,7 +31,7 @@ struct ShopSeedPacket {
 
 
 class HitResult;
-class SeedBank : public __GameObject {
+class SeedBank : public GameObject {
 public:
     int mNumPackets;                    // 13
     int mCutSceneDarken;                // 14

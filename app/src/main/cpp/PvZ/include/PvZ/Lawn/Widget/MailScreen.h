@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -24,7 +24,7 @@
 #include "PvZ/Lawn/Common/ConstEnums.h"
 #include "PvZ/Symbols.h"
 
-class MailScreen : public __LawnDialog {
+class MailScreen : public LawnDialog {
 public:
     int unk[3];   // 191 ~ 193
     int mPage;    // 194
@@ -49,7 +49,7 @@ protected:
     friend void InitHookFunction();
 
     void _constructor(LawnApp *theApp);
-    void __Destructor2();
+    void _destructor2();
 };
 
 class MailBox {

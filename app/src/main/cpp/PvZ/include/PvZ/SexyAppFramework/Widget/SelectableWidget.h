@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -24,7 +24,7 @@
 
 namespace Sexy {
 
-class SelectableWidget : public __Widget {
+class SelectableWidget : public Widget {
 public:
     Color mUnkColor;  // 64 ~ 67
     float unkMems[4]; // 68 ~ 71

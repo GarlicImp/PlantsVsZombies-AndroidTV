@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -20,12 +20,22 @@
 #ifndef PVZ_SEXYAPPFRAMEWORK_MISC_TRI_VERTEX_H
 #define PVZ_SEXYAPPFRAMEWORK_MISC_TRI_VERTEX_H
 
+#include <cstdint>
+
 namespace Sexy {
 
 class TriVertex {
 public:
-    float x, y, u, v;
-    unsigned int color;
+    float x;
+    float y;
+    uint32_t offset8;
+    float offsetC;
+    uint32_t color = 0; // ARGB (0 = use color specified in function call)
+    uint32_t offset14;
+    float u;
+    float v;
+
+    constexpr TriVertex() = default;
 };
 
 } // namespace Sexy

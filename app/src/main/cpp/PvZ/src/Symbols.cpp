@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -202,6 +202,9 @@ bool LoadGameMain() {
     Board_RowCanHaveZombiesAddr = dlsym(handle, "_ZN5Board17RowCanHaveZombiesEi");
     Board_AddMPTargetAddr = dlsym(handle, "_ZN5Board11AddMPTargetEii");
     Board_PlaceRakeAddr = dlsym(handle, "_ZN5Board9PlaceRakeEv");
+    Board_SpawnZombiesFromSkyAddr = dlsym(handle, "_ZN5Board19SpawnZombiesFromSkyEv");
+    Board_SpawnZombiesFromPoolAddr = dlsym(handle, "_ZN5Board20SpawnZombiesFromPoolEv");
+    Board_PickGraveRisingZombieTypeAddr = dlsym(handle, "_ZN5Board25PickGraveRisingZombieTypeEi");
 
 
     SyncBoardAddr = dlsym(handle, "_Z9SyncBoardP15SaveGameContextP5Board");
@@ -593,6 +596,7 @@ bool LoadGameMain() {
     Challenge_CanTargetZombieWithPortalsAddr = dlsym(handle, "_ZN9Challenge26CanTargetZombieWithPortalsEP5PlantP6Zombie");
     Challenge_ScaryPotterJackExplodeAddr = dlsym(handle, "_ZN9Challenge22ScaryPotterJackExplodeEii");
     Challenge_UpdateConveyorBeltAddr = dlsym(handle, "_ZN9Challenge18UpdateConveyorBeltEi");
+    Challenge_MouseDownWhackAZombieAddr = dlsym(handle, "_ZN9Challenge21MouseDownWhackAZombieEiii");
 
 
     Plant_UpdateAddr = dlsym(handle, "_ZN5Plant6UpdateEv");
@@ -641,6 +645,8 @@ bool LoadGameMain() {
     Plant_FindTargetAndFireAddr = dlsym(handle, "_ZN5Plant17FindTargetAndFireEi11PlantWeapon");
     Plant_IceZombiesAddr = dlsym(handle, "_ZN5Plant10IceZombiesEv");
     Plant_BlowAwayFliersAddr = dlsym(handle, "_ZN5Plant14BlowAwayFliersEii");
+    Plant_UpdateChomperAddr = dlsym(handle, "_ZN5Plant13UpdateChomperEv");
+    Plant_UpdateSquashAddr = dlsym(handle, "_ZN5Plant12UpdateSquashEv");
 
 
     Projectile_UpdateAddr = dlsym(handle, "_ZN10Projectile6UpdateEv");
@@ -682,6 +688,8 @@ bool LoadGameMain() {
     SeedPacket_DeactivateAddr = dlsym(handle, "_ZN10SeedPacket10DeactivateEv");
     SeedPacket_WasPlantedAddr = dlsym(handle, "_ZN10SeedPacket10WasPlantedEi");
     SeedPacket_SetPacketTypeAddr = dlsym(handle, "_ZN10SeedPacket13SetPacketTypeE8SeedTypeS0_");
+    SeedPacket_PickNextSlotMachineSeedAddr = dlsym(handle, "_ZN10SeedPacket23PickNextSlotMachineSeedEv");
+    SeedPacket_SlotMachineStartAddr = dlsym(handle, "_ZN10SeedPacket16SlotMachineStartEv");
 
 
     VSSetupMenu_VSSetupMenuAddr = dlsym(handle, "_ZN11VSSetupMenuC2Ev");
@@ -747,6 +755,7 @@ bool LoadGameMain() {
 
 
     Sexy_GraphicsState_CopyStateFromAddr = dlsym(handle, "_ZN4Sexy13GraphicsState13CopyStateFromEPKS0_");
+    Sexy_Graphics_SetTrackingDeviceStateAddr = dlsym(handle, "_ZN4Sexy8Graphics22SetTrackingDeviceStateEb");
     Sexy_Graphics_GraphicsAddr = dlsym(handle, "_ZN4Sexy8GraphicsC2ERKS0_");
     Sexy_Graphics_Graphics2Addr = dlsym(handle, "_ZN4Sexy8GraphicsC2EPNS_5ImageE");
     Sexy_Graphics_SetDrawModeAddr = dlsym(handle, "_ZN4Sexy8Graphics11SetDrawModeEi");
@@ -825,6 +834,8 @@ bool LoadGameMain() {
     ZenGarden_DrawPottedPlantAddr = dlsym(handle, "_ZN9ZenGarden15DrawPottedPlantEPN4Sexy8GraphicsEffP11PottedPlantfb");
     PlantFlowerPotHeightOffsetAddr = dlsym(handle, "_Z26PlantFlowerPotHeightOffset8SeedTypef");
 
+
+    TitleScreen_TitleScreenAddr = dlsym(handle, "_ZN11TitleScreenC2EP7LawnApp");
     TitleScreen_DrawAddr = dlsym(handle, "_ZN11TitleScreen4DrawEPN4Sexy8GraphicsE");
     TitleScreen_UpdateAddr = dlsym(handle, "_ZN11TitleScreen6UpdateEv");
     TitleScreen_SwitchStateAddr = dlsym(handle, "_ZN11TitleScreen11SwitchStateE10TitleStatei");
@@ -840,10 +851,12 @@ bool LoadGameMain() {
     GridItem_UpdateBurialMoundAddr = dlsym(handle, "_ZN8GridItem17UpdateBurialMoundEv");
 
 
+    Sexy_SexyCommonApp_getGameInfoAddr = dlsym(handle, "_ZN4Sexy13SexyCommonApp11getGameInfoEv");
     Sexy_GamepadApp_CheckGamepadAddr = dlsym(handle, "_ZN4Sexy10GamepadApp12CheckGamepadEv");
     Sexy_GamepadApp_HasGamepadAddr = dlsym(handle, "_ZN4Sexy10GamepadApp10HasGamepadEv");
     Sexy_RandIntAddr = dlsym(handle, "_ZN4Sexy4RandEi");
     Sexy_RandFloatAddr = dlsym(handle, "_ZN4Sexy4RandEf");
+    Sexy_GetTickCountAddr = dlsym(handle, "_ZN4Sexy12GetTickCountEv");
     Sexy_Level_isCardNotAllowedToPickAddr = dlsym(handle, "_ZN4Sexy5Level22isCardNotAllowedToPickEi");
     Sexy_ScrollbarWidget_MouseDownAddr = dlsym(handle, "_ZN4Sexy15ScrollbarWidget9MouseDownEiiii");
     Sexy_ScrollbarWidget_ScrollbarWidgetAddr = dlsym(handle, "_ZN4Sexy15ScrollbarWidgetC2EiPNS_14ScrollListenerE");
@@ -945,13 +958,16 @@ bool LoadGameMain() {
     Sexy_SexyAppBase_GetDialogAddr = dlsym(handle, "_ZN4Sexy11SexyAppBase9GetDialogEi");
     Sexy_SexyAppBase_EraseFileAddr = dlsym(handle, "_ZN4Sexy11SexyAppBase9EraseFileERKSs");
     Sexy_SexyAppBase_AddDialogAddr = dlsym(handle, "_ZN4Sexy11SexyAppBase9AddDialogEPNS_6DialogE");
+    Sexy_SexyAppBase_DoParseCmdLineAddr = dlsym(handle, "_ZN4Sexy11SexyAppBase14DoParseCmdLineEv");
+    Sexy_SexyAppBase_LoadResourceManifestAddr = dlsym(handle, "_ZN4Sexy11SexyAppBase20LoadResourceManifestEv");
+    Sexy_SexyAppBase_GetIntegerAddr = dlsym(handle, "_ZN4Sexy11SexyAppBase10GetIntegerERKSsi");
     Sexy_Ratio_SetAddr = dlsym(handle, "_ZN4Sexy5Ratio3SetEii");
     Sexy_MemoryImage_MemoryImageAddr = dlsym(handle, "_ZN4Sexy11MemoryImageC2Ev");
     Sexy_MemoryImage_ClearRectAddr = dlsym(handle, "_ZN4Sexy11MemoryImage9ClearRectERKNS_5TRectIiEE");
     Sexy_MemoryImage_GetBitsAddr = dlsym(handle, "_ZN4Sexy11MemoryImage7GetBitsEv");
     Sexy_MemoryImage_CreateAddr = dlsym(handle, "_ZN4Sexy11MemoryImage6CreateEii");
     Sexy_MemoryImage_SetImageModeAddr = dlsym(handle, "_ZN4Sexy11MemoryImage12SetImageModeEbb");
-    Sexy_MemoryImage_DeleteAddr = dlsym(handle, "_ZN4Sexy11MemoryImageD0Ev");
+    Sexy_MemoryImage_DeleteAddr = dlsym(handle, "_ZN4Sexy11MemoryImageD2Ev");
     Sexy_MemoryImage_WriteToPngAddr = dlsym(handle, "_ZN4Sexy11MemoryImage10WriteToPngESs");
     Sexy_MemoryImage_WriteToJPEGAddr = dlsym(handle, "_ZN4Sexy11MemoryImage11WriteToJPEGESs");
     Sexy_MemoryImage_BitsChangedAddr = dlsym(handle, "_ZN4Sexy11MemoryImage11BitsChangedEv");
@@ -981,10 +997,9 @@ bool LoadGameMain() {
     Sexy_MenuWidget_DrawAddr = dlsym(handle, "_ZN4Sexy10MenuWidget4DrawEPNS_8GraphicsE");
     Sexy_Widget_DeferOverlayAddr = dlsym(handle, "_ZN4Sexy6Widget12DeferOverlayEi");
     Sexy_SexyMatrix3_SexyMatrix3Addr = dlsym(handle, "_ZN4Sexy11SexyMatrix3C2Ev");
-    Sexy_SexyTransform2D_SexyTransform2DAddr = dlsym(handle, "_ZN4Sexy15SexyTransform2DC2Ev");
-    Sexy_SexyTransform2D_ScaleAddr = dlsym(handle, "_ZN4Sexy15SexyTransform2D5ScaleEff");
-    Sexy_SexyTransform2D_TranslateAddr = dlsym(handle, "_ZN4Sexy15SexyTransform2D9TranslateEff");
-    Sexy_SexyTransform2D_RotateRadAddr = dlsym(handle, "_ZN4Sexy15SexyTransform2D9RotateRadEf");
+    Sexy_ButtonWidget__destructorAddr = dlsym(handle, "_ZN4Sexy12ButtonWidgetD2Ev");
+
+
     TodScaleTransformMatrixAddr = dlsym(handle, "_Z23TodScaleTransformMatrixRN4Sexy11SexyMatrix3Effff");
     TodDrawStringWrappedAddr = dlsym(handle, "_Z20TodDrawStringWrappedPN4Sexy8GraphicsERKSsRKNS_5TRectIiEEPNS_4FontERKNS_5ColorE23DrawStringJustificationb");
     TodDrawStringMatrixAddr = dlsym(handle, "_Z19TodDrawStringMatrixPN4Sexy8GraphicsEPNS_4FontERKNS_11SexyMatrix3ERKSsRKNS_5ColorE");
@@ -1057,12 +1072,16 @@ bool LoadGameMain() {
 
 
     TypingCheck_SetPhraseAddr = dlsym(handle, "_ZN11TypingCheck9SetPhraseERKSs");
+    TypingCheck_AddCharAddr = dlsym(handle, "_ZN11TypingCheck7AddCharEc");
+    TypingCheck_CreateByStringAddr = dlsym(handle, "_ZN11TypingCheckC2ERKSs");
+    TypingCheck_TypingCheckAddr = dlsym(handle, "_ZN11TypingCheckC2Ev");
     ZenGardenControls_UpdateAddr = dlsym(handle, "_ZN17ZenGardenControls6UpdateEf");
 
     AwardScreen_GameButtonDownAddr = dlsym(handle, "_ZN17ZenGardenControls6UpdateEf");
     AwardScreen_MouseDownAddr = dlsym(handle, "_ZN11AwardScreen9MouseDownEiii");
     AwardScreen_MouseUpAddr = dlsym(handle, "_ZN11AwardScreen7MouseUpEiii");
     AwardScreen_StartButtonPressedAddr = dlsym(handle, "_ZN11AwardScreen18StartButtonPressedEv");
+    Sexy_DefaultPlayerInfo_SaveDetailsAddr = dlsym(handle, "_ZN4Sexy17DefaultPlayerInfo11SaveDetailsEv");
     LawnPlayerInfo_GetFlagAddr = dlsym(handle, "_ZN14LawnPlayerInfo7GetFlagE11PlayerFlags");
     LawnPlayerInfo_AddCoinsAddr = dlsym(handle, "_ZN14LawnPlayerInfo8AddCoinsEi");
     GetFlashingColorAddr = dlsym(handle, "_Z16GetFlashingColorii");
@@ -1074,6 +1093,10 @@ bool LoadGameMain() {
     PoolEffect_BilinearLookupFixedPointAddr = dlsym(handle, "_ZN10PoolEffect24BilinearLookupFixedPointEjj");
     PoolEffect_PoolEffectDrawAddr = dlsym(handle, "_ZN10PoolEffect14PoolEffectDrawEPN4Sexy8GraphicsEb");
     Sexy_DefaultProfileMgr_GetAnyProfileAddr = dlsym(handle, "_ZN4Sexy17DefaultProfileMgr13GetAnyProfileEv");
+    Sexy_DefaultProfileMgr_AddProfileAddr = dlsym(handle, "_ZN4Sexy17DefaultProfileMgr10AddProfileERKSs");
+    Sexy_DefaultProfileMgr_GetProfileAddr = dlsym(handle, "_ZN4Sexy17DefaultProfileMgr10GetProfileERKSs");
+    Sexy_DefaultProfileMgr_LoadAddr = dlsym(handle, "_ZN4Sexy17DefaultProfileMgr4LoadEv");
+    Sexy_DefaultProfileMgr_SaveAddr = dlsym(handle, "_ZN4Sexy17DefaultProfileMgr4SaveEv");
     TodDrawImageCelScaledFAddr = dlsym(handle, "_Z22TodDrawImageCelScaledFPN4Sexy8GraphicsEPNS_5ImageEffiiff");
     TodDrawImageScaledFAddr = dlsym(handle, "_Z19TodDrawImageScaledFPN4Sexy8GraphicsEPNS_5ImageEffff");
     TodDrawImageCenterScaledFAddr = dlsym(handle, "_Z25TodDrawImageCenterScaledFPN4Sexy8GraphicsEPNS_5ImageEffff");
@@ -1105,9 +1128,9 @@ bool LoadGameMain() {
     MakeButtonAddr = dlsym(handle, "_Z10MakeButtoniPN4Sexy14ButtonListenerEPNS_6WidgetERKSs");
     MakeNewButtonAddr = dlsym(handle, "_Z13MakeNewButtoniPN4Sexy14ButtonListenerEPNS_6WidgetERKSsPNS_4FontEPNS_5ImageES9_S9_");
     MakeNewCheckboxAddr = dlsym(handle, "_Z15MakeNewCheckboxiPN4Sexy16CheckboxListenerEPNS_6WidgetEb");
-    Sexy_ButtonWidget_ButtonWidgetAddr = dlsym(handle, "_ZN4Sexy12ButtonWidgetC2EiPNS_14ButtonListenerE");
     SaveGameContext_SyncIntAddr = dlsym(handle, "_ZN15SaveGameContext7SyncIntERi");
     SaveGameContext_SyncReanimationDefAddr = dlsym(handle, "_ZN15SaveGameContext18SyncReanimationDefERP20ReanimatorDefinition");
+    EffectSystem_EffectSystemInitializeAddr = dlsym(handle, "_ZN12EffectSystem22EffectSystemInitializeEv");
 
     TodFoley_PlayFoleyAddr = dlsym(handle, "_ZN8TodFoley9PlayFoleyE9FoleyType");
 
@@ -1242,6 +1265,7 @@ bool LoadGameMain() {
 
     Sexy::FONT_DWARVENTODCRAFT18 = reinterpret_cast<Sexy::Font **>(dlsym(handle, "_ZN4Sexy22FONT_DWARVENTODCRAFT18E"));
     Sexy::FONT_HOUSEOFTERROR28 = reinterpret_cast<Sexy::Font **>(dlsym(handle, "_ZN4Sexy20FONT_HOUSEOFTERROR28E"));
+    Sexy::FONT_DWARVENTODCRAFT24 = reinterpret_cast<Sexy::Font **>(dlsym(handle, "_ZN4Sexy22FONT_DWARVENTODCRAFT24E"));
 
     Sexy::SOUND_BALLOON_POP = reinterpret_cast<int *>(dlsym(handle, "_ZN4Sexy17SOUND_BALLOON_POPE"));
 
@@ -1302,6 +1326,7 @@ bool LoadGameMain() {
     gReanimatorDefArray_Addr = (ReanimatorDefinition **)dlsym(handle, "gReanimatorDefArray");
     gEffectSystem_Addr = (int *)dlsym(handle, "gEffectSystem");
     gFoleyParamArraySizeAddr = (int *)dlsym(handle, "gFoleyParamArraySize");
+    gLawnReanimationArrayAddr = (ReanimationParams *)dlsym(handle, "gLawnReanimationArray");
     Challenge_gVSSuddenDeathMode_Addr = (int *)dlsym(handle, "_ZN9Challenge18gVSSuddenDeathModeE");
     Challenge_gVSWinModeAddr = (int *)dlsym(handle, "_ZN9Challenge10gVSWinModeE");
     Sexy_gSexyAppBase_Addr = reinterpret_cast<Sexy::SexyAppBase **>(dlsym(handle, "_ZN4Sexy12gSexyAppBaseE"));

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -29,7 +29,7 @@ constexpr int CAUSTIC_IMAGE_HEIGHT = 64;
 namespace Sexy {
 class MemoryImage;
 class Graphics;
-}; // namespace Sexy
+} // namespace Sexy
 
 struct CausticEffect {
     bool mTextureAlpha[256][256];

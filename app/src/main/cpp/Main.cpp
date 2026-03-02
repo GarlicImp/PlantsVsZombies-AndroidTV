@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -17,6 +17,7 @@
  * PlantsVsZombies-AndroidTV.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "Homura/ExceptionUtils.h"
 #include "PvZ/GlobalVariable.h"
 #include "PvZ/HookInit.h"
 #include "PvZ/Lawn/Board/Board.h"
@@ -39,10 +40,6 @@
 #include <numbers>
 #include <sstream>
 
-static jstring StringToJString(JNIEnv *env, std::string_view sv) {
-    return env->NewStringUTF(sv.data());
-}
-
 static std::string JStringToString(JNIEnv *env, jstring str) {
     const char *buffer = env->GetStringUTFChars(str, nullptr);
     std::string result(buffer);
@@ -56,11 +53,16 @@ static std::string JStringToString(JNIEnv *env, jstring str) {
  * Java 层已指定模块加载顺序: 先 libGameMain.so, 后 libHomura.so.
  */
 [[gnu::constructor]] static void lib_main() {
+    homura::RegisterExceptionHandler();
+    homura::RegisterAccessViolationHandler();
+
     // 获取符号地址
     GetFunctionAddr();
 
     // 部分安卓4设备无法获取到基址，暂不清楚原因, 但仅影响 Patch 而不影响Hook, 影响不大.
-    gLibBaseOffset = ((Board_UpdateAddr != nullptr) && (uintptr_t(Board_UpdateAddr) > BOARD_UPDATE_ADDR_RELATIVE + 1)) ? (uintptr_t(Board_UpdateAddr) - BOARD_UPDATE_ADDR_RELATIVE - 1) : 0;
+    if ((Board_UpdateAddr != nullptr) && (uintptr_t(Board_UpdateAddr) > BOARD_UPDATE_ADDR_RELATIVE + 1)) {
+        gLibBaseOffset = (uintptr_t(Board_UpdateAddr) - BOARD_UPDATE_ADDR_RELATIVE - 1);
+    }
 
     // Hook
     CallHook();
@@ -652,10 +654,10 @@ extern "C" JNIEXPORT jobjectArray JNICALL Java_com_android_support_CkHomuraMenu_
 
     };
 
-    int featuresCount = std::size(features);
+    constexpr int featuresCount = std::size(features);
     jobjectArray ret = env->NewObjectArray(featuresCount, env->FindClass("java/lang/String"), nullptr);
     for (int i = 0; i < featuresCount; ++i) {
-        env->SetObjectArrayElement(ret, i, StringToJString(env, features[i]));
+        env->SetObjectArrayElement(ret, i, env->NewStringUTF(features[i]));
     }
     return ret;
 }
@@ -668,10 +670,10 @@ extern "C" JNIEXPORT jobjectArray JNICALL Java_com_android_support_CkHomuraMenu_
         "-6_Button_<font color='green'>返回菜单</font>",
     };
 
-    int featuresCount = std::size(features);
+    constexpr int featuresCount = std::size(features);
     jobjectArray ret = env->NewObjectArray(featuresCount, env->FindClass("java/lang/String"), nullptr);
     for (int i = 0; i < featuresCount; ++i) {
-        env->SetObjectArrayElement(ret, i, StringToJString(env, features[i]));
+        env->SetObjectArrayElement(ret, i, env->NewStringUTF(features[i]));
     }
     return ret;
 }
@@ -735,7 +737,7 @@ static std::string generateLineupStr(const std::multimap<int, int> &theMap) {
 extern "C" JNIEXPORT jstring JNICALL Java_com_android_support_CkHomuraMenu_GetCurrentFormation(JNIEnv *env, jobject thiz) {
     Board *aBoard = (*gLawnApp_Addr)->mBoard;
     if (aBoard == nullptr) {
-        return StringToJString(env, "");
+        return env->NewStringUTF("");
     }
 
     std::multimap<int, int> map;
@@ -761,14 +763,14 @@ extern "C" JNIEXPORT jstring JNICALL Java_com_android_support_CkHomuraMenu_GetCu
         int value = aPlantCol | (aRow << 4);
         map.emplace(key, value);
     }
-    return StringToJString(env, generateLineupStr(map));
+    return env->NewStringUTF(generateLineupStr(map).c_str());
 }
 
 extern "C" JNIEXPORT void JNICALL Java_com_transmension_mobile_EnhanceActivity_native1PButtonDown(JNIEnv *env, jclass clazz, jint code) {
     Board *aBoard = (*gLawnApp_Addr)->mBoard;
     if (aBoard) {
         gButtonDownP1 = true;
-        gButtonCodeP1 = GamepadButton(code);
+        gButtonCodeP1 = Sexy::GamepadButton(code);
     }
 }
 
@@ -776,7 +778,7 @@ extern "C" JNIEXPORT void JNICALL Java_com_transmension_mobile_EnhanceActivity_n
     Board *aBoard = (*gLawnApp_Addr)->mBoard;
     if (aBoard) {
         gButtonDownP2 = true;
-        gButtonCodeP2 = GamepadButton(code);
+        gButtonCodeP2 = Sexy::GamepadButton(code);
     }
 }
 
@@ -802,14 +804,14 @@ extern "C" JNIEXPORT jboolean JNICALL Java_com_transmension_mobile_EnhanceActivi
     LawnApp *anApp = *gLawnApp_Addr;
     Board *aBoard = anApp->mBoard;
     auto *aFocusWidget = anApp->mWidgetManager->mFocusWidget;
-    if (aBoard && aFocusWidget == reinterpret_cast<Sexy::Widget *>(aBoard)) {
+    if (aBoard && aFocusWidget == aBoard) {
         return true;
     }
     SeedChooserScreen *aSeedChooser = anApp->mSeedChooserScreen;
-    if (anApp->IsCoopMode() && aSeedChooser && (aFocusWidget == reinterpret_cast<Sexy::Widget *>(aSeedChooser))) {
+    if (anApp->IsCoopMode() && aSeedChooser && (aFocusWidget == aSeedChooser)) {
         return true;
     }
-    if (anApp->IsVSMode() && anApp->mVSSetupScreen && (anApp->mVSSetupScreen->mState == VS_SETUP_STATE_SIDES || anApp->mVSSetupScreen->mState == VS_SETUP_STATE_CUSTOM_BATTLE)) {
+    if (anApp->IsVSMode() && anApp->mVSSetupMenu && (anApp->mVSSetupMenu->mState == VS_SETUP_STATE_SIDES || anApp->mVSSetupMenu->mState == VS_SETUP_STATE_CUSTOM_BATTLE)) {
         return true;
     }
 
@@ -820,22 +822,22 @@ extern "C" JNIEXPORT jboolean JNICALL Java_com_transmension_mobile_EnhanceActivi
 extern "C" JNIEXPORT void JNICALL Java_com_transmension_mobile_EnhanceActivity_nativeSendButtonEvent(JNIEnv *env, jclass clazz, jboolean is_key_down, jint button_code) {
     bool aIsPlayer2 = button_code >= 256;
     bool aGamepad1Is2P = gGamepad1ToPlayerIndex == 1;
-    GamepadButton aButtonCode = GamepadButton(aIsPlayer2 ? button_code - 256 : button_code);
+    Sexy::GamepadButton aButtonCode = Sexy::GamepadButton(aIsPlayer2 ? button_code - 256 : button_code);
 
     LawnApp *anApp = *gLawnApp_Addr;
     Board *aBoard = anApp->mBoard;
     auto *aFocusWidget = anApp->mWidgetManager->mFocusWidget;
 
-    if (!aBoard || aFocusWidget != reinterpret_cast<Sexy::Widget *>(aBoard)) {
+    if (!aBoard || aFocusWidget != aBoard) {
         SeedChooserScreen *aSeedChooser = anApp->mSeedChooserScreen;
-        if (is_key_down && anApp->IsCoopMode() && aSeedChooser && aFocusWidget == reinterpret_cast<Sexy::Widget *>(aSeedChooser)) {
+        if (is_key_down && anApp->IsCoopMode() && aSeedChooser && aFocusWidget == aSeedChooser) {
             gButtonDownSeedChooser = true;
             gButtonCode = aButtonCode;
             gGamePlayerIndex = aIsPlayer2 ? 1 : 0;
             return;
         }
 
-        VSSetupMenu *aVSSetup = anApp->mVSSetupScreen;
+        VSSetupMenu *aVSSetup = anApp->mVSSetupMenu;
         if (is_key_down && anApp->IsVSMode() && aVSSetup && (aVSSetup->mState == VS_SETUP_STATE_SIDES || aVSSetup->mState == VS_SETUP_STATE_CUSTOM_BATTLE)) {
             gButtonDownVSSetup = true;
             gButtonCode = aButtonCode;
@@ -845,24 +847,24 @@ extern "C" JNIEXPORT void JNICALL Java_com_transmension_mobile_EnhanceActivity_n
         return;
     }
 
-    float &aX = (aIsPlayer2 == true) ? gGamepadP2VelX : gGamepadP1VelX;
-    float &aY = (aIsPlayer2 == true) ? gGamepadP2VelY : gGamepadP1VelY;
+    float &aX = aIsPlayer2 ? gGamepadP2VelX : gGamepadP1VelX;
+    float &aY = aIsPlayer2 ? gGamepadP2VelY : gGamepadP1VelY;
     if (is_key_down) {
         switch (aButtonCode) {
-            case GamepadButton::BUTTONCODE_B:
+            case Sexy::GamepadButton::GAMEPAD_BUTTON_B:
                 gKeyDown = true;
                 gGamePlayerIndex = aIsPlayer2 ? 1 : 0;
                 break;
-            case GamepadButton::BUTTONCODE_UP:
+            case Sexy::GamepadButton::GAMEPAD_BUTTON_DPAD_UP:
                 aY = -400;
                 break;
-            case GamepadButton::BUTTONCODE_DOWN:
+            case Sexy::GamepadButton::GAMEPAD_BUTTON_DPAD_DOWN:
                 aY = 400;
                 break;
-            case GamepadButton::BUTTONCODE_LEFT:
+            case Sexy::GamepadButton::GAMEPAD_BUTTON_DPAD_LEFT:
                 aX = -400;
                 break;
-            case GamepadButton::BUTTONCODE_RIGHT:
+            case Sexy::GamepadButton::GAMEPAD_BUTTON_DPAD_RIGHT:
                 aX = 400;
                 break;
             default:
@@ -877,12 +879,12 @@ extern "C" JNIEXPORT void JNICALL Java_com_transmension_mobile_EnhanceActivity_n
         }
     } else {
         switch (aButtonCode) {
-            case GamepadButton::BUTTONCODE_UP:
-            case GamepadButton::BUTTONCODE_DOWN:
+            case Sexy::GamepadButton::GAMEPAD_BUTTON_DPAD_UP:
+            case Sexy::GamepadButton::GAMEPAD_BUTTON_DPAD_DOWN:
                 aY = 0;
                 break;
-            case GamepadButton::BUTTONCODE_LEFT:
-            case GamepadButton::BUTTONCODE_RIGHT:
+            case Sexy::GamepadButton::GAMEPAD_BUTTON_DPAD_LEFT:
+            case Sexy::GamepadButton::GAMEPAD_BUTTON_DPAD_RIGHT:
                 aX = 0;
                 break;
             default:
@@ -913,14 +915,6 @@ extern "C" JNIEXPORT void JNICALL Java_com_transmension_mobile_EnhanceActivity_n
     jumpLogo = true;
 }
 
-extern "C" JNIEXPORT void JNICALL Java_com_transmension_mobile_EnhanceActivity_nativeMoreZombieSeeds(JNIEnv *env, jclass clazz) {
-    gMoreZombieSeeds = true;
-}
-
-extern "C" JNIEXPORT void JNICALL Java_com_transmension_mobile_EnhanceActivity_nativeVSBalanceAdjustment(JNIEnv *env, jclass clazz) {
-    gVSBalanceAdjustment = true;
-}
-
 extern "C" JNIEXPORT void JNICALL Java_com_transmension_mobile_EnhanceActivity_nativeIntroVideoCompleted(JNIEnv *env, jclass clazz) {
     TitleScreen *aTitleScreen = (*gLawnApp_Addr)->mTitleScreen;
     if (aTitleScreen != nullptr) {
@@ -933,10 +927,12 @@ extern "C" JNIEXPORT void JNICALL Java_com_transmension_mobile_EnhanceActivity_n
 }
 
 
-extern "C" JNIEXPORT void JNICALL Java_com_transmension_mobile_NativeView_onTextInputNative2(JNIEnv *env, jobject thiz, jlong j, jstring str) {
-    if (str == nullptr) {
-        gInputString.clear();
+extern "C" JNIEXPORT void JNICALL Java_com_transmension_mobile_NativeView_onTextInputNative2(JNIEnv *env, jobject thiz, jstring text) {
+    std::string input = JStringToString(env, text);
+    if (input.empty()) {
         return;
     }
-    gInputString = JStringToString(env, str);
+    gHasInputContent.wait(true); // 若旧输入未被消费则等待
+    gInputString = std::move(input);
+    gHasInputContent = true;
 }

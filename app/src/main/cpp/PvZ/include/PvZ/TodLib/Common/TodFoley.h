@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -21,6 +21,7 @@
 #define PVZ_SEXYAPPFRAMEWORK_TODLIB_COMMON_TOD_FOLEY_H
 
 #include "PvZ/Lawn/Common/Resources.h"
+#include "PvZ/Symbols.h"
 
 constexpr int MAX_FOLEY_TYPES = 110;
 constexpr int MAX_FOLEY_INSTANCES = 8;

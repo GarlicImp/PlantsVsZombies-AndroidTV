@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -27,19 +27,21 @@
 namespace Sexy {
 class Graphics;
 class MemoryImage;
-}; // namespace Sexy
-// using namespace Sexy;
+} // namespace Sexy
 
 class LawnApp;
+
 class ReanimCacheImageVariation {
 public:
     SeedType mSeedType;
     DrawVariation mDrawVariation;
     Sexy::MemoryImage *mImage;
 };
-typedef TodList<ReanimCacheImageVariation> ImageVariationList;
+
+using ImageVariationList = TodList<ReanimCacheImageVariation>;
 
 class Reanimation;
+
 class ReanimatorCache {
 public:
     ImageVariationList mImageVariationList;

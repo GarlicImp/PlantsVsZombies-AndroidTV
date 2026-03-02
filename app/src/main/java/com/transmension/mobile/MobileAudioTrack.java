@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -20,28 +20,25 @@
 package com.transmension.mobile;
 
 import android.media.AudioTrack;
+import android.util.Log;
 
-/* compiled from: AudioOutput.java */
-/* loaded from: classes.dex */
 class MobileAudioTrack extends AudioTrack {
     private final int mFrameSize;
 
     public MobileAudioTrack(int streamType, int sampleRateInHz, int channelConfig, int audioFormat, int bufferSizeInBytes, int mode) throws IllegalArgumentException {
         super(streamType, sampleRateInHz, channelConfig, audioFormat, bufferSizeInBytes, mode);
-        if (audioFormat == 2) {
-            this.mFrameSize = getChannelCount() * 2;
-        } else {
-            this.mFrameSize = getChannelCount();
-        }
+        this.mFrameSize = audioFormat == 2 ? getChannelCount() * 2 : getChannelCount();
     }
 
-    @Override // android.media.AudioTrack
+    @Override
     public void play() throws IllegalStateException {
+        Log.d("TAG", "play: ");
         super.play();
         initBuffer();
     }
 
     public void initBuffer() {
+        Log.d("TAG", "initBuffer: ");
         byte[] audioData = new byte[getNativeFrameCount() * this.mFrameSize];
         write(audioData, 0, audioData.length);
     }

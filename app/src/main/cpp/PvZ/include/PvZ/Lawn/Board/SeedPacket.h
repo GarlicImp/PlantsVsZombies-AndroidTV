@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -27,7 +27,7 @@
 
 class HitResult;
 class SeedBank;
-class SeedPacket : public __GameObject {
+class SeedPacket : public GameObject {
 public:
     int mRefreshCounter;             // 13
     int mRefreshTime;                // 14
@@ -68,9 +68,9 @@ public:
     void Deactivate() {
         reinterpret_cast<void (*)(SeedPacket *)>(SeedPacket_DeactivateAddr)(this);
     }
-    // void WasPlanted(int thePlayerIndex) {
-    // reinterpret_cast<void (*)(SeedPacket *, int)>(SeedPacket_WasPlantedAddr)(this, thePlayerIndex);
-    // }
+    void PickNextSlotMachineSeed() {
+        reinterpret_cast<void (*)(SeedPacket *)>(SeedPacket_PickNextSlotMachineSeedAddr)(this);
+    }
 
     void Update();
     void UpdateSelected();
@@ -81,8 +81,10 @@ public:
     void EndDraw(Sexy::Graphics *g);
     void SetPacketType(SeedType theSeedType, SeedType theImitaterType);
     void WasPlanted(int thePlayerIndex);
+    void SlotMachineStart();
 };
 
+void DrawSeedType(Sexy::Graphics *g, float x, float y, SeedType theSeedType, SeedType theImitaterType, float theOffsetX, float theOffsetY, float theScale);
 void DrawSeedPacket(Sexy::Graphics *g,
                     float x,
                     float y,
@@ -92,8 +94,8 @@ void DrawSeedPacket(Sexy::Graphics *g,
                     int theGrayness,
                     bool theDrawCost,
                     bool theUseCurrentCost,
-                    bool isZombieSeed,
-                    bool isSeedPacketSelected);
+                    bool theIsZombieSeed,
+                    bool theIsPacketSelected);
 
 /***************************************************************************************************************/
 inline bool showCoolDown;

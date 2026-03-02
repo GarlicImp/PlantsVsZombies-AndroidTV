@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -23,7 +23,7 @@
 #include "PvZ/Lawn/Common/ConstEnums.h"
 #include "PvZ/SexyAppFramework/Widget/Widget.h"
 
-class HelpTextScreen : public Sexy::__Widget {
+class HelpTextScreen : public Sexy::Widget {
 public:
     void KeyDown(Sexy::KeyCode theKey) {
         reinterpret_cast<void (*)(HelpTextScreen *, Sexy::KeyCode)>(HelpTextScreen_KeyDownAddr)(this, theKey);

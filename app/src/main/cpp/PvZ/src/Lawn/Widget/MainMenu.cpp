@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -25,7 +25,6 @@
 #include "PvZ/Lawn/LawnApp.h"
 #include "PvZ/Lawn/Widget/GameButton.h"
 #include "PvZ/Lawn/Widget/MailScreen.h"
-#include "PvZ/Misc.h"
 #include "PvZ/SexyAppFramework/Graphics/Graphics.h"
 #include "PvZ/SexyAppFramework/Graphics/MemoryImage.h"
 #include "PvZ/Symbols.h"
@@ -175,7 +174,7 @@ void MainMenu::Update() {
         if (gMainMenuAchievementCounter == 0) {
             gAchievementState = SHOWING;
             pvzstl::string str1 = TodStringTranslate("[CLOSE]");
-            gMainMenuAchievementsBack = MakeButton(ACHIEVEMENTS_BACK_BUTTON, &mButtonListener, this, str1);
+            gMainMenuAchievementsBack = MakeButton(ACHIEVEMENTS_BACK_BUTTON, this, this, str1);
             gMainMenuAchievementsBack->Resize(1000, 564 + 720, 170, 50);
             AddWidget((Widget *)gMainMenuAchievementsBack);
         }
@@ -334,7 +333,7 @@ void MainMenu::KeyDown(Sexy::KeyCode theKeyCode) {
     if (gMainMenuAchievementsWidget != nullptr) {
         if (gAchievementState != SHOWING)
             return;
-        if (theKeyCode == Sexy::KEYCODE_ESCAPE || theKeyCode == Sexy::KEYCODE_ESCAPE2) {
+        if (theKeyCode == Sexy::KEYCODE_ESCAPE || theKeyCode == Sexy::KEYCODE_GAMEPAD_B) {
             MainMenu::ButtonDepress(ACHIEVEMENTS_BUTTON);
         } else if (theKeyCode == Sexy::KEYCODE_UP || theKeyCode == Sexy::KEYCODE_DOWN) {
             if (gMainMenuAchievementKeyboardScrollCounter != 0) {
@@ -545,7 +544,7 @@ void MainMenu::RemovedFromManager(int *a2) {
     old_MainMenu_RemovedFromManager(this, a2);
 }
 
-void MainMenu::__Destructor2() {
+void MainMenu::_destructor2() {
     old_MainMenu_Delete2(this);
     if (gMainMenuAchievementsWidget != nullptr) {
         reinterpret_cast<MaskHelpWidget *>(gMainMenuAchievementsWidget)->~MaskHelpWidget();
@@ -639,7 +638,7 @@ void MainMenu::Draw(Sexy::Graphics *g) {
             unkMems3[3] = v18;
             TodAnimateCurveFloat(0, 100, v18, 0.75, 0.8, TodCurves::CURVE_SIN_WAVE);
             Sexy::Rect v38 = {0, 0, mailAlertImage->mWidth, mailAlertImage->mHeight};
-            g->DrawImageMatrix(mailAlertImage, aSexyTransform2D, v38, 0.0, 0.0, 1);
+            g->DrawImageMatrix(mailAlertImage, aSexyTransform2D, v38, 0.0, 0.0, true);
         }
     }
     int moreTrackIndex = mainMenuReanim->FindTrackIndex("more");
@@ -651,10 +650,10 @@ void MainMenu::Draw(Sexy::Graphics *g) {
     aSexyTransform2D.Translate(120.0, 200.0);
 
     Sexy::Rect v37 = {0, 0, m2DMarkImage->mWidth, m2DMarkImage->mHeight};
-    g->DrawImageMatrix(m2DMarkImage, aSexyTransform2D, v37, 0.0, 0.0, 1);
+    g->DrawImageMatrix(m2DMarkImage, aSexyTransform2D, v37, 0.0, 0.0, true);
     Sexy::Rect v38 = {15, 15, 90, 90};
     aSexyTransform2D.Translate(-4.0, -16.0);
-    g->DrawImageMatrix(mApp->mQRCodeImage, aSexyTransform2D, v38, 0.0, 0.0, 1);
+    g->DrawImageMatrix(mApp->mQRCodeImage, aSexyTransform2D, v38, 0.0, 0.0, true);
 }
 
 void MainMenu::DrawOverlay(Sexy::Graphics *g) {
@@ -741,7 +740,7 @@ void MaskHelpWidget_MouseDown(AchievementsWidget *achievementsWidget, int x, int
     achievementsWidget->mMouseDownY = y;
     achievementsWidget->mLastDownY = y;
     achievementsWidget->mLastDownY1 = achievementsWidget->mLastDownY;
-    struct timeval tp;
+    timeval tp;
     gettimeofday(&tp, nullptr);
     achievementsWidget->mLastTimeMs = tp.tv_sec * 1000 + tp.tv_usec / 1000; // Convert to milliseconds
     achievementsWidget->mLastTimeMs1 = achievementsWidget->mLastTimeMs;
@@ -754,14 +753,14 @@ void MaskHelpWidget_MouseDrag(AchievementsWidget *achievementsWidget, int x, int
     achievementsWidget->Move(achievementsWidget->mX, theNewY);
     achievementsWidget->mLastDownY1 = achievementsWidget->mLastDownY;
     achievementsWidget->mLastDownY = y;
-    struct timeval tp;
+    timeval tp;
     gettimeofday(&tp, nullptr);
     achievementsWidget->mLastTimeMs1 = achievementsWidget->mLastTimeMs;
     achievementsWidget->mLastTimeMs = tp.tv_sec * 1000 + tp.tv_usec / 1000; // Convert to milliseconds
 }
 
 void MaskHelpWidget_MouseUp(AchievementsWidget *achievementsWidget, int x, int y) {
-    struct timeval tp;
+    timeval tp;
     gettimeofday(&tp, nullptr);
     long currentTimeMs = tp.tv_sec * 1000 + tp.tv_usec / 1000; // Convert to milliseconds
     long deltaT = currentTimeMs - achievementsWidget->mLastTimeMs;
@@ -829,18 +828,18 @@ void ZombatarWidget::ButtonDepress(this ZombatarWidget &self, int id) {
             return;
 
         if (addonImages.zombatar_portrait != nullptr) {
-            reinterpret_cast<MemoryImage *>(addonImages.zombatar_portrait)->~MemoryImage();
+            static_cast<MemoryImage *>(addonImages.zombatar_portrait)->~MemoryImage();
         }
 
         MemoryImage *aImage = new MemoryImage();
         aImage->Create(addonZombatarImages.zombatar_background_blank->mWidth, addonZombatarImages.zombatar_background_blank->mHeight);
         aImage->SetImageMode(true, true);
         aImage->mIsVolatile = true;
-        Graphics graphics = Graphics(reinterpret_cast<Image *>(aImage));
+        Graphics graphics = Graphics(aImage);
         TestMenuWidget_DrawPortrait(gMainMenuZombatarWidget, &graphics, 0, 0);
         aImage->WriteToPng("ZOMBATAR.PNG");
         // StringDelete(holder);
-        addonImages.zombatar_portrait = reinterpret_cast<Image *>(aImage);
+        addonImages.zombatar_portrait = aImage;
         gMainMenuZombatarWidget->mShowExistingZombatarPortrait = true;
         gMainMenuZombatarWidget->mShowZombieTypeSelection = false;
 
@@ -884,7 +883,7 @@ void ZombatarWidget::ButtonDepress(this ZombatarWidget &self, int id) {
             return;
         gMainMenuZombatarWidget->mShowExistingZombatarPortrait = false;
         if (addonImages.zombatar_portrait != nullptr) {
-            reinterpret_cast<MemoryImage *>(addonImages.zombatar_portrait)->~MemoryImage();
+            static_cast<MemoryImage *>(addonImages.zombatar_portrait)->~MemoryImage();
             addonImages.zombatar_portrait = nullptr;
             lawnApp->EraseFile("ZOMBATAR.PNG");
         }
@@ -3025,14 +3024,14 @@ void TestMenuWidget_Delete2(ZombatarWidget *zombatarWidget) {
     zombatarWidget->mPreviewZombie->DieNoLoot();
     (*((void (**)(Zombie *))zombatarWidget->mPreviewZombie->vTable + 1))(zombatarWidget->mPreviewZombie); // Delete();
 
-    (*((void (**)(Sexy::__Widget *, Sexy::__Widget *))zombatarWidget->vTable + 7))(zombatarWidget, zombatarWidget->mBackButton);
+    (*((void (**)(Sexy::Widget *, Sexy::Widget *))zombatarWidget->vTable + 7))(zombatarWidget, zombatarWidget->mBackButton);
     zombatarWidget->mBackButton->mDrawStoneButton = true;
     zombatarWidget->mBackButton->mButtonImage = nullptr;
     zombatarWidget->mBackButton->mDownImage = nullptr;
     zombatarWidget->mBackButton->mOverImage = nullptr;
     // GameButton_Delete(zombatarWidget->mBackButton);
 
-    (*((void (**)(Sexy::__Widget *, Sexy::__Widget *))zombatarWidget->vTable + 7))(zombatarWidget, zombatarWidget->mFinishButton);
+    (*((void (**)(Sexy::Widget *, Sexy::Widget *))zombatarWidget->vTable + 7))(zombatarWidget, zombatarWidget->mFinishButton);
     zombatarWidget->mFinishButton->mDrawStoneButton = true;
     zombatarWidget->mFinishButton->mButtonImage = nullptr;
     zombatarWidget->mFinishButton->mDownImage = nullptr;
@@ -3040,7 +3039,7 @@ void TestMenuWidget_Delete2(ZombatarWidget *zombatarWidget) {
     // GameButton_Delete(zombatarWidget->mFinishButton);
 
 
-    (*((void (**)(Sexy::__Widget *, Sexy::__Widget *))zombatarWidget->vTable + 7))(zombatarWidget, zombatarWidget->mViewPortraitButton);
+    (*((void (**)(Sexy::Widget *, Sexy::Widget *))zombatarWidget->vTable + 7))(zombatarWidget, zombatarWidget->mViewPortraitButton);
     zombatarWidget->mViewPortraitButton->mDrawStoneButton = true;
     zombatarWidget->mViewPortraitButton->mButtonImage = nullptr;
     zombatarWidget->mViewPortraitButton->mDownImage = nullptr;
@@ -3454,7 +3453,7 @@ void TestMenuWidget_MouseDrag(ZombatarWidget *zombatarWidget, int x, int y) {
 void TestMenuWidget_MouseUp(ZombatarWidget *zombatarWidget, int x, int y) {}
 
 void TestMenuWidget_KeyDown(ZombatarWidget *zombatarWidget, int keyCode) {
-    if (keyCode == Sexy::KEYCODE_ESCAPE || keyCode == Sexy::KEYCODE_ESCAPE2) {
+    if (keyCode == Sexy::KEYCODE_ESCAPE || keyCode == Sexy::KEYCODE_GAMEPAD_B) {
         LawnApp *lawnApp = *gLawnApp_Addr;
         lawnApp->KillZombatarScreen();
         lawnApp->ShowMainMenuScreen();

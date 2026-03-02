@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -27,6 +27,7 @@
 #include "PvZ/Lawn/GamepadControls.h"
 #include "PvZ/Lawn/LawnApp.h"
 #include "PvZ/Lawn/System/ReanimationLawn.h"
+#include "PvZ/Lawn/Widget/VSSetupMenu.h"
 #include "PvZ/Lawn/Widget/WaitForSecondPlayerDialog.h"
 #include "PvZ/MagicAddr.h"
 #include "PvZ/Misc.h"
@@ -315,7 +316,7 @@ void Plant::Draw(Sexy::Graphics *g) {
     g->SetDrawMode(Graphics::DRAWMODE_NORMAL);
     int theCelRow = 0;
     float aOffsetX = 0.0f;
-    float aOffsetY = PlantDrawHeightOffset(mBoard, 0, mSeedType, mPlantCol, mRow);
+    float aOffsetY = PlantDrawHeightOffset(mBoard, nullptr, mSeedType, mPlantCol, mRow);
     if (IsFlying(mSeedType) && mSquished) {
         aOffsetY += 30.0f;
     }
@@ -695,6 +696,7 @@ void Plant::DoSpecial() {
             mApp->AddTodParticle(aPosX, aPosY, (int)RenderLayer::RENDER_LAYER_TOP, ParticleEffect::PARTICLE_ICE_TRAP);
 
             Die();
+            TriggerVibration(VibrationEffect::VIVRATION_ICE_TRAP);
             break;
         }
         case SeedType::SEED_POTATOMINE: {
@@ -723,6 +725,8 @@ void Plant::DoSpecial() {
 
             break;
         }
+        default:
+            break;
     }
 }
 
@@ -851,7 +855,7 @@ void Plant::Fire(Zombie *theTargetZombie, int theRow, PlantWeapon thePlantWeapon
     } else if (mSeedType == SeedType::SEED_LEFTPEATER) {
         int aOffsetX, aOffsetY;
         GetPeaHeadOffset(aOffsetX, aOffsetY);
-        aOriginX = mX + aOffsetX + 27;
+        aOriginX = mX - aOffsetX + 27;
         aOriginY = mY + aOffsetY - 33;
     } else if (mSeedType == SeedType::SEED_GATLINGPEA) {
         int aOffsetX, aOffsetY;
@@ -1117,7 +1121,7 @@ GridItem *Plant::FindTargetGridItem(PlantWeapon thePlantWeapon) {
                     continue;
                 }
                 if (mSeedType == SeedType::SEED_PUFFSHROOM || mSeedType == SeedType::SEED_SEASHROOM) {
-                    if (gVSBalanceAdjustment && aGridX - mPlantCol > 2) {
+                    if (mApp->mPlayerInfo->mVSBalancePatchMode && aGridX - mPlantCol > 2) {
                         continue;
                     }
                     // 如果是小喷菇或水兵菇，则索敌三格以内的墓碑
@@ -1187,8 +1191,8 @@ int Plant::GetCost(SeedType theSeedType, SeedType theImitaterType) {
         if (theSeedType == SeedType::SEED_IMITATER && theImitaterType != SeedType::SEED_NONE) {
             theSeedType = theImitaterType;
         }
-        if (gVSBalanceAdjustment) {
-            return GetCostAdjusted(theSeedType);
+        if (gLawnApp->mPlayerInfo->mVSBalancePatchMode) {
+            return GetCostBalanced(theSeedType);
         } else {
             switch (theSeedType) {
                 case SeedType::SEED_CHERRYBOMB:
@@ -1198,6 +1202,8 @@ int Plant::GetCost(SeedType theSeedType, SeedType theImitaterType) {
                 case SeedType::SEED_ZOMBIE_DANCER:
                 case SeedType::SEED_ZOMBIE_DIGGER:
                 case SeedType::SEED_ZOMBIE_LADDER:
+                case SeedType::SEED_ZOMBIE_GATLINGPEA_HEAD:
+                case SeedType::SEED_ZOMBIE_TALLNUT_HEAD:
                     return 150;
                 case SeedType::SEED_SQUASH:
                 case SeedType::SEED_GARLIC:
@@ -1212,8 +1218,6 @@ int Plant::GetCost(SeedType theSeedType, SeedType theImitaterType) {
                 case SeedType::SEED_ZOMBIE_SNORKEL:
                 case SeedType::SEED_ZOMBIE_DOLPHIN_RIDER:
                 case SeedType::SEED_ZOMBIE_JALAPENO_HEAD:
-                case SeedType::SEED_ZOMBIE_GATLINGPEA_HEAD:
-                case SeedType::SEED_ZOMBIE_TALLNUT_HEAD:
                     return 125;
                 case SeedType::SEED_CACTUS:
                 case SeedType::SEED_CABBAGEPULT:
@@ -1267,8 +1271,8 @@ int Plant::GetRefreshTime(SeedType theSeedType, SeedType theImitaterType) {
             theSeedType = theImitaterType;
         }
         int aRefreshTime;
-        if (gVSBalanceAdjustment) {
-            aRefreshTime = GetRefreshTimeAdjusted(theSeedType);
+        if (gLawnApp->mPlayerInfo->mVSBalancePatchMode) {
+            aRefreshTime = GetRefreshTimeBalanced(theSeedType);
         } else {
             if (Challenge::IsMPSeedType(theSeedType)) {
                 switch (theSeedType) {
@@ -1343,15 +1347,15 @@ int Plant::GetRefreshTime(SeedType theSeedType, SeedType theImitaterType) {
                 case SeedType::SEED_ZOMBIE_TRASHCAN:
                 case SeedType::SEED_ZOMBIE_SCREEN_DOOR:
                     return aRefreshTime;
-                // 平衡调整后不减cd
+                // 平衡调整后cd减幅下降
                 case SeedType::SEED_POTATOMINE:
                 case SeedType::SEED_SQUASH:
                 case SeedType::SEED_CHERRYBOMB:
                 case SeedType::SEED_JALAPENO:
                 case SeedType::SEED_DOOMSHROOM:
                 case SeedType::SEED_ICESHROOM:
-                    if (gVSBalanceAdjustment)
-                        return aRefreshTime;
+                    if (gLawnApp->mPlayerInfo->mVSBalancePatchMode)
+                        return aRefreshTime / 3 * 2;
                 default:
                     return aRefreshTime / 3;
             }
@@ -1361,10 +1365,11 @@ int Plant::GetRefreshTime(SeedType theSeedType, SeedType theImitaterType) {
     return old_Plant_GetRefreshTime(theSeedType, theImitaterType);
 }
 
-int Plant::GetCostAdjusted(SeedType theSeedType) {
+int Plant::GetCostBalanced(SeedType theSeedType) {
     switch (theSeedType) {
         case SeedType::SEED_SUNSHROOM:
             return 0;
+        case SeedType::SEED_ICESHROOM: // 75 -> 25
         case SeedType::SEED_INSTANT_COFFEE:
         case SeedType::SEED_ZOMBIE_NORMAL:
         case SeedType::SEED_ZOMBIE_DUCKY_TUBE:
@@ -1372,8 +1377,7 @@ int Plant::GetCostAdjusted(SeedType theSeedType) {
             return 25;
         case SeedType::SEED_GRAVEBUSTER:  // 75 -> 50
         case SeedType::SEED_HYPNOSHROOM:  // 75 -> 50
-        case SeedType::SEED_ICESHROOM:    // 75 -> 50
-        case SeedType::SEED_BLOVER:       // 100->50
+        case SeedType::SEED_BLOVER:       // 100 -> 50
         case SeedType::SEED_PUMPKINSHELL: // 125 -> 50
         case SeedType::SEED_ZOMBIE_GRAVESTONE:
         case SeedType::SEED_ZOMBIE_TRASHCAN:
@@ -1385,12 +1389,12 @@ int Plant::GetCostAdjusted(SeedType theSeedType) {
             return 50;
         case SeedType::SEED_PEASHOOTER: // 100 -> 75
         case SeedType::SEED_KERNELPULT: // 100 -> 75
-        case SeedType::SEED_SQUASH:
         case SeedType::SEED_GARLIC:
         case SeedType::SEED_ZOMBIE_POLEVAULTER:     // 100 -> 75
         case SeedType::SEED_ZOMBIE_JACK_IN_THE_BOX: // 100 -> 75
         case SeedType::SEED_ZOMBIE_SNORKEL:
             return 75;
+        case SeedType::SEED_SQUASH:  // 75 -> 100 削弱窝瓜!!!
         case SeedType::SEED_TALLNUT: // 125 -> 100
         case SeedType::SEED_CACTUS:
         case SeedType::SEED_SPLITPEA: // 125 -> 100
@@ -1408,26 +1412,24 @@ int Plant::GetCostAdjusted(SeedType theSeedType) {
         case SeedType::SEED_ZOMBIE_BUNGEE:
         case SeedType::SEED_ZOMBIE_LADDER: // 150 -> 125
         case SeedType::SEED_ZOMBIE_JALAPENO_HEAD:
-        case SeedType::SEED_ZOMBIE_GATLINGPEA_HEAD:
-        case SeedType::SEED_ZOMBIE_TALLNUT_HEAD:
             return 125;
         case SeedType::SEED_REPEATER:
         case SeedType::SEED_ZOMBIE_FOOTBALL:
         case SeedType::SEED_ZOMBIE_DANCER:
         case SeedType::SEED_ZOMBONI:
         case SeedType::SEED_ZOMBIE_CATAPULT: // 200 -> 150
+        case SeedType::SEED_ZOMBIE_GATLINGPEA_HEAD:
+        case SeedType::SEED_ZOMBIE_TALLNUT_HEAD:
             return 150;
         case SeedType::SEED_DOOMSHROOM: // 125 -> 175
         case SeedType::SEED_STARFRUIT:
         case SeedType::SEED_ZOMBIE_POGO: // 225 -> 175
             return 175;
+        case SeedType::SEED_THREEPEATER:
         case SeedType::SEED_MELONPULT:         // 300 -> 200
         case SeedType::SEED_ZOMBIE_FLAG:       // 300 -> 200
         case SeedType::SEED_ZOMBIE_GARGANTUAR: // 250 -> 200
             return 200;
-        case SeedType::SEED_THREEPEATER: // 200 -> 225
-            return 225;
-            // return 250;
         default:
             return GetPlantDefinition(theSeedType).mSeedCost;
     }
@@ -1435,7 +1437,7 @@ int Plant::GetCostAdjusted(SeedType theSeedType) {
     return GetPlantDefinition(theSeedType).mSeedCost;
 }
 
-int Plant::GetRefreshTimeAdjusted(SeedType theSeedType) {
+int Plant::GetRefreshTimeBalanced(SeedType theSeedType) {
     if (Challenge::IsMPSeedType(theSeedType)) {
         switch (theSeedType) {
             case SeedType::SEED_ZOMBONI:
@@ -1459,7 +1461,7 @@ int Plant::GetRefreshTimeAdjusted(SeedType theSeedType) {
             case SeedType::SEED_ZOMBIE_GATLINGPEA_HEAD:
             case SeedType::SEED_ZOMBIE_TALLNUT_HEAD:
                 return 3000;
-            case SeedType::SEED_ZOMBIE_POLEVAULTER: // 30 -> 15
+                //            case SeedType::SEED_ZOMBIE_POLEVAULTER: // 30 -> 15
             case SeedType::SEED_ZOMBIE_NEWSPAPER:
             case SeedType::SEED_ZOMBIE_SCREEN_DOOR:
             case SeedType::SEED_ZOMBIE_JACK_IN_THE_BOX: // 30 -> 15
@@ -2082,4 +2084,80 @@ bool Plant::FindTargetAndFire(int theRow, PlantWeapon thePlantWeapon) {
 
 
     return result;
+}
+
+void Plant::UpdateChomper() {
+    Reanimation *aBodyReanim = mApp->ReanimationTryToGet(mBodyReanimID);
+    if (mState == PlantState::STATE_READY) {
+        if (FindTargetZombie(mRow, PlantWeapon::WEAPON_PRIMARY)) {
+            PlayBodyReanim("anim_bite", ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD, 20, 24.0f);
+            mState = PlantState::STATE_CHOMPER_BITING;
+            mStateCountdown = 70;
+        }
+    } else if (mState == PlantState::STATE_CHOMPER_BITING) {
+        if (mStateCountdown == 0) {
+            mApp->PlayFoley(FoleyType::FOLEY_BIGCHOMP);
+
+            Zombie *aZombie = FindTargetZombie(mRow, PlantWeapon::WEAPON_PRIMARY);
+            bool doBite = false;
+            if (aZombie) {
+                if (aZombie->mZombieType == ZombieType::ZOMBIE_GARGANTUAR || aZombie->mZombieType == ZombieType::ZOMBIE_REDEYE_GARGANTUAR || aZombie->mZombieType == ZombieType::ZOMBIE_BOSS) {
+                    doBite = true;
+                }
+            }
+            bool doMiss = false;
+            if (aZombie == nullptr) {
+                doMiss = true;
+            } else if (!aZombie->IsImmobilizied()) {
+                if (aZombie->IsBouncingPogo() || aZombie->mZombiePhase == ZombiePhase::PHASE_POLEVAULTER_IN_VAULT || aZombie->mZombiePhase == ZombiePhase::PHASE_POLEVAULTER_PRE_VAULT) {
+                    doMiss = true;
+                }
+            }
+
+            if (doBite) {
+                mApp->PlayFoley(FoleyType::FOLEY_SPLAT);
+                aZombie->TakeDamage(40, 0U);
+                mState = PlantState::STATE_CHOMPER_BITING_MISSED;
+            } else if (doMiss) {
+                mState = PlantState::STATE_CHOMPER_BITING_MISSED;
+            } else {
+                if (tcp_connected)
+                    return;
+
+                if (tcpClientSocket >= 0) {
+                    U16U16_Event event = {{EventType::EVENT_SERVER_BOARD_PLANT_CHOMPER_BIT}, uint16_t(mBoard->mPlants.DataArrayGetID(this)), uint16_t(mBoard->mZombies.DataArrayGetID(aZombie))};
+                    sendWithSize(tcpClientSocket, &event, sizeof(U16U16_Event), 0);
+                }
+
+                aZombie->DieWithLoot();
+                mState = PlantState::STATE_CHOMPER_BITING_GOT_ONE;
+            }
+        }
+    } else if (mState == PlantState::STATE_CHOMPER_BITING_GOT_ONE) {
+        if (aBodyReanim->mLoopCount > 0) {
+            PlayBodyReanim("anim_chew", ReanimLoopType::REANIM_LOOP, 0, 15.0f);
+            if (mApp->IsIZombieLevel()) {
+                aBodyReanim->SetAnimRate(0.0f);
+            }
+
+            mState = PlantState::STATE_CHOMPER_DIGESTING;
+            mStateCountdown = 4000;
+        }
+    } else if (mState == PlantState::STATE_CHOMPER_DIGESTING) {
+        if (mStateCountdown == 0) {
+            PlayBodyReanim("anim_swallow", ReanimLoopType::REANIM_PLAY_ONCE_AND_HOLD, 20, 12.0f);
+            mState = PlantState::STATE_CHOMPER_SWALLOWING;
+        }
+    } else if ((mState == PlantState::STATE_CHOMPER_SWALLOWING || mState == PlantState::STATE_CHOMPER_BITING_MISSED) && aBodyReanim->mLoopCount > 0) {
+        PlayIdleAnim(aBodyReanim->mDefinition->mFPS);
+        mState = PlantState::STATE_READY;
+    }
+}
+
+void Plant::UpdateSquash() {
+    old_Plant_UpdateSquash(this);
+
+    if (mState == PlantState::STATE_SQUASH_PRE_LAUNCH && mStateCountdown == 1) {
+        TriggerVibration(VibrationEffect::VIVRATION_JUMP); // 这窝瓜有力气!!
+    }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -27,18 +27,18 @@
 class Coin;
 class Plant;
 
-class CursorObject : public __GameObject {
+class CursorObject : public GameObject {
 public:
-    int mSeedBankIndex;        // 13
-    SeedType mType;            // 14
-    SeedType mImitaterType;    // 15
-    CursorType mCursorType;    // 16
-    Coin *mCoinID;             // 17
-    Plant *mGlovePlantID;      // 18
-    Plant *mDuplicatorPlantID; // 19
-    Plant *mCobCannonPlantID;  // 20
-    int mHammerDownCounter;    // 21
-    int mReanimCursorID;       // 22
+    int mSeedBankIndex;            // 13
+    SeedType mType;                // 14
+    SeedType mImitaterType;        // 15
+    CursorType mCursorType;        // 16
+    Coin *mCoinID;                 // 17
+    Plant *mGlovePlantID;          // 18
+    Plant *mDuplicatorPlantID;     // 19
+    Plant *mCobCannonPlantID;      // 20
+    int mHammerDownCounter;        // 21
+    ReanimationID mReanimCursorID; // 22
     // 大小23个整数
 
     void Draw(Sexy::Graphics *g) {
@@ -52,7 +52,7 @@ public:
     void EndDraw(Sexy::Graphics *g);
 };
 
-class CursorPreview : public __GameObject {
+class CursorPreview : public GameObject {
 public:
     int mGridX;      // 13
     int mGridY;      // 14

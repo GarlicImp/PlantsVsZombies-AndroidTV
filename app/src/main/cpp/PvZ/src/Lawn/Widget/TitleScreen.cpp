@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -48,4 +48,8 @@ void TitleScreen_SwitchState(TitleScreen *titleScreen, TitleScreen::TitleState s
     titleScreen->mTitleState = state;
     titleScreen->mTitleStateDuration = duration;
     titleScreen->mTitleStateCounter = duration;
+}
+
+void TitleScreen::_constructor(LawnApp *theApp) {
+    old_TitleScreen_TitleScreen(this, theApp);
 }

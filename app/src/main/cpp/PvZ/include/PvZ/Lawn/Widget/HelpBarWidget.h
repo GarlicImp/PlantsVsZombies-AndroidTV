@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -17,7 +17,25 @@
  * PlantsVsZombies-AndroidTV.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.transmension.mobile;
+#ifndef PVZ_LAWN_WIDGET_HELP_BAR_WIDGET_H
+#define PVZ_LAWN_WIDGET_HELP_BAR_WIDGET_H
 
-public class SetActivityEntrance extends SetActivity {
-}
+#include "PvZ/SexyAppFramework/Widget/Widget.h"
+
+class HelpBarWidget : public Sexy::Widget {
+public:
+    char mUnk[40]; // 65 ~ 74
+
+    HelpBarWidget() {
+        _constructor();
+    }
+
+protected:
+    friend void InitHookFunction();
+
+    void _constructor();
+};
+
+inline void (*old_HelpBarWidget_HelpBarWidget)(HelpBarWidget *);
+
+#endif // PVZ_LAWN_WIDGET_HELP_BAR_WIDGET_H

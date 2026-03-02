@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -37,12 +37,14 @@ void InitHookFunction();
 namespace Sexy {
 
 class Dialog;
-class __Dialog;
+class Dialog;
 
-class __SexyAppBase {
+class SexyAppBase {
 public:
     int *vTable;                            // 0
-    int unkMem1[164];                       // 1 ~ 164
+    int unkMem1_1[30];                      // 1 ~ 30
+    bool unkBool_1[4];                      // 31
+    int unkMem1_2[133];                     // 32 ~ 164
     WidgetManager *mWidgetManager;          // 165
     int unkMem2[70];                        // 166 ~ 235, musicinterface 193
     bool mLawnMouseMode;                    // 944
@@ -63,49 +65,50 @@ public:
     // 115： 552 , 111： 553
 
     Dialog *GetDialog(Dialogs theDialogId) { // vTable + 4 * 103
-        return reinterpret_cast<Dialog *(*)(__SexyAppBase *, Dialogs)>(Sexy_SexyAppBase_GetDialogAddr)(this, theDialogId);
+        return reinterpret_cast<Dialog *(*)(SexyAppBase *, Dialogs)>(Sexy_SexyAppBase_GetDialogAddr)(this, theDialogId);
     }
-    void EraseFile(const std::string &theFileName) {
-        reinterpret_cast<void (*)(__SexyAppBase *, const std::string &)>(Sexy_SexyAppBase_EraseFileAddr)(this, theFileName);
+    void EraseFile(const pvzstl::string &theFileName) {
+        reinterpret_cast<void (*)(SexyAppBase *, const pvzstl::string &)>(Sexy_SexyAppBase_EraseFileAddr)(this, theFileName);
     }
     Image *GetImage(const pvzstl::string &theFileName, bool commitBits = true) {
-        return reinterpret_cast<Image *(*)(__SexyAppBase *, const pvzstl::string &, bool)>(Sexy_SexyAppBase_GetImageAddr)(this, theFileName, commitBits);
+        return reinterpret_cast<Image *(*)(SexyAppBase *, const pvzstl::string &, bool)>(Sexy_SexyAppBase_GetImageAddr)(this, theFileName, commitBits);
     }
-    bool RegistryReadString(const std::string &theValueName, std::string *theString) {
-        return reinterpret_cast<bool (*)(__SexyAppBase *, const std::string &, std::string *)>(Sexy_SexyAppBase_RegistryReadStringAddr)(this, theValueName, theString);
+    bool RegistryReadString(const pvzstl::string &theValueName, pvzstl::string *theString) {
+        return reinterpret_cast<bool (*)(SexyAppBase *, const pvzstl::string &, pvzstl::string *)>(Sexy_SexyAppBase_RegistryReadStringAddr)(this, theValueName, theString);
     }
     Image *CopyImage(Image *theImage) {
-        return reinterpret_cast<Image *(*)(__SexyAppBase *, Image *)>(Sexy_SexyAppBase_CopyImageAddr)(this, theImage);
+        return reinterpret_cast<Image *(*)(SexyAppBase *, Image *)>(Sexy_SexyAppBase_CopyImageAddr)(this, theImage);
     }
     Image *CopyImage(Image *theImage, const Rect &theRect) {
-        return reinterpret_cast<Image *(*)(__SexyAppBase *, Image *, const Rect &)>(Sexy_SexyAppBase_CopyImage2Addr)(this, theImage, theRect);
+        return reinterpret_cast<Image *(*)(SexyAppBase *, Image *, const Rect &)>(Sexy_SexyAppBase_CopyImage2Addr)(this, theImage, theRect);
     }
-    void AddDialog(__Dialog *theDialog) {
-        reinterpret_cast<void (*)(__SexyAppBase *, __Dialog *)>(Sexy_SexyAppBase_AddDialogAddr)(this, theDialog);
+    void AddDialog(Dialog *theDialog) {
+        reinterpret_cast<void (*)(SexyAppBase *, Dialog *)>(Sexy_SexyAppBase_AddDialogAddr)(this, theDialog);
+    }
+    void DoParseCmdLine() { // vTable + 4 * 62
+        reinterpret_cast<void (*)(SexyAppBase *)>(Sexy_SexyAppBase_DoParseCmdLineAddr)(this);
+    }
+    int GetInteger(const pvzstl::string &theName, int defValue) {
+        return reinterpret_cast<bool (*)(SexyAppBase *, const pvzstl::string &, int)>(Sexy_SexyAppBase_GetIntegerAddr)(this, theName, defValue);
+    }
+    void LoadResourceManifest() {
+        reinterpret_cast<void (*)(SexyAppBase *)>(Sexy_SexyAppBase_LoadResourceManifestAddr)(this);
     }
 
+    bool UpdateApp();
+
 protected:
-    __SexyAppBase() = default;
-    ~__SexyAppBase() = default;
+    SexyAppBase() = default;
+    ~SexyAppBase() = default;
 
     friend void ::InitHookFunction();
 
     void _constructor();
 };
 
-class SexyAppBase : public __SexyAppBase {
-public:
-    SexyAppBase() {
-        _constructor();
-    }
-
-    ~SexyAppBase() = delete;
-    bool UpdateApp();
-};
-
 } // namespace Sexy
 
-inline void (*old_Sexy_SexyAppBase_SexyAppBase)(Sexy::__SexyAppBase *appBase);
+inline void (*old_Sexy_SexyAppBase_SexyAppBase)(Sexy::SexyAppBase *appBase);
 
 inline bool (*old_Sexy_SexyAppBase_UpdateApp)(Sexy::SexyAppBase *appBase);
 

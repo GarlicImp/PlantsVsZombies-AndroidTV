@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -21,6 +21,7 @@
 #define PVZ_LAWN_BOARD_BOARD_H
 
 #include "PvZ/Lawn/Common/ConstEnums.h"
+#include "PvZ/Lawn/System/SaveGame.h"
 #include "PvZ/Lawn/Widget/AchievementsWidget.h"
 #include "PvZ/SexyAppFramework/Misc/KeyCodes.h"
 #include "PvZ/SexyAppFramework/Widget/ButtonListener.h"
@@ -135,9 +136,8 @@ enum TouchPlayerIndex {
     TOUCHPLAYER_PLAYER2 = 1,
 };
 
-class Board : public Sexy::__Widget {
+class Board : public Sexy::Widget, public Sexy::ButtonListener {
 public:
-    Sexy::ButtonListener mButtonListener;         // 64
     int unknownMembers1[4];                       // 65 ~ 68
     LawnApp *mApp;                                // 69
     DataArray<Zombie> mZombies;                   // 70 ~ 76
@@ -150,8 +150,7 @@ public:
     PlantRbTree mFlowerPotTree;                   // 118 ~ 123
     PlantRbTree mPumpkinTree;                     // 124 ~ 129
     CustomMessageWidget *mAdvice;                 // 130
-    SeedBank *mSeedBankLeft;                      // 131
-    SeedBank *mSeedBankRight;                     // 132
+    SeedBank *mSeedBank[2];                       // 131 ~ 132
     int unknownMembers3[7];                       // 133 ~ 139
     GamepadControls *mGamepadControls1;           // 140
     GamepadControls *mGamepadControls2;           // 141
@@ -420,9 +419,6 @@ public:
     bool CanDropLoot() {
         return reinterpret_cast<bool (*)(Board *)>(Board_CanDropLootAddr)(this);
     }
-    void SpawnZombiesFromGraves() {
-        reinterpret_cast<void (*)(Board *)>(Board_SpawnZombiesFromGravesAddr)(this);
-    }
     void ClearAdvice(AdviceType theHelpIndex) {
         reinterpret_cast<void (*)(Board *)>(Board_ClearAdviceAddr)(this);
     }
@@ -474,6 +470,15 @@ public:
     void PlaceRake() {
         reinterpret_cast<void (*)(Board *)>(Board_PlaceRakeAddr)(this);
     }
+    void SpawnZombiesFromSky() {
+        reinterpret_cast<void (*)(Board *)>(Board_SpawnZombiesFromSkyAddr)(this);
+    }
+    void SpawnZombiesFromPool() {
+        reinterpret_cast<void (*)(Board *)>(Board_SpawnZombiesFromPoolAddr)(this);
+    }
+    ZombieType PickGraveRisingZombieType(int theZombiePoints) {
+        return reinterpret_cast<ZombieType (*)(Board *, int)>(Board_PickGraveRisingZombieTypeAddr)(this, theZombiePoints);
+    }
 
     Board(LawnApp *theApp);
     void InitLevel();
@@ -500,6 +505,8 @@ public:
     void UpdateGame();
     void UpdateGameObjects();
     bool IsFlagWave(int theWaveNumber);
+    int GetGraveStonesCount();
+    void SpawnZombiesFromGraves();
     void SpawnZombieWave();
     void DrawProgressMeter(Sexy::Graphics *g, int theX, int theY);
     int GetNumWavesPerFlag();
@@ -524,7 +531,6 @@ public:
     bool StageHasPool();
     bool StageHasRoof();
     bool StageHas6Rows();
-    bool ZombieIsAddInRow(ZombieType theZombieType);
     Zombie *AddZombieInRow(ZombieType theZombieType, int theRow, int theFromWave, bool theIsRustle);
     Zombie *AddZombie(ZombieType theZombieType, int theFromWave, bool theIsRustle);
     void DoPlantingEffects(int theGridX, int theGridY, Plant *thePlant);
@@ -606,6 +612,9 @@ protected:
     friend void InitHookFunction();
 
     void _constructor(LawnApp *theApp);
+    void ClientMouseDownLocal(int x, int y, bool isInBank);
+    void ClientMouseDragLocal(int x, int y);
+    void ClientMouseUpLocal(int x, int y);
 };
 
 int GetRectOverlap(const Sexy::Rect &rect1, const Sexy::Rect &rect2);
@@ -673,9 +682,9 @@ inline bool endlessLastStand;
 
 inline void (*old_FixBoardAfterLoad)(Board *board);
 
-inline int (*old_LawnSaveGame)(Board *a1, int *a2);
+inline bool (*old_LawnSaveGame)(Board *a1, const pvzstl::string &a2);
 
-inline int (*old_LawnLoadGame)(Board *a1, int *a2);
+inline bool (*old_LawnLoadGame)(Board *a1, SaveGameContext *a2);
 
 inline void (*old_Board_UpdateGame)(Board *board);
 
@@ -787,9 +796,9 @@ void FixBoardAfterLoad(Board *board);
 
 void SyncReanimation(Board *a1, Reanimation *a2, int *theSaveGameContext);
 
-int LawnSaveGame(Board *board, int *a2);
+bool LawnSaveGame(Board *theBoard, const pvzstl::string &theFilePath);
 
-int LawnLoadGame(Board *board, int *a2);
+bool LawnLoadGame(Board *theBoard, SaveGameContext *theFilePath);
 
 const char *GetNameByAchievementId(AchievementId theAchievementId);
 

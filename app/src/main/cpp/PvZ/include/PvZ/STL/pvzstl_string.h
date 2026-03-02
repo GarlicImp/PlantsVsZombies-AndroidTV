@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -88,10 +88,10 @@ public:
     }
 
     basic_string(const basic_string &str, size_type pos, size_type n)
-        : _dataplus{_construct(str.c_str() + str._check_range(pos, "basic_string"), std::min(n, str.size() - pos))} {}
+        : _dataplus{_construct(str.c_str() + str._check_range(pos, "basic_string"), str.c_str() + std::min(n, str.size() - pos))} {}
 
     basic_string(const basic_string &str, size_type pos)
-        : _dataplus{_construct(str.c_str() + str._check_range(pos, "basic_string"), str.size() - pos)} {}
+        : _dataplus{_construct(str.c_str() + str._check_range(pos, "basic_string"), str.c_str() + str.size() - pos)} {}
 
     basic_string(basic_string &&str, size_type pos, size_type n)
         : basic_string(std::move(str.assign(str, pos, n))) {}
@@ -100,18 +100,22 @@ public:
         : basic_string(std::move(str.assign(str, pos))) {}
 
     basic_string(const CharT *s, size_type n)
-        : _dataplus{_construct(s, n)} {}
+        : _dataplus{_construct(s, s + n)} {}
 
     basic_string(const CharT *s)
-        : _dataplus{_construct(s, ((s != nullptr) ? traits_type::length(s) : npos))} {}
+        : _dataplus{_construct(s, s + (s != nullptr ? traits_type::length(s) : npos))} {}
 
     basic_string(std::nullptr_t) = delete;
 
     basic_string(size_type n, CharT c)
         : _dataplus{_construct(n, c)} {}
 
+    template <std::input_iterator InputIt>
+    basic_string(InputIt first, InputIt last)
+        : _dataplus{_construct(first, last)} {}
+
     basic_string(std::initializer_list<CharT> il)
-        : _dataplus{_construct(il.begin(), il.size())} {}
+        : _dataplus{_construct(il.begin(), il.end())} {}
 
     ~basic_string() {
         _get_rep()->_dispose();
@@ -768,9 +772,13 @@ protected:
             return !_is_leaked() ? _ref_copy() : _clone();
         }
 
+        void _destroy() noexcept {
+            ::operator delete(this);
+        }
+
         void _dispose() noexcept {
             if ((this != &_empty_rep()) && (_ref_count-- <= 0)) {
-                ::operator delete(this);
+                _destroy();
             }
         }
 
@@ -806,17 +814,58 @@ protected:
 
     mutable CharT *_dataplus;
 
-    [[nodiscard]] static CharT *_construct(const CharT *s, size_type n) {
-        if (n == 0) {
+    template <std::input_iterator InputIt>
+    [[nodiscard]] static CharT *_construct(InputIt first, InputIt last) {
+        if (first == last) {
             return _rep::_empty_rep()._data;
         }
-        // NB: Not required, but considered best practice.
-        if (s == nullptr) {
-            throw std::logic_error{"basic_string::_construct null not valid"};
+        CharT buf[128];
+        size_type len = 0;
+        while (first != last && len < std::size(buf)) {
+            buf[len++] = *first;
+            ++first;
         }
-        _rep *r = _rep::_create(n, 0);
-        traits_type::copy(r->_data, s, n);
-        r->_set_size(n);
+        _rep *r = _rep::_create(len, 0);
+        traits_type::copy(r->_data, buf, len);
+        try {
+            while (first != last) {
+                if (len == r->_capacity) {
+                    // Allocate more space.
+                    _rep *another = _rep::_create(len + 1, len);
+                    traits_type::copy(another->_data, r->_data, len);
+                    r->_destroy();
+                    r = another;
+                }
+                r->_data[len++] = *first;
+                ++first;
+            }
+        } catch (...) {
+            r->_destroy();
+            throw;
+        }
+        r->_set_size(len);
+        return r->_data;
+    }
+
+    template <std::forward_iterator InputIt>
+    [[nodiscard]] static CharT *_construct(InputIt first, InputIt last) {
+        if (first == last) {
+            return _rep::_empty_rep()._data;
+        }
+        if constexpr (std::is_pointer_v<InputIt>) {
+            if (first == nullptr) {
+                throw std::logic_error{"basic_string::_construct null not valid"};
+            }
+        }
+        const size_type dnew = static_cast<size_type>(std::distance(first, last));
+        _rep *r = _rep::_create(dnew, 0);
+        try {
+            std::copy(first, last, r->_data);
+        } catch (...) {
+            r->_destroy();
+            throw;
+        }
+        r->_set_size(dnew);
         return r->_data;
     }
 
@@ -830,7 +879,7 @@ protected:
         return r->_data;
     }
 
-    [[nodiscard]] static constexpr size_type _from_view_pos(_self_view::size_type pos) noexcept {
+    [[nodiscard]] static constexpr size_type _from_view_pos(typename _self_view::size_type pos) noexcept {
         if constexpr (npos == _self_view::npos) {
             return pos;
         } else {
@@ -1008,27 +1057,53 @@ template <typename CharT>
     return std::move(lhs);
 }
 
+template <typename CharT>
+void swap(basic_string<CharT> &lhs, basic_string<CharT> &rhs) noexcept(noexcept(lhs.swap(rhs))) {
+    lhs.swap(rhs);
+}
+
 using string = basic_string<char>;
-using wstring = basic_string<wchar_t>; // `basic_string<int>` in PvZ
+using wstring = basic_string<wchar_t>;    // `basic_string<int>` in PvZ
+using u32string = basic_string<char32_t>; // `basic_string<int>` in PvZ
 #ifndef PVZ_VERSION
 using u8string = basic_string<char8_t>;
 using u16string = basic_string<char16_t>;
-#endif
-using u32string = basic_string<char32_t>; // `basic_string<int>` in PvZ
+#endif // PVZ_VERSION
 
 } // namespace pvzstl
 
-
-namespace std {
-
 template <typename CharT>
-struct hash<pvzstl::basic_string<CharT>> {
+struct std::hash<pvzstl::basic_string<CharT>> {
     [[nodiscard]] size_t operator()(const pvzstl::basic_string<CharT> &val) const noexcept {
         using StringView = basic_string_view<CharT>;
         return hash<StringView>{}(StringView{val});
     }
 };
 
-} // namespace std
+namespace pvzstl::inline literals::inline string_literals {
+
+[[nodiscard]] inline string operator""_s(const char *str, std::size_t len) {
+    return string(str, len);
+}
+
+[[nodiscard]] inline wstring operator""_s(const wchar_t *str, std::size_t len) {
+    return wstring(str, len);
+}
+
+#ifndef PVZ_VERSION
+[[nodiscard]] inline u8string operator""_s(const char8_t *str, std::size_t len) {
+    return u8string(str, len);
+}
+
+[[nodiscard]] inline u16string operator""_s(const char16_t *str, std::size_t len) {
+    return u16string(str, len);
+}
+#endif // PVZ_VERSION
+
+[[nodiscard]] inline u32string operator""_s(const char32_t *str, std::size_t len) {
+    return u32string(str, len);
+}
+
+} // namespace pvzstl::inline literals::inline string_literals
 
 #endif // PVZ_STL_PVZSTL_STRING_H

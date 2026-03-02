@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025  PvZ TV Touch Team
+ * Copyright (C) 2023-2026  PvZ TV Touch Team
  *
  * This file is part of PlantsVsZombies-AndroidTV.
  *
@@ -39,10 +39,9 @@ enum AchievementId {
     MAX_ACHIEVEMENTS
 };
 
-class AchievementsWidget : public Sexy::__Widget {
+class AchievementsWidget : public Sexy::Widget, public Sexy::ButtonListener {
 public:
-    Sexy::ButtonListener mButtonListener; // 64
-    LawnApp *mApp;                        // 65
+    LawnApp *mApp; // 65
     int mMouseDownY;
     int mLastDownY;
     int mLastDownY1;
@@ -53,7 +52,7 @@ public:
     bool mIsScrolling;
 }; // 我想用AchievementsWidget取代MaskHelpWidget。MaskHelpWidget的大小是66个整数。
 
-class MaskHelpWidget : public Sexy::__Widget {
+class MaskHelpWidget : public Sexy::Widget {
 public:
     MaskHelpWidget(LawnApp *theApp) {
         _constructor(theApp);
