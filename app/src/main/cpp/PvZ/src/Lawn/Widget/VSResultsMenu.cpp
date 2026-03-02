@@ -33,6 +33,15 @@ void VSResultsMenu::_constructor() {
     old_VSResultsMenu_Constructor(this);
     gVSResultRequestState = -1;
     gNetDelayNow = 0; // 清除旧的延时数据
+
+    for (size_t i = 0; i < mColors.size(); ++i) {
+        int red = mColors[i].mRed;  // 或 vec.at(i)
+        LOG_DEBUG("a vector red(index {}) is: {}", i, red);
+        int green = mColors[i].mGreen;  // 或 vec.at(i)
+        LOG_DEBUG("a vector green(index {}) is: {}", i, green);
+        int blue = mColors[i].mBlue;  // 或 vec.at(i)
+        LOG_DEBUG("a vector blue(index {}) is: {}", i, blue);
+    }
 }
 
 size_t VSResultsMenu::getClientEventSize(EventType type) {

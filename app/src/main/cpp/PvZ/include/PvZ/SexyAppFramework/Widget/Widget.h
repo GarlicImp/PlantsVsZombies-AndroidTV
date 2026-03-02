@@ -20,6 +20,7 @@
 #ifndef PVZ_SEXYAPPFRAMEWORK_WIDGET_WIDGET_H
 #define PVZ_SEXYAPPFRAMEWORK_WIDGET_WIDGET_H
 
+#include "PvZ/STL/pvzstl_vector.h"
 #include "PvZ/SexyAppFramework/Graphics/Color.h"
 #include "PvZ/SexyAppFramework/Graphics/Graphics.h"
 #include "PvZ/SexyAppFramework/Misc/Common.h"
@@ -32,7 +33,7 @@ namespace Sexy {
 
 class Widget;
 
-typedef std::vector<Color> ColorVector;
+typedef pvzstl::vector<Color> ColorVector;
 
 class Widget : public WidgetContainer {
 public:
